@@ -1,14 +1,15 @@
 # Weeks Web - Roadmapa projektu
 
-> Verze: 1.1 | Datum: 12. prosince 2024
+> Verze: 2.0 | Datum: 12. prosince 2024
 >
 > **LIVE URL:** https://weeksweb.vercel.app
 > **GitHub:** https://github.com/lxkask/weeks
 > **Sanity Studio:** https://weeksweb.vercel.app/studio
+> **Formspree ID:** mrbnrqld
 
 ## Executive Summary
 
-Tento dokument obsahuje kompletní roadmapu pro vývoj webu Weeks - víkendových IT táborů pro děti 10-15 let v HWLabu Praha pod záštitou DDM Praha 6.
+Web Weeks je funkční a live. Všechny základní funkce jsou implementovány. Web je připraven pro soft-launch a sběr waitlist přihlášek.
 
 ---
 
@@ -19,499 +20,161 @@ Tento dokument obsahuje kompletní roadmapu pro vývoj webu Weeks - víkendovýc
 | Fáze 0: Setup | ✅ HOTOVO | Vše nastaveno, web live |
 | Fáze 1: Architektura | ✅ HOTOVO | UI/UX spec + obsah vytvořen |
 | Fáze 2: Design systém | ✅ HOTOVO | Komponenty implementovány |
-| Fáze 3: Implementace | 🔄 PROBÍHÁ | Homepage hotová, chybí podstránky + API |
-| Fáze 4: Analytics | ⏳ ČEKÁ | - |
-| Fáze 5: Legal | ⏳ ČEKÁ | - |
-| Fáze 6: Testování | ⏳ ČEKÁ | - |
-| Fáze 7: Launch | ⏳ ČEKÁ | Soft-launch proběhl |
+| Fáze 3: Implementace | ✅ HOTOVO | Všechny stránky + API hotové |
+| Fáze 4: Analytics | ⏳ ODLOŽENO | Google Analytics + FB Pixel |
+| Fáze 5: Legal | ✅ HOTOVO | GDPR + Podmínky stránky |
+| Fáze 6: Testování | 🔄 PRŮBĚŽNĚ | Manuální testování |
+| Fáze 7: Launch | ✅ SOFT-LAUNCH | Web je live, sbírá waitlist |
+
+---
+
+## Implementované stránky
+
+| Stránka | URL | Stav |
+|---------|-----|------|
+| Homepage | `/` | ✅ |
+| Program | `/program` | ✅ |
+| O nás | `/o-nas` | ✅ |
+| Kontakt | `/kontakt` | ✅ |
+| GDPR | `/gdpr` | ✅ |
+| Podmínky | `/podminky` | ✅ |
+| Sanity Studio | `/studio` | ✅ |
+| Sitemap | `/sitemap.xml` | ✅ |
+
+---
+
+## Implementované funkce
+
+### Waitlist & Lead Collection
+- [x] Waitlist formulář s GDPR checkboxem
+- [x] API endpoint `/api/waitlist`
+- [x] Napojení na Formspree (ID: mrbnrqld)
+- [x] Email validace (frontend + backend)
+- [x] Success/error handling v češtině
+
+### SEO
+- [x] Meta tagy na všech stránkách
+- [x] Open Graph + Twitter Cards
+- [x] Schema.org markup (Organization, LocalBusiness, Event)
+- [x] Dynamický sitemap.xml
+- [x] robots.txt
+- [x] Canonical URLs
+- [x] PWA manifest
+
+### Design & UX
+- [x] Responzivní design (mobile-first)
+- [x] Framer Motion animace
+- [x] Konzistentní design systém
+- [x] Breadcrumb navigace na podstránkách
 
 ---
 
 ## Tech Stack
 
-| Technologie | Účel |
-|-------------|------|
-| Next.js 16 | Frontend framework (App Router) |
-| TypeScript | Type safety |
-| Tailwind CSS | Styling |
-| Framer Motion | Animace |
-| Sanity CMS | Headless CMS pro tým |
-| Vercel | Hosting (free tier) |
-| Resend/Formspree | Sběr emailů |
+| Technologie | Účel | Stav |
+|-------------|------|------|
+| Next.js 16 | Frontend framework | ✅ |
+| TypeScript | Type safety | ✅ |
+| Tailwind CSS | Styling | ✅ |
+| Framer Motion | Animace | ✅ |
+| Sanity CMS | Headless CMS | ✅ Připraveno |
+| Vercel | Hosting | ✅ |
+| Formspree | Sběr emailů | ✅ |
 
 ---
 
-## Fáze projektu
+## Co zbývá (volitelné/budoucí)
 
-### Fáze 0: Setup ✅ HOTOVO
+### Vysoká priorita (před plným launch)
+- [ ] **Grafické assets** - og-image.jpg, favicon
+- [ ] **Google Search Console** - registrace, verifikace, sitemap
+- [ ] **Reálné fotky** - HWLab, vybavení, tým
+- [ ] **Aktualizovat telefon** - nahradit placeholder +420 XXX XXX XXX
 
-#### 0.1 Inicializace projektu
-- [x] Vytvořit Next.js 16 projekt s App Router
-- [x] Nastavit TypeScript konfiguraci
-- [x] Nakonfigurovat Tailwind CSS s custom design tokeny
-- [x] Inicializovat Git repozitář
-- [x] Připojit ke GitHub (https://github.com/lxkask/weeks.git)
-- [x] Připojit k Vercel pro CI/CD
-- [x] Vytvořit Sanity Studio projekt a schémata (ID: cuy78njh)
+### Střední priorita
+- [ ] **Google Analytics 4** - tracking konverzí
+- [ ] **Cookie consent banner** - GDPR compliance
+- [ ] **Kontaktní formulář** - napojit na Formspree
+- [ ] **Vlastní doména** - weeks.cz nebo podobná
 
-#### 0.2 Environment proměnné
+### Nízká priorita (nice-to-have)
+- [ ] **Blog sekce** - pro SEO content marketing
+- [ ] **Galerie** - fotky z akcí
+- [ ] **Testimonials** - po prvních kempech
+- [ ] **Facebook Pixel** - remarketing
+
+---
+
+## Použití AI agentů - souhrn
+
+| Agent | Použito pro |
+|-------|-------------|
+| `ui-ux-designer` | UI/UX specifikace, persony, wireframes |
+| `content-marketer` | Český obsah, GDPR + Podmínky stránky |
+| `frontend-developer` | Homepage sekce, podstránky |
+| `backend-architect` | Waitlist API, Formspree integrace |
+| `seo-analyzer` | SEO audit, Schema markup, sitemap |
+
+---
+
+## Environment proměnné
+
+### Lokální (.env.local)
 ```env
-NEXT_PUBLIC_SANITY_PROJECT_ID=
+NEXT_PUBLIC_SANITY_PROJECT_ID=cuy78njh
 NEXT_PUBLIC_SANITY_DATASET=production
-SANITY_API_TOKEN=
-NEXT_PUBLIC_GA_ID=
-NEXT_PUBLIC_FB_PIXEL_ID=
+NEXT_PUBLIC_FORMSPREE_ID=mrbnrqld
 ```
 
-#### 0.3 Doména a hosting
-> **ODLOŽENO**: Vlastní doména bude řešena později. Prozatím pouze Vercel produkční doména.
-
-- [ ] ~~Registrovat doménu (`weeks.cz` nebo `weeks-tabory.cz`)~~ - ODLOŽENO
-- [ ] ~~Nasměrovat DNS na Vercel~~ - ODLOŽENO
-- [x] SSL automaticky přes Vercel
-
----
-
-### Fáze 1: Informační architektura ✅ HOTOVO
-
-> **Dokumenty vytvořené:**
-> - `docs/UI_UX_SPEC.md` - Persony, wireframes, user journey
-> - `docs/CONTENT_CS.md` - Veškerý český obsah webu
-
-#### 1.1 Struktura webu (Sitemap)
-```
-/                   # Homepage (landing page)
-/program            # Detaily programu (3D tisk, VR, IoT)
-/o-nas              # O nás - DDM, HWLab, tým
-/terminy            # Termíny / waiting list
-/kontakt            # Kontakt + mapa HWLabu
-/gdpr               # Zásady ochrany osobních údajů
-/podminky           # Obchodní podmínky
-
-Budoucí (Nice-to-have):
-/blog               # Články pro SEO
-/galerie            # Fotogalerie
-/reference          # Reference (po prvních táborech)
+### Vercel (nastaveno)
+```env
+NEXT_PUBLIC_SANITY_PROJECT_ID=cuy78njh
+NEXT_PUBLIC_SANITY_DATASET=production
+NEXT_PUBLIC_FORMSPREE_ID=mrbnrqld
 ```
 
-#### 1.2 Sekce homepage (scroll-based landing page)
-1. **Hero** - Value proposition + hlavní CTA
-2. **Co je Weeks** - Krátké vysvětlení
-3. **Program** - 3D tisk, VR, IoT karty
-4. **Proč Weeks** - USP grid (6 prodejních argumentů)
-5. **Důvěra** - Loga DDM/HWLab + info o bezpečnosti
-6. **Termíny/CTA** - Registrace nebo waiting list
-7. **FAQ** - Časté dotazy rodičů
-8. **Kontakt** - Rychlé kontaktní info
-
-#### 1.3 Obsah k vytvoření
-
-| Sekce | Tón | Cílová skupina | Priorita |
-|-------|-----|----------------|----------|
-| Hero headline | Energický, jasný | Obě | Kritická |
-| Popisy programu | Technický ale přístupný | Rodiče | Kritická |
-| Bezpečnost/BOZP | Profesionální, uklidňující | Rodiče | Kritická |
-| "Cool factor" sekce | Moderní, engaging | Teenageři | Vysoká |
-| Tým/O nás | Profesionální | Partneři | Střední |
-| FAQ | Nápomocný, důkladný | Rodiče | Vysoká |
-
 ---
 
-### Fáze 2: Design systém ✅ HOTOVO
-
-#### 2.1 Barevná paleta
-```css
-:root {
-  /* Primary - Tech/Energy */
-  --color-primary-500: #6366F1;  /* Indigo */
-  --color-primary-600: #4F46E5;
-
-  /* Accent - Engagement */
-  --color-accent-500: #06B6D4;   /* Cyan */
-
-  /* Trust - Professional */
-  --color-trust-500: #10B981;    /* Emerald */
-
-  /* Neutral */
-  --color-gray-900: #111827;
-  --color-gray-50: #F9FAFB;
-
-  /* CTA */
-  --color-cta: #F59E0B;          /* Amber */
-}
-```
-
-#### 2.2 Typografie
-```css
-/* Headlines - Modern, techy feel */
-font-family: 'Inter', 'SF Pro Display', sans-serif;
-
-/* Body - Readable for parents */
-font-family: 'Inter', system-ui, sans-serif;
-```
-
-#### 2.3 Komponenty k vytvoření
-
-| Komponenta | Účel | Animace |
-|------------|------|---------|
-| `HeroSection` | Landing hero s CTA | Subtle parallax |
-| `ProgramCard` | 3D/VR/IoT showcase | Hover lift + glow |
-| `USPGrid` | Prodejní argumenty | Stagger reveal |
-| `TrustBar` | Loga partnerů | Logo carousel |
-| `CTAButton` | Hlavní akce | Pulse/glow effect |
-| `WaitlistForm` | Sběr emailů | Success animation |
-| `ContactMap` | Lokace HWLabu | Interaktivní mapa |
-| `TeamCard` | Profily instruktorů | Hover reveal |
-| `FAQAccordion` | Dotazy rodičů | Smooth expand |
-| `Footer` | Odkazy + legal | - |
-
----
-
-### Fáze 3: Technická implementace 🔄 PROBÍHÁ
-
-#### 3.0 Aktuální stav implementace
-
-**✅ Hotovo:**
-- [x] Homepage se všemi sekcemi (Hero, Program, USP, Trust, CTA, FAQ, Contact)
-- [x] Header a Footer komponenty
-- [x] Responzivní design (mobile-first)
-- [x] Framer Motion animace
-- [x] Sanity Studio na /studio
-- [x] SEO metadata
-
-**🔄 Zbývá dokončit:**
-- [ ] Napojit waitlist formulář na email službu (Formspree/Resend)
-- [ ] Podstránky: /program, /o-nas, /terminy, /kontakt
-- [ ] Legal stránky: /gdpr, /podminky
-- [ ] Reálné obrázky a fotky (místo placeholderů)
-- [ ] Google Maps embed s přesnou lokací HWLab
-
-#### 3.1 Struktura projektu
-```
-/app
-  /layout.tsx              # Root layout s providery
-  /page.tsx                # Homepage
-  /program/page.tsx        # Detaily programu
-  /o-nas/page.tsx          # O nás
-  /terminy/page.tsx        # Termíny
-  /kontakt/page.tsx        # Kontakt
-  /gdpr/page.tsx           # GDPR
-  /api
-    /waitlist/route.ts     # Email collection endpoint
-    /revalidate/route.ts   # Sanity webhook handler
-
-/components
-  /ui                      # Base UI komponenty
-  /sections                # Sekce stránek
-  /forms                   # Formuláře
-  /layout                  # Header, Footer, Nav
-
-/lib
-  /sanity                  # Sanity client config
-  /analytics               # GA/FB helpers
-  /utils                   # Utility funkce
-
-/sanity
-  /schemas                 # Content schémata
-  /lib                     # Sanity utilities
-```
-
-#### 3.2 Sanity CMS schémata
-
-**Program:**
-- title, slug, description, content, icon, image, order
-
-**Člen týmu:**
-- name, role, bio, photo, order
-
-**Termín tábora:**
-- title, startDate, endDate, capacity, registrationUrl (DDM), status
-
-**FAQ:**
-- question, answer, category, order
-
-**Nastavení webu:**
-- heroHeadline, heroSubheadline, waitlistMode, contactEmail, contactPhone, hwlabAddress, socialLinks
-
-#### 3.3 Sběr emailů (Waiting list)
-
-**Možnosti:**
-1. **Resend** (doporučeno) - 100 emailů/den zdarma
-2. **Formspree** - 50 submissions/měsíc zdarma
-3. **Google Sheets API** - přímá integrace
-
-#### 3.4 DDM integrace
-
-Flow registrace:
-1. Uživatel klikne "Přihlásit se" u konkrétního termínu
-2. Otevře se DDM registrační systém v novém tabu
-3. Klik se trackuje jako konverze v GA/FB Pixel
-
----
-
-### Fáze 4: Analytics & Marketing (Týden 4)
-
-#### 4.1 Google Analytics 4
-
-**Eventy k trackování:**
-- `page_view` - Standardní
-- `waitlist_signup` - Odeslání emailu
-- `registration_click` - Klik na DDM odkaz
-- `program_view` - Rozbalení detailu programu
-- `contact_interaction` - Klik na mapu/telefon/email
-
-#### 4.2 Facebook Pixel
-
-**Eventy:**
-- `PageView` - Všechny stránky
-- `Lead` - Waitlist signup
-- `InitiateCheckout` - DDM registrace klik
-- `ViewContent` - Stránky programu
-
-#### 4.3 Cookie consent (GDPR)
-- Cookie consent banner
-- Blokovat analytics do udělení souhlasu
-- Uložit preference do localStorage
-- České UI
-
----
-
-### Fáze 5: Legal & Bezpečnost (Týden 4-5)
-
-#### 5.1 GDPR compliance
-
-**Požadované stránky/elementy:**
-1. Zásady ochrany osobních údajů (`/gdpr`)
-2. Cookie policy (součást GDPR stránky)
-3. Cookie consent banner
-4. Proces žádosti o smazání dat
-
-**Obsah GDPR stránky:**
-- Správce dat: DDM Praha 6
-- Účel sběru dat
-- Právní základ (souhlas)
-- Doba uchování
-- Práva uživatelů (přístup, smazání, přenositelnost)
-- Kontakt pro žádosti o data
-
-#### 5.2 Ochrana dat dětí
-
-**Kritické body:**
-- Web NESBÍRÁ data dětí přímo
-- Sběr emailů je pouze pro rodiče
-- Registrace probíhá přes DDM systém
-- Žádné uživatelské účty na webu
-- Žádná přímá komunikace s nezletilými přes web
-
-#### 5.3 Legal footer
-
-Povinné odkazy:
-- Zásady ochrany osobních údajů
-- Podmínky užití
-- Cookies
-- Provozovatel: DDM Praha 6
-
----
-
-### Fáze 6: Testování (Týden 5-6)
-
-#### 6.1 Testovací checklist
-- [ ] Mobilní responzivita (všechny breakpointy)
-- [ ] Cross-browser testování (Chrome, Safari, Firefox, Edge)
-- [ ] Validace formulářů a odesílání
-- [ ] Analytics eventy fungují
-- [ ] Rychlost načítání (<3s na 3G)
-- [ ] Accessibility audit (WCAG 2.1 AA)
-- [ ] CMS aktualizace obsahu fungují
-- [ ] Externí odkazy (DDM) fungují
-- [ ] SEO meta tagy přítomny
-- [ ] Open Graph obrázky se renderují
-
-#### 6.2 Performance cíle
-
-| Metrika | Cíl | Nástroj |
-|---------|-----|---------|
-| First Contentful Paint | <1.8s | Lighthouse |
-| Largest Contentful Paint | <2.5s | Lighthouse |
-| Total Blocking Time | <200ms | Lighthouse |
-| Cumulative Layout Shift | <0.1 | Lighthouse |
-| Performance Score | >90 | Lighthouse |
-
----
-
-### Fáze 7: Launch (Týden 6-7)
-
-#### 7.1 Pre-launch checklist
-- [ ] Veškerý obsah schválen týmem
-- [ ] Loga DDM/HWLab schválena
-- [ ] Legal stránky zkontrolovány
-- [ ] Analytics ověřeny
-- [ ] SSL certifikát aktivní
-- [ ] Custom doména připojena
-- [ ] 404 stránka vytvořena
-- [ ] Robots.txt nakonfigurován
-- [ ] Sitemap.xml vygenerován
-- [ ] Social media preview obrázky nastaveny
-
-#### 7.2 Launch day
-1. Merge do main branch
-2. Vercel auto-deploy
-3. Ověřit produkční web
-4. Otestovat formuláře live
-5. Sdílet s týmem pro finální check
-6. Oznámit na sociálních sítích
-
-#### 7.3 Post-launch monitoring
-
-**Prvních 48 hodin:**
-- Monitorovat error logy (Vercel)
-- Kontrolovat tok analytics dat
-- Reagovat na feedback týmu
-- Opravit kritické bugy
-
-**První týden:**
-- Analyzovat chování uživatelů
-- Zkontrolovat submissions formulářů
-- Zkontrolovat Core Web Vitals v Search Console
-- Iterovat na základě feedbacku
-
----
-
-## AI Agenti - Použití podle fáze
-
-| Fáze | Primární agent | Podporující agenti |
-|------|----------------|-------------------|
-| 0 - Setup | fullstack-developer | - |
-| 1 - Architektura | ui-ux-designer | content-marketer |
-| 2 - Design | ui-ux-designer | frontend-developer |
-| 3 - Implementace | frontend-developer | backend-architect |
-| 4 - Analytics | seo-analyzer | backend-architect |
-| 5 - Legal | content-marketer | - |
-| 6 - Testování | code-reviewer | seo-analyzer |
-| 7 - Launch | fullstack-developer | - |
-
----
-
-## Rizika a mitigace
-
-| Riziko | Pravděpodobnost | Dopad | Mitigace |
-|--------|-----------------|-------|----------|
-| DDM zpoždění schválení | Střední | Vysoký | Začít s waiting list módem |
-| Design není dost "cool" pro teenagery | Střední | Střední | Získat feedback od teenagerů brzy |
-| CMS příliš složité pro tým | Nízká | Střední | Vytvořit dokumentaci k použití |
-| Problémy s výkonem | Nízká | Vysoký | Testovat na pomalém připojení |
-| Legal non-compliance | Střední | Vysoký | Konzultovat požadavky s DDM |
-
----
-
-## Rozpočet
-
-| Položka | Cena | Poznámka |
-|---------|------|----------|
-| Vercel Hosting | Zdarma | Hobby tier stačí |
-| Sanity CMS | Zdarma | Free tier: 100k API requests/měsíc |
-| Doména (.cz) | ~200 Kč/rok | Libovolný registrátor |
-| Resend (email) | Zdarma | 100 emailů/den zdarma |
-| **Měsíčně celkem** | **~0 Kč** | |
-| **Ročně celkem** | **~200 Kč** | Pouze doména |
+## Dokumentace projektu
+
+| Soubor | Účel |
+|--------|------|
+| `docs/ROADMAP.md` | Tento soubor - roadmapa |
+| `docs/UI_UX_SPEC.md` | UI/UX specifikace |
+| `docs/CONTENT_CS.md` | Český obsah webu |
+| `CLAUDE.md` | Kontext pro Claude Code |
+| `SEO-AUDIT-REPORT.md` | SEO audit report |
+| `NEXT-STEPS.md` | Rychlý návod dalších kroků |
 
 ---
 
 ## Metriky úspěchu
 
-**Launch úspěch (Týden 1 po launch):**
-- Web se načte <3s na mobilu
-- 0 kritických bugů nahlášeno
-- Analytics tracking ověřen
+### Aktuální stav (Soft-launch)
+- [x] Web je live a funkční
+- [x] Waitlist sbírá emaily
+- [x] Všechny stránky responzivní
+- [x] SEO základy implementovány
 
-**Krátkodobý úspěch (Měsíc 1):**
-- 50+ waitlist přihlášení
-- <1% bounce rate na mobilu
-- Pozitivní feedback týmu
+### Cíle pro měsíc 1
+- [ ] 50+ waitlist přihlášení
+- [ ] Google indexace
+- [ ] 0 kritických bugů
 
-**Dlouhodobý úspěch (První sezona táborů):**
-- Tábory dosáhnou kapacity přes web referraly
-- Rodiče zmiňují web jako faktor důvěry
-- Teenageři sdílejí web s kamarády
-
----
-
-## Příklady promptů pro agenty
-
-### ui-ux-designer
-```
-Design a wireframe for the Weeks homepage that appeals to both
-parents (trust, safety) and teenagers (cool factor, tech visuals).
-Include sections for: hero, program highlights, USPs, trust signals,
-CTA, and FAQ. Focus on mobile-first layout.
-```
-
-### frontend-developer
-```
-Create a ProgramCard component for the Weeks website. It should:
-- Display program icon, title, and short description
-- Have a hover effect with subtle 3D tilt
-- Use Framer Motion for animations
-- Be fully responsive (mobile-first)
-- Follow the high-tech design aesthetic
-```
-
-### content-marketer
-```
-Write Czech copy for the Weeks homepage hero section. Target audience
-is parents of 10-15 year olds. Use "vykani" (formal you). Emphasize:
-- Weekend IT camps at HWLab Prague
-- 3D printing, VR, IoT activities
-- DDM Praha 6 backing for trust
-- Educational value + kids create real projects
-Keep it energetic but professional.
-```
-
-### seo-analyzer
-```
-Audit the Weeks website for SEO. Focus on:
-- Meta tags for Czech search
-- Local SEO for Prague
-- Keywords: "IT tabory pro deti", "vikendove tabory Praha"
-- Schema markup for events
-- Core Web Vitals optimization
-```
+### Cíle pro sezonu (jaro 2026)
+- [ ] Tábory naplněny přes web
+- [ ] Pozitivní feedback rodičů
+- [ ] Testimonials k zobrazení
 
 ---
 
-## 🚀 DOPORUČENÉ DALŠÍ KROKY
+## Kontakty
 
-> Aktualizováno: 12. prosince 2024
+- **Email:** info@weeks.cz
+- **Provozovatel:** DDM Praha 6
+- **Místo:** HWLab Praha, Vnislavova 2, 128 00 Praha 2
 
-### Priorita 1: Funkční waitlist (KRITICKÉ)
-**Agent:** `backend-architect`
-**Úkol:** Napojit waitlist formulář na Formspree pro sběr emailů
-**Proč:** Bez funkčního sběru emailů nemůžeme sbírat leady
+---
 
-```
-Vytvoř API endpoint pro waitlist formulář. Použij Formspree (jednodušší)
-nebo Resend. Formulář je v CTASection.tsx. Zajisti:
-- Validaci emailu
-- Ukládání do Formspree/Resend
-- Success/error handling
-- GDPR souhlas checkbox
-```
-
-### Priorita 2: Legal stránky (DŮLEŽITÉ pro GDPR)
-**Agent:** `content-marketer`
-**Úkol:** Vytvořit /gdpr a /podminky stránky
-**Proč:** Povinné pro sběr osobních údajů (emailů)
-
-### Priorita 3: SEO optimalizace
-**Agent:** `seo-analyzer`
-**Úkol:** Audit a optimalizace pro české vyhledávače
-**Proč:** Organická návštěvnost z Google
-
-### Priorita 4: Podstránky
-**Agent:** `frontend-developer`
-**Úkol:** Vytvořit /program, /o-nas, /kontakt stránky
-**Proč:** Lepší UX a SEO (více obsahu)
-
-### Priorita 5: Vizuální obsah
-**Potřeba:** Reálné fotky z HWLab, týmu, vybavení
-**Akce:** Klient musí dodat fotografie
+**Poslední aktualizace:** 12. prosince 2024
+**Verze dokumentu:** 2.0
