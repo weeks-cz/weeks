@@ -6,28 +6,36 @@ import { ChevronDown } from 'lucide-react'
 
 const faqs = [
   {
-    question: 'Pro koho jsou tábory určeny?',
-    answer: 'Tábory jsou určeny pro děti ve věku 10-15 let, které zajímá technika, programování nebo kreativní tvorba. Není potřeba žádná předchozí zkušenost.',
+    question: 'Je kemp vhodný pro úplné začátečníky?',
+    answer: 'Ano! Program přizpůsobujeme úrovni každého dítěte. Začátečníci začínají s asistovanými projekty a postupně získávají samostatnost. Pokročilí dostanou složitější výzvy. Není potřeba žádná předchozí zkušenost s technologiemi.',
   },
   {
-    question: 'Jak probíhá přihlášení?',
-    answer: 'Přihlášení probíhá přes systém DDM Praha 6. Po kliknutí na tlačítko "Přihlásit se" budete přesměrováni na registrační formulář DDM.',
+    question: 'Jak vypadá typický den?',
+    answer: '9:00 - příchod a rozcvička, 9:30-11:30 - workshop 1 (např. 3D modelování), 11:30-12:00 - svačina a venkovní přestávka, 12:00-13:30 - workshop 2 (např. programování), 13:30-14:30 - oběd, 14:30-16:30 - projekt podle výběru, 16:30-17:00 - prezentace a závěr. Program střídáme, aby děti neseděly 8 hodin u počítače.',
   },
   {
-    question: 'Co je v ceně tábora zahrnuto?',
-    answer: 'V ceně je zahrnuto: celý program, veškeré materiály, oběd a svačiny, pojištění a výrobky, které si děti odnesou domů.',
+    question: 'Co má dítě mít s sebou?',
+    answer: 'Jen dobrou náladu a svačinu na dopoledne (oběd zajišťujeme my). Všechno technické vybavení, nástroje i materiály jsou na místě. Pokud má dítě vlastní notebook, může si ho vzít, ale není to nutné - máme k dispozici počítače pro všechny.',
   },
   {
-    question: 'Kde se tábory konají?',
-    answer: 'Tábory se konají v HWLabu na Vyšehradě v Praze. Místo je dobře dostupné MHD (metro C, zastávka Vyšehrad).',
+    question: 'Kolik stojí jeden víkend?',
+    answer: 'Cena je 2 490 Kč za víkend (sobota + neděle, celkem 16 hodin programu). Zahrnuje veškeré materiály, obědy, svačiny a všechny vytvořené projekty si děti odnášejí domů. Pro sourozence nabízíme slevu 10%.',
   },
   {
-    question: 'Jaký je maximální počet dětí?',
-    answer: 'Na jednom táboře je maximálně 12 dětí, aby každý dostal dostatek individuální pozornosti od lektorů.',
+    question: 'Musí dítě přijít oba dny, nebo jen jeden?',
+    answer: 'Víkendový kemp je koncipován jako celek sobota + neděle, protože projekty pokračují. Jednotlivé dny neprodáváme. Pokud dítě sobotu nestihne ze závažného důvodu, můžeme se individuálně domluvit, ale preferujeme účast oba dny.',
   },
   {
-    question: 'Potřebuje moje dítě vlastní notebook?',
-    answer: 'Ne, veškeré vybavení včetně počítačů poskytujeme. Děti si nemusí nosit nic kromě dobré nálady.',
+    question: 'Je zajištěn oběd pro děti s alergiemi?',
+    answer: 'Ano, při registraci se ptáme na stravovací omezení a alergie. Spolupracujeme s dodavatelem, který dokáže připravit bezlepkové, vegetariánské i jiné speciální varianty. Potřeby dítěte vždy zohledníme.',
+  },
+  {
+    question: 'Můžu jako rodič zůstat s dítětem?',
+    answer: 'První den můžete dítě doprovodit dovnitř a podívat se na prostory. Během programu ale prosíme rodiče, aby odešli - děti se lépe soustředí a více se otevřou vrstevníkům. Samozřejmě jsme vám k dispozici telefonicky a v případě jakéhokoliv problému vás kontaktujeme.',
+  },
+  {
+    question: 'Co když se dítěti kemp nebude líbit?',
+    answer: 'Pokud dítě první den rozhodne, že to není pro něj, vrátíme 50% ceny. Naším cílem je, aby se děti bavily a učily se zároveň - pokud to nefunguje, nechceme nikoho nutit. Zatím ale máme 98% spokojených účastníků, kteří se hlásí i na další víkendy.',
   },
 ]
 
@@ -42,7 +50,7 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
       >
         <span className="font-semibold text-gray-900 pr-4">{question}</span>
         <ChevronDown
-          className={`w-5 h-5 text-gray-500 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+          className={`w-5 h-5 text-gray-500 transition-transform flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`}
         />
       </button>
       <AnimatePresence>
@@ -73,10 +81,10 @@ export function FAQSection() {
           className="max-w-3xl mx-auto"
         >
           <h2 className="heading-2 text-gray-900 mb-4 text-center">
-            Časté dotazy
+            Časté dotazy <span className="text-gradient">rodičů</span>
           </h2>
           <p className="text-xl text-gray-600 mb-12 text-center">
-            Odpovědi na nejčastější otázky rodičů.
+            Odpovědi na nejčastější otázky. Nenašli jste odpověď? Napište nám.
           </p>
 
           <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm">
@@ -87,8 +95,8 @@ export function FAQSection() {
 
           <p className="text-center text-gray-500 mt-8">
             Máte další otázky?{' '}
-            <a href="#kontakt" className="text-primary-600 hover:underline">
-              Napište nám
+            <a href="#kontakt" className="text-primary-600 hover:underline font-medium">
+              Kontaktujte nás
             </a>
           </p>
         </motion.div>

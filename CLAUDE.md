@@ -110,10 +110,24 @@ Located in `.claude/agents/`:
 - `fullstack-developer` - End-to-end development
 - `prompt-engineer` - AI prompt optimization
 
+## Current Status
+
+**Phase 0 (Setup)**: 90% complete
+- [x] Next.js 16 + TypeScript + Tailwind
+- [x] Framer Motion animations
+- [x] GitHub connected (https://github.com/lxkask/weeks.git)
+- [x] Sanity CMS schemas created
+- [ ] Vercel deployment (pending login)
+- [ ] Sanity project creation (need Project ID)
+
 ## Next Steps
 
-1. Set up Sanity CMS with content schemas
-2. Add analytics (GA4, FB Pixel)
-3. Implement waitlist form with email integration
-4. Add GDPR/cookie consent
-5. Create remaining pages (/program, /o-nas, /kontakt, /gdpr)
+1. **Deploy to Vercel** - Run `vercel login` then `vercel`
+2. **Create Sanity project** - https://www.sanity.io/manage
+3. **Set environment variables** in Vercel:
+   - `NEXT_PUBLIC_SANITY_PROJECT_ID`
+   - `NEXT_PUBLIC_SANITY_DATASET=production`
+4. Add analytics (GA4, FB Pixel)
+5. Implement waitlist form with email integration
+6. Add GDPR/cookie consent
+7. Create remaining pages (/program, /o-nas, /kontakt, /gdpr)

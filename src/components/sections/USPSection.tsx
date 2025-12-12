@@ -1,38 +1,38 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Building2, GraduationCap, Shield, Clock, Utensils, MapPin } from 'lucide-react'
+import { Building2, Package, GraduationCap, Shield, Clock, Train } from 'lucide-react'
 
 const usps = [
   {
     icon: Building2,
-    title: 'Exkluzivní zázemí HWLabu',
-    description: 'Přístup k profesionálním 3D tiskárnám, VR setům, CNC strojům a dalšímu vybavení.',
+    title: 'Exkluzivní technologie HWLab',
+    description: 'Vaše dítě pracuje se stejným vybavením jako profesionálové - průmyslové 3D tiskárny, VR headsety, CNC stroje a pokročilá IoT zařízení. Žádné hračky.',
+  },
+  {
+    icon: Package,
+    title: 'Projekty, které si odnesou domů',
+    description: 'Učíme tvorbou, ne teorií. Každý víkend znamená dokončený projekt - vytištěný model, funkční elektroniku nebo nahrané aplikace.',
   },
   {
     icon: GraduationCap,
-    title: 'Odborné vedení',
-    description: 'Lektoři, kteří technologiím opravdu rozumí. Nejsou to jen dozor, ale mentoři.',
+    title: 'Skuteční odborníci, ne hlídání',
+    description: 'Naši lektoři jsou aktivní programátoři, inženýři a designéři. Mají praxi z oboru a vědí, jak zaujmout teenagery i začátečníky od 10 let.',
   },
   {
     icon: Shield,
-    title: 'Záštita DDM Praha 6',
-    description: 'Zavedená instituce garantuje bezpečnostní standardy, pojištění a prověřené procesy.',
+    title: 'Pod záštitou DDM Praha 6',
+    description: 'Garantujeme bezpečnost, pojištění a prověřené procesy. DDM Praha 6 má více než 60 let zkušeností s dětskými aktivitami.',
   },
   {
     icon: Clock,
-    title: 'Víkendový detox pro rodiče',
-    description: 'Dítě se od 9 do 17 vzdělává a tvoří, vy máte volný víkend pro sebe.',
+    title: 'Kompletní servis od 9 do 17',
+    description: 'Oběd, svačiny, přestávky na hřišti a střídání aktivit. Rodiče mají celý víkendový den pro sebe, děti mají postaráno o vše.',
   },
   {
-    icon: Utensils,
-    title: 'Kompletní péče',
-    description: 'O děti je postaráno včetně obědů a svačin. Aktivity i mimo počítač.',
-  },
-  {
-    icon: MapPin,
-    title: 'Skvělá dostupnost',
-    description: 'HWLab na Vyšehradě, výborná dostupnost MHD. Víkendové termíny bez zásahu do školy.',
+    icon: Train,
+    title: 'Metro až ke dveřím',
+    description: 'HWLab Praha na Vyšehradě - 2 minuty pěšky od metra. Snadný přístup z celé Prahy bez komplikovaného dojíždění.',
   },
 ]
 
@@ -48,7 +48,7 @@ export function USPSection() {
             viewport={{ once: true }}
             className="heading-2 text-gray-900 mb-4"
           >
-            Proč <span className="text-gradient">Weeks</span>?
+            Proč zvolit <span className="text-gradient">Weeks</span>?
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}

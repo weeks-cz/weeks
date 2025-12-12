@@ -23,7 +23,7 @@ export function HeroSection() {
             className="inline-flex items-center gap-2 px-4 py-2 bg-primary-100 text-primary-700 rounded-full text-sm font-medium mb-8"
           >
             <Sparkles className="w-4 h-4" />
-            Nové termíny již brzy
+            Nově v Praze! Registrace spuštěna
           </motion.div>
 
           {/* Headline */}
@@ -33,9 +33,9 @@ export function HeroSection() {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="heading-1 text-gray-900 mb-6"
           >
-            Víkendové IT tábory
+            Víkendové IT kempy,
             <br />
-            <span className="text-gradient">pro děti 10-15 let</span>
+            <span className="text-gradient">kde děti tvoří budoucnost</span>
           </motion.h1>
 
           {/* Subheadline */}
@@ -45,8 +45,8 @@ export function HeroSection() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="text-xl md:text-2xl text-gray-600 mb-10 max-w-2xl mx-auto"
           >
-            3D tisk, virtuální realita a IoT v profesionálním prostředí HWLabu Praha.
-            Nechte své dítě tvořit budoucnost.
+            Každou sobotu a neděli na Vyšehradě. Profesionální vybavení, expert instruktoři
+            a projekty, které si Vaše dítě odnese domů. Pro děti 10-15 let.
           </motion.p>
 
           {/* CTAs */}
@@ -57,11 +57,11 @@ export function HeroSection() {
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
             <Link href="#prihlasit" className="btn-primary text-lg px-8 py-4">
-              Přihlásit se na tábor
+              Přejít na registraci
               <ArrowRight className="ml-2 w-5 h-5" />
             </Link>
             <Link href="#program" className="btn-outline text-lg px-8 py-4">
-              Prohlédnout program
+              Co děti čeká
             </Link>
           </motion.div>
 
@@ -79,7 +79,7 @@ export function HeroSection() {
             <div className="w-px h-6 bg-gray-300 hidden sm:block" />
             <div className="flex items-center gap-2">
               <span className="text-sm">Místo konání</span>
-              <span className="font-semibold text-gray-700">HWLab Praha</span>
+              <span className="font-semibold text-gray-700">HWLab Vyšehrad</span>
             </div>
             <div className="w-px h-6 bg-gray-300 hidden sm:block" />
             <div className="flex items-center gap-2">

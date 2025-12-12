@@ -1,31 +1,31 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Printer, Glasses, Cpu, Gamepad2 } from 'lucide-react'
+import { Printer, Glasses, Cpu, Code2 } from 'lucide-react'
 
 const programs = [
   {
     icon: Printer,
-    title: '3D Tisk',
-    description: 'Naučte se navrhovat a tisknout vlastní 3D modely. Od návrhu v CAD softwaru až po hotový výrobek.',
+    title: '3D tisk & modelování',
+    description: 'Od návrhu po reálný výtisk. Děti navrhnou v 3D a vytisknou si vlastní projekt na profesionálních tiskárnách.',
     color: 'primary',
   },
   {
     icon: Glasses,
     title: 'Virtuální realita',
-    description: 'Prozkoumejte virtuální světy a naučte se základy tvorby VR aplikací.',
+    description: 'Tvorba VR světů a zážitků. Naučí se pracovat s nejmodernější technologií a vytvořit vlastní virtuální prostředí.',
     color: 'accent',
   },
   {
     icon: Cpu,
-    title: 'IoT & Elektronika',
-    description: 'Sestavte si vlastní chytrá zařízení s Arduino a Raspberry Pi. Propojte fyzický svět s digitálním.',
+    title: 'IoT & elektronika',
+    description: 'Chytré zařízení od A do Z. Programování senzorů, LED pásků a vytvoření funkčního IoT projektu s napojením na internet.',
     color: 'trust',
   },
   {
-    icon: Gamepad2,
-    title: 'Programování',
-    description: 'Základy programování hravou formou. Vytvořte si vlastní hru nebo aplikaci.',
+    icon: Code2,
+    title: 'Programování & vývoj',
+    description: 'Kód, který funguje. Od základů po pokročilé projekty - aplikace, hry nebo weby podle zájmu a úrovně dítěte.',
     color: 'cta',
   },
 ]
@@ -65,7 +65,7 @@ export function ProgramSection() {
             viewport={{ once: true }}
             className="heading-2 text-gray-900 mb-4"
           >
-            Co se na táboře <span className="text-gradient">naučíte</span>
+            Co děti <span className="text-gradient">čeká</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -75,7 +75,7 @@ export function ProgramSection() {
             className="text-xl text-gray-600"
           >
             Praktické dovednosti s nejmodernějšími technologiemi.
-            Každý si odnese vlastní výrobek a nové znalosti.
+            Každý si odnese vlastní projekt a nové znalosti.
           </motion.p>
         </div>
 
