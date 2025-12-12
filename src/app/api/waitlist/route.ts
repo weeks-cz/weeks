@@ -1,0 +1,98 @@
+import { NextRequest, NextResponse } from 'next/server'
+
+// Email validation regex
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+interface WaitlistRequestBody {
+  email: string
+  gdprConsent: boolean
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    // Parse request body
+    const body: WaitlistRequestBody = await request.json()
+    const { email, gdprConsent } = body
+
+    // Validate required fields
+    if (!email) {
+      return NextResponse.json(
+        { error: 'Email je povinný' },
+        { status: 400 }
+      )
+    }
+
+    if (!gdprConsent) {
+      return NextResponse.json(
+        { error: 'Musíte souhlasit se zpracováním osobních údajů' },
+        { status: 400 }
+      )
+    }
+
+    // Validate email format
+    if (!EMAIL_REGEX.test(email)) {
+      return NextResponse.json(
+        { error: 'Neplatný formát emailu' },
+        { status: 400 }
+      )
+    }
+
+    // Get Formspree ID from environment
+    const formspreeId = process.env.NEXT_PUBLIC_FORMSPREE_ID
+
+    if (!formspreeId) {
+      console.error('NEXT_PUBLIC_FORMSPREE_ID is not configured')
+      return NextResponse.json(
+        { error: 'Služba není správně nakonfigurována' },
+        { status: 500 }
+      )
+    }
+
+    // Send to Formspree
+    const formspreeResponse = await fetch(
+      `https://formspree.io/f/${formspreeId}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          gdprConsent,
+          _subject: 'Nová registrace do waitlistu - Weeks',
+          timestamp: new Date().toISOString(),
+        }),
+      }
+    )
+
+    if (!formspreeResponse.ok) {
+      const errorData = await formspreeResponse.json().catch(() => ({}))
+      console.error('Formspree error:', errorData)
+
+      return NextResponse.json(
+        { error: 'Nepodařilo se odeslat email. Zkuste to prosím znovu.' },
+        { status: 500 }
+      )
+    }
+
+    const data = await formspreeResponse.json()
+
+    return NextResponse.json(
+      {
+        success: true,
+        message: 'Email byl úspěšně přidán do waitlistu',
+        data
+      },
+      { status: 200 }
+    )
+
+  } catch (error) {
+    console.error('Waitlist API error:', error)
+
+    return NextResponse.json(
+      { error: 'Nastala neočekávaná chyba. Zkuste to prosím znovu.' },
+      { status: 500 }
+    )
+  }
+}

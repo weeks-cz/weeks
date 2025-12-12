@@ -9,16 +9,42 @@ export function CTASection() {
   // TODO: This will be controlled by Sanity CMS - waitlistMode setting
   const isWaitlistMode = true
   const [email, setEmail] = useState('')
+  const [gdprConsent, setGdprConsent] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
-    // TODO: Connect to actual email collection service (Resend/Formspree)
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    setIsSubmitted(true)
-    setIsSubmitting(false)
+    setError(null)
+
+    try {
+      const response = await fetch('/api/waitlist', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          gdprConsent,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Něco se pokazilo')
+      }
+
+      setIsSubmitted(true)
+      setEmail('')
+      setGdprConsent(false)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Nepodařilo se odeslat email. Zkuste to prosím znovu.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -58,23 +84,52 @@ export function CTASection() {
                   </p>
                 </motion.div>
               ) : (
-                <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="váš@email.cz"
-                    className="flex-1 px-4 py-3 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cta-500"
-                    required
-                  />
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="btn-primary whitespace-nowrap disabled:opacity-50"
-                  >
-                    {isSubmitting ? 'Odesílám...' : 'Chci být informován/a'}
-                    {!isSubmitting && <ArrowRight className="ml-2 w-5 h-5" />}
-                  </button>
+                <form onSubmit={handleSubmit} className="max-w-md mx-auto">
+                  <div className="flex flex-col sm:flex-row gap-4 mb-4">
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="váš@email.cz"
+                      className="flex-1 px-4 py-3 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cta-500"
+                      required
+                    />
+                    <button
+                      type="submit"
+                      disabled={isSubmitting || !gdprConsent}
+                      className="btn-primary whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {isSubmitting ? 'Odesílám...' : 'Chci být informován/a'}
+                      {!isSubmitting && <ArrowRight className="ml-2 w-5 h-5" />}
+                    </button>
+                  </div>
+
+                  {/* GDPR Checkbox */}
+                  <div className="flex items-start gap-3 text-left">
+                    <input
+                      type="checkbox"
+                      id="gdpr-consent"
+                      checked={gdprConsent}
+                      onChange={(e) => setGdprConsent(e.target.checked)}
+                      className="mt-1 w-4 h-4 rounded border-primary-300 text-cta-500 focus:ring-cta-500 focus:ring-offset-0"
+                      required
+                    />
+                    <label htmlFor="gdpr-consent" className="text-sm text-primary-100 cursor-pointer">
+                      Souhlasím se zpracováním osobních údajů za účelem zasílání informací o spuštění registrací.
+                      Svůj souhlas mohu kdykoli odvolat.
+                    </label>
+                  </div>
+
+                  {/* Error Message */}
+                  {error && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="mt-4 p-4 bg-red-500/20 border border-red-400 rounded-lg"
+                    >
+                      <p className="text-sm text-white">{error}</p>
+                    </motion.div>
+                  )}
                 </form>
               )}
 
