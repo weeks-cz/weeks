@@ -5,10 +5,10 @@ import Link from 'next/link'
 import { Menu, X } from 'lucide-react'
 
 const navigation = [
-  { name: 'Program', href: '#program' },
-  { name: 'Proč Weeks', href: '#proc-weeks' },
-  { name: 'O nás', href: '#o-nas' },
-  { name: 'Kontakt', href: '#kontakt' },
+  { name: 'Program', href: '/program' },
+  { name: 'Proč Weeks', href: '/#proc-weeks' },
+  { name: 'O nás', href: '/o-nas' },
+  { name: 'Kontakt', href: '/kontakt' },
 ]
 
 export function Header() {

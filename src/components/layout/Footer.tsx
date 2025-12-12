@@ -25,17 +25,22 @@ export function Footer() {
             <h3 className="text-white font-semibold mb-4">Rychlé odkazy</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="#program" className="hover:text-white transition-colors">
+                <Link href="/program" className="hover:text-white transition-colors">
                   Program
                 </Link>
               </li>
               <li>
-                <Link href="#proc-weeks" className="hover:text-white transition-colors">
+                <Link href="/#proc-weeks" className="hover:text-white transition-colors">
                   Proč Weeks
                 </Link>
               </li>
               <li>
-                <Link href="#kontakt" className="hover:text-white transition-colors">
+                <Link href="/o-nas" className="hover:text-white transition-colors">
+                  O nás
+                </Link>
+              </li>
+              <li>
+                <Link href="/kontakt" className="hover:text-white transition-colors">
                   Kontakt
                 </Link>
               </li>
