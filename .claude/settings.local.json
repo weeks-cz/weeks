@@ -5,7 +5,14 @@
       "Bash(npx create-next-app@latest:*)",
       "Bash(npm install:*)",
       "Bash(git init:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(npm run build:*)",
+      "Bash(npm run dev:*)",
+      "Bash(git remote add:*)",
+      "Bash(git branch:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nInitial project setup - Next.js 14 + Tailwind + Framer Motion\n\n- Next.js 14 with App Router and TypeScript\n- Tailwind CSS with custom design system (primary, accent, trust, cta colors)\n- Framer Motion for animations\n- Homepage with all main sections (Hero, Program, USP, Trust, CTA, FAQ, Contact)\n- Responsive Header and Footer components\n- Project documentation (CLAUDE.md, ROADMAP.md)\n- Environment configuration template\n\n🤖 Generated with [Claude Code](https://claude.ai/claude-code)\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git push:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nAdd Sanity CMS setup and fix build issues\n\n- Upgrade to Next.js 16 for next-sanity compatibility\n- Add Sanity CMS schemas (program, teamMember, campDate, faq, siteSettings, partner)\n- Configure Sanity client, queries and data fetching\n- Add Sanity Studio at /studio route\n- Add 404 not-found page\n- Update ROADMAP with progress and defer custom domain\n\n🤖 Generated with [Claude Code](https://claude.ai/claude-code)\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n)\")"
     ]
   }
 }

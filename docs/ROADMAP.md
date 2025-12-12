@@ -12,7 +12,7 @@ Tento dokument obsahuje kompletní roadmapu pro vývoj webu Weeks - víkendovýc
 
 | Technologie | Účel |
 |-------------|------|
-| Next.js 14+ | Frontend framework (App Router) |
+| Next.js 16 | Frontend framework (App Router) |
 | TypeScript | Type safety |
 | Tailwind CSS | Styling |
 | Framer Motion | Animace |
@@ -27,12 +27,13 @@ Tento dokument obsahuje kompletní roadmapu pro vývoj webu Weeks - víkendovýc
 ### Fáze 0: Setup (Týden 1)
 
 #### 0.1 Inicializace projektu
-- [ ] Vytvořit Next.js 14+ projekt s App Router
-- [ ] Nastavit TypeScript konfiguraci
-- [ ] Nakonfigurovat Tailwind CSS s custom design tokeny
-- [ ] Inicializovat Git repozitář
+- [x] Vytvořit Next.js 16 projekt s App Router
+- [x] Nastavit TypeScript konfiguraci
+- [x] Nakonfigurovat Tailwind CSS s custom design tokeny
+- [x] Inicializovat Git repozitář
+- [x] Připojit ke GitHub (https://github.com/lxkask/weeks.git)
 - [ ] Připojit k Vercel pro CI/CD
-- [ ] Vytvořit Sanity Studio projekt
+- [x] Vytvořit Sanity Studio projekt a schémata
 
 #### 0.2 Environment proměnné
 ```env
@@ -44,9 +45,11 @@ NEXT_PUBLIC_FB_PIXEL_ID=
 ```
 
 #### 0.3 Doména a hosting
-- Registrovat doménu (`weeks.cz` nebo `weeks-tabory.cz`)
-- Nasměrovat DNS na Vercel
-- SSL automaticky přes Vercel
+> **ODLOŽENO**: Vlastní doména bude řešena později. Prozatím pouze Vercel produkční doména.
+
+- [ ] ~~Registrovat doménu (`weeks.cz` nebo `weeks-tabory.cz`)~~ - ODLOŽENO
+- [ ] ~~Nasměrovat DNS na Vercel~~ - ODLOŽENO
+- [x] SSL automaticky přes Vercel
 
 ---
 
