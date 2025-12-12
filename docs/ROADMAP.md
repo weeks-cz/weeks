@@ -1,10 +1,29 @@
 # Weeks Web - Roadmapa projektu
 
-> Verze: 1.0 | Datum: Prosinec 2024
+> Verze: 1.1 | Datum: 12. prosince 2024
+>
+> **LIVE URL:** https://weeksweb.vercel.app
+> **GitHub:** https://github.com/lxkask/weeks
+> **Sanity Studio:** https://weeksweb.vercel.app/studio
 
 ## Executive Summary
 
 Tento dokument obsahuje kompletní roadmapu pro vývoj webu Weeks - víkendových IT táborů pro děti 10-15 let v HWLabu Praha pod záštitou DDM Praha 6.
+
+---
+
+## Aktuální stav projektu
+
+| Fáze | Stav | Poznámka |
+|------|------|----------|
+| Fáze 0: Setup | ✅ HOTOVO | Vše nastaveno, web live |
+| Fáze 1: Architektura | ✅ HOTOVO | UI/UX spec + obsah vytvořen |
+| Fáze 2: Design systém | ✅ HOTOVO | Komponenty implementovány |
+| Fáze 3: Implementace | 🔄 PROBÍHÁ | Homepage hotová, chybí podstránky + API |
+| Fáze 4: Analytics | ⏳ ČEKÁ | - |
+| Fáze 5: Legal | ⏳ ČEKÁ | - |
+| Fáze 6: Testování | ⏳ ČEKÁ | - |
+| Fáze 7: Launch | ⏳ ČEKÁ | Soft-launch proběhl |
 
 ---
 
@@ -24,7 +43,7 @@ Tento dokument obsahuje kompletní roadmapu pro vývoj webu Weeks - víkendovýc
 
 ## Fáze projektu
 
-### Fáze 0: Setup (Týden 1)
+### Fáze 0: Setup ✅ HOTOVO
 
 #### 0.1 Inicializace projektu
 - [x] Vytvořit Next.js 16 projekt s App Router
@@ -32,8 +51,8 @@ Tento dokument obsahuje kompletní roadmapu pro vývoj webu Weeks - víkendovýc
 - [x] Nakonfigurovat Tailwind CSS s custom design tokeny
 - [x] Inicializovat Git repozitář
 - [x] Připojit ke GitHub (https://github.com/lxkask/weeks.git)
-- [ ] Připojit k Vercel pro CI/CD
-- [x] Vytvořit Sanity Studio projekt a schémata
+- [x] Připojit k Vercel pro CI/CD
+- [x] Vytvořit Sanity Studio projekt a schémata (ID: cuy78njh)
 
 #### 0.2 Environment proměnné
 ```env
@@ -53,7 +72,11 @@ NEXT_PUBLIC_FB_PIXEL_ID=
 
 ---
 
-### Fáze 1: Informační architektura (Týden 1-2)
+### Fáze 1: Informační architektura ✅ HOTOVO
+
+> **Dokumenty vytvořené:**
+> - `docs/UI_UX_SPEC.md` - Persony, wireframes, user journey
+> - `docs/CONTENT_CS.md` - Veškerý český obsah webu
 
 #### 1.1 Struktura webu (Sitemap)
 ```
@@ -94,7 +117,7 @@ Budoucí (Nice-to-have):
 
 ---
 
-### Fáze 2: Design systém (Týden 2-3)
+### Fáze 2: Design systém ✅ HOTOVO
 
 #### 2.1 Barevná paleta
 ```css
@@ -144,7 +167,24 @@ font-family: 'Inter', system-ui, sans-serif;
 
 ---
 
-### Fáze 3: Technická implementace (Týden 3-5)
+### Fáze 3: Technická implementace 🔄 PROBÍHÁ
+
+#### 3.0 Aktuální stav implementace
+
+**✅ Hotovo:**
+- [x] Homepage se všemi sekcemi (Hero, Program, USP, Trust, CTA, FAQ, Contact)
+- [x] Header a Footer komponenty
+- [x] Responzivní design (mobile-first)
+- [x] Framer Motion animace
+- [x] Sanity Studio na /studio
+- [x] SEO metadata
+
+**🔄 Zbývá dokončit:**
+- [ ] Napojit waitlist formulář na email službu (Formspree/Resend)
+- [ ] Podstránky: /program, /o-nas, /terminy, /kontakt
+- [ ] Legal stránky: /gdpr, /podminky
+- [ ] Reálné obrázky a fotky (místo placeholderů)
+- [ ] Google Maps embed s přesnou lokací HWLab
 
 #### 3.1 Struktura projektu
 ```
@@ -436,3 +476,42 @@ Audit the Weeks website for SEO. Focus on:
 - Schema markup for events
 - Core Web Vitals optimization
 ```
+
+---
+
+## 🚀 DOPORUČENÉ DALŠÍ KROKY
+
+> Aktualizováno: 12. prosince 2024
+
+### Priorita 1: Funkční waitlist (KRITICKÉ)
+**Agent:** `backend-architect`
+**Úkol:** Napojit waitlist formulář na Formspree pro sběr emailů
+**Proč:** Bez funkčního sběru emailů nemůžeme sbírat leady
+
+```
+Vytvoř API endpoint pro waitlist formulář. Použij Formspree (jednodušší)
+nebo Resend. Formulář je v CTASection.tsx. Zajisti:
+- Validaci emailu
+- Ukládání do Formspree/Resend
+- Success/error handling
+- GDPR souhlas checkbox
+```
+
+### Priorita 2: Legal stránky (DŮLEŽITÉ pro GDPR)
+**Agent:** `content-marketer`
+**Úkol:** Vytvořit /gdpr a /podminky stránky
+**Proč:** Povinné pro sběr osobních údajů (emailů)
+
+### Priorita 3: SEO optimalizace
+**Agent:** `seo-analyzer`
+**Úkol:** Audit a optimalizace pro české vyhledávače
+**Proč:** Organická návštěvnost z Google
+
+### Priorita 4: Podstránky
+**Agent:** `frontend-developer`
+**Úkol:** Vytvořit /program, /o-nas, /kontakt stránky
+**Proč:** Lepší UX a SEO (více obsahu)
+
+### Priorita 5: Vizuální obsah
+**Potřeba:** Reálné fotky z HWLab, týmu, vybavení
+**Akce:** Klient musí dodat fotografie
