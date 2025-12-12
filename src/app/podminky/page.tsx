@@ -3,15 +3,46 @@ import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
+import { BreadcrumbSchema } from '@/components/seo/StructuredData'
+
+const pageTitle = 'Podmínky užití'
+const pageDescription = 'Podmínky užití webu pro víkendové IT kempy Weeks provozované DDM Praha 6. Obchodní podmínky a pravidla pro užívání webu.'
+const pageUrl = 'https://weeksweb.vercel.app/podminky'
 
 export const metadata: Metadata = {
-  title: 'Podmínky užití | Weeks',
-  description: 'Podmínky užití webu pro víkendové IT kempy Weeks provozované DDM Praha 6.',
+  title: pageTitle,
+  description: pageDescription,
+  alternates: {
+    canonical: pageUrl,
+  },
+  openGraph: {
+    title: pageTitle,
+    description: pageDescription,
+    url: pageUrl,
+    type: 'website',
+    locale: 'cs_CZ',
+    siteName: 'Weeks',
+  },
+  twitter: {
+    card: 'summary',
+    title: pageTitle,
+    description: pageDescription,
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 }
 
 export default function PodminkyPage() {
+  const breadcrumbItems = [
+    { name: 'Domů', url: 'https://weeksweb.vercel.app' },
+    { name: 'Podmínky užití', url: 'https://weeksweb.vercel.app/podminky' },
+  ]
+
   return (
     <>
+      <BreadcrumbSchema items={breadcrumbItems} />
       <Header />
       <main className="min-h-screen bg-white pt-24 pb-16">
         <article className="section-container max-w-4xl">

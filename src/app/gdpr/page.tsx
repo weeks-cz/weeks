@@ -3,15 +3,46 @@ import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
+import { BreadcrumbSchema } from '@/components/seo/StructuredData'
+
+const pageTitle = 'Ochrana osobních údajů (GDPR)'
+const pageDescription = 'Zásady ochrany osobních údajů pro víkendové IT kempy Weeks provozované DDM Praha 6. Informace o zpracování osobních údajů v souladu s GDPR.'
+const pageUrl = 'https://weeksweb.vercel.app/gdpr'
 
 export const metadata: Metadata = {
-  title: 'Ochrana osobních údajů (GDPR) | Weeks',
-  description: 'Zásady ochrany osobních údajů pro víkendové IT kempy Weeks provozované DDM Praha 6.',
+  title: pageTitle,
+  description: pageDescription,
+  alternates: {
+    canonical: pageUrl,
+  },
+  openGraph: {
+    title: pageTitle,
+    description: pageDescription,
+    url: pageUrl,
+    type: 'website',
+    locale: 'cs_CZ',
+    siteName: 'Weeks',
+  },
+  twitter: {
+    card: 'summary',
+    title: pageTitle,
+    description: pageDescription,
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 }
 
 export default function GDPRPage() {
+  const breadcrumbItems = [
+    { name: 'Domů', url: 'https://weeksweb.vercel.app' },
+    { name: 'Ochrana osobních údajů', url: 'https://weeksweb.vercel.app/gdpr' },
+  ]
+
   return (
     <>
+      <BreadcrumbSchema items={breadcrumbItems} />
       <Header />
       <main className="min-h-screen bg-white pt-24 pb-16">
         <article className="section-container max-w-4xl">

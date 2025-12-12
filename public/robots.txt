@@ -1,0 +1,13 @@
+# robots.txt pro Weeks - Víkendové IT kempy pro děti
+# https://weeksweb.vercel.app
+
+# Povolit všem robotům přístup
+User-agent: *
+Allow: /
+
+# Zakázat crawlování admin a studio složek (Sanity CMS)
+Disallow: /studio/
+Disallow: /api/
+
+# Sitemap
+Sitemap: https://weeksweb.vercel.app/sitemap.xml

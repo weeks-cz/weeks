@@ -1,0 +1,38 @@
+{
+  "name": "Weeks - Víkendové IT kempy pro děti",
+  "short_name": "Weeks",
+  "description": "Víkendové IT kempy pro děti 10-15 let v Praze. 3D tisk, VR, programování a IoT.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#3B82F6",
+  "lang": "cs",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["education", "kids", "technology"],
+  "shortcuts": [
+    {
+      "name": "Program",
+      "short_name": "Program",
+      "description": "Co děti čeká",
+      "url": "/#program"
+    },
+    {
+      "name": "Kontakt",
+      "short_name": "Kontakt",
+      "description": "Kontaktní informace",
+      "url": "/#kontakt"
+    }
+  ]
+}
