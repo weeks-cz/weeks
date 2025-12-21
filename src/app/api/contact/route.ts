@@ -22,8 +22,8 @@ export async function POST(request: Request) {
       )
     }
 
-    // Send to Formspree
-    const formspreeId = process.env.NEXT_PUBLIC_FORMSPREE_CONTACT_ID || process.env.NEXT_PUBLIC_FORMSPREE_ID
+    // Send to Formspree (uses same ID as waitlist)
+    const formspreeId = process.env.NEXT_PUBLIC_FORMSPREE_ID
 
     if (formspreeId) {
       const formspreeResponse = await fetch(`https://formspree.io/f/${formspreeId}`, {
