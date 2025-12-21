@@ -26,14 +26,22 @@ export function Header() {
   }, [])
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? 'bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100'
-          : 'bg-gray-900/50 backdrop-blur-sm'
-      }`}
-    >
-      <nav className="section-container flex items-center justify-between py-4">
+    <>
+      {/* Skip to main content link for keyboard navigation */}
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[60] focus:px-4 focus:py-2 focus:bg-primary-600 focus:text-white focus:rounded-lg focus:outline-none"
+      >
+        Přeskočit na hlavní obsah
+      </a>
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          scrolled
+            ? 'bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100'
+            : 'bg-gray-900/50 backdrop-blur-sm'
+        }`}
+      >
+        <nav className="section-container flex items-center justify-between py-4" aria-label="Hlavní navigace">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3 group">
           <motion.div
@@ -90,11 +98,14 @@ export function Header() {
             scrolled ? 'hover:bg-gray-100' : 'hover:bg-white/10'
           }`}
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label={mobileMenuOpen ? 'Zavřít menu' : 'Otevřít menu'}
+          aria-expanded={mobileMenuOpen}
+          aria-controls="mobile-menu"
         >
           {mobileMenuOpen ? (
-            <X className={`h-6 w-6 ${scrolled ? 'text-gray-700' : 'text-white'}`} />
+            <X className={`h-6 w-6 ${scrolled ? 'text-gray-700' : 'text-white'}`} aria-hidden="true" />
           ) : (
-            <Menu className={`h-6 w-6 ${scrolled ? 'text-gray-700' : 'text-white'}`} />
+            <Menu className={`h-6 w-6 ${scrolled ? 'text-gray-700' : 'text-white'}`} aria-hidden="true" />
           )}
         </motion.button>
       </nav>
@@ -103,6 +114,7 @@ export function Header() {
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
+            id="mobile-menu"
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
@@ -145,6 +157,7 @@ export function Header() {
           </motion.div>
         )}
       </AnimatePresence>
-    </header>
+      </header>
+    </>
   )
 }

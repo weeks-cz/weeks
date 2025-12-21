@@ -72,6 +72,8 @@ export function CTASection() {
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   className="bg-white/10 backdrop-blur rounded-2xl p-8"
+                  role="status"
+                  aria-live="polite"
                 >
                   <div className="w-16 h-16 bg-trust-500 rounded-full flex items-center justify-center mx-auto mb-4">
                     <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -126,6 +128,8 @@ export function CTASection() {
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
                       className="mt-4 p-4 bg-red-500/20 border border-red-400 rounded-lg"
+                      role="alert"
+                      aria-live="assertive"
                     >
                       <p className="text-sm text-white">{error}</p>
                     </motion.div>

@@ -39,23 +39,31 @@ const faqs = [
   },
 ]
 
-function FAQItem({ question, answer }: { question: string; answer: string }) {
+function FAQItem({ question, answer, index }: { question: string; answer: string; index: number }) {
   const [isOpen, setIsOpen] = useState(false)
+  const answerId = `faq-answer-${index}`
 
   return (
     <div className="border-b border-gray-200 last:border-0">
       <button
+        type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full py-5 flex items-center justify-between text-left"
+        className="w-full py-5 flex items-center justify-between text-left focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded-lg"
+        aria-expanded={isOpen}
+        aria-controls={answerId}
       >
         <span className="font-semibold text-gray-900 pr-4">{question}</span>
         <ChevronDown
           className={`w-5 h-5 text-gray-500 transition-transform flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`}
+          aria-hidden="true"
         />
       </button>
       <AnimatePresence>
         {isOpen && (
           <motion.div
+            id={answerId}
+            role="region"
+            aria-labelledby={`faq-question-${index}`}
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
@@ -88,8 +96,8 @@ export function FAQSection() {
           </p>
 
           <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm">
-            {faqs.map((faq) => (
-              <FAQItem key={faq.question} {...faq} />
+            {faqs.map((faq, index) => (
+              <FAQItem key={faq.question} {...faq} index={index} />
             ))}
           </div>
 
