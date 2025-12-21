@@ -1,9 +1,19 @@
 import type { Metadata, Viewport } from 'next'
-import { Inter } from 'next/font/google'
+import { DM_Sans, Outfit } from 'next/font/google'
 import './globals.css'
 import { OrganizationSchema, LocalBusinessSchema, EventSchema } from '@/components/seo/StructuredData'
 
-const inter = Inter({ subsets: ['latin', 'latin-ext'] })
+const dmSans = DM_Sans({
+  subsets: ['latin', 'latin-ext'],
+  variable: '--font-dm-sans',
+  display: 'swap',
+})
+
+const outfit = Outfit({
+  subsets: ['latin', 'latin-ext'],
+  variable: '--font-outfit',
+  display: 'swap',
+})
 
 const siteUrl = 'https://weeksweb.vercel.app'
 const siteTitle = 'Weeks - Víkendové IT kempy pro děti | Praha Vyšehrad'
@@ -90,7 +100,7 @@ export default function RootLayout({
         <LocalBusinessSchema />
         <EventSchema />
       </head>
-      <body className={inter.className}>{children}</body>
+      <body className={`${dmSans.variable} ${outfit.variable} font-sans`}>{children}</body>
     </html>
   )
 }
