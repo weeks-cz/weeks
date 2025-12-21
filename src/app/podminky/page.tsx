@@ -92,7 +92,7 @@ export default function PodminkyPage() {
                 <p className="text-gray-700 text-base mb-1">Email: info@weeks.cz</p>
                 <p className="text-gray-700 text-base mb-1">Web: weeksweb.vercel.app</p>
                 <p className="text-gray-700 text-base mt-4">
-                  <strong>Místo konání kempů:</strong> HWLab Praha, Vnislavova 2, 128 00 Praha 2 - Vyšehrad
+                  <strong>Místo konání kempů:</strong> Kongresové centrum Praha, 5. května 11, 140 00 Praha 4 - Nusle
                 </p>
               </div>
             </section>
@@ -350,7 +350,7 @@ export default function PodminkyPage() {
                   <strong>Web:</strong> weeksweb.vercel.app
                 </p>
                 <p className="text-primary-800 text-base">
-                  <strong>Místo konání:</strong> HWLab Praha, Vnislavova 2, 128 00 Praha 2 - Vyšehrad
+                  <strong>Místo konání:</strong> Kongresové centrum Praha, 5. května 11, 140 00 Praha 4 - Nusle
                 </p>
               </div>
             </section>

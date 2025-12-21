@@ -16,8 +16,8 @@ const outfit = Outfit({
 })
 
 const siteUrl = 'https://weeksweb.vercel.app'
-const siteTitle = 'Weeks - Víkendové IT kempy pro děti | Praha Vyšehrad'
-const siteDescription = 'Víkendové IT kempy pro děti 10-15 let na Vyšehradě v Praze. 3D tisk, VR, programování, robotika a IoT. Každou sobotu a neděli. Expert instruktoři, moderní vybavení HWLab, pod záštitou DDM Praha 6.'
+const siteTitle = 'Weeks - Víkendové IT kempy pro děti | Praha'
+const siteDescription = 'Víkendové IT kempy pro děti 10-15 let v Praze. 3D tisk, VR, programování, robotika a IoT. Každou sobotu a neděli. Expert instruktoři, moderní vybavení HWLab, pod záštitou DDM Praha 6.'
 
 export const viewport: Viewport = {
   width: 'device-width',

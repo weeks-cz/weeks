@@ -90,9 +90,9 @@ export function Footer() {
               <li className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 text-primary-500 shrink-0 mt-0.5" />
                 <span className="text-gray-400 text-sm">
-                  HWLab Praha<br />
-                  Vnislavova 2<br />
-                  128 00 Praha 2 - Vyšehrad
+                  Kongresové centrum Praha<br />
+                  5. května 11<br />
+                  140 00 Praha 4 - Nusle
                 </span>
               </li>
               <li className="flex items-center gap-3">

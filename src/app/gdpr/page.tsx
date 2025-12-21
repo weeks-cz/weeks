@@ -314,7 +314,7 @@ export default function GDPRPage() {
                 <p className="text-primary-900 font-semibold mb-2">Weeks - DDM Praha 6</p>
                 <p className="text-primary-800 text-base mb-1">Email: info@weeks.cz</p>
                 <p className="text-primary-800 text-base">
-                  Místo konání: HWLab Praha, Vnislavova 2, 128 00 Praha 2 - Vyšehrad
+                  Místo konání: Kongresové centrum Praha, 5. května 11, 140 00 Praha 4 - Nusle
                 </p>
               </div>
             </section>

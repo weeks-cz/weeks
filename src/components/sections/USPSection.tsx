@@ -32,7 +32,7 @@ const usps = [
   {
     icon: Train,
     title: 'Metro až ke dveřím',
-    description: 'HWLab Praha na Vyšehradě - 2 minuty pěšky od metra. Snadný přístup z celé Prahy bez komplikovaného dojíždění.',
+    description: 'Kongresové centrum Praha - 5 minut pěšky od metra Vyšehrad. Snadný přístup z celé Prahy bez komplikovaného dojíždění.',
   },
 ]
 

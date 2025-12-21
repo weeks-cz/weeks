@@ -49,7 +49,7 @@ const partners = [
     name: 'HWLab Praha',
     shortName: 'HW',
     color: 'accent',
-    description: 'HWLab je moderní technologické centrum na Vyšehradě zaměřené na digitální výrobu, prototypování a vzdělávání. Disponuje profesionálním vybavením a prostory navrženými pro komfortní a bezpečnou práci.',
+    description: 'HWLab je moderní technologické centrum v Kongresovém centru Praha zaměřené na digitální výrobu, prototypování a vzdělávání. Disponuje profesionálním vybavením a prostory navrženými pro komfortní a bezpečnou práci.',
     details: [
       'Profesionální 3D tiskárny Prusa i3 MK3S+',
       'VR headsety Meta Quest a HTC Vive',
@@ -57,7 +57,7 @@ const partners = [
       'Klimatizované prostory s kuchyňkou a odpočinkovými zónami',
       'Výborná dostupnost MHD (metro C - Vyšehrad)',
     ],
-    location: 'Vnislavova 2, Praha 2 - Vyšehrad',
+    location: '5. května 11, Praha 4 - Nusle',
     established: '2018',
   },
 ]

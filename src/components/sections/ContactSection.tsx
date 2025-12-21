@@ -66,12 +66,12 @@ export function ContactSection() {
                 <div>
                   <h3 className="font-semibold text-gray-900 mb-1">Místo konání</h3>
                   <p className="text-gray-600">
-                    HWLab Praha<br />
-                    Vnislavova 2<br />
-                    128 00 Praha 2 - Vyšehrad
+                    Kongresové centrum Praha<br />
+                    5. května 11<br />
+                    140 00 Praha 4 - Nusle
                   </p>
                   <a
-                    href="https://maps.google.com/?q=HWLab+Praha+Vyšehrad"
+                    href="https://maps.google.com/?q=Kongresové+centrum+Praha,+5.+května+11"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-primary-600 hover:underline text-sm mt-2 inline-block"
@@ -100,14 +100,14 @@ export function ContactSection() {
             {/* Map */}
             <div className="bg-gray-100 rounded-2xl h-80 lg:h-auto min-h-[320px] overflow-hidden">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2561.1!2d14.4178!3d50.0631!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x470b9466f1a3e7c7%3A0x400af0f6614d810!2sVnislavova%202%2C%20128%2000%20Praha%202-Vy%C5%A1ehrad!5e0!3m2!1scs!2scz!4v1703196000000"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2561.5!2d14.4285!3d50.0621!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x470b9390e8c4a4a7%3A0x400af0f6614d810!2sKongresov%C3%A9%20centrum%20Praha!5e0!3m2!1scs!2scz!4v1703196000000"
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                title="HWLab Praha - Vnislavova 2, Vyšehrad"
+                title="Kongresové centrum Praha - 5. května 11"
                 className="w-full h-full"
               />
             </div>

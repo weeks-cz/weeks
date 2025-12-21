@@ -118,12 +118,12 @@ export function TrustSection() {
                 HWLab Praha
               </h3>
               <p className="text-gray-300 leading-relaxed mb-4">
-                Moderní technologické centrum na Vyšehradě vybavené nejnovějšími nástroji
+                Moderní technologické centrum v Kongresovém centru Praha vybavené nejnovějšími nástroji
                 pro digitální výrobu a vývoj. Profesionální prostory s klimatizací a zázemím.
               </p>
               <div className="flex items-center gap-2 text-sm text-white/80 font-medium">
                 <MapPin className="w-4 h-4" />
-                Vnislavova 2, Praha 2 - Vyšehrad
+                5. května 11, Praha 4 - Nusle
               </div>
             </div>
           </motion.div>

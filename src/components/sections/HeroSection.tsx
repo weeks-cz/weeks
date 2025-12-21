@@ -59,7 +59,7 @@ export function HeroSection() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-lg md:text-xl text-gray-300 mb-10 max-w-2xl leading-relaxed"
           >
-            Každou sobotu a neděli na Vyšehradě. Profesionální vybavení,
+            Každou sobotu a neděli v Kongresovém centru Praha. Profesionální vybavení,
             zkušení instruktoři a projekty, které si Vaše dítě odnese domů.
             <span className="text-white font-medium"> Pro děti 10–15 let.</span>
           </motion.p>
@@ -113,7 +113,7 @@ export function HeroSection() {
                 </div>
                 <div>
                   <p className="text-xs text-gray-400">Místo konání</p>
-                  <p className="text-sm font-medium text-white">HWLab Vyšehrad</p>
+                  <p className="text-sm font-medium text-white">Kongresové centrum</p>
                 </div>
               </div>
 
