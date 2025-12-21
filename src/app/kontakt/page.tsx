@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Mail, Phone, MapPin, Clock, Send, User, MessageSquare } from 'lucide-react'
+import { Mail, Phone, MapPin, Clock, Send, User, MessageSquare, Loader2, CheckCircle, AlertCircle } from 'lucide-react'
 import Link from 'next/link'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
@@ -64,13 +64,32 @@ export default function ContactPage() {
     email: '',
     message: '',
   })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // TODO: Implement form submission (Formspree or other service)
-    console.log('Form submitted:', formData)
-    alert('Děkujeme za zprávu! Odpovíme vám co nejdříve.')
-    setFormData({ name: '', email: '', message: '' })
+    setIsSubmitting(true)
+    setSubmitStatus('idle')
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      })
+
+      if (response.ok) {
+        setSubmitStatus('success')
+        setFormData({ name: '', email: '', message: '' })
+      } else {
+        setSubmitStatus('error')
+      }
+    } catch {
+      setSubmitStatus('error')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -230,14 +249,43 @@ export default function ContactPage() {
                     </div>
                   </div>
 
-                  <button type="submit" className="btn-primary w-full">
-                    <Send className="w-5 h-5 mr-2" />
-                    Odeslat zprávu
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                        Odesílám...
+                      </>
+                    ) : (
+                      <>
+                        <Send className="w-5 h-5 mr-2" />
+                        Odeslat zprávu
+                      </>
+                    )}
                   </button>
 
-                  <p className="text-sm text-gray-500 text-center">
-                    Odpovíme vám do 24 hodin v pracovních dnech
-                  </p>
+                  {submitStatus === 'success' && (
+                    <div className="flex items-center gap-2 p-4 bg-green-50 text-green-700 rounded-lg" role="alert">
+                      <CheckCircle className="w-5 h-5 shrink-0" />
+                      <p>Děkujeme za zprávu! Odpovíme vám co nejdříve.</p>
+                    </div>
+                  )}
+
+                  {submitStatus === 'error' && (
+                    <div className="flex items-center gap-2 p-4 bg-red-50 text-red-700 rounded-lg" role="alert">
+                      <AlertCircle className="w-5 h-5 shrink-0" />
+                      <p>Něco se pokazilo. Zkuste to prosím znovu nebo nám napište na info@weeks.cz</p>
+                    </div>
+                  )}
+
+                  {submitStatus === 'idle' && (
+                    <p className="text-sm text-gray-500 text-center">
+                      Odpovíme vám do 24 hodin v pracovních dnech
+                    </p>
+                  )}
                 </form>
               </motion.div>
 

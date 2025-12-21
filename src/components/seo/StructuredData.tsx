@@ -5,7 +5,7 @@ export function OrganizationSchema() {
     name: 'Weeks - Víkendové IT kempy pro děti',
     alternateName: 'Weeks',
     url: 'https://weeksweb.vercel.app',
-    logo: 'https://weeksweb.vercel.app/logo.png',
+    logo: 'https://weeksweb.vercel.app/images/weeks-logo.png',
     description: 'Víkendové IT kempy pro děti 10-15 let v Praze. 3D tisk, VR, programování a IoT.',
     email: 'info@weeks.cz',
     address: {
