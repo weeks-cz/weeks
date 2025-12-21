@@ -44,3 +44,9 @@ next-env.d.ts
 /sanity/dist/
 
 .vercel
+
+# Original photos (converted to WebP in public/images/)
+*.HEIC
+*.heic
+Kryštof - Telefon/
+Screenshot*.png
