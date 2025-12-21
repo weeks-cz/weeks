@@ -74,7 +74,7 @@ export function Header() {
             </Link>
           ))}
           <Link
-            href="#prihlasit"
+            href="/#prihlasit"
             className="ml-4 btn-primary group"
           >
             Přihlásit se
@@ -133,7 +133,7 @@ export function Header() {
                 className="pt-2"
               >
                 <Link
-                  href="#prihlasit"
+                  href="/#prihlasit"
                   className="btn-primary w-full text-center justify-center"
                   onClick={() => setMobileMenuOpen(false)}
                 >
