@@ -27,13 +27,6 @@ export function Header() {
 
   return (
     <>
-      {/* Skip to main content link for keyboard navigation - only visible on focus */}
-      <a
-        href="#main"
-        className="absolute -top-full left-4 z-[60] px-4 py-2 bg-primary-600 text-white rounded-lg outline-none focus:top-4 transition-all"
-      >
-        Přeskočit na hlavní obsah
-      </a>
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           scrolled

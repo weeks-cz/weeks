@@ -23,7 +23,9 @@
       "Bash(python:*)",
       "Bash(ls:*)",
       "Bash(npx vercel:*)",
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "Bash(ping:*)",
+      "Bash(nslookup:*)"
     ],
     "deny": [],
     "ask": []
