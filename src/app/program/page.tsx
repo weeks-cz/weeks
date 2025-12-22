@@ -1,118 +1,171 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Printer, Glasses, Cpu, Code2, ArrowRight, Check } from 'lucide-react'
+import { Printer, Cpu, Box, Globe, Gamepad2, Code2, Sparkles, ArrowRight, Check } from 'lucide-react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
-import type { Metadata } from 'next'
 
+// Všech 7 programů s detailními popisy podle PDF
 const programs = [
   {
+    id: 'mix',
+    icon: Sparkles,
+    title: 'MIX - Ochutnej vše',
+    subtitle: 'Ideální pro začátečníky',
+    color: 'mix',
+    image: '/images/hwlab/hwlab-7972.webp',
+    description: 'Tábor zaměřený na chytré technologie a jejich propojování s reálným světem. Cílem není stát se odborníkem ve všech tématech, ale získat vhled do světa chytrých technologií s cílem, aby si dítě našlo odvětví, které ho chytne a začne se v něm dále rozvíjet.',
+    extendedDescription: 'Během dvou dnů si děti prakticky vyzkouší 3D tisk, IoT (Micro:bit) i virtuální realitu. Důraz je na to, aby dítě vidělo chytré využití těchto technologií v dnešním světě a začalo ho napadat další využití. VR není jen o hraní - využijeme výukové aplikace zaměřené na rozvoj dítěte.',
+    learnings: [
+      'Ochutnávka budoucnosti: prakticky vyzkouší 3D tisk, IoT i virtuální realitu',
+      '3D tisk v praxi: připraví model, ovládne tiskárnu, odnese si vlastní výtisk',
+      'Svět chytré elektroniky: pochopí senzory a naprogramuje první projekt na Micro:bit',
+      'VR i pro vzdělávání: virtuální realita není jen o hraní her',
+      'Nalezení směru: zjistí, která technologie ho baví nejvíce',
+    ],
+    ultimateGoal: 'Otevřít dětem dveře do světa chytrých technologií, nechat je "ochutnat" budoucnost a pomoci jim objevit tu jednu vášeň, která je chytne a nasměruje jejich další rozvoj.',
+  },
+  {
+    id: '3d-tisk',
     icon: Printer,
-    title: '3D tisk & modelování',
+    title: '3D tisk',
+    subtitle: 'Od návrhu k výtisku',
     color: 'primary',
-    description: 'Objevte fascinující svět digitální výroby. Děti se naučí navrhovat vlastní 3D modely v profesionálním CAD software, připravit je k tisku (slicing) a vytisknout na průmyslových 3D tiskárnách. Zkusí si i post-processing - broušení, lakování a sestavování složitějších projektů.',
-    extendedDescription: 'Od první skici až po hotový výrobek v ruce. Pracujeme s profesionálními nástroji jako Fusion 360 nebo Tinkercad a tiskneme na spolehlivých tiskárnách Prusa. Děti se naučí nejen technickou stránku, ale i základy designu a funkčního myšlení.',
+    image: '/images/hwlab/hwlab-7990.webp',
+    description: 'Základní rozdělení druhů 3D tiskáren na FDM a SLA. Popis jak fungují, výhody a nevýhody jednotlivých druhů. Ukázka filamentu vs. resinu a obecných využití 3D tisku v praxi.',
+    extendedDescription: 'Práce se slicerem - základní funkce, ovládání a kompletní příprava prvního tisku. Rozebrání do hloubky, co dělají různé funkce a nastavení. Základy modelování v Tinkercad, export do sliceru a tisk. Post-processing včetně barvení, lepení, broušení a vyhlazování.',
     learnings: [
-      '3D modelování v CAD software (Fusion 360, Tinkercad)',
-      'Příprava modelu k tisku - slicing, podpěry, nastavení parametrů',
-      'Obsluha průmyslových 3D tiskáren Prusa',
-      'Post-processing - broušení, lepení, malování modelů',
-      'Řešení problémů při tisku a optimalizace designu',
+      'Vysvětlit jaké tiskárny máme a jaké jsou mezi nimi rozdíly (FDM vs SLA)',
+      'Vybrat vhodný filament na konkrétní projekt a obhájit volbu',
+      'Vyhledat a připravit model k 3D tisku ve sliceru',
+      'Zavést filament, spustit tisk, vyčistit podložku, zkalibrovat tiskárnu',
+      'Základy modelování a jednoduché úpravy modelů',
     ],
-    projects: [
-      'Vlastní jmenovka nebo klíčenka s gravírováním',
-      'Funkční mechanický gadget (fidget spinner, puzzle box)',
-      'Držák na mobil nebo stojánek na sluchátka',
-      'Vícebarevný nebo vícekomponentní projekt',
-    ],
+    ultimateGoal: 'Dítě dokáže po zadání problému vytvořit model (součástku), vybrat filament, naslicovat a vytisknout funkční díl a vysvětlit jednotlivé kroky.',
   },
   {
-    icon: Glasses,
-    title: 'Virtuální realita',
-    color: 'accent',
-    description: 'Vstupte do světa virtuální reality! Děti vyzkouší nejmodernější VR headsety a naučí se tvořit vlastní 3D prostředí a interaktivní zážitky. Od základů práce v 3D prostoru až po vytvoření vlastního VR světa, který si budou moci "projít".',
-    extendedDescription: 'VR není jen zábava - je to budoucnost vzdělávání, designu i zábavy. Děti se seznámí s nástroji pro tvorbu VR obsahu, naučí se pracovat s 3D objekty v prostoru a vytvářet interaktivní scény. Vyzkoušíme si headsety Meta Quest a další profesionální vybavení.',
-    learnings: [
-      'Práce s VR headsety - ovládání, bezpečnost, best practices',
-      'Základy 3D modelování pro VR prostředí',
-      'Vytváření interaktivních scén a objektů',
-      'Optimalizace VR obsahu pro plynulý zážitek',
-      'Testování a iterace vlastních VR projektů',
-    ],
-    projects: [
-      'Vlastní VR místnost s interaktivními objekty',
-      'Jednoduchá VR hra nebo puzzle',
-      'Virtuální galerie s vlastními 3D modely',
-      'VR prezentace nebo "tour" vlastním světem',
-    ],
-  },
-  {
+    id: 'iot',
     icon: Cpu,
-    title: 'IoT & elektronika',
+    title: 'IoT & Arduino',
+    subtitle: 'Chytrá elektronika',
     color: 'trust',
-    description: 'Vytvořte chytré zařízení od A do Z! Děti se naučí programovat mikrokontroléry Arduino a ESP32, připojovat senzory, ovládat LED pásky a propojit vše s internetem. Každý si odnese funkční IoT projekt, který může doma dál rozvíjet.',
-    extendedDescription: 'Internet věcí je všude kolem nás - od chytrých žárovek po průmyslové senzory. Ukážeme dětem, jak to celé funguje zevnitř. Naučí se základy elektroniky, programování mikročipů a vytvoření vlastního zařízení připojeného k internetu.',
+    image: '/images/hwlab/hwlab-7965.webp',
+    description: 'Úvod do IoT - vysvětlení pojmů a využití ve světě. Ukázka mikropočítačů (ESP, Raspberry Pi, Micro:bit), představení Arduina a rozdíly mezi analogovým a digitálním signálem.',
+    extendedDescription: 'Práce s breadboardem, vytvoření jednoduchého obvodu s LED diodou. Ukázka senzorů - vstupní a výstupní zařízení. Seznámení s Arduino IDE, základy práce s bloky a první kód. Implementace složitějších modulů jako display. Základy elektrotechniky a Ohmův zákon.',
     learnings: [
-      'Programování Arduino a ESP32 v C++ nebo MicroPython',
-      'Práce se senzory - teplota, vzdálenost, světlo, pohyb',
-      'Ovládání LED pásků a dalších výstupních zařízení',
-      'Připojení k Wi-Fi a odesílání dat do cloudu',
-      'Základy bezpečnosti IoT a ochrana dat',
+      'Vysvětlit co znamená IoT a kde se s tím mohou setkat',
+      'Rozlišit druhy mikropočítačů které používáme',
+      'Vysvětlit základní rozdíly analog vs digital, vstupní vs výstupní',
+      'Správně zapojit jednoduchý obvod na breadboardu',
+      'Vytvořit program a nahrát ho na Arduino',
     ],
-    projects: [
-      'Chytrá lampička ovládaná přes mobil',
-      'Meteostanice s online sledováním dat',
-      'Senzor parkování s LED indikací vzdálenosti',
-      'Alarm s pohybovým čidlem a notifikacemi',
-    ],
+    ultimateGoal: 'Dítě dokáže samostatně zapojit obvod se senzory, naprogramovat Arduino a vytvořit funkční IoT projekt.',
   },
   {
-    icon: Code2,
-    title: 'Programování & vývoj',
-    color: 'cta',
-    description: 'Naučte se programovat! Od základů až po funkční aplikace. Děti si vyberou cestu podle svých zájmů - tvorba her v Pythonu, webové aplikace v JavaScriptu, nebo mobilní appky. Vše s důrazem na praktické projekty a skutečně fungující kód.',
-    extendedDescription: 'Programování je kreativní disciplína - je to jako psaní, jen místo slov používáme kód. Učíme děti myslet algoritmicky, rozdělit problém na menší části a vytvořit řešení. Používáme moderní nástroje a postupy z reálného vývoje software.',
+    id: 'blender',
+    icon: Box,
+    title: '3D modelování v Blenderu',
+    subtitle: 'Grafika a animace',
+    color: 'accent',
+    image: '/images/hwlab/hwlab-7978.webp',
+    description: 'Úvodní seznámení s oborem. Rozdělení 3D modelování na grafické a "praktické". Rozdělení grafiky na vektorovou a bitmapovou. Ukázka různých programů na modelování.',
+    extendedDescription: 'První spuštění Blenderu, orientace v prostředí. Object mode vs edit mode, nástroje na úpravu modelu. Práce s Modifiers, vytváření textur. Import online modelů a textur. Tvorba scény, práce s kamerou. Rozdíly mezi Eevee a Cycles, vytváření renderů.',
     learnings: [
-      'Základy programování - proměnné, cykly, podmínky, funkce',
-      'Python nebo JavaScript podle úrovně a zájmu',
-      'Práce s Git a verzováním kódu',
-      'Debugging - hledání a oprava chyb v kódu',
-      'Struktura projektu a čistý, čitelný kód',
+      'Schopnost říct co je 3D modelování a k čemu slouží',
+      'Představení různých programů pro modelování',
+      'Vysvětlení rozdělení druhů grafik a účelu modelování',
+      'Tvorba jednoduchých modelů s využitím nástrojů Blenderu',
+      'Tvorba základní textury a vytvoření kvalitního renderu',
     ],
-    projects: [
-      'Hra v Pygame (had, pong, space shooter)',
-      'Webová aplikace s interaktivním rozhraním',
-      'Discord bot s vlastními příkazy',
-      'Automatizační skripty pro usnadnění práce',
+    ultimateGoal: 'Dítě si odnese vlastní 3D model s texturami a profesionální render, který může sdílet nebo použít pro 3D tisk.',
+  },
+  {
+    id: 'web',
+    icon: Globe,
+    title: 'Tvorba webu',
+    subtitle: 'HTML, CSS & publikace',
+    color: 'cta',
+    image: '/images/hwlab/hwlab-7975.webp',
+    description: 'Úvod do světa webových stránek - co je to web, jak funguje. Ukázka různých typů webových stránek (osobní portfolio, blog, e-shop). První kroky v HTML - struktura stránky, základní tagy.',
+    extendedDescription: 'Úvod do CSS - co jsou styly, jak propojit s HTML. Práce s barvami, fonty, velikostmi a pozadím. Základy layoutu a responzivity. Práce s obrázky a ikonami - kde hledat volně dostupné zdroje. Základy bezpečnosti - co na web nedávat.',
+    learnings: [
+      'Chápat základní principy fungování webu (HTML, CSS, prohlížeč)',
+      'Vytvořit jednoduchou webovou stránku s textem, obrázky a odkazy',
+      'Nastylovat stránku pomocí CSS (barvy, fonty, rozložení)',
+      'Vědět kde hledat zdroje a inspiraci (obrázky, ikony, návody)',
+      'Základní povědomí o bezpečnosti a soukromí na webu',
     ],
+    ultimateGoal: 'Dítě si odnese vlastní funkční webovou stránku (portfolio nebo stránku na vlastní téma) publikovanou online, kterou může ukázat rodině a kamarádům.',
+  },
+  {
+    id: 'hry',
+    icon: Gamepad2,
+    title: 'Vývoj her',
+    subtitle: 'Unity & Visual Scripting',
+    color: 'primary',
+    image: '/images/hwlab/hwlab-7968.webp',
+    description: 'Úvod do světa vývoje her - všichni hry hrají, ale kdo z dětí ví jak doopravdy vznikají? Pochopení základních principů herního vývoje, enginů, základní logiky a principu programování.',
+    extendedDescription: 'Práce v herním enginu Unity s využitím Visual Scripting (složitější Scratch). Tvorba jednoduché 2D hry - skákačka nebo top-down. Grafika bude předpřipravená. Naučíme se orientaci v Unity, práci s nástroji, pohyb hráče, smrt hráče, měření score, UI.',
+    learnings: [
+      'Od hráče k tvůrci: nahlédnou pod pokličku herního vývoje',
+      'Reálný výsledek: hratelný build vlastní 2D hry a zdrojové soubory',
+      'Logické myšlení: principy algoritmizace (podmínky, proměnné, akce)',
+      'Samostatnost při řešení problémů: prostor pro vlastní nápady',
+      'Práce s profesionálními nástroji: orientace v Unity',
+    ],
+    ultimateGoal: 'Proměnit děti z pasivních hráčů na aktivní tvůrce, kteří pochopí "jak to funguje" a odnesou si domů svou první, vlastnoručně naprogramovanou hru v Unity.',
+  },
+  {
+    id: 'csharp',
+    icon: Code2,
+    title: 'Programování C#',
+    subtitle: 'Základy programování',
+    color: 'trust',
+    image: '/images/hwlab/hwlab-7962.webp',
+    description: 'Úvod a rozdělení programovacích jazyků. Základy programování - proměnné, cykly, podmínky a funkce. Praktické cvičení s reálnými příklady.',
+    extendedDescription: 'C# je moderní programovací jazyk používaný pro vývoj her v Unity, desktopových aplikací i webových služeb. Děti se naučí základní koncepty programování, které jsou přenositelné do jakéhokoliv jiného jazyka.',
+    learnings: [
+      'Pochopení základních konceptů programování',
+      'Práce s proměnnými a datovými typy',
+      'Vytváření podmínek a cyklů',
+      'Psaní a volání funkcí',
+      'Debugging a hledání chyb v kódu',
+    ],
+    ultimateGoal: 'Dítě si odnese vlastní funkční program a základy programátorského myšlení, které může dále rozvíjet.',
   },
 ]
 
 const colorClasses = {
+  mix: {
+    bg: 'bg-gradient-to-br from-primary-600 via-accent-600 to-trust-600',
+    icon: 'text-white',
+    badge: 'bg-white/20 text-white',
+    gradient: 'from-primary-600 via-accent-600 to-trust-600',
+  },
   primary: {
     bg: 'bg-primary-100',
     icon: 'text-primary-600',
-    hover: 'hover:border-primary-300',
+    badge: 'bg-primary-100 text-primary-700',
     gradient: 'from-primary-600 to-primary-400',
   },
   accent: {
     bg: 'bg-accent-100',
     icon: 'text-accent-600',
-    hover: 'hover:border-accent-300',
+    badge: 'bg-accent-100 text-accent-700',
     gradient: 'from-accent-600 to-accent-400',
   },
   trust: {
     bg: 'bg-trust-100',
     icon: 'text-trust-600',
-    hover: 'hover:border-trust-300',
+    badge: 'bg-trust-100 text-trust-700',
     gradient: 'from-trust-600 to-trust-400',
   },
   cta: {
     bg: 'bg-cta-100',
     icon: 'text-cta-600',
-    hover: 'hover:border-cta-300',
+    badge: 'bg-cta-100 text-cta-700',
     gradient: 'from-cta-600 to-cta-400',
   },
 }
@@ -141,7 +194,7 @@ export default function ProgramPage() {
                   Domů
                 </Link>
                 <span className="text-gray-400 mx-2">/</span>
-                <span className="text-gray-900 font-medium">Program</span>
+                <span className="text-gray-900 font-medium">Programy</span>
               </motion.div>
 
               <motion.h1
@@ -159,8 +212,8 @@ export default function ProgramPage() {
                 transition={{ delay: 0.2 }}
                 className="text-xl text-gray-600 max-w-2xl mx-auto"
               >
-                Každý program je navržený tak, aby děti získaly praktické dovednosti
-                s nejmodernějšími technologiemi. Od prvního kroku až po hotový projekt.
+                7 víkendových táborů zaměřených na různé oblasti IT.
+                Od praktického 3D tisku přes programování až po vývoj her.
               </motion.p>
             </div>
           </div>
@@ -173,75 +226,156 @@ export default function ProgramPage() {
               {programs.map((program, index) => {
                 const colors = colorClasses[program.color as keyof typeof colorClasses]
                 const isEven = index % 2 === 0
+                const isMix = program.id === 'mix'
 
                 return (
                   <motion.div
-                    key={program.title}
+                    key={program.id}
+                    id={program.id}
                     initial={{ opacity: 0, y: 40 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ delay: index * 0.1 }}
-                    className="relative"
+                    transition={{ delay: 0.1 }}
+                    className="relative scroll-mt-24"
                   >
-                    <div className={`grid grid-cols-1 lg:grid-cols-2 gap-12 items-start ${isEven ? '' : 'lg:grid-flow-dense'}`}>
-                      {/* Content */}
-                      <div className={isEven ? '' : 'lg:col-start-2'}>
-                        <div className={`inline-flex items-center justify-center w-16 h-16 ${colors.bg} rounded-2xl mb-6`}>
-                          <program.icon className={`w-8 h-8 ${colors.icon}`} />
-                        </div>
+                    {/* MIX gets special treatment */}
+                    {isMix ? (
+                      <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-primary-600 via-accent-600 to-trust-600 p-1">
+                        <div className="relative rounded-[22px] overflow-hidden bg-gradient-to-br from-primary-600 via-accent-600 to-trust-600">
+                          <div className="grid grid-cols-1 lg:grid-cols-2">
+                            {/* Content */}
+                            <div className="p-8 lg:p-12">
+                              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/20 backdrop-blur-sm rounded-full text-sm font-semibold text-white w-fit mb-4">
+                                <Sparkles className="w-4 h-4" />
+                                {program.subtitle}
+                              </div>
 
-                        <h2 className="heading-2 text-gray-900 mb-4">
-                          {program.title}
-                        </h2>
+                              <h2 className="font-display text-3xl lg:text-4xl font-bold text-white mb-4">
+                                {program.title}
+                              </h2>
 
-                        <p className="text-lg text-gray-600 mb-4">
-                          {program.description}
-                        </p>
+                              <p className="text-lg text-white/90 mb-4">
+                                {program.description}
+                              </p>
 
-                        <p className="text-gray-600 mb-8">
-                          {program.extendedDescription}
-                        </p>
+                              <p className="text-white/80 mb-6">
+                                {program.extendedDescription}
+                              </p>
 
-                        {/* Co se naučíš */}
-                        <div className="mb-8">
-                          <h3 className="text-xl font-semibold text-gray-900 mb-4">
-                            Co se naučíš
-                          </h3>
-                          <ul className="space-y-3">
-                            {program.learnings.map((learning, i) => (
-                              <li key={i} className="flex items-start gap-3">
-                                <Check className={`w-5 h-5 ${colors.icon} flex-shrink-0 mt-0.5`} />
-                                <span className="text-gray-700">{learning}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      </div>
+                              <div className="mb-8">
+                                <h3 className="text-xl font-semibold text-white mb-4">
+                                  Co si děti odnesou
+                                </h3>
+                                <ul className="space-y-3">
+                                  {program.learnings.map((learning, i) => (
+                                    <li key={i} className="flex items-start gap-3">
+                                      <div className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                        <Check className="w-3 h-3 text-white" />
+                                      </div>
+                                      <span className="text-white/90">{learning}</span>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
 
-                      {/* Projects Card */}
-                      <div className={isEven ? '' : 'lg:col-start-1 lg:row-start-1'}>
-                        <div className={`sticky top-24 p-8 rounded-2xl bg-gradient-to-br ${colors.gradient} text-white`}>
-                          <h3 className="text-2xl font-bold mb-6">
-                            Příklady projektů
-                          </h3>
-                          <ul className="space-y-4">
-                            {program.projects.map((project, i) => (
-                              <li key={i} className="flex items-start gap-3">
-                                <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                                  <span className="text-sm font-semibold">{i + 1}</span>
-                                </div>
-                                <span className="text-white/90">{project}</span>
-                              </li>
-                            ))}
-                          </ul>
-                          <div className="mt-8 pt-6 border-t border-white/20">
-                            <p className="text-sm text-white/80">
-                              A mnoho dalších projektů podle zájmu a úrovně dětí!
-                            </p>
+                              <div className="p-4 bg-white/10 rounded-xl mb-6">
+                                <p className="text-sm font-semibold text-white/90 mb-1">Ultimátní cíl:</p>
+                                <p className="text-white/80 text-sm">{program.ultimateGoal}</p>
+                              </div>
+
+                              <Link
+                                href="/#prihlasit"
+                                className="btn-primary bg-white text-primary-600 hover:bg-gray-100 inline-flex items-center"
+                              >
+                                Mám zájem o MIX
+                                <ArrowRight className="ml-2 w-5 h-5" />
+                              </Link>
+                            </div>
+
+                            {/* Image */}
+                            <div className="relative h-64 lg:h-auto min-h-[400px]">
+                              <Image
+                                src={program.image}
+                                alt={program.title}
+                                fill
+                                sizes="(max-width: 1024px) 100vw, 50vw"
+                                className="object-cover"
+                              />
+                              <div className="absolute inset-0 bg-gradient-to-r from-primary-600/50 via-transparent to-transparent lg:bg-gradient-to-l" />
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
+                    ) : (
+                      /* Regular program cards */
+                      <div className={`grid grid-cols-1 lg:grid-cols-2 gap-12 items-start ${isEven ? '' : 'lg:grid-flow-dense'}`}>
+                        {/* Content */}
+                        <div className={isEven ? '' : 'lg:col-start-2'}>
+                          <div className={`inline-flex items-center justify-center w-16 h-16 ${colors.bg} rounded-2xl mb-6`}>
+                            <program.icon className={`w-8 h-8 ${colors.icon}`} />
+                          </div>
+
+                          <div className={`inline-flex items-center px-3 py-1 ${colors.badge} rounded-full text-sm font-medium mb-4`}>
+                            {program.subtitle}
+                          </div>
+
+                          <h2 className="heading-2 text-gray-900 mb-4">
+                            {program.title}
+                          </h2>
+
+                          <p className="text-lg text-gray-600 mb-4">
+                            {program.description}
+                          </p>
+
+                          <p className="text-gray-600 mb-8">
+                            {program.extendedDescription}
+                          </p>
+
+                          {/* Co se naučíš */}
+                          <div className="mb-8">
+                            <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                              Co si děti odnesou
+                            </h3>
+                            <ul className="space-y-3">
+                              {program.learnings.map((learning, i) => (
+                                <li key={i} className="flex items-start gap-3">
+                                  <Check className={`w-5 h-5 ${colors.icon} flex-shrink-0 mt-0.5`} />
+                                  <span className="text-gray-700">{learning}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+
+                          {/* Ultimátní cíl */}
+                          <div className="p-4 bg-gray-50 rounded-xl border border-gray-100">
+                            <p className="text-sm font-semibold text-gray-900 mb-1">Ultimátní cíl:</p>
+                            <p className="text-gray-600 text-sm">{program.ultimateGoal}</p>
+                          </div>
+                        </div>
+
+                        {/* Image Card */}
+                        <div className={isEven ? '' : 'lg:col-start-1 lg:row-start-1'}>
+                          <div className="sticky top-24 rounded-2xl overflow-hidden shadow-xl">
+                            <div className="relative h-80 lg:h-96">
+                              <Image
+                                src={program.image}
+                                alt={program.title}
+                                fill
+                                sizes="(max-width: 1024px) 100vw, 50vw"
+                                className="object-cover"
+                              />
+                              <div className="absolute inset-0 bg-gradient-to-t from-gray-900/40 to-transparent" />
+                            </div>
+                            <div className={`p-6 bg-gradient-to-br ${colors.gradient} text-white`}>
+                              <p className="font-semibold mb-2">Víkendový formát</p>
+                              <p className="text-sm text-white/80">
+                                Sobota + neděle, 9:00 - 17:00. Vše potřebné zajistíme, stačí přijít s chutí tvořit.
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </motion.div>
                 )
               })}
@@ -259,11 +393,11 @@ export default function ProgramPage() {
               className="max-w-3xl mx-auto text-center"
             >
               <h2 className="heading-2 text-white mb-6">
-                Připraveni začít?
+                Nevíte si rady?
               </h2>
               <p className="text-xl text-white/90 mb-8">
-                Každý víkend nabízíme různé programy. Zaregistrujte své dítě
-                a vyberte si termín, který vám vyhovuje.
+                Pokud si nejste jistí, který program je pro vaše dítě nejlepší,
+                doporučujeme začít s <strong>MIX</strong> - ochutná všechno a pak se může rozhodnout.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link href="/#prihlasit" className="btn-primary bg-white text-primary-600 hover:bg-gray-100">

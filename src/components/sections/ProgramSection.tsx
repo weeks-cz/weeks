@@ -1,42 +1,80 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Printer, Glasses, Cpu, Code2, ArrowUpRight } from 'lucide-react'
+import { Printer, Cpu, Box, Globe, Gamepad2, Code2, Sparkles, ArrowRight, Check } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 
-const programs = [
+// MIX program - hero card
+const mixProgram = {
+  id: 'mix',
+  icon: Sparkles,
+  title: 'MIX - Ochutnej vše',
+  subtitle: 'Ideální pro začátečníky',
+  description: 'Nejste si jistí, která oblast IT vaše dítě zaujme nejvíc? MIX víkend kombinuje 3D tisk, virtuální realitu, robotiku i programování. Perfektní úvod do světa technologií.',
+  highlights: [
+    'Vyzkouší 3 různé technologie za jeden víkend',
+    'Odnese si projekt z každé oblasti',
+    'Zjistí, co ho baví - pak se může rozhodnout',
+  ],
+  image: '/images/hwlab/hwlab-7972.webp',
+}
+
+// Specializované programy
+const specializations = [
   {
+    id: '3d-tisk',
     icon: Printer,
-    title: '3D tisk & modelování',
-    description: 'Od návrhu po reálný výtisk. Děti navrhnou v 3D a vytisknou si vlastní projekt na profesionálních tiskárnách Prusa.',
+    title: '3D tisk',
+    description: 'Od návrhu k reálnému výtisku. FDM i SLA tiskárny, práce se slicerem, modelování v Tinkercad a post-processing.',
     image: '/images/hwlab/hwlab-7990.webp',
     color: 'primary',
-    stats: '8+ tiskáren',
+    badge: '8+ tiskáren Prusa',
   },
   {
-    icon: Glasses,
-    title: 'Virtuální realita',
-    description: 'Tvorba VR světů a zážitků. Naučí se pracovat s nejmodernější technologií a vytvořit vlastní virtuální prostředí.',
-    image: '/images/hwlab/hwlab-7975.webp',
-    color: 'accent',
-    stats: 'Meta Quest',
-  },
-  {
+    id: 'iot',
     icon: Cpu,
-    title: 'IoT & elektronika',
-    description: 'Chytré zařízení od A do Z. Programování senzorů, LED pásků a vytvoření funkčního IoT projektu.',
+    title: 'IoT & Arduino',
+    description: 'Programování mikročipů, práce se senzory a breadboardem. Základy elektrotechniky a vlastní IoT projekt.',
+    image: '/images/hwlab/hwlab-7965.webp',
+    color: 'trust',
+    badge: 'Arduino & ESP32',
+  },
+  {
+    id: 'blender',
+    icon: Box,
+    title: '3D modelování',
+    description: 'Blender od základů. Tvorba 3D modelů, textur a renderů. Export pro 3D tisk nebo do herních enginů.',
+    image: '/images/hwlab/hwlab-7978.webp',
+    color: 'accent',
+    badge: 'Blender',
+  },
+  {
+    id: 'web',
+    icon: Globe,
+    title: 'Tvorba webu',
+    description: 'HTML, CSS a základy JavaScriptu. Vlastní portfolio nebo web na téma podle výběru, publikovaný online.',
+    image: '/images/hwlab/hwlab-7975.webp',
+    color: 'cta',
+    badge: 'HTML & CSS',
+  },
+  {
+    id: 'hry',
+    icon: Gamepad2,
+    title: 'Vývoj her',
+    description: 'Unity a Visual Scripting. Tvorba vlastní 2D hry od návrhu po hratelný build, který si odneseš domů.',
+    image: '/images/hwlab/hwlab-7968.webp',
+    color: 'primary',
+    badge: 'Unity',
+  },
+  {
+    id: 'csharp',
+    icon: Code2,
+    title: 'Programování C#',
+    description: 'Základy programování v C#. Proměnné, cykly, podmínky a funkce. Vlastní funkční program.',
     image: '/images/hwlab/hwlab-7962.webp',
     color: 'trust',
-    stats: 'Arduino & RPi',
-  },
-  {
-    icon: Code2,
-    title: 'Programování & vývoj',
-    description: 'Kód, který funguje. Od základů po pokročilé projekty - aplikace, hry nebo weby podle zájmu a úrovně dítěte.',
-    image: '/images/hwlab/hwlab-7965.webp',
-    color: 'cta',
-    stats: 'Python & JS',
+    badge: 'C# & .NET',
   },
 ]
 
@@ -82,7 +120,7 @@ export function ProgramSection() {
 
       <div className="section-container relative z-10">
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        <div className="text-center max-w-3xl mx-auto mb-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -90,7 +128,7 @@ export function ProgramSection() {
             className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full text-sm font-medium text-gray-600 shadow-sm mb-6"
           >
             <span className="w-2 h-2 rounded-full bg-trust-500 animate-pulse" />
-            Co se naučí
+            7 programů na výběr
           </motion.div>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -98,9 +136,9 @@ export function ProgramSection() {
             viewport={{ once: true }}
             className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4"
           >
-            Praktické dovednosti
+            Vyberte si podle toho,
             <br />
-            <span className="text-gradient">s nejmodernějšími technologiemi</span>
+            <span className="text-gradient">co vaše dítě baví</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -109,64 +147,141 @@ export function ProgramSection() {
             transition={{ delay: 0.1 }}
             className="text-lg text-gray-600"
           >
-            Každý si odnese vlastní projekt a nové znalosti. Vše v reálném HWLab prostředí.
+            Nebo zkuste všechno! Každý si odnese vlastní projekt a nové znalosti.
           </motion.p>
         </div>
 
-        {/* Program Grid - 2x2 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-          {programs.map((program, index) => {
+        {/* MIX Hero Card */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mb-12"
+        >
+          <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-primary-600 via-accent-600 to-trust-600 p-1">
+            <div className="relative rounded-[22px] overflow-hidden bg-gradient-to-br from-primary-600 via-accent-600 to-trust-600">
+              <div className="grid grid-cols-1 lg:grid-cols-2">
+                {/* Content */}
+                <div className="p-8 lg:p-12 flex flex-col justify-center">
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/20 backdrop-blur-sm rounded-full text-sm font-semibold text-white w-fit mb-4">
+                    <Sparkles className="w-4 h-4" />
+                    {mixProgram.subtitle}
+                  </div>
+
+                  <h3 className="font-display text-3xl lg:text-4xl font-bold text-white mb-4">
+                    {mixProgram.title}
+                  </h3>
+
+                  <p className="text-lg text-white/90 mb-6">
+                    {mixProgram.description}
+                  </p>
+
+                  <ul className="space-y-3 mb-8">
+                    {mixProgram.highlights.map((highlight, i) => (
+                      <li key={i} className="flex items-start gap-3">
+                        <div className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <Check className="w-3 h-3 text-white" />
+                        </div>
+                        <span className="text-white/90">{highlight}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <Link
+                      href="/#prihlasit"
+                      className="btn-primary bg-white text-primary-600 hover:bg-gray-100 inline-flex items-center justify-center"
+                    >
+                      Mám zájem o MIX
+                      <ArrowRight className="ml-2 w-5 h-5" />
+                    </Link>
+                    <Link
+                      href="/program#mix"
+                      className="btn-outline border-white/50 text-white hover:bg-white/10 inline-flex items-center justify-center"
+                    >
+                      Více o programu
+                    </Link>
+                  </div>
+                </div>
+
+                {/* Image */}
+                <div className="relative h-64 lg:h-auto min-h-[300px]">
+                  <Image
+                    src={mixProgram.image}
+                    alt="MIX program - VR headsety a další technologie"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    className="object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-r from-primary-600/50 via-transparent to-transparent lg:bg-gradient-to-l" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Specializace Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-8"
+        >
+          <h3 className="text-xl font-semibold text-gray-700">
+            Nebo si vyberte specializaci
+          </h3>
+          <p className="text-gray-500 mt-1">
+            Pro děti, které už vědí, čemu se chtějí věnovat
+          </p>
+        </motion.div>
+
+        {/* Specializace Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {specializations.map((program, index) => {
             const colors = colorClasses[program.color as keyof typeof colorClasses]
             return (
               <motion.div
-                key={program.title}
+                key={program.id}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
+                transition={{ delay: index * 0.05 }}
                 className="group relative bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100"
               >
                 {/* Image */}
-                <div className="relative h-48 md:h-56 overflow-hidden">
+                <div className="relative h-40 overflow-hidden">
                   <Image
                     src={program.image}
                     alt={program.title}
                     fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="object-cover group-hover:scale-105 transition-transform duration-700"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-gray-900/20 to-transparent" />
 
-                  {/* Stats Badge */}
-                  <div className="absolute top-4 right-4">
-                    <div className={`px-3 py-1.5 rounded-full bg-white/90 backdrop-blur-sm text-xs font-semibold ${colors.text}`}>
-                      {program.stats}
+                  {/* Badge */}
+                  <div className="absolute top-3 right-3">
+                    <div className={`px-2.5 py-1 rounded-full bg-white/90 backdrop-blur-sm text-xs font-semibold ${colors.text}`}>
+                      {program.badge}
                     </div>
                   </div>
 
                   {/* Icon */}
-                  <div className="absolute bottom-4 left-4">
-                    <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${colors.gradient} flex items-center justify-center shadow-lg`}>
-                      <program.icon className="w-6 h-6 text-white" />
+                  <div className="absolute bottom-3 left-3">
+                    <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${colors.gradient} flex items-center justify-center shadow-lg`}>
+                      <program.icon className="w-5 h-5 text-white" />
                     </div>
                   </div>
                 </div>
 
                 {/* Content */}
-                <div className="p-6">
-                  <h3 className="font-display text-xl font-bold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors">
+                <div className="p-5">
+                  <h4 className="font-display text-lg font-bold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors">
                     {program.title}
-                  </h3>
-                  <p className="text-gray-600 leading-relaxed">
+                  </h4>
+                  <p className="text-sm text-gray-600 leading-relaxed">
                     {program.description}
                   </p>
-                </div>
-
-                {/* Hover Arrow */}
-                <div className="absolute top-4 left-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <div className="w-10 h-10 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center">
-                    <ArrowUpRight className="w-5 h-5 text-gray-700" />
-                  </div>
                 </div>
               </motion.div>
             )
@@ -178,15 +293,15 @@ export function ProgramSection() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ delay: 0.4 }}
+          transition={{ delay: 0.3 }}
           className="mt-12 text-center"
         >
           <Link
             href="/program"
             className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 font-semibold group"
           >
-            Zobrazit kompletní program
-            <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+            Zobrazit detaily všech programů
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Link>
         </motion.div>
       </div>

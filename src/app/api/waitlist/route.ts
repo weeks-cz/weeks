@@ -3,8 +3,26 @@ import { NextRequest, NextResponse } from 'next/server'
 // Email validation regex
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
+// Valid program IDs
+const VALID_PROGRAMS = ['mix', '3d-tisk', 'iot', 'blender', 'web', 'hry', 'csharp', 'nevim']
+
+// Program labels for email
+const PROGRAM_LABELS: Record<string, string> = {
+  'mix': 'MIX - Ochutnej vše',
+  '3d-tisk': '3D tisk',
+  'iot': 'IoT & Arduino',
+  'blender': '3D modelování (Blender)',
+  'web': 'Tvorba webu',
+  'hry': 'Vývoj her',
+  'csharp': 'Programování C#',
+  'nevim': 'Ještě nevím',
+}
+
 interface WaitlistRequestBody {
   email: string
+  program: string
+  childName?: string
+  childAge?: string
   gdprConsent: boolean
 }
 
@@ -12,7 +30,7 @@ export async function POST(request: NextRequest) {
   try {
     // Parse request body
     const body: WaitlistRequestBody = await request.json()
-    const { email, gdprConsent } = body
+    const { email, program, childName, childAge, gdprConsent } = body
 
     // Validate required fields
     if (!email) {
@@ -37,6 +55,14 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Validate program
+    if (!program || !VALID_PROGRAMS.includes(program)) {
+      return NextResponse.json(
+        { error: 'Vyberte prosím program' },
+        { status: 400 }
+      )
+    }
+
     // Get Formspree ID from environment
     const formspreeId = process.env.NEXT_PUBLIC_FORMSPREE_ID
 
@@ -47,6 +73,9 @@ export async function POST(request: NextRequest) {
         { status: 500 }
       )
     }
+
+    // Prepare data for Formspree
+    const programLabel = PROGRAM_LABELS[program] || program
 
     // Send to Formspree
     const formspreeResponse = await fetch(
@@ -59,8 +88,12 @@ export async function POST(request: NextRequest) {
         },
         body: JSON.stringify({
           email,
+          program: programLabel,
+          programId: program,
+          childName: childName || '(neuvedeno)',
+          childAge: childAge ? `${childAge} let` : '(neuvedeno)',
           gdprConsent,
-          _subject: 'Nová registrace do waitlistu - Weeks',
+          _subject: `Waitlist: ${programLabel} - ${email}`,
           timestamp: new Date().toISOString(),
         }),
       }
