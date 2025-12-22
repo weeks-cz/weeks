@@ -246,43 +246,47 @@ export function ProgramSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.05 }}
-                className="group relative bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100"
               >
-                {/* Image */}
-                <div className="relative h-40 overflow-hidden">
-                  <Image
-                    src={program.image}
-                    alt={program.title}
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className="object-cover group-hover:scale-105 transition-transform duration-700"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-gray-900/20 to-transparent" />
+                <Link
+                  href={`/program#${program.id}`}
+                  className="group relative bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 block"
+                >
+                  {/* Image */}
+                  <div className="relative h-40 overflow-hidden">
+                    <Image
+                      src={program.image}
+                      alt={program.title}
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      className="object-cover group-hover:scale-105 transition-transform duration-700"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-gray-900/20 to-transparent" />
 
-                  {/* Badge */}
-                  <div className="absolute top-3 right-3">
-                    <div className={`px-2.5 py-1 rounded-full bg-white/90 backdrop-blur-sm text-xs font-semibold ${colors.text}`}>
-                      {program.badge}
+                    {/* Badge */}
+                    <div className="absolute top-3 right-3">
+                      <div className={`px-2.5 py-1 rounded-full bg-white/90 backdrop-blur-sm text-xs font-semibold ${colors.text}`}>
+                        {program.badge}
+                      </div>
+                    </div>
+
+                    {/* Icon */}
+                    <div className="absolute bottom-3 left-3">
+                      <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${colors.gradient} flex items-center justify-center shadow-lg`}>
+                        <program.icon className="w-5 h-5 text-white" />
+                      </div>
                     </div>
                   </div>
 
-                  {/* Icon */}
-                  <div className="absolute bottom-3 left-3">
-                    <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${colors.gradient} flex items-center justify-center shadow-lg`}>
-                      <program.icon className="w-5 h-5 text-white" />
-                    </div>
+                  {/* Content */}
+                  <div className="p-5">
+                    <h4 className="font-display text-lg font-bold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors">
+                      {program.title}
+                    </h4>
+                    <p className="text-sm text-gray-600 leading-relaxed">
+                      {program.description}
+                    </p>
                   </div>
-                </div>
-
-                {/* Content */}
-                <div className="p-5">
-                  <h4 className="font-display text-lg font-bold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors">
-                    {program.title}
-                  </h4>
-                  <p className="text-sm text-gray-600 leading-relaxed">
-                    {program.description}
-                  </p>
-                </div>
+                </Link>
               </motion.div>
             )
           })}
