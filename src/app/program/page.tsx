@@ -311,12 +311,13 @@ export default function ProgramPage() {
                       <div className={`grid grid-cols-1 lg:grid-cols-2 gap-12 items-start ${isEven ? '' : 'lg:grid-flow-dense'}`}>
                         {/* Content */}
                         <div className={isEven ? '' : 'lg:col-start-2'}>
-                          <div className={`inline-flex items-center justify-center w-16 h-16 ${colors.bg} rounded-2xl mb-6`}>
-                            <program.icon className={`w-8 h-8 ${colors.icon}`} />
-                          </div>
-
-                          <div className={`inline-flex items-center px-3 py-1 ${colors.badge} rounded-full text-sm font-medium mb-4`}>
-                            {program.subtitle}
+                          <div className="flex items-center gap-4 mb-6">
+                            <div className={`inline-flex items-center justify-center w-12 h-12 ${colors.bg} rounded-xl`}>
+                              <program.icon className={`w-6 h-6 ${colors.icon}`} />
+                            </div>
+                            <div className={`inline-flex items-center px-3 py-1 ${colors.badge} rounded-full text-sm font-medium`}>
+                              {program.subtitle}
+                            </div>
                           </div>
 
                           <h2 className="heading-2 text-gray-900 mb-4">
