@@ -7,7 +7,7 @@ import Image from 'next/image'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 
-// Všech 7 programů s detailními popisy podle PDF
+// Všech 7 programů s marketingovými popisy
 const programs = [
   {
     id: 'mix',
@@ -16,124 +16,117 @@ const programs = [
     subtitle: 'Ideální pro začátečníky',
     color: 'mix',
     image: '/images/hwlab/hwlab-7972.webp',
-    description: 'Tábor zaměřený na chytré technologie a jejich propojování s reálným světem. Cílem není stát se odborníkem ve všech tématech, ale získat vhled do světa chytrých technologií s cílem, aby si dítě našlo odvětví, které ho chytne a začne se v něm dále rozvíjet.',
-    extendedDescription: 'Během dvou dnů si děti prakticky vyzkouší 3D tisk, IoT (Micro:bit) i virtuální realitu. Důraz je na to, aby dítě vidělo chytré využití těchto technologií v dnešním světě a začalo ho napadat další využití. VR není jen o hraní - využijeme výukové aplikace zaměřené na rozvoj dítěte.',
+    description: 'Nevíte, co by vaše dítě bavilo? Za jeden víkend si vyzkouší hned několik oblastí - 3D tisk, virtuální realitu i programování. Ideální start pro každého, kdo chce objevit svět technologií.',
+    extendedDescription: 'Dva dny plné objevování. Vaše dítě si prakticky vyzkouší hned několik oblastí - vytiskne si vlastní model na 3D tiskárně, prozkoumá virtuální světy v brýlích a naprogramuje svůj první projekt. Není potřeba žádné předchozí zkušenosti. MIX je perfektní volba, když nevíte, co by vaše dítě mohlo bavit - nebo když ho baví všechno.',
     learnings: [
-      'Ochutnávka budoucnosti: prakticky vyzkouší 3D tisk, IoT i virtuální realitu',
-      '3D tisk v praxi: připraví model, ovládne tiskárnu, odnese si vlastní výtisk',
-      'Svět chytré elektroniky: pochopí senzory a naprogramuje první projekt na Micro:bit',
-      'VR i pro vzdělávání: virtuální realita není jen o hraní her',
-      'Nalezení směru: zjistí, která technologie ho baví nejvíce',
+      'Vlastní 3D výtisk, který si sami navrhnou',
+      'Zážitek z virtuální reality a pochopení, jak funguje',
+      'První naprogramovaný projekt na mikropočítači',
+      'Přehled o tom, která oblast technologií je baví nejvíc',
     ],
-    ultimateGoal: 'Otevřít dětem dveře do světa chytrých technologií, nechat je "ochutnat" budoucnost a pomoci jim objevit tu jednu vášeň, která je chytne a nasměruje jejich další rozvoj.',
+    ultimateGoal: 'Dítě objeví, která technologie ho baví, a získá motivaci se jí věnovat dál.',
   },
   {
     id: '3d-tisk',
     icon: Printer,
     title: '3D tisk',
-    subtitle: 'Od návrhu k výtisku',
+    subtitle: 'Od nápadu k výrobku',
     color: 'primary',
     image: '/images/hwlab/hwlab-7990.webp',
-    description: 'Základní rozdělení druhů 3D tiskáren na FDM a SLA. Popis jak fungují, výhody a nevýhody jednotlivých druhů. Ukázka filamentu vs. resinu a obecných využití 3D tisku v praxi.',
-    extendedDescription: 'Práce se slicerem - základní funkce, ovládání a kompletní příprava prvního tisku. Rozebrání do hloubky, co dělají různé funkce a nastavení. Základy modelování v Tinkercad, export do sliceru a tisk. Post-processing včetně barvení, lepení, broušení a vyhlazování.',
+    description: 'Od nápadu k hotovému výrobku. Děti navrhnou vlastní model a vytisknou si ho na profesionálních tiskárnách. Domů si odnesou něco, co samy vytvořily.',
+    extendedDescription: 'Celý víkend věnovaný 3D tisku od začátku do konce. Děti se naučí, jak z jednoduchého náčrtu vytvořit počítačový model, jak ho připravit k tisku a jak ovládat tiskárnu. Vyzkoušejí si i dokončovací práce - broušení, barvení a sestavování. Pracujeme s tiskárnami Prusa, které patří mezi nejlepší na světě - a jsou české!',
     learnings: [
-      'Vysvětlit jaké tiskárny máme a jaké jsou mezi nimi rozdíly (FDM vs SLA)',
-      'Vybrat vhodný filament na konkrétní projekt a obhájit volbu',
-      'Vyhledat a připravit model k 3D tisku ve sliceru',
-      'Zavést filament, spustit tisk, vyčistit podložku, zkalibrovat tiskárnu',
-      'Základy modelování a jednoduché úpravy modelů',
+      'Vlastní navržený a vytištěný model (klíčenka, stojánek, hračka...)',
+      'Schopnost připravit a spustit tisk samostatně',
+      'Základy 3D modelování v jednoduchém programu',
+      'Pochopení, jak 3D tisk funguje a k čemu se dá využít',
     ],
-    ultimateGoal: 'Dítě dokáže po zadání problému vytvořit model (součástku), vybrat filament, naslicovat a vytisknout funkční díl a vysvětlit jednotlivé kroky.',
+    ultimateGoal: 'Dítě dokáže samostatně navrhnout jednoduchý model a vytisknout ho - a ví, že to zvládne i doma.',
   },
   {
     id: 'iot',
     icon: Cpu,
-    title: 'IoT & Arduino',
-    subtitle: 'Chytrá elektronika',
+    title: 'IoT & elektronika',
+    subtitle: 'Chytrá zařízení',
     color: 'trust',
     image: '/images/hwlab/hwlab-7965.webp',
-    description: 'Úvod do IoT - vysvětlení pojmů a využití ve světě. Ukázka mikropočítačů (ESP, Raspberry Pi, Micro:bit), představení Arduina a rozdíly mezi analogovým a digitálním signálem.',
-    extendedDescription: 'Práce s breadboardem, vytvoření jednoduchého obvodu s LED diodou. Ukázka senzorů - vstupní a výstupní zařízení. Seznámení s Arduino IDE, základy práce s bloky a první kód. Implementace složitějších modulů jako display. Základy elektrotechniky a Ohmův zákon.',
+    description: 'Postavit si vlastní chytré zařízení? Děti propojí senzory, světýlka a displeje a naprogramují je, aby dělaly přesně to, co chtějí.',
+    extendedDescription: 'Víkend plný bastlení a objevování. Děti si postaví vlastní elektronické projekty - od blikající LED až po chytré zařízení, které reaguje na okolí. Naučí se propojovat součástky, psát jednoduché programy a pochopit, jak fungují chytré věci kolem nás. Žádné předchozí znalosti nejsou potřeba.',
     learnings: [
-      'Vysvětlit co znamená IoT a kde se s tím mohou setkat',
-      'Rozlišit druhy mikropočítačů které používáme',
-      'Vysvětlit základní rozdíly analog vs digital, vstupní vs výstupní',
-      'Správně zapojit jednoduchý obvod na breadboardu',
-      'Vytvořit program a nahrát ho na Arduino',
+      'Vlastní fungující elektronický projekt',
+      'Pochopení, jak fungují chytrá zařízení kolem nás',
+      'Základy propojování elektronických součástek',
+      'První zkušenost s programováním hardwaru',
     ],
-    ultimateGoal: 'Dítě dokáže samostatně zapojit obvod se senzory, naprogramovat Arduino a vytvořit funkční IoT projekt.',
+    ultimateGoal: 'Dítě si odnese vlastní chytré zařízení a pochopí, že elektronika není magie, ale něco, co může tvořit samo.',
   },
   {
     id: 'blender',
     icon: Box,
-    title: '3D modelování v Blenderu',
-    subtitle: 'Grafika a animace',
+    title: '3D modelování',
+    subtitle: 'Digitální tvorba',
     color: 'accent',
     image: '/images/hwlab/hwlab-7978.webp',
-    description: 'Úvodní seznámení s oborem. Rozdělení 3D modelování na grafické a "praktické". Rozdělení grafiky na vektorovou a bitmapovou. Ukázka různých programů na modelování.',
-    extendedDescription: 'První spuštění Blenderu, orientace v prostředí. Object mode vs edit mode, nástroje na úpravu modelu. Práce s Modifiers, vytváření textur. Import online modelů a textur. Tvorba scény, práce s kamerou. Rozdíly mezi Eevee a Cycles, vytváření renderů.',
+    description: 'Tvorba 3D modelů jako v animovaných filmech. Vlastní postavička, scéna nebo předmět, který můžou vytisknout na 3D tiskárně.',
+    extendedDescription: 'Vstup do světa digitální tvorby. Děti se naučí vytvářet 3D modely v programu Blender - stejném nástroji, který používají profesionální studia. Vytvoří si vlastní postavičku, předmět nebo celou scénu. Výsledek můžou použít jako obrázek, animaci, nebo ho poslat na 3D tisk.',
     learnings: [
-      'Schopnost říct co je 3D modelování a k čemu slouží',
-      'Představení různých programů pro modelování',
-      'Vysvětlení rozdělení druhů grafik a účelu modelování',
-      'Tvorba jednoduchých modelů s využitím nástrojů Blenderu',
-      'Tvorba základní textury a vytvoření kvalitního renderu',
+      'Vlastní 3D model vytvořený od nuly',
+      'Základy práce v profesionálním 3D programu',
+      'Schopnost vytvořit obrázek (render) svého modelu',
+      'Pochopení, jak vznikají 3D grafika ve hrách a filmech',
     ],
-    ultimateGoal: 'Dítě si odnese vlastní 3D model s texturami a profesionální render, který může sdílet nebo použít pro 3D tisk.',
+    ultimateGoal: 'Dítě vytvoří vlastní 3D model a pochopí základy digitální tvorby, kterou může rozvíjet dál.',
   },
   {
     id: 'web',
     icon: Globe,
     title: 'Tvorba webu',
-    subtitle: 'HTML, CSS & publikace',
+    subtitle: 'Vlastní stránky',
     color: 'cta',
     image: '/images/hwlab/hwlab-7975.webp',
-    description: 'Úvod do světa webových stránek - co je to web, jak funguje. Ukázka různých typů webových stránek (osobní portfolio, blog, e-shop). První kroky v HTML - struktura stránky, základní tagy.',
-    extendedDescription: 'Úvod do CSS - co jsou styly, jak propojit s HTML. Práce s barvami, fonty, velikostmi a pozadím. Základy layoutu a responzivity. Práce s obrázky a ikonami - kde hledat volně dostupné zdroje. Základy bezpečnosti - co na web nedávat.',
+    description: 'Vlastní webová stránka, kterou můžou ukázat kamarádům a rodině. Portfolio, blog nebo fan stránka na téma, které je baví.',
+    extendedDescription: 'Za víkend od nuly k vlastní webové stránce. Děti se naučí, jak weby fungují, a vytvoří si vlastní - třeba portfolio svých prací, blog, nebo stránku o svém koníčku. Stránku pak publikujeme online, takže ji můžou ukázat komukoliv. Žádné předchozí zkušenosti nejsou potřeba.',
     learnings: [
-      'Chápat základní principy fungování webu (HTML, CSS, prohlížeč)',
-      'Vytvořit jednoduchou webovou stránku s textem, obrázky a odkazy',
-      'Nastylovat stránku pomocí CSS (barvy, fonty, rozložení)',
-      'Vědět kde hledat zdroje a inspiraci (obrázky, ikony, návody)',
-      'Základní povědomí o bezpečnosti a soukromí na webu',
+      'Vlastní webová stránka publikovaná online',
+      'Pochopení, jak weby fungují',
+      'Schopnost upravit vzhled stránky podle svých představ',
+      'Základy bezpečnosti na internetu',
     ],
-    ultimateGoal: 'Dítě si odnese vlastní funkční webovou stránku (portfolio nebo stránku na vlastní téma) publikovanou online, kterou může ukázat rodině a kamarádům.',
+    ultimateGoal: 'Dítě si odnese vlastní funkční web, který může ukázat rodině a kamarádům - a ví, jak ho dál upravovat.',
   },
   {
     id: 'hry',
     icon: Gamepad2,
     title: 'Vývoj her',
-    subtitle: 'Unity & Visual Scripting',
+    subtitle: 'Tvorba vlastní hry',
     color: 'primary',
     image: '/images/hwlab/hwlab-7968.webp',
-    description: 'Úvod do světa vývoje her - všichni hry hrají, ale kdo z dětí ví jak doopravdy vznikají? Pochopení základních principů herního vývoje, enginů, základní logiky a principu programování.',
-    extendedDescription: 'Práce v herním enginu Unity s využitím Visual Scripting (složitější Scratch). Tvorba jednoduché 2D hry - skákačka nebo top-down. Grafika bude předpřipravená. Naučíme se orientaci v Unity, práci s nástroji, pohyb hráče, smrt hráče, měření score, UI.',
+    description: 'Z hráče tvůrcem. Děti vytvoří vlastní hru, kterou si můžou zahrát i doma a ukázat kamarádům.',
+    extendedDescription: 'Každý hraje hry, ale jak vznikají? Za víkend to děti zjistí a vytvoří si vlastní. Pracujeme v Unity - stejném programu, ve kterém vznikají i profesionální hry. Děti navrhnou herní svět, naprogramují pohyb postavy a vytvoří hratelnou hru, kterou si odnesou domů.',
     learnings: [
-      'Od hráče k tvůrci: nahlédnou pod pokličku herního vývoje',
-      'Reálný výsledek: hratelný build vlastní 2D hry a zdrojové soubory',
-      'Logické myšlení: principy algoritmizace (podmínky, proměnné, akce)',
-      'Samostatnost při řešení problémů: prostor pro vlastní nápady',
-      'Práce s profesionálními nástroji: orientace v Unity',
+      'Vlastní hratelná hra, kterou si můžou zahrát i doma',
+      'Pochopení, jak hry fungují "pod kapotou"',
+      'Základy herního designu a programování',
+      'Zkušenost s profesionálním herním enginem',
     ],
-    ultimateGoal: 'Proměnit děti z pasivních hráčů na aktivní tvůrce, kteří pochopí "jak to funguje" a odnesou si domů svou první, vlastnoručně naprogramovanou hru v Unity.',
+    ultimateGoal: 'Dítě se promění z hráče v tvůrce - pochopí, jak hry vznikají, a odnese si vlastní hru.',
   },
   {
     id: 'csharp',
     icon: Code2,
-    title: 'Programování C#',
-    subtitle: 'Základy programování',
+    title: 'Programování',
+    subtitle: 'První kroky v kódu',
     color: 'trust',
     image: '/images/hwlab/hwlab-7962.webp',
-    description: 'Úvod a rozdělení programovacích jazyků. Základy programování - proměnné, cykly, podmínky a funkce. Praktické cvičení s reálnými příklady.',
-    extendedDescription: 'C# je moderní programovací jazyk používaný pro vývoj her v Unity, desktopových aplikací i webových služeb. Děti se naučí základní koncepty programování, které jsou přenositelné do jakéhokoliv jiného jazyka.',
+    description: 'První kroky v programování. Od jednoduchých příkazů po vlastní fungující program, který něco užitečného dělá.',
+    extendedDescription: 'Programování je jako učit se nový jazyk - jazyk, kterým mluvíte s počítačem. Za víkend děti pochopí základy a napíší vlastní program. Začneme jednoduše a postupně přidáváme. Na konci bude mít každý vlastní fungující program, který si odnese domů.',
     learnings: [
-      'Pochopení základních konceptů programování',
-      'Práce s proměnnými a datovými typy',
-      'Vytváření podmínek a cyklů',
-      'Psaní a volání funkcí',
-      'Debugging a hledání chyb v kódu',
+      'Vlastní fungující program',
+      'Pochopení základních principů programování',
+      'Schopnost číst a upravovat jednoduchý kód',
+      'Základ pro další učení jakéhokoliv programovacího jazyka',
     ],
-    ultimateGoal: 'Dítě si odnese vlastní funkční program a základy programátorského myšlení, které může dále rozvíjet.',
+    ultimateGoal: 'Dítě pochopí, že programování není magie, a získá základ, na kterém může stavět dál.',
   },
 ]
 
@@ -212,8 +205,7 @@ export default function ProgramPage() {
                 transition={{ delay: 0.2 }}
                 className="text-xl text-gray-600 max-w-2xl mx-auto"
               >
-                7 víkendových táborů zaměřených na různé oblasti IT.
-                Od praktického 3D tisku přes programování až po vývoj her.
+                7 víkendových táborů, 7 různých oblastí. Vyberte si podle toho, co vaše dítě baví - nebo zkuste MIX a objevte to společně.
               </motion.p>
             </div>
           </div>
@@ -279,7 +271,7 @@ export default function ProgramPage() {
                               </div>
 
                               <div className="p-4 bg-white/10 rounded-xl mb-6">
-                                <p className="text-sm font-semibold text-white/90 mb-1">Ultimátní cíl:</p>
+                                <p className="text-sm font-semibold text-white/90 mb-1">Cíl programu:</p>
                                 <p className="text-white/80 text-sm">{program.ultimateGoal}</p>
                               </div>
 
@@ -332,7 +324,7 @@ export default function ProgramPage() {
                             {program.extendedDescription}
                           </p>
 
-                          {/* Co se naučíš */}
+                          {/* Co si odnesou */}
                           <div className="mb-8">
                             <h3 className="text-xl font-semibold text-gray-900 mb-4">
                               Co si děti odnesou
@@ -347,9 +339,9 @@ export default function ProgramPage() {
                             </ul>
                           </div>
 
-                          {/* Ultimátní cíl */}
+                          {/* Cíl programu */}
                           <div className="p-4 bg-gray-50 rounded-xl border border-gray-100">
-                            <p className="text-sm font-semibold text-gray-900 mb-1">Ultimátní cíl:</p>
+                            <p className="text-sm font-semibold text-gray-900 mb-1">Cíl programu:</p>
                             <p className="text-gray-600 text-sm">{program.ultimateGoal}</p>
                           </div>
                         </div>

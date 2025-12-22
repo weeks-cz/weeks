@@ -27,10 +27,10 @@ export function Header() {
 
   return (
     <>
-      {/* Skip to main content link for keyboard navigation */}
+      {/* Skip to main content link for keyboard navigation - only visible on focus */}
       <a
         href="#main"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[60] focus:px-4 focus:py-2 focus:bg-primary-600 focus:text-white focus:rounded-lg focus:outline-none"
+        className="absolute -top-full left-4 z-[60] px-4 py-2 bg-primary-600 text-white rounded-lg outline-none focus:top-4 transition-all"
       >
         Přeskočit na hlavní obsah
       </a>
