@@ -1,30 +1,32 @@
 # Weeks Web - Roadmapa projektu
 
-> Verze: 2.0 | Datum: 12. prosince 2024
+> Verze: 3.0 | Datum: 22. prosince 2024
 >
 > **LIVE URL:** https://weeksweb.vercel.app
 > **GitHub:** https://github.com/lxkask/weeks
 > **Sanity Studio:** https://weeksweb.vercel.app/studio
-> **Formspree ID:** mrbnrqld
-
-## Executive Summary
-
-Web Weeks je funkční a live. Všechny základní funkce jsou implementovány. Web je připraven pro soft-launch a sběr waitlist přihlášek.
 
 ---
 
-## Aktuální stav projektu
+## Executive Summary
+
+Web Weeks je plně funkční a live. MVP je dokončeno na 95%. Zbývající položky (analytics, telefonní číslo) jsou blokovány externími faktory.
+
+---
+
+## Stav projektu
 
 | Fáze | Stav | Poznámka |
 |------|------|----------|
-| Fáze 0: Setup | ✅ HOTOVO | Vše nastaveno, web live |
-| Fáze 1: Architektura | ✅ HOTOVO | UI/UX spec + obsah vytvořen |
-| Fáze 2: Design systém | ✅ HOTOVO | Komponenty implementovány |
-| Fáze 3: Implementace | ✅ HOTOVO | Všechny stránky + API hotové |
-| Fáze 4: Analytics | ⏳ ODLOŽENO | Google Analytics + FB Pixel |
-| Fáze 5: Legal | ✅ HOTOVO | GDPR + Podmínky stránky |
-| Fáze 6: Testování | 🔄 PRŮBĚŽNĚ | Manuální testování |
-| Fáze 7: Launch | ✅ SOFT-LAUNCH | Web je live, sbírá waitlist |
+| Setup & Infrastruktura | ✅ HOTOVO | Next.js 16, Vercel, GitHub |
+| Design systém | ✅ HOTOVO | Tailwind + custom tokens |
+| Všechny stránky | ✅ HOTOVO | Homepage, program, kontakt, GDPR... |
+| Formuláře | ✅ HOTOVO | Waitlist + kontakt (Formspree) |
+| SEO | ✅ HOTOVO | OG image, favicons, sitemap, Schema.org |
+| Accessibility | ✅ HOTOVO | ARIA, skip-link, reduced-motion |
+| GDPR | ✅ HOTOVO | Cookie consent, právní stránky |
+| Analytics | ⏳ BLOKOVÁNO | Čeká na centrální email |
+| Kontaktní údaje | ⏳ BLOKOVÁNO | Telefonní číslo placeholder |
 
 ---
 
@@ -40,32 +42,50 @@ Web Weeks je funkční a live. Všechny základní funkce jsou implementovány. 
 | Podmínky | `/podminky` | ✅ |
 | Sanity Studio | `/studio` | ✅ |
 | Sitemap | `/sitemap.xml` | ✅ |
+| 404 | custom | ✅ |
 
 ---
 
 ## Implementované funkce
 
-### Waitlist & Lead Collection
+### Formuláře
 - [x] Waitlist formulář s GDPR checkboxem
-- [x] API endpoint `/api/waitlist`
+- [x] Kontaktní formulář s GDPR checkboxem
+- [x] API endpointy (`/api/waitlist`, `/api/contact`)
 - [x] Napojení na Formspree (ID: mrbnrqld)
 - [x] Email validace (frontend + backend)
 - [x] Success/error handling v češtině
 
 ### SEO
 - [x] Meta tagy na všech stránkách
-- [x] Open Graph + Twitter Cards
+- [x] Open Graph image (1200x630)
+- [x] Favicon set (ico, 16x16, 32x32, apple-touch)
 - [x] Schema.org markup (Organization, LocalBusiness, Event)
 - [x] Dynamický sitemap.xml
 - [x] robots.txt
 - [x] Canonical URLs
 - [x] PWA manifest
 
+### Accessibility (WCAG)
+- [x] Skip-to-content link
+- [x] ARIA labels na interaktivních prvcích
+- [x] aria-live regiony pro formuláře
+- [x] Focus states
+- [x] prefers-reduced-motion podpora
+- [x] Dostatečný barevný kontrast
+- [x] Image alt texty
+
+### GDPR
+- [x] Cookie consent banner
+- [x] GDPR stránka s politikou
+- [x] Podmínky použití stránka
+- [x] Checkbox souhlasu ve formulářích
+
 ### Design & UX
 - [x] Responzivní design (mobile-first)
 - [x] Framer Motion animace
 - [x] Konzistentní design systém
-- [x] Breadcrumb navigace na podstránkách
+- [x] HWLab fotografie integrovány
 
 ---
 
@@ -79,102 +99,76 @@ Web Weeks je funkční a live. Všechny základní funkce jsou implementovány. 
 | Framer Motion | Animace | ✅ |
 | Sanity CMS | Headless CMS | ✅ Připraveno |
 | Vercel | Hosting | ✅ |
-| Formspree | Sběr emailů | ✅ |
+| Formspree | Sběr emailů/kontaktů | ✅ |
 
 ---
 
-## Co zbývá (volitelné/budoucí)
+## Blokované úkoly
 
-### Vysoká priorita (před plným launch)
-- [ ] **Grafické assets** - og-image.jpg, favicon
-- [ ] **Google Search Console** - registrace, verifikace, sitemap
-- [ ] **Reálné fotky** - HWLab, vybavení, tým
-- [ ] **Aktualizovat telefon** - nahradit placeholder +420 XXX XXX XXX
+### Analytics (čeká na centrální email)
+Po vytvoření centrálního emailu:
+1. Vytvořit Google Analytics 4 property
+2. Vytvořit Facebook Pixel
+3. Přidat environment variables do Vercel:
+   - `NEXT_PUBLIC_GA_ID`
+   - `NEXT_PUBLIC_FB_PIXEL_ID`
+4. Implementovat tracking komponenty
 
-### Střední priorita
-- [ ] **Google Analytics 4** - tracking konverzí
-- [ ] **Cookie consent banner** - GDPR compliance
-- [ ] **Kontaktní formulář** - napojit na Formspree
-- [ ] **Vlastní doména** - weeks.cz nebo podobná
-
-### Nízká priorita (nice-to-have)
-- [ ] **Blog sekce** - pro SEO content marketing
-- [ ] **Galerie** - fotky z akcí
-- [ ] **Testimonials** - po prvních kempech
-- [ ] **Facebook Pixel** - remarketing
+### Kontaktní údaje
+- Telefonní číslo: aktuálně placeholder `+420 XXX XXX XXX`
+- Po získání reálného čísla aktualizovat v:
+  - `src/app/kontakt/page.tsx`
+  - `src/components/sections/ContactSection.tsx`
+  - `src/components/seo/StructuredData.tsx`
 
 ---
 
-## Použití AI agentů - souhrn
+## Budoucí vylepšení (nice-to-have)
 
-| Agent | Použito pro |
-|-------|-------------|
-| `ui-ux-designer` | UI/UX specifikace, persony, wireframes |
-| `content-marketer` | Český obsah, GDPR + Podmínky stránky |
-| `frontend-developer` | Homepage sekce, podstránky |
-| `backend-architect` | Waitlist API, Formspree integrace |
-| `seo-analyzer` | SEO audit, Schema markup, sitemap |
+| Priorita | Úkol | Poznámka |
+|----------|------|----------|
+| Střední | Vlastní doména | weeks.cz nebo podobná |
+| Nízká | Blog sekce | Pro SEO content marketing |
+| Nízká | Galerie | Fotky z akcí po prvních kempech |
+| Nízká | Testimonials | Po prvních kempech |
+| Nízká | Google Search Console | Registrace a verifikace |
 
 ---
 
 ## Environment proměnné
 
-### Lokální (.env.local)
+### Vercel (nakonfigurováno)
 ```env
+NEXT_PUBLIC_FORMSPREE_ID=mrbnrqld
 NEXT_PUBLIC_SANITY_PROJECT_ID=cuy78njh
 NEXT_PUBLIC_SANITY_DATASET=production
-NEXT_PUBLIC_FORMSPREE_ID=mrbnrqld
 ```
 
-### Vercel (nastaveno)
+### Čeká na přidání
 ```env
-NEXT_PUBLIC_SANITY_PROJECT_ID=cuy78njh
-NEXT_PUBLIC_SANITY_DATASET=production
-NEXT_PUBLIC_FORMSPREE_ID=mrbnrqld
+NEXT_PUBLIC_GA_ID=              # Google Analytics 4
+NEXT_PUBLIC_FB_PIXEL_ID=        # Facebook Pixel
 ```
 
 ---
 
-## Dokumentace projektu
+## Dokumentace
 
 | Soubor | Účel |
 |--------|------|
+| `CLAUDE.md` | Kontext pro Claude Code |
 | `docs/ROADMAP.md` | Tento soubor - roadmapa |
 | `docs/UI_UX_SPEC.md` | UI/UX specifikace |
 | `docs/CONTENT_CS.md` | Český obsah webu |
-| `CLAUDE.md` | Kontext pro Claude Code |
-| `SEO-AUDIT-REPORT.md` | SEO audit report |
-| `NEXT-STEPS.md` | Rychlý návod dalších kroků |
-
----
-
-## Metriky úspěchu
-
-### Aktuální stav (Soft-launch)
-- [x] Web je live a funkční
-- [x] Waitlist sbírá emaily
-- [x] Všechny stránky responzivní
-- [x] SEO základy implementovány
-
-### Cíle pro měsíc 1
-- [ ] 50+ waitlist přihlášení
-- [ ] Google indexace
-- [ ] 0 kritických bugů
-
-### Cíle pro sezonu (jaro 2026)
-- [ ] Tábory naplněny přes web
-- [ ] Pozitivní feedback rodičů
-- [ ] Testimonials k zobrazení
 
 ---
 
 ## Kontakty
 
-- **Email:** info@weeks.cz
 - **Provozovatel:** DDM Praha 6
 - **Místo:** HWLab Praha, Vnislavova 2, 128 00 Praha 2
 
 ---
 
-**Poslední aktualizace:** 12. prosince 2024
-**Verze dokumentu:** 2.0
+**Poslední aktualizace:** 22. prosince 2024
+**Verze dokumentu:** 3.0
