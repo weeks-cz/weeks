@@ -25,7 +25,9 @@
       "Bash(npx vercel:*)",
       "Bash(npm run build:*)",
       "Bash(ping:*)",
-      "Bash(nslookup:*)"
+      "Bash(nslookup:*)",
+      "Bash(curl:*)",
+      "Bash(ipconfig:*)"
     ],
     "deny": [],
     "ask": []
