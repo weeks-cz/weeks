@@ -3,7 +3,8 @@
 import { motion } from 'framer-motion'
 import { ArrowRight, Calendar, Mail, Sparkles } from 'lucide-react'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 
 const programs = [
   { id: 'mix', label: 'MIX - Ochutnej vše', recommended: true },
@@ -16,9 +17,12 @@ const programs = [
   { id: 'nevim', label: 'Ještě nevím', recommended: false },
 ]
 
+const validProgramIds = programs.map(p => p.id)
+
 export function CTASection() {
   // TODO: This will be controlled by Sanity CMS - waitlistMode setting
   const isWaitlistMode = true
+  const searchParams = useSearchParams()
   const [email, setEmail] = useState('')
   const [selectedProgram, setSelectedProgram] = useState('mix')
   const [childName, setChildName] = useState('')
@@ -27,6 +31,14 @@ export function CTASection() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  // Read program from URL parameter
+  useEffect(() => {
+    const programParam = searchParams.get('program')
+    if (programParam && validProgramIds.includes(programParam)) {
+      setSelectedProgram(programParam)
+    }
+  }, [searchParams])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

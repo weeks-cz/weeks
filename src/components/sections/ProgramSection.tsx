@@ -189,7 +189,7 @@ export function ProgramSection() {
 
                   <div className="flex flex-col sm:flex-row gap-3">
                     <Link
-                      href="/#prihlasit"
+                      href="/?program=mix#prihlasit"
                       className="btn-primary bg-white text-primary-600 hover:bg-gray-100 inline-flex items-center justify-center"
                     >
                       Mám zájem o MIX

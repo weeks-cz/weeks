@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import { HeroSection } from '@/components/sections/HeroSection'
 import { ProgramSection } from '@/components/sections/ProgramSection'
 import { USPSection } from '@/components/sections/USPSection'
@@ -17,7 +18,9 @@ export default function Home() {
         <ProgramSection />
         <USPSection />
         <TrustSection />
-        <CTASection />
+        <Suspense fallback={null}>
+          <CTASection />
+        </Suspense>
         <FAQSection />
         <ContactSection />
       </main>

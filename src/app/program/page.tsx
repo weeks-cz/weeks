@@ -276,7 +276,7 @@ export default function ProgramPage() {
                               </div>
 
                               <Link
-                                href="/#prihlasit"
+                                href="/?program=mix#prihlasit"
                                 className="btn-primary bg-white text-primary-600 hover:bg-gray-100 inline-flex items-center"
                               >
                                 Mám zájem o MIX
@@ -340,10 +340,19 @@ export default function ProgramPage() {
                           </div>
 
                           {/* Cíl programu */}
-                          <div className="p-4 bg-gray-50 rounded-xl border border-gray-100">
+                          <div className="p-4 bg-gray-50 rounded-xl border border-gray-100 mb-6">
                             <p className="text-sm font-semibold text-gray-900 mb-1">Cíl programu:</p>
                             <p className="text-gray-600 text-sm">{program.ultimateGoal}</p>
                           </div>
+
+                          {/* CTA Button */}
+                          <Link
+                            href={`/?program=${program.id}#prihlasit`}
+                            className="btn-primary inline-flex items-center"
+                          >
+                            Mám zájem o {program.title}
+                            <ArrowRight className="ml-2 w-5 h-5" />
+                          </Link>
                         </div>
 
                         {/* Image Card */}
