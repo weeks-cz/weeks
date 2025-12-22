@@ -14,6 +14,7 @@ export function HeroSection() {
           src="/images/hwlab/hwlab-7962.webp"
           alt="HWLab - profesionální dílna"
           fill
+          sizes="100vw"
           className="object-cover"
           priority
           quality={90}

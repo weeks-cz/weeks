@@ -3,6 +3,7 @@ import { DM_Sans, Outfit } from 'next/font/google'
 import './globals.css'
 import { OrganizationSchema, LocalBusinessSchema, EventSchema } from '@/components/seo/StructuredData'
 import { CookieConsent } from '@/components/ui/CookieConsent'
+import { MotionProvider } from '@/components/providers/MotionProvider'
 
 const dmSans = DM_Sans({
   subsets: ['latin', 'latin-ext'],
@@ -102,7 +103,9 @@ export default function RootLayout({
         <EventSchema />
       </head>
       <body className={`${dmSans.variable} ${outfit.variable} font-sans`}>
-        {children}
+        <MotionProvider>
+          {children}
+        </MotionProvider>
         <CookieConsent />
       </body>
     </html>

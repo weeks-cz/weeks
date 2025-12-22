@@ -104,6 +104,7 @@ export function TrustSection() {
                 src="/images/hwlab/hwlab-7975.webp"
                 alt="HWLab prostory"
                 fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/70 to-gray-900/40" />
@@ -142,6 +143,7 @@ export function TrustSection() {
               src="/images/hwlab/hwlab-7962.webp"
               alt="HWLab workshop"
               fill
+              sizes="100vw"
               className="object-cover"
             />
             <div className="absolute inset-0 bg-trust-900/90 backdrop-blur-sm" />

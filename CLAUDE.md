@@ -112,22 +112,46 @@ Located in `.claude/agents/`:
 
 ## Current Status
 
-**Phase 0 (Setup)**: 90% complete
+**Phase 1 (MVP)**: ~85% complete
 - [x] Next.js 16 + TypeScript + Tailwind
 - [x] Framer Motion animations
 - [x] GitHub connected (https://github.com/lxkask/weeks.git)
-- [x] Sanity CMS schemas created
-- [ ] Vercel deployment (pending login)
-- [ ] Sanity project creation (need Project ID)
+- [x] Vercel deployment (https://weeksweb.vercel.app)
+- [x] Sanity CMS schemas created + Project ID configured
+- [x] All pages implemented (/program, /o-nas, /kontakt, /gdpr, /podminky)
+- [x] Waitlist form with Formspree integration
+- [x] Contact form with Formspree integration
+- [x] GDPR/Cookie consent banner
+- [x] SEO: OG image, favicons, sitemap, structured data
+- [x] Accessibility: ARIA labels, skip-to-content, aria-live
+- [ ] Analytics (GA4, FB Pixel) - pending central email setup
+- [ ] Real phone number - pending
 
-## Next Steps
+## Pending Tasks
 
-1. **Deploy to Vercel** - Run `vercel login` then `vercel`
-2. **Create Sanity project** - https://www.sanity.io/manage
-3. **Set environment variables** in Vercel:
-   - `NEXT_PUBLIC_SANITY_PROJECT_ID`
-   - `NEXT_PUBLIC_SANITY_DATASET=production`
-4. Add analytics (GA4, FB Pixel)
-5. Implement waitlist form with email integration
-6. Add GDPR/cookie consent
-7. Create remaining pages (/program, /o-nas, /kontakt, /gdpr)
+### Analytics Setup (Blocked)
+Čeká se na vytvoření centrálního emailu pro analytics účty.
+Po vytvoření emailu:
+1. Vytvořit Google Analytics 4 property → získat Measurement ID (`G-XXXXXXXXXX`)
+2. Vytvořit Facebook Pixel → získat Pixel ID
+3. Nastavit v Vercel Environment Variables:
+   - `NEXT_PUBLIC_GA_ID`
+   - `NEXT_PUBLIC_FB_PIXEL_ID`
+4. Analytics komponenta je připravena k implementaci v `src/lib/analytics/`
+
+### Contact Info
+- Telefonní číslo: Aktuálně placeholder `+420 XXX XXX XXX`
+- Až bude k dispozici, aktualizovat v:
+  - `src/app/kontakt/page.tsx`
+  - `src/components/sections/ContactSection.tsx`
+  - `src/components/seo/StructuredData.tsx`
+
+## Environment Variables (Vercel)
+
+```
+NEXT_PUBLIC_FORMSPREE_ID=xxxxx      # ✅ Configured
+NEXT_PUBLIC_SANITY_PROJECT_ID=xxxxx # ✅ Configured
+NEXT_PUBLIC_SANITY_DATASET=production
+NEXT_PUBLIC_GA_ID=                  # ⏳ Pending
+NEXT_PUBLIC_FB_PIXEL_ID=            # ⏳ Pending
+```

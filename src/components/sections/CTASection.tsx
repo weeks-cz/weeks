@@ -62,7 +62,7 @@ export function CTASection() {
               <h2 className="heading-2 text-white mb-4">
                 Budeme brzy! Přidejte se na waitlist
               </h2>
-              <p className="text-xl text-primary-100 mb-8">
+              <p className="text-xl text-white/90 mb-8">
                 Registrace na první běhy bude spuštěna začátkem ledna 2026.
                 Zanechte nám email a dáme Vám vědět jako prvním včetně speciální nabídky pro early birds.
               </p>
@@ -81,7 +81,7 @@ export function CTASection() {
                     </svg>
                   </div>
                   <h3 className="text-xl font-semibold text-white mb-2">Děkujeme!</h3>
-                  <p className="text-primary-100">
+                  <p className="text-white/80">
                     Jakmile otevřeme registrace, budete mezi prvními, kdo se dozví.
                   </p>
                 </motion.div>
@@ -116,7 +116,7 @@ export function CTASection() {
                       className="mt-1 w-4 h-4 rounded border-primary-300 text-cta-500 focus:ring-cta-500 focus:ring-offset-0"
                       required
                     />
-                    <label htmlFor="gdpr-consent" className="text-sm text-primary-100 cursor-pointer">
+                    <label htmlFor="gdpr-consent" className="text-sm text-white/80 cursor-pointer">
                       Souhlasím se zpracováním osobních údajů za účelem zasílání informací o spuštění registrací.
                       Svůj souhlas mohu kdykoli odvolat.
                     </label>
@@ -147,7 +147,7 @@ export function CTASection() {
               <h2 className="heading-2 text-white mb-4">
                 Zaregistrujte své dítě ještě dnes
               </h2>
-              <p className="text-xl text-primary-100 mb-8">
+              <p className="text-xl text-white/90 mb-8">
                 Místa jsou omezená - přihlašujeme max. 24 dětí na víkend.
                 Vyberte termín, vyplňte údaje a my se ozveme s potvrzením do 24 hodin.
                 Platba až po potvrzení.
