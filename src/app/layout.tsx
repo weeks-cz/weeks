@@ -114,13 +114,7 @@ export default function RootLayout({
           id="google-analytics"
           strategy="afterInteractive"
           dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){window.dataLayer.push(arguments);}
-              window.gtag = gtag;
-              gtag('js', new Date());
-              gtag('config', '${GA_ID}');
-            `,
+            __html: `window.dataLayer=window.dataLayer||[];function gtag(){window.dataLayer.push(arguments);}window.gtag=gtag;gtag('js',new Date());gtag('config','${GA_ID}');`,
           }}
         />
         <MotionProvider>
