@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import { DM_Sans, Outfit } from 'next/font/google'
-import Script from 'next/script'
+import { GoogleAnalytics } from '@next/third-parties/google'
 import './globals.css'
 import { OrganizationSchema, LocalBusinessSchema, EventSchema } from '@/components/seo/StructuredData'
 import { CookieConsent } from '@/components/ui/CookieConsent'
@@ -101,17 +101,6 @@ export default function RootLayout({
   return (
     <html lang="cs">
       <head>
-        <Script
-          src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
-          strategy="beforeInteractive"
-        />
-        <Script
-          id="google-analytics"
-          strategy="beforeInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `window.dataLayer=window.dataLayer||[];function gtag(){window.dataLayer.push(arguments);}window.gtag=gtag;gtag('js',new Date());gtag('config','${GA_ID}');`,
-          }}
-        />
         <OrganizationSchema />
         <LocalBusinessSchema />
         <EventSchema />
@@ -121,6 +110,7 @@ export default function RootLayout({
           {children}
         </MotionProvider>
         <CookieConsent />
+        <GoogleAnalytics gaId={GA_ID} />
       </body>
     </html>
   )
