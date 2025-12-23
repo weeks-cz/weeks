@@ -4,6 +4,7 @@ import './globals.css'
 import { OrganizationSchema, LocalBusinessSchema, EventSchema } from '@/components/seo/StructuredData'
 import { CookieConsent } from '@/components/ui/CookieConsent'
 import { MotionProvider } from '@/components/providers/MotionProvider'
+import { GoogleAnalytics } from '@/lib/analytics'
 
 const dmSans = DM_Sans({
   subsets: ['latin', 'latin-ext'],
@@ -17,7 +18,7 @@ const outfit = Outfit({
   display: 'swap',
 })
 
-const siteUrl = 'https://weeksweb.vercel.app'
+const siteUrl = 'https://weeks.cz'
 const siteTitle = 'Weeks - Víkendové IT kempy pro děti | Praha'
 const siteDescription = 'Víkendové IT kempy pro děti 10-15 let v Praze. 3D tisk, VR, programování, robotika a IoT. Každou sobotu a neděli. Expert instruktoři, moderní vybavení HWLab, pod záštitou DDM Praha 6.'
 
@@ -103,6 +104,7 @@ export default function RootLayout({
         <EventSchema />
       </head>
       <body className={`${dmSans.variable} ${outfit.variable} font-sans`}>
+        <GoogleAnalytics />
         <MotionProvider>
           {children}
         </MotionProvider>
