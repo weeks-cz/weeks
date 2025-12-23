@@ -18,7 +18,7 @@ This file provides guidance to Claude Code when working with this repository.
 - **Hosting**: Vercel
 - **Domain**: weeks.cz (DNS at subreg.cz)
 - **Forms**: Formspree (admin@weeks.cz account, form ID: mrezolbj)
-- **Analytics**: GA4 configured (G-9955Q5FRRX), FB Pixel pending
+- **Analytics**: GA4 configured (G-9955Q5FRRX)
 
 ## Commands
 
@@ -34,36 +34,36 @@ npm run lint         # Run ESLint
 ```
 /src
   /app
-    layout.tsx              # Root layout with SEO metadata
+    layout.tsx              # Root layout with SEO metadata + GA4
     page.tsx                # Homepage (with Suspense for CTASection)
     globals.css             # Global styles + Tailwind
-    sitemap.ts              # Dynamic sitemap
+    sitemap.ts              # Dynamic sitemap (weeks.cz URLs)
     not-found.tsx           # 404 page
     /api
       /waitlist/route.ts    # Waitlist form API (handles program selection)
       /contact/route.ts     # Contact form API
     /program                # Program page (7 programs with CTAs)
-    /o-nas                  # About page
+    /o-nas                  # About page (team with real names)
     /kontakt                # Contact page
     /gdpr                   # GDPR page
     /podminky               # Terms page
     /studio                 # Sanity Studio
   /components
     /layout
-      Header.tsx            # Navigation
+      Header.tsx            # Navigation (logo = home link)
       Footer.tsx            # Footer with links
     /sections
-      HeroSection.tsx       # Hero with background image
+      HeroSection.tsx       # Hero with HWLab background (hwlab-7976)
       ProgramSection.tsx    # MIX hero + 6 specializations (clickable cards)
       USPSection.tsx        # Unique selling points
-      TrustSection.tsx      # Partners (DDM, HWLab)
+      TrustSection.tsx      # Partners (DDM, HWLab) - 1:5 ratio
       CTASection.tsx        # Waitlist form (reads ?program= URL param)
-      FAQSection.tsx        # Accordion FAQ
+      FAQSection.tsx        # Accordion FAQ (price 2990 Kč)
       ContactSection.tsx    # Contact info
     /providers
       MotionProvider.tsx    # Framer Motion reduced-motion support
     /seo
-      StructuredData.tsx    # Schema.org markup
+      StructuredData.tsx    # Schema.org markup (weeks.cz URLs, price included)
     /ui
       CookieConsent.tsx     # GDPR cookie banner
   /lib
@@ -143,6 +143,7 @@ All user-facing content is in Czech. Code/docs can be in English.
 ## Current Status
 
 **Phase 1 (MVP)**: Complete
+**Status**: Waiting for DDM confirmation before marketing launch
 
 ### Implemented
 - [x] All pages: Homepage, /program, /o-nas, /kontakt, /gdpr, /podminky
@@ -158,12 +159,20 @@ All user-facing content is in Czech. Code/docs can be in English.
 - [x] Responsive design (mobile-first)
 - [x] Framer Motion animations
 - [x] Sanity CMS schemas + Studio
+- [x] Google Analytics 4 (G-9955Q5FRRX)
+- [x] Google Search Console verified
+- [x] Team review feedback implemented (December 2024)
 
-### Pending
-- [x] Google Analytics 4 - DONE (G-9955Q5FRRX)
-- [ ] Facebook Pixel - next step
+### Social Media (December 2024)
+- [x] Instagram: @weeks.cz (bio complete)
+- [x] Facebook: Weeks - It kempy pro děti (page created)
+- [ ] Facebook Pixel - set up when ready for ads
+- [ ] FB + IG accounts linked in Meta Business Suite
+
+### Pending (blocked or future)
+- [ ] Facebook Pixel - when ready for ads
 - [ ] Real phone number - using placeholder
-- [ ] Content fixes from team review (see below)
+- [ ] DDM confirmation - before marketing launch
 
 ## Environment Variables
 
@@ -172,21 +181,21 @@ All user-facing content is in Czech. Code/docs can be in English.
 NEXT_PUBLIC_FORMSPREE_ID=mrezolbj        # Waitlist + Contact forms (admin@weeks.cz)
 NEXT_PUBLIC_SANITY_PROJECT_ID=cuy78njh
 NEXT_PUBLIC_SANITY_DATASET=production
-NEXT_PUBLIC_GA_ID=G-9955Q5FRRX           # Google Analytics 4 (DONE)
+NEXT_PUBLIC_GA_ID=G-9955Q5FRRX           # Google Analytics 4
 ```
 
-### To be added
+### To be added (when ready)
 ```
-NEXT_PUBLIC_FB_PIXEL_ID=                 # Facebook Pixel
+NEXT_PUBLIC_FB_PIXEL_ID=                 # Facebook Pixel (after ads setup)
 ```
 
-## Facebook Pixel Setup (Next Session)
+## Team (O nás page)
 
-1. Go to https://business.facebook.com → Events Manager
-2. Create new Pixel for weeks.cz
-3. Get Pixel ID (format: 15-digit number)
-4. Add to Vercel: `NEXT_PUBLIC_FB_PIXEL_ID=XXXXXXXXXXXXXXX`
-5. Use `@next/third-parties/google` pattern or create FB component
+Real team members with specialized icons:
+1. **Kryštof Ježdík** - VR & Herní vývoj (Gamepad2 icon)
+2. **Lukáš Kubík** - Web & Programování (Code icon)
+3. **Štěpán Jurenka** - 3D modelování & Tisk (Box icon)
+4. **Lukáš Kautský** - Grafika & Design (Palette icon)
 
 ## Contact Info Update (When Ready)
 
@@ -202,53 +211,25 @@ Domain: weeks.cz (registered at subreg.cz)
 ```
 A     @     76.76.21.21
 CNAME www   cname.vercel-dns.com
+TXT   @     google-site-verification=5epLUIbGFT0mcISr7rJZPFLcNlcAIFkQXe5cBY9nSdY
 ```
 
-## Team Review Feedback (December 2024)
+## Key Decisions Made (December 2024)
 
-Content and UX fixes from team call - file `Co je špatně - web.txt`:
-
-### High Priority (Text/Content Changes)
-- [ ] Change "Registrace otevřena" → "Zájem otevřen" or similar (waitlist, not registration)
-- [ ] Button "Přidat na waitlist" - enable only after email + consent filled
-- [ ] FAQ: Remove "!" from "Ano!" in beginner question
-- [ ] FAQ: Update price 2 490 → **2 990 Kč**, remove snack mention (only lunch)
-- [ ] FAQ: Remove sibling discount (needs DDM approval first)
-- [ ] FAQ: Remove "98% spokojených" - no camps yet
-- [ ] FAQ: Rephrase "můžeme se individuálně domluvit" more professionally
-- [ ] FAQ: Remove notebook mention (kids will want to play games)
-- [ ] FAQ: Add typical day schedule (needs team input)
-- [ ] USP: Change "1 lektor na 8 dětí" → **1 lektor na 5 dětí**
-- [ ] "Budeme brzy!" / "První běhy" - consider different wording
-- [ ] Review all program descriptions - remove unrealistic promises:
-  - Arduino: can't give away full Arduino kit
-  - Web: can't publish pages (security risk)
-- [ ] Footer: Remove trademark symbol (not registered yet)
-
-### Medium Priority (Legal/Contact)
-- [ ] GDPR page: Fix - emails collected by us, not DDM Praha 6
-- [ ] Terms page: Fix - we are the operator, not DDM; update old domain references
-- [ ] Contact page: Fix hours "9-16" → **9-17**
-- [ ] Contact page: Update FAQ section (outdated)
-- [ ] Contact form: Verify GDPR consent is handled (separate from waitlist)
-- [ ] Phone number: Decide and update placeholder
-
-### Lower Priority (UX/Design)
-- [ ] Consider adding "Domů" to navbar (some users don't know logo = home)
-- [ ] Program page scroll: When clicking from homepage, lands too low (heading not visible)
-- [ ] Homepage cover photo: Consider if there's a better option
-- [ ] Map: Highlight HWLab in red
-- [ ] About page: "max 8 dětí na lektora" → **max 5**
-- [ ] About page team section:
-  - Replace profile photos with topic-related graphics
-  - Add real names and specializations
-  - Keep only 4 instructors (remove coordinator)
-  - Consider hiding section until real photos available
+1. **Hero text**: "Přijímáme zájemce" (not "Registrace otevřena")
+2. **Instructor ratio**: 1:5 (not 1:8)
+3. **Price**: 2 990 Kč (updated from 2 490)
+4. **CTA wording**: "tábory" (not "běhy")
+5. **No "Domů" in nav**: Logo serves as home link (standard UX)
+6. **No map marker**: Would require paid Google Maps API
+7. **Team icons**: Specialized Lucide icons instead of placeholder photos
 
 ## Notes for Future Sessions
 
-- **GA4 is LIVE** - tracking at G-9955Q5FRRX
-- Facebook Pixel is next priority
-- Team review feedback needs implementation (see above)
 - Web is fully functional and deployed at weeks.cz
 - Waitlist is actively collecting signups to admin@weeks.cz
+- All team review feedback has been implemented
+- Google Search Console is set up and indexing
+- Social media accounts (FB + IG) are created
+- Next priority: FB Pixel when ready for advertising
+- Waiting for: DDM confirmation before marketing push

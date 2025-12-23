@@ -50,3 +50,9 @@ next-env.d.ts
 *.heic
 Kryštof - Telefon/
 Screenshot*.png
+
+# Working documents (keep locally, not in repo)
+*.pdf
+*.docx*.pdf
+Co je špatně*.txt
+weeks_logo.png

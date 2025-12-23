@@ -30,7 +30,8 @@
       "Bash(ls:*)",
       "Bash(git pull:*)",
       "Bash(git stash:*)",
-      "WebFetch(domain:weeks.cz)"
+      "WebFetch(domain:weeks.cz)",
+      "Bash(npx vercel:*)"
     ]
   }
 }
