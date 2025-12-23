@@ -300,7 +300,7 @@ export default function ContactPage() {
                 className="space-y-8"
               >
                 {/* Map */}
-                <div className="bg-gray-200 rounded-2xl h-80 overflow-hidden relative">
+                <div className="bg-gray-200 rounded-2xl h-80 overflow-hidden">
                   <iframe
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2561.5!2d14.4285!3d50.0621!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x470b9390e8c4a4a7%3A0x400af0f6614d810!2sKongresov%C3%A9%20centrum%20Praha!5e0!3m2!1scs!2scz!4v1703196000000"
                     width="100%"
@@ -312,11 +312,6 @@ export default function ContactPage() {
                     title="Kongresové centrum Praha - 5. května 11"
                     className="w-full h-full"
                   />
-                  {/* HWLab marker overlay */}
-                  <div className="absolute top-4 left-4 bg-red-600 text-white px-3 py-2 rounded-lg shadow-lg flex items-center gap-2 pointer-events-none">
-                    <MapPin className="w-4 h-4" />
-                    <span className="font-semibold text-sm">HWLab Praha</span>
-                  </div>
                 </div>
 
                 {/* Provozní doba */}
