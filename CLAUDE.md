@@ -18,7 +18,7 @@ This file provides guidance to Claude Code when working with this repository.
 - **Hosting**: Vercel
 - **Domain**: weeks.cz (DNS at subreg.cz)
 - **Forms**: Formspree (admin@weeks.cz account, form ID: mrezolbj)
-- **Analytics**: Pending setup (GA4, FB Pixel)
+- **Analytics**: GA4 configured (G-9955Q5FRRX), FB Pixel pending
 
 ## Commands
 
@@ -160,8 +160,10 @@ All user-facing content is in Czech. Code/docs can be in English.
 - [x] Sanity CMS schemas + Studio
 
 ### Pending
-- [ ] Analytics (GA4, FB Pixel) - Google Workspace issue with admin@weeks.cz
+- [x] Google Analytics 4 - DONE (G-9955Q5FRRX)
+- [ ] Facebook Pixel - next step
 - [ ] Real phone number - using placeholder
+- [ ] Content fixes from team review (see below)
 
 ## Environment Variables
 
@@ -170,30 +172,21 @@ All user-facing content is in Czech. Code/docs can be in English.
 NEXT_PUBLIC_FORMSPREE_ID=mrezolbj        # Waitlist + Contact forms (admin@weeks.cz)
 NEXT_PUBLIC_SANITY_PROJECT_ID=cuy78njh
 NEXT_PUBLIC_SANITY_DATASET=production
+NEXT_PUBLIC_GA_ID=G-9955Q5FRRX           # Google Analytics 4 (DONE)
 ```
 
 ### To be added
 ```
-NEXT_PUBLIC_GA_ID=                       # Google Analytics 4
 NEXT_PUBLIC_FB_PIXEL_ID=                 # Facebook Pixel
 ```
 
-## Analytics Setup (Next Session)
+## Facebook Pixel Setup (Next Session)
 
-### Problem
-- admin@weeks.cz was created as Google Workspace account
-- Cannot use it directly for GA4 without Workspace setup
-
-### Options to resolve
-1. **Fix Workspace**: Configure Google Workspace properly for admin@weeks.cz
-2. **Use personal Google account**: Create GA4 with personal account, add admin@weeks.cz as viewer later
-3. **Create different email**: Use a non-Workspace Google account for analytics
-
-### Once resolved
-1. Create GA4 property → get Measurement ID (`G-XXXXXXXXXX`)
-2. Create Facebook Pixel → get Pixel ID
-3. Add to Vercel Environment Variables
-4. Create `src/lib/analytics/` with tracking components
+1. Go to https://business.facebook.com → Events Manager
+2. Create new Pixel for weeks.cz
+3. Get Pixel ID (format: 15-digit number)
+4. Add to Vercel: `NEXT_PUBLIC_FB_PIXEL_ID=XXXXXXXXXXXXXXX`
+5. Use `@next/third-parties/google` pattern or create FB component
 
 ## Contact Info Update (When Ready)
 
@@ -211,10 +204,51 @@ A     @     76.76.21.21
 CNAME www   cname.vercel-dns.com
 ```
 
+## Team Review Feedback (December 2024)
+
+Content and UX fixes from team call - file `Co je špatně - web.txt`:
+
+### High Priority (Text/Content Changes)
+- [ ] Change "Registrace otevřena" → "Zájem otevřen" or similar (waitlist, not registration)
+- [ ] Button "Přidat na waitlist" - enable only after email + consent filled
+- [ ] FAQ: Remove "!" from "Ano!" in beginner question
+- [ ] FAQ: Update price 2 490 → **2 990 Kč**, remove snack mention (only lunch)
+- [ ] FAQ: Remove sibling discount (needs DDM approval first)
+- [ ] FAQ: Remove "98% spokojených" - no camps yet
+- [ ] FAQ: Rephrase "můžeme se individuálně domluvit" more professionally
+- [ ] FAQ: Remove notebook mention (kids will want to play games)
+- [ ] FAQ: Add typical day schedule (needs team input)
+- [ ] USP: Change "1 lektor na 8 dětí" → **1 lektor na 5 dětí**
+- [ ] "Budeme brzy!" / "První běhy" - consider different wording
+- [ ] Review all program descriptions - remove unrealistic promises:
+  - Arduino: can't give away full Arduino kit
+  - Web: can't publish pages (security risk)
+- [ ] Footer: Remove trademark symbol (not registered yet)
+
+### Medium Priority (Legal/Contact)
+- [ ] GDPR page: Fix - emails collected by us, not DDM Praha 6
+- [ ] Terms page: Fix - we are the operator, not DDM; update old domain references
+- [ ] Contact page: Fix hours "9-16" → **9-17**
+- [ ] Contact page: Update FAQ section (outdated)
+- [ ] Contact form: Verify GDPR consent is handled (separate from waitlist)
+- [ ] Phone number: Decide and update placeholder
+
+### Lower Priority (UX/Design)
+- [ ] Consider adding "Domů" to navbar (some users don't know logo = home)
+- [ ] Program page scroll: When clicking from homepage, lands too low (heading not visible)
+- [ ] Homepage cover photo: Consider if there's a better option
+- [ ] Map: Highlight HWLab in red
+- [ ] About page: "max 8 dětí na lektora" → **max 5**
+- [ ] About page team section:
+  - Replace profile photos with topic-related graphics
+  - Add real names and specializations
+  - Keep only 4 instructors (remove coordinator)
+  - Consider hiding section until real photos available
+
 ## Notes for Future Sessions
 
+- **GA4 is LIVE** - tracking at G-9955Q5FRRX
+- Facebook Pixel is next priority
+- Team review feedback needs implementation (see above)
 - Web is fully functional and deployed at weeks.cz
 - Waitlist is actively collecting signups to admin@weeks.cz
-- All critical SEO and accessibility items completed
-- Main blocker: Google Workspace issue preventing GA4 setup
-- Consider using personal Google account for analytics if Workspace is too complex
