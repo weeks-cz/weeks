@@ -1,10 +1,12 @@
 import type { Metadata, Viewport } from 'next'
 import { DM_Sans, Outfit } from 'next/font/google'
+import Script from 'next/script'
 import './globals.css'
 import { OrganizationSchema, LocalBusinessSchema, EventSchema } from '@/components/seo/StructuredData'
 import { CookieConsent } from '@/components/ui/CookieConsent'
 import { MotionProvider } from '@/components/providers/MotionProvider'
-import { GoogleAnalytics } from '@/lib/analytics'
+
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID || 'G-9955Q5FRRX'
 
 const dmSans = DM_Sans({
   subsets: ['latin', 'latin-ext'],
@@ -104,7 +106,20 @@ export default function RootLayout({
         <EventSchema />
       </head>
       <body className={`${dmSans.variable} ${outfit.variable} font-sans`}>
-        <GoogleAnalytics />
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_ID}', {
+              page_path: window.location.pathname,
+            });
+          `}
+        </Script>
         <MotionProvider>
           {children}
         </MotionProvider>
