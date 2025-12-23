@@ -6,8 +6,8 @@ import { Footer } from '@/components/layout/Footer'
 import { BreadcrumbSchema } from '@/components/seo/StructuredData'
 
 const pageTitle = 'Podmínky užití'
-const pageDescription = 'Podmínky užití webu pro víkendové IT kempy Weeks provozované DDM Praha 6. Obchodní podmínky a pravidla pro užívání webu.'
-const pageUrl = 'https://weeksweb.vercel.app/podminky'
+const pageDescription = 'Podmínky užití webu pro víkendové IT kempy Weeks. Obchodní podmínky a pravidla pro užívání webu.'
+const pageUrl = 'https://weeks.cz/podminky'
 
 export const metadata: Metadata = {
   title: pageTitle,
@@ -36,8 +36,8 @@ export const metadata: Metadata = {
 
 export default function PodminkyPage() {
   const breadcrumbItems = [
-    { name: 'Domů', url: 'https://weeksweb.vercel.app' },
-    { name: 'Podmínky užití', url: 'https://weeksweb.vercel.app/podminky' },
+    { name: 'Domů', url: 'https://weeks.cz' },
+    { name: 'Podmínky užití', url: 'https://weeks.cz/podminky' },
   ]
 
   return (
@@ -74,7 +74,7 @@ export default function PodminkyPage() {
               <h2 className="heading-3 text-gray-900 mb-4">1. Úvodní ustanovení</h2>
               <p className="text-gray-700 mb-4">
                 Tyto podmínky užití (dále jen "Podmínky") upravují přístup a užívání webových
-                stránek <strong>weeksweb.vercel.app</strong> (dále jen "Web"), které slouží jako
+                stránek <strong>weeks.cz</strong> (dále jen "Web"), které slouží jako
                 informační a prezentační platforma pro víkendové IT kempy Weeks.
               </p>
               <p className="text-gray-700">
@@ -87,10 +87,10 @@ export default function PodminkyPage() {
               <h2 className="heading-3 text-gray-900 mb-4">2. Provozovatel webu</h2>
               <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
                 <p className="text-gray-900 font-semibold mb-4">Provozovatelem webu je:</p>
-                <p className="text-gray-900 font-medium mb-2">Dům dětí a mládeže Praha 6</p>
-                <p className="text-gray-700 text-base mb-1">Sídlo: Praha 6</p>
+                <p className="text-gray-900 font-medium mb-2">Projekt Weeks</p>
                 <p className="text-gray-700 text-base mb-1">Email: info@weeks.cz</p>
-                <p className="text-gray-700 text-base mb-1">Web: weeksweb.vercel.app</p>
+                <p className="text-gray-700 text-base mb-1">Web: weeks.cz</p>
+                <p className="text-gray-500 text-sm mt-2">Projekt funguje pod záštitou DDM Praha 6</p>
                 <p className="text-gray-700 text-base mt-4">
                   <strong>Místo konání kempů:</strong> Kongresové centrum Praha, 5. května 11, 140 00 Praha 4 - Nusle
                 </p>
@@ -167,7 +167,7 @@ export default function PodminkyPage() {
               <h2 className="heading-3 text-gray-900 mb-4">6. Autorská práva a duševní vlastnictví</h2>
               <p className="text-gray-700 mb-4">
                 Veškerý obsah tohoto webu, včetně textů, grafiky, log, fotografií, designu a dalších
-                prvků, je chráněn autorským právem a je majetkem DDM Praha 6 nebo třetích stran,
+                prvků, je chráněn autorským právem a je majetkem projektu Weeks nebo třetích stran,
                 které poskytly souhlas k jejich použití.
               </p>
               <div className="space-y-4">
@@ -342,12 +342,12 @@ export default function PodminkyPage() {
                 můžete kontaktovat:
               </p>
               <div className="bg-primary-50 p-6 rounded-lg border border-primary-200">
-                <p className="text-primary-900 font-semibold mb-2">Weeks - DDM Praha 6</p>
+                <p className="text-primary-900 font-semibold mb-2">Projekt Weeks</p>
                 <p className="text-primary-800 text-base mb-1">
                   <strong>Email:</strong> info@weeks.cz
                 </p>
                 <p className="text-primary-800 text-base mb-1">
-                  <strong>Web:</strong> weeksweb.vercel.app
+                  <strong>Web:</strong> weeks.cz
                 </p>
                 <p className="text-primary-800 text-base">
                   <strong>Místo konání:</strong> Kongresové centrum Praha, 5. května 11, 140 00 Praha 4 - Nusle

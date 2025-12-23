@@ -7,7 +7,7 @@ import { ChevronDown } from 'lucide-react'
 const faqs = [
   {
     question: 'Je kemp vhodný pro úplné začátečníky?',
-    answer: 'Ano! Program přizpůsobujeme úrovni každého dítěte. Začátečníci začínají s asistovanými projekty a postupně získávají samostatnost. Pokročilí dostanou složitější výzvy. Není potřeba žádná předchozí zkušenost s technologiemi.',
+    answer: 'Ano. Program přizpůsobujeme úrovni každého dítěte. Začátečníci začínají s asistovanými projekty a postupně získávají samostatnost. Pokročilí dostanou složitější výzvy. Není potřeba žádná předchozí zkušenost s technologiemi.',
   },
   {
     question: 'Jak vypadá typický den?',
@@ -15,15 +15,15 @@ const faqs = [
   },
   {
     question: 'Co má dítě mít s sebou?',
-    answer: 'Jen dobrou náladu a svačinu na dopoledne (oběd zajišťujeme my). Všechno technické vybavení, nástroje i materiály jsou na místě. Pokud má dítě vlastní notebook, může si ho vzít, ale není to nutné - máme k dispozici počítače pro všechny.',
+    answer: 'Jen dobrou náladu a svačinu na dopoledne (oběd zajišťujeme my). Všechno technické vybavení, nástroje i materiály jsou na místě. Máme k dispozici počítače pro všechny.',
   },
   {
     question: 'Kolik stojí jeden víkend?',
-    answer: 'Cena je 2 490 Kč za víkend (sobota + neděle, celkem 16 hodin programu). Zahrnuje veškeré materiály, obědy, svačiny a všechny vytvořené projekty si děti odnášejí domů. Pro sourozence nabízíme slevu 10%.',
+    answer: 'Cena je 2 990 Kč za víkend (sobota + neděle, celkem 16 hodin programu). Zahrnuje veškeré materiály, obědy a všechny vytvořené projekty si děti odnášejí domů.',
   },
   {
     question: 'Musí dítě přijít oba dny, nebo jen jeden?',
-    answer: 'Víkendový kemp je koncipován jako celek sobota + neděle, protože projekty pokračují. Jednotlivé dny neprodáváme. Pokud dítě sobotu nestihne ze závažného důvodu, můžeme se individuálně domluvit, ale preferujeme účast oba dny.',
+    answer: 'Víkendový kemp je koncipován jako celek sobota + neděle, protože projekty na sebe navazují. Jednotlivé dny neprodáváme. V případě závažných důvodů nás prosím kontaktujte a pokusíme se najít řešení.',
   },
   {
     question: 'Je zajištěn oběd pro děti s alergiemi?',
@@ -35,7 +35,7 @@ const faqs = [
   },
   {
     question: 'Co když se dítěti kemp nebude líbit?',
-    answer: 'Pokud dítě první den rozhodne, že to není pro něj, vrátíme 50% ceny. Naším cílem je, aby se děti bavily a učily se zároveň - pokud to nefunguje, nechceme nikoho nutit. Zatím ale máme 98% spokojených účastníků, kteří se hlásí i na další víkendy.',
+    answer: 'Pokud dítě první den rozhodne, že to není pro něj, vrátíme 50% ceny. Naším cílem je, aby se děti bavily a učily se zároveň - pokud to nefunguje, nechceme nikoho nutit.',
   },
 ]
 

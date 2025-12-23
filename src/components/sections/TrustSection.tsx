@@ -13,7 +13,7 @@ const safetyFeatures = [
   {
     icon: Users,
     title: 'Malé skupiny',
-    description: '1 lektor na 8 dětí',
+    description: '1 lektor na 5 dětí',
   },
   {
     icon: Phone,

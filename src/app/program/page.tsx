@@ -58,7 +58,7 @@ const programs = [
       'Základy propojování elektronických součástek',
       'První zkušenost s programováním hardwaru',
     ],
-    ultimateGoal: 'Dítě si odnese vlastní chytré zařízení a pochopí, že elektronika není magie, ale něco, co může tvořit samo.',
+    ultimateGoal: 'Dítě pochopí, jak elektronika funguje, a získá zkušenosti pro vlastní projekty doma.',
   },
   {
     id: 'blender',
@@ -85,14 +85,14 @@ const programs = [
     color: 'cta',
     image: '/images/hwlab/hwlab-7975.webp',
     description: 'Vlastní webová stránka, kterou můžou ukázat kamarádům a rodině. Portfolio, blog nebo fan stránka na téma, které je baví.',
-    extendedDescription: 'Za víkend od nuly k vlastní webové stránce. Děti se naučí, jak weby fungují, a vytvoří si vlastní - třeba portfolio svých prací, blog, nebo stránku o svém koníčku. Stránku pak publikujeme online, takže ji můžou ukázat komukoliv. Žádné předchozí zkušenosti nejsou potřeba.',
+    extendedDescription: 'Za víkend od nuly k vlastní webové stránce. Děti se naučí, jak weby fungují, a vytvoří si vlastní - třeba portfolio svých prací, blog, nebo stránku o svém koníčku. Naučí se základy HTML a CSS a pochopí, jak internet funguje. Žádné předchozí zkušenosti nejsou potřeba.',
     learnings: [
-      'Vlastní webová stránka publikovaná online',
+      'Vlastní webová stránka, kterou si mohou spustit na počítači',
       'Pochopení, jak weby fungují',
       'Schopnost upravit vzhled stránky podle svých představ',
-      'Základy bezpečnosti na internetu',
+      'Základy HTML, CSS a bezpečnosti na internetu',
     ],
-    ultimateGoal: 'Dítě si odnese vlastní funkční web, který může ukázat rodině a kamarádům - a ví, jak ho dál upravovat.',
+    ultimateGoal: 'Dítě pochopí, jak weby fungují, naučí se základy tvorby a získá dovednosti pro další rozvoj.',
   },
   {
     id: 'hry',
@@ -228,7 +228,7 @@ export default function ProgramPage() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.1 }}
-                    className="relative scroll-mt-24"
+                    className="relative scroll-mt-32"
                   >
                     {/* MIX gets special treatment */}
                     {isMix ? (

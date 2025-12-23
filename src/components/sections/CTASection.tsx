@@ -93,7 +93,7 @@ export function CTASection() {
               <div className="text-center mb-8">
                 <Mail className="w-16 h-16 text-primary-200 mx-auto mb-6" />
                 <h2 className="heading-2 text-white mb-4">
-                  Budeme brzy! Přidejte se na waitlist
+                  Připravujeme pro vás první běhy
                 </h2>
                 <p className="text-xl text-white/90">
                   Registrace na první běhy bude spuštěna začátkem roku 2026.
@@ -243,7 +243,7 @@ export function CTASection() {
                   {/* Submit Button */}
                   <button
                     type="submit"
-                    disabled={isSubmitting || !gdprConsent}
+                    disabled={isSubmitting || !gdprConsent || !email.trim()}
                     className="w-full btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isSubmitting ? 'Odesílám...' : 'Přidat na waitlist'}

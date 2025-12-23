@@ -6,8 +6,8 @@ import { Footer } from '@/components/layout/Footer'
 import { BreadcrumbSchema } from '@/components/seo/StructuredData'
 
 const pageTitle = 'Ochrana osobních údajů (GDPR)'
-const pageDescription = 'Zásady ochrany osobních údajů pro víkendové IT kempy Weeks provozované DDM Praha 6. Informace o zpracování osobních údajů v souladu s GDPR.'
-const pageUrl = 'https://weeksweb.vercel.app/gdpr'
+const pageDescription = 'Zásady ochrany osobních údajů pro víkendové IT kempy Weeks. Informace o zpracování osobních údajů v souladu s GDPR.'
+const pageUrl = 'https://weeks.cz/gdpr'
 
 export const metadata: Metadata = {
   title: pageTitle,
@@ -36,8 +36,8 @@ export const metadata: Metadata = {
 
 export default function GDPRPage() {
   const breadcrumbItems = [
-    { name: 'Domů', url: 'https://weeksweb.vercel.app' },
-    { name: 'Ochrana osobních údajů', url: 'https://weeksweb.vercel.app/gdpr' },
+    { name: 'Domů', url: 'https://weeks.cz' },
+    { name: 'Ochrana osobních údajů', url: 'https://weeks.cz/gdpr' },
   ]
 
   return (
@@ -76,10 +76,10 @@ export default function GDPRPage() {
                 Správcem Vašich osobních údajů je:
               </p>
               <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
-                <p className="text-gray-900 font-semibold mb-2">Dům dětí a mládeže Praha 6</p>
-                <p className="text-gray-700 text-base mb-1">Sídlo: Praha 6</p>
+                <p className="text-gray-900 font-semibold mb-2">Projekt Weeks</p>
                 <p className="text-gray-700 text-base mb-1">Email: info@weeks.cz</p>
-                <p className="text-gray-700 text-base">Web: weeksweb.vercel.app</p>
+                <p className="text-gray-700 text-base mb-1">Web: weeks.cz</p>
+                <p className="text-gray-500 text-sm mt-2">Projekt funguje pod záštitou DDM Praha 6</p>
               </div>
             </section>
 
@@ -208,15 +208,12 @@ export default function GDPRPage() {
             </section>
 
             <section className="mb-12">
-              <h2 className="heading-3 text-gray-900 mb-4">8. Pověřenec pro ochranu osobních údajů</h2>
+              <h2 className="heading-3 text-gray-900 mb-4">8. Kontakt pro ochranu osobních údajů</h2>
               <p className="text-gray-700 mb-4">
-                Pro dotazy týkající se zpracování osobních údajů můžete kontaktovat našeho pověřence:
+                Pro dotazy týkající se zpracování osobních údajů nás můžete kontaktovat:
               </p>
               <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
-                <p className="text-gray-700 text-base mb-1">Email: dpo@ddmpraha6.cz</p>
-                <p className="text-gray-500 text-sm mt-2">
-                  (Kontakt bude doplněn po jmenování pověřence)
-                </p>
+                <p className="text-gray-700 text-base">Email: info@weeks.cz</p>
               </div>
             </section>
 
@@ -311,7 +308,7 @@ export default function GDPRPage() {
                 údajů nás neváhejte kontaktovat:
               </p>
               <div className="bg-primary-50 p-6 rounded-lg border border-primary-200">
-                <p className="text-primary-900 font-semibold mb-2">Weeks - DDM Praha 6</p>
+                <p className="text-primary-900 font-semibold mb-2">Projekt Weeks</p>
                 <p className="text-primary-800 text-base mb-1">Email: info@weeks.cz</p>
                 <p className="text-primary-800 text-base">
                   Místo konání: Kongresové centrum Praha, 5. května 11, 140 00 Praha 4 - Nusle

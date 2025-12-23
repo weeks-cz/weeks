@@ -11,8 +11,8 @@ export function HeroSection() {
       {/* Background Image with Overlay */}
       <div className="absolute inset-0">
         <Image
-          src="/images/hwlab/hwlab-7962.webp"
-          alt="HWLab - profesionální dílna"
+          src="/images/hwlab/hwlab-7976.webp"
+          alt="HWLab - učebna s počítači a 3D tiskárnami"
           fill
           sizes="100vw"
           className="object-cover"
@@ -36,7 +36,7 @@ export function HeroSection() {
             <Sparkles className="w-4 h-4 text-cta-400" />
             <span>Nově v Praze!</span>
             <span className="w-px h-4 bg-white/30" />
-            <span className="text-cta-400">Registrace otevřena</span>
+            <span className="text-cta-400">Přijímáme zájemce</span>
           </motion.div>
 
           {/* Headline */}

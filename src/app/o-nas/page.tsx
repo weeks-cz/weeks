@@ -15,7 +15,7 @@ const values = [
   {
     icon: Heart,
     title: 'Individuální přístup',
-    description: 'Malé skupiny (max 8 dětí na lektora) nám umožňují přizpůsobit tempo a obsah potřebám každého dítěte.',
+    description: 'Malé skupiny (max 5 dětí na lektora) nám umožňují přizpůsobit tempo a obsah potřebám každého dítěte.',
   },
   {
     icon: Lightbulb,
@@ -64,28 +64,28 @@ const partners = [
 
 const teamMembers = [
   {
-    name: 'Lektor 1',
-    role: 'Lead Instructor - Programování',
+    name: 'Kryštof Ježdík',
+    role: 'VR & Herní vývoj',
     image: '/team/placeholder-1.jpg',
-    description: 'Specialista na Python a webový vývoj s 5+ lety zkušeností.',
+    description: 'Propojuje virtuální realitu s tvorbou her a programováním. Nadšenec do 3D tisku.',
   },
   {
-    name: 'Lektor 2',
-    role: 'Instructor - 3D tisk & VR',
+    name: 'Lukáš Kubík',
+    role: 'Web & Programování',
     image: '/team/placeholder-2.jpg',
-    description: 'Expert na digitální výrobu a virtuální realitu.',
+    description: 'Specialista na webové technologie a programování. Učí děti vytvářet vlastní projekty.',
   },
   {
-    name: 'Lektor 3',
-    role: 'Instructor - IoT & Elektronika',
+    name: 'Štěpán Jurenka',
+    role: '3D modelování & Tisk',
     image: '/team/placeholder-3.jpg',
-    description: 'Embedded systems engineer se zaměřením na vzdělávání.',
+    description: 'Expert na 3D technologie s pedagogickými zkušenostmi z DDM. Kombinuje kreativitu s technikou.',
   },
   {
-    name: 'Koordinátor',
-    role: 'Program Coordinator',
+    name: 'Lukáš Kautský',
+    role: 'Grafika & Design',
     image: '/team/placeholder-4.jpg',
-    description: 'Zajišťuje hladký průběh kempů a komunikaci s rodiči.',
+    description: 'Pomáhá dětem objevit svět vizuální tvorby a digitálního designu.',
   },
 ]
 
@@ -366,7 +366,7 @@ export default function AboutPage() {
                         Malé skupiny
                       </h3>
                       <p className="text-sm text-gray-600">
-                        Maximálně 8 dětí na jednoho lektora pro individuální přístup
+                        Maximálně 5 dětí na jednoho lektora pro individuální přístup
                       </p>
                     </div>
                   </div>
