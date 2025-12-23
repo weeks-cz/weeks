@@ -29,7 +29,8 @@
       "Bash(dir:*)",
       "Bash(ls:*)",
       "Bash(git pull:*)",
-      "Bash(git stash:*)"
+      "Bash(git stash:*)",
+      "WebFetch(domain:weeks.cz)"
     ]
   }
 }
