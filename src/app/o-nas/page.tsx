@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Target, Heart, Lightbulb, Users, ShieldCheck, Award, Building2, MapPin } from 'lucide-react'
+import { Target, Heart, Lightbulb, Users, ShieldCheck, Award, Building2, MapPin, Gamepad2, Code, Box, Palette, type LucideIcon } from 'lucide-react'
 import Link from 'next/link'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
@@ -66,25 +66,25 @@ const teamMembers = [
   {
     name: 'Kryštof Ježdík',
     role: 'VR & Herní vývoj',
-    image: '/team/placeholder-1.jpg',
+    icon: Gamepad2,
     description: 'Propojuje virtuální realitu s tvorbou her a programováním. Nadšenec do 3D tisku.',
   },
   {
     name: 'Lukáš Kubík',
     role: 'Web & Programování',
-    image: '/team/placeholder-2.jpg',
+    icon: Code,
     description: 'Specialista na webové technologie a programování. Učí děti vytvářet vlastní projekty.',
   },
   {
     name: 'Štěpán Jurenka',
     role: '3D modelování & Tisk',
-    image: '/team/placeholder-3.jpg',
+    icon: Box,
     description: 'Expert na 3D technologie s pedagogickými zkušenostmi z DDM. Kombinuje kreativitu s technikou.',
   },
   {
     name: 'Lukáš Kautský',
     role: 'Grafika & Design',
-    image: '/team/placeholder-4.jpg',
+    icon: Palette,
     description: 'Pomáhá dětem objevit svět vizuální tvorby a digitálního designu.',
   },
 ]
@@ -308,9 +308,9 @@ export default function AboutPage() {
                   transition={{ delay: index * 0.1 }}
                   className="text-center"
                 >
-                  {/* Placeholder Image */}
+                  {/* Icon */}
                   <div className="w-32 h-32 bg-gradient-to-br from-primary-200 to-accent-200 rounded-full mx-auto mb-4 flex items-center justify-center">
-                    <Users className="w-16 h-16 text-white" />
+                    <member.icon className="w-16 h-16 text-white" />
                   </div>
                   <h3 className="font-semibold text-gray-900 mb-1">
                     {member.name}

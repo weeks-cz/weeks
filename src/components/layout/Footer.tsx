@@ -111,7 +111,7 @@ export function Footer() {
         {/* Copyright */}
         <div className="mt-12 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-gray-500">
-            &copy; {new Date().getFullYear()} Weeks. Všechna práva vyhrazena.
+            {new Date().getFullYear()} Weeks. Všechna práva vyhrazena.
           </p>
           <p className="text-sm text-gray-500">
             Provozováno pod záštitou DDM Praha 6

@@ -93,10 +93,10 @@ export function CTASection() {
               <div className="text-center mb-8">
                 <Mail className="w-16 h-16 text-primary-200 mx-auto mb-6" />
                 <h2 className="heading-2 text-white mb-4">
-                  Připravujeme pro vás první běhy
+                  Připravujeme pro vás první tábory
                 </h2>
                 <p className="text-xl text-white/90">
-                  Registrace na první běhy bude spuštěna začátkem roku 2026.
+                  Registrace na první tábory bude spuštěna začátkem roku 2026.
                   Zanechte nám kontakt a dáme Vám vědět jako prvním.
                 </p>
               </div>
