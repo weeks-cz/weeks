@@ -6,7 +6,7 @@ import { OrganizationSchema, LocalBusinessSchema, EventSchema } from '@/componen
 import { CookieConsent } from '@/components/ui/CookieConsent'
 import { MotionProvider } from '@/components/providers/MotionProvider'
 
-const GA_ID = process.env.NEXT_PUBLIC_GA_ID || 'G-9955Q5FRRX'
+const GA_ID = (process.env.NEXT_PUBLIC_GA_ID || 'G-9955Q5FRRX').trim()
 
 const dmSans = DM_Sans({
   subsets: ['latin', 'latin-ext'],
