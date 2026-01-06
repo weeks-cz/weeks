@@ -18,10 +18,11 @@ export function Footer() {
             <Link href="/" className="flex items-center gap-3 mb-6">
               <Image
                 src="/images/weeks-logo.png"
-                alt="Weeks"
+                alt=""
                 width={40}
                 height={40}
                 className="w-10 h-10 object-contain"
+                aria-hidden="true"
               />
               <span className="text-xl font-display font-bold text-white">Weeks</span>
             </Link>
@@ -110,10 +111,10 @@ export function Footer() {
 
         {/* Copyright */}
         <div className="mt-12 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-400">
             {new Date().getFullYear()} Weeks. Všechna práva vyhrazena.
           </p>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-400">
             Provozováno pod záštitou DDM Praha 6
           </p>
         </div>

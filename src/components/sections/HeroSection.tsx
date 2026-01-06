@@ -17,7 +17,7 @@ export function HeroSection() {
           sizes="100vw"
           className="object-cover"
           priority
-          quality={90}
+          quality={75}
         />
         {/* Stronger gradient overlay for better readability */}
         <div className="absolute inset-0 bg-gradient-to-r from-gray-900/95 via-gray-900/85 to-gray-900/60" />

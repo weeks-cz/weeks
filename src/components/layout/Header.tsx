@@ -44,11 +44,12 @@ export function Header() {
           >
             <Image
               src="/images/weeks-logo.png"
-              alt="Weeks"
+              alt=""
               width={44}
               height={44}
               className="w-11 h-11 object-contain"
               priority
+              aria-hidden="true"
             />
           </motion.div>
           <span className={`text-xl font-display font-bold tracking-tight transition-colors ${
