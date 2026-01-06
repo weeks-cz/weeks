@@ -1,5 +1,5 @@
 # robots.txt pro Weeks - Víkendové IT kempy pro děti
-# https://weeksweb.vercel.app
+# https://weeks.cz
 
 # Povolit všem robotům přístup
 User-agent: *
@@ -10,4 +10,4 @@ Disallow: /studio/
 Disallow: /api/
 
 # Sitemap
-Sitemap: https://weeksweb.vercel.app/sitemap.xml
+Sitemap: https://weeks.cz/sitemap.xml
