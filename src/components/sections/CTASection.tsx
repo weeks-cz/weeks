@@ -219,7 +219,7 @@ export function CTASection() {
                       required
                     />
                     <label htmlFor="gdpr-consent" className="text-sm text-white/80 cursor-pointer">
-                      Souhlasím se zpracováním osobních údajů za účelem zasílání informací o spuštění registrací.
+                      Souhlasím se zpracováním osobních údajů správcem DDM Praha 6 za účelem zasílání informací o spuštění registrací.
                       Svůj souhlas mohu kdykoli odvolat.{' '}
                       <Link href="/gdpr" className="underline hover:text-white">
                         Více informací

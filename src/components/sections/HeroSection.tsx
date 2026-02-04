@@ -101,7 +101,7 @@ export function HeroSection() {
                   <span className="text-xs font-bold text-white">DDM</span>
                 </div>
                 <div className="min-w-0">
-                  <p className="text-xs text-gray-400">Pod záštitou</p>
+                  <p className="text-xs text-gray-400">Organizátor</p>
                   <p className="text-sm font-medium text-white truncate">DDM Praha 6</p>
                 </div>
               </div>

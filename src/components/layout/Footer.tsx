@@ -115,7 +115,7 @@ export function Footer() {
             {new Date().getFullYear()} Weeks. Všechna práva vyhrazena.
           </p>
           <p className="text-sm text-gray-400">
-            Provozováno pod záštitou DDM Praha 6
+            Projekt Weeks je organizován DDM Praha 6
           </p>
         </div>
       </div>

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 
 const pageTitle = 'O nás'
-const pageDescription = 'Poznejte tým Weeks - zkušené lektory víkendových IT kempů pro děti. VR, programování, 3D tisk, grafika. Pod záštitou DDM Praha 6 v prostorách HWLab.'
+const pageDescription = 'Poznejte lektorský tým Weeks - zkušené lektory víkendových IT kempů pro děti. VR, programování, 3D tisk, grafika. Organizátor: DDM Praha 6. Místo konání: HWLab Praha.'
 const pageUrl = 'https://weeks.cz/o-nas'
 
 export const metadata: Metadata = {

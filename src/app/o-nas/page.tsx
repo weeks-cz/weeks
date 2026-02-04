@@ -34,7 +34,8 @@ const partners = [
     name: 'DDM Praha 6',
     shortName: 'DDM',
     color: 'primary',
-    description: 'Dům dětí a mládeže Praha 6 poskytuje osvětovou činnost již od roku 1953. Za více než 70 let působení se stal jednou z největších a nejrespektovanějších institucí pro volnočasové aktivity dětí a mládeže v České republice.',
+    role: 'Organizátor',
+    description: 'Dům dětí a mládeže Praha 6 je organizátorem víkendových kempů Weeks. Poskytuje osvětovou činnost již od roku 1953 a za více než 70 let působení se stal jednou z největších a nejrespektovanějších institucí pro volnočasové aktivity dětí a mládeže v České republice.',
     details: [
       'Více než 70 let zkušeností s prací s dětmi',
       'Certifikovaní a proškolení instruktoři',
@@ -49,6 +50,7 @@ const partners = [
     name: 'HWLab Praha',
     shortName: 'HW',
     color: 'accent',
+    role: 'Místo konání',
     description: 'HWLab je moderní technologické centrum v Kongresovém centru Praha zaměřené na digitální výrobu, prototypování a vzdělávání. Disponuje profesionálním vybavením a prostory navrženými pro komfortní a bezpečnou práci.',
     details: [
       'Profesionální 3D tiskárny Prusa i3 MK3S+',
@@ -211,11 +213,11 @@ export default function AboutPage() {
               className="text-center mb-16"
             >
               <h2 className="heading-2 text-gray-900 mb-4">
-                Naši <span className="text-gradient">partneři</span>
+                Organizátor a <span className="text-gradient">zázemí</span>
               </h2>
               <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-                Weeks funguje díky spolupráci s institucemi, které mají dlouholetou tradici
-                a prokázané zkušenosti v oblasti vzdělávání a práce s dětmi.
+                Weeks je projekt organizovaný DDM Praha 6, který probíhá
+                v prostorách HWLab v Kongresovém centru Praha.
               </p>
             </motion.div>
 
@@ -234,6 +236,11 @@ export default function AboutPage() {
                     <div className="flex flex-col md:flex-row gap-8">
                       {/* Logo/Icon */}
                       <div className="flex-shrink-0">
+                        {'role' in partner && (
+                          <div className={`inline-flex items-center gap-2 px-3 py-1 ${colors.bg} rounded-full text-xs font-semibold ${colors.text} mb-3`}>
+                            {partner.role}
+                          </div>
+                        )}
                         <div className={`w-24 h-24 ${colors.bg} rounded-2xl flex items-center justify-center`}>
                           <span className={`text-3xl font-bold ${colors.text}`}>
                             {partner.shortName}
@@ -290,11 +297,11 @@ export default function AboutPage() {
               className="text-center mb-16"
             >
               <h2 className="heading-2 text-gray-900 mb-4">
-                Náš <span className="text-gradient">tým</span>
+                Lektorský <span className="text-gradient">tým</span>
               </h2>
               <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-                Pracujeme s lektory, kteří mají zkušenosti z praxe a zároveň lásku k výuce.
-                Každý lektor prošel školením DDM Praha 6 a má ověřené reference.
+                Naši lektoři jsou odborníci z praxe s vášní pro výuku. Každý z nich prošel
+                školením DDM Praha 6, má ověřené reference a individuální přístup k dětem.
               </p>
             </motion.div>
 

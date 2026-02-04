@@ -48,8 +48,8 @@ export function TrustSection() {
             viewport={{ once: true }}
             className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4"
           >
-            Za námi stojí
-            <span className="text-gradient"> silní partneři</span>
+            Kdo za Weeks
+            <span className="text-gradient"> stojí</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -58,7 +58,7 @@ export function TrustSection() {
             transition={{ delay: 0.1 }}
             className="text-lg text-gray-600"
           >
-            Weeks funguje pod záštitou zavedených institucí s dlouholetou tradicí ve vzdělávání.
+            Weeks je projekt organizovaný DDM Praha 6, který probíhá v prostorách HWLab Praha.
           </motion.p>
         </div>
 
@@ -72,6 +72,9 @@ export function TrustSection() {
             className="group relative bg-gradient-to-br from-primary-50 to-white rounded-2xl p-8 border border-primary-100 overflow-hidden"
           >
             <div className="relative z-10">
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary-100 rounded-full text-xs font-semibold text-primary-700 mb-4">
+                Organizátor
+              </div>
               <div className="w-16 h-16 bg-primary-100 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                 <span className="text-2xl font-bold text-primary-600">DDM</span>
               </div>
@@ -79,8 +82,9 @@ export function TrustSection() {
                 DDM Praha 6
               </h3>
               <p className="text-gray-600 leading-relaxed mb-4">
-                Dům dětí a mládeže Praha 6 poskytuje osvětovou činnost již od roku 1953.
-                Je zkušeným organizátorem kroužků, táborů a akcí pro tisíce dětí ročně.
+                Dům dětí a mládeže Praha 6 je organizátorem víkendových kempů Weeks.
+                Poskytuje osvětovou činnost již od roku 1953 a je zkušeným pořadatelem
+                kroužků, táborů a akcí pro tisíce dětí ročně.
               </p>
               <div className="flex items-center gap-2 text-sm text-primary-600 font-medium">
                 <Clock className="w-4 h-4" />

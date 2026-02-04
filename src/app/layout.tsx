@@ -22,7 +22,7 @@ const outfit = Outfit({
 
 const siteUrl = 'https://weeks.cz'
 const siteTitle = 'Weeks - Víkendové IT kempy pro děti | Praha'
-const siteDescription = 'Víkendové IT kempy pro děti 10-15 let v Praze. 3D tisk, VR, programování, robotika a IoT. Každou sobotu a neděli. Expert instruktoři, moderní vybavení HWLab, pod záštitou DDM Praha 6.'
+const siteDescription = 'Víkendové IT kempy pro děti 10-15 let v Praze. 3D tisk, VR, programování, robotika a IoT. Každou sobotu a neděli. Expert instruktoři, moderní vybavení HWLab. Organizátor: DDM Praha 6.'
 
 export const viewport: Viewport = {
   width: 'device-width',

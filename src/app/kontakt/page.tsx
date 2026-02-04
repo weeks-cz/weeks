@@ -336,7 +336,7 @@ export default function ContactPage() {
                 {/* Provozovatel */}
                 <div className="bg-primary-50 rounded-2xl p-6">
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                    Provozovatel
+                    Organizátor
                   </h3>
                   <p className="text-gray-700 mb-1 font-medium">
                     DDM Praha 6
@@ -345,8 +345,8 @@ export default function ContactPage() {
                     Dům dětí a mládeže Praha 6
                   </p>
                   <p className="text-sm text-gray-500 mt-3">
-                    Weeks je projekt pod záštitou DDM Praha 6,
-                    organizace s více než 70letou tradicí v oblasti
+                    Weeks je projekt organizovaný DDM Praha 6,
+                    institucí s více než 70letou tradicí v oblasti
                     volnočasových aktivit pro děti.
                   </p>
                 </div>

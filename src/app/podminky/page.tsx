@@ -86,11 +86,11 @@ export default function PodminkyPage() {
             <section className="mb-12">
               <h2 className="heading-3 text-gray-900 mb-4">2. Provozovatel webu</h2>
               <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
-                <p className="text-gray-900 font-semibold mb-4">Provozovatelem webu je:</p>
-                <p className="text-gray-900 font-medium mb-2">Projekt Weeks</p>
+                <p className="text-gray-900 font-semibold mb-4">Provozovatelem webu a organizátorem kempů je:</p>
+                <p className="text-gray-900 font-medium mb-2">DDM Praha 6 (Dům dětí a mládeže Praha 6)</p>
+                <p className="text-gray-700 text-base mb-1">Projekt: Weeks - Víkendové IT kempy pro děti</p>
                 <p className="text-gray-700 text-base mb-1">Email: info@weeks.cz</p>
                 <p className="text-gray-700 text-base mb-1">Web: weeks.cz</p>
-                <p className="text-gray-500 text-sm mt-2">Projekt funguje pod záštitou DDM Praha 6</p>
                 <p className="text-gray-700 text-base mt-4">
                   <strong>Místo konání kempů:</strong> Kongresové centrum Praha, 5. května 11, 140 00 Praha 4 - Nusle
                 </p>
@@ -342,7 +342,10 @@ export default function PodminkyPage() {
                 můžete kontaktovat:
               </p>
               <div className="bg-primary-50 p-6 rounded-lg border border-primary-200">
-                <p className="text-primary-900 font-semibold mb-2">Projekt Weeks</p>
+                <p className="text-primary-900 font-semibold mb-2">Weeks - projekt DDM Praha 6</p>
+                <p className="text-primary-800 text-base mb-1">
+                  <strong>Organizátor:</strong> DDM Praha 6 (Dům dětí a mládeže Praha 6)
+                </p>
                 <p className="text-primary-800 text-base mb-1">
                   <strong>Email:</strong> info@weeks.cz
                 </p>
@@ -360,7 +363,7 @@ export default function PodminkyPage() {
                 Tyto podmínky užití jsou platné a účinné od 1. prosince 2024.
               </p>
               <p className="text-gray-500 text-sm mt-2">
-                Poslední aktualizace: 12. prosince 2024
+                Poslední aktualizace: 4. února 2026
               </p>
             </div>
           </div>

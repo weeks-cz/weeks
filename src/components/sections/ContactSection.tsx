@@ -86,7 +86,7 @@ export function ContactSection() {
                   <Clock className="w-6 h-6 text-primary-600" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-1">Provozovatel</h3>
+                  <h3 className="font-semibold text-gray-900 mb-1">Organizátor</h3>
                   <p className="text-gray-600">
                     DDM Praha 6<br />
                     <span className="text-sm text-gray-500">

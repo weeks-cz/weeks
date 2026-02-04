@@ -21,8 +21,8 @@ const usps = [
   },
   {
     icon: Shield,
-    title: 'Pod záštitou DDM Praha 6',
-    description: 'Garantujeme bezpečnost, pojištění a prověřené procesy. DDM Praha 6 má více než 60 let zkušeností s dětskými aktivitami.',
+    title: 'Organizováno DDM Praha 6',
+    description: 'Organizátorem kempů je DDM Praha 6. Garantujeme bezpečnost, pojištění a prověřené procesy s více než 70 lety zkušeností s dětskými aktivitami.',
   },
   {
     icon: Clock,

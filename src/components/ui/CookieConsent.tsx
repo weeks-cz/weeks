@@ -52,7 +52,7 @@ export function CookieConsent() {
                     Používáme cookies
                   </h3>
                   <p className="text-sm text-gray-600 mb-4">
-                    Tento web používá cookies pro zlepšení vašeho zážitku a analýzu návštěvnosti.
+                    Tento web provozuje DDM Praha 6 a používá cookies pro zlepšení vašeho zážitku a analýzu návštěvnosti.
                     Kliknutím na &quot;Přijmout vše&quot; souhlasíte s použitím všech cookies.
                     Více informací najdete v našich{' '}
                     <Link href="/gdpr" className="text-primary-600 hover:underline">

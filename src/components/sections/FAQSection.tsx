@@ -80,7 +80,7 @@ function FAQItem({ question, answer, index }: { question: string; answer: string
 
 export function FAQSection() {
   return (
-    <section className="section-padding bg-gray-50">
+    <section id="faq" className="section-padding bg-gray-50">
       <div className="section-container">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

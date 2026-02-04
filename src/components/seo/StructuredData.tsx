@@ -38,7 +38,7 @@ export function LocalBusinessSchema() {
     '@id': 'https://weeks.cz/#localbusiness',
     name: 'Weeks - Víkendové IT kempy pro děti',
     image: 'https://weeks.cz/og-image.jpg',
-    description: 'Víkendové IT kempy pro děti 10-15 let v Praze. 3D tisk, VR, programování a IoT. Expert instruktoři, moderní vybavení, pod záštitou DDM Praha 6.',
+    description: 'Víkendové IT kempy pro děti 10-15 let v Praze. 3D tisk, VR, programování a IoT. Expert instruktoři, moderní vybavení. Organizátor: DDM Praha 6.',
     url: 'https://weeks.cz',
     telephone: '+420123456789',
     email: 'info@weeks.cz',
