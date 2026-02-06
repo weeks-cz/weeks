@@ -8,7 +8,7 @@ const VALID_PROGRAMS = ['mix', '3d-tisk', 'iot', 'blender', 'web', 'hry', 'cshar
 
 // Program labels for email
 const PROGRAM_LABELS: Record<string, string> = {
-  'mix': 'MIX - Ochutnej vše',
+  'mix': 'Tábor chytrých technologií',
   '3d-tisk': '3D tisk',
   'iot': 'IoT & Arduino',
   'blender': '3D modelování (Blender)',

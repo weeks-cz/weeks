@@ -5,17 +5,17 @@ import { Printer, Cpu, Box, Globe, Gamepad2, Code2, Sparkles, ArrowRight, Check 
 import Image from 'next/image'
 import Link from 'next/link'
 
-// MIX program - hero card
+// Tábor chytrých technologií - hero card
 const mixProgram = {
   id: 'mix',
   icon: Sparkles,
-  title: 'MIX - Ochutnej vše',
-  subtitle: 'Ideální pro začátečníky',
-  description: 'Nevíte, co by vaše dítě bavilo? Za jeden víkend si vyzkouší 3D tisk, virtuální realitu i programování. Ideální start pro každého, kdo chce objevit svět technologií.',
+  title: 'Tábor chytrých technologií',
+  subtitle: 'Víkendový tábor pro děti 10–15 let',
+  description: 'Za jeden víkend si vaše dítě vyzkouší 3D tisk, IoT programování i virtuální realitu. Odnese si vlastní výtisky, naprogramované projekty a zážitky z VR.',
   highlights: [
-    'Vyzkouší 3 různé technologie za jeden víkend',
-    'Odnese si projekt z každé oblasti',
-    'Zjistí, co ho baví - pak se může rozhodnout',
+    '3D tisk, IoT a virtuální realita v jednom víkendu',
+    'Vlastní výtisky a projekty si odnese domů',
+    'Vhodné pro začátečníky i pokročilé',
   ],
   image: '/images/hwlab/hwlab-7972.webp',
 }
@@ -189,14 +189,14 @@ export function ProgramSection() {
 
                   <div className="flex flex-col sm:flex-row gap-3">
                     <Link
-                      href="/?program=mix#prihlasit"
+                      href="/tabor-chytrych-technologii"
                       className="btn-primary bg-white text-primary-600 hover:bg-gray-100 inline-flex items-center justify-center"
                     >
-                      Mám zájem o MIX
+                      Zobrazit termíny
                       <ArrowRight className="ml-2 w-5 h-5" />
                     </Link>
                     <Link
-                      href="/program#mix"
+                      href="/tabor-chytrych-technologii#program"
                       className="btn-outline border-white/50 text-white hover:bg-white/10 inline-flex items-center justify-center"
                     >
                       Více o programu
@@ -208,7 +208,7 @@ export function ProgramSection() {
                 <div className="relative h-64 lg:h-auto min-h-[300px]">
                   <Image
                     src={mixProgram.image}
-                    alt="MIX program - VR headsety a další technologie"
+                    alt="Tábor chytrých technologií - 3D tisk, IoT a VR"
                     fill
                     sizes="(max-width: 1024px) 100vw, 50vw"
                     className="object-cover"

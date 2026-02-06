@@ -12,19 +12,19 @@ const programs = [
   {
     id: 'mix',
     icon: Sparkles,
-    title: 'MIX - Ochutnej vše',
-    subtitle: 'Ideální pro začátečníky',
+    title: 'Tábor chytrých technologií',
+    subtitle: 'Víkendový tábor pro děti 10–15 let',
     color: 'mix',
     image: '/images/hwlab/hwlab-7972.webp',
-    description: 'Nevíte, co by vaše dítě bavilo? Za jeden víkend si vyzkouší hned několik oblastí - 3D tisk, virtuální realitu i programování. Ideální start pro každého, kdo chce objevit svět technologií.',
-    extendedDescription: 'Dva dny plné objevování. Vaše dítě si prakticky vyzkouší hned několik oblastí - vytiskne si vlastní model na 3D tiskárně, prozkoumá virtuální světy v brýlích a naprogramuje svůj první projekt. Není potřeba žádné předchozí zkušenosti. MIX je perfektní volba, když nevíte, co by vaše dítě mohlo bavit - nebo když ho baví všechno.',
+    description: 'Za jeden víkend si vaše dítě vyzkouší 3D tisk, IoT programování i virtuální realitu. Odnese si vlastní výtisky, naprogramované projekty a zážitky z VR.',
+    extendedDescription: 'Dva dny plné objevování. V sobotu se děti ponoří do světa 3D tisku – navrhnou si vlastní model a pošlou ho na profesionální tiskárnu Prusa. V neděli je čeká programování IoT projektů na Micro:bitu a zážitky ve virtuální realitě. Není potřeba žádné předchozí zkušenosti.',
     learnings: [
-      'Vlastní 3D výtisk, který si sami navrhnou',
+      'Vlastní 3D výtisk, který si sami navrhnou a vytisknou',
+      'Naprogramovaný IoT projekt na Micro:bitu',
       'Zážitek z virtuální reality a pochopení, jak funguje',
-      'První naprogramovaný projekt na mikropočítači',
       'Přehled o tom, která oblast technologií je baví nejvíc',
     ],
-    ultimateGoal: 'Dítě objeví, která technologie ho baví, a získá motivaci se jí věnovat dál.',
+    ultimateGoal: 'Dítě objeví, která technologie ho baví, a odnese si domů vlastní výtvory.',
   },
   {
     id: '3d-tisk',
@@ -205,7 +205,7 @@ export default function ProgramPage() {
                 transition={{ delay: 0.2 }}
                 className="text-xl text-gray-600 max-w-2xl mx-auto"
               >
-                7 víkendových táborů, 7 různých oblastí. Vyberte si podle toho, co vaše dítě baví - nebo zkuste MIX a objevte to společně.
+                7 víkendových táborů, 7 různých oblastí. Vyberte si podle toho, co vaše dítě baví - nebo zkuste Tábor chytrých technologií a objevte to společně.
               </motion.p>
             </div>
           </div>
@@ -276,10 +276,10 @@ export default function ProgramPage() {
                               </div>
 
                               <Link
-                                href="/?program=mix#prihlasit"
+                                href="/tabor-chytrych-technologii#terminy"
                                 className="btn-primary bg-white text-primary-600 hover:bg-gray-100 inline-flex items-center"
                               >
-                                Mám zájem o MIX
+                                Zobrazit termíny
                                 <ArrowRight className="ml-2 w-5 h-5" />
                               </Link>
                             </div>
@@ -350,7 +350,7 @@ export default function ProgramPage() {
                             href={`/?program=${program.id}#prihlasit`}
                             className="btn-primary inline-flex items-center"
                           >
-                            Mám zájem o {program.title}
+                            Mám zájem o program {program.title}
                             <ArrowRight className="ml-2 w-5 h-5" />
                           </Link>
                         </div>
@@ -399,11 +399,11 @@ export default function ProgramPage() {
               </h2>
               <p className="text-xl text-white/90 mb-8">
                 Pokud si nejste jistí, který program je pro vaše dítě nejlepší,
-                doporučujeme začít s <strong>MIX</strong> - ochutná všechno a pak se může rozhodnout.
+                doporučujeme začít s <strong>Táborem chytrých technologií</strong> - ochutná 3D tisk, IoT i VR a pak se může rozhodnout.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link href="/#prihlasit" className="btn-primary bg-white text-primary-600 hover:bg-gray-100">
-                  Přejít na registraci
+                <Link href="/tabor-chytrych-technologii#terminy" className="btn-primary bg-white text-primary-600 hover:bg-gray-100">
+                  Zobrazit termíny
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </Link>
                 <Link href="/kontakt" className="btn-outline border-white text-white hover:bg-white/10">

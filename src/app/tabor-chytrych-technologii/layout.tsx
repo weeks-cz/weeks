@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 
-const pageTitle = 'Programy'
-const pageDescription = 'Vyberte si z víkendových IT programů pro děti: Tábor chytrých technologií, 3D tisk, IoT & elektronika, 3D modelování, tvorba webu, vývoj her, programování. Pro děti 10-15 let v Praze.'
-const pageUrl = 'https://weeks.cz/program'
+const pageTitle = 'Tábor chytrých technologií'
+const pageDescription = 'Víkendový tábor pro děti 10–15 let v Praze. 3D tisk, IoT programování a virtuální realita. Sobota + neděle, 9:00–17:00. Organizátor: DDM Praha 6.'
+const pageUrl = 'https://weeks.cz/tabor-chytrych-technologii'
 
 export const metadata: Metadata = {
   title: pageTitle,
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   },
 }
 
-export default function ProgramLayout({
+export default function TaborLayout({
   children,
 }: {
   children: React.ReactNode

@@ -36,7 +36,7 @@ export function HeroSection() {
             <Sparkles className="w-4 h-4 text-cta-400" />
             <span>Nově v Praze!</span>
             <span className="w-px h-4 bg-white/30" />
-            <span className="text-cta-400">Přijímáme zájemce</span>
+            <span className="text-cta-400">Registrace otevřena</span>
           </motion.div>
 
           {/* Headline */}
@@ -73,10 +73,10 @@ export function HeroSection() {
             className="flex flex-col sm:flex-row gap-4"
           >
             <Link
-              href="#prihlasit"
+              href="/tabor-chytrych-technologii"
               className="group inline-flex items-center justify-center px-8 py-4 bg-cta-500 hover:bg-cta-400 text-gray-900 font-semibold rounded-xl transition-all duration-300 hover:shadow-xl hover:shadow-cta-500/30 hover:-translate-y-0.5"
             >
-              Přejít na registraci
+              Zobrazit termíny
               <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Link>
             <Link
