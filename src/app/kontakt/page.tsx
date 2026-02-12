@@ -25,10 +25,10 @@ const contactInfo = [
   {
     icon: MapPin,
     title: 'Místo konání',
-    value: 'DDM Praha 6',
-    address: 'U Boroviček 5, 163 00 Praha 6',
-    link: 'https://www.google.com/maps/search/?api=1&query=DDM+Praha+6,+U+Boroviček+5',
-    description: 'DDM Praha 6 – Bílá hora',
+    value: 'Kongresové centrum Praha',
+    address: '5. května 11, 140 00 Praha 4 - Nusle',
+    link: 'https://www.google.com/maps/search/?api=1&query=Kongresové+centrum+Praha,+5.+května+11',
+    description: 'Metro C - Vyšehrad (5 min pěšky)',
   },
   {
     icon: Clock,

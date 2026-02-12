@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 
 const pageTitle = 'Kontakt'
-const pageDescription = 'Kontaktujte nás ohledně víkendových IT kempů Weeks pro děti. E-mail, telefon, adresa DDM Praha 6.'
+const pageDescription = 'Kontaktujte nás ohledně víkendových IT kempů Weeks pro děti. E-mail, telefon, adresa místa konání v Kongresovém centru Praha.'
 const pageUrl = 'https://weeks.cz/kontakt'
 
 export const metadata: Metadata = {
