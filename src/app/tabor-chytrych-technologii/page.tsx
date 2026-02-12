@@ -18,6 +18,7 @@ const terminy = [
     location: 'HWLab Praha',
     locationDetail: 'Kongresové centrum Praha, 5. května 11, Praha 4',
     spotsLeft: 15,
+    registrationUrl: 'https://www.ddmp6.cz/tabory/?id=734',
   },
   {
     id: 2,
@@ -27,6 +28,7 @@ const terminy = [
     location: 'HWLab Praha',
     locationDetail: 'Kongresové centrum Praha, 5. května 11, Praha 4',
     spotsLeft: 15,
+    registrationUrl: 'https://www.ddmp6.cz/tabory/?id=735',
   },
   {
     id: 3,
@@ -36,6 +38,7 @@ const terminy = [
     location: 'DDM Praha 6 – Bílá hora',
     locationDetail: 'U Boroviček 5, Praha 6',
     spotsLeft: 12,
+    registrationUrl: 'https://www.ddmp6.cz/tabory/?id=736',
   },
 ]
 
@@ -530,11 +533,9 @@ export default function TaborChytrychTechnologiiPage() {
                     </div>
 
                     <a
-                      href="#"
-                      onClick={(e) => {
-                        e.preventDefault()
-                        alert('Registrace bude spuštěna po potvrzení termínů DDM Praha 6.')
-                      }}
+                      href={termin.registrationUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="w-full btn-primary text-center justify-center"
                     >
                       Přihlásit se
