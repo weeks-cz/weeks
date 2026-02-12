@@ -34,7 +34,7 @@ const terminy = [
     day1: 'Sobota 28. 3.',
     day2: 'Neděle 29. 3.',
     location: 'DDM Praha 6 – Bílá hora',
-    locationDetail: 'Na dlouhém lánu 19, Praha 6',
+    locationDetail: 'U Boroviček 5, Praha 6',
     spotsLeft: 12,
   },
 ]
