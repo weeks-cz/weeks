@@ -91,9 +91,15 @@ export function Footer() {
               <li className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 text-primary-500 shrink-0 mt-0.5" />
                 <span className="text-gray-400 text-sm">
-                  Kongresové centrum Praha<br />
-                  5. května 11<br />
-                  140 00 Praha 4 - Nusle
+                  <span className="text-gray-300 font-medium">HWLab Praha</span><br />
+                  5. května 11, Praha 4
+                </span>
+              </li>
+              <li className="flex items-start gap-3">
+                <MapPin className="w-5 h-5 text-primary-500 shrink-0 mt-0.5" />
+                <span className="text-gray-400 text-sm">
+                  <span className="text-gray-300 font-medium">DDM Praha 6</span><br />
+                  U Boroviček 5, Praha 6
                 </span>
               </li>
               <li className="flex items-center gap-3">

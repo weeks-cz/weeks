@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { ArrowRight, Sparkles, Play } from 'lucide-react'
+import { ArrowRight, Sparkles, Play, MapPin } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 
@@ -60,7 +60,7 @@ export function HeroSection() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-lg md:text-xl text-gray-300 mb-10 max-w-2xl leading-relaxed"
           >
-            Každou sobotu a neděli v Kongresovém centru Praha. Profesionální vybavení,
+            Každou sobotu a neděli v Praze. Profesionální vybavení,
             zkušení instruktoři a projekty, které si Vaše dítě odnese domů.
             <span className="text-white font-medium"> Pro děti 10–15 let.</span>
           </motion.p>
@@ -108,11 +108,11 @@ export function HeroSection() {
 
               <div className="flex items-center gap-3 p-3 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10">
                 <div className="w-10 h-10 shrink-0 rounded-lg bg-white/10 flex items-center justify-center">
-                  <span className="text-xs font-bold text-white">KCP</span>
+                  <MapPin className="w-5 h-5 text-white" />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-xs text-gray-400">Místo konání</p>
-                  <p className="text-sm font-medium text-white truncate">Kongresové centrum</p>
+                  <p className="text-xs text-gray-400">Místa konání</p>
+                  <p className="text-sm font-medium text-white truncate">Praha 4 & Praha 6</p>
                 </div>
               </div>
 

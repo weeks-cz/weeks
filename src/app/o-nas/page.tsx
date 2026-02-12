@@ -34,8 +34,8 @@ const partners = [
     name: 'DDM Praha 6',
     shortName: 'DDM',
     color: 'primary',
-    role: 'Organizátor',
-    description: 'Dům dětí a mládeže Praha 6 je organizátorem víkendových kempů Weeks. Poskytuje osvětovou činnost již od roku 1953 a za více než 70 let působení se stal jednou z největších a nejrespektovanějších institucí pro volnočasové aktivity dětí a mládeže v České republice.',
+    role: 'Organizátor & místo konání',
+    description: 'Dům dětí a mládeže Praha 6 je organizátorem víkendových kempů Weeks a zároveň jedním ze dvou míst konání. Poskytuje osvětovou činnost již od roku 1953 a za více než 70 let působení se stal jednou z největších a nejrespektovanějších institucí pro volnočasové aktivity dětí a mládeže v České republice.',
     details: [
       'Více než 70 let zkušeností s prací s dětmi',
       'Certifikovaní a proškolení instruktoři',
@@ -43,7 +43,7 @@ const partners = [
       'Akreditované vzdělávací programy',
       'Pojištění účastníků a bezpečnostní protokoly',
     ],
-    location: 'Praha 6',
+    location: 'U Boroviček 5, Praha 6',
     established: '1953',
   },
   {
@@ -211,7 +211,7 @@ export default function AboutPage() {
               </h2>
               <p className="text-xl text-gray-600 max-w-2xl mx-auto">
                 Weeks je projekt organizovaný DDM Praha 6, který probíhá
-                v prostorách HWLab v Kongresovém centru Praha.
+                ve dvou lokalitách – HWLab Praha a DDM Praha 6 – Bílá hora.
               </p>
             </motion.div>
 

@@ -61,28 +61,6 @@ export function ContactSection() {
 
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <MapPin className="w-6 h-6 text-primary-600" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-1">Místo konání</h3>
-                  <p className="text-gray-600">
-                    Kongresové centrum Praha<br />
-                    5. května 11<br />
-                    140 00 Praha 4 - Nusle
-                  </p>
-                  <a
-                    href="https://maps.google.com/?q=Kongresové+centrum+Praha,+5.+května+11"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-primary-600 hover:underline text-sm mt-2 inline-block"
-                  >
-                    Zobrazit na mapě →
-                  </a>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center flex-shrink-0">
                   <Clock className="w-6 h-6 text-primary-600" />
                 </div>
                 <div>
@@ -97,19 +75,51 @@ export function ContactSection() {
               </div>
             </div>
 
-            {/* Map */}
-            <div className="bg-gray-100 rounded-2xl h-80 lg:h-auto min-h-[320px] overflow-hidden">
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2561.5!2d14.4285!3d50.0621!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x470b9390e8c4a4a7%3A0x400af0f6614d810!2sKongresov%C3%A9%20centrum%20Praha!5e0!3m2!1scs!2scz!4v1703196000000"
-                width="100%"
-                height="100%"
-                style={{ border: 0 }}
-                allowFullScreen
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                title="Kongresové centrum Praha - 5. května 11"
-                className="w-full h-full"
-              />
+            {/* Venues */}
+            <div className="space-y-6">
+              {/* Venue cards */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <a
+                  href="https://maps.google.com/?q=Kongresové+centrum+Praha,+5.+května+11"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group p-5 bg-gray-50 rounded-2xl border border-gray-100 hover:border-primary-200 hover:bg-primary-50/30 transition-colors"
+                >
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-9 h-9 bg-primary-100 rounded-lg flex items-center justify-center">
+                      <MapPin className="w-4 h-4 text-primary-600" />
+                    </div>
+                    <h3 className="font-semibold text-gray-900 text-sm">HWLab Praha</h3>
+                  </div>
+                  <p className="text-sm text-gray-600 leading-relaxed">
+                    Kongresové centrum Praha<br />
+                    5. května 11, Praha 4
+                  </p>
+                  <p className="text-xs text-primary-600 mt-2 group-hover:underline">
+                    Zobrazit na mapě →
+                  </p>
+                </a>
+                <a
+                  href="https://maps.google.com/?q=DDM+Praha+6,+U+Boroviček+5,+Praha+6"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group p-5 bg-gray-50 rounded-2xl border border-gray-100 hover:border-primary-200 hover:bg-primary-50/30 transition-colors"
+                >
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-9 h-9 bg-primary-100 rounded-lg flex items-center justify-center">
+                      <MapPin className="w-4 h-4 text-primary-600" />
+                    </div>
+                    <h3 className="font-semibold text-gray-900 text-sm">DDM Praha 6</h3>
+                  </div>
+                  <p className="text-sm text-gray-600 leading-relaxed">
+                    DDM Praha 6 – Bílá hora<br />
+                    U Boroviček 5, Praha 6
+                  </p>
+                  <p className="text-xs text-primary-600 mt-2 group-hover:underline">
+                    Zobrazit na mapě →
+                  </p>
+                </a>
+              </div>
             </div>
           </div>
         </motion.div>

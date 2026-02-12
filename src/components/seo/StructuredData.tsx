@@ -92,23 +92,42 @@ export function EventSchema() {
     endDate: '2026-03-29',
     eventStatus: 'https://schema.org/EventScheduled',
     eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
-    location: {
-      '@type': 'Place',
-      name: 'Kongresové centrum Praha',
-      address: {
-        '@type': 'PostalAddress',
-        streetAddress: '5. května 11',
-        addressLocality: 'Praha 4 - Nusle',
-        addressRegion: 'Praha',
-        postalCode: '140 00',
-        addressCountry: 'CZ',
+    location: [
+      {
+        '@type': 'Place',
+        name: 'HWLab Praha – Kongresové centrum Praha',
+        address: {
+          '@type': 'PostalAddress',
+          streetAddress: '5. května 11',
+          addressLocality: 'Praha 4 - Nusle',
+          addressRegion: 'Praha',
+          postalCode: '140 00',
+          addressCountry: 'CZ',
+        },
+        geo: {
+          '@type': 'GeoCoordinates',
+          latitude: '50.0621',
+          longitude: '14.4285',
+        },
       },
-      geo: {
-        '@type': 'GeoCoordinates',
-        latitude: '50.0621',
-        longitude: '14.4285',
+      {
+        '@type': 'Place',
+        name: 'DDM Praha 6 – Bílá hora',
+        address: {
+          '@type': 'PostalAddress',
+          streetAddress: 'U Boroviček 5',
+          addressLocality: 'Praha 6',
+          addressRegion: 'Praha',
+          postalCode: '163 00',
+          addressCountry: 'CZ',
+        },
+        geo: {
+          '@type': 'GeoCoordinates',
+          latitude: '50.0830',
+          longitude: '14.3350',
+        },
       },
-    },
+    ],
     organizer: {
       '@type': 'Organization',
       name: 'DDM Praha 6',

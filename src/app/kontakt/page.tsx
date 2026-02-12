@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Mail, Phone, MapPin, Clock, Send, User, MessageSquare, Loader2, CheckCircle, AlertCircle } from 'lucide-react'
+import { Mail, Phone, MapPin, Clock, Send, User, MessageSquare, Loader2, CheckCircle, AlertCircle, Navigation } from 'lucide-react'
 import Link from 'next/link'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
@@ -24,11 +24,9 @@ const contactInfo = [
   },
   {
     icon: MapPin,
-    title: 'Místo konání',
-    value: 'Kongresové centrum Praha',
-    address: '5. května 11, 140 00 Praha 4 - Nusle',
-    link: 'https://www.google.com/maps/search/?api=1&query=Kongresové+centrum+Praha,+5.+května+11',
-    description: 'Metro C - Vyšehrad (5 min pěšky)',
+    title: 'Místa konání',
+    value: 'Praha 4 & Praha 6',
+    description: 'HWLab Praha · DDM Praha 6',
   },
   {
     icon: Clock,
@@ -59,6 +57,7 @@ const faqPreview = [
 ]
 
 export default function ContactPage() {
+  const [activeVenue, setActiveVenue] = useState<'hwlab' | 'ddm'>('hwlab')
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -170,9 +169,6 @@ export default function ContactPage() {
                     </a>
                   ) : (
                     <p className="text-gray-900 font-medium mb-1">{info.value}</p>
-                  )}
-                  {info.address && (
-                    <p className="text-sm text-gray-600 mb-1">{info.address}</p>
                   )}
                   <p className="text-sm text-gray-500">{info.description}</p>
                 </motion.div>
@@ -299,19 +295,92 @@ export default function ContactPage() {
                 viewport={{ once: true }}
                 className="space-y-8"
               >
-                {/* Map */}
-                <div className="bg-gray-200 rounded-2xl h-80 overflow-hidden">
-                  <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2561.5!2d14.4285!3d50.0621!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x470b9390e8c4a4a7%3A0x400af0f6614d810!2sKongresov%C3%A9%20centrum%20Praha!5e0!3m2!1scs!2scz!4v1703196000000"
-                    width="100%"
-                    height="100%"
-                    style={{ border: 0 }}
-                    allowFullScreen
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                    title="Kongresové centrum Praha - 5. května 11"
-                    className="w-full h-full"
-                  />
+                {/* Venue Tabs + Map */}
+                <div className="bg-white rounded-2xl overflow-hidden">
+                  <div className="flex border-b border-gray-200">
+                    <button
+                      onClick={() => setActiveVenue('hwlab')}
+                      className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
+                        activeVenue === 'hwlab'
+                          ? 'text-primary-600 border-b-2 border-primary-600 bg-primary-50/50'
+                          : 'text-gray-500 hover:text-gray-700'
+                      }`}
+                    >
+                      HWLab Praha
+                    </button>
+                    <button
+                      onClick={() => setActiveVenue('ddm')}
+                      className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
+                        activeVenue === 'ddm'
+                          ? 'text-primary-600 border-b-2 border-primary-600 bg-primary-50/50'
+                          : 'text-gray-500 hover:text-gray-700'
+                      }`}
+                    >
+                      DDM Praha 6
+                    </button>
+                  </div>
+                  <div className="h-64">
+                    {activeVenue === 'hwlab' ? (
+                      <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2561.5!2d14.4285!3d50.0621!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x470b9390e8c4a4a7%3A0x400af0f6614d810!2sKongresov%C3%A9%20centrum%20Praha!5e0!3m2!1scs!2scz!4v1703196000000"
+                        width="100%"
+                        height="100%"
+                        style={{ border: 0 }}
+                        allowFullScreen
+                        loading="lazy"
+                        referrerPolicy="no-referrer-when-downgrade"
+                        title="HWLab Praha - Kongresové centrum Praha"
+                        className="w-full h-full"
+                      />
+                    ) : (
+                      <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2559.0!2d14.3350!3d50.0830!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x470b951a0e1c4b1d%3A0x1e4b5a6e3a7b8c9d!2sU+Borovi%C4%8Dek+5%2C+Praha+6!5e0!3m2!1scs!2scz!4v1703196000000"
+                        width="100%"
+                        height="100%"
+                        style={{ border: 0 }}
+                        allowFullScreen
+                        loading="lazy"
+                        referrerPolicy="no-referrer-when-downgrade"
+                        title="DDM Praha 6 - U Boroviček 5"
+                        className="w-full h-full"
+                      />
+                    )}
+                  </div>
+                  <div className="p-4 border-t border-gray-100">
+                    {activeVenue === 'hwlab' ? (
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm font-medium text-gray-900">Kongresové centrum Praha</p>
+                          <p className="text-xs text-gray-500">5. května 11, Praha 4 · Metro C – Vyšehrad</p>
+                        </div>
+                        <a
+                          href="https://maps.google.com/?q=Kongresové+centrum+Praha,+5.+května+11"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-1 text-xs text-primary-600 hover:underline shrink-0"
+                        >
+                          <Navigation className="w-3.5 h-3.5" />
+                          Navigovat
+                        </a>
+                      </div>
+                    ) : (
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm font-medium text-gray-900">DDM Praha 6 – Bílá hora</p>
+                          <p className="text-xs text-gray-500">U Boroviček 5, Praha 6</p>
+                        </div>
+                        <a
+                          href="https://maps.google.com/?q=DDM+Praha+6,+U+Boroviček+5,+Praha+6"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-1 text-xs text-primary-600 hover:underline shrink-0"
+                        >
+                          <Navigation className="w-3.5 h-3.5" />
+                          Navigovat
+                        </a>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 {/* Provozní doba */}

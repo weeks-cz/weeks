@@ -58,7 +58,7 @@ export function TrustSection() {
             transition={{ delay: 0.1 }}
             className="text-lg text-gray-600"
           >
-            Weeks je projekt organizovaný DDM Praha 6, který probíhá v prostorách HWLab Praha.
+            Weeks je projekt organizovaný DDM Praha 6, který probíhá ve dvou lokalitách – HWLab Praha a DDM Praha 6.
           </motion.p>
         </div>
 
@@ -86,9 +86,13 @@ export function TrustSection() {
                 Poskytuje osvětovou činnost již od roku 1953 a je zkušeným pořadatelem
                 kroužků, táborů a akcí pro tisíce dětí ročně.
               </p>
-              <div className="flex items-center gap-2 text-sm text-primary-600 font-medium">
+              <div className="flex items-center gap-2 text-sm text-primary-600 font-medium mb-2">
                 <Clock className="w-4 h-4" />
                 70+ let zkušeností
+              </div>
+              <div className="flex items-center gap-2 text-sm text-primary-600 font-medium">
+                <MapPin className="w-4 h-4" />
+                U Boroviček 5, Praha 6
               </div>
             </div>
             {/* Decorative */}
