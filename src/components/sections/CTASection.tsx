@@ -78,9 +78,9 @@ export function CTASection() {
 
               <div className="space-y-3 mb-8">
                 {[
+                  '7. – 8. března (HWLab Praha)',
                   '14. – 15. března (HWLab Praha)',
-                  '21. – 22. března (DDM Bílá hora)',
-                  '28. – 29. března (HWLab Praha)',
+                  '28. – 29. března (DDM Praha 6 – Bílá hora)',
                 ].map((date, i) => (
                   <div key={i} className="flex items-center gap-3 text-sm text-white/90">
                     <div className="w-2 h-2 rounded-full bg-cta-400 flex-shrink-0" />
