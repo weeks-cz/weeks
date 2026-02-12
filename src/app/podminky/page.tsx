@@ -92,7 +92,7 @@ export default function PodminkyPage() {
                 <p className="text-gray-700 text-base mb-1">Email: info@weeks.cz</p>
                 <p className="text-gray-700 text-base mb-1">Web: weeks.cz</p>
                 <p className="text-gray-700 text-base mt-4">
-                  <strong>Místo konání kempů:</strong> Kongresové centrum Praha, 5. května 11, 140 00 Praha 4 - Nusle
+                  <strong>Místo konání kempů:</strong> DDM Praha 6, U Boroviček 5, 163 00 Praha 6
                 </p>
               </div>
             </section>

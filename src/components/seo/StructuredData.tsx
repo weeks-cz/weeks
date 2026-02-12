@@ -10,9 +10,9 @@ export function OrganizationSchema() {
     email: 'info@weeks.cz',
     address: {
       '@type': 'PostalAddress',
-      streetAddress: '5. května 11',
-      addressLocality: 'Praha 4 - Nusle',
-      postalCode: '140 00',
+      streetAddress: 'U Boroviček 5',
+      addressLocality: 'Praha 6',
+      postalCode: '163 00',
       addressRegion: 'Praha',
       addressCountry: 'CZ',
     },
@@ -45,16 +45,16 @@ export function LocalBusinessSchema() {
     priceRange: 'Kč',
     address: {
       '@type': 'PostalAddress',
-      streetAddress: '5. května 11',
-      addressLocality: 'Praha 4 - Nusle',
+      streetAddress: 'U Boroviček 5',
+      addressLocality: 'Praha 6',
       addressRegion: 'Praha',
-      postalCode: '140 00',
+      postalCode: '163 00',
       addressCountry: 'CZ',
     },
     geo: {
       '@type': 'GeoCoordinates',
-      latitude: '50.0621',
-      longitude: '14.4285',
+      latitude: '50.0785',
+      longitude: '14.3230',
     },
     openingHoursSpecification: [
       {
@@ -94,19 +94,19 @@ export function EventSchema() {
     eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
     location: {
       '@type': 'Place',
-      name: 'Kongresové centrum Praha',
+      name: 'DDM Praha 6',
       address: {
         '@type': 'PostalAddress',
-        streetAddress: '5. května 11',
-        addressLocality: 'Praha 4 - Nusle',
+        streetAddress: 'U Boroviček 5',
+        addressLocality: 'Praha 6',
         addressRegion: 'Praha',
-        postalCode: '140 00',
+        postalCode: '163 00',
         addressCountry: 'CZ',
       },
       geo: {
         '@type': 'GeoCoordinates',
-        latitude: '50.0621',
-        longitude: '14.4285',
+        latitude: '50.0785',
+        longitude: '14.3230',
       },
     },
     organizer: {
