@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Target, Heart, Lightbulb, Users, ShieldCheck, Award, Building2, MapPin, Gamepad2, Code, Box, Palette, type LucideIcon } from 'lucide-react'
+import { Target, Heart, Lightbulb, Users, ShieldCheck, Award, Building2, MapPin, Gamepad2, Code, Box, type LucideIcon } from 'lucide-react'
 import Link from 'next/link'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
@@ -82,12 +82,6 @@ const teamMembers = [
     role: '3D modelování & Tisk',
     icon: Box,
     description: 'Expert na 3D technologie s pedagogickými zkušenostmi z DDM. Kombinuje kreativitu s technikou.',
-  },
-  {
-    name: 'Lukáš Kautský',
-    role: 'Grafika & Design',
-    icon: Palette,
-    description: 'Pomáhá dětem objevit svět vizuální tvorby a digitálního designu.',
   },
 ]
 
@@ -305,7 +299,7 @@ export default function AboutPage() {
               </p>
             </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
               {teamMembers.map((member, index) => (
                 <motion.div
                   key={member.name}
