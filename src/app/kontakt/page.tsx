@@ -18,8 +18,8 @@ const contactInfo = [
   {
     icon: Phone,
     title: 'Telefon',
-    value: '+420 XXX XXX XXX',
-    link: 'tel:+420XXXXXXXXX',
+    value: '+420 235 323 333-2',
+    link: 'tel:+4202353233332',
     description: 'Po-Pá 9:00-17:00',
   },
   {
@@ -421,9 +421,9 @@ export default function ContactPage() {
                   <Mail className="w-5 h-5 mr-2" />
                   info@weeks.cz
                 </a>
-                <a href="tel:+420XXXXXXXXX" className="btn-outline border-white text-white hover:bg-white/10">
+                <a href="tel:+4202353233332" className="btn-outline border-white text-white hover:bg-white/10">
                   <Phone className="w-5 h-5 mr-2" />
-                  +420 XXX XXX XXX
+                  +420 235 323 333-2
                 </a>
               </div>
             </motion.div>
