@@ -6,38 +6,41 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { AnimatePresence } from 'framer-motion'
 
 const terminy = [
   {
     id: 1,
+    ddmId: '734',
     dates: '7. – 8. března 2026',
     day1: 'Sobota 7. 3.',
     day2: 'Neděle 8. 3.',
     location: 'HWLab Praha',
     locationDetail: 'Kongresové centrum Praha, 5. května 11, Praha 4',
-    spotsLeft: 15,
+    defaultSpots: 15,
     registrationUrl: 'https://www.ddmp6.cz/tabory/?id=734',
   },
   {
     id: 2,
+    ddmId: '735',
     dates: '14. – 15. března 2026',
     day1: 'Sobota 14. 3.',
     day2: 'Neděle 15. 3.',
     location: 'HWLab Praha',
     locationDetail: 'Kongresové centrum Praha, 5. května 11, Praha 4',
-    spotsLeft: 15,
+    defaultSpots: 15,
     registrationUrl: 'https://www.ddmp6.cz/tabory/?id=735',
   },
   {
     id: 3,
+    ddmId: '736',
     dates: '28. – 29. března 2026',
     day1: 'Sobota 28. 3.',
     day2: 'Neděle 29. 3.',
     location: 'DDM Praha 6 – Bílá hora',
     locationDetail: 'U Boroviček 5, Praha 6',
-    spotsLeft: 12,
+    defaultSpots: 12,
     registrationUrl: 'https://www.ddmp6.cz/tabory/?id=736',
   },
 ]
@@ -126,6 +129,32 @@ function FAQItem({ question, answer, index }: { question: string; answer: string
 }
 
 export default function TaborChytrychTechnologiiPage() {
+  const [liveCapacity, setLiveCapacity] = useState<Record<string, { spotsLeft: number; maxCapacity: number }>>({})
+
+  useEffect(() => {
+    async function fetchCapacity() {
+      try {
+        const res = await fetch('/api/capacity')
+        if (!res.ok) return
+        const json = await res.json()
+        if (json.data) {
+          setLiveCapacity(json.data)
+        }
+      } catch {
+        // Silently fall back to default values
+      }
+    }
+    fetchCapacity()
+    // Refresh every 5 minutes
+    const interval = setInterval(fetchCapacity, 5 * 60 * 1000)
+    return () => clearInterval(interval)
+  }, [])
+
+  function getSpotsLeft(termin: typeof terminy[number]): number {
+    const live = liveCapacity[termin.ddmId]
+    return live ? live.spotsLeft : termin.defaultSpots
+  }
+
   return (
     <>
       <Header />
@@ -527,20 +556,37 @@ export default function TaborChytrychTechnologiiPage() {
                       <p className="text-xs text-gray-500 ml-6">{termin.locationDetail}</p>
                     </div>
 
-                    <div className="flex items-center gap-2 mb-6 text-sm">
-                      <div className="w-2 h-2 rounded-full bg-trust-500" />
-                      <span className="text-trust-700 font-medium">{termin.spotsLeft} volných míst</span>
-                    </div>
+                    {(() => {
+                      const spots = getSpotsLeft(termin)
+                      const isFull = spots <= 0
+                      const isLow = spots > 0 && spots <= 3
+                      return (
+                        <>
+                          <div className="flex items-center gap-2 mb-6 text-sm">
+                            <div className={`w-2 h-2 rounded-full ${isFull ? 'bg-red-500' : isLow ? 'bg-cta-500' : 'bg-trust-500'}`} />
+                            <span className={`font-medium ${isFull ? 'text-red-600' : isLow ? 'text-cta-700' : 'text-trust-700'}`}>
+                              {isFull ? 'Obsazeno' : `${spots} volných míst`}
+                            </span>
+                          </div>
 
-                    <a
-                      href={termin.registrationUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-full btn-primary text-center justify-center"
-                    >
-                      Přihlásit se
-                      <ArrowRight className="ml-2 w-5 h-5" />
-                    </a>
+                          {isFull ? (
+                            <span className="w-full btn-primary text-center justify-center opacity-50 cursor-not-allowed">
+                              Obsazeno
+                            </span>
+                          ) : (
+                            <a
+                              href={termin.registrationUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="w-full btn-primary text-center justify-center"
+                            >
+                              Přihlásit se
+                              <ArrowRight className="ml-2 w-5 h-5" />
+                            </a>
+                          )}
+                        </>
+                      )
+                    })()}
                   </div>
                 </motion.div>
               ))}
