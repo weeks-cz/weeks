@@ -72,7 +72,7 @@ const specializations = [
     icon: Code2,
     title: 'Programování',
     description: 'První kroky v programování. Od jednoduchých příkazů po vlastní fungující program.',
-    image: '/images/program-csharp.webp',
+    image: '/images/program-csharp.webp?v=2',
     color: 'trust',
     badge: 'C#',
   },
