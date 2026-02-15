@@ -15,7 +15,7 @@ const programs = [
     title: 'Tábor chytrých technologií',
     subtitle: 'Víkendový tábor pro děti 10–15 let',
     color: 'mix',
-    image: '/images/hwlab/hwlab-7972.webp',
+    image: '/images/program-mix.webp',
     description: 'Za jeden víkend si vaše dítě vyzkouší 3D tisk, IoT programování i virtuální realitu. Odnese si vlastní výtisky, naprogramované projekty a zážitky z VR.',
     extendedDescription: 'Dva dny plné objevování. V sobotu se děti ponoří do světa 3D tisku – navrhnou si vlastní model a pošlou ho na profesionální tiskárnu Prusa. V neděli je čeká programování IoT projektů na Micro:bitu a zážitky ve virtuální realitě. Není potřeba žádné předchozí zkušenosti.',
     learnings: [
@@ -32,7 +32,7 @@ const programs = [
     title: '3D tisk',
     subtitle: 'Od nápadu k výrobku',
     color: 'primary',
-    image: '/images/hwlab/hwlab-7990.webp',
+    image: '/images/program-3dtisk.webp',
     description: 'Od nápadu k hotovému výrobku. Děti navrhnou vlastní model a vytisknou si ho na profesionálních tiskárnách. Domů si odnesou něco, co samy vytvořily.',
     extendedDescription: 'Celý víkend věnovaný 3D tisku od začátku do konce. Děti se naučí, jak z jednoduchého náčrtu vytvořit počítačový model, jak ho připravit k tisku a jak ovládat tiskárnu. Vyzkoušejí si i dokončovací práce - broušení, barvení a sestavování. Pracujeme s tiskárnami Prusa, které patří mezi nejlepší na světě - a jsou české!',
     learnings: [
@@ -49,7 +49,7 @@ const programs = [
     title: 'IoT & elektronika',
     subtitle: 'Chytrá zařízení',
     color: 'trust',
-    image: '/images/hwlab/hwlab-7965.webp',
+    image: '/images/program-iot.webp',
     description: 'Postavit si vlastní chytré zařízení? Děti propojí senzory, světýlka a displeje a naprogramují je, aby dělaly přesně to, co chtějí.',
     extendedDescription: 'Víkend plný bastlení a objevování. Děti si postaví vlastní elektronické projekty - od blikající LED až po chytré zařízení, které reaguje na okolí. Naučí se propojovat součástky, psát jednoduché programy a pochopit, jak fungují chytré věci kolem nás. Žádné předchozí znalosti nejsou potřeba.',
     learnings: [
@@ -66,7 +66,7 @@ const programs = [
     title: '3D modelování',
     subtitle: 'Digitální tvorba',
     color: 'accent',
-    image: '/images/hwlab/hwlab-7978.webp',
+    image: '/images/program-blender.webp',
     description: 'Tvorba 3D modelů jako v animovaných filmech. Vlastní postavička, scéna nebo předmět, který můžou vytisknout na 3D tiskárně.',
     extendedDescription: 'Vstup do světa digitální tvorby. Děti se naučí vytvářet 3D modely v programu Blender - stejném nástroji, který používají profesionální studia. Vytvoří si vlastní postavičku, předmět nebo celou scénu. Výsledek můžou použít jako obrázek, animaci, nebo ho poslat na 3D tisk.',
     learnings: [
@@ -83,7 +83,7 @@ const programs = [
     title: 'Tvorba webu',
     subtitle: 'Vlastní stránky',
     color: 'cta',
-    image: '/images/hwlab/hwlab-7975.webp',
+    image: '/images/program-web.webp',
     description: 'Vlastní webová stránka, kterou můžou ukázat kamarádům a rodině. Portfolio, blog nebo fan stránka na téma, které je baví.',
     extendedDescription: 'Za víkend od nuly k vlastní webové stránce. Děti se naučí, jak weby fungují, a vytvoří si vlastní - třeba portfolio svých prací, blog, nebo stránku o svém koníčku. Naučí se základy HTML a CSS a pochopí, jak internet funguje. Žádné předchozí zkušenosti nejsou potřeba.',
     learnings: [
@@ -100,7 +100,7 @@ const programs = [
     title: 'Vývoj her',
     subtitle: 'Tvorba vlastní hry',
     color: 'primary',
-    image: '/images/hwlab/hwlab-7968.webp',
+    image: '/images/program-hry.webp',
     description: 'Z hráče tvůrcem. Děti vytvoří vlastní hru, kterou si můžou zahrát i doma a ukázat kamarádům.',
     extendedDescription: 'Každý hraje hry, ale jak vznikají? Za víkend to děti zjistí a vytvoří si vlastní. Pracujeme v Unity - stejném programu, ve kterém vznikají i profesionální hry. Děti navrhnou herní svět, naprogramují pohyb postavy a vytvoří hratelnou hru, kterou si odnesou domů.',
     learnings: [
@@ -117,7 +117,7 @@ const programs = [
     title: 'Programování',
     subtitle: 'První kroky v kódu',
     color: 'trust',
-    image: '/images/hwlab/hwlab-7962.webp',
+    image: '/images/program-csharp.webp',
     description: 'První kroky v programování. Od jednoduchých příkazů po vlastní fungující program, který něco užitečného dělá.',
     extendedDescription: 'Programování je jako učit se nový jazyk - jazyk, kterým mluvíte s počítačem. Za víkend děti pochopí základy a napíší vlastní program. Začneme jednoduše a postupně přidáváme. Na konci bude mít každý vlastní fungující program, který si odnese domů.',
     learnings: [

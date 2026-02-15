@@ -109,8 +109,8 @@ export function TrustSection() {
             {/* Background Image */}
             <div className="absolute inset-0">
               <Image
-                src="/images/hwlab/hwlab-7975.webp"
-                alt="HWLab prostory"
+                src="/images/trust-hwlab.webp"
+                alt="Široký záběr HWLab s 3D tiskárnami"
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-cover"
@@ -148,8 +148,8 @@ export function TrustSection() {
           {/* Background with Image */}
           <div className="absolute inset-0">
             <Image
-              src="/images/hwlab/hwlab-7962.webp"
-              alt="HWLab workshop"
+              src="/images/trust-safety.webp"
+              alt="Celkový přehled učebny s vybavením"
               fill
               sizes="100vw"
               className="object-cover"

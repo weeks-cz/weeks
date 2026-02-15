@@ -17,7 +17,7 @@ const mixProgram = {
     'Vlastní výtisky a projekty si odnese domů',
     'Vhodné pro začátečníky i pokročilé',
   ],
-  image: '/images/hwlab/hwlab-7972.webp',
+  image: '/images/program-mix.webp',
 }
 
 // Specializované programy
@@ -27,7 +27,7 @@ const specializations = [
     icon: Printer,
     title: '3D tisk',
     description: 'Od nápadu k hotovému výrobku. Děti navrhnou vlastní model a vytisknou si ho na profesionálních tiskárnách.',
-    image: '/images/hwlab/hwlab-7990.webp',
+    image: '/images/program-3dtisk.webp',
     color: 'primary',
     badge: 'Tiskárny Prusa',
   },
@@ -36,7 +36,7 @@ const specializations = [
     icon: Cpu,
     title: 'IoT & elektronika',
     description: 'Postavit si vlastní chytré zařízení? Děti propojí senzory, světýlka a displeje a naprogramují je.',
-    image: '/images/hwlab/hwlab-7965.webp',
+    image: '/images/program-iot.webp',
     color: 'trust',
     badge: 'Arduino',
   },
@@ -45,7 +45,7 @@ const specializations = [
     icon: Box,
     title: '3D modelování',
     description: 'Tvorba 3D modelů jako v animovaných filmech. Vlastní postavička, scéna nebo předmět pro 3D tisk.',
-    image: '/images/hwlab/hwlab-7978.webp',
+    image: '/images/program-blender.webp',
     color: 'accent',
     badge: 'Blender',
   },
@@ -54,7 +54,7 @@ const specializations = [
     icon: Globe,
     title: 'Tvorba webu',
     description: 'Vlastní webová stránka, kterou můžou ukázat kamarádům. Portfolio, blog nebo fan stránka.',
-    image: '/images/hwlab/hwlab-7975.webp',
+    image: '/images/program-web.webp',
     color: 'cta',
     badge: 'HTML & CSS',
   },
@@ -63,7 +63,7 @@ const specializations = [
     icon: Gamepad2,
     title: 'Vývoj her',
     description: 'Z hráče tvůrcem. Děti vytvoří vlastní hru, kterou si můžou zahrát i doma.',
-    image: '/images/hwlab/hwlab-7968.webp',
+    image: '/images/program-hry.webp',
     color: 'primary',
     badge: 'Unity',
   },
@@ -72,7 +72,7 @@ const specializations = [
     icon: Code2,
     title: 'Programování',
     description: 'První kroky v programování. Od jednoduchých příkazů po vlastní fungující program.',
-    image: '/images/hwlab/hwlab-7962.webp',
+    image: '/images/program-csharp.webp',
     color: 'trust',
     badge: 'C#',
   },
@@ -208,7 +208,7 @@ export function ProgramSection() {
                 <div className="relative h-64 lg:h-auto min-h-[300px]">
                   <Image
                     src={mixProgram.image}
-                    alt="Tábor chytrých technologií - 3D tisk, IoT a VR"
+                    alt="Lab s webem Weeks na projektoru - ukázka z tábora"
                     fill
                     sizes="(max-width: 1024px) 100vw, 50vw"
                     className="object-cover"
@@ -255,7 +255,7 @@ export function ProgramSection() {
                   <div className="relative h-40 overflow-hidden">
                     <Image
                       src={program.image}
-                      alt={program.title}
+                      alt={`${program.title} - ukázka z víkendového tábora`}
                       fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       className="object-cover group-hover:scale-105 transition-transform duration-700"
