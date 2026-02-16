@@ -117,7 +117,7 @@ const programs = [
     title: 'Programování',
     subtitle: 'První kroky v kódu',
     color: 'trust',
-    image: '/images/program-csharp.webp?v=2',
+    image: '/images/program-csharp.webp',
     description: 'První kroky v programování. Od jednoduchých příkazů po vlastní fungující program, který něco užitečného dělá.',
     extendedDescription: 'Programování je jako učit se nový jazyk - jazyk, kterým mluvíte s počítačem. Za víkend děti pochopí základy a napíší vlastní program. Začneme jednoduše a postupně přidáváme. Na konci bude mít každý vlastní fungující program, který si odnese domů.',
     learnings: [
