@@ -4,6 +4,7 @@ import { GoogleAnalytics } from '@next/third-parties/google'
 import './globals.css'
 import { OrganizationSchema, LocalBusinessSchema, EventSchema } from '@/components/seo/StructuredData'
 import { CookieConsent } from '@/components/ui/CookieConsent'
+import { MetaPixel } from '@/components/analytics/MetaPixel'
 import { MotionProvider } from '@/components/providers/MotionProvider'
 
 const GA_ID = (process.env.NEXT_PUBLIC_GA_ID || 'G-9955Q5FRRX').trim()
@@ -110,6 +111,7 @@ export default function RootLayout({
           {children}
         </MotionProvider>
         <CookieConsent />
+        <MetaPixel />
         <GoogleAnalytics gaId={GA_ID} />
       </body>
     </html>

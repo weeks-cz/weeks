@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { ArrowRight, Calendar, Mail, Sparkles } from 'lucide-react'
 import Link from 'next/link'
 import { useState } from 'react'
+import { trackLead } from '@/lib/fbpixel'
 
 export function CTASection() {
   const [email, setEmail] = useState('')
@@ -39,6 +40,7 @@ export function CTASection() {
       setIsSubmitted(true)
       setEmail('')
       setGdprConsent(false)
+      trackLead()
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Nepodařilo se odeslat email. Zkuste to prosím znovu.')
     } finally {

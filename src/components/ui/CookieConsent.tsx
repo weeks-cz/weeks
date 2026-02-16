@@ -20,9 +20,7 @@ export function CookieConsent() {
   const acceptAll = () => {
     localStorage.setItem('cookie-consent', 'all')
     setIsVisible(false)
-    // Here you would initialize analytics if consent given
-    // initGA4()
-    // initFBPixel()
+    window.dispatchEvent(new Event('cookie-consent-updated'))
   }
 
   const acceptNecessary = () => {

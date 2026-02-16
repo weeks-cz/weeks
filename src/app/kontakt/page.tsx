@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { useState } from 'react'
+import { trackLead } from '@/lib/fbpixel'
 
 const contactInfo = [
   {
@@ -81,6 +82,7 @@ export default function ContactPage() {
       if (response.ok) {
         setSubmitStatus('success')
         setFormData({ name: '', email: '', message: '' })
+        trackLead()
       } else {
         setSubmitStatus('error')
       }
