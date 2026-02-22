@@ -8,6 +8,7 @@ import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { useState, useEffect } from 'react'
 import { AnimatePresence } from 'framer-motion'
+import { trackRegistrationClick } from '@/lib/analytics'
 
 const terminy = [
   {
@@ -579,6 +580,13 @@ export default function TaborChytrychTechnologiiPage() {
                               target="_blank"
                               rel="noopener noreferrer"
                               className="w-full btn-primary text-center justify-center"
+                              onClick={() => trackRegistrationClick({
+                                termId: termin.ddmId,
+                                termDates: termin.dates,
+                                termLocation: termin.location,
+                                spotsAvailable: spots,
+                                outboundUrl: termin.registrationUrl,
+                              })}
                             >
                               Přihlásit se
                               <ArrowRight className="ml-2 w-5 h-5" />

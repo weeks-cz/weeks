@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, ChevronRight } from 'lucide-react'
+import { trackNavCTA } from '@/lib/analytics'
 
 const navigation = [
   { name: 'Program', href: '/program' },
@@ -78,6 +79,7 @@ export function Header() {
           <Link
             href="/tabor-chytrych-technologii#terminy"
             className="ml-4 btn-primary group"
+            onClick={() => trackNavCTA('desktop')}
           >
             Přihlásit se
             <ChevronRight className="ml-1 w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
@@ -141,7 +143,7 @@ export function Header() {
                 <Link
                   href="/tabor-chytrych-technologii#terminy"
                   className="btn-primary w-full text-center justify-center"
-                  onClick={() => setMobileMenuOpen(false)}
+                  onClick={() => { trackNavCTA('mobile'); setMobileMenuOpen(false) }}
                 >
                   Přihlásit se
                   <ChevronRight className="ml-1 w-4 h-4" />

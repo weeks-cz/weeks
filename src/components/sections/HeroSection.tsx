@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { ArrowRight, Sparkles, Play, MapPin } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { trackViewTerms } from '@/lib/analytics'
 
 export function HeroSection() {
   return (
@@ -75,6 +76,7 @@ export function HeroSection() {
             <Link
               href="/tabor-chytrych-technologii"
               className="group inline-flex items-center justify-center px-8 py-4 bg-cta-500 hover:bg-cta-400 text-gray-900 font-semibold rounded-xl transition-all duration-300 hover:shadow-xl hover:shadow-cta-500/30 hover:-translate-y-0.5"
+              onClick={() => trackViewTerms('homepage_hero')}
             >
               Zobrazit termíny
               <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />

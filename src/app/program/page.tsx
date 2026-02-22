@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { Printer, Cpu, Box, Globe, Gamepad2, Code2, Sparkles, ArrowRight, Check } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { trackViewTerms, trackProgramInterest } from '@/lib/analytics'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 
@@ -278,6 +279,7 @@ export default function ProgramPage() {
                               <Link
                                 href="/tabor-chytrych-technologii#terminy"
                                 className="btn-primary bg-white text-primary-600 hover:bg-gray-100 inline-flex items-center"
+                                onClick={() => trackViewTerms('program_mix')}
                               >
                                 Zobrazit termíny
                                 <ArrowRight className="ml-2 w-5 h-5" />
@@ -349,6 +351,7 @@ export default function ProgramPage() {
                           <Link
                             href={`/?program=${program.id}#prihlasit`}
                             className="btn-primary inline-flex items-center"
+                            onClick={() => trackProgramInterest(program.id, program.title)}
                           >
                             Mám zájem o program {program.title}
                             <ArrowRight className="ml-2 w-5 h-5" />
@@ -402,7 +405,7 @@ export default function ProgramPage() {
                 doporučujeme začít s <strong>Táborem chytrých technologií</strong> - ochutná 3D tisk, IoT i VR a pak se může rozhodnout.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link href="/tabor-chytrych-technologii#terminy" className="btn-primary bg-white text-primary-600 hover:bg-gray-100">
+                <Link href="/tabor-chytrych-technologii#terminy" className="btn-primary bg-white text-primary-600 hover:bg-gray-100" onClick={() => trackViewTerms('program_bottom_cta')}>
                   Zobrazit termíny
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </Link>
