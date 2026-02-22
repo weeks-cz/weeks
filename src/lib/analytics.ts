@@ -1,34 +1,24 @@
 // Analytics utility for GA4 + Facebook Pixel event tracking
-// GA4 is loaded via @next/third-parties in layout.tsx
-// FB Pixel is loaded via MetaPixel component (fbq types declared in fbpixel.ts)
+// GA4: uses sendGAEvent from @next/third-parties (official Next.js method)
+// FB Pixel: uses window.fbq loaded via MetaPixel component
 
-declare global {
-  interface Window {
-    gtag?: (...args: unknown[]) => void
-  }
-}
-
-function gtagEvent(eventName: string, params: Record<string, string | number>) {
-  if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('event', eventName, params)
-  }
-}
+import { sendGAEvent } from '@next/third-parties/google'
 
 function fbqEvent(eventName: string, params?: Record<string, string | number>) {
-  if (typeof window !== 'undefined' && window.fbq) {
+  if (typeof window !== 'undefined' && typeof window.fbq === 'function') {
     window.fbq('track', eventName, params)
   }
 }
 
 // Funnel Step 1: "Zobrazit termíny" click (homepage hero, program page)
 export function trackViewTerms(source: string) {
-  gtagEvent('view_terms', { source })
+  sendGAEvent('event', 'view_terms', { source })
   fbqEvent('ViewContent', { content_name: 'camp_terms', content_category: source })
 }
 
 // Funnel Step 2: "Mám zájem" click on /program page
 export function trackProgramInterest(programId: string, programTitle: string) {
-  gtagEvent('program_interest', {
+  sendGAEvent('event', 'program_interest', {
     program_id: programId,
     program_title: programTitle,
   })
@@ -37,7 +27,7 @@ export function trackProgramInterest(programId: string, programTitle: string) {
 
 // Funnel Step 3: Navigation "Přihlásit se" button
 export function trackNavCTA(source: 'desktop' | 'mobile') {
-  gtagEvent('nav_cta_click', { source })
+  sendGAEvent('event', 'nav_cta_click', { source })
 }
 
 // Funnel Step 4: Final "Přihlásit se" → DDM registration (key conversion)
@@ -48,7 +38,7 @@ export function trackRegistrationClick(params: {
   spotsAvailable: number
   outboundUrl: string
 }) {
-  gtagEvent('registration_click', {
+  sendGAEvent('event', 'registration_click', {
     term_id: params.termId,
     term_dates: params.termDates,
     term_location: params.termLocation,
