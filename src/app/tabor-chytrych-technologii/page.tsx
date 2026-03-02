@@ -20,7 +20,7 @@ const terminy = [
     location: 'HWLab Praha',
     locationDetail: 'Kongresové centrum Praha, 5. května 11, Praha 4',
     defaultSpots: 15,
-    registrationUrl: 'https://www.ddmp6.cz/tabory/?id=734',
+    registrationUrl: 'https://www.ddmp6.cz/tabory/?id=734#js-application',
   },
   {
     id: 2,
@@ -31,7 +31,7 @@ const terminy = [
     location: 'HWLab Praha',
     locationDetail: 'Kongresové centrum Praha, 5. května 11, Praha 4',
     defaultSpots: 15,
-    registrationUrl: 'https://www.ddmp6.cz/tabory/?id=735',
+    registrationUrl: 'https://www.ddmp6.cz/tabory/?id=735#js-application',
   },
   {
     id: 3,
@@ -42,7 +42,7 @@ const terminy = [
     location: 'DDM Praha 6 – Bílá hora',
     locationDetail: 'U Boroviček 5, Praha 6',
     defaultSpots: 12,
-    registrationUrl: 'https://www.ddmp6.cz/tabory/?id=736',
+    registrationUrl: 'https://www.ddmp6.cz/tabory/?id=736#js-application',
   },
 ]
 
