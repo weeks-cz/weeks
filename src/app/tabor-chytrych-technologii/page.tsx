@@ -49,7 +49,7 @@ const terminy = [
 const sobotaProgram = [
   { time: '9:00', title: 'Příchod a seznámení', description: 'Představení lektorů, pravidla bezpečnosti, co nás čeká.' },
   { time: '9:30', title: 'Úvod do 3D tisku', description: 'Jak funguje 3D tiskárna? Ukázka tisku, materiály, principy.' },
-  { time: '10:30', title: 'Přestávka', description: 'Svačina a pití (vlastní nebo z automatu).' },
+  { time: '10:30', title: 'Přestávka', description: 'Svačina a pití.' },
   { time: '10:45', title: 'Návrh vlastního modelu', description: 'Každý si navrhne vlastní 3D model v jednoduchém programu.' },
   { time: '12:00', title: 'Oběd', description: 'Zajištěný oběd pro všechny účastníky.' },
   { time: '12:45', title: 'Spuštění tisku', description: 'Příprava modelu pro tisk, nastavení tiskárny, start tisku.' },
