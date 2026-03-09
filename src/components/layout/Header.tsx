@@ -77,11 +77,11 @@ export function Header() {
             </Link>
           ))}
           <Link
-            href="/tabor-chytrych-technologii#terminy"
+            href="/program"
             className="ml-4 btn-primary group"
             onClick={() => trackNavCTA('desktop')}
           >
-            Přihlásit se
+            Vybrat tábor
             <ChevronRight className="ml-1 w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
           </Link>
         </div>
@@ -141,11 +141,11 @@ export function Header() {
                 className="pt-2"
               >
                 <Link
-                  href="/tabor-chytrych-technologii#terminy"
+                  href="/program"
                   className="btn-primary w-full text-center justify-center"
                   onClick={() => { trackNavCTA('mobile'); setMobileMenuOpen(false) }}
                 >
-                  Přihlásit se
+                  Vybrat tábor
                   <ChevronRight className="ml-1 w-4 h-4" />
                 </Link>
               </motion.div>

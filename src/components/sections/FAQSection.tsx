@@ -19,11 +19,11 @@ const faqs = [
   },
   {
     question: 'Kolik stojí jeden víkend?',
-    answer: 'Cena je 2 990 Kč za víkend (sobota + neděle, celkem 16 hodin programu). Zahrnuje veškeré materiály, obědy a všechny vytvořené projekty si děti odnášejí domů.',
+    answer: 'Víkendový Tábor chytrých technologií stojí 2 990 Kč (sobota + neděle, 16 hodin programu). Jednodenní tábory (3D tisk nebo IoT) stojí 1 490 Kč (sobota, 8 hodin programu). Obě ceny zahrnují materiály, obědy a všechny vytvořené projekty si děti odnášejí domů.',
   },
   {
     question: 'Musí dítě přijít oba dny, nebo jen jeden?',
-    answer: 'Víkendový kemp je koncipován jako celek sobota + neděle, protože projekty na sebe navazují. Jednotlivé dny neprodáváme. V případě závažných důvodů nás prosím kontaktujte a pokusíme se najít řešení.',
+    answer: 'Víkendový Tábor chytrých technologií je koncipován jako celek sobota + neděle, protože projekty na sebe navazují. Pokud vám víkendový formát nevyhovuje, nabízíme jednodenní tábory zaměřené na 3D tisk nebo IoT & elektroniku – ty probíhají jen v sobotu.',
   },
   {
     question: 'Je zajištěn oběd pro děti s alergiemi?',

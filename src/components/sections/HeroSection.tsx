@@ -47,7 +47,7 @@ export function HeroSection() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="font-display text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight text-white mb-6 leading-[1.1]"
           >
-            Víkendové IT kempy,
+            IT tábory,
             <br />
             <span className="bg-gradient-to-r from-primary-400 via-accent-400 to-primary-400 bg-clip-text text-transparent">
               kde děti tvoří budoucnost
@@ -61,7 +61,7 @@ export function HeroSection() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-lg md:text-xl text-gray-300 mb-10 max-w-2xl leading-relaxed"
           >
-            Každou sobotu a neděli v Praze. Profesionální vybavení,
+            Víkendové i jednodenní formáty v Praze. Profesionální vybavení,
             zkušení instruktoři a projekty, které si Vaše dítě odnese domů.
             <span className="text-white font-medium"> Pro děti 10–15 let.</span>
           </motion.p>
@@ -74,11 +74,11 @@ export function HeroSection() {
             className="flex flex-col sm:flex-row gap-4"
           >
             <Link
-              href="/tabor-chytrych-technologii"
+              href="#program"
               className="group inline-flex items-center justify-center px-8 py-4 bg-cta-500 hover:bg-cta-400 text-gray-900 font-semibold rounded-xl transition-all duration-300 hover:shadow-xl hover:shadow-cta-500/30 hover:-translate-y-0.5"
               onClick={() => trackViewTerms('homepage_hero')}
             >
-              Zobrazit termíny
+              Vybrat tábor
               <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Link>
             <Link

@@ -239,6 +239,10 @@ export function ProgramSection() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {specializations.map((program, index) => {
             const colors = colorClasses[program.color as keyof typeof colorClasses]
+            const hasOwnPage = program.id === '3d-tisk' || program.id === 'iot'
+            const href = hasOwnPage
+              ? program.id === '3d-tisk' ? '/tabor-3d-tisk' : '/tabor-iot'
+              : `/program#${program.id}`
             return (
               <motion.div
                 key={program.id}
@@ -248,7 +252,7 @@ export function ProgramSection() {
                 transition={{ delay: index * 0.05 }}
               >
                 <Link
-                  href={`/program#${program.id}`}
+                  href={href}
                   className="group relative bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 block"
                 >
                   {/* Image */}
@@ -261,6 +265,15 @@ export function ProgramSection() {
                       className="object-cover group-hover:scale-105 transition-transform duration-700"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-gray-900/20 to-transparent" />
+
+                    {/* "Nově otevřeno" badge for 3D tisk and IoT */}
+                    {hasOwnPage && (
+                      <div className="absolute top-3 left-3 z-10">
+                        <div className="px-2.5 py-1 rounded-full bg-cta-500 text-xs font-semibold text-gray-900 shadow-lg">
+                          Nově otevřeno
+                        </div>
+                      </div>
+                    )}
 
                     {/* Badge */}
                     <div className="absolute top-3 right-3">

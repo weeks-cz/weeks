@@ -37,6 +37,7 @@ export function trackRegistrationClick(params: {
   termLocation: string
   spotsAvailable: number
   outboundUrl: string
+  campType?: 'weekend' | 'oneday'
 }) {
   sendGAEvent('event', 'registration_click', {
     term_id: params.termId,
@@ -44,10 +45,43 @@ export function trackRegistrationClick(params: {
     term_location: params.termLocation,
     spots_available: params.spotsAvailable,
     outbound_url: params.outboundUrl,
+    camp_type: params.campType || 'weekend',
   })
   fbqEvent('InitiateCheckout', {
     content_name: `${params.termDates} - ${params.termLocation}`,
-    value: 2990,
+    value: params.campType === 'oneday' ? 1490 : 2990,
     currency: 'CZK',
+  })
+}
+
+// One-day camp: "Mám zájem" inline form submit
+export function trackInterestSubmit(params: {
+  programId: string
+  programTitle: string
+  termin: string
+  campType: 'oneday'
+}) {
+  sendGAEvent('event', 'interest_submit', {
+    program_id: params.programId,
+    program_title: params.programTitle,
+    termin: params.termin,
+    camp_type: params.campType,
+  })
+  fbqEvent('Lead', {
+    content_name: `${params.programTitle} - ${params.termin}`,
+    value: 1490,
+    currency: 'CZK',
+  })
+}
+
+// One-day camp page view tracking
+export function trackViewOneDayCamp(programId: string, source: string) {
+  sendGAEvent('event', 'view_oneday_camp', {
+    program_id: programId,
+    source,
+  })
+  fbqEvent('ViewContent', {
+    content_name: `oneday_${programId}`,
+    content_category: source,
   })
 }

@@ -35,7 +35,7 @@ const programs = [
     color: 'primary',
     image: '/images/program-3dtisk.webp',
     description: 'Od nápadu k hotovému výrobku. Děti navrhnou vlastní model a vytisknou si ho na profesionálních tiskárnách. Domů si odnesou něco, co samy vytvořily.',
-    extendedDescription: 'Celý víkend věnovaný 3D tisku od začátku do konce. Děti se naučí, jak z jednoduchého náčrtu vytvořit počítačový model, jak ho připravit k tisku a jak ovládat tiskárnu. Vyzkoušejí si i dokončovací práce - broušení, barvení a sestavování. Pracujeme s tiskárnami Prusa, které patří mezi nejlepší na světě - a jsou české!',
+    extendedDescription: 'Celý den věnovaný 3D tisku od začátku do konce. Děti se naučí, jak z jednoduchého náčrtu vytvořit počítačový model, jak ho připravit k tisku a jak ovládat tiskárnu. Vyzkoušejí si i dokončovací práce - broušení, barvení a sestavování. Pracujeme s tiskárnami Prusa, které patří mezi nejlepší na světě - a jsou české!',
     learnings: [
       'Vlastní navržený a vytištěný model (klíčenka, stojánek, hračka...)',
       'Schopnost připravit a spustit tisk samostatně',
@@ -52,7 +52,7 @@ const programs = [
     color: 'trust',
     image: '/images/program-iot.webp',
     description: 'Postavit si vlastní chytré zařízení? Děti propojí senzory, světýlka a displeje a naprogramují je, aby dělaly přesně to, co chtějí.',
-    extendedDescription: 'Víkend plný bastlení a objevování. Děti si postaví vlastní elektronické projekty - od blikající LED až po chytré zařízení, které reaguje na okolí. Naučí se propojovat součástky, psát jednoduché programy a pochopit, jak fungují chytré věci kolem nás. Žádné předchozí znalosti nejsou potřeba.',
+    extendedDescription: 'Den plný bastlení a objevování. Děti si postaví vlastní elektronické projekty - od blikající LED až po chytré zařízení, které reaguje na okolí. Naučí se propojovat součástky, psát jednoduché programy a pochopit, jak fungují chytré věci kolem nás. Žádné předchozí znalosti nejsou potřeba.',
     learnings: [
       'Vlastní fungující elektronický projekt',
       'Pochopení, jak fungují chytrá zařízení kolem nás',
@@ -348,14 +348,34 @@ export default function ProgramPage() {
                           </div>
 
                           {/* CTA Button */}
-                          <Link
-                            href={`/?program=${program.id}#prihlasit`}
-                            className="btn-primary inline-flex items-center"
-                            onClick={() => trackProgramInterest(program.id, program.title)}
-                          >
-                            Mám zájem o program {program.title}
-                            <ArrowRight className="ml-2 w-5 h-5" />
-                          </Link>
+                          {program.id === '3d-tisk' ? (
+                            <Link
+                              href="/tabor-3d-tisk#terminy"
+                              className="btn-primary inline-flex items-center"
+                              onClick={() => trackProgramInterest(program.id, program.title)}
+                            >
+                              Zobrazit termíny 3D tisk
+                              <ArrowRight className="ml-2 w-5 h-5" />
+                            </Link>
+                          ) : program.id === 'iot' ? (
+                            <Link
+                              href="/tabor-iot#terminy"
+                              className="btn-primary inline-flex items-center"
+                              onClick={() => trackProgramInterest(program.id, program.title)}
+                            >
+                              Zobrazit termíny IoT
+                              <ArrowRight className="ml-2 w-5 h-5" />
+                            </Link>
+                          ) : (
+                            <Link
+                              href={`/?program=${program.id}#prihlasit`}
+                              className="btn-primary inline-flex items-center"
+                              onClick={() => trackProgramInterest(program.id, program.title)}
+                            >
+                              Mám zájem o program {program.title}
+                              <ArrowRight className="ml-2 w-5 h-5" />
+                            </Link>
+                          )}
                         </div>
 
                         {/* Image Card */}
@@ -372,10 +392,21 @@ export default function ProgramPage() {
                               <div className="absolute inset-0 bg-gradient-to-t from-gray-900/40 to-transparent" />
                             </div>
                             <div className={`p-6 bg-gradient-to-br ${colors.gradient} text-white`}>
-                              <p className="font-semibold mb-2">Víkendový formát</p>
-                              <p className="text-sm text-white/80">
-                                Sobota + neděle, 9:00 - 17:00. Vše potřebné zajistíme, stačí přijít s chutí tvořit.
-                              </p>
+                              {program.id === '3d-tisk' || program.id === 'iot' ? (
+                                <>
+                                  <p className="font-semibold mb-2">Jednodenní tábor</p>
+                                  <p className="text-sm text-white/80">
+                                    Sobota, 9:00 – 17:00. Vše potřebné zajistíme, stačí přijít s chutí tvořit.
+                                  </p>
+                                </>
+                              ) : (
+                                <>
+                                  <p className="font-semibold mb-2">Víkendový formát</p>
+                                  <p className="text-sm text-white/80">
+                                    Sobota + neděle, 9:00 - 17:00. Vše potřebné zajistíme, stačí přijít s chutí tvořit.
+                                  </p>
+                                </>
+                              )}
                             </div>
                           </div>
                         </div>

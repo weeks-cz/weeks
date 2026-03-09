@@ -1,6 +1,6 @@
 # Weeks Web - Roadmapa projektu
 
-> Verze: 4.0 | Datum: 23. prosince 2024
+> Verze: 5.0 | Datum: 8. března 2026
 >
 > **LIVE URL:** https://weeks.cz
 > **GitHub:** https://github.com/lxkask/weeks
@@ -10,7 +10,7 @@
 
 ## Executive Summary
 
-Web Weeks je plně funkční a live na produkční doméně weeks.cz. MVP je dokončeno na 100%. Sociální sítě (Facebook, Instagram) jsou založeny. Čekáme na potvrzení od DDM před spuštěním marketingu.
+Web Weeks je plně funkční a live na produkční doméně weeks.cz. MVP je dokončeno na 100%. Kromě víkendového Táboru chytrých technologií (3 březnové termíny) nyní nabízíme i jednodenní tábory 3D tisku a IoT (termíny v přípravě). Sociální sítě (Facebook, Instagram) jsou založeny.
 
 ---
 
@@ -42,6 +42,9 @@ Web Weeks je plně funkční a live na produkční doméně weeks.cz. MVP je dok
 | Stránka | URL | Stav |
 |---------|-----|------|
 | Homepage | `/` | ✅ |
+| Tábor chytrých technologií | `/tabor-chytrych-technologii` | ✅ Potvrzené termíny |
+| Jednodenní 3D tisk | `/tabor-3d-tisk` | ✅ Termíny připravujeme |
+| Jednodenní IoT | `/tabor-iot` | ✅ Termíny připravujeme |
 | Program | `/program` | ✅ |
 | O nás | `/o-nas` | ✅ |
 | Kontakt | `/kontakt` | ✅ |
@@ -103,11 +106,33 @@ Web Weeks je plně funkční a live na produkční doméně weeks.cz. MVP je dok
 
 ---
 
+## Jednodenní tábory (Březen 2026)
+
+### Co je hotovo:
+- [x] Stránka `/tabor-3d-tisk` — hero, program (3 bloky), harmonogram, praktické info, FAQ, crosslink
+- [x] Stránka `/tabor-iot` — stejná struktura, trust/emerald barvy, Micro:bit/senzory obsah
+- [x] "Připravujeme" termíny s inline interest formulářem → POST `/api/waitlist`
+- [x] Waitlist API rozšířen o volitelné pole `termin`
+- [x] Analytics: `trackInterestSubmit`, `trackViewOneDayCamp`, `trackRegistrationClick` s `campType`
+- [x] ProgramSection: "Nově otevřeno" badge na 3D tisk a IoT kartách, linky na vlastní stránky
+- [x] Program page: CTA "Zobrazit termíny" pro 3D tisk/IoT, footer "Jednodenní tábor"
+- [x] CTASection: 3 rovnocenné karty (MIX, 3D tisk, IoT) + email signup
+- [x] FAQSection: Aktualizované odpovědi (obě ceny, jednodenní alternativa)
+- [x] Hero + Header CTA: Neutrální ("Vybrat tábor" → `/program`)
+- [x] Sitemap: `/tabor-3d-tisk` a `/tabor-iot` (priority 0.85)
+
+### Co zbývá (až budou termíny potvrzeny):
+- [ ] Přidat potvrzené termíny s DDM registračními linky (zelený dot, kapacita, btn-primary)
+- [ ] Live capacity API pro jednodenní tábory (jako u MIX)
+- [ ] Aktualizovat "Připravujeme" → skutečné datumy
+
+---
+
 ## Budoucí úkoly
 
 | Priorita | Úkol | Blokováno |
 |----------|------|-----------|
-| Vysoká | DDM potvrzení | Externí |
+| Vysoká | Potvrzení termínů jednodenních táborů | DDM |
 | Vysoká | Telefonní číslo | Rozhodnutí týmu |
 | Střední | Facebook Pixel | Až budeme dělat reklamy |
 | Střední | Propojení FB + IG v Meta BS | Čas |
@@ -157,5 +182,5 @@ TXT   @     google-site-verification=5epLUIbGFT0mcISr7rJZPFLcNlcAIFkQXe5cBY9nSdY
 
 ---
 
-**Poslední aktualizace:** 23. prosince 2024
-**Verze dokumentu:** 4.0
+**Poslední aktualizace:** 8. března 2026
+**Verze dokumentu:** 5.0

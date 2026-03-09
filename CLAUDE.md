@@ -4,7 +4,7 @@ This file provides guidance to Claude Code when working with this repository.
 
 ## Project Overview
 
-**Weeks** is a website for weekend IT camps for children (ages 10-15) held at HWLab in Prague, operated under DDM Praha 6. The site appeals to two audiences: parents (who pay) and teenagers (who decide if they want to attend).
+**Weeks** is a website for IT camps for children (ages 10-15) in Prague, operated under DDM Praha 6. The site offers weekend camps (MIX) and one-day camps (3D tisk, IoT). It appeals to two audiences: parents (who pay) and teenagers (who decide if they want to attend).
 
 **Live URL:** https://weeks.cz
 **GitHub:** https://github.com/lxkask/weeks
@@ -43,6 +43,9 @@ npm run lint         # Run ESLint
       /waitlist/route.ts    # Waitlist form API (handles program selection)
       /contact/route.ts     # Contact form API
     /program                # Program page (7 programs with CTAs)
+    /tabor-chytrych-technologii  # Weekend MIX camp page (confirmed terms)
+    /tabor-3d-tisk          # One-day 3D printing camp page
+    /tabor-iot              # One-day IoT & electronics camp page
     /o-nas                  # About page (team with real names)
     /kontakt                # Contact page
     /gdpr                   # GDPR page
@@ -54,11 +57,11 @@ npm run lint         # Run ESLint
       Footer.tsx            # Footer with links
     /sections
       HeroSection.tsx       # Hero with HWLab background (hwlab-7976)
-      ProgramSection.tsx    # MIX hero + 6 specializations (clickable cards)
+      ProgramSection.tsx    # MIX hero + 6 specializations (3D tisk/IoT → own pages)
       USPSection.tsx        # Unique selling points
       TrustSection.tsx      # Partners (DDM, HWLab) - 1:5 ratio
-      CTASection.tsx        # Waitlist form (reads ?program= URL param)
-      FAQSection.tsx        # Accordion FAQ (price 2990 Kč)
+      CTASection.tsx        # 3 camp cards (MIX, 3D tisk, IoT) + email signup
+      FAQSection.tsx        # Accordion FAQ (prices 2990/1490 Kč)
       ContactSection.tsx    # Contact info
     /providers
       MotionProvider.tsx    # Framer Motion reduced-motion support
@@ -68,6 +71,7 @@ npm run lint         # Run ESLint
       CookieConsent.tsx     # GDPR cookie banner
   /lib
     utils.ts                # cn() classnames utility
+    analytics.ts            # GA4 + FB Pixel tracking (registration, interest, one-day views)
   /sanity
     /lib                    # Sanity client, queries
     /schemas                # CMS content schemas
@@ -87,24 +91,32 @@ npm run lint         # Run ESLint
   site.webmanifest          # PWA manifest
 ```
 
-## Programs (7 total)
+## Programs (7 total) + Camp Formats
 
-The website features 7 weekend camp programs:
+The website features 7 camp programs in two formats:
 
-1. **MIX - Ochutnej vše** (hero treatment, recommended for beginners)
-2. **3D tisk** - 3D printing with Prusa printers
-3. **IoT & elektronika** - Arduino, sensors, smart devices
-4. **3D modelování** - Blender 3D modeling
-5. **Tvorba webu** - HTML/CSS web development
-6. **Vývoj her** - Unity game development
-7. **Programování** - C# programming basics
+### Weekend camp (víkendový tábor)
+- **MIX - Tábor chytrých technologií** (So+Ne, 2 990 Kč) — hero treatment, combines 3D tisk + IoT + VR
+- Page: `/tabor-chytrych-technologii` with confirmed DDM terms, live capacity
+
+### One-day camps (jednodenní tábory) — March 2026
+- **3D tisk** (So, 1 490 Kč) — page: `/tabor-3d-tisk`, terms "Připravujeme"
+- **IoT & elektronika** (So, 1 490 Kč) — page: `/tabor-iot`, terms "Připravujeme"
+
+### Specializations (no own pages yet)
+- **3D modelování** - Blender 3D modeling
+- **Tvorba webu** - HTML/CSS web development
+- **Vývoj her** - Unity game development
+- **Programování** - C# programming basics
 
 ### UX Strategy
-- MIX is subtly preferred via visual hierarchy (hero card, multi-color gradient)
-- No explicit "main program" label (team compromise)
-- Specialization cards on homepage link to `/program#[id]`
-- Each program has "Mám zájem" CTA → `/?program=[id]#prihlasit`
-- Waitlist form pre-selects program from URL parameter
+- All three camp formats are visually balanced on homepage (CTA section shows 3 equal cards)
+- Hero + Header CTA → `/program` or `#program` (neutral, not MIX-only)
+- MIX still gets hero treatment in ProgramSection (multi-color gradient card)
+- 3D tisk & IoT cards on homepage have "Nově otevřeno" amber badge, link to own pages
+- Other 5 specializations link to `/program#[id]` with "Mám zájem" → waitlist
+- One-day camp pages have "Připravujeme" terms with inline interest form → `/api/waitlist`
+- Waitlist API supports optional `termin` field for one-day camp interest tracking
 
 ## Design System
 
@@ -147,11 +159,15 @@ All user-facing content is in Czech. Code/docs can be in English.
 
 ### Implemented
 - [x] All pages: Homepage, /program, /o-nas, /kontakt, /gdpr, /podminky
+- [x] Weekend camp page: /tabor-chytrych-technologii (confirmed terms, DDM registration)
+- [x] One-day camp pages: /tabor-3d-tisk, /tabor-iot (March 2026, "Připravujeme" terms)
 - [x] 7 camp programs with marketing-friendly descriptions
-- [x] Waitlist form with program selection (Formspree on admin@weeks.cz)
+- [x] Waitlist form with program selection + optional termin field (Formspree on admin@weeks.cz)
 - [x] Contact form with Formspree
-- [x] Program cards clickable → link to /program#[id]
-- [x] "Mám zájem" CTAs on /program → waitlist with pre-selected program
+- [x] 3D tisk & IoT cards → own pages with "Nově otevřeno" badges
+- [x] Other program cards clickable → link to /program#[id]
+- [x] "Mám zájem" CTAs on /program → one-day pages or waitlist
+- [x] Inline interest forms on one-day camp "Připravujeme" terms
 - [x] Production domain: weeks.cz
 - [x] SEO: OG image, favicons, sitemap, structured data
 - [x] Accessibility: ARIA labels, aria-live, prefers-reduced-motion
@@ -224,6 +240,18 @@ TXT   @     google-site-verification=5epLUIbGFT0mcISr7rJZPFLcNlcAIFkQXe5cBY9nSdY
 6. **No map marker**: Would require paid Google Maps API
 7. **Team icons**: Specialized Lucide icons instead of placeholder photos
 
+## Key Decisions Made (March 2026)
+
+1. **One-day camps**: 3D tisk + IoT as standalone one-day (Saturday) format, 1 490 Kč
+2. **Visual balance**: Homepage presents all 3 camp formats equally (not MIX-dominant)
+3. **Hero headline**: "IT tábory" (not "Víkendové IT kempy") — covers both formats
+4. **Header CTA**: "Vybrat tábor" → `/program` (neutral, not MIX-only)
+5. **CTA section**: 3 equal camp cards + email signup (not MIX card + email form)
+6. **One-day term status**: "Připravujeme" with dashed border + inline interest form
+7. **Colors**: 3D tisk = primary/indigo, IoT = trust/emerald (consistent with program cards)
+8. **One-day capacity**: Max 12 kids (vs 15 for weekend MIX)
+9. **Analytics**: Separate events for one-day camps (interest_submit, view_oneday_camp)
+
 ## Notes for Future Sessions
 
 - Web is fully functional and deployed at weeks.cz
@@ -231,5 +259,7 @@ TXT   @     google-site-verification=5epLUIbGFT0mcISr7rJZPFLcNlcAIFkQXe5cBY9nSdY
 - All team review feedback has been implemented
 - Google Search Console is set up and indexing
 - Social media accounts (FB + IG) are created
+- One-day camp pages (/tabor-3d-tisk, /tabor-iot) are live with "Připravujeme" terms
+- When one-day camp terms are confirmed: add confirmed term cards with DDM registration links
 - Next priority: FB Pixel when ready for advertising
-- Waiting for: DDM confirmation before marketing push
+- Waiting for: DDM confirmation of one-day camp terms

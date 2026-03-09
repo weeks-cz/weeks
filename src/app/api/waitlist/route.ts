@@ -23,6 +23,7 @@ interface WaitlistRequestBody {
   program: string
   childName?: string
   childAge?: string
+  termin?: string
   gdprConsent: boolean
 }
 
@@ -30,7 +31,7 @@ export async function POST(request: NextRequest) {
   try {
     // Parse request body
     const body: WaitlistRequestBody = await request.json()
-    const { email, program, childName, childAge, gdprConsent } = body
+    const { email, program, childName, childAge, termin, gdprConsent } = body
 
     // Validate required fields
     if (!email) {
@@ -92,8 +93,11 @@ export async function POST(request: NextRequest) {
           programId: program,
           childName: childName || '(neuvedeno)',
           childAge: childAge ? `${childAge} let` : '(neuvedeno)',
+          ...(termin && { termin }),
           gdprConsent,
-          _subject: `Waitlist: ${programLabel} - ${email}`,
+          _subject: termin
+            ? `Zájem: ${programLabel} - ${termin} - ${email}`
+            : `Waitlist: ${programLabel} - ${email}`,
           timestamp: new Date().toISOString(),
         }),
       }
