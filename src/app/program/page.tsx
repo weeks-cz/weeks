@@ -18,7 +18,7 @@ const programs = [
     color: 'mix',
     image: '/images/program-mix.webp',
     description: 'Za jeden víkend si vaše dítě vyzkouší 3D tisk, IoT programování i virtuální realitu. Odnese si vlastní výtisky, naprogramované projekty a zážitky z VR.',
-    extendedDescription: 'Dva dny plné objevování. V sobotu se děti ponoří do světa 3D tisku – navrhnou si vlastní model a pošlou ho na profesionální tiskárnu Prusa. V neděli je čeká programování IoT projektů na Micro:bitu a zážitky ve virtuální realitě. Není potřeba žádné předchozí zkušenosti.',
+    extendedDescription: 'Dva dny plné objevování. V sobotu se děti ponoří do světa 3D tisku – navrhnou si vlastní model a pošlou ho na profesionální tiskárnu. V neděli je čeká programování IoT projektů na Micro:bitu/Arduinu a zážitky ve virtuální realitě. Není potřeba žádné předchozí zkušenosti.',
     learnings: [
       'Vlastní 3D výtisk, který si sami navrhnou a vytisknou',
       'Naprogramovaný IoT projekt na Micro:bitu',
@@ -35,7 +35,7 @@ const programs = [
     color: 'primary',
     image: '/images/program-3dtisk.webp',
     description: 'Od nápadu k hotovému výrobku. Děti navrhnou vlastní model a vytisknou si ho na profesionálních tiskárnách. Domů si odnesou něco, co samy vytvořily.',
-    extendedDescription: 'Celý den věnovaný 3D tisku od začátku do konce. Děti se naučí, jak z jednoduchého náčrtu vytvořit počítačový model, jak ho připravit k tisku a jak ovládat tiskárnu. Vyzkoušejí si i dokončovací práce - broušení, barvení a sestavování. Pracujeme s tiskárnami Prusa, které patří mezi nejlepší na světě - a jsou české!',
+    extendedDescription: 'Celý den věnovaný 3D tisku od začátku do konce. Děti se naučí, jak z jednoduchého náčrtu vytvořit počítačový model, jak ho připravit k tisku a jak ovládat tiskárnu. Vyzkoušejí si i dokončovací práce – odstraňování podpor a kontrolu kvality. Pracujeme s tiskárnami Prusa Research (MK3S, MK4S, Mini+, CORE One, XL a další).',
     learnings: [
       'Vlastní navržený a vytištěný model (klíčenka, stojánek, hračka...)',
       'Schopnost připravit a spustit tisk samostatně',
@@ -51,8 +51,8 @@ const programs = [
     subtitle: 'Chytrá zařízení',
     color: 'trust',
     image: '/images/program-iot.webp',
-    description: 'Postavit si vlastní chytré zařízení? Děti propojí senzory, světýlka a displeje a naprogramují je, aby dělaly přesně to, co chtějí.',
-    extendedDescription: 'Den plný bastlení a objevování. Děti si postaví vlastní elektronické projekty - od blikající LED až po chytré zařízení, které reaguje na okolí. Naučí se propojovat součástky, psát jednoduché programy a pochopit, jak fungují chytré věci kolem nás. Žádné předchozí znalosti nejsou potřeba.',
+    description: 'Postavit si vlastní chytré zařízení? S Micro:bitem a Arduinem děti propojí senzory, světýlka a displeje a naprogramují je, aby dělaly přesně to, co chtějí.',
+    extendedDescription: 'Den plný bastlení a objevování. Děti si postaví vlastní elektronické projekty s Micro:bitem a Arduinem – od blikající LED až po chytré zařízení, které reaguje na okolí. Naučí se propojovat součástky, psát jednoduché programy a pochopit, jak fungují chytré věci kolem nás. Žádné předchozí znalosti nejsou potřeba.',
     learnings: [
       'Vlastní fungující elektronický projekt',
       'Pochopení, jak fungují chytrá zařízení kolem nás',
@@ -206,7 +206,7 @@ export default function ProgramPage() {
                 transition={{ delay: 0.2 }}
                 className="text-xl text-gray-600 max-w-2xl mx-auto"
               >
-                7 víkendových táborů, 7 různých oblastí. Vyberte si podle toho, co vaše dítě baví - nebo zkuste Tábor chytrých technologií a objevte to společně.
+                Víkendové i jednodenní tábory, 7 různých oblastí. Vyberte si podle toho, co vaše dítě baví – nebo zkuste Tábor chytrých technologií a objevte to společně.
               </motion.p>
             </div>
           </div>
@@ -394,9 +394,12 @@ export default function ProgramPage() {
                             <div className={`p-6 bg-gradient-to-br ${colors.gradient} text-white`}>
                               {program.id === '3d-tisk' || program.id === 'iot' ? (
                                 <>
-                                  <p className="font-semibold mb-2">Jednodenní tábor</p>
+                                  <p className="font-semibold mb-2 flex items-center gap-2">
+                                    Jednodenní tábor
+                                    <span className="px-2 py-0.5 rounded-full bg-white/20 text-xs font-semibold">Nově otevřeno</span>
+                                  </p>
                                   <p className="text-sm text-white/80">
-                                    Sobota, 9:00 – 17:00. Vše potřebné zajistíme, stačí přijít s chutí tvořit.
+                                    Sobota nebo neděle, 9:00 – 17:00. Vše potřebné zajistíme, stačí přijít s chutí tvořit.
                                   </p>
                                 </>
                               ) : (

@@ -79,7 +79,6 @@ export function CTASection() {
 
               <div className="space-y-2 mb-6">
                 {[
-                  '7. – 8. března',
                   '14. – 15. března',
                   '28. – 29. března',
                 ].map((date, i) => (
@@ -107,13 +106,19 @@ export function CTASection() {
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
           >
-            <div className="h-full bg-white/10 backdrop-blur rounded-2xl p-6 border border-white/10 flex flex-col">
-              <div className="flex items-center gap-2 mb-4">
+            <div className="h-full bg-gradient-to-br from-primary-500/20 to-primary-400/10 backdrop-blur rounded-2xl p-6 border border-primary-400/30 flex flex-col relative overflow-hidden">
+              {/* Nově otevřeno accent line */}
+              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cta-400 to-cta-500" />
+
+              <div className="flex items-center gap-2 mb-4 flex-wrap">
                 <div className="w-10 h-10 rounded-xl bg-primary-500 flex items-center justify-center">
                   <Printer className="w-5 h-5 text-white" />
                 </div>
                 <span className="px-2.5 py-1 bg-primary-500/20 rounded-full text-xs font-semibold text-primary-300">
                   Jednodenní
+                </span>
+                <span className="px-2.5 py-1 bg-cta-500/20 rounded-full text-xs font-semibold text-cta-300 animate-pulse">
+                  Nově
                 </span>
               </div>
 
@@ -122,21 +127,30 @@ export function CTASection() {
               </h3>
 
               <p className="text-white/70 text-sm mb-4 flex-1">
-                Od návrhu po hotový výtisk na tiskárně Prusa za jeden den. Sobota, 1 490 Kč.
+                Od návrhu po hotový výtisk na profesionální tiskárně za jeden den. 1 490 Kč.
               </p>
 
               <div className="space-y-2 mb-6">
-                <div className="flex items-center gap-2 text-xs text-white/60">
-                  <div className="w-1.5 h-1.5 rounded-full bg-cta-400 flex-shrink-0" />
-                  Termíny připravujeme
-                </div>
+                {[
+                  { date: 'So 11. dubna', confirmed: true },
+                  { date: 'Ne 19. dubna', confirmed: true },
+                  { date: '+ další termíny', confirmed: false },
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center gap-2 text-xs text-white/80">
+                    <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${item.confirmed ? 'bg-trust-400' : 'bg-cta-400'}`} />
+                    {item.date}
+                    {item.confirmed && (
+                      <span className="text-trust-400 text-[10px] font-medium">potvrzeno</span>
+                    )}
+                  </div>
+                ))}
               </div>
 
               <Link
                 href="/tabor-3d-tisk"
-                className="group inline-flex items-center justify-center px-6 py-3 bg-white/15 hover:bg-white/25 text-white font-semibold rounded-xl border border-white/20 transition-all duration-300 text-sm"
+                className="group inline-flex items-center justify-center px-6 py-3 bg-primary-500 hover:bg-primary-400 text-white font-semibold rounded-xl transition-all duration-300 hover:shadow-xl hover:shadow-primary-500/30 text-sm"
               >
-                Zjistit více
+                Zobrazit termíny
                 <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
@@ -149,13 +163,19 @@ export function CTASection() {
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
           >
-            <div className="h-full bg-white/10 backdrop-blur rounded-2xl p-6 border border-white/10 flex flex-col">
-              <div className="flex items-center gap-2 mb-4">
+            <div className="h-full bg-gradient-to-br from-trust-500/20 to-trust-400/10 backdrop-blur rounded-2xl p-6 border border-trust-400/30 flex flex-col relative overflow-hidden">
+              {/* Nově otevřeno accent line */}
+              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cta-400 to-cta-500" />
+
+              <div className="flex items-center gap-2 mb-4 flex-wrap">
                 <div className="w-10 h-10 rounded-xl bg-trust-500 flex items-center justify-center">
                   <Cpu className="w-5 h-5 text-white" />
                 </div>
                 <span className="px-2.5 py-1 bg-trust-500/20 rounded-full text-xs font-semibold text-trust-300">
                   Jednodenní
+                </span>
+                <span className="px-2.5 py-1 bg-cta-500/20 rounded-full text-xs font-semibold text-cta-300 animate-pulse">
+                  Nově
                 </span>
               </div>
 
@@ -164,21 +184,30 @@ export function CTASection() {
               </h3>
 
               <p className="text-white/70 text-sm mb-4 flex-1">
-                Micro:bit, senzory a vlastní chytré zařízení za jeden den. Sobota, 1 490 Kč.
+                Micro:bit/Arduino, senzory a vlastní chytré zařízení za jeden den. 1 490 Kč.
               </p>
 
               <div className="space-y-2 mb-6">
-                <div className="flex items-center gap-2 text-xs text-white/60">
-                  <div className="w-1.5 h-1.5 rounded-full bg-cta-400 flex-shrink-0" />
-                  Termíny připravujeme
-                </div>
+                {[
+                  { date: 'Ne 12. dubna', confirmed: true },
+                  { date: 'So 18. dubna', confirmed: true },
+                  { date: '+ další termíny', confirmed: false },
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center gap-2 text-xs text-white/80">
+                    <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${item.confirmed ? 'bg-trust-400' : 'bg-cta-400'}`} />
+                    {item.date}
+                    {item.confirmed && (
+                      <span className="text-trust-400 text-[10px] font-medium">potvrzeno</span>
+                    )}
+                  </div>
+                ))}
               </div>
 
               <Link
                 href="/tabor-iot"
-                className="group inline-flex items-center justify-center px-6 py-3 bg-white/15 hover:bg-white/25 text-white font-semibold rounded-xl border border-white/20 transition-all duration-300 text-sm"
+                className="group inline-flex items-center justify-center px-6 py-3 bg-trust-500 hover:bg-trust-400 text-white font-semibold rounded-xl transition-all duration-300 hover:shadow-xl hover:shadow-trust-500/30 text-sm"
               >
-                Zjistit více
+                Zobrazit termíny
                 <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>

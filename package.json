@@ -13,6 +13,7 @@
     "@sanity/client": "^7.13.2",
     "@sanity/image-url": "^2.0.2",
     "@sanity/vision": "^4.21.1",
+    "@upstash/redis": "^1.36.3",
     "clsx": "^2.1.0",
     "framer-motion": "^11.0.0",
     "lucide-react": "^0.460.0",

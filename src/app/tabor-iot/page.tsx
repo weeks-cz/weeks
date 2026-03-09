@@ -9,17 +9,25 @@ import { Footer } from '@/components/layout/Footer'
 import { useState } from 'react'
 import { trackInterestSubmit, trackViewOneDayCamp } from '@/lib/analytics'
 
-// Placeholder terms for "Připravujeme"
+// Potvrzené termíny (DDM link bude doplněn)
+const confirmedTerminy = [
+  { id: 'iot-12-04', date: '12. dubna 2026', day: 'neděle', label: 'Neděle 12. dubna' },
+  { id: 'iot-18-04', date: '18. dubna 2026', day: 'sobota', label: 'Sobota 18. dubna' },
+]
+
+// Připravované termíny
 const pripravujemeTerminy = [
-  { id: 'jaro-2026', label: 'Jaro 2026' },
-  { id: 'leto-2026', label: 'Léto 2026' },
+  { id: 'iot-26-04', date: '26. dubna', day: 'neděle', label: 'Neděle 26. dubna' },
+  { id: 'iot-02-05', date: '2. května', day: 'sobota', label: 'Sobota 2. května' },
+  { id: 'iot-10-05', date: '10. května', day: 'neděle', label: 'Neděle 10. května' },
+  { id: 'iot-17-05', date: '17. května', day: 'sobota', label: 'Sobota 17. května' },
 ]
 
 const dayProgram = [
   { time: '9:00', title: 'Příchod a seznámení', description: 'Představení lektorů, pravidla bezpečnosti, co nás čeká.' },
   { time: '9:30', title: 'Úvod do IoT', description: 'Co je Internet věcí? Ukázky chytrých zařízení, principy fungování.' },
   { time: '10:30', title: 'Přestávka', description: 'Svačina a pití.' },
-  { time: '10:45', title: 'Micro:bit a senzory', description: 'Seznámení s Micro:bitem, propojení senzorů, první program.' },
+  { time: '10:45', title: 'Micro:bit/Arduino a senzory', description: 'Seznámení s Micro:bitem a Arduinem, propojení senzorů, první program.' },
   { time: '12:00', title: 'Oběd', description: 'Zajištěný oběd pro všechny účastníky.' },
   { time: '12:45', title: 'Vlastní IoT projekt', description: 'Návrh a stavba vlastního chytrého zařízení – meteostanice, alarm, hra.' },
   { time: '14:00', title: 'Přestávka', description: 'Svačina, odpočinek, volná zábava.' },
@@ -35,7 +43,7 @@ const campFaqs = [
   },
   {
     question: 'Co si děti odnesou domů?',
-    answer: 'Děti si odnesou zkušenosti s programováním a elektronikou. Micro:bity zůstávají v laboratoři, ale děti získají přístup k online prostředí, kde mohou pokračovat v programování doma.',
+    answer: 'Děti si odnesou zkušenosti s programováním a elektronikou. Micro:bity a Arduina zůstávají v laboratoři, ale děti získají přístup k online prostředí, kde mohou pokračovat v programování doma.',
   },
   {
     question: 'Je oběd v ceně?',
@@ -47,7 +55,7 @@ const campFaqs = [
   },
   {
     question: 'Kolik stojí jednodenní tábor?',
-    answer: 'Cena je 1 490 Kč za jeden den (sobota, 8 hodin programu). Zahrnuje veškeré materiály, oběd a vybavení.',
+    answer: 'Cena je 1 490 Kč za jeden den (8 hodin programu, sobota nebo neděle dle termínu). Zahrnuje veškeré materiály, oběd a vybavení.',
   },
 ]
 
@@ -85,7 +93,7 @@ function FAQItem({ question, answer, index }: { question: string; answer: string
   )
 }
 
-function InterestForm({ terminId, terminLabel }: { terminId: string; terminLabel: string }) {
+function InterestForm({ terminId, terminLabel, buttonLabel = 'Nezávazná registrace' }: { terminId: string; terminLabel: string; buttonLabel?: string }) {
   const [isOpen, setIsOpen] = useState(false)
   const [email, setEmail] = useState('')
   const [gdprConsent, setGdprConsent] = useState(false)
@@ -148,9 +156,9 @@ function InterestForm({ terminId, terminLabel }: { terminId: string; terminLabel
             setIsOpen(true)
             trackViewOneDayCamp('iot', `termin_${terminId}`)
           }}
-          className="btn-outline border-white/50 text-white hover:bg-white/10 inline-flex items-center"
+          className="btn-outline border-white/50 text-white hover:bg-white/10 inline-flex items-center gap-2"
         >
-          Mám zájem
+          {buttonLabel}
         </button>
       ) : (
         <AnimatePresence>
@@ -213,7 +221,7 @@ export default function TaborIoTPage() {
           <div className="absolute inset-0">
             <Image
               src="/images/program-iot.webp"
-              alt="Jednodenní tábor IoT - děti pracují s Micro:bitem a senzory"
+              alt="Jednodenní tábor IoT - děti pracují s Micro:bitem, Arduinem a senzory"
               fill
               sizes="100vw"
               className="object-cover"
@@ -274,7 +282,7 @@ export default function TaborIoTPage() {
                 transition={{ delay: 0.2 }}
                 className="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl leading-relaxed"
               >
-                Za jeden den si vaše dítě naprogramuje Micro:bit, propojí senzory
+                Za jeden den si vaše dítě naprogramuje Micro:bit/Arduino, propojí senzory
                 a postaví vlastní chytré zařízení.
                 <span className="text-white font-medium"> Pro děti 10–15 let.</span>
               </motion.p>
@@ -308,9 +316,9 @@ export default function TaborIoTPage() {
                 className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-3"
               >
                 {[
-                  { icon: Calendar, label: '1 den', sublabel: 'Sobota' },
+                  { icon: Calendar, label: '1 den', sublabel: 'So / Ne' },
                   { icon: Clock, label: '8 hodin', sublabel: 'programu' },
-                  { icon: Users, label: 'Max 12', sublabel: 'dětí' },
+                  { icon: Users, label: 'Max 15', sublabel: 'dětí' },
                   { icon: Utensils, label: 'Oběd', sublabel: 'v ceně' },
                 ].map((fact, i) => (
                   <div key={i} className="flex items-center gap-3 p-3 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10">
@@ -348,9 +356,9 @@ export default function TaborIoTPage() {
               {[
                 {
                   icon: Cpu,
-                  title: 'Micro:bit a základy',
-                  description: 'Seznámení s mikropočítačem Micro:bit, první program, ovládání LED displeje a tlačítek.',
-                  highlights: ['Programování Micro:bitu', 'LED displej a tlačítka', 'Online editor MakeCode'],
+                  title: 'Micro:bit/Arduino a základy',
+                  description: 'Seznámení s mikropočítači Micro:bit a Arduino, první program, ovládání LED displeje a tlačítek.',
+                  highlights: ['Programování Micro:bitu a Arduina', 'LED displej a tlačítka', 'Online editor MakeCode'],
                 },
                 {
                   icon: Zap,
@@ -427,7 +435,7 @@ export default function TaborIoTPage() {
                   <div className="flex items-center gap-3">
                     <Cpu className="w-6 h-6 text-white" />
                     <div>
-                      <h3 className="text-lg font-bold text-white">Sobota – IoT & elektronika</h3>
+                      <h3 className="text-lg font-bold text-white">IoT & elektronika – program dne</h3>
                       <p className="text-sm text-white/80">Od základů po vlastní chytré zařízení</p>
                     </div>
                   </div>
@@ -475,17 +483,17 @@ export default function TaborIoTPage() {
                   {
                     icon: Laptop,
                     title: 'Vybavení',
-                    text: 'Veškeré technické vybavení, počítače, Micro:bity i senzory jsou na místě. Děti nemusí nic nosit.',
+                    text: 'Veškeré technické vybavení, počítače, Micro:bity, Arduina i senzory jsou na místě. Děti nemusí nic nosit.',
                   },
                   {
                     icon: Users,
                     title: 'Kapacita',
-                    text: 'Maximálně 12 dětí na termín. Menší skupinka zajišťuje individuální přístup lektorů ke každému dítěti.',
+                    text: 'Maximálně 15 dětí na termín. Menší skupinka zajišťuje individuální přístup lektorů ke každému dítěti.',
                   },
                   {
                     icon: Clock,
                     title: 'Čas',
-                    text: 'Sobota od 9:00 do 17:00. Příchod od 8:45, vyzvednutí do 17:15. Celkem 8 hodin programu.',
+                    text: 'Od 9:00 do 17:00 (sobota nebo neděle dle termínu). Příchod od 8:45, vyzvednutí do 17:15. Celkem 8 hodin programu.',
                   },
                 ].map((info, i) => (
                   <motion.div
@@ -523,20 +531,65 @@ export default function TaborIoTPage() {
                 Termíny
               </h2>
               <p className="text-xl text-white/90 max-w-2xl mx-auto">
-                Jednodenní tábor IoT & elektroniky, sobota 9:00–17:00.
+                Jednodenní tábor IoT & elektroniky, 9:00–17:00.
               </p>
               <p className="text-lg text-white/70 mt-2">
                 Cena: <span className="font-bold text-white">1 490 Kč</span> za den (vč. oběda a materiálů)
               </p>
             </motion.div>
 
-            <div className="max-w-3xl mx-auto space-y-8">
-              {/* Připravujeme */}
+            <div className="max-w-3xl mx-auto space-y-10">
+              {/* Potvrzené termíny */}
+              <div>
+                <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                  <div className="w-2.5 h-2.5 rounded-full bg-trust-400" />
+                  Potvrzené termíny
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {confirmedTerminy.map((termin, index) => (
+                    <motion.div
+                      key={termin.id}
+                      initial={{ opacity: 0, y: 30 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: index * 0.1 }}
+                      className="bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 overflow-hidden"
+                    >
+                      <div className="p-6">
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="flex items-center gap-2">
+                            <Calendar className="w-5 h-5 text-white/70" />
+                            <h4 className="text-lg font-bold text-white">{termin.label}</h4>
+                          </div>
+                          <span className="px-3 py-1 rounded-full bg-trust-400/20 text-trust-200 text-xs font-semibold">
+                            Potvrzeno
+                          </span>
+                        </div>
+
+                        <p className="text-sm text-white/70 mb-4">
+                          Termín je potvrzený. Přihlášení přes systém DDM Praha 6 bude brzy k dispozici.
+                        </p>
+                        <p className="text-xs text-white/50 mb-4">
+                          Nechte nám email a dáme vám vědět, jakmile bude registrace spuštěna.
+                        </p>
+
+                        <InterestForm terminId={termin.id} terminLabel={termin.label} buttonLabel="Upozornit mě" />
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Připravované termíny */}
               <div>
                 <h3 className="text-lg font-semibold text-white/80 mb-4 flex items-center gap-2">
                   <div className="w-2.5 h-2.5 rounded-full bg-cta-400" />
-                  Připravujeme nové termíny
+                  Připravované termíny
                 </h3>
+                <p className="text-sm text-white/60 mb-6 max-w-xl">
+                  Zanechte nám email a dáme vám vědět nejpozději 14 dní před termínem, zda se tábor otevře.
+                  Nezavazujete se k ničemu — pouze dostanete včasnou informaci o otevření registrace.
+                </p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {pripravujemeTerminy.map((termin, index) => (
                     <motion.div
@@ -551,16 +604,12 @@ export default function TaborIoTPage() {
                         <div className="flex items-center justify-between mb-4">
                           <div className="flex items-center gap-2">
                             <Calendar className="w-5 h-5 text-white/70" />
-                            <h4 className="text-lg font-bold text-white">{termin.label}</h4>
+                            <h4 className="text-base font-bold text-white">{termin.label}</h4>
                           </div>
                           <span className="px-3 py-1 rounded-full bg-cta-500/20 text-cta-300 text-xs font-semibold">
                             Připravujeme
                           </span>
                         </div>
-
-                        <p className="text-sm text-white/60 mb-4">
-                          Zanechte email a dáme vám vědět, jakmile bude termín potvrzený.
-                        </p>
 
                         <InterestForm terminId={termin.id} terminLabel={termin.label} />
                       </div>

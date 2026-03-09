@@ -9,11 +9,20 @@ import { Footer } from '@/components/layout/Footer'
 import { useState } from 'react'
 import { trackInterestSubmit, trackViewOneDayCamp } from '@/lib/analytics'
 
-// Placeholder terms for "Připravujeme"
-const pripravujemeTerminy = [
-  { id: 'jaro-2026', label: 'Jaro 2026' },
-  { id: 'leto-2026', label: 'Léto 2026' },
+// Potvrzené termíny (DDM link bude doplněn)
+const confirmedTerminy = [
+  { id: '3d-11-04', date: '11. dubna 2026', day: 'sobota', label: 'Sobota 11. dubna' },
+  { id: '3d-19-04', date: '19. dubna 2026', day: 'neděle', label: 'Neděle 19. dubna' },
 ]
+
+// Připravované termíny
+const pripravujemeTerminy = [
+  { id: '3d-25-04', date: '25. dubna', day: 'sobota', label: 'Sobota 25. dubna' },
+  { id: '3d-03-05', date: '3. května', day: 'neděle', label: 'Neděle 3. května' },
+  { id: '3d-09-05', date: '9. května', day: 'sobota', label: 'Sobota 9. května' },
+]
+
+const printerModels = ['MK3S', 'MK4S', 'Mini+', 'CORE One', 'CORE One L', 'XL', 'SL1S']
 
 const dayProgram = [
   { time: '9:00', title: 'Příchod a seznámení', description: 'Představení lektorů, pravidla bezpečnosti, co nás čeká.' },
@@ -21,7 +30,7 @@ const dayProgram = [
   { time: '10:30', title: 'Přestávka', description: 'Svačina a pití.' },
   { time: '10:45', title: 'Návrh vlastního modelu', description: 'Každý si navrhne vlastní 3D model v jednoduchém programu.' },
   { time: '12:00', title: 'Oběd', description: 'Zajištěný oběd pro všechny účastníky.' },
-  { time: '12:45', title: 'Spuštění tisku + post-processing', description: 'Příprava modelu pro tisk, nastavení tiskárny, broušení a barvení hotových výtisků.' },
+  { time: '12:45', title: 'Spuštění tisku + dokončení', description: 'Příprava modelu pro tisk, nastavení tiskárny, odstraňování podpor a kontrola kvality hotových výtisků.' },
   { time: '14:00', title: 'Přestávka', description: 'Svačina, odpočinek, volná zábava.' },
   { time: '14:15', title: 'Pokročilé techniky a vlastní projekty', description: 'Práce na dalších modelech, základy údržby tiskárny.' },
   { time: '16:00', title: 'Prezentace a závěr', description: 'Každý představí svůj projekt. Tipy, co dál.' },
@@ -47,7 +56,7 @@ const campFaqs = [
   },
   {
     question: 'Kolik stojí jednodenní tábor?',
-    answer: 'Cena je 1 490 Kč za jeden den (sobota, 8 hodin programu). Zahrnuje veškeré materiály, oběd a všechny vytvořené projekty si děti odnášejí domů.',
+    answer: 'Cena je 1 490 Kč za jeden den (8 hodin programu, sobota nebo neděle dle termínu). Zahrnuje veškeré materiály, oběd a všechny vytvořené projekty si děti odnášejí domů.',
   },
 ]
 
@@ -85,7 +94,7 @@ function FAQItem({ question, answer, index }: { question: string; answer: string
   )
 }
 
-function InterestForm({ terminId, terminLabel }: { terminId: string; terminLabel: string }) {
+function InterestForm({ terminId, terminLabel, buttonLabel = 'Nezávazná registrace' }: { terminId: string; terminLabel: string; buttonLabel?: string }) {
   const [isOpen, setIsOpen] = useState(false)
   const [email, setEmail] = useState('')
   const [gdprConsent, setGdprConsent] = useState(false)
@@ -148,9 +157,9 @@ function InterestForm({ terminId, terminLabel }: { terminId: string; terminLabel
             setIsOpen(true)
             trackViewOneDayCamp('3d-tisk', `termin_${terminId}`)
           }}
-          className="btn-outline border-white/50 text-white hover:bg-white/10 inline-flex items-center"
+          className="btn-outline border-white/50 text-white hover:bg-white/10 inline-flex items-center gap-2"
         >
-          Mám zájem
+          {buttonLabel}
         </button>
       ) : (
         <AnimatePresence>
@@ -213,7 +222,7 @@ export default function Tabor3DTiskPage() {
           <div className="absolute inset-0">
             <Image
               src="/images/program-3dtisk.webp"
-              alt="Jednodenní tábor 3D tisku - děti pracují s 3D tiskárnami Prusa"
+              alt="Jednodenní tábor 3D tisku - děti pracují s 3D tiskárnami"
               fill
               sizes="100vw"
               className="object-cover"
@@ -308,9 +317,9 @@ export default function Tabor3DTiskPage() {
                 className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-3"
               >
                 {[
-                  { icon: Calendar, label: '1 den', sublabel: 'Sobota' },
+                  { icon: Calendar, label: '1 den', sublabel: 'So / Ne' },
                   { icon: Clock, label: '8 hodin', sublabel: 'programu' },
-                  { icon: Users, label: 'Max 12', sublabel: 'dětí' },
+                  { icon: Users, label: 'Max 15', sublabel: 'dětí' },
                   { icon: Utensils, label: 'Oběd', sublabel: 'v ceně' },
                 ].map((fact, i) => (
                   <div key={i} className="flex items-center gap-3 p-3 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10">
@@ -354,15 +363,15 @@ export default function Tabor3DTiskPage() {
                 },
                 {
                   icon: Printer,
-                  title: 'Tisk na Pruse',
-                  description: 'Model připravíme pro tisk a pustíme na profesionální tiskárnu Prusa. Děti uvidí celý proces.',
-                  highlights: ['Tiskárny Prusa MK4', 'Příprava modelu pro tisk', 'Nastavení tiskárny'],
+                  title: 'Tisk na tiskárně',
+                  description: 'Model připravíme pro tisk a pustíme na profesionální 3D tiskárnu. Děti uvidí celý proces vrstvu po vrstvě.',
+                  highlights: ['Příprava modelu pro tisk', 'Nastavení a spuštění tiskárny', 'Tisk vrstvu po vrstvě'],
                 },
                 {
                   icon: Check,
-                  title: 'Post-processing',
-                  description: 'Hotový výtisk obrousíme, případně obarvíme. Děti si odnesou dokončený výrobek.',
-                  highlights: ['Broušení a úpravy', 'Barvení výtisků', 'Hotový výrobek domů'],
+                  title: 'Dokončení a výsledek',
+                  description: 'Hotový výtisk zkontrolujeme, odstraníme podpory a připravíme k předání. Každé dítě si odnese vlastní výrobek.',
+                  highlights: ['Odstraňování podpor', 'Kontrola kvality tisku', 'Hotový výrobek domů'],
                 },
               ].map((block, index) => (
                 <motion.div
@@ -396,6 +405,23 @@ export default function Tabor3DTiskPage() {
                 </motion.div>
               ))}
             </div>
+
+            {/* Naše tiskárny */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="mt-12 text-center"
+            >
+              <p className="text-sm font-medium text-gray-500 mb-4">Tiskneme na tiskárnách Prusa Research</p>
+              <div className="flex flex-wrap justify-center gap-2">
+                {printerModels.map(model => (
+                  <span key={model} className="px-3 py-1.5 bg-primary-50 text-primary-700 rounded-full text-sm font-medium border border-primary-100">
+                    {model}
+                  </span>
+                ))}
+              </div>
+            </motion.div>
           </div>
         </section>
 
@@ -427,7 +453,7 @@ export default function Tabor3DTiskPage() {
                   <div className="flex items-center gap-3">
                     <Printer className="w-6 h-6 text-white" />
                     <div>
-                      <h3 className="text-lg font-bold text-white">Sobota – 3D tisk</h3>
+                      <h3 className="text-lg font-bold text-white">3D tisk – program dne</h3>
                       <p className="text-sm text-white/80">Od návrhu po hotový výtisk</p>
                     </div>
                   </div>
@@ -480,12 +506,12 @@ export default function Tabor3DTiskPage() {
                   {
                     icon: Users,
                     title: 'Kapacita',
-                    text: 'Maximálně 12 dětí na termín. Menší skupinka zajišťuje individuální přístup lektorů ke každému dítěti.',
+                    text: 'Maximálně 15 dětí na termín. Menší skupinka zajišťuje individuální přístup lektorů ke každému dítěti.',
                   },
                   {
                     icon: Clock,
                     title: 'Čas',
-                    text: 'Sobota od 9:00 do 17:00. Příchod od 8:45, vyzvednutí do 17:15. Celkem 8 hodin programu.',
+                    text: 'Od 9:00 do 17:00 (sobota nebo neděle dle termínu). Příchod od 8:45, vyzvednutí do 17:15. Celkem 8 hodin programu.',
                   },
                 ].map((info, i) => (
                   <motion.div
@@ -523,34 +549,66 @@ export default function Tabor3DTiskPage() {
                 Termíny
               </h2>
               <p className="text-xl text-white/90 max-w-2xl mx-auto">
-                Jednodenní tábor 3D tisku, sobota 9:00–17:00.
+                Jednodenní tábor 3D tisku, 9:00–17:00.
               </p>
               <p className="text-lg text-white/70 mt-2">
                 Cena: <span className="font-bold text-white">1 490 Kč</span> za den (vč. oběda a materiálů)
               </p>
             </motion.div>
 
-            <div className="max-w-3xl mx-auto space-y-8">
-              {/* Potvrzené termíny - zatím prázdné */}
-              {/*
+            <div className="max-w-3xl mx-auto space-y-10">
+              {/* Potvrzené termíny */}
               <div>
                 <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
                   <div className="w-2.5 h-2.5 rounded-full bg-trust-400" />
                   Potvrzené termíny
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  ... confirmed term cards here ...
+                  {confirmedTerminy.map((termin, index) => (
+                    <motion.div
+                      key={termin.id}
+                      initial={{ opacity: 0, y: 30 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: index * 0.1 }}
+                      className="bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 overflow-hidden"
+                    >
+                      <div className="p-6">
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="flex items-center gap-2">
+                            <Calendar className="w-5 h-5 text-white/70" />
+                            <h4 className="text-lg font-bold text-white">{termin.label}</h4>
+                          </div>
+                          <span className="px-3 py-1 rounded-full bg-trust-500/20 text-trust-300 text-xs font-semibold">
+                            Potvrzeno
+                          </span>
+                        </div>
+
+                        <p className="text-sm text-white/70 mb-4">
+                          Termín je potvrzený. Přihlášení přes systém DDM Praha 6 bude brzy k dispozici.
+                        </p>
+                        <p className="text-xs text-white/50 mb-4">
+                          Nechte nám email a dáme vám vědět, jakmile bude registrace spuštěna.
+                        </p>
+
+                        <InterestForm terminId={termin.id} terminLabel={termin.label} buttonLabel="Upozornit mě" />
+                      </div>
+                    </motion.div>
+                  ))}
                 </div>
               </div>
-              */}
 
-              {/* Připravujeme */}
+              {/* Připravované termíny */}
               <div>
                 <h3 className="text-lg font-semibold text-white/80 mb-4 flex items-center gap-2">
                   <div className="w-2.5 h-2.5 rounded-full bg-cta-400" />
-                  Připravujeme nové termíny
+                  Připravované termíny
                 </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <p className="text-sm text-white/60 mb-6 max-w-xl">
+                  Zanechte nám email a dáme vám vědět nejpozději 14 dní před termínem, zda se tábor otevře.
+                  Nezavazujete se k ničemu — pouze dostanete včasnou informaci o otevření registrace.
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   {pripravujemeTerminy.map((termin, index) => (
                     <motion.div
                       key={termin.id}
@@ -564,16 +622,12 @@ export default function Tabor3DTiskPage() {
                         <div className="flex items-center justify-between mb-4">
                           <div className="flex items-center gap-2">
                             <Calendar className="w-5 h-5 text-white/70" />
-                            <h4 className="text-lg font-bold text-white">{termin.label}</h4>
+                            <h4 className="text-base font-bold text-white">{termin.label}</h4>
                           </div>
                           <span className="px-3 py-1 rounded-full bg-cta-500/20 text-cta-300 text-xs font-semibold">
                             Připravujeme
                           </span>
                         </div>
-
-                        <p className="text-sm text-white/60 mb-4">
-                          Zanechte email a dáme vám vědět, jakmile bude termín potvrzený.
-                        </p>
 
                         <InterestForm terminId={termin.id} terminLabel={termin.label} />
                       </div>

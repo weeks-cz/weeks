@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Printer, Cpu, Box, Globe, Gamepad2, Code2, Sparkles, ArrowRight, Check } from 'lucide-react'
+import { Printer, Cpu, Box, Globe, Gamepad2, Code2, Sparkles, ArrowRight, Check, Calendar } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -20,8 +20,8 @@ const mixProgram = {
   image: '/images/program-mix.webp',
 }
 
-// Specializované programy
-const specializations = [
+// Jednodenní tábory - nově otevřeno
+const oneDayCamps = [
   {
     id: '3d-tisk',
     icon: Printer,
@@ -29,7 +29,10 @@ const specializations = [
     description: 'Od nápadu k hotovému výrobku. Děti navrhnou vlastní model a vytisknou si ho na profesionálních tiskárnách.',
     image: '/images/program-3dtisk.webp',
     color: 'primary',
-    badge: 'Tiskárny Prusa',
+    badge: 'Prusa Research',
+    href: '/tabor-3d-tisk',
+    price: '1 490 Kč',
+    nextDates: ['So 11. dubna', 'Ne 19. dubna'],
   },
   {
     id: 'iot',
@@ -38,8 +41,15 @@ const specializations = [
     description: 'Postavit si vlastní chytré zařízení? Děti propojí senzory, světýlka a displeje a naprogramují je.',
     image: '/images/program-iot.webp',
     color: 'trust',
-    badge: 'Arduino',
+    badge: 'Micro:bit / Arduino',
+    href: '/tabor-iot',
+    price: '1 490 Kč',
+    nextDates: ['Ne 12. dubna', 'So 18. dubna'],
   },
+]
+
+// Další specializace
+const specializations = [
   {
     id: 'blender',
     icon: Box,
@@ -220,7 +230,105 @@ export function ProgramSection() {
           </div>
         </motion.div>
 
-        {/* Specializace Header */}
+        {/* Jednodenní tábory - nově otevřeno */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-8"
+        >
+          <div className="inline-flex items-center gap-3 mb-3">
+            <h3 className="text-xl font-semibold text-gray-700">
+              Jednodenní tábory
+            </h3>
+            <span className="px-3 py-1 rounded-full bg-cta-100 text-cta-700 text-xs font-bold uppercase tracking-wide">
+              Nově otevřeno
+            </span>
+          </div>
+          <p className="text-gray-500 mt-1">
+            Jeden den, jedno téma do hloubky. Střídáme soboty a neděle.
+          </p>
+        </motion.div>
+
+        {/* One-day camps grid - 2 featured cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+          {oneDayCamps.map((camp, index) => {
+            const colors = colorClasses[camp.color as keyof typeof colorClasses]
+            return (
+              <motion.div
+                key={camp.id}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+              >
+                <Link
+                  href={camp.href}
+                  className="group relative bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 block"
+                >
+                  {/* Image */}
+                  <div className="relative h-48 overflow-hidden">
+                    <Image
+                      src={camp.image}
+                      alt={`${camp.title} - jednodenní tábor`}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                      className="object-cover group-hover:scale-105 transition-transform duration-700"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-gray-900/20 to-transparent" />
+
+                    {/* Badges */}
+                    <div className="absolute top-3 left-3 z-10 flex items-center gap-2">
+                      <div className="px-2.5 py-1 rounded-full bg-cta-500 text-xs font-semibold text-gray-900 shadow-lg">
+                        Jednodenní
+                      </div>
+                    </div>
+                    <div className="absolute top-3 right-3">
+                      <div className={`px-2.5 py-1 rounded-full bg-white/90 backdrop-blur-sm text-xs font-semibold ${colors.text}`}>
+                        {camp.badge}
+                      </div>
+                    </div>
+
+                    {/* Icon */}
+                    <div className="absolute bottom-3 left-3">
+                      <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${colors.gradient} flex items-center justify-center shadow-lg`}>
+                        <camp.icon className="w-5 h-5 text-white" />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-5">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="font-display text-lg font-bold text-gray-900 group-hover:text-primary-600 transition-colors">
+                        {camp.title}
+                      </h4>
+                      <span className="text-sm font-semibold text-gray-900">{camp.price}</span>
+                    </div>
+                    <p className="text-sm text-gray-600 leading-relaxed mb-4">
+                      {camp.description}
+                    </p>
+
+                    {/* Next dates */}
+                    <div className="flex items-center gap-4 pt-3 border-t border-gray-100">
+                      <Calendar className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                      <div className="flex flex-wrap gap-2">
+                        {camp.nextDates.map((date, i) => (
+                          <span key={i} className="text-xs font-medium text-gray-600 bg-gray-50 px-2 py-0.5 rounded">
+                            {date}
+                          </span>
+                        ))}
+                      </div>
+                      <ArrowRight className="w-4 h-4 text-gray-400 ml-auto group-hover:translate-x-1 transition-transform flex-shrink-0" />
+                    </div>
+                  </div>
+                </Link>
+              </motion.div>
+            )
+          })}
+        </div>
+
+        {/* Další specializace Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -228,7 +336,7 @@ export function ProgramSection() {
           className="text-center mb-8"
         >
           <h3 className="text-xl font-semibold text-gray-700">
-            Nebo si vyberte specializaci
+            Další specializace
           </h3>
           <p className="text-gray-500 mt-1">
             Pro děti, které už vědí, čemu se chtějí věnovat
@@ -236,13 +344,9 @@ export function ProgramSection() {
         </motion.div>
 
         {/* Specializace Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {specializations.map((program, index) => {
             const colors = colorClasses[program.color as keyof typeof colorClasses]
-            const hasOwnPage = program.id === '3d-tisk' || program.id === 'iot'
-            const href = hasOwnPage
-              ? program.id === '3d-tisk' ? '/tabor-3d-tisk' : '/tabor-iot'
-              : `/program#${program.id}`
             return (
               <motion.div
                 key={program.id}
@@ -252,7 +356,7 @@ export function ProgramSection() {
                 transition={{ delay: index * 0.05 }}
               >
                 <Link
-                  href={href}
+                  href={`/program#${program.id}`}
                   className="group relative bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 block"
                 >
                   {/* Image */}
@@ -261,19 +365,10 @@ export function ProgramSection() {
                       src={program.image}
                       alt={`${program.title} - ukázka z víkendového tábora`}
                       fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
                       className="object-cover group-hover:scale-105 transition-transform duration-700"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-gray-900/20 to-transparent" />
-
-                    {/* "Nově otevřeno" badge for 3D tisk and IoT */}
-                    {hasOwnPage && (
-                      <div className="absolute top-3 left-3 z-10">
-                        <div className="px-2.5 py-1 rounded-full bg-cta-500 text-xs font-semibold text-gray-900 shadow-lg">
-                          Nově otevřeno
-                        </div>
-                      </div>
-                    )}
 
                     {/* Badge */}
                     <div className="absolute top-3 right-3">

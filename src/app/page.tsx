@@ -1,5 +1,6 @@
 import { Suspense } from 'react'
 import { HeroSection } from '@/components/sections/HeroSection'
+import { SummerBanner } from '@/components/sections/SummerBanner'
 import { ProgramSection } from '@/components/sections/ProgramSection'
 import { USPSection } from '@/components/sections/USPSection'
 import { TrustSection } from '@/components/sections/TrustSection'
@@ -15,6 +16,7 @@ export default function Home() {
       <Header />
       <main id="main">
         <HeroSection />
+        <SummerBanner />
         <ProgramSection />
         <USPSection />
         <TrustSection />

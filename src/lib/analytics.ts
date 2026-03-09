@@ -59,7 +59,7 @@ export function trackInterestSubmit(params: {
   programId: string
   programTitle: string
   termin: string
-  campType: 'oneday'
+  campType: 'oneday' | 'weekend'
 }) {
   sendGAEvent('event', 'interest_submit', {
     program_id: params.programId,
