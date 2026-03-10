@@ -4,11 +4,12 @@ import { NextRequest, NextResponse } from 'next/server'
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 // Valid program IDs
-const VALID_PROGRAMS = ['mix', '3d-tisk', 'iot', 'blender', 'web', 'hry', 'csharp', 'nevim']
+const VALID_PROGRAMS = ['mix', 'mix-leto', '3d-tisk', 'iot', 'blender', 'web', 'hry', 'csharp', 'nevim']
 
 // Program labels for email
 const PROGRAM_LABELS: Record<string, string> = {
   'mix': 'Tábor chytrých technologií',
+  'mix-leto': 'Tábor chytrých technologií – Léto 2026',
   '3d-tisk': '3D tisk',
   'iot': 'IoT & Arduino',
   'blender': '3D modelování (Blender)',
