@@ -7,7 +7,7 @@ import Image from 'next/image'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { useState } from 'react'
-import { trackInterestSubmit, trackViewOneDayCamp } from '@/lib/analytics'
+import { trackInterestSubmit, trackViewOneDayCamp, trackRegistrationFormOpen } from '@/lib/analytics'
 
 // Potvrzené termíny (DDM link bude doplněn)
 const confirmedTerminy = [
@@ -155,6 +155,12 @@ function InterestForm({ terminId, terminLabel, buttonLabel = 'Nezávazná regist
           onClick={() => {
             setIsOpen(true)
             trackViewOneDayCamp('iot', `termin_${terminId}`)
+            trackRegistrationFormOpen({
+              programId: 'iot',
+              programTitle: 'IoT & elektronika',
+              termin: terminLabel,
+              campType: 'oneday',
+            })
           }}
           className="btn-outline border-white/50 text-white hover:bg-white/10 inline-flex items-center gap-2"
         >
@@ -601,14 +607,14 @@ export default function TaborIoTPage() {
                       className="bg-white/5 backdrop-blur-sm rounded-2xl border border-dashed border-white/30 overflow-hidden"
                     >
                       <div className="p-6">
-                        <div className="flex items-center justify-between mb-4">
-                          <div className="flex items-center gap-2">
-                            <Calendar className="w-5 h-5 text-white/70" />
-                            <h4 className="text-base font-bold text-white">{termin.label}</h4>
-                          </div>
-                          <span className="px-3 py-1 rounded-full bg-cta-500/20 text-cta-300 text-xs font-semibold">
+                        <div className="mb-4">
+                          <span className="inline-block px-3 py-1 rounded-full bg-cta-500/20 text-cta-300 text-xs font-semibold mb-3">
                             Připravujeme
                           </span>
+                          <div className="flex items-center gap-2">
+                            <Calendar className="w-5 h-5 text-white/70 flex-shrink-0" />
+                            <h4 className="text-base font-bold text-white">{termin.label}</h4>
+                          </div>
                         </div>
 
                         <InterestForm terminId={termin.id} terminLabel={termin.label} />

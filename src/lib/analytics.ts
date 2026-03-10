@@ -85,3 +85,19 @@ export function trackViewOneDayCamp(programId: string, source: string) {
     content_category: source,
   })
 }
+
+// Registration form opened (clicked button, but hasn't submitted yet)
+// Compare with interest_submit to measure drop-off
+export function trackRegistrationFormOpen(params: {
+  programId: string
+  programTitle: string
+  termin: string
+  campType: 'oneday' | 'weekend'
+}) {
+  sendGAEvent('event', 'registration_form_open', {
+    program_id: params.programId,
+    program_title: params.programTitle,
+    termin: params.termin,
+    camp_type: params.campType,
+  })
+}
