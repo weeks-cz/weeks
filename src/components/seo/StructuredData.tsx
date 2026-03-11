@@ -40,7 +40,7 @@ export function LocalBusinessSchema() {
     image: 'https://weeks.cz/og-image.jpg',
     description: 'Víkendové IT kempy pro děti 10-15 let v Praze. 3D tisk, VR, programování a IoT. Expert instruktoři, moderní vybavení. Organizátor: DDM Praha 6.',
     url: 'https://weeks.cz',
-    telephone: '+4202353233332',
+    telephone: '+420703046440',
     email: 'info@weeks.cz',
     priceRange: 'Kč',
     address: {

@@ -48,10 +48,10 @@ export function ContactSection() {
                 <div>
                   <h3 className="font-semibold text-gray-900 mb-1">Telefon</h3>
                   <a
-                    href="tel:+4202353233332"
+                    href="tel:+420703046440"
                     className="text-primary-600 hover:underline"
                   >
-                    +420 235 323 333-2
+                    +420 703 046 440
                   </a>
                   <p className="text-sm text-gray-500 mt-1">
                     Po-Pá 9:00-17:00
