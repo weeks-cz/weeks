@@ -53,6 +53,25 @@ export async function POST(request: Request) {
       console.log({ name, email, message, timestamp: new Date().toISOString() })
     }
 
+    // Fire-and-forget: send to Weeks Hub
+    const hubUrl = process.env.WEEKS_HUB_API_URL
+    const hubKey = process.env.WEEKS_HUB_API_KEY
+    if (hubUrl && hubKey) {
+      fetch(`${hubUrl}/api/form-submissions`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': hubKey,
+        },
+        body: JSON.stringify({
+          form_type: 'contact',
+          email,
+          sender_name: name,
+          message,
+        }),
+      }).catch((err) => console.error('Weeks Hub sync error:', err))
+    }
+
     return NextResponse.json({
       success: true,
       message: 'Zpráva byla úspěšně odeslána',
