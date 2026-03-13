@@ -368,7 +368,7 @@ export default function ProgramPage() {
                             </Link>
                           ) : (
                             <Link
-                              href={`/?program=${program.id}#prihlasit`}
+                              href="/#prihlasit"
                               className="btn-primary inline-flex items-center"
                               onClick={() => trackProgramInterest(program.id, program.title)}
                             >
