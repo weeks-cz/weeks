@@ -116,25 +116,29 @@ export async function POST(request: NextRequest) {
 
     const data = await formspreeResponse.json()
 
-    // Fire-and-forget: send to Weeks Hub
+    // Sync to Weeks Hub (must be awaited — serverless kills pending fetches after response)
     const hubUrl = process.env.WEEKS_HUB_API_URL
     const hubKey = process.env.WEEKS_HUB_API_KEY
     if (hubUrl && hubKey) {
-      fetch(`${hubUrl}/api/form-submissions`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': hubKey,
-        },
-        body: JSON.stringify({
-          form_type: 'waitlist',
-          email,
-          child_name: childName || null,
-          child_age: childAge || null,
-          program,
-          gdpr_consent: gdprConsent,
-        }),
-      }).catch((err) => console.error('Weeks Hub sync error:', err))
+      try {
+        await fetch(`${hubUrl}/api/form-submissions`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': hubKey,
+          },
+          body: JSON.stringify({
+            form_type: 'waitlist',
+            email,
+            child_name: childName || null,
+            child_age: childAge || null,
+            program,
+            gdpr_consent: gdprConsent,
+          }),
+        })
+      } catch (err) {
+        console.error('Weeks Hub sync error:', err)
+      }
     }
 
     return NextResponse.json(
