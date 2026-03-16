@@ -1,7 +1,5 @@
 // DDM camp IDs and term metadata
 export const DDM_TERMS: Record<string, { termNumber: number; dates: string; location: string }> = {
-  '734': { termNumber: 1, dates: '7.–8. března', location: 'HWLab Praha' },
-  '735': { termNumber: 2, dates: '14.–15. března', location: 'HWLab Praha' },
   '736': { termNumber: 3, dates: '28.–29. března', location: 'DDM Praha 6 – Bílá hora' },
 }
 

@@ -17,7 +17,7 @@ const mainCamps = [
     badge: 'Víkendový',
     href: '/tabor-chytrych-technologii',
     price: '2 990 Kč',
-    nextDates: ['14.–15. března', '28.–29. března'],
+    nextDates: ['28.–29. března'],
   },
   {
     id: '3d-tisk',

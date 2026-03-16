@@ -12,17 +12,6 @@ import { trackRegistrationClick, trackInterestSubmit } from '@/lib/analytics'
 
 const terminy = [
   {
-    id: 2,
-    ddmId: '735',
-    dates: '14. – 15. března 2026',
-    day1: 'Sobota 14. 3.',
-    day2: 'Neděle 15. 3.',
-    location: 'HWLab Praha',
-    locationDetail: 'Kongresové centrum Praha, 5. května 11, Praha 4',
-    defaultSpots: 15,
-    registrationUrl: 'https://www.ddmp6.cz/tabory/?id=735#:~:text=Weeks%20-%20T%C3%A1bor%20chytr%C3%BDch%20technologi%C3%AD',
-  },
-  {
     id: 3,
     ddmId: '736',
     dates: '28. – 29. března 2026',

@@ -78,15 +78,10 @@ export function CTASection() {
               </p>
 
               <div className="space-y-2 mb-6">
-                {[
-                  '14. – 15. března',
-                  '28. – 29. března',
-                ].map((date, i) => (
-                  <div key={i} className="flex items-center gap-2 text-xs text-white/80">
-                    <div className="w-1.5 h-1.5 rounded-full bg-accent-400 flex-shrink-0" />
-                    {date}
-                  </div>
-                ))}
+                <div className="flex items-center gap-2 text-xs text-white/80">
+                  <div className="w-1.5 h-1.5 rounded-full bg-accent-400 flex-shrink-0" />
+                  28. – 29. března
+                </div>
               </div>
 
               <Link
@@ -126,16 +121,13 @@ export function CTASection() {
 
               <div className="space-y-2 mb-6">
                 {[
-                  { date: 'So 11. dubna', confirmed: true },
-                  { date: 'Ne 19. dubna', confirmed: true },
-                  { date: '+ další termíny', confirmed: false },
-                ].map((item, i) => (
+                  'So 11. dubna',
+                  'Ne 19. dubna',
+                  '+ další termíny',
+                ].map((date, i) => (
                   <div key={i} className="flex items-center gap-2 text-xs text-white/80">
-                    <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${item.confirmed ? 'bg-trust-400' : 'bg-primary-400'}`} />
-                    {item.date}
-                    {item.confirmed && (
-                      <span className="text-trust-400 text-[10px] font-medium">potvrzeno</span>
-                    )}
+                    <div className="w-1.5 h-1.5 rounded-full bg-primary-400 flex-shrink-0" />
+                    {date}
                   </div>
                 ))}
               </div>
@@ -177,16 +169,13 @@ export function CTASection() {
 
               <div className="space-y-2 mb-6">
                 {[
-                  { date: 'Ne 12. dubna', confirmed: true },
-                  { date: 'So 18. dubna', confirmed: true },
-                  { date: '+ další termíny', confirmed: false },
-                ].map((item, i) => (
+                  'Ne 12. dubna',
+                  'So 18. dubna',
+                  '+ další termíny',
+                ].map((date, i) => (
                   <div key={i} className="flex items-center gap-2 text-xs text-white/80">
-                    <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${item.confirmed ? 'bg-trust-400' : 'bg-trust-400/50'}`} />
-                    {item.date}
-                    {item.confirmed && (
-                      <span className="text-trust-400 text-[10px] font-medium">potvrzeno</span>
-                    )}
+                    <div className="w-1.5 h-1.5 rounded-full bg-trust-400 flex-shrink-0" />
+                    {date}
                   </div>
                 ))}
               </div>
