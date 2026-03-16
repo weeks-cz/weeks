@@ -63,7 +63,7 @@ const weekendCamps: CampTerm[] = [
 // One-day camps - 3D tisk
 const camps3dTisk: CampTerm[] = [
   {
-    id: '3d-11-04',
+    id: '3d-774',
     title: 'Jednodenní tábor 3D tisku',
     campType: 'oneday',
     program: '3d-tisk',
@@ -74,13 +74,13 @@ const camps3dTisk: CampTerm[] = [
     capacity: 15,
     spotsLeft: null,
     enrolledCount: null,
-    status: 'open_no_link',
-    registrationUrl: null,
+    status: 'open_with_link',
+    registrationUrl: 'https://www.ddmp6.cz/tabory/?id=774',
     price: 1490,
-    ddmId: null,
+    ddmId: '774',
   },
   {
-    id: '3d-19-04',
+    id: '3d-775',
     title: 'Jednodenní tábor 3D tisku',
     campType: 'oneday',
     program: '3d-tisk',
@@ -91,10 +91,10 @@ const camps3dTisk: CampTerm[] = [
     capacity: 15,
     spotsLeft: null,
     enrolledCount: null,
-    status: 'open_no_link',
-    registrationUrl: null,
+    status: 'open_with_link',
+    registrationUrl: 'https://www.ddmp6.cz/tabory/?id=775',
     price: 1490,
-    ddmId: null,
+    ddmId: '775',
   },
   {
     id: '3d-25-04',
@@ -152,7 +152,7 @@ const camps3dTisk: CampTerm[] = [
 // One-day camps - IoT & elektronika
 const campsIot: CampTerm[] = [
   {
-    id: 'iot-12-04',
+    id: 'iot-776',
     title: 'Jednodenní tábor IoT & elektroniky',
     campType: 'oneday',
     program: 'iot',
@@ -163,13 +163,13 @@ const campsIot: CampTerm[] = [
     capacity: 15,
     spotsLeft: null,
     enrolledCount: null,
-    status: 'open_no_link',
-    registrationUrl: null,
+    status: 'open_with_link',
+    registrationUrl: 'https://www.ddmp6.cz/tabory/?id=776',
     price: 1490,
-    ddmId: null,
+    ddmId: '776',
   },
   {
-    id: 'iot-18-04',
+    id: 'iot-773',
     title: 'Jednodenní tábor IoT & elektroniky',
     campType: 'oneday',
     program: 'iot',
@@ -180,10 +180,10 @@ const campsIot: CampTerm[] = [
     capacity: 15,
     spotsLeft: null,
     enrolledCount: null,
-    status: 'open_no_link',
-    registrationUrl: null,
+    status: 'open_with_link',
+    registrationUrl: 'https://www.ddmp6.cz/tabory/?id=773',
     price: 1490,
-    ddmId: null,
+    ddmId: '773',
   },
   {
     id: 'iot-26-04',
