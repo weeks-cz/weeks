@@ -685,17 +685,17 @@ export default function TaborChytrychTechnologiiPage() {
               className="text-center mb-12"
             >
               <h2 className="heading-2 text-white mb-4">
-                Vyberte si termín
+                Nejbližší termín
               </h2>
               <p className="text-xl text-white/90 max-w-2xl mx-auto">
-                Dva březnové víkendy, stejný program. Vyberte si ten, který vám vyhovuje.
+                Víkendový tábor v březnu. Přihlaste se přes systém DDM Praha 6.
               </p>
               <p className="text-lg text-white/70 mt-2">
                 Cena: <span className="font-bold text-white">2 990 Kč</span> za víkend (vč. obědů a materiálů)
               </p>
             </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+            <div className="max-w-md mx-auto">
               {terminy.map((termin, index) => (
                 <motion.div
                   key={termin.id}
