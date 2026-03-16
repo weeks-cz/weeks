@@ -24,16 +24,17 @@ const pripravujemeTerminy = [
 ]
 
 const dayProgram = [
-  { time: '9:00', title: 'Příchod a seznámení', description: 'Představení lektorů, pravidla bezpečnosti, co nás čeká.' },
-  { time: '9:30', title: 'Úvod do IoT', description: 'Co je Internet věcí? Ukázky chytrých zařízení, principy fungování.' },
+  { time: '8:30', title: 'Příchod dětí', description: '' },
+  { time: '9:00', title: 'Seznámení a úvod', description: 'Představení lektorů, organizační info a úvod do programu.' },
+  { time: '9:30', title: 'Úvod do IoT', description: 'Co je to IoT a k čemu slouží. Seznámení s Arduinem.' },
   { time: '10:30', title: 'Přestávka', description: 'Svačina a pití.' },
-  { time: '10:45', title: 'Micro:bit/Arduino a senzory', description: 'Seznámení s Micro:bitem a Arduinem, propojení senzorů, první program.' },
+  { time: '10:45', title: 'Arduino I', description: 'Seznámení s Arduinem, první Arduino projekt.' },
   { time: '12:00', title: 'Oběd', description: 'Zajištěný oběd pro všechny účastníky.' },
-  { time: '12:45', title: 'Vlastní IoT projekt', description: 'Návrh a stavba vlastního chytrého zařízení – meteostanice, alarm, hra.' },
-  { time: '14:00', title: 'Přestávka', description: 'Svačina, odpočinek, volná zábava.' },
-  { time: '14:15', title: 'Pokročilé projekty', description: 'Rozšíření projektů, propojení více senzorů, displeje a LED.' },
-  { time: '16:00', title: 'Prezentace a závěr', description: 'Každý představí svůj projekt. Tipy, co dál.' },
-  { time: '17:00', title: 'Odchod', description: 'Děti si odnáší zkušenosti a know-how pro vlastní projekty doma.' },
+  { time: '13:00', title: 'Poobědová pauza', description: 'Venkovní aktivita (v případě špatného počasí organizovaný program uvnitř).' },
+  { time: '14:00', title: 'Arduino II', description: 'Pokračování s Arduino projekty.' },
+  { time: '15:00', title: 'Přestávka', description: 'Odpolední pauza.' },
+  { time: '15:15', title: 'IoT zařízení', description: 'Výroba chytrého zařízení, které si děti odnesou domů.' },
+  { time: '16:30', title: 'Postupný odchod', description: 'Děti si odnáší zkušenosti a know-how. Prostor pro dotazy rodičů.' },
 ]
 
 const campFaqs = [
@@ -426,7 +427,7 @@ export default function TaborIoTPage() {
                 Harmonogram <span className="bg-gradient-to-r from-trust-600 to-trust-400 bg-clip-text text-transparent">dne</span>
               </h2>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                8 hodin plných bastlení a objevování, od 9:00 do 17:00.
+                Příchod od 8:30, program 9:00–16:30. Střídáme bastlení, přestávky i venkovní aktivity.
               </p>
             </motion.div>
 
@@ -499,7 +500,7 @@ export default function TaborIoTPage() {
                   {
                     icon: Clock,
                     title: 'Čas',
-                    text: 'Od 9:00 do 17:00 (sobota nebo neděle dle termínu). Příchod od 8:45, vyzvednutí do 17:15. Celkem 8 hodin programu.',
+                    text: 'Sobota nebo neděle dle termínu. Příchod od 8:30, program 9:00–16:30, odchod do 17:00.',
                   },
                 ].map((info, i) => (
                   <motion.div

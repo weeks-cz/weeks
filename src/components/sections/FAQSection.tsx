@@ -11,7 +11,7 @@ const faqs = [
   },
   {
     question: 'Jak vypadá typický den?',
-    answer: '9:00 - příchod a rozcvička, 9:30-11:30 - workshop 1 (např. 3D modelování), 11:30-12:00 - svačina a venkovní přestávka, 12:00-13:30 - workshop 2 (např. programování), 13:30-14:30 - oběd, 14:30-16:30 - projekt podle výběru, 16:30-17:00 - prezentace a závěr. Program střídáme, aby děti neseděly 8 hodin u počítače.',
+    answer: '8:30 - příchod dětí, 9:00 - seznámení a úvod, 9:30-10:30 - workshop (3D tisk, IoT…), 10:30 - svačina, 10:45-12:00 - praktická část, 12:00-13:00 - oběd, 13:00-14:00 - poobědová pauza s venkovní aktivitou, 14:00-15:00 - projekty, 15:00 - odpolední pauza, 15:15-16:30 - samostatná práce, 16:30 - postupný odchod. Střídáme tvoření, přestávky i venkovní aktivity.',
   },
   {
     question: 'Co má dítě mít s sebou?',

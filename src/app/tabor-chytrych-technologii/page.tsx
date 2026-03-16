@@ -25,29 +25,32 @@ const terminy = [
 ]
 
 const sobotaProgram = [
-  { time: '9:00', title: 'Příchod a seznámení', description: 'Představení lektorů, pravidla bezpečnosti, co nás čeká.' },
-  { time: '9:30', title: 'Úvod do 3D tisku', description: 'Jak funguje 3D tiskárna? Ukázka tisku, materiály, principy.' },
+  { time: '8:30', title: 'Příchod dětí', description: '' },
+  { time: '9:00', title: 'Seznámení a úvod', description: 'Představení lektorů, organizační info a úvod do programu tábora.' },
+  { time: '9:30', title: '3D tisk – teorie', description: 'Základní principy fungování tiskárny, jak najít model online a základy přípravy pro tisk.' },
+  { time: '10:00', title: '3D tisk – praxe', description: 'Praktické ovládání tiskárny, spuštění prvních tisků od začátku do konce.' },
   { time: '10:30', title: 'Přestávka', description: 'Svačina a pití.' },
-  { time: '10:45', title: 'Návrh vlastního modelu', description: 'Každý si navrhne vlastní 3D model v jednoduchém programu.' },
+  { time: '10:45', title: 'Virtuální realita', description: 'VR headsety, interaktivní výzvy a zážitky.' },
   { time: '12:00', title: 'Oběd', description: 'Zajištěný oběd pro všechny účastníky.' },
-  { time: '12:45', title: 'Spuštění tisku', description: 'Příprava modelu pro tisk, nastavení tiskárny, start tisku.' },
-  { time: '14:00', title: 'Přestávka', description: 'Svačina, odpočinek, volná zábava.' },
-  { time: '14:15', title: 'Údržba a samostatná práce', description: 'Základy údržby tiskárny, práce na dalších modelech.' },
-  { time: '16:30', title: 'Závěr prvního dne', description: 'Shrnutí, co jsme zvládli. Tisky pokračují přes noc!' },
-  { time: '17:00', title: 'Odchod', description: '' },
+  { time: '13:00', title: 'Poobědová pauza', description: 'Venkovní aktivita (v případě špatného počasí organizovaný program uvnitř).' },
+  { time: '14:00', title: 'Návrh vlastního modelu', description: 'Základy modelování v jednoduchém programu, tisk vymodelovaného objektu.' },
+  { time: '15:00', title: 'Přestávka', description: 'Odpolední pauza.' },
+  { time: '15:15', title: '3D tisk – samostatná práce', description: 'Samostatné modelování, individuální příprava tisku pro vlastní objekty.' },
+  { time: '16:30', title: 'Postupný odchod', description: 'Prostor pro dotazy rodičů.' },
 ]
 
 const nedeleProgram = [
-  { time: '9:00', title: 'Příchod a kontrola tisků', description: 'Co se vytisklo přes noc? Prohlídka hotových modelů.' },
-  { time: '9:30', title: 'IoT - Internet věcí', description: 'Úvod do Micro:bitu, propojení senzorů a programování.' },
+  { time: '8:30', title: 'Příchod dětí', description: '' },
+  { time: '9:00', title: 'Kontrola a vyjmutí tisků', description: 'Prohlídka modelů vytištěných přes noc.' },
+  { time: '9:30', title: 'Úvod do IoT', description: 'Co je to IoT a k čemu slouží. Seznámení s Arduinem.' },
   { time: '10:30', title: 'Přestávka', description: 'Svačina a pití.' },
-  { time: '10:45', title: 'IoT projekt', description: 'Vlastní projekt – naprogramování chytrého zařízení.' },
+  { time: '10:45', title: 'Arduino I', description: 'Seznámení s Arduinem, první Arduino projekt.' },
   { time: '12:00', title: 'Oběd', description: 'Zajištěný oběd pro všechny účastníky.' },
-  { time: '12:45', title: 'Virtuální realita', description: 'VR headsety, interaktivní výzvy a zážitky.' },
-  { time: '14:00', title: 'Přestávka', description: 'Svačina, odpočinek.' },
-  { time: '14:15', title: 'Dokončení projektů', description: 'Finalizace IoT projektů, post-processing 3D výtisků.' },
-  { time: '16:00', title: 'Prezentace a závěr', description: 'Každý představí svůj projekt. Doporučení, co dál.' },
-  { time: '17:00', title: 'Odchod', description: 'Děti si odnáší všechny své výtvory domů.' },
+  { time: '13:00', title: 'Poobědová pauza', description: 'Venkovní aktivita (v případě špatného počasí organizovaný program uvnitř).' },
+  { time: '14:00', title: 'Arduino II', description: 'Pokračování s Arduino projekty.' },
+  { time: '15:00', title: 'Přestávka', description: 'Odpolední pauza.' },
+  { time: '15:15', title: 'IoT zařízení', description: 'Výroba chytrého zařízení, které si děti odnesou domů.' },
+  { time: '16:30', title: 'Postupný odchod', description: 'Předání vytisknutých modelů, prostor pro dotazy rodičů.' },
 ]
 
 const campFaqs = [
@@ -538,7 +541,7 @@ export default function TaborChytrychTechnologiiPage() {
                 Harmonogram <span className="text-gradient">víkendu</span>
               </h2>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                Dva dny plné tvoření, od 9:00 do 17:00. Program střídáme, aby děti neseděly celý den u počítače.
+                Dva dny plné tvoření. Příchod od 8:30, program 9:00–16:30. Střídáme tvoření, přestávky i venkovní aktivity.
               </p>
             </motion.div>
 
@@ -647,7 +650,7 @@ export default function TaborChytrychTechnologiiPage() {
                   {
                     icon: Clock,
                     title: 'Čas',
-                    text: 'Sobota i neděle od 9:00 do 17:00. Příchod od 8:45, vyzvednutí do 17:15. Celkem 16 hodin programu.',
+                    text: 'Sobota i neděle, příchod od 8:30, program 9:00–16:30, odchod do 17:00.',
                   },
                 ].map((info, i) => (
                   <motion.div

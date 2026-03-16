@@ -25,16 +25,18 @@ const pripravujemeTerminy = [
 const printerModels = ['MK3S', 'MK4S', 'Mini+', 'CORE One', 'CORE One L', 'XL', 'SL1S']
 
 const dayProgram = [
-  { time: '9:00', title: 'Příchod a seznámení', description: 'Představení lektorů, pravidla bezpečnosti, co nás čeká.' },
-  { time: '9:30', title: 'Úvod do 3D tisku', description: 'Jak funguje 3D tiskárna? Ukázka tisku, materiály, principy.' },
+  { time: '8:30', title: 'Příchod dětí', description: '' },
+  { time: '9:00', title: 'Seznámení a úvod', description: 'Představení lektorů, organizační info a úvod do programu.' },
+  { time: '9:30', title: '3D tisk – teorie', description: 'Základní principy fungování tiskárny, jak najít model online a základy přípravy pro tisk.' },
+  { time: '10:00', title: '3D tisk – praxe', description: 'Praktické ovládání tiskárny, spuštění prvních tisků od začátku do konce.' },
   { time: '10:30', title: 'Přestávka', description: 'Svačina a pití.' },
   { time: '10:45', title: 'Návrh vlastního modelu', description: 'Každý si navrhne vlastní 3D model v jednoduchém programu.' },
   { time: '12:00', title: 'Oběd', description: 'Zajištěný oběd pro všechny účastníky.' },
-  { time: '12:45', title: 'Spuštění tisku + dokončení', description: 'Příprava modelu pro tisk, nastavení tiskárny, odstraňování podpor a kontrola kvality hotových výtisků.' },
-  { time: '14:00', title: 'Přestávka', description: 'Svačina, odpočinek, volná zábava.' },
-  { time: '14:15', title: 'Pokročilé techniky a vlastní projekty', description: 'Práce na dalších modelech, základy údržby tiskárny.' },
-  { time: '16:00', title: 'Prezentace a závěr', description: 'Každý představí svůj projekt. Tipy, co dál.' },
-  { time: '17:00', title: 'Odchod', description: 'Děti si odnáší všechny své výtvory domů.' },
+  { time: '13:00', title: 'Poobědová pauza', description: 'Venkovní aktivita (v případě špatného počasí organizovaný program uvnitř).' },
+  { time: '14:00', title: 'Spuštění tisku a dokončení', description: 'Příprava modelu pro tisk, nastavení tiskárny, odstraňování podpor a kontrola kvality.' },
+  { time: '15:00', title: 'Přestávka', description: 'Odpolední pauza.' },
+  { time: '15:15', title: 'Samostatná práce', description: 'Samostatné modelování, individuální příprava tisku pro vlastní objekty.' },
+  { time: '16:30', title: 'Postupný odchod', description: 'Děti si odnáší všechny své výtvory domů. Prostor pro dotazy rodičů.' },
 ]
 
 const campFaqs = [
@@ -444,7 +446,7 @@ export default function Tabor3DTiskPage() {
                 Harmonogram <span className="text-gradient">dne</span>
               </h2>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                8 hodin plných tvoření, od 9:00 do 17:00. Program střídáme, aby děti neseděly celý den u počítače.
+                Příchod od 8:30, program 9:00–16:30. Střídáme tvoření, přestávky i venkovní aktivity.
               </p>
             </motion.div>
 
@@ -517,7 +519,7 @@ export default function Tabor3DTiskPage() {
                   {
                     icon: Clock,
                     title: 'Čas',
-                    text: 'Od 9:00 do 17:00 (sobota nebo neděle dle termínu). Příchod od 8:45, vyzvednutí do 17:15. Celkem 8 hodin programu.',
+                    text: 'Sobota nebo neděle dle termínu. Příchod od 8:30, program 9:00–16:30, odchod do 17:00.',
                   },
                 ].map((info, i) => (
                   <motion.div
