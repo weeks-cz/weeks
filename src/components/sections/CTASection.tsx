@@ -59,12 +59,12 @@ export function CTASection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <div className="h-full bg-gradient-to-br from-primary-500/30 to-accent-500/30 backdrop-blur rounded-2xl p-6 border border-white/10 flex flex-col">
+            <div className="h-full bg-gradient-to-br from-accent-500/30 to-primary-500/30 backdrop-blur rounded-2xl p-6 border border-white/20 flex flex-col">
               <div className="flex items-center gap-2 mb-4">
-                <div className="w-10 h-10 rounded-xl bg-cta-500 flex items-center justify-center">
-                  <Sparkles className="w-5 h-5 text-gray-900" />
+                <div className="w-10 h-10 rounded-xl bg-accent-500 flex items-center justify-center">
+                  <Sparkles className="w-5 h-5 text-white" />
                 </div>
-                <span className="px-2.5 py-1 bg-cta-500/20 rounded-full text-xs font-semibold text-cta-300">
+                <span className="px-2.5 py-1 bg-accent-500/20 rounded-full text-xs font-semibold text-accent-300">
                   Víkendový
                 </span>
               </div>
@@ -83,7 +83,7 @@ export function CTASection() {
                   '28. – 29. března',
                 ].map((date, i) => (
                   <div key={i} className="flex items-center gap-2 text-xs text-white/80">
-                    <div className="w-1.5 h-1.5 rounded-full bg-cta-400 flex-shrink-0" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-accent-400 flex-shrink-0" />
                     {date}
                   </div>
                 ))}
@@ -91,7 +91,7 @@ export function CTASection() {
 
               <Link
                 href="/tabor-chytrych-technologii"
-                className="group inline-flex items-center justify-center px-6 py-3 bg-cta-500 hover:bg-cta-400 text-gray-900 font-semibold rounded-xl transition-all duration-300 hover:shadow-xl hover:shadow-cta-500/30 text-sm"
+                className="group inline-flex items-center justify-center px-6 py-3 bg-accent-500 hover:bg-accent-400 text-white font-semibold rounded-xl transition-all duration-300 hover:shadow-xl hover:shadow-accent-500/30 text-sm"
               >
                 Zobrazit termíny
                 <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -106,19 +106,13 @@ export function CTASection() {
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
           >
-            <div className="h-full bg-gradient-to-br from-primary-500/20 to-primary-400/10 backdrop-blur rounded-2xl p-6 border border-primary-400/30 flex flex-col relative overflow-hidden">
-              {/* Nově otevřeno accent line */}
-              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cta-400 to-cta-500" />
-
-              <div className="flex items-center gap-2 mb-4 flex-wrap">
+            <div className="h-full bg-gradient-to-br from-primary-500/30 to-primary-400/20 backdrop-blur rounded-2xl p-6 border border-white/20 flex flex-col">
+              <div className="flex items-center gap-2 mb-4">
                 <div className="w-10 h-10 rounded-xl bg-primary-500 flex items-center justify-center">
                   <Printer className="w-5 h-5 text-white" />
                 </div>
                 <span className="px-2.5 py-1 bg-primary-500/20 rounded-full text-xs font-semibold text-primary-300">
                   Jednodenní
-                </span>
-                <span className="px-2.5 py-1 bg-cta-500/20 rounded-full text-xs font-semibold text-cta-300 animate-pulse">
-                  Nově
                 </span>
               </div>
 
@@ -137,7 +131,7 @@ export function CTASection() {
                   { date: '+ další termíny', confirmed: false },
                 ].map((item, i) => (
                   <div key={i} className="flex items-center gap-2 text-xs text-white/80">
-                    <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${item.confirmed ? 'bg-trust-400' : 'bg-cta-400'}`} />
+                    <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${item.confirmed ? 'bg-trust-400' : 'bg-primary-400'}`} />
                     {item.date}
                     {item.confirmed && (
                       <span className="text-trust-400 text-[10px] font-medium">potvrzeno</span>
@@ -163,19 +157,13 @@ export function CTASection() {
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
           >
-            <div className="h-full bg-gradient-to-br from-trust-500/20 to-trust-400/10 backdrop-blur rounded-2xl p-6 border border-trust-400/30 flex flex-col relative overflow-hidden">
-              {/* Nově otevřeno accent line */}
-              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cta-400 to-cta-500" />
-
-              <div className="flex items-center gap-2 mb-4 flex-wrap">
+            <div className="h-full bg-gradient-to-br from-trust-500/30 to-trust-400/20 backdrop-blur rounded-2xl p-6 border border-white/20 flex flex-col">
+              <div className="flex items-center gap-2 mb-4">
                 <div className="w-10 h-10 rounded-xl bg-trust-500 flex items-center justify-center">
                   <Cpu className="w-5 h-5 text-white" />
                 </div>
                 <span className="px-2.5 py-1 bg-trust-500/20 rounded-full text-xs font-semibold text-trust-300">
                   Jednodenní
-                </span>
-                <span className="px-2.5 py-1 bg-cta-500/20 rounded-full text-xs font-semibold text-cta-300 animate-pulse">
-                  Nově
                 </span>
               </div>
 
@@ -194,7 +182,7 @@ export function CTASection() {
                   { date: '+ další termíny', confirmed: false },
                 ].map((item, i) => (
                   <div key={i} className="flex items-center gap-2 text-xs text-white/80">
-                    <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${item.confirmed ? 'bg-trust-400' : 'bg-cta-400'}`} />
+                    <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${item.confirmed ? 'bg-trust-400' : 'bg-trust-400/50'}`} />
                     {item.date}
                     {item.confirmed && (
                       <span className="text-trust-400 text-[10px] font-medium">potvrzeno</span>

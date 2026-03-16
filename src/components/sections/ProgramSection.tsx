@@ -1,27 +1,24 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Printer, Cpu, Box, Globe, Gamepad2, Code2, Sparkles, ArrowRight, Check, Calendar } from 'lucide-react'
+import { Printer, Cpu, Box, Globe, Gamepad2, Code2, Sparkles, ArrowRight, Calendar } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 
-// Tábor chytrých technologií - hero card
-const mixProgram = {
-  id: 'mix',
-  icon: Sparkles,
-  title: 'Tábor chytrých technologií',
-  subtitle: 'Víkendový tábor pro děti 10–15 let',
-  description: 'Za jeden víkend si vaše dítě vyzkouší 3D tisk, IoT programování i virtuální realitu. Odnese si vlastní výtisky, naprogramované projekty a zážitky z VR.',
-  highlights: [
-    '3D tisk, IoT a virtuální realita v jednom víkendu',
-    'Vlastní výtisky a projekty si odnese domů',
-    'Vhodné pro začátečníky i pokročilé',
-  ],
-  image: '/images/program-mix.webp',
-}
-
-// Jednodenní tábory - nově otevřeno
-const oneDayCamps = [
+// Všechny 3 hlavní tábory - rovnocenné
+const mainCamps = [
+  {
+    id: 'mix',
+    icon: Sparkles,
+    title: 'Tábor chytrých technologií',
+    description: 'Za jeden víkend si vaše dítě vyzkouší 3D tisk, IoT programování i virtuální realitu.',
+    image: '/images/program-mix.webp',
+    color: 'accent',
+    badge: 'Víkendový',
+    href: '/tabor-chytrych-technologii',
+    price: '2 990 Kč',
+    nextDates: ['14.–15. března', '28.–29. března'],
+  },
   {
     id: '3d-tisk',
     icon: Printer,
@@ -29,7 +26,7 @@ const oneDayCamps = [
     description: 'Od nápadu k hotovému výrobku. Děti navrhnou vlastní model a vytisknou si ho na profesionálních tiskárnách.',
     image: '/images/program-3dtisk.webp',
     color: 'primary',
-    badge: 'Prusa Research',
+    badge: 'Jednodenní',
     href: '/tabor-3d-tisk',
     price: '1 490 Kč',
     nextDates: ['So 11. dubna', 'Ne 19. dubna'],
@@ -41,7 +38,7 @@ const oneDayCamps = [
     description: 'Postavit si vlastní chytré zařízení? Děti propojí senzory, světýlka a displeje a naprogramují je.',
     image: '/images/program-iot.webp',
     color: 'trust',
-    badge: 'Micro:bit / Arduino',
+    badge: 'Jednodenní',
     href: '/tabor-iot',
     price: '1 490 Kč',
     nextDates: ['Ne 12. dubna', 'So 18. dubna'],
@@ -161,98 +158,9 @@ export function ProgramSection() {
           </motion.p>
         </div>
 
-        {/* MIX Hero Card */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mb-12"
-        >
-          <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-primary-600 via-accent-600 to-trust-600 p-1">
-            <div className="relative rounded-[22px] overflow-hidden bg-gradient-to-br from-primary-600 via-accent-600 to-trust-600">
-              <div className="grid grid-cols-1 lg:grid-cols-2">
-                {/* Content */}
-                <div className="p-8 lg:p-12 flex flex-col justify-center">
-                  <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/20 backdrop-blur-sm rounded-full text-sm font-semibold text-white w-fit mb-4">
-                    <Sparkles className="w-4 h-4" />
-                    {mixProgram.subtitle}
-                  </div>
-
-                  <h3 className="font-display text-3xl lg:text-4xl font-bold text-white mb-4">
-                    {mixProgram.title}
-                  </h3>
-
-                  <p className="text-lg text-white/90 mb-6">
-                    {mixProgram.description}
-                  </p>
-
-                  <ul className="space-y-3 mb-8">
-                    {mixProgram.highlights.map((highlight, i) => (
-                      <li key={i} className="flex items-start gap-3">
-                        <div className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                          <Check className="w-3 h-3 text-white" />
-                        </div>
-                        <span className="text-white/90">{highlight}</span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <div className="flex flex-col sm:flex-row gap-3">
-                    <Link
-                      href="/tabor-chytrych-technologii"
-                      className="btn-primary bg-white text-primary-600 hover:bg-gray-100 inline-flex items-center justify-center"
-                    >
-                      Zobrazit termíny
-                      <ArrowRight className="ml-2 w-5 h-5" />
-                    </Link>
-                    <Link
-                      href="/tabor-chytrych-technologii#program"
-                      className="btn-outline border-white/50 text-white hover:bg-white/10 inline-flex items-center justify-center"
-                    >
-                      Více o programu
-                    </Link>
-                  </div>
-                </div>
-
-                {/* Image */}
-                <div className="relative h-64 lg:h-auto min-h-[300px]">
-                  <Image
-                    src={mixProgram.image}
-                    alt="Lab s webem Weeks na projektoru - ukázka z tábora"
-                    fill
-                    sizes="(max-width: 1024px) 100vw, 50vw"
-                    className="object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-r from-primary-600/50 via-transparent to-transparent lg:bg-gradient-to-l" />
-                </div>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Jednodenní tábory - nově otevřeno */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-8"
-        >
-          <div className="inline-flex items-center gap-3 mb-3">
-            <h3 className="text-xl font-semibold text-gray-700">
-              Jednodenní tábory
-            </h3>
-            <span className="px-3 py-1 rounded-full bg-cta-100 text-cta-700 text-xs font-bold uppercase tracking-wide">
-              Nově otevřeno
-            </span>
-          </div>
-          <p className="text-gray-500 mt-1">
-            Jeden den, jedno téma do hloubky. Střídáme soboty a neděle.
-          </p>
-        </motion.div>
-
-        {/* One-day camps grid - 2 featured cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-          {oneDayCamps.map((camp, index) => {
+        {/* Hlavní tábory - všechny 3 rovnocenně */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          {mainCamps.map((camp, index) => {
             const colors = colorClasses[camp.color as keyof typeof colorClasses]
             return (
               <motion.div
@@ -264,27 +172,22 @@ export function ProgramSection() {
               >
                 <Link
                   href={camp.href}
-                  className="group relative bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 block"
+                  className="group relative bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 block h-full"
                 >
                   {/* Image */}
                   <div className="relative h-48 overflow-hidden">
                     <Image
                       src={camp.image}
-                      alt={`${camp.title} - jednodenní tábor`}
+                      alt={`${camp.title} - tábor pro děti`}
                       fill
-                      sizes="(max-width: 768px) 100vw, 50vw"
+                      sizes="(max-width: 768px) 100vw, 33vw"
                       className="object-cover group-hover:scale-105 transition-transform duration-700"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-gray-900/20 to-transparent" />
 
-                    {/* Badges */}
-                    <div className="absolute top-3 left-3 z-10 flex items-center gap-2">
-                      <div className="px-2.5 py-1 rounded-full bg-cta-500 text-xs font-semibold text-gray-900 shadow-lg">
-                        Jednodenní
-                      </div>
-                    </div>
-                    <div className="absolute top-3 right-3">
-                      <div className={`px-2.5 py-1 rounded-full bg-white/90 backdrop-blur-sm text-xs font-semibold ${colors.text}`}>
+                    {/* Badge */}
+                    <div className="absolute top-3 left-3 z-10">
+                      <div className={`px-2.5 py-1 rounded-full ${colors.bg} text-xs font-semibold text-white shadow-lg`}>
                         {camp.badge}
                       </div>
                     </div>
@@ -298,14 +201,14 @@ export function ProgramSection() {
                   </div>
 
                   {/* Content */}
-                  <div className="p-5">
+                  <div className="p-5 flex flex-col flex-1">
                     <div className="flex items-center justify-between mb-2">
                       <h4 className="font-display text-lg font-bold text-gray-900 group-hover:text-primary-600 transition-colors">
                         {camp.title}
                       </h4>
                       <span className="text-sm font-semibold text-gray-900">{camp.price}</span>
                     </div>
-                    <p className="text-sm text-gray-600 leading-relaxed mb-4">
+                    <p className="text-sm text-gray-600 leading-relaxed mb-4 flex-1">
                       {camp.description}
                     </p>
 

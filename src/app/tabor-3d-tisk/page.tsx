@@ -7,12 +7,12 @@ import Image from 'next/image'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { useState } from 'react'
-import { trackInterestSubmit, trackViewOneDayCamp, trackRegistrationFormOpen } from '@/lib/analytics'
+import { trackInterestSubmit, trackViewOneDayCamp, trackRegistrationFormOpen, trackRegistrationClick } from '@/lib/analytics'
 
-// Potvrzené termíny (DDM link bude doplněn)
+// Potvrzené termíny s DDM registračními linky
 const confirmedTerminy = [
-  { id: '3d-11-04', date: '11. dubna 2026', day: 'sobota', label: 'Sobota 11. dubna' },
-  { id: '3d-19-04', date: '19. dubna 2026', day: 'neděle', label: 'Neděle 19. dubna' },
+  { id: '3d-11-04', date: '11. dubna 2026', day: 'sobota', label: 'Sobota 11. dubna', registrationUrl: 'https://www.ddmp6.cz/tabory/?id=774' },
+  { id: '3d-19-04', date: '19. dubna 2026', day: 'neděle', label: 'Neděle 19. dubna', registrationUrl: 'https://www.ddmp6.cz/tabory/?id=775' },
 ]
 
 // Připravované termíny
@@ -590,14 +590,27 @@ export default function Tabor3DTiskPage() {
                           </span>
                         </div>
 
-                        <p className="text-sm text-white/70 mb-4">
-                          Termín je potvrzený. Přihlášení přes systém DDM Praha 6 bude brzy k dispozici.
-                        </p>
-                        <p className="text-xs text-white/50 mb-4">
-                          Nechte nám email a dáme vám vědět, jakmile bude registrace spuštěna.
+                        <p className="text-sm text-white/70 mb-6">
+                          9:00–17:00, HWLab Praha. Registrace přes DDM Praha 6.
                         </p>
 
-                        <InterestForm terminId={termin.id} terminLabel={termin.label} buttonLabel="Upozornit mě" />
+                        <a
+                          href={termin.registrationUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-full inline-flex items-center justify-center px-6 py-3 bg-cta-500 hover:bg-cta-400 text-gray-900 font-semibold rounded-xl transition-all duration-300 hover:shadow-xl hover:shadow-cta-500/30 text-sm"
+                          onClick={() => trackRegistrationClick({
+                            termId: termin.id,
+                            termDates: termin.date,
+                            termLocation: 'HWLab Praha',
+                            spotsAvailable: 15,
+                            outboundUrl: termin.registrationUrl,
+                            campType: 'oneday',
+                          })}
+                        >
+                          Přihlásit se
+                          <ArrowRight className="ml-2 w-4 h-4" />
+                        </a>
                       </div>
                     </motion.div>
                   ))}

@@ -133,10 +133,10 @@ const programs = [
 
 const colorClasses = {
   mix: {
-    bg: 'bg-gradient-to-br from-primary-600 via-accent-600 to-trust-600',
-    icon: 'text-white',
-    badge: 'bg-white/20 text-white',
-    gradient: 'from-primary-600 via-accent-600 to-trust-600',
+    bg: 'bg-accent-100',
+    icon: 'text-accent-600',
+    badge: 'bg-accent-100 text-accent-700',
+    gradient: 'from-accent-600 to-primary-600',
   },
   primary: {
     bg: 'bg-primary-100',
@@ -219,7 +219,6 @@ export default function ProgramPage() {
               {programs.map((program, index) => {
                 const colors = colorClasses[program.color as keyof typeof colorClasses]
                 const isEven = index % 2 === 0
-                const isMix = program.id === 'mix'
 
                 return (
                   <motion.div
@@ -231,190 +230,131 @@ export default function ProgramPage() {
                     transition={{ delay: 0.1 }}
                     className="relative scroll-mt-32"
                   >
-                    {/* MIX gets special treatment */}
-                    {isMix ? (
-                      <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-primary-600 via-accent-600 to-trust-600 p-1">
-                        <div className="relative rounded-[22px] overflow-hidden bg-gradient-to-br from-primary-600 via-accent-600 to-trust-600">
-                          <div className="grid grid-cols-1 lg:grid-cols-2">
-                            {/* Content */}
-                            <div className="p-8 lg:p-12">
-                              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/20 backdrop-blur-sm rounded-full text-sm font-semibold text-white w-fit mb-4">
-                                <Sparkles className="w-4 h-4" />
-                                {program.subtitle}
-                              </div>
+                    <div className={`grid grid-cols-1 lg:grid-cols-2 gap-12 items-start ${isEven ? '' : 'lg:grid-flow-dense'}`}>
+                      {/* Content */}
+                      <div className={isEven ? '' : 'lg:col-start-2'}>
+                        <div className="flex items-center gap-4 mb-6">
+                          <div className={`inline-flex items-center justify-center w-12 h-12 ${colors.bg} rounded-xl`}>
+                            <program.icon className={`w-6 h-6 ${colors.icon}`} />
+                          </div>
+                          <div className={`inline-flex items-center px-3 py-1 ${colors.badge} rounded-full text-sm font-medium`}>
+                            {program.subtitle}
+                          </div>
+                        </div>
 
-                              <h2 className="font-display text-3xl lg:text-4xl font-bold text-white mb-4">
-                                {program.title}
-                              </h2>
+                        <h2 className="heading-2 text-gray-900 mb-4">
+                          {program.title}
+                        </h2>
 
-                              <p className="text-lg text-white/90 mb-4">
-                                {program.description}
-                              </p>
+                        <p className="text-lg text-gray-600 mb-4">
+                          {program.description}
+                        </p>
 
-                              <p className="text-white/80 mb-6">
-                                {program.extendedDescription}
-                              </p>
+                        <p className="text-gray-600 mb-8">
+                          {program.extendedDescription}
+                        </p>
 
-                              <div className="mb-8">
-                                <h3 className="text-xl font-semibold text-white mb-4">
-                                  Co si děti odnesou
-                                </h3>
-                                <ul className="space-y-3">
-                                  {program.learnings.map((learning, i) => (
-                                    <li key={i} className="flex items-start gap-3">
-                                      <div className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                                        <Check className="w-3 h-3 text-white" />
-                                      </div>
-                                      <span className="text-white/90">{learning}</span>
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
+                        {/* Co si odnesou */}
+                        <div className="mb-8">
+                          <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                            Co si děti odnesou
+                          </h3>
+                          <ul className="space-y-3">
+                            {program.learnings.map((learning, i) => (
+                              <li key={i} className="flex items-start gap-3">
+                                <Check className={`w-5 h-5 ${colors.icon} flex-shrink-0 mt-0.5`} />
+                                <span className="text-gray-700">{learning}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
 
-                              <div className="p-4 bg-white/10 rounded-xl mb-6">
-                                <p className="text-sm font-semibold text-white/90 mb-1">Cíl programu:</p>
-                                <p className="text-white/80 text-sm">{program.ultimateGoal}</p>
-                              </div>
+                        {/* Cíl programu */}
+                        <div className="p-4 bg-gray-50 rounded-xl border border-gray-100 mb-6">
+                          <p className="text-sm font-semibold text-gray-900 mb-1">Cíl programu:</p>
+                          <p className="text-gray-600 text-sm">{program.ultimateGoal}</p>
+                        </div>
 
-                              <Link
-                                href="/tabor-chytrych-technologii#terminy"
-                                className="btn-primary bg-white text-primary-600 hover:bg-gray-100 inline-flex items-center"
-                                onClick={() => trackViewTerms('program_mix')}
-                              >
-                                Zobrazit termíny
-                                <ArrowRight className="ml-2 w-5 h-5" />
-                              </Link>
-                            </div>
+                        {/* CTA Button */}
+                        {program.id === 'mix' ? (
+                          <Link
+                            href="/tabor-chytrych-technologii#terminy"
+                            className="btn-primary inline-flex items-center"
+                            onClick={() => trackViewTerms('program_mix')}
+                          >
+                            Zobrazit termíny
+                            <ArrowRight className="ml-2 w-5 h-5" />
+                          </Link>
+                        ) : program.id === '3d-tisk' ? (
+                          <Link
+                            href="/tabor-3d-tisk#terminy"
+                            className="btn-primary inline-flex items-center"
+                            onClick={() => trackProgramInterest(program.id, program.title)}
+                          >
+                            Zobrazit termíny 3D tisk
+                            <ArrowRight className="ml-2 w-5 h-5" />
+                          </Link>
+                        ) : program.id === 'iot' ? (
+                          <Link
+                            href="/tabor-iot#terminy"
+                            className="btn-primary inline-flex items-center"
+                            onClick={() => trackProgramInterest(program.id, program.title)}
+                          >
+                            Zobrazit termíny IoT
+                            <ArrowRight className="ml-2 w-5 h-5" />
+                          </Link>
+                        ) : (
+                          <Link
+                            href="/#prihlasit"
+                            className="btn-primary inline-flex items-center"
+                            onClick={() => trackProgramInterest(program.id, program.title)}
+                          >
+                            Mám zájem o program {program.title}
+                            <ArrowRight className="ml-2 w-5 h-5" />
+                          </Link>
+                        )}
+                      </div>
 
-                            {/* Image */}
-                            <div className="relative h-64 lg:h-auto min-h-[400px]">
-                              <Image
-                                src={program.image}
-                                alt={program.title}
-                                fill
-                                sizes="(max-width: 1024px) 100vw, 50vw"
-                                className="object-cover"
-                              />
-                              <div className="absolute inset-0 bg-gradient-to-r from-primary-600/50 via-transparent to-transparent lg:bg-gradient-to-l" />
-                            </div>
+                      {/* Image Card */}
+                      <div className={isEven ? '' : 'lg:col-start-1 lg:row-start-1'}>
+                        <div className="sticky top-24 rounded-2xl overflow-hidden shadow-xl">
+                          <div className="relative h-80 lg:h-96">
+                            <Image
+                              src={program.image}
+                              alt={program.title}
+                              fill
+                              sizes="(max-width: 1024px) 100vw, 50vw"
+                              className="object-cover"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-gray-900/40 to-transparent" />
+                          </div>
+                          <div className={`p-6 bg-gradient-to-br ${colors.gradient} text-white`}>
+                            {program.id === '3d-tisk' || program.id === 'iot' ? (
+                              <>
+                                <p className="font-semibold mb-2">Jednodenní tábor</p>
+                                <p className="text-sm text-white/80">
+                                  Sobota nebo neděle, 9:00–17:00. Vše potřebné zajistíme, stačí přijít s chutí tvořit.
+                                </p>
+                              </>
+                            ) : program.id === 'mix' ? (
+                              <>
+                                <p className="font-semibold mb-2">Víkendový tábor</p>
+                                <p className="text-sm text-white/80">
+                                  Sobota + neděle, 9:00–17:00. 3D tisk, IoT a VR v jednom víkendu.
+                                </p>
+                              </>
+                            ) : (
+                              <>
+                                <p className="font-semibold mb-2">Víkendový formát</p>
+                                <p className="text-sm text-white/80">
+                                  Sobota + neděle, 9:00–17:00. Vše potřebné zajistíme, stačí přijít s chutí tvořit.
+                                </p>
+                              </>
+                            )}
                           </div>
                         </div>
                       </div>
-                    ) : (
-                      /* Regular program cards */
-                      <div className={`grid grid-cols-1 lg:grid-cols-2 gap-12 items-start ${isEven ? '' : 'lg:grid-flow-dense'}`}>
-                        {/* Content */}
-                        <div className={isEven ? '' : 'lg:col-start-2'}>
-                          <div className="flex items-center gap-4 mb-6">
-                            <div className={`inline-flex items-center justify-center w-12 h-12 ${colors.bg} rounded-xl`}>
-                              <program.icon className={`w-6 h-6 ${colors.icon}`} />
-                            </div>
-                            <div className={`inline-flex items-center px-3 py-1 ${colors.badge} rounded-full text-sm font-medium`}>
-                              {program.subtitle}
-                            </div>
-                          </div>
-
-                          <h2 className="heading-2 text-gray-900 mb-4">
-                            {program.title}
-                          </h2>
-
-                          <p className="text-lg text-gray-600 mb-4">
-                            {program.description}
-                          </p>
-
-                          <p className="text-gray-600 mb-8">
-                            {program.extendedDescription}
-                          </p>
-
-                          {/* Co si odnesou */}
-                          <div className="mb-8">
-                            <h3 className="text-xl font-semibold text-gray-900 mb-4">
-                              Co si děti odnesou
-                            </h3>
-                            <ul className="space-y-3">
-                              {program.learnings.map((learning, i) => (
-                                <li key={i} className="flex items-start gap-3">
-                                  <Check className={`w-5 h-5 ${colors.icon} flex-shrink-0 mt-0.5`} />
-                                  <span className="text-gray-700">{learning}</span>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-
-                          {/* Cíl programu */}
-                          <div className="p-4 bg-gray-50 rounded-xl border border-gray-100 mb-6">
-                            <p className="text-sm font-semibold text-gray-900 mb-1">Cíl programu:</p>
-                            <p className="text-gray-600 text-sm">{program.ultimateGoal}</p>
-                          </div>
-
-                          {/* CTA Button */}
-                          {program.id === '3d-tisk' ? (
-                            <Link
-                              href="/tabor-3d-tisk#terminy"
-                              className="btn-primary inline-flex items-center"
-                              onClick={() => trackProgramInterest(program.id, program.title)}
-                            >
-                              Zobrazit termíny 3D tisk
-                              <ArrowRight className="ml-2 w-5 h-5" />
-                            </Link>
-                          ) : program.id === 'iot' ? (
-                            <Link
-                              href="/tabor-iot#terminy"
-                              className="btn-primary inline-flex items-center"
-                              onClick={() => trackProgramInterest(program.id, program.title)}
-                            >
-                              Zobrazit termíny IoT
-                              <ArrowRight className="ml-2 w-5 h-5" />
-                            </Link>
-                          ) : (
-                            <Link
-                              href="/#prihlasit"
-                              className="btn-primary inline-flex items-center"
-                              onClick={() => trackProgramInterest(program.id, program.title)}
-                            >
-                              Mám zájem o program {program.title}
-                              <ArrowRight className="ml-2 w-5 h-5" />
-                            </Link>
-                          )}
-                        </div>
-
-                        {/* Image Card */}
-                        <div className={isEven ? '' : 'lg:col-start-1 lg:row-start-1'}>
-                          <div className="sticky top-24 rounded-2xl overflow-hidden shadow-xl">
-                            <div className="relative h-80 lg:h-96">
-                              <Image
-                                src={program.image}
-                                alt={program.title}
-                                fill
-                                sizes="(max-width: 1024px) 100vw, 50vw"
-                                className="object-cover"
-                              />
-                              <div className="absolute inset-0 bg-gradient-to-t from-gray-900/40 to-transparent" />
-                            </div>
-                            <div className={`p-6 bg-gradient-to-br ${colors.gradient} text-white`}>
-                              {program.id === '3d-tisk' || program.id === 'iot' ? (
-                                <>
-                                  <p className="font-semibold mb-2 flex items-center gap-2">
-                                    Jednodenní tábor
-                                    <span className="px-2 py-0.5 rounded-full bg-white/20 text-xs font-semibold">Nově otevřeno</span>
-                                  </p>
-                                  <p className="text-sm text-white/80">
-                                    Sobota nebo neděle, 9:00 – 17:00. Vše potřebné zajistíme, stačí přijít s chutí tvořit.
-                                  </p>
-                                </>
-                              ) : (
-                                <>
-                                  <p className="font-semibold mb-2">Víkendový formát</p>
-                                  <p className="text-sm text-white/80">
-                                    Sobota + neděle, 9:00 - 17:00. Vše potřebné zajistíme, stačí přijít s chutí tvořit.
-                                  </p>
-                                </>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
+                    </div>
                   </motion.div>
                 )
               })}
