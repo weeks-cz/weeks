@@ -98,9 +98,9 @@ npm run lint         # Run ESLint
 The website features 7 camp programs in two formats:
 
 ### Weekend camp (víkendový tábor)
-- **MIX - Tábor chytrých technologií** (So+Ne, 2 990 Kč) — hero treatment, combines 3D tisk + IoT + VR
+- **MIX - Tábor chytrých technologií** (So+Ne, 2 990 Kč) — equal treatment with one-day camps, combines 3D tisk + IoT + VR
 - Page: `/tabor-chytrych-technologii` with confirmed DDM terms, live capacity
-- Spring terms: 14-15.3, 28-29.3 (term 7-8.3 removed — already passed)
+- Spring terms: 28-29.3 (terms 7-8.3 and 14-15.3 removed — already passed)
 - Summer 2026 terms: 7 weekends (Jul–Aug), multi-select interest form at `#leto`
 
 ### One-day camps (jednodenní tábory) — April–May 2026
@@ -115,18 +115,18 @@ The website features 7 camp programs in two formats:
 - **Programování** - C# programming basics
 
 ### UX Strategy
-- All three camp formats are visually balanced on homepage (CTA section shows 3 equal cards)
+- All three camp formats visually equal on homepage — same card size in ProgramSection (3-col grid) and CTASection
 - Hero + Header CTA → `/program` or `#program` (neutral, not MIX-only)
-- MIX still gets hero treatment in ProgramSection (multi-color gradient card)
-- 3D tisk & IoT cards on homepage have "Jednodenní" + "Nově" badges with pulse animation
-- ProgramSection: one-day camps in prominent 2-column layout, other specializations in 4-column grid
+- ProgramSection: all 3 camps in equal 3-column grid, other specializations in 4-column grid below
+- CTASection: 3 equal cards with unified gradient strengths, each camp uses its own color
 - SummerBanner: amber gradient banner after hero → links to `/tabor-chytrych-technologii#leto`
 - CTA buttons: "Nezávazná registrace" (replaces "Mám zájem") with 14-day notice explanation
-- Confirmed terms show "Potvrzeno" badge + email notification signup (no DDM link yet)
+- Confirmed one-day terms have DDM registration links (direct "Přihlásit se" buttons)
 - Připravujeme terms have dashed border + inline non-binding registration form
 - Other 4 specializations link to `/program#[id]` with "Mám zájem" → waitlist
 - Waitlist API supports optional `termin` field for one-day camp + summer interest tracking
 - Summer MIX terms: multi-select checkbox form (not individual cards), sends to waitlist API
+- Program page: all 7 programs use same alternating 2-col layout (MIX no longer has special hero card)
 
 ### One-day Camp Term Schedule (April–May 2026)
 
@@ -197,11 +197,11 @@ All user-facing content is in Czech. Code/docs can be in English.
 - [x] Waitlist form with program selection + optional termin field (Formspree on admin@weeks.cz)
 - [x] Contact form with Formspree
 - [x] One-day camps prominent on homepage: "Jednodenní" + "Nově" badges, gradient cards
-- [x] ProgramSection: one-day camps in 2-col prominent layout + 4-col specializations grid
+- [x] ProgramSection: all 3 camps in equal 3-col grid + 4-col specializations grid
 - [x] SummerBanner: amber gradient banner after hero → summer MIX terms
 - [x] Summer 2026 MIX interest form: multi-select checkboxes at #leto section
 - [x] "Nezávazná registrace" CTA with 14-day notice explanation (replaces "Mám zájem")
-- [x] Confirmed one-day terms (11-12.4, 18-19.4) with "Potvrzeno" badge
+- [x] Confirmed one-day terms (11-12.4, 18-19.4) with DDM registration links
 - [x] Alternating So/Ne schedule for one-day camps (April–May)
 - [x] IoT: Micro:bit + Arduino throughout (descriptions, steps, practical info)
 - [x] 3D tisk: printer models showcase (MK3S, MK4S, Mini+, CORE One, etc.)
@@ -298,7 +298,10 @@ TXT   @     google-site-verification=5epLUIbGFT0mcISr7rJZPFLcNlcAIFkQXe5cBY9nSdY
 14. **3D tisk post-processing**: Removed "broušení a barvení", replaced with "Dokončení a výsledek"
 15. **Summer MIX terms**: Multi-select checkbox form (not individual term cards)
 16. **SummerBanner**: Prominent amber banner on homepage right after hero
-17. **Confirmed terms without DDM links**: Show "Potvrzeno" badge + email notification form
+17. **Confirmed one-day terms with DDM links**: Direct "Přihlásit se" buttons to DDM registration
+18. **Visual equalization (March 16, 2026)**: MIX lost hero treatment — all 3 camps equal in ProgramSection, CTASection, and program page
+19. **Program schedules updated from MIX.docx**: 8:30 arrival, 13:00 lunch + outdoor activity, 15:00 afternoon break, 16:30 departure
+20. **One-day schedules derived from MIX**: 3D tisk = MIX Saturday minus VR/overnight prints; IoT = MIX Sunday minus overnight prints
 
 ## Notes for Future Sessions
 
@@ -308,21 +311,21 @@ TXT   @     google-site-verification=5epLUIbGFT0mcISr7rJZPFLcNlcAIFkQXe5cBY9nSdY
 - Social media accounts (FB + IG) are created
 
 ### Current term status
-- **MIX spring**: 14-15.3 and 28-29.3 confirmed with DDM registration links
+- **MIX spring**: 28-29.3 confirmed with DDM registration link (14-15.3 removed — passed)
 - **MIX summer**: 7 weekends (Jul–Aug) — non-binding interest form only
-- **One-day confirmed**: 11-12.4 and 18-19.4 — "Potvrzeno" badge, email notification form
+- **One-day confirmed**: 11-12.4 and 18-19.4 — DDM registration links active
+  - 3D tisk 11.4. → ddmp6.cz/tabory/?id=774
+  - IoT 12.4. → ddmp6.cz/tabory/?id=776
+  - IoT 18.4. → ddmp6.cz/tabory/?id=773
+  - 3D tisk 19.4. → ddmp6.cz/tabory/?id=775
 - **One-day připravujeme**: 25-26.4 through 17.5 — non-binding registration form
 
 ### When next terms are confirmed by DDM
-- Replace "Potvrzeno" badge + email form with actual DDM registration links on confirmed terms
 - Move připravujeme terms to confirmed as DDM approves them
-- Add DDM registration URLs (same pattern as MIX terms)
-
-### Small adjustments pending (user mentioned "drobnosti na upravu")
-- User will specify in next session
+- Add DDM registration URLs (same pattern as confirmed one-day terms)
 
 ### Other pending items
 - Facebook Pixel — when ready for advertising
-- Real phone number — still using placeholder
 - DDM confirmation for remaining one-day camp terms (25.4+)
 - Summer MIX terms: currently interest-only, will need DDM registration when confirmed
+- Consider listing on detske-tabory.info (free) and cesketabory.cz for visibility
