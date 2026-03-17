@@ -20,6 +20,7 @@ const pripravujemeTerminy = [
   { id: '3d-25-04', date: '25. dubna', day: 'sobota', label: 'Sobota 25. dubna' },
   { id: '3d-03-05', date: '3. května', day: 'neděle', label: 'Neděle 3. května' },
   { id: '3d-09-05', date: '9. května', day: 'sobota', label: 'Sobota 9. května' },
+  { id: '3d-16-05', date: '16. května', day: 'sobota', label: 'Sobota 16. května' },
 ]
 
 const printerModels = ['MK3S', 'MK4S', 'Mini+', 'CORE One', 'CORE One L', 'XL', 'SL1S']
