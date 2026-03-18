@@ -86,6 +86,23 @@ export function trackViewOneDayCamp(programId: string, source: string) {
   })
 }
 
+// QR code scan: fires when visitor arrives via /go/[slug] redirect (utm_medium=qr)
+export function trackQRScan(params: {
+  source: string   // utm_source (e.g. 'plakat')
+  campaign: string // utm_campaign (e.g. 'jaro2026')
+  content: string  // utm_content (e.g. 'skola1', 'ddm')
+}) {
+  sendGAEvent('event', 'qr_scan', {
+    qr_source: params.source,
+    qr_campaign: params.campaign,
+    qr_content: params.content,
+  })
+  fbqEvent('ViewContent', {
+    content_name: `qr_${params.content}`,
+    content_category: 'qr_scan',
+  })
+}
+
 // Registration form opened (clicked button, but hasn't submitted yet)
 // Compare with interest_submit to measure drop-off
 export function trackRegistrationFormOpen(params: {
