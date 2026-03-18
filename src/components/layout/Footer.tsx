@@ -47,10 +47,10 @@ export function Footer() {
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="https://www.kudyznudy.cz/App_Themes/KzN/CSS/Images/svg/new-logo.svg"
-                  width={80}
-                  height={18}
+                  width={100}
+                  height={22}
                   alt="Kudyznudy.cz – tipy na výlet"
-                  className="opacity-60 hover:opacity-100 transition-opacity"
+                  className="brightness-0 invert opacity-70 hover:opacity-100 transition-opacity"
                 />
               </a>
             </div>
