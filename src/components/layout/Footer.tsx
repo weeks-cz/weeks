@@ -30,13 +30,29 @@ export function Footer() {
               Víkendové IT kempy pro děti 10-15 let. 3D tisk, VR, IoT a programování
               v profesionálním prostředí HWLab Praha.
             </p>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 flex-wrap">
               <div className="px-3 py-1.5 bg-gray-800 rounded-lg text-xs font-medium text-gray-300">
                 DDM Praha 6
               </div>
               <div className="px-3 py-1.5 bg-gray-800 rounded-lg text-xs font-medium text-gray-300">
                 HWLab
               </div>
+              <a
+                href="https://www.kudyznudy.cz/?utm_source=kzn&utm_medium=partneri_kzn&utm_campaign=banner"
+                title="Kudyznudy.cz – tipy na výlet"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-3 py-1.5 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors flex items-center"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="https://www.kudyznudy.cz/App_Themes/KzN/CSS/Images/svg/new-logo.svg"
+                  width={80}
+                  height={18}
+                  alt="Kudyznudy.cz – tipy na výlet"
+                  className="opacity-60 hover:opacity-100 transition-opacity"
+                />
+              </a>
             </div>
           </div>
 
