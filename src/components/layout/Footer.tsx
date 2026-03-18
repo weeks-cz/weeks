@@ -44,13 +44,12 @@ export function Footer() {
                 rel="noopener noreferrer"
                 className="px-3 py-1.5 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors flex items-center"
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="https://www.kudyznudy.cz/App_Themes/KzN/CSS/Images/svg/new-logo.svg"
-                  width={100}
-                  height={22}
+                <Image
+                  src="/images/kudy-z-nudy-white.png"
+                  width={150}
+                  height={33}
                   alt="Kudyznudy.cz – tipy na výlet"
-                  className="brightness-0 invert opacity-70 hover:opacity-100 transition-opacity"
+                  className="opacity-80 hover:opacity-100 transition-opacity"
                 />
               </a>
             </div>
