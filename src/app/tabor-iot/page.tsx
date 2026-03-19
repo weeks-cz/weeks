@@ -8,6 +8,16 @@ import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { useState } from 'react'
 import { trackInterestSubmit, trackViewOneDayCamp, trackRegistrationFormOpen, trackRegistrationClick } from '@/lib/analytics'
+import { GallerySection, GalleryImage } from '@/components/sections/GallerySection'
+
+const galleryImages: GalleryImage[] = [
+  { src: '/images/gallery/iot-arduino-breadboard.jpg', alt: 'Práce s Arduino breadboardem', featured: true },
+  { src: '/images/gallery/iot-plant-sensor.jpg', alt: 'IoT senzor na květině' },
+  { src: '/images/gallery/iot-arduino-programming.jpg', alt: 'Programování Arduina', featured: true },
+  { src: '/images/gallery/iot-breadboard-detail.jpg', alt: 'Detail breadboardu s LEDkami' },
+  { src: '/images/gallery/iot-plant-sensor-2.jpg', alt: 'Chytré zavlažování květin' },
+  { src: '/images/gallery/iot-circuit-design.jpg', alt: 'Návrh IoT obvodu' },
+]
 
 // Potvrzené termíny s DDM registračními linky
 const confirmedTerminy = [
@@ -524,6 +534,14 @@ export default function TaborIoTPage() {
             </motion.div>
           </div>
         </section>
+
+        {/* Galerie */}
+        <GallerySection
+          images={galleryImages}
+          accentColor="trust"
+          title="Co si děti odnesou domů"
+          subtitle="Podívejte se na ukázky IoT projektů, které děti sestavily na našich táborech"
+        />
 
         {/* Termíny */}
         <section id="terminy" className="section-padding bg-gradient-to-br from-trust-600 to-trust-800 scroll-mt-24">

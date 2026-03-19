@@ -8,6 +8,18 @@ import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { useState } from 'react'
 import { trackInterestSubmit, trackViewOneDayCamp, trackRegistrationFormOpen, trackRegistrationClick } from '@/lib/analytics'
+import { GallerySection, GalleryImage } from '@/components/sections/GallerySection'
+
+const galleryImages: GalleryImage[] = [
+  { src: '/images/gallery/3d-prints-collection.jpg', alt: 'Kolekce výtisků z tábora', featured: true },
+  { src: '/images/gallery/3d-uv-curing.jpg', alt: 'UV vytvrzování resinových výtisků', featured: true },
+  { src: '/images/gallery/3d-dragon-hands.jpg', alt: 'Liška z 3D tiskárny' },
+  { src: '/images/gallery/3d-cat-lowpoly.jpg', alt: 'Low-poly kočka' },
+  { src: '/images/gallery/3d-dragon-desk.jpg', alt: 'Oranžová liška na stole' },
+  { src: '/images/gallery/3d-resin-figurines.jpg', alt: 'Resinové figurky' },
+  { src: '/images/gallery/3d-printer-slicer.jpg', alt: 'Práce s 3D tiskárnou a slicerem' },
+  { src: '/images/gallery/3d-printers-row.jpg', alt: 'Řada Prusa tiskáren' },
+]
 
 // Potvrzené termíny s DDM registračními linky
 const confirmedTerminy = [
@@ -544,6 +556,14 @@ export default function Tabor3DTiskPage() {
             </motion.div>
           </div>
         </section>
+
+        {/* Galerie */}
+        <GallerySection
+          images={galleryImages}
+          accentColor="primary"
+          title="Co si děti odnesou domů"
+          subtitle="Podívejte se na ukázky 3D výtisků, které děti vytvořily na našich táborech"
+        />
 
         {/* Termíny */}
         <section id="terminy" className="section-padding bg-gradient-to-br from-primary-600 to-primary-800 scroll-mt-24">

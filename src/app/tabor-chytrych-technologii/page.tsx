@@ -9,6 +9,24 @@ import { Footer } from '@/components/layout/Footer'
 import { useState, useEffect } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import { trackRegistrationClick, trackInterestSubmit } from '@/lib/analytics'
+import { GallerySection, GalleryImage } from '@/components/sections/GallerySection'
+
+const galleryImages: GalleryImage[] = [
+  { src: '/images/gallery/3d-prints-collection.jpg', alt: 'Kolekce výtisků z tábora', featured: true },
+  { src: '/images/gallery/3d-uv-curing.jpg', alt: 'UV vytvrzování resinových výtisků', featured: true },
+  { src: '/images/gallery/3d-dragon-hands.jpg', alt: 'Liška z 3D tiskárny' },
+  { src: '/images/gallery/iot-arduino-breadboard.jpg', alt: 'Práce s Arduino breadboardem' },
+  { src: '/images/gallery/3d-cat-lowpoly.jpg', alt: 'Low-poly kočka' },
+  { src: '/images/gallery/iot-plant-sensor.jpg', alt: 'IoT senzor na květině' },
+  { src: '/images/gallery/3d-dragon-desk.jpg', alt: 'Oranžová liška na stole' },
+  { src: '/images/gallery/iot-arduino-programming.jpg', alt: 'Programování Arduina' },
+  { src: '/images/gallery/3d-resin-figurines.jpg', alt: 'Resinové figurky' },
+  { src: '/images/gallery/iot-breadboard-detail.jpg', alt: 'Detail breadboardu s LEDkami' },
+  { src: '/images/gallery/3d-printer-slicer.jpg', alt: 'Práce s 3D tiskárnou a slicerem' },
+  { src: '/images/gallery/3d-printers-row.jpg', alt: 'Řada Prusa tiskáren' },
+  { src: '/images/gallery/iot-plant-sensor-2.jpg', alt: 'Chytré zavlažování květin' },
+  { src: '/images/gallery/iot-circuit-design.jpg', alt: 'Návrh IoT obvodu' },
+]
 
 const terminy = [
   {
@@ -674,6 +692,14 @@ export default function TaborChytrychTechnologiiPage() {
             </motion.div>
           </div>
         </section>
+
+        {/* Galerie */}
+        <GallerySection
+          images={galleryImages}
+          accentColor="primary"
+          title="Co si děti odnesou domů"
+          subtitle="Podívejte se na ukázky projektů, které děti vytvořily na našich táborech"
+        />
 
         {/* Termíny a registrace */}
         <section id="terminy" className="section-padding bg-gradient-to-br from-primary-600 to-primary-800 scroll-mt-24">
