@@ -1,9 +1,41 @@
 'use client'
 
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Mail, Phone, MapPin, Clock } from 'lucide-react'
+import Link from 'next/link'
+import { trackLead } from '@/lib/fbpixel'
 
 export function ContactSection() {
+  const [email, setEmail] = useState('')
+  const [gdprConsent, setGdprConsent] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSubmitted, setIsSubmitted] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const handleEmailSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+    setError(null)
+    try {
+      const response = await fetch('/api/waitlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, program: 'nevim', gdprConsent }),
+      })
+      const data = await response.json()
+      if (!response.ok) throw new Error(data.error || 'Něco se pokazilo')
+      setIsSubmitted(true)
+      setEmail('')
+      setGdprConsent(false)
+      trackLead()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Nepodařilo se odeslat email. Zkuste to prosím znovu.')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   return (
     <section id="kontakt" className="section-padding bg-white">
       <div className="section-container">
@@ -120,6 +152,71 @@ export function ContactSection() {
                   </p>
                 </a>
               </div>
+            </div>
+          </div>
+
+          {/* Email signup */}
+          <div className="mt-12 pt-8 border-t border-gray-200">
+            <div className="max-w-xl mx-auto text-center">
+              <div className="flex items-center justify-center gap-2 mb-4">
+                <Mail className="w-5 h-5 text-primary-500" />
+                <h3 className="font-semibold text-gray-900">Nechte nám email</h3>
+              </div>
+              <p className="text-gray-600 text-sm mb-6">
+                Dáme vám vědět o nových termínech a volných místech.
+              </p>
+
+              {isSubmitted ? (
+                <div className="flex items-center justify-center gap-2 py-4" role="status" aria-live="polite">
+                  <div className="w-8 h-8 bg-trust-500 rounded-full flex items-center justify-center">
+                    <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <p className="text-gray-900 font-medium">Děkujeme! O novinkách se dozvíte jako první.</p>
+                </div>
+              ) : (
+                <form onSubmit={handleEmailSubmit} className="space-y-3">
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="váš@email.cz"
+                      className="flex-1 px-4 py-3 rounded-xl border border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      required
+                    />
+                    <button
+                      type="submit"
+                      disabled={isSubmitting || !gdprConsent || !email.trim()}
+                      className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+                    >
+                      {isSubmitting ? 'Odesílám...' : 'Dát mi vědět'}
+                    </button>
+                  </div>
+                  <div className="flex items-start gap-2 justify-center">
+                    <input
+                      type="checkbox"
+                      id="contact-gdpr"
+                      checked={gdprConsent}
+                      onChange={(e) => setGdprConsent(e.target.checked)}
+                      className="mt-0.5 w-4 h-4 rounded border-gray-300 text-primary-500 focus:ring-primary-500"
+                      required
+                    />
+                    <label htmlFor="contact-gdpr" className="text-xs text-gray-500 cursor-pointer text-left">
+                      Souhlasím se zpracováním osobních údajů.{' '}
+                      <Link href="/gdpr" className="underline hover:text-primary-600">
+                        Více informací
+                      </Link>
+                    </label>
+                  </div>
+                  {error && (
+                    <div className="p-3 bg-red-50 border border-red-200 rounded-lg" role="alert">
+                      <p className="text-sm text-red-600">{error}</p>
+                    </div>
+                  )}
+                </form>
+              )}
             </div>
           </div>
         </motion.div>

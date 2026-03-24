@@ -1,10 +1,9 @@
-import { Suspense } from 'react'
 import { HeroSection } from '@/components/sections/HeroSection'
 import { SummerBanner } from '@/components/sections/SummerBanner'
 import { ProgramSection } from '@/components/sections/ProgramSection'
 import { USPSection } from '@/components/sections/USPSection'
 import { TrustSection } from '@/components/sections/TrustSection'
-import { CTASection } from '@/components/sections/CTASection'
+import { UpcomingTermsSection } from '@/components/sections/UpcomingTermsSection'
 import { FAQSection } from '@/components/sections/FAQSection'
 import { ContactSection } from '@/components/sections/ContactSection'
 import { Header } from '@/components/layout/Header'
@@ -20,9 +19,7 @@ export default function Home() {
         <ProgramSection />
         <USPSection />
         <TrustSection />
-        <Suspense fallback={null}>
-          <CTASection />
-        </Suspense>
+        <UpcomingTermsSection />
         <FAQSection />
         <ContactSection />
       </main>
