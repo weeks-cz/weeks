@@ -19,7 +19,7 @@ const QR_REDIRECTS: Record<string, { source: string; medium: string; campaign: s
     source: 'plakat',
     medium: 'qr',
     campaign: 'jaro2026',
-    content: 'skola1',
+    content: 'zs-zlicin',
   },
   'skola2': {
     source: 'plakat',

@@ -77,11 +77,11 @@ export function Header() {
             </Link>
           ))}
           <Link
-            href="/program"
+            href="/#prihlasit"
             className="ml-4 btn-primary group"
             onClick={() => trackNavCTA('desktop')}
           >
-            Vybrat tábor
+            Vybrat termín
             <ChevronRight className="ml-1 w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
           </Link>
         </div>
@@ -141,11 +141,11 @@ export function Header() {
                 className="pt-2"
               >
                 <Link
-                  href="/program"
+                  href="/#prihlasit"
                   className="btn-primary w-full text-center justify-center"
                   onClick={() => { trackNavCTA('mobile'); setMobileMenuOpen(false) }}
                 >
-                  Vybrat tábor
+                  Vybrat termín
                   <ChevronRight className="ml-1 w-4 h-4" />
                 </Link>
               </motion.div>
