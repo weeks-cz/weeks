@@ -105,11 +105,13 @@ function CampCard({ camp, index }: { camp: typeof CAMPS[number]; index: number }
 
   return (
     <motion.div
+      id={`card-${camp.id}`}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.15, duration: 0.5 }}
+      className="scroll-mt-4"
     >
-      <div className={`h-full bg-gradient-to-br ${camp.gradient} backdrop-blur rounded-2xl p-6 sm:p-8 border border-white/20 flex flex-col`}>
+      <div className={`h-full bg-gradient-to-br ${camp.gradient} backdrop-blur rounded-2xl p-5 sm:p-8 border border-white/20 flex flex-col`}>
         {/* Header */}
         <div className="flex items-center gap-3 mb-4">
           <div className={`w-12 h-12 rounded-xl ${camp.iconBg} flex items-center justify-center`}>
@@ -158,7 +160,7 @@ function CampCard({ camp, index }: { camp: typeof CAMPS[number]; index: number }
         </p>
 
         {/* Divider */}
-        <div className="border-t border-white/10 my-5" />
+        <div className="border-t border-white/10 my-4" />
 
         {/* Záchranná síť — email lead capture */}
         {isSubmitted ? (
@@ -234,24 +236,27 @@ export default function DubenPage() {
   return (
     <main className="min-h-screen bg-gradient-to-b from-gray-950 via-primary-950 to-gray-950">
       {/* Logo */}
-      <div className="pt-8 pb-4 flex justify-center">
-        <Link href="/" aria-label="Weeks — zpět na hlavní stránku">
+      <div className="pt-6 pb-2 flex justify-center">
+        <Link href="/" className="flex items-center gap-2" aria-label="Weeks — zpět na hlavní stránku">
           <Image
             src="/images/weeks-logo.png"
             alt=""
-            width={48}
-            height={48}
-            className="w-12 h-12"
+            width={40}
+            height={40}
+            className="w-10 h-10"
           />
+          <span className="text-xl font-display font-bold text-white tracking-tight">
+            Weeks
+          </span>
         </Link>
       </div>
 
       {/* Headline */}
-      <div className="text-center px-4 pt-4 pb-8 sm:pb-12">
+      <div className="text-center px-4 pt-3 pb-4 sm:pb-8">
         <motion.h1
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-3xl sm:text-4xl font-display font-bold text-white mb-3"
+          className="text-2xl sm:text-4xl font-display font-bold text-white mb-2"
         >
           IT tábory pro děti tento víkend
         </motion.h1>
@@ -259,15 +264,37 @@ export default function DubenPage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
-          className="text-white/60 text-base sm:text-lg max-w-lg mx-auto"
+          className="text-white/60 text-sm sm:text-lg max-w-lg mx-auto"
         >
           Vyberte si jednodenní tábor pro vaše dítě. Sobota 18. a neděle 19. dubna v Praze.
         </motion.p>
       </div>
 
+      {/* Quick camp switcher (mobile) — shows both options so user knows to scroll */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.15 }}
+        className="flex md:hidden justify-center gap-3 px-4 pb-4"
+      >
+        {CAMPS.map((camp) => {
+          const Icon = camp.icon
+          return (
+            <a
+              key={camp.id}
+              href={`#card-${camp.id}`}
+              className={`flex items-center gap-2 px-3 py-2 rounded-lg bg-white/10 border border-white/10 text-white/80 text-xs font-medium transition-colors hover:bg-white/20`}
+            >
+              <Icon className="w-3.5 h-3.5" />
+              {camp.title}
+            </a>
+          )
+        })}
+      </motion.div>
+
       {/* Camp cards */}
-      <div className="px-4 pb-12 max-w-3xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="px-4 pb-8 sm:pb-12 max-w-3xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           {CAMPS.map((camp, i) => (
             <CampCard key={camp.id} camp={camp} index={i} />
           ))}
