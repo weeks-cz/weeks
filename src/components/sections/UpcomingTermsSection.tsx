@@ -22,17 +22,6 @@ interface ConfirmedTerm {
 
 const confirmedTerms: ConfirmedTerm[] = [
   {
-    id: 'mix-28-29-3',
-    date: '2026-03-28',
-    dateLabel: 'So–Ne 28.–29. března',
-    camp: 'MIX – Tábor chytrých technologií',
-    campType: 'mix',
-    location: 'HWLab Praha',
-    price: '2 990 Kč',
-    href: '/tabor-chytrych-technologii',
-    registrationUrl: 'https://www.ddmp6.cz/tabory/?id=736',
-  },
-  {
     id: 'iot-18-4',
     date: '2026-04-18',
     dateLabel: 'So 18. dubna',

@@ -28,19 +28,17 @@ const galleryImages: GalleryImage[] = [
   { src: '/images/gallery/iot-circuit-design.jpg', alt: 'Návrh IoT obvodu' },
 ]
 
-const terminy = [
-  {
-    id: 3,
-    ddmId: '736',
-    dates: '28. – 29. března 2026',
-    day1: 'Sobota 28. 3.',
-    day2: 'Neděle 29. 3.',
-    location: 'DDM Praha 6 – Bílá hora',
-    locationDetail: 'U Boroviček 5, Praha 6',
-    defaultSpots: 12,
-    registrationUrl: 'https://www.ddmp6.cz/tabory/?id=736#:~:text=Weeks%20-%20T%C3%A1bor%20chytr%C3%BDch%20technologi%C3%AD',
-  },
-]
+const terminy: {
+  id: number
+  ddmId: string
+  dates: string
+  day1: string
+  day2: string
+  location: string
+  locationDetail: string
+  defaultSpots: number
+  registrationUrl: string
+}[] = []
 
 const sobotaProgram = [
   { time: '8:30', title: 'Příchod dětí', description: '' },
@@ -711,10 +709,10 @@ export default function TaborChytrychTechnologiiPage() {
               className="text-center mb-12"
             >
               <h2 className="heading-2 text-white mb-4">
-                Nejbližší termín
+                Jarní termíny proběhly
               </h2>
               <p className="text-xl text-white/90 max-w-2xl mx-auto">
-                Víkendový tábor v březnu. Přihlaste se přes systém DDM Praha 6.
+                Podívejte se na <a href="#leto" className="underline hover:text-white">letní termíny</a> níže.
               </p>
               <p className="text-lg text-white/70 mt-2">
                 Cena: <span className="font-bold text-white">2 990 Kč</span> za víkend (vč. obědů a materiálů)

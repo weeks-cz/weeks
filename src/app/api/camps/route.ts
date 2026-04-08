@@ -23,42 +23,7 @@ interface CampTerm {
 }
 
 // Weekend camps - Tábor chytrých technologií
-const weekendCamps: CampTerm[] = [
-  {
-    id: 'tech-735',
-    title: 'Tábor chytrých technologií',
-    campType: 'weekend',
-    program: 'tech',
-    startDate: '2026-03-14',
-    endDate: '2026-03-15',
-    location: 'HWLab Praha',
-    locationDetail: 'Kongresové centrum Praha, 5. května 11, Praha 4',
-    capacity: 15,
-    spotsLeft: null,
-    enrolledCount: null,
-    status: 'open_with_link',
-    registrationUrl: 'https://www.ddmp6.cz/tabory/?id=735',
-    price: 2990,
-    ddmId: '735',
-  },
-  {
-    id: 'tech-736',
-    title: 'Tábor chytrých technologií',
-    campType: 'weekend',
-    program: 'tech',
-    startDate: '2026-03-28',
-    endDate: '2026-03-29',
-    location: 'DDM Praha 6 – Bílá hora',
-    locationDetail: 'U Boroviček 5, Praha 6',
-    capacity: 12,
-    spotsLeft: null,
-    enrolledCount: null,
-    status: 'open_with_link',
-    registrationUrl: 'https://www.ddmp6.cz/tabory/?id=736',
-    price: 2990,
-    ddmId: '736',
-  },
-]
+const weekendCamps: CampTerm[] = []
 
 // One-day camps - 3D tisk
 const camps3dTisk: CampTerm[] = [
