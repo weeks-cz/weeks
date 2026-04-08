@@ -156,7 +156,7 @@ function CampCard({ camp, index }: { camp: typeof CAMPS[number]; index: number }
 
         {/* Pre-framing */}
         <p className="text-white/40 text-xs mt-3 leading-relaxed">
-          Přihlášení probíhá přes oficiální systém DDM Praha 6. Budete potřebovat rodné číslo dítěte. Celé to zabere asi 3 minuty.
+          Přihlášení probíhá přes oficiální systém DDM Praha 6. Celé to zabere asi 3 minuty.
         </p>
 
         {/* Divider */}
@@ -237,17 +237,14 @@ export default function DubenPage() {
     <main className="min-h-screen bg-gradient-to-b from-gray-950 via-primary-950 to-gray-950">
       {/* Logo */}
       <div className="pt-6 pb-2 flex justify-center">
-        <Link href="/" className="flex items-center gap-2" aria-label="Weeks — zpět na hlavní stránku">
+        <Link href="/" aria-label="Weeks — zpět na hlavní stránku">
           <Image
             src="/images/weeks-logo.png"
-            alt=""
-            width={40}
-            height={40}
-            className="w-10 h-10"
+            alt="Weeks"
+            width={120}
+            height={120}
+            className="h-14 w-auto"
           />
-          <span className="text-xl font-display font-bold text-white tracking-tight">
-            Weeks
-          </span>
         </Link>
       </div>
 
