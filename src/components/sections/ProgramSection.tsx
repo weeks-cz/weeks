@@ -29,7 +29,7 @@ const mainCamps = [
     badge: 'Jednodenní',
     href: '/tabor-3d-tisk',
     price: '1 490 Kč',
-    nextDates: ['So 11. dubna', 'Ne 19. dubna'],
+    nextDates: ['Ne 19. dubna'],
   },
   {
     id: 'iot',
@@ -41,7 +41,7 @@ const mainCamps = [
     badge: 'Jednodenní',
     href: '/tabor-iot',
     price: '1 490 Kč',
-    nextDates: ['Ne 12. dubna', 'So 18. dubna'],
+    nextDates: ['So 18. dubna'],
   },
 ]
 

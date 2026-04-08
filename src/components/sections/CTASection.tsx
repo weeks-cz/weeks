@@ -121,7 +121,6 @@ export function CTASection() {
 
               <div className="space-y-2 mb-6">
                 {[
-                  'So 11. dubna',
                   'Ne 19. dubna',
                   '+ další termíny',
                 ].map((date, i) => (
@@ -169,7 +168,6 @@ export function CTASection() {
 
               <div className="space-y-2 mb-6">
                 {[
-                  'Ne 12. dubna',
                   'So 18. dubna',
                   '+ další termíny',
                 ].map((date, i) => (
