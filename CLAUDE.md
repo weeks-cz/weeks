@@ -47,6 +47,7 @@ npm run lint         # Run ESLint
     /tabor-chytrych-technologii  # Weekend MIX camp page (spring terms + summer #leto section)
     /tabor-3d-tisk          # One-day 3D printing camp (confirmed + připravujeme terms)
     /tabor-iot              # One-day IoT + Arduino camp (confirmed + připravujeme terms)
+    /duben                  # Ad landing page for April 18-19 camps (noindex, minimal layout)
     /o-nas                  # About page (team with real names)
     /kontakt                # Contact page
     /gdpr                   # GDPR page
@@ -227,7 +228,7 @@ All user-facing content is in Czech. Code/docs can be in English.
 
 ### Pending (blocked or future)
 - [ ] Facebook Pixel - when ready for ads
-- [ ] Real phone number - using placeholder
+- [x] Real phone number: +420 703 046 440 (confirmed April 2026)
 - [ ] DDM confirmation - before marketing launch
 
 ## Environment Variables
@@ -253,12 +254,10 @@ Real team members with specialized icons:
 3. **Štěpán Jurenka** - 3D modelování & Tisk (Box icon)
 4. **Lukáš Kautský** - Grafika & Design (Palette icon)
 
-## Contact Info Update (When Ready)
+## Contact Info
 
-Phone placeholder `+420 XXX XXX XXX` needs updating in:
-- `src/app/kontakt/page.tsx`
-- `src/components/sections/ContactSection.tsx`
-- `src/components/seo/StructuredData.tsx`
+Phone: +420 703 046 440 (confirmed April 2026)
+Used in: kontakt page, ContactSection, StructuredData, /duben landing page
 
 ## DNS Configuration
 
@@ -303,6 +302,16 @@ TXT   @     google-site-verification=5epLUIbGFT0mcISr7rJZPFLcNlcAIFkQXe5cBY9nSdY
 19. **Program schedules updated from MIX.docx**: 8:30 arrival, 13:00 lunch + outdoor activity, 15:00 afternoon break, 16:30 departure
 20. **One-day schedules derived from MIX**: 3D tisk = MIX Saturday minus VR/overnight prints; IoT = MIX Sunday minus overnight prints
 
+## Key Decisions Made (April 2026)
+
+1. **Ad landing page `/duben`**: Minimal conversion page for IG ads — no Header/Footer, just logo + 2 camp cards + DDM CTAs
+2. **Landing page URL**: `/duben` — short, reusable, memorable for IG bio/ads
+3. **Pre-framing**: Text under CTA explaining DDM registration process (no mention of rodné číslo)
+4. **Záchranná síť**: Lead capture email form per camp card with GDPR checkbox
+5. **Osobní asistence**: Phone + WhatsApp section for parents stuck in DDM system
+6. **GA4 virtual pageviews**: `/ad/duben` (page load), `/registrace-duben-{campId}` (CTA click), `/lead-duben-{campId}` (email submit)
+7. **Landing page noindex**: `robots: 'noindex, nofollow'` — ad-only, not in Google
+
 ## Notes for Future Sessions
 
 - Web is fully functional and deployed at weeks.cz (staging branch merged to main)
@@ -323,6 +332,13 @@ TXT   @     google-site-verification=5epLUIbGFT0mcISr7rJZPFLcNlcAIFkQXe5cBY9nSdY
 ### When next terms are confirmed by DDM
 - Move připravujeme terms to confirmed as DDM approves them
 - Add DDM registration URLs (same pattern as confirmed one-day terms)
+
+### Ad landing pages
+- **`/duben`** — live at weeks.cz/duben, used for IG ad campaign promoting IoT 18.4 + 3D tisk 19.4
+  - Minimal layout (no nav/footer), 2 camp cards with direct DDM registration
+  - Lead capture (záchranná síť) + personal assistance (phone/WhatsApp)
+  - GA4 virtual pageviews: `/ad/duben`, `/registrace-duben-iot`, `/registrace-duben-3d-tisk`, `/lead-duben-*`
+  - Spec: `docs/superpowers/specs/2026-04-08-ad-landing-duben.md`
 
 ### Other pending items
 - Facebook Pixel — when ready for advertising
