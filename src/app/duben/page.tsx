@@ -1,12 +1,21 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Cpu, Printer, Phone, MessageCircle, ArrowRight, Mail, CheckCircle } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { sendGAEvent } from '@next/third-parties/google'
 import { trackRegistrationClick, trackInterestSubmit } from '@/lib/analytics'
 import { trackLead } from '@/lib/fbpixel'
+
+/** Send a GA4 virtual pageview — appears in Pages & screens report */
+function trackVirtualPageview(path: string) {
+  sendGAEvent('event', 'page_view', {
+    page_location: `https://weeks.cz${path}`,
+    page_title: path,
+  })
+}
 
 const CAMPS = [
   {
@@ -55,6 +64,7 @@ function CampCard({ camp, index }: { camp: typeof CAMPS[number]; index: number }
   const Icon = camp.icon
 
   const handleDDMClick = () => {
+    trackVirtualPageview(`/registrace-duben-${camp.id}`)
     trackRegistrationClick({
       termId: camp.id,
       termDates: camp.date,
@@ -89,6 +99,7 @@ function CampCard({ camp, index }: { camp: typeof CAMPS[number]; index: number }
       setEmail('')
       setGdprConsent(false)
 
+      trackVirtualPageview(`/lead-duben-${camp.id}`)
       trackInterestSubmit({
         programId: camp.id,
         programTitle: camp.title,
@@ -233,6 +244,10 @@ function CampCard({ camp, index }: { camp: typeof CAMPS[number]; index: number }
 }
 
 export default function DubenPage() {
+  useEffect(() => {
+    trackVirtualPageview('/ad/duben')
+  }, [])
+
   return (
     <main className="min-h-screen bg-gradient-to-b from-gray-950 via-primary-950 to-gray-950">
       {/* Logo */}
@@ -255,7 +270,7 @@ export default function DubenPage() {
           animate={{ opacity: 1, y: 0 }}
           className="text-2xl sm:text-4xl font-display font-bold text-white mb-2"
         >
-          IT tábory pro děti tento víkend
+          Jednodenní IT tábory pro děti
         </motion.h1>
         <motion.p
           initial={{ opacity: 0 }}
