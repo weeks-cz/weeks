@@ -102,7 +102,7 @@ export function HeroSection() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
               <div className="flex items-center gap-3 p-3 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10">
                 <div className="w-10 h-10 shrink-0 rounded-lg bg-white/10 flex items-center justify-center">
-                  <span className="text-xs font-bold text-white">DDM</span>
+                  <span className="text-xs font-bold text-white">{location.organizer.name.split(' ')[0]}</span>
                 </div>
                 <div className="min-w-0">
                   <p className="text-xs text-gray-400">Organizátor</p>

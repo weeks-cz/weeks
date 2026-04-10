@@ -115,7 +115,7 @@ export function RegistrationForm() {
         throw new Error(data.error || 'Registrace se nezdařila')
       }
 
-      router.push(data.paymentUrl)
+      router.push(`${data.paymentUrl}?location=${locationId}`)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Něco se pokazilo')
     } finally {

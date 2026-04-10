@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { CreditCard, Lock, Loader2, AlertTriangle } from 'lucide-react'
 
@@ -11,6 +11,8 @@ interface PaymentMockProps {
 
 export function PaymentMock({ registrationId }: PaymentMockProps) {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const locationId = searchParams.get('location') || ''
   const [cardNumber, setCardNumber] = useState('')
   const [expiry, setExpiry] = useState('')
   const [cvv, setCvv] = useState('')
@@ -49,7 +51,7 @@ export function PaymentMock({ registrationId }: PaymentMockProps) {
         throw new Error(data.error || 'Platba se nezdařila')
       }
 
-      router.push(data.redirectUrl)
+      router.push(locationId ? `${data.redirectUrl}?location=${locationId}` : data.redirectUrl)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Platba se nezdařila')
       setIsProcessing(false)

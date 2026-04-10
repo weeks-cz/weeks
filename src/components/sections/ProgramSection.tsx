@@ -4,6 +4,8 @@ import { motion } from 'framer-motion'
 import { Printer, Cpu, Box, Globe, Gamepad2, Code2, Sparkles, ArrowRight, Calendar } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useLocation } from '@/contexts/LocationContext'
+import { buildPath } from '@/lib/locations'
 
 // Všechny 3 hlavní tábory - rovnocenné
 const mainCamps = [
@@ -117,6 +119,7 @@ const colorClasses = {
 }
 
 export function ProgramSection() {
+  const location = useLocation()
   return (
     <section id="program" className="section-padding bg-gray-50 relative overflow-hidden">
       {/* Background Pattern */}
@@ -171,7 +174,7 @@ export function ProgramSection() {
                 transition={{ delay: index * 0.1 }}
               >
                 <Link
-                  href={camp.href}
+                  href={buildPath(location, camp.href.replace(/^\//, ''))}
                   className="group relative bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 block h-full"
                 >
                   {/* Image */}
@@ -259,7 +262,7 @@ export function ProgramSection() {
                 transition={{ delay: index * 0.05 }}
               >
                 <Link
-                  href={`/program#${program.id}`}
+                  href={buildPath(location, `program#${program.id}`)}
                   className="group relative bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 block"
                 >
                   {/* Image */}
@@ -312,7 +315,7 @@ export function ProgramSection() {
           className="mt-12 text-center"
         >
           <Link
-            href="/program"
+            href={buildPath(location, 'program')}
             className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 font-semibold group"
           >
             Zobrazit detaily všech programů

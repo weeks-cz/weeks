@@ -1,28 +1,35 @@
+'use client'
+
 import { Suspense } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { RegistrationForm } from '@/components/registration/RegistrationForm'
 import { LocationProvider } from '@/contexts/LocationContext'
-import { DEFAULT_LOCATION } from '@/lib/locations'
+import { getLocationById, DEFAULT_LOCATION } from '@/lib/locations'
 
-export const metadata = {
-  title: 'Registrace na tábor | Weeks',
-  description: 'Zaregistrujte své dítě na IT tábor Weeks.',
-  robots: 'noindex, nofollow',
-}
+function RegistraceContent() {
+  const searchParams = useSearchParams()
+  const locationId = searchParams.get('location') || ''
+  const location = locationId ? getLocationById(locationId) : DEFAULT_LOCATION
 
-export default function RegistracePage() {
   return (
-    <LocationProvider location={DEFAULT_LOCATION}>
+    <LocationProvider location={location}>
       <Header />
       <main className="min-h-screen bg-slate-50 pt-24 pb-16">
         <div className="section-container">
-          <Suspense fallback={<div className="text-center py-12 text-gray-500">Načítání formuláře...</div>}>
-            <RegistrationForm />
-          </Suspense>
+          <RegistrationForm />
         </div>
       </main>
       <Footer />
     </LocationProvider>
+  )
+}
+
+export default function RegistracePage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-slate-50 flex items-center justify-center text-gray-500">Načítání...</div>}>
+      <RegistraceContent />
+    </Suspense>
   )
 }

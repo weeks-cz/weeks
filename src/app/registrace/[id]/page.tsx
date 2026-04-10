@@ -1,19 +1,20 @@
+'use client'
+
+import { use, Suspense } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { RegistrationConfirmation } from '@/components/registration/RegistrationConfirmation'
 import { LocationProvider } from '@/contexts/LocationContext'
-import { DEFAULT_LOCATION } from '@/lib/locations'
+import { getLocationById, DEFAULT_LOCATION } from '@/lib/locations'
 
-export const metadata = {
-  title: 'Potvrzení registrace | Weeks',
-  robots: 'noindex, nofollow',
-}
-
-export default async function ConfirmationPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params
+function ConfirmationContent({ id }: { id: string }) {
+  const searchParams = useSearchParams()
+  const locationId = searchParams.get('location') || ''
+  const location = locationId ? getLocationById(locationId) : DEFAULT_LOCATION
 
   return (
-    <LocationProvider location={DEFAULT_LOCATION}>
+    <LocationProvider location={location}>
       <Header />
       <main className="min-h-screen bg-slate-50 pt-24 pb-16">
         <div className="section-container">
@@ -22,5 +23,15 @@ export default async function ConfirmationPage({ params }: { params: Promise<{ i
       </main>
       <Footer />
     </LocationProvider>
+  )
+}
+
+export default function ConfirmationPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params)
+
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-slate-50 flex items-center justify-center text-gray-500">Načítání...</div>}>
+      <ConfirmationContent id={id} />
+    </Suspense>
   )
 }
