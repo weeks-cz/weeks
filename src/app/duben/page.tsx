@@ -250,8 +250,18 @@ export default function DubenPage() {
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-gray-950 via-primary-950 to-gray-950">
+      {/* Top bar with back link */}
+      <div className="px-4 pt-4 pb-1 flex justify-end max-w-3xl mx-auto">
+        <Link
+          href="/"
+          className="text-white/30 hover:text-white/60 text-xs transition-colors"
+        >
+          ← Zpět na hlavní web
+        </Link>
+      </div>
+
       {/* Logo */}
-      <div className="pt-6 pb-2 flex justify-center">
+      <div className="pb-2 flex flex-col items-center">
         <Link href="/" aria-label="Weeks — zpět na hlavní stránku">
           <Image
             src="/images/weeks-logo.png"
@@ -260,6 +270,9 @@ export default function DubenPage() {
             height={120}
             className="h-14 w-auto"
           />
+        </Link>
+        <Link href="/" className="text-white/30 hover:text-white/50 text-xs mt-1 transition-colors">
+          Více o nás na Weeks.cz
         </Link>
       </div>
 
@@ -347,6 +360,14 @@ export default function DubenPage() {
           </p>
         </div>
       </motion.div>
+
+      {/* Credibility footer */}
+      <div className="px-4 pb-8 text-center">
+        <p className="text-white/25 text-xs">
+          Tuto zjednodušenou přihlášku pro vás připravil tým z{' '}
+          <Link href="/" className="underline hover:text-white/40 transition-colors">Weeks.cz</Link>
+        </p>
+      </div>
     </main>
   )
 }
