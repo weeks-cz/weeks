@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion'
 import { Users, ShieldCheck, Phone, Heart, MapPin, Clock } from 'lucide-react'
 import Image from 'next/image'
+import { useLocation } from '@/contexts/LocationContext'
 
 const safetyFeatures = [
   {
@@ -28,6 +29,7 @@ const safetyFeatures = [
 ]
 
 export function TrustSection() {
+  const location = useLocation()
   return (
     <section id="o-nas" className="section-padding bg-white relative overflow-hidden">
       <div className="section-container">
@@ -58,84 +60,85 @@ export function TrustSection() {
             transition={{ delay: 0.1 }}
             className="text-lg text-gray-600"
           >
-            Weeks je projekt organizovaný DDM Praha 6, který probíhá ve dvou lokalitách – HWLab Praha a DDM Praha 6.
+            Weeks je projekt organizovaný {location.organizer.name}, který probíhá {location.venues.length === 1 ? 'v lokalitě' : 've'} {location.venues.map(v => v.name).join(' a ')}.
           </motion.p>
         </div>
 
         {/* Partners Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
-          {/* DDM Praha 6 */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="group relative bg-gradient-to-br from-primary-50 to-white rounded-2xl p-8 border border-primary-100 overflow-hidden"
-          >
-            <div className="relative z-10">
-              <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary-100 rounded-full text-xs font-semibold text-primary-700 mb-4">
-                Organizátor
-              </div>
-              <div className="w-16 h-16 bg-primary-100 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <span className="text-2xl font-bold text-primary-600">DDM</span>
-              </div>
-              <h3 className="font-display text-2xl font-bold text-gray-900 mb-3">
-                DDM Praha 6
-              </h3>
-              <p className="text-gray-600 leading-relaxed mb-4">
-                Dům dětí a mládeže Praha 6 je organizátorem víkendových kempů Weeks.
-                Poskytuje osvětovou činnost již od roku 1953 a je zkušeným pořadatelem
-                kroužků, táborů a akcí pro tisíce dětí ročně.
-              </p>
-              <div className="flex items-center gap-2 text-sm text-primary-600 font-medium mb-2">
-                <Clock className="w-4 h-4" />
-                70+ let zkušeností
-              </div>
-              <div className="flex items-center gap-2 text-sm text-primary-600 font-medium">
-                <MapPin className="w-4 h-4" />
-                U Boroviček 5, Praha 6
-              </div>
-            </div>
-            {/* Decorative */}
-            <div className="absolute -right-8 -bottom-8 w-32 h-32 bg-primary-100 rounded-full opacity-50" />
-          </motion.div>
+        <div className={`grid gap-8 mb-16 ${location.venues.length === 1 ? 'grid-cols-1' : 'grid-cols-1 lg:grid-cols-2'}`}>
+          {location.venues.map((venue, index) => (
+            <motion.div
+              key={venue.name}
+              initial={{ opacity: 0, x: index === 0 ? -30 : 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className={venue.name.includes('HWLab') ?
+                'group relative rounded-2xl overflow-hidden' :
+                'group relative bg-gradient-to-br from-primary-50 to-white rounded-2xl p-8 border border-primary-100 overflow-hidden'
+              }
+            >
+              {venue.name.includes('HWLab') ? (
+                <>
+                  {/* Background Image for HWLab */}
+                  <div className="absolute inset-0">
+                    <Image
+                      src="/images/trust-hwlab.webp"
+                      alt={`${venue.fullName}`}
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                      className="object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/70 to-gray-900/40" />
+                  </div>
 
-          {/* HWLab */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="group relative rounded-2xl overflow-hidden"
-          >
-            {/* Background Image */}
-            <div className="absolute inset-0">
-              <Image
-                src="/images/trust-hwlab.webp"
-                alt="Široký záběr HWLab s 3D tiskárnami"
-                fill
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                className="object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/70 to-gray-900/40" />
-            </div>
-
-            {/* Content */}
-            <div className="relative z-10 p-8 h-full flex flex-col justify-end min-h-[320px]">
-              <div className="w-16 h-16 bg-white/10 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-6 border border-white/20">
-                <span className="text-2xl font-bold text-white">HW</span>
-              </div>
-              <h3 className="font-display text-2xl font-bold text-white mb-3">
-                HWLab Praha
-              </h3>
-              <p className="text-gray-300 leading-relaxed mb-4">
-                Moderní technologické centrum v Kongresovém centru Praha vybavené nejnovějšími nástroji
-                pro digitální výrobu a vývoj. Profesionální prostory s klimatizací a zázemím.
-              </p>
-              <div className="flex items-center gap-2 text-sm text-white/80 font-medium">
-                <MapPin className="w-4 h-4" />
-                5. května 11, Praha 4 - Nusle
-              </div>
-            </div>
-          </motion.div>
+                  {/* Content for HWLab */}
+                  <div className="relative z-10 p-8 h-full flex flex-col justify-end min-h-[320px]">
+                    <div className="w-16 h-16 bg-white/10 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-6 border border-white/20">
+                      <span className="text-2xl font-bold text-white">HW</span>
+                    </div>
+                    <h3 className="font-display text-2xl font-bold text-white mb-3">
+                      {venue.name}
+                    </h3>
+                    <p className="text-gray-300 leading-relaxed mb-4">
+                      {venue.description}
+                    </p>
+                    <div className="flex items-center gap-2 text-sm text-white/80 font-medium">
+                      <MapPin className="w-4 h-4" />
+                      {venue.address}, {venue.city}
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  {/* Content for other venues (DDM style) */}
+                  <div className="relative z-10">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary-100 rounded-full text-xs font-semibold text-primary-700 mb-4">
+                      Organizátor
+                    </div>
+                    <div className="w-16 h-16 bg-primary-100 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                      <span className="text-2xl font-bold text-primary-600">{venue.name.substring(0, 3).toUpperCase()}</span>
+                    </div>
+                    <h3 className="font-display text-2xl font-bold text-gray-900 mb-3">
+                      {venue.name}
+                    </h3>
+                    <p className="text-gray-600 leading-relaxed mb-4">
+                      {venue.description}
+                    </p>
+                    <div className="flex items-center gap-2 text-sm text-primary-600 font-medium mb-2">
+                      <Clock className="w-4 h-4" />
+                      {venue.name.includes('DDM') ? '70+ let zkušeností' : 'Moderní vybavení'}
+                    </div>
+                    <div className="flex items-center gap-2 text-sm text-primary-600 font-medium">
+                      <MapPin className="w-4 h-4" />
+                      {venue.address}, {venue.city}
+                    </div>
+                  </div>
+                  {/* Decorative */}
+                  <div className="absolute -right-8 -bottom-8 w-32 h-32 bg-primary-100 rounded-full opacity-50" />
+                </>
+              )}
+            </motion.div>
+          ))}
         </div>
 
         {/* Safety Section */}
@@ -163,7 +166,7 @@ export function TrustSection() {
                 Bezpečnost dětí je naší prioritou
               </h3>
               <p className="text-trust-100 max-w-2xl mx-auto">
-                Všichni instruktoři mají ověřené reference a prošli školením DDM Praha 6.
+                Všichni instruktoři mají ověřené reference a prošli školením {location.organizer.name}.
                 Dodržujeme přísné bezpečnostní protokoly.
               </p>
             </div>

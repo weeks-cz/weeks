@@ -5,8 +5,11 @@ import { ArrowRight, Calendar, Mail, Sparkles, Printer, Cpu } from 'lucide-react
 import Link from 'next/link'
 import { useState } from 'react'
 import { trackLead } from '@/lib/fbpixel'
+import { useLocation } from '@/contexts/LocationContext'
+import { buildPath } from '@/lib/locations'
 
 export function CTASection() {
+  const location = useLocation()
   const [email, setEmail] = useState('')
   const [gdprConsent, setGdprConsent] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -85,7 +88,7 @@ export function CTASection() {
               </div>
 
               <Link
-                href="/tabor-chytrych-technologii"
+                href={buildPath(location, 'tabor-chytrych-technologii')}
                 className="group inline-flex items-center justify-center px-6 py-3 bg-accent-500 hover:bg-accent-400 text-white font-semibold rounded-xl transition-all duration-300 hover:shadow-xl hover:shadow-accent-500/30 text-sm"
               >
                 Zobrazit termíny
@@ -132,7 +135,7 @@ export function CTASection() {
               </div>
 
               <Link
-                href="/tabor-3d-tisk"
+                href={buildPath(location, 'tabor-3d-tisk')}
                 className="group inline-flex items-center justify-center px-6 py-3 bg-primary-500 hover:bg-primary-400 text-white font-semibold rounded-xl transition-all duration-300 hover:shadow-xl hover:shadow-primary-500/30 text-sm"
               >
                 Zobrazit termíny
@@ -179,7 +182,7 @@ export function CTASection() {
               </div>
 
               <Link
-                href="/tabor-iot"
+                href={buildPath(location, 'tabor-iot')}
                 className="group inline-flex items-center justify-center px-6 py-3 bg-trust-500 hover:bg-trust-400 text-white font-semibold rounded-xl transition-all duration-300 hover:shadow-xl hover:shadow-trust-500/30 text-sm"
               >
                 Zobrazit termíny

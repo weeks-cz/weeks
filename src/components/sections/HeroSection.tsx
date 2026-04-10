@@ -5,8 +5,10 @@ import { ArrowRight, Sparkles, Play, MapPin } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { trackViewTerms } from '@/lib/analytics'
+import { useLocation } from '@/contexts/LocationContext'
 
 export function HeroSection() {
+  const location = useLocation()
   return (
     <section className="relative min-h-screen flex items-center pt-32 pb-24 overflow-hidden">
       {/* Background Image with Overlay */}
@@ -35,7 +37,7 @@ export function HeroSection() {
             className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm text-white/90 rounded-full text-sm font-medium mb-8 border border-white/20"
           >
             <Sparkles className="w-4 h-4 text-cta-400" />
-            <span>Nově v Praze!</span>
+            <span>{location.hero.badge}</span>
             <span className="w-px h-4 bg-white/30" />
             <span className="text-cta-400">Registrace otevřena</span>
           </motion.div>
@@ -61,7 +63,7 @@ export function HeroSection() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-lg md:text-xl text-gray-300 mb-10 max-w-2xl leading-relaxed"
           >
-            Víkendové i jednodenní formáty v Praze. Profesionální vybavení,
+            {location.hero.subtitle} Profesionální vybavení,
             zkušení instruktoři a projekty, které si Vaše dítě odnese domů.
             <span className="text-white font-medium"> Pro děti 10–15 let.</span>
           </motion.p>
@@ -104,7 +106,7 @@ export function HeroSection() {
                 </div>
                 <div className="min-w-0">
                   <p className="text-xs text-gray-400">Organizátor</p>
-                  <p className="text-sm font-medium text-white truncate">DDM Praha 6</p>
+                  <p className="text-sm font-medium text-white truncate">{location.organizer.name}</p>
                 </div>
               </div>
 
@@ -114,7 +116,7 @@ export function HeroSection() {
                 </div>
                 <div className="min-w-0">
                   <p className="text-xs text-gray-400">Místa konání</p>
-                  <p className="text-sm font-medium text-white truncate">Praha 4 & Praha 6</p>
+                  <p className="text-sm font-medium text-white truncate">{location.venues.map(v => v.city).join(' & ')}</p>
                 </div>
               </div>
 

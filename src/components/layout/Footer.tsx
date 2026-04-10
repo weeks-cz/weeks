@@ -1,8 +1,12 @@
+'use client'
+
 import Link from 'next/link'
 import Image from 'next/image'
 import { MapPin, Mail, Phone } from 'lucide-react'
+import { useLocation } from '@/contexts/LocationContext'
 
 export function Footer() {
+  const location = useLocation()
   return (
     <footer className="bg-gray-900 text-gray-300 relative overflow-hidden">
       {/* Background decoration */}
@@ -28,14 +32,14 @@ export function Footer() {
             </Link>
             <p className="text-gray-400 leading-relaxed mb-6">
               Víkendové IT kempy pro děti 10-15 let. 3D tisk, VR, IoT a programování
-              v profesionálním prostředí HWLab Praha.
+              v profesionálním prostředí {location.venues[0].name}.
             </p>
             <div className="flex items-center gap-3 flex-wrap">
               <div className="px-3 py-1.5 bg-gray-800 rounded-lg text-xs font-medium text-gray-300">
-                DDM Praha 6
+                {location.organizer.name}
               </div>
               <div className="px-3 py-1.5 bg-gray-800 rounded-lg text-xs font-medium text-gray-300">
-                HWLab
+                {location.venues[0].name}
               </div>
               <a
                 href="https://www.kudyznudy.cz/?utm_source=kzn&utm_medium=partneri_kzn&utm_campaign=banner"
@@ -103,27 +107,22 @@ export function Footer() {
           <div>
             <h3 className="font-display text-white font-semibold mb-5">Kontakt</h3>
             <ul className="space-y-4">
-              <li className="flex items-start gap-3">
-                <MapPin className="w-5 h-5 text-primary-500 shrink-0 mt-0.5" />
-                <span className="text-gray-400 text-sm">
-                  <span className="text-gray-300 font-medium">HWLab Praha</span><br />
-                  5. května 11, Praha 4
-                </span>
-              </li>
-              <li className="flex items-start gap-3">
-                <MapPin className="w-5 h-5 text-primary-500 shrink-0 mt-0.5" />
-                <span className="text-gray-400 text-sm">
-                  <span className="text-gray-300 font-medium">DDM Praha 6</span><br />
-                  U Boroviček 5, Praha 6
-                </span>
-              </li>
+              {location.venues.map((venue) => (
+                <li key={venue.name} className="flex items-start gap-3">
+                  <MapPin className="w-5 h-5 text-primary-500 shrink-0 mt-0.5" />
+                  <span className="text-gray-400 text-sm">
+                    <span className="text-gray-300 font-medium">{venue.name}</span><br />
+                    {venue.address}, {venue.city}
+                  </span>
+                </li>
+              ))}
               <li className="flex items-center gap-3">
                 <Mail className="w-5 h-5 text-primary-500 shrink-0" />
                 <a
-                  href="mailto:info@weeks.cz"
+                  href={`mailto:${location.contact.email}`}
                   className="text-gray-400 hover:text-white transition-colors text-sm"
                 >
-                  info@weeks.cz
+                  {location.contact.email}
                 </a>
               </li>
             </ul>
@@ -136,7 +135,7 @@ export function Footer() {
             {new Date().getFullYear()} Weeks. Všechna práva vyhrazena.
           </p>
           <p className="text-sm text-gray-400">
-            Projekt Weeks je organizován DDM Praha 6
+            Projekt Weeks je organizován {location.organizer.name}
           </p>
         </div>
       </div>

@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, ChevronRight } from 'lucide-react'
 import { trackNavCTA } from '@/lib/analytics'
+import { CitySwitcher } from '@/components/ui/CitySwitcher'
 
 const navigation = [
   { name: 'Program', href: '/program' },
@@ -76,6 +77,7 @@ export function Header() {
               }`} />
             </Link>
           ))}
+          <CitySwitcher />
           <Link
             href="/#prihlasit"
             className="ml-4 btn-primary group"
@@ -138,8 +140,11 @@ export function Header() {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: navigation.length * 0.05 }}
-                className="pt-2"
+                className="pt-2 flex flex-col gap-2"
               >
+                <div className="flex justify-center">
+                  <CitySwitcher />
+                </div>
                 <Link
                   href="/#prihlasit"
                   className="btn-primary w-full text-center justify-center"

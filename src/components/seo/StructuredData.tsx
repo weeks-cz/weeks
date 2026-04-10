@@ -1,4 +1,9 @@
-export function OrganizationSchema() {
+import { type Location, DEFAULT_LOCATION } from '@/lib/locations'
+
+export function OrganizationSchema({ location }: { location?: Location }) {
+  const loc = location || DEFAULT_LOCATION
+  const primaryVenue = loc.venues[0]
+
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
@@ -7,19 +12,19 @@ export function OrganizationSchema() {
     url: 'https://weeks.cz',
     logo: 'https://weeks.cz/images/weeks-logo.png',
     description: 'Víkendové IT kempy pro děti 10-15 let v Praze. 3D tisk, VR, programování a IoT.',
-    email: 'info@weeks.cz',
+    email: loc.contact.email,
     address: {
       '@type': 'PostalAddress',
-      streetAddress: '5. května 11',
-      addressLocality: 'Praha 4 - Nusle',
-      postalCode: '140 00',
-      addressRegion: 'Praha',
+      streetAddress: primaryVenue.address,
+      addressLocality: primaryVenue.city,
+      postalCode: primaryVenue.postalCode,
+      addressRegion: loc.name,
       addressCountry: 'CZ',
     },
     parentOrganization: {
       '@type': 'Organization',
-      name: 'Dům dětí a mládeže Praha 6',
-      alternateName: 'DDM Praha 6',
+      name: loc.organizer.fullName,
+      alternateName: loc.organizer.name,
     },
   }
 
@@ -31,30 +36,33 @@ export function OrganizationSchema() {
   )
 }
 
-export function LocalBusinessSchema() {
+export function LocalBusinessSchema({ location }: { location?: Location }) {
+  const loc = location || DEFAULT_LOCATION
+  const primaryVenue = loc.venues[0]
+
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
     '@id': 'https://weeks.cz/#localbusiness',
     name: 'Weeks - Víkendové IT kempy pro děti',
     image: 'https://weeks.cz/og-image.jpg',
-    description: 'Víkendové IT kempy pro děti 10-15 let v Praze. 3D tisk, VR, programování a IoT. Expert instruktoři, moderní vybavení. Organizátor: DDM Praha 6.',
+    description: `Víkendové IT kempy pro děti 10-15 let v ${loc.name}. 3D tisk, VR, programování a IoT. Expert instruktoři, moderní vybavení. Organizátor: ${loc.organizer.name}.`,
     url: 'https://weeks.cz',
-    telephone: '+420703046440',
-    email: 'info@weeks.cz',
+    telephone: loc.contact.phone,
+    email: loc.contact.email,
     priceRange: 'Kč',
     address: {
       '@type': 'PostalAddress',
-      streetAddress: '5. května 11',
-      addressLocality: 'Praha 4 - Nusle',
-      addressRegion: 'Praha',
-      postalCode: '140 00',
+      streetAddress: primaryVenue.address,
+      addressLocality: primaryVenue.city,
+      addressRegion: loc.name,
+      postalCode: primaryVenue.postalCode,
       addressCountry: 'CZ',
     },
     geo: {
       '@type': 'GeoCoordinates',
-      latitude: '50.0621',
-      longitude: '14.4285',
+      latitude: String(primaryVenue.geo.lat),
+      longitude: String(primaryVenue.geo.lng),
     },
     openingHoursSpecification: [
       {
@@ -66,7 +74,7 @@ export function LocalBusinessSchema() {
     ],
     areaServed: {
       '@type': 'City',
-      name: 'Praha',
+      name: loc.name,
       '@id': 'https://www.wikidata.org/wiki/Q1085',
     },
     serviceType: ['IT kempy pro děti', 'programování pro děti', '3D tisk pro děti', 'VR kempy pro děti', 'robotika pro děti'],
@@ -80,57 +88,40 @@ export function LocalBusinessSchema() {
   )
 }
 
-export function EventSchema() {
+export function EventSchema({ location }: { location?: Location }) {
+  const loc = location || DEFAULT_LOCATION
+
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'Event',
     '@id': 'https://weeks.cz/#event',
     name: 'Tábor chytrých technologií - Weeks',
-    description: 'Víkendové IT kempy zaměřené na 3D tisk, virtuální realitu, programování a IoT pro děti ve věku 10-15 let v Praze.',
+    description: `Víkendové IT kempy zaměřené na 3D tisk, virtuální realitu, programování a IoT pro děti ve věku 10-15 let v ${loc.name}.`,
     image: 'https://weeks.cz/og-image.jpg',
     startDate: '2026-03-14',
     endDate: '2026-03-29',
     eventStatus: 'https://schema.org/EventScheduled',
     eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
-    location: [
-      {
-        '@type': 'Place',
-        name: 'HWLab Praha – Kongresové centrum Praha',
-        address: {
-          '@type': 'PostalAddress',
-          streetAddress: '5. května 11',
-          addressLocality: 'Praha 4 - Nusle',
-          addressRegion: 'Praha',
-          postalCode: '140 00',
-          addressCountry: 'CZ',
-        },
-        geo: {
-          '@type': 'GeoCoordinates',
-          latitude: '50.0621',
-          longitude: '14.4285',
-        },
+    location: loc.venues.map((venue) => ({
+      '@type': 'Place',
+      name: venue.fullName,
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: venue.address,
+        addressLocality: venue.city,
+        addressRegion: loc.name,
+        postalCode: venue.postalCode,
+        addressCountry: 'CZ',
       },
-      {
-        '@type': 'Place',
-        name: 'DDM Praha 6 – Bílá hora',
-        address: {
-          '@type': 'PostalAddress',
-          streetAddress: 'U Boroviček 5',
-          addressLocality: 'Praha 6',
-          addressRegion: 'Praha',
-          postalCode: '163 00',
-          addressCountry: 'CZ',
-        },
-        geo: {
-          '@type': 'GeoCoordinates',
-          latitude: '50.0830',
-          longitude: '14.3350',
-        },
+      geo: {
+        '@type': 'GeoCoordinates',
+        latitude: String(venue.geo.lat),
+        longitude: String(venue.geo.lng),
       },
-    ],
+    })),
     organizer: {
       '@type': 'Organization',
-      name: 'DDM Praha 6',
+      name: loc.organizer.name,
       url: 'https://weeks.cz',
     },
     performer: {

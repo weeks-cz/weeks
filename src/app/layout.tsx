@@ -24,8 +24,8 @@ const outfit = Outfit({
 })
 
 const siteUrl = 'https://weeks.cz'
-const siteTitle = 'Weeks - Víkendové IT kempy pro děti | Praha'
-const siteDescription = 'Víkendové IT kempy pro děti 10-15 let v Praze. 3D tisk, VR, programování, robotika a IoT. Každou sobotu a neděli. Expert instruktoři, moderní vybavení HWLab. Organizátor: DDM Praha 6.'
+const siteTitle = 'Weeks - IT tábory pro děti'
+const siteDescription = 'IT tábory pro děti 10-15 let. 3D tisk, VR, programování, IoT a elektronika. Víkendové i jednodenní formáty v Praze a Karlových Varech.'
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -41,8 +41,8 @@ export const metadata: Metadata = {
   },
   description: siteDescription,
   authors: [{ name: 'Weeks Team', url: siteUrl }],
-  creator: 'DDM Praha 6',
-  publisher: 'DDM Praha 6',
+  creator: 'Weeks',
+  publisher: 'Weeks',
   alternates: {
     canonical: siteUrl,
   },
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
         url: `${siteUrl}/og-image.jpg`,
         width: 1200,
         height: 630,
-        alt: 'Weeks - Víkendové IT kempy pro děti v Praze',
+        alt: 'Weeks - IT tábory pro děti',
       },
     ],
   },

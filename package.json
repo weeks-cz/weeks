@@ -13,6 +13,7 @@
     "@sanity/client": "^7.13.2",
     "@sanity/image-url": "^2.0.2",
     "@sanity/vision": "^4.21.1",
+    "@supabase/supabase-js": "^2.103.0",
     "@upstash/redis": "^1.37.0",
     "clsx": "^2.1.0",
     "framer-motion": "^11.0.0",
@@ -22,7 +23,8 @@
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "sanity": "^4.21.1",
-    "tailwind-merge": "^2.5.0"
+    "tailwind-merge": "^2.5.0",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

@@ -3,8 +3,9 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronDown } from 'lucide-react'
+import { useLocation } from '@/contexts/LocationContext'
 
-const faqs = [
+const baseFaqs = [
   {
     question: 'Je kemp vhodný pro úplné začátečníky?',
     answer: 'Ano. Program přizpůsobujeme úrovni každého dítěte. Začátečníci začínají s asistovanými projekty a postupně získávají samostatnost. Pokročilí dostanou složitější výzvy. Není potřeba žádná předchozí zkušenost s technologiemi.',
@@ -36,6 +37,16 @@ const faqs = [
   {
     question: 'Co když se dítěti kemp nebude líbit?',
     answer: 'Pokud dítě první den rozhodne, že to není pro něj, vrátíme 50% ceny. Naším cílem je, aby se děti bavily a učily se zároveň - pokud to nefunguje, nechceme nikoho nutit.',
+  },
+  {
+    type: 'location',
+    question: 'Kde jsou kempy?',
+    answerKey: 'locationAnswer',
+  },
+  {
+    type: 'organizer',
+    question: 'Kdo organizuje kempy?',
+    answerKey: 'organizerAnswer',
   },
 ]
 
@@ -79,6 +90,24 @@ function FAQItem({ question, answer, index }: { question: string; answer: string
 }
 
 export function FAQSection() {
+  const location = useLocation()
+
+  const faqs = baseFaqs.map((faq) => {
+    if (faq.type === 'location') {
+      return {
+        question: faq.question,
+        answer: location.faq.locationAnswer,
+      }
+    }
+    if (faq.type === 'organizer') {
+      return {
+        question: faq.question,
+        answer: location.faq.organizerAnswer,
+      }
+    }
+    return faq
+  })
+
   return (
     <section id="faq" className="section-padding bg-gray-50">
       <div className="section-container">
@@ -97,7 +126,7 @@ export function FAQSection() {
 
           <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm">
             {faqs.map((faq, index) => (
-              <FAQItem key={faq.question} {...faq} index={index} />
+              <FAQItem key={faq.question} question={faq.question} answer={faq.answer || ''} index={index} />
             ))}
           </div>
 
