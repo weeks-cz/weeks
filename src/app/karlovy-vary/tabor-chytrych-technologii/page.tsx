@@ -3,15 +3,55 @@
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { useLocation } from '@/contexts/LocationContext'
-import { motion } from 'framer-motion'
-import { Sparkles, Clock, Users, MapPin, Calendar, ArrowRight } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Sparkles, Clock, Users, MapPin, Calendar, ArrowRight, Utensils, Laptop, Cpu, Printer, ChevronDown } from 'lucide-react'
 import Link from 'next/link'
+import { useState } from 'react'
+
+const sobotaProgram = [
+  { time: '8:30', title: 'Příchod dětí', description: '' },
+  { time: '9:00', title: 'Seznámení a úvod', description: 'Představení lektorů, organizační info a úvod do programu tábora.' },
+  { time: '9:30', title: '3D tisk – teorie', description: 'Základní principy fungování tiskárny, jak najít model online a základy přípravy pro tisk.' },
+  { time: '10:00', title: '3D tisk – praxe', description: 'Praktické ovládání tiskárny, spuštění prvních tisků od začátku do konce.' },
+  { time: '10:30', title: 'Přestávka', description: 'Svačina a pití.' },
+  { time: '10:45', title: 'Virtuální realita', description: 'VR headsety, interaktivní výzvy a zážitky.' },
+  { time: '12:00', title: 'Oběd', description: 'Zajištěný oběd pro všechny účastníky.' },
+  { time: '13:00', title: 'Poobědová pauza', description: 'Venkovní aktivita (v případě špatného počasí organizovaný program uvnitř).' },
+  { time: '14:00', title: 'Návrh vlastního modelu', description: 'Základy modelování v jednoduchém programu, tisk vymodelovaného objektu.' },
+  { time: '15:00', title: 'Přestávka', description: 'Odpolední pauza.' },
+  { time: '15:15', title: '3D tisk – samostatná práce', description: 'Samostatné modelování, individuální příprava tisku pro vlastní objekty.' },
+  { time: '16:30', title: 'Postupný odchod', description: 'Prostor pro dotazy rodičů.' },
+]
+
+const nedeleProgram = [
+  { time: '8:30', title: 'Příchod dětí', description: '' },
+  { time: '9:00', title: 'Kontrola a vyjmutí tisků', description: 'Prohlídka modelů vytištěných přes noc.' },
+  { time: '9:30', title: 'Úvod do IoT', description: 'Co je to IoT a k čemu slouží. Seznámení s Arduinem.' },
+  { time: '10:30', title: 'Přestávka', description: 'Svačina a pití.' },
+  { time: '10:45', title: 'Arduino I', description: 'Seznámení s Arduinem, první Arduino projekt.' },
+  { time: '12:00', title: 'Oběd', description: 'Zajištěný oběd pro všechny účastníky.' },
+  { time: '13:00', title: 'Poobědová pauza', description: 'Venkovní aktivita (v případě špatného počasí organizovaný program uvnitř).' },
+  { time: '14:00', title: 'Arduino II', description: 'Pokračování s Arduino projekty.' },
+  { time: '15:00', title: 'Přestávka', description: 'Odpolední pauza.' },
+  { time: '15:15', title: 'IoT zařízení', description: 'Výroba chytrého zařízení, které si děti odnesou domů.' },
+  { time: '16:30', title: 'Postupný odchod', description: 'Předání vytisknutých modelů, prostor pro dotazy rodičů.' },
+]
+
+const campFaqs = [
+  { question: 'Co má dítě mít s sebou?', answer: 'Jen dobrou náladu a svačinu na dopoledne a odpoledne. Oběd zajišťujeme my. Všechno technické vybavení, nástroje i materiály jsou na místě.' },
+  { question: 'Musí dítě přijít oba dny?', answer: 'Ano, víkendový tábor je koncipován jako celek sobota + neděle, protože projekty na sebe navazují (např. 3D tisky se tisknou přes noc). Jednotlivé dny neprodáváme.' },
+  { question: 'Je zajištěn oběd pro děti s alergiemi?', answer: 'Ano, při registraci se ptáme na stravovací omezení a alergie. Spolupracujeme s dodavatelem, který dokáže připravit bezlepkové, vegetariánské i jiné speciální varianty.' },
+  { question: 'Je potřeba nějaká předchozí zkušenost?', answer: 'Ne, žádné předchozí zkušenosti nejsou potřeba. Program přizpůsobujeme úrovni každého dítěte. Začátečníci začínají s asistovanými projekty, pokročilí dostanou složitější výzvy.' },
+  { question: 'Kolik stojí víkendový tábor?', answer: 'Cena je 2 990 Kč za celý víkend (sobota + neděle). Zahrnuje veškeré materiály, obědy oba dny a všechny vytvořené projekty si děti odnášejí domů.' },
+]
 
 export default function KVMix() {
   const location = useLocation()
   const program = location.programs.find(p => p.id === 'mix')!
   const terms = location.terms.filter(t => t.program === 'mix')
   const venue = location.venues[0]
+  const [activeDay, setActiveDay] = useState<'sobota' | 'neděle'>('sobota')
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null)
 
   return (
     <>
@@ -85,8 +125,138 @@ export default function KVMix() {
           </div>
         </section>
 
+        {/* Practical Info Cards */}
+        <section className="section-padding bg-accent-50">
+          <div className="section-container">
+            <h2 className="heading-2 text-center mb-10">Na co se máte těšit</h2>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="bg-white rounded-xl p-6 border border-accent-200"
+              >
+                <div className="w-10 h-10 rounded-lg bg-accent-100 flex items-center justify-center mb-4">
+                  <Utensils className="w-5 h-5 text-accent-600" />
+                </div>
+                <h3 className="font-semibold text-gray-900 mb-3">Stravování</h3>
+                <p className="text-sm text-gray-600">Oběd je zajištěný a v ceně oba dny. Na dopoledne a odpoledne si děti přinesou vlastní svačinu. Pití je k dispozici po celý den.</p>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.1 }}
+                className="bg-white rounded-xl p-6 border border-accent-200"
+              >
+                <div className="w-10 h-10 rounded-lg bg-accent-100 flex items-center justify-center mb-4">
+                  <Laptop className="w-5 h-5 text-accent-600" />
+                </div>
+                <h3 className="font-semibold text-gray-900 mb-3">Vybavení</h3>
+                <p className="text-sm text-gray-600">Veškeré technické vybavení — 3D tiskárny, VR headsety, Arduina i senzory — je na místě ve Vary&Te. Děti nemusí nic nosit.</p>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 }}
+                className="bg-white rounded-xl p-6 border border-accent-200"
+              >
+                <div className="w-10 h-10 rounded-lg bg-accent-100 flex items-center justify-center mb-4">
+                  <Users className="w-5 h-5 text-accent-600" />
+                </div>
+                <h3 className="font-semibold text-gray-900 mb-3">Kapacita</h3>
+                <p className="text-sm text-gray-600">Maximálně 15 dětí na termín. Menší skupinka zajišťuje individuální přístup lektorů ke každému dítěti.</p>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3 }}
+                className="bg-white rounded-xl p-6 border border-accent-200"
+              >
+                <div className="w-10 h-10 rounded-lg bg-accent-100 flex items-center justify-center mb-4">
+                  <Clock className="w-5 h-5 text-accent-600" />
+                </div>
+                <h3 className="font-semibold text-gray-900 mb-3">Čas</h3>
+                <p className="text-sm text-gray-600">Sobota + neděle. Příchod od 8:30, program 9:00–16:30 oba dny.</p>
+              </motion.div>
+            </div>
+          </div>
+        </section>
+
+        {/* Day Schedules */}
+        <section className="section-padding">
+          <div className="section-container">
+            <h2 className="heading-2 text-center mb-10">Program tábora</h2>
+
+            {/* Day Tabs */}
+            <div className="flex gap-4 mb-8 justify-center">
+              <button
+                onClick={() => setActiveDay('sobota')}
+                className={`px-6 py-3 rounded-lg font-semibold transition-all ${
+                  activeDay === 'sobota'
+                    ? 'bg-accent-600 text-white shadow-lg'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  <Printer className="w-4 h-4" />
+                  Sobota — 3D tisk & VR
+                </div>
+              </button>
+              <button
+                onClick={() => setActiveDay('neděle')}
+                className={`px-6 py-3 rounded-lg font-semibold transition-all ${
+                  activeDay === 'neděle'
+                    ? 'bg-accent-600 text-white shadow-lg'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  <Cpu className="w-4 h-4" />
+                  Neděle — IoT & Arduino
+                </div>
+              </button>
+            </div>
+
+            {/* Schedule Cards */}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeDay}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.3 }}
+                className="max-w-3xl mx-auto space-y-3"
+              >
+                {(activeDay === 'sobota' ? sobotaProgram : nedeleProgram).map((item, i) => (
+                  <div key={i} className="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-sm transition-shadow">
+                    <div className="p-4 flex gap-4">
+                      <div className="flex-shrink-0">
+                        <span className="inline-flex items-center justify-center w-16 h-16 rounded-lg bg-accent-100">
+                          <span className="font-semibold text-accent-600 text-sm">{item.time}</span>
+                        </span>
+                      </div>
+                      <div className="flex-grow">
+                        <h4 className="font-semibold text-gray-900">{item.title}</h4>
+                        {item.description && (
+                          <p className="text-sm text-gray-600 mt-1">{item.description}</p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        </section>
+
         {/* Terms */}
-        <section className="section-padding bg-gray-50">
+        <section id="terminy" className="section-padding bg-gray-50">
           <div className="section-container">
             <h2 className="heading-2 text-center mb-10">Termíny — {location.name}</h2>
             {terms.length > 0 ? (
@@ -134,6 +304,86 @@ export default function KVMix() {
             ) : (
               <p className="text-center text-gray-500">Termíny budou brzy vypsány.</p>
             )}
+          </div>
+        </section>
+
+        {/* FAQ Section */}
+        <section className="section-padding">
+          <div className="section-container max-w-3xl">
+            <h2 className="heading-2 text-center mb-10">Často kladené otázky</h2>
+            <div className="space-y-3">
+              {campFaqs.map((faq, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                  className="bg-white border border-gray-200 rounded-lg overflow-hidden"
+                >
+                  <button
+                    onClick={() => setOpenFaqIndex(openFaqIndex === i ? null : i)}
+                    className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
+                  >
+                    <h3 className="font-semibold text-gray-900 text-left">{faq.question}</h3>
+                    <ChevronDown
+                      className={`w-5 h-5 text-accent-600 flex-shrink-0 transition-transform ${
+                        openFaqIndex === i ? 'rotate-180' : ''
+                      }`}
+                    />
+                  </button>
+                  <AnimatePresence>
+                    {openFaqIndex === i && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="border-t border-gray-100 bg-gray-50"
+                      >
+                        <p className="px-6 py-4 text-gray-600">{faq.answer}</p>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Bottom CTA */}
+        <section className="relative py-20 bg-gradient-to-br from-accent-600 via-accent-700 to-accent-800 overflow-hidden">
+          <div className="section-container relative z-10">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="max-w-2xl mx-auto text-center"
+            >
+              <h2 className="heading-1 text-white mb-4">3D tisk, IoT i VR za jeden víkend</h2>
+              <p className="text-lg text-white/80 mb-8">
+                Vaše dítě projde všemi technologiemi za 2 dny a odnese si domů vlastní projekty. Žádné předchozí zkušenosti nepotřebuje.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+                <Link href="#terminy" className="btn-primary">
+                  Zobrazit termíny
+                  <ArrowRight className="ml-2 w-4 h-4" />
+                </Link>
+                <Link href="/karlovy-vary/kontakt" className="btn-secondary">
+                  Máte dotazy?
+                </Link>
+              </div>
+              <p className="text-sm text-white/70">
+                Hledáte jednodenní tábor?{' '}
+                <Link href="/karlovy-vary/tabor-3d-tisk" className="underline hover:text-white transition-colors">
+                  3D tisk
+                </Link>
+                {' '}
+                nebo{' '}
+                <Link href="/karlovy-vary/tabor-iot" className="underline hover:text-white transition-colors">
+                  IoT
+                </Link>
+              </p>
+            </motion.div>
           </div>
         </section>
       </main>
