@@ -87,7 +87,7 @@ npm run lint         # Run ESLint
 /public
   /images/hwlab             # HWLab photos
   /images/weeks-logo.png    # Logo
-  og-image.jpg              # Open Graph image (1200x630)
+  og-image-v2.jpg           # Open Graph image (1200x630). Bump version when regenerating to bust social cache.
   favicon.ico               # Favicon (multi-size)
   apple-touch-icon.png      # Apple touch icon
   robots.txt                # Robots rules

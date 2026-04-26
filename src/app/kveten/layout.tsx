@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     description: '3D tisk (So 16.5.) a IoT & elektronika (Ne 17.5.) v Praze. Pro děti 10–15 let. Organizátor: DDM Praha 6.',
     url: 'https://weeks.cz/kveten',
     siteName: 'Weeks – IT tábory pro děti',
-    images: [{ url: 'https://weeks.cz/og-image.jpg', width: 1200, height: 630 }],
+    images: [{ url: 'https://weeks.cz/og-image-v2.jpg', width: 1200, height: 630 }],
     locale: 'cs_CZ',
     type: 'website',
   },

@@ -7,7 +7,8 @@ const path = require('path')
 const fs = require('fs')
 
 const SRC = path.join(__dirname, '..', 'public', 'images', 'hwlab', 'hwlab-7976.webp')
-const OUT = path.join(__dirname, '..', 'public', 'og-image.jpg')
+// Versioned filename — bump suffix when regenerating to bust Discord/FB caches
+const OUT = path.join(__dirname, '..', 'public', 'og-image-v2.jpg')
 
 const W = 1200
 const H = 630

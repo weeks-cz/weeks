@@ -55,7 +55,7 @@ export const metadata: Metadata = {
     description: siteDescription,
     images: [
       {
-        url: `${siteUrl}/og-image.jpg`,
+        url: `${siteUrl}/og-image-v2.jpg`,
         width: 1200,
         height: 630,
         alt: 'Weeks - Víkendové IT kempy pro děti v Praze',
@@ -66,7 +66,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: siteTitle,
     description: siteDescription,
-    images: [`${siteUrl}/og-image.jpg`],
+    images: [`${siteUrl}/og-image-v2.jpg`],
     creator: '@weeks_cz',
   },
   robots: {
