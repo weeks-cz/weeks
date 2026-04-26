@@ -6,6 +6,30 @@ Clean rewrite of `step4n`'s vanilla JavaScript IoT learning platform into a Next
 
 This spec defines v2 scope. Execution happens in a follow-up session (not in the session that produced this spec). During v2 development, step4n continues working on the vanilla codebase on the `dev` branch — see §9 for coordination.
 
+## Spec Addendum — 2026-04-26 (Štěpán's `dev` branch additions)
+
+After this spec was written (2026-04-22), step4n pushed two commits to `dev` adding new features that v2 must port to retain full parity. These additions are folded into the architecture below; the originating commits are kept here for traceability.
+
+**New commits on `dev` (baseline for v2 port is now `dev` @ `f20a160`, not `main`):**
+- `e865397` (2026-04-25) — *"Add topic selector and account email integration"*
+- `f20a160` (2026-04-25) — *"Opravil jsem texty a pripravil odkaz na vyber temat"*
+
+**New v2 surface added by these commits:**
+
+1. **Topic selector** — pre-PIN gating screen with 4 topic buttons (IoT, 3D tisk, Programování, Blender). Only IoT is `enabled: true`; the other three render disabled. `state.selectedTopic` persisted to localStorage; URL param `?screen=topics` (or `?view=topics`) forces a re-selection. `TOPIC_OPTIONS` list ported 1:1, including the three disabled entries.
+2. **Account email integration** — after a kid links an account email, the app POSTs `{to, subject, body, accessUrl}` to a configurable endpoint. **Decision: v2 implements this endpoint as a single Vercel serverless function `/api/notify-account`.** This is the only deviation from the original "static export" goal; the rest of the app remains pre-rendered. The Vercel project still defaults `main` to production. `accountAccessUrl` is computed from `window.location` (origin + `?email=…&screen=topics`), preserving Štěpán's URL-prefill flow.
+3. **`TEST_MODE` dev override** — Štěpán's `TEST_MODE` + `TEST_BALANCE` constants port as `process.env.NEXT_PUBLIC_TEST_MODE === '1'` (dev-only). When enabled, `GameStateProvider` seeds new accounts with `TEST_BALANCE.stars` / `TEST_BALANCE.styleTokens` instead of zero. Documented in v2 README.
+4. **Granular validation messages** — Štěpán refactored validation from `boolean` to `{ ok, message }` and added `STRICT_TASK_RULES`: per-task arrays of `{ pattern: RegExp, message: string }` that produce specific feedback ("Chybí blok, který čte tlačítko"). v2 ports this verbatim into `lib/strict-rules.ts`; `task-solutions.ts` returns `ValidationResult = { ok: boolean, message?: string }`.
+5. **New per-theme CSS variables** — Štěpán's diff added `--page-top/mid/bottom`, `--page-base-{top,mid,bottom}`, `--page-radial-{left,right}`, `--page-shape-{left,right}` to every one of the 8 themes. v2's `globals.css` extends each `[data-theme="…"]` block with these vars and the page background composes from them.
+6. **Diakritika sweep** — every UI string in v2 ships with full Czech diacritics; all source strings come from the post-`f20a160` `app.js`, not the pre-Štěpán version.
+
+**Implications for sections below:**
+- §"Architecture → Tech Stack" — `output: 'export'` changes to default Next.js (static pages + 1 serverless route under `/api/`).
+- §"Architecture → Directory Structure" — adds `src/app/api/notify-account/route.ts`, `src/lib/topics.ts`, `src/lib/strict-rules.ts`, `src/components/screens/TopicSelect.tsx`, `src/components/ui/TopicButton.tsx`.
+- §"Security & Audit Scope" — `/api/notify-account` is a new (small) attack surface; audit task adds: input validation on `to`/`subject`/`body`, no-open-relay check (allow-only-our-domain in `accessUrl`), spam rate-limiting note (out-of-scope to implement, in-scope to document).
+- §"Success Criteria" — adds: topic selector renders with 4 buttons (1 enabled), `/api/notify-account` returns 2xx for valid input, validation surfaces granular messages.
+- §"Source Project Baseline" line counts below are pre-Štěpán; current `dev` is ~4012 lines `app.js`, ~1523 lines `style.css`. Port baseline = `dev` @ `f20a160`, NOT `main`.
+
 ## Source Project Baseline
 
 **Repo:** `lxkask/weeks-iot`, branch `main` at time of spec writing.

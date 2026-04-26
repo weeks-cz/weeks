@@ -18,13 +18,36 @@ Spec: `docs/superpowers/specs/2026-04-22-iot-platform-v2-nextjs-refactor-design.
 
 Single cohesive refactor: scaffold → data port → state → UI components → design polish → audit → docs → cutover. No decomposition needed — all phases belong to one implementation.
 
+## Update Log
+
+### 2026-04-26 — Štěpán parity additions (post-original-plan)
+
+step4n pushed two commits to `dev` after this plan was first written. The port baseline shifts from `main` to `dev` @ `f20a160`. The following items were folded into the existing phases (no renumber — additions use letter suffixes; existing tasks edited in place):
+
+| Area | New / edited tasks | Notes |
+|------|---------------------|-------|
+| Drop static export, add API route | Task 6 (edit), Task 7 (edit), **Task 7a (NEW)** | Vercel project switches from `output: 'export'` to default Next.js. One serverless route at `src/app/api/notify-account/route.ts`. |
+| TEST_MODE env override | Task 11 (edit) | `process.env.NEXT_PUBLIC_TEST_MODE === '1'` seeds `TEST_BALANCE` for new accounts. |
+| Topics module | **Task 14a (NEW)** | `src/lib/topics.ts` with `TOPIC_OPTIONS`, `getTopicById`, `isTopicEnabled`. 4 topics; only `iot` enabled. |
+| Granular validation | Task 16 (edit), Task 18 (edit) | Validation now returns `{ ok: boolean, message?: string }`. New module `src/lib/strict-rules.ts` with `STRICT_TASK_RULES`. |
+| State + URL params + storage | Task 10 (edit), Task 20 (edit), Task 21 (edit) | `selectedTopic` in `GameState`; storage key bumped to `iot-camp-screen-state-v6`; URL params `?screen=topics` and `?email=` honored on mount. |
+| Account email integration | **Task 21a (NEW)** | `notifyAccountCreated(email)` POSTs `{to,subject,body,accessUrl}` to `/api/notify-account`. Async with loading state in PinEntry form. |
+| Per-theme page CSS vars | Task 22 (edit) | Adds `--page-top/mid/bottom`, `--page-base-{top,mid,bottom}`, `--page-radial-{left,right}`, `--page-shape-{left,right}` to every theme block. |
+| Topic UI | **Task 23a (NEW)**, **Task 28a (NEW)** | `TopicButton.tsx` (4 color accents + disabled state); `TopicSelect.tsx` screen rendered before PIN entry. |
+| Pin entry edits | Task 24 (edit) | "Změnit téma" button + email URL prefill. |
+| Orchestration | Task 29 (edit) | Topic gate runs before PIN gate; `?screen=topics` resets selected topic. |
+| Audit + cutover | Task 33 (edit), Task 35 (edit), Success Criteria (edit) | Audit covers `/api/notify-account` input validation; Task 35 step4n-changes review marks these two commits as already covered. |
+
+**No renumbering** of existing tasks. Letter-suffixed tasks (`7a`, `14a`, `21a`, `23a`, `28a`) live in their natural phase but at the end of that phase's existing numbered tasks.
+
 ## Execution Context
 
 This plan runs in a **separate session** from the one that produced it. It does NOT run in the current `weeks_web` directory — it operates on the `weeks-iot` repo at `C:\Users\lukol\weeks-iot`.
 
 Before starting execution:
 - Ensure `C:\Users\lukol\weeks-iot` exists (if not, clone: `git clone https://github.com/lxkask/weeks-iot /c/Users/lukol/weeks-iot`)
-- Confirm step4n has NOT pushed breaking changes to `main` recently (if he has, resync base before Task 1)
+- Confirm step4n has NOT pushed breaking changes to `dev` since `f20a160` (2026-04-25). If he has, resync the new commits into `legacy-vanilla/` and add a follow-up Task 35 entry before cutover.
+- Port baseline = `dev` @ `f20a160`, **not** `main`. After Task 3 moves files into `legacy-vanilla/`, those files must be the post-Štěpán versions (~4012 lines `app.js`).
 
 ## Pre-flight Confirmation
 
@@ -51,22 +74,27 @@ weeks-iot/
 │   │   ├── layout.tsx
 │   │   ├── page.tsx
 │   │   ├── admin/page.tsx
+│   │   ├── api/
+│   │   │   └── notify-account/route.ts   # serverless POST endpoint for account email
 │   │   ├── globals.css
 │   │   └── not-found.tsx
 │   ├── components/
-│   │   ├── screens/{PinEntry,TaskList,TaskDetail,StyleShop,AvatarShop,LevelBadges}.tsx
+│   │   ├── screens/{TopicSelect,PinEntry,TaskList,TaskDetail,StyleShop,AvatarShop,LevelBadges}.tsx
 │   │   ├── task/{CodeValidator,HelpCards,TaskImage}.tsx
-│   │   ├── ui/{Button,PanelGlass,StarBadge,LevelBadge,ProgressBar,Modal}.tsx
+│   │   ├── ui/{Button,PanelGlass,StarBadge,LevelBadge,ProgressBar,Modal,TopicButton}.tsx
 │   │   └── providers/GameStateProvider.tsx
 │   ├── lib/
 │   │   ├── storage.ts
 │   │   ├── tasks.ts
 │   │   ├── task-solutions.ts
+│   │   ├── strict-rules.ts             # NEW — STRICT_TASK_RULES (granular validation messages)
+│   │   ├── topics.ts                   # NEW — TOPIC_OPTIONS, getTopicById, isTopicEnabled
+│   │   ├── account-email.ts            # NEW — notifyAccountCreated → POST /api/notify-account
 │   │   ├── avatars.ts
 │   │   ├── themes.ts
 │   │   ├── rewards.ts
 │   │   ├── pin.ts
-│   │   ├── config.ts
+│   │   ├── config.ts                   # bumped to v6 + TEST_MODE/TEST_BALANCE
 │   │   └── validation.ts
 │   └── types/index.ts
 ├── public/
@@ -78,10 +106,11 @@ weeks-iot/
 ├── postcss.config.js
 ├── package.json
 ├── .eslintrc.json
-├── .gitignore (updated: add node_modules, .next, out/)
+├── .env.local.example                   # NEW — documents NEXT_PUBLIC_TEST_MODE, ACCOUNT_EMAIL_FROM, RESEND_API_KEY (or equivalent)
+├── .gitignore (updated: add node_modules, .next, out/, .env.local)
 ├── README.md (rewritten — v2 Codex-first workflow)
 ├── robots.txt (kept)
-├── vercel.json (updated: static export config)
+├── vercel.json (updated: drop static-export-only assumption; keep noindex headers)
 └── docs/audit-findings-v2.md
 ```
 
@@ -231,9 +260,11 @@ cd /c/Users/lukol/weeks-iot && git add package.json package-lock.json && git com
 
 ---
 
-### Task 6: [Agent] Configure Next.js for static export
+### Task 6: [Agent] Configure Next.js (default rendering, images unoptimized)
 
 **Files:** `next.config.ts`
+
+> **CHANGED 2026-04-26:** Static export dropped because v2 ships `/api/notify-account` (account-email integration ported from step4n). Pages still pre-render statically; only the API route runs as a Vercel serverless function.
 
 - [ ] **Step 1: Replace `next.config.ts` with**
 
@@ -241,7 +272,6 @@ cd /c/Users/lukol/weeks-iot && git add package.json package-lock.json && git com
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: "export",
   images: {
     unoptimized: true,
   },
@@ -251,35 +281,34 @@ const nextConfig: NextConfig = {
 export default nextConfig;
 ```
 
-Rationale: `output: "export"` produces static HTML in `out/`. `images.unoptimized` avoids needing a runtime image optimizer. `trailingSlash` avoids Vercel redirect quirks on subpaths.
+Rationale: dropping `output: "export"` lets us add the one API route in Task 7a. `images.unoptimized` avoids needing a runtime image optimizer (we serve raw PNGs). `trailingSlash` avoids Vercel redirect quirks on subpaths. Pages without server data are still statically generated by Next.js automatically.
 
-- [ ] **Step 2: Verify export works**
+- [ ] **Step 2: Verify build works**
 
 ```bash
 cd /c/Users/lukol/weeks-iot && npm run build
 ```
 
-Expected: `out/` directory created with `index.html`. No errors.
+Expected: `.next/` directory created. No errors. Static pages prerendered.
 
 - [ ] **Step 3: Commit**
 
 ```bash
-cd /c/Users/lukol/weeks-iot && git add next.config.ts && git commit -m "chore: configure Next.js for static export" && git push
+cd /c/Users/lukol/weeks-iot && git add next.config.ts && git commit -m "chore: configure Next.js (drop static export to allow /api routes)" && git push
 ```
 
 ---
 
-### Task 7: [Agent] Update `vercel.json` for static deploy + preserve headers
+### Task 7: [Agent] Update `vercel.json` (drop static-export flags, keep noindex)
 
 **Files:** `vercel.json`
+
+> **CHANGED 2026-04-26:** Vercel auto-detects Next.js — no need for `buildCommand`/`outputDirectory`/`framework: null`. Only the headers block is explicit.
 
 - [ ] **Step 1: Replace `vercel.json` contents**
 
 ```json
 {
-  "buildCommand": "npm run build",
-  "outputDirectory": "out",
-  "framework": null,
   "headers": [
     {
       "source": "/(.*)",
@@ -294,7 +323,7 @@ cd /c/Users/lukol/weeks-iot && git add next.config.ts && git commit -m "chore: c
 - [ ] **Step 2: Commit**
 
 ```bash
-cd /c/Users/lukol/weeks-iot && git add vercel.json && git commit -m "chore: configure Vercel for Next.js static export + keep noindex" && git push
+cd /c/Users/lukol/weeks-iot && git add vercel.json && git commit -m "chore: simplify vercel.json (Next.js autodetect + keep noindex)" && git push
 ```
 
 Preview deploy on `v2-nextjs` should pick this up and serve the default Next.js page with noindex header.
@@ -308,6 +337,148 @@ curl -skI https://<preview-url>.vercel.app 2>&1 | grep -iE "HTTP/|x-robots-tag"
 ```
 
 Expected: `HTTP/2 200` and `x-robots-tag: noindex, nofollow`.
+
+---
+
+### Task 7a: [Agent] Add `/api/notify-account` serverless route (NEW 2026-04-26)
+
+**Files:**
+- Create: `src/app/api/notify-account/route.ts`
+- Create: `.env.local.example`
+
+**Why:** Štěpán's `e865397` introduced `notifyAccountCreated()` that POSTs `{to, subject, body, accessUrl}` to a configurable endpoint. v2 owns that endpoint as a Vercel serverless function. Email transport is provider-pluggable; the v2 default uses Resend (cheap free tier, simple API), but the route's interface is independent of provider so it can swap to Postmark/SES/Formspree later.
+
+- [ ] **Step 1: Create `src/app/api/notify-account/route.ts`**
+
+```typescript
+import { NextRequest, NextResponse } from "next/server";
+
+export const runtime = "nodejs";
+
+const ALLOWED_ORIGINS = [
+  /\.weeks\.cz$/,
+  /^localhost(:\d+)?$/,
+  /^127\.0\.0\.1(:\d+)?$/,
+  /\.vercel\.app$/,
+];
+
+interface NotifyPayload {
+  to?: unknown;
+  subject?: unknown;
+  body?: unknown;
+  accessUrl?: unknown;
+}
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function isAllowedAccessUrl(value: string): boolean {
+  try {
+    const u = new URL(value);
+    return ALLOWED_ORIGINS.some((re) => re.test(u.host));
+  } catch {
+    return false;
+  }
+}
+
+export async function POST(req: NextRequest) {
+  let payload: NotifyPayload;
+  try {
+    payload = (await req.json()) as NotifyPayload;
+  } catch {
+    return NextResponse.json({ ok: false, error: "Invalid JSON" }, { status: 400 });
+  }
+
+  const { to, subject, body, accessUrl } = payload;
+
+  if (typeof to !== "string" || !EMAIL_RE.test(to)) {
+    return NextResponse.json({ ok: false, error: "Invalid 'to'" }, { status: 400 });
+  }
+  if (typeof subject !== "string" || subject.length === 0 || subject.length > 200) {
+    return NextResponse.json({ ok: false, error: "Invalid 'subject'" }, { status: 400 });
+  }
+  if (typeof body !== "string" || body.length === 0 || body.length > 5000) {
+    return NextResponse.json({ ok: false, error: "Invalid 'body'" }, { status: 400 });
+  }
+  if (typeof accessUrl !== "string" || !isAllowedAccessUrl(accessUrl)) {
+    return NextResponse.json({ ok: false, error: "Invalid 'accessUrl'" }, { status: 400 });
+  }
+
+  const apiKey = process.env.RESEND_API_KEY;
+  const from = process.env.ACCOUNT_EMAIL_FROM;
+  if (!apiKey || !from) {
+    console.warn("[notify-account] missing RESEND_API_KEY or ACCOUNT_EMAIL_FROM — accepting silently in dev");
+    return NextResponse.json({ ok: true, delivered: false, reason: "no transport configured" });
+  }
+
+  const res = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      from,
+      to: [to],
+      subject,
+      text: `${body}\n\n${accessUrl}\n`,
+    }),
+  });
+
+  if (!res.ok) {
+    const detail = await res.text();
+    console.error("[notify-account] resend error:", res.status, detail);
+    return NextResponse.json({ ok: false, error: "Email transport failed" }, { status: 502 });
+  }
+
+  return NextResponse.json({ ok: true, delivered: true });
+}
+```
+
+- [ ] **Step 2: Create `.env.local.example`**
+
+```bash
+# Email transport for /api/notify-account (production: set in Vercel project env)
+# Resend (https://resend.com) — current default provider; swap freely.
+RESEND_API_KEY=
+ACCOUNT_EMAIL_FROM=Weeks IoT <noreply@weeks.cz>
+
+# Dev override — when "1", new accounts seed with TEST_BALANCE (see Task 11).
+# Leave blank in production.
+NEXT_PUBLIC_TEST_MODE=
+```
+
+- [ ] **Step 3: Update `.gitignore`**
+
+Append `.env.local` if not already ignored:
+
+```bash
+cd /c/Users/lukol/weeks-iot && grep -qxF '.env.local' .gitignore || echo '.env.local' >> .gitignore
+```
+
+- [ ] **Step 4: Smoke-test the route locally**
+
+```bash
+cd /c/Users/lukol/weeks-iot && npm run dev &
+sleep 4
+curl -s -X POST http://localhost:3000/api/notify-account \
+  -H 'Content-Type: application/json' \
+  -d '{"to":"a@b.cz","subject":"Test","body":"Hi","accessUrl":"https://weeks-iot-git-v2-nextjs.vercel.app/?email=a%40b.cz&screen=topics"}'
+kill %1 2>/dev/null
+```
+
+Expected (no env set): `{"ok":true,"delivered":false,"reason":"no transport configured"}`.
+
+Expected with bad input (e.g. `to: "not-an-email"`): HTTP 400 with `{"ok":false,"error":"Invalid 'to'"}`.
+
+- [ ] **Step 5: Commit**
+
+```bash
+cd /c/Users/lukol/weeks-iot && git add src/app/api/notify-account/route.ts .env.local.example .gitignore && git commit -m "feat: add /api/notify-account serverless route for account-email integration" && git push
+```
+
+- [ ] **Step 6: [Lukáš manual] Configure Vercel env vars (deferred to before cutover)**
+
+Post a follow-up note in the cutover task (Task 37): in Vercel project `weeks-iot` → Settings → Environment Variables, add `RESEND_API_KEY` (Production + Preview) and `ACCOUNT_EMAIL_FROM=Weeks IoT <noreply@weeks.cz>`. Without these the endpoint accepts silently (no email sent) — fine for previews, must be set before cutover.
 
 ---
 
@@ -447,6 +618,17 @@ export type ThemeAccent =
 
 export type UnlockType = "default" | "shop";
 
+// Topic selector (added 2026-04-26 — Štěpán's e865397)
+export type TopicId = "iot" | "3d-print" | "programming" | "blender";
+export type TopicAccent = "green" | "amber" | "blue" | "purple";
+
+export interface TopicOption {
+  id: TopicId;
+  label: string;
+  accent: TopicAccent;
+  enabled: boolean;
+}
+
 export interface ThemeOption {
   id: ThemeId;
   label: string;
@@ -510,6 +692,7 @@ export interface AccountState {
 
 export interface ScreenState {
   currentScreen:
+    | "topic-select"               // added 2026-04-26 — gates entry to PIN
     | "pin-entry" | "task-list" | "task-detail"
     | "style-shop" | "avatar-shop" | "level-badges"
     | "admin";
@@ -519,6 +702,8 @@ export interface ScreenState {
 
 export interface GameState {
   version: number;
+  selectedTopic: TopicId | null;     // added 2026-04-26 — null = topic-select must run
+  accountEmail?: string;             // added 2026-04-26 — set when /api/notify-account succeeds
   account: AccountState;
   tasks: Record<string, TaskState>;
   sections: Record<SectionId, { unlocked: boolean }>;
@@ -535,9 +720,20 @@ export interface Config {
   skipCost: number;
 }
 
+// Validation result — granular messages per Štěpán's e865397
+// `ok` is the public field name (matches `linkAccountToEmail()` and STRICT_TASK_RULES return shape).
+// `valid` was the v0 shape; do NOT reintroduce — single source of truth is `ok`.
 export interface ValidationResult {
-  valid: boolean;
-  feedback?: string;
+  ok: boolean;
+  message?: string;
+}
+
+// Email payload sent to /api/notify-account (added 2026-04-26)
+export interface NotifyAccountPayload {
+  to: string;
+  subject: string;
+  body: string;
+  accessUrl: string;
 }
 ```
 
@@ -580,11 +776,25 @@ import type { Config } from "@/types";
  * For production admin gating, a backend is required (deferred to v3).
  */
 
-export const CONFIG_VERSION = 5;
-export const STORAGE_KEY = "iot-camp-screen-state-v5";
+// Bumped to v6 (was v5 in original plan) because GameState gained `selectedTopic`
+// and `accountEmail` fields after Štěpán's e865397 (2026-04-26). Old keys stay
+// orphaned in localStorage — no migration; these are pre-prod pilot users.
+export const CONFIG_VERSION = 6;
+export const STORAGE_KEY = "iot-camp-screen-state-v6";
 
 export const DAILY_ACCESS_MODE = "manual" as const;
 export const MAX_STUDENTS_LIMIT = 25;
+
+// TEST_MODE — dev-only override that seeds new accounts with TEST_BALANCE.
+// Set NEXT_PUBLIC_TEST_MODE=1 in .env.local. NEVER set in production.
+export const TEST_MODE: boolean =
+  typeof process !== "undefined" &&
+  process.env?.NEXT_PUBLIC_TEST_MODE === "1";
+
+export const TEST_BALANCE = {
+  stars: 80,
+  styleTokens: 6,
+} as const;
 
 export const DEFAULT_CONFIG: Config = {
   dailyPin: "123",
@@ -761,6 +971,53 @@ export { REWARD_CONFIG, SECTION_UNLOCK_COSTS };
 
 ```bash
 cd /c/Users/lukol/weeks-iot && npx tsc --noEmit && git add src/lib/rewards.ts && git commit -m "feat(rewards): port level badges (data)" && git push
+```
+
+---
+
+### Task 14a: [Agent] Port topics module (NEW 2026-04-26)
+
+**Files:** `src/lib/topics.ts` (create)
+
+**Source:** `legacy-vanilla/app.js` lines 47–51 (`TOPIC_OPTIONS`), 1840–1847 (helpers `getTopicById`, `isTopicEnabled`).
+
+- [ ] **Step 1: Create `src/lib/topics.ts`**
+
+```typescript
+import type { TopicId, TopicOption } from "@/types";
+
+export const TOPIC_OPTIONS: TopicOption[] = [
+  { id: "iot",          label: "IoT a elektronika",      accent: "green",  enabled: true  },
+  { id: "3d-print",     label: "3D tisk",                accent: "amber",  enabled: false },
+  { id: "programming",  label: "Programování",           accent: "blue",   enabled: false },
+  { id: "blender",      label: "3D modelování",          accent: "purple", enabled: false },
+];
+
+export function getTopicById(id: string | null | undefined): TopicOption | undefined {
+  if (!id) return undefined;
+  return TOPIC_OPTIONS.find((t) => t.id === id);
+}
+
+export function isTopicEnabled(id: string | null | undefined): boolean {
+  const topic = getTopicById(id);
+  return Boolean(topic?.enabled);
+}
+
+// Read-only — preserved verbatim from Štěpán's `getTopicById` reference.
+// Only `iot` is enabled in v2 — porting 1:1 per scope decision (don't drop disabled topics
+// because the disabled state is part of UX: kid sees what's coming).
+```
+
+- [ ] **Step 2: Type-check**
+
+```bash
+cd /c/Users/lukol/weeks-iot && npx tsc --noEmit
+```
+
+- [ ] **Step 3: Commit**
+
+```bash
+cd /c/Users/lukol/weeks-iot && git add src/lib/topics.ts && git commit -m "feat(topics): port TOPIC_OPTIONS + helpers (1 enabled, 3 disabled)" && git push
 ```
 
 ---
@@ -982,47 +1239,87 @@ cd /c/Users/lukol/weeks-iot && git add src/lib/tasks.ts && git commit -m "feat(t
 
 ---
 
-### Task 18: [Agent] Port task validation logic (TASK_SOLUTIONS)
+### Task 18: [Agent] Port task validation logic (TASK_SOLUTIONS + STRICT_TASK_RULES)
 
-**Files:** `src/lib/task-solutions.ts` (create)
+**Files:**
+- Create: `src/lib/task-solutions.ts`
+- Create: `src/lib/strict-rules.ts` (NEW 2026-04-26)
+
+> **CHANGED 2026-04-26:** Štěpán's `e865397` refactored validation from boolean to `{ ok, message }` and split per-task rule lists into `STRICT_TASK_RULES`. v2 mirrors that split: bulk validators in `task-solutions.ts`, granular rule arrays in `strict-rules.ts`. Both consumed by the same `validateTaskCode()` function so callers see one API.
 
 - [ ] **Step 1: Read source**
 
-`legacy-vanilla/app.js` lines 155–647 contain `TASK_SOLUTIONS` object — 493 lines mapping each task ID to a validation function or spec.
+`legacy-vanilla/app.js` lines 155–647 contain `TASK_SOLUTIONS`. Lines 661–779 contain `STRICT_TASK_RULES` (added by Štěpán) — per-task arrays of `{ pattern: RegExp, message: string }` checked first; if any pattern fails, the user sees the rule's message instead of a generic failure. Lines ~2810 wire `validationResult.message` into `showMessage(...)`.
 
-- [ ] **Step 2: Create `src/lib/task-solutions.ts`**
+- [ ] **Step 2: Create `src/lib/strict-rules.ts`**
 
-Preserve structure. Each task's validator becomes a typed function.
+```typescript
+export interface StrictRule {
+  pattern: RegExp;
+  message: string;
+}
+
+// Port verbatim from legacy-vanilla/app.js lines 661–779. Each entry is a list
+// of "must-match" patterns; the first pattern that DOES NOT match produces the
+// granular feedback message shown to the kid.
+//
+// IMPORTANT: keys must match Task IDs in src/lib/tasks.ts exactly.
+export const STRICT_TASK_RULES: Record<string, StrictRule[]> = {
+  // Example shape (port real entries from source):
+  "prvni-led": [
+    { pattern: /pinMode\s*\(\s*\d+\s*,\s*OUTPUT\s*\)/i,    message: "Chybí pinMode(..., OUTPUT)." },
+    { pattern: /digitalWrite\s*\(\s*\d+\s*,\s*HIGH\s*\)/i, message: "Chybí digitalWrite(..., HIGH) — LED se nerozsvítí." },
+  ],
+  // ... copy all entries from source
+};
+```
+
+- [ ] **Step 3: Create `src/lib/task-solutions.ts`**
 
 ```typescript
 import type { ValidationResult } from "@/types";
-import { normalizeCodeForValidation, hasAll, hasAny, countMatches } from "./validation";
+import { normalizeCodeForValidation } from "./validation";
+import { STRICT_TASK_RULES } from "./strict-rules";
 
 type Validator = (rawCode: string) => ValidationResult;
 
 export const TASK_SOLUTIONS: Record<string, Validator> = {
-  // Port each task's validator from legacy-vanilla/app.js lines 155-647.
-  // Example structure:
+  // Port each task's bulk validator from legacy-vanilla/app.js lines 155–647.
+  // These are catch-alls run AFTER STRICT_TASK_RULES — return { ok: true } when
+  // no granular rule matched but the code is structurally fine.
   "prvni-led": (raw) => {
     const code = normalizeCodeForValidation(raw);
-    if (!hasAll(code, [/pinMode\(\s*\d+\s*,\s*OUTPUT/i, /digitalWrite\(\s*\d+\s*,\s*HIGH/i])) {
-      return { valid: false, feedback: "Chybí pinMode OUTPUT a digitalWrite HIGH." };
+    if (code.length < 20) {
+      return { ok: false, message: "Kód je příliš krátký — chybí struktura setup() / loop()." };
     }
-    return { valid: true };
+    return { ok: true };
   },
   // ... 20 more task validators
 };
 
-export function validateTaskCode(taskId: string, code: string): ValidationResult {
+export function validateTaskCode(taskId: string, rawCode: string): ValidationResult {
+  const code = normalizeCodeForValidation(rawCode);
+
+  // 1) Granular rules first — return the first failing rule's message.
+  const rules = STRICT_TASK_RULES[taskId] ?? [];
+  for (const rule of rules) {
+    if (!rule.pattern.test(code)) {
+      return { ok: false, message: rule.message };
+    }
+  }
+
+  // 2) Bulk validator catch-all.
   const validator = TASK_SOLUTIONS[taskId];
   if (!validator) {
-    return { valid: false, feedback: "Pro tento úkol není definována validace." };
+    return { ok: false, message: "Pro tento úkol není definována validace." };
   }
-  return validator(code);
+  return validator(rawCode);
 }
 ```
 
 **Port fidelity:** copy step4n's exact regex patterns and condition logic. Don't "improve" validators — that's a v2.1+ task. If a validator in the source uses an obscure trick, replicate it literally with a comment explaining what it does.
+
+**Naming consistency:** all callers receive `{ ok, message }` (single source of truth — see Task 10's `ValidationResult`). Do NOT mix `valid`/`feedback` naming anywhere.
 
 - [ ] **Step 3: Type-check + commit**
 
@@ -1137,7 +1434,7 @@ cd /c/Users/lukol/weeks-iot && npx tsc --noEmit && git add src/lib/rewards.ts &&
 
 ```typescript
 import type { GameState, AccountState, TaskState, ScreenState } from "@/types";
-import { CONFIG_VERSION, STORAGE_KEY } from "./config";
+import { CONFIG_VERSION, STORAGE_KEY, TEST_MODE, TEST_BALANCE } from "./config";
 import { DEFAULT_AVATAR_ID } from "./avatars";
 import { getAllTasks, SECTIONS } from "./tasks";
 
@@ -1154,8 +1451,11 @@ function createDefaultTaskState(): TaskState {
 function createDefaultAccountState(): AccountState {
   return {
     avatarId: DEFAULT_AVATAR_ID,
-    stars: 0,
-    tokens: 0,
+    // TEST_MODE seeds new accounts with TEST_BALANCE for dev exploration of shop/badges
+    // (added 2026-04-26 — Štěpán's TEST_BALANCE constant). NEVER triggers in production
+    // because NEXT_PUBLIC_TEST_MODE is read at build time and unset on Vercel.
+    stars: TEST_MODE ? TEST_BALANCE.stars : 0,
+    tokens: TEST_MODE ? TEST_BALANCE.styleTokens : 0,
     unlockedThemes: ["classic"],
     unlockedAvatars: [DEFAULT_AVATAR_ID],
     currentTheme: "classic",
@@ -1165,7 +1465,8 @@ function createDefaultAccountState(): AccountState {
 }
 
 function createDefaultScreenState(): ScreenState {
-  return { currentScreen: "pin-entry", pinLevel: "none" };
+  // Topic-select runs first; reducer flips to "pin-entry" once selectedTopic is set.
+  return { currentScreen: "topic-select", pinLevel: "none" };
 }
 
 export function createDefaultGameState(): GameState {
@@ -1180,6 +1481,7 @@ export function createDefaultGameState(): GameState {
   };
   return {
     version: CONFIG_VERSION,
+    selectedTopic: null,           // forces topic-select screen on first visit
     account: createDefaultAccountState(),
     tasks,
     sections,
@@ -1237,13 +1539,16 @@ cd /c/Users/lukol/weeks-iot && npx tsc --noEmit && git add src/lib/storage.ts &&
 ```typescript
 "use client";
 
-import { createContext, useContext, useEffect, useReducer, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useReducer, useState, type ReactNode } from "react";
 import type { GameState } from "@/types";
 import { createDefaultGameState, loadGameState, saveGameState } from "@/lib/storage";
 import { applyTheme } from "@/lib/themes";
 
 type Action =
   | { type: "HYDRATE"; state: GameState }
+  | { type: "SELECT_TOPIC"; topicId: GameState["selectedTopic"] }   // 2026-04-26
+  | { type: "CHANGE_TOPIC" }                                         // 2026-04-26 — back to topic-select
+  | { type: "SET_ACCOUNT_EMAIL"; email: string }                     // 2026-04-26
   | { type: "SET_SCREEN"; screen: GameState["screen"] }
   | { type: "SET_PIN_LEVEL"; level: GameState["screen"]["pinLevel"] }
   | { type: "OPEN_TASK"; taskId: string }
@@ -1274,10 +1579,33 @@ import {
 import { SECTION_UNLOCK_COSTS } from "@/lib/config";
 import { findTask } from "@/lib/tasks";
 
+import { isTopicEnabled } from "@/lib/topics";
+
 function reducer(state: GameState, action: Action): GameState {
   switch (action.type) {
     case "HYDRATE":
       return action.state;
+
+    case "SELECT_TOPIC": {
+      // Only allow enabled topics — disabled topics in TOPIC_OPTIONS are decorative.
+      if (!isTopicEnabled(action.topicId)) return state;
+      return {
+        ...state,
+        selectedTopic: action.topicId,
+        screen: { ...state.screen, currentScreen: "pin-entry" },
+      };
+    }
+
+    case "CHANGE_TOPIC":
+      // Returns to topic-select; clears PIN level so kid must re-auth on new topic.
+      return {
+        ...state,
+        selectedTopic: null,
+        screen: { ...state.screen, currentScreen: "topic-select", pinLevel: "none" },
+      };
+
+    case "SET_ACCOUNT_EMAIL":
+      return { ...state, accountEmail: action.email };
 
     case "SET_SCREEN":
       return { ...state, screen: action.screen };
@@ -1368,19 +1696,68 @@ function reducer(state: GameState, action: Action): GameState {
   }
 }
 
+// URL parameter helpers — port of Štěpán's shouldOpenTopicSelectFromUrl() and getEmailFromUrl().
+// Reads `?screen=topics` (alias `?view=topics`) → reset selectedTopic.
+// Reads `?email=...` → exposed via context for PinEntry to prefill (NOT auto-applied to state;
+// the user still must submit the link-account form).
+function readUrlState(): { forceTopicSelect: boolean; emailFromUrl: string | null } {
+  if (typeof window === "undefined") {
+    return { forceTopicSelect: false, emailFromUrl: null };
+  }
+  const params = new URLSearchParams(window.location.search);
+  const screen = (params.get("screen") ?? params.get("view") ?? "").toLowerCase();
+  const rawEmail = params.get("email");
+  const normalizedEmail = rawEmail ? rawEmail.trim().toLowerCase() : null;
+  return {
+    forceTopicSelect: screen === "topics",
+    emailFromUrl: normalizedEmail,
+  };
+}
+
 interface GameStateContextValue {
   state: GameState;
   dispatch: React.Dispatch<Action>;
+  emailFromUrl: string | null;   // 2026-04-26 — read once at mount
 }
 
 const GameStateContext = createContext<GameStateContextValue | null>(null);
 
 export function GameStateProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(reducer, createDefaultGameState());
+  const [emailFromUrl, setEmailFromUrl] = useState<string | null>(null);
 
-  // Hydrate from localStorage on mount
+  // Hydrate from localStorage on mount + apply URL overrides
   useEffect(() => {
     const loaded = loadGameState();
+    const { forceTopicSelect, emailFromUrl: emailParam } = readUrlState();
+    setEmailFromUrl(emailParam);
+
+    if (forceTopicSelect) {
+      // ?screen=topics resets the topic gate even if previously selected.
+      dispatch({
+        type: "HYDRATE",
+        state: {
+          ...loaded,
+          selectedTopic: null,
+          screen: { ...loaded.screen, currentScreen: "topic-select", pinLevel: "none" },
+        },
+      });
+      return;
+    }
+
+    // If selectedTopic is set but topic was disabled in code since last visit, force re-select.
+    if (loaded.selectedTopic && !isTopicEnabled(loaded.selectedTopic)) {
+      dispatch({
+        type: "HYDRATE",
+        state: {
+          ...loaded,
+          selectedTopic: null,
+          screen: { ...loaded.screen, currentScreen: "topic-select" },
+        },
+      });
+      return;
+    }
+
     dispatch({ type: "HYDRATE", state: loaded });
   }, []);
 
@@ -1394,7 +1771,11 @@ export function GameStateProvider({ children }: { children: ReactNode }) {
     applyTheme(state.account.currentTheme);
   }, [state.account.currentTheme]);
 
-  return <GameStateContext.Provider value={{ state, dispatch }}>{children}</GameStateContext.Provider>;
+  return (
+    <GameStateContext.Provider value={{ state, dispatch, emailFromUrl }}>
+      {children}
+    </GameStateContext.Provider>
+  );
 }
 
 export function useGameState() {
@@ -1414,6 +1795,97 @@ Modify `src/app/layout.tsx` to wrap `{children}` with `<GameStateProvider>`.
 
 ```bash
 cd /c/Users/lukol/weeks-iot && npx tsc --noEmit && git add src/components/providers/GameStateProvider.tsx src/app/layout.tsx && git commit -m "feat(state): GameStateProvider with localStorage persistence + theme apply" && git push
+```
+
+---
+
+### Task 21a: [Agent] Account-email integration helper (NEW 2026-04-26)
+
+**Files:** `src/lib/account-email.ts` (create)
+
+**Purpose:** Encapsulate Štěpán's `notifyAccountCreated()` flow (commit `e865397`, app.js:1775–1796 + 2213). Builds the `{to, subject, body, accessUrl}` payload and POSTs it to `/api/notify-account` (Task 7a). Returns `{ ok, message }` so the calling form can show the result without knowing transport details.
+
+- [ ] **Step 1: Create `src/lib/account-email.ts`**
+
+```typescript
+import type { NotifyAccountPayload, ValidationResult } from "@/types";
+import { isValidEmail, normalizeEmail } from "./validation";
+
+function buildAccountAccessUrl(email: string): string {
+  if (typeof window === "undefined") return "";
+  const url = new URL(window.location.href);
+  // Pin the deep link to topic-select + email prefill, dropping any other params.
+  const out = new URL(url.origin + url.pathname);
+  out.searchParams.set("screen", "topics");
+  out.searchParams.set("email", email);
+  return out.toString();
+}
+
+function buildAccountCreatedEmail(email: string): NotifyAccountPayload {
+  const accessUrl = buildAccountAccessUrl(email);
+  return {
+    to: email,
+    subject: "Tvůj přístup do Weeks IoT je připravený",
+    body:
+      `Ahoj!\n\n` +
+      `Účet pro IoT tábor je vytvořený. Pro pokračování použij odkaz níže — ` +
+      `otevře se příští krok (výběr tématu) přímo z tvé schránky:\n`,
+    accessUrl,
+  };
+}
+
+export async function notifyAccountCreated(rawEmail: string): Promise<ValidationResult> {
+  const email = normalizeEmail(rawEmail);
+  if (!isValidEmail(email)) {
+    return { ok: false, message: "Zadej prosím platnou e-mailovou adresu." };
+  }
+  const payload = buildAccountCreatedEmail(email);
+  try {
+    const res = await fetch("/api/notify-account", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) {
+      return { ok: false, message: "E-mail se nepodařilo odeslat. Zkus to za chvíli znovu." };
+    }
+    return { ok: true, message: "E-mail s odkazem byl odeslán." };
+  } catch (err) {
+    console.warn("[account-email] fetch failed:", err);
+    return { ok: false, message: "Síťová chyba — odkaz neodešel." };
+  }
+}
+```
+
+- [ ] **Step 2: Type-check**
+
+```bash
+cd /c/Users/lukol/weeks-iot && npx tsc --noEmit
+```
+
+- [ ] **Step 3: Smoke test against the API route**
+
+Run dev server, then in browser console at `localhost:3000`:
+
+```javascript
+await fetch('/api/notify-account', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    to: 'a@b.cz',
+    subject: 'Test',
+    body: 'Hi',
+    accessUrl: 'http://localhost:3000/?email=a%40b.cz&screen=topics',
+  }),
+}).then(r => r.json())
+```
+
+Expected (no env vars set): `{ ok: true, delivered: false, reason: "no transport configured" }`.
+
+- [ ] **Step 4: Commit**
+
+```bash
+cd /c/Users/lukol/weeks-iot && git add src/lib/account-email.ts && git commit -m "feat(account-email): port notifyAccountCreated → POST /api/notify-account" && git push
 ```
 
 ---
@@ -1444,23 +1916,44 @@ Template:
   --theme-star: #ffbc5b;
   --theme-success: #2dd4a6;
   --theme-shadow: 0 28px 80px rgba(0, 0, 0, 0.36);
+
+  /* Page background composition vars (added 2026-04-26 — Štěpán's e865397).
+     style.css now layers a 3-stop gradient + 2 radial highlights + 2 shape blobs
+     per theme. Each theme overrides ALL the vars below. Defaults are the Classic
+     palette; other themes redeclare in their own block.                          */
+  --page-top:           rgba(7, 13, 26, 0.92);
+  --page-mid:           rgba(10, 17, 31, 0.9);
+  --page-bottom:        rgba(13, 20, 39, 0.96);
+  --page-base-top:      #0d1427;
+  --page-base-mid:      #131c33;
+  --page-base-bottom:   #0a111f;
+  --page-radial-left:   rgba(113, 153, 255, 0.18);
+  --page-radial-right:  rgba(45, 212, 166, 0.12);
+  --page-shape-left:    rgba(113, 153, 255, 0.10);
+  --page-shape-right:   rgba(255, 188, 91, 0.08);
 }
 
 [data-theme="sunrise"] {
   --theme-bg: #1a0e1f;
   --theme-panel: rgba(53, 32, 25, 0.6);
-  /* ... port warm palette ... */
+  /* ... port warm palette + page-* vars ... */
 }
 
-/* 6 more themes */
+/* 6 more themes — each redeclares ALL --theme-* AND --page-* vars from the Classic block above.
+   Port exact color values from legacy-vanilla/style.css's per-theme blocks (post-Štěpán).        */
 
 body {
-  background: var(--theme-bg);
   color: var(--theme-text);
+  background-color: var(--page-base-mid);
   background-image:
-    linear-gradient(180deg, rgba(7,13,26,0.92) 0%, rgba(10,17,31,0.9) 34%, rgba(13,20,39,0.96) 100%),
+    /* Gradient overlay (uses --page-top/mid/bottom) */
+    linear-gradient(180deg, var(--page-top) 0%, var(--page-mid) 34%, var(--page-bottom) 100%),
+    /* Radial highlights (uses --page-radial-left/right) */
+    radial-gradient(60% 40% at 15% 20%, var(--page-radial-left) 0%, transparent 70%),
+    radial-gradient(60% 40% at 85% 80%, var(--page-radial-right) 0%, transparent 70%),
+    /* HWLab photo backdrop */
     url("https://weeks.cz/_next/image?q=75&url=%2Fimages%2Fhwlab%2Fhwlab-7976.webp&w=3840");
-  background-size: cover;
+  background-size: cover, auto, auto, cover;
   background-attachment: fixed;
 }
 
@@ -1658,11 +2151,78 @@ cd /c/Users/lukol/weeks-iot && npx tsc --noEmit && git add src/components/ui/ &&
 
 ---
 
+### Task 23a: [Agent] TopicButton UI primitive (NEW 2026-04-26)
+
+**Files:** `src/components/ui/TopicButton.tsx` (create)
+
+**Source:** `legacy-vanilla/style.css` lines around `.topic-button` (per-accent gradients, disabled state, hover transform); `legacy-vanilla/app.js` `renderTopicSelect()` (data-action="select-topic" wiring).
+
+- [ ] **Step 1: Create `src/components/ui/TopicButton.tsx`**
+
+```typescript
+"use client";
+
+import type { TopicAccent } from "@/types";
+
+interface Props {
+  topicId: string;
+  label: string;
+  accent: TopicAccent;
+  enabled: boolean;
+  onSelect: (topicId: string) => void;
+}
+
+const ACCENT_GRADIENT: Record<TopicAccent, string> = {
+  green:  "from-emerald-500/30 to-emerald-700/20 border-emerald-400/40",
+  amber:  "from-amber-500/30  to-amber-700/20  border-amber-400/40",
+  blue:   "from-sky-500/30    to-sky-700/20    border-sky-400/40",
+  purple: "from-violet-500/30 to-violet-700/20 border-violet-400/40",
+};
+
+export function TopicButton({ topicId, label, accent, enabled, onSelect }: Props) {
+  const baseClasses =
+    "panel-glass relative w-full overflow-hidden rounded-xl border bg-gradient-to-br p-6 text-left " +
+    "transition-[transform,border-color,background] duration-150 " +
+    "shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]";
+  const enabledClasses =
+    "hover:-translate-y-0.5 hover:border-white/30 cursor-pointer";
+  const disabledClasses =
+    "cursor-not-allowed opacity-60 saturate-50 hover:transform-none hover:border-current";
+
+  return (
+    <button
+      type="button"
+      data-action="select-topic"
+      data-topic-id={topicId}
+      disabled={!enabled}
+      onClick={() => enabled && onSelect(topicId)}
+      className={`${baseClasses} ${ACCENT_GRADIENT[accent]} ${enabled ? enabledClasses : disabledClasses}`}
+      aria-disabled={!enabled}
+    >
+      <span className="block text-xs font-semibold uppercase tracking-wider text-white/60">
+        {enabled ? "Dostupné" : "Připravujeme"}
+      </span>
+      <span className="mt-1 block text-2xl font-bold text-white">{label}</span>
+    </button>
+  );
+}
+```
+
+- [ ] **Step 2: Type-check + commit**
+
+```bash
+cd /c/Users/lukol/weeks-iot && npx tsc --noEmit && git add src/components/ui/TopicButton.tsx && git commit -m "feat(ui): TopicButton primitive with 4 accent gradients + disabled state" && git push
+```
+
+---
+
 ## Phase 5: Screens
 
-### Task 24: [Agent] PinEntry screen
+### Task 24: [Agent] PinEntry screen (with topic-change + email-link form)
 
 **Files:** `src/components/screens/PinEntry.tsx` (create)
+
+> **CHANGED 2026-04-26:** PinEntry now hosts (a) the "Změnit téma" button (Štěpán's `topic-change-button`) and (b) the optional "Propojit účet" email form that calls `notifyAccountCreated()` (Task 21a). Email is prefilled from URL `?email=…` via `useGameState().emailFromUrl`.
 
 - [ ] **Step 1: Create `src/components/screens/PinEntry.tsx`**
 
@@ -1675,11 +2235,20 @@ import { Button } from "@/components/ui/Button";
 import { PanelGlass } from "@/components/ui/PanelGlass";
 import { useGameState } from "@/components/providers/GameStateProvider";
 import { verifyPin, type PinLevel } from "@/lib/pin";
+import { notifyAccountCreated } from "@/lib/account-email";
+import { getTopicById } from "@/lib/topics";
 
 export function PinEntry() {
-  const { dispatch } = useGameState();
+  const { state, dispatch, emailFromUrl } = useGameState();
   const [value, setValue] = useState("");
   const [error, setError] = useState<string | null>(null);
+
+  // Email form (added 2026-04-26)
+  const [email, setEmail] = useState(emailFromUrl ?? "");
+  const [emailBusy, setEmailBusy] = useState(false);
+  const [emailMsg, setEmailMsg] = useState<{ ok: boolean; message: string } | null>(null);
+
+  const topic = getTopicById(state.selectedTopic);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -1700,6 +2269,18 @@ export function PinEntry() {
     });
   }
 
+  async function handleAccountLink(e: React.FormEvent) {
+    e.preventDefault();
+    setEmailBusy(true);
+    setEmailMsg(null);
+    const result = await notifyAccountCreated(email);
+    setEmailMsg({ ok: result.ok, message: result.message ?? (result.ok ? "Hotovo." : "Nepodařilo se.") });
+    if (result.ok) {
+      dispatch({ type: "SET_ACCOUNT_EMAIL", email });
+    }
+    setEmailBusy(false);
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -1707,6 +2288,17 @@ export function PinEntry() {
       className="flex min-h-screen items-center justify-center p-4"
     >
       <PanelGlass className="w-full max-w-sm">
+        <div className="mb-4 flex items-center justify-between text-xs text-[color:var(--theme-muted)]">
+          <span>Téma: <strong className="text-[color:var(--theme-text)]">{topic?.label ?? "—"}</strong></span>
+          <button
+            type="button"
+            onClick={() => dispatch({ type: "CHANGE_TOPIC" })}
+            className="topic-change-button rounded-md border border-white/15 px-2 py-1 hover:border-white/30"
+          >
+            Změnit téma
+          </button>
+        </div>
+
         <h1 className="mb-2 text-2xl font-bold text-center">Weeks IoT</h1>
         <p className="mb-6 text-center text-sm text-[color:var(--theme-muted)]">
           Zadej PIN pro vstup
@@ -1726,6 +2318,30 @@ export function PinEntry() {
           {error && <p className="text-center text-sm text-red-400">{error}</p>}
           <Button type="submit" size="lg" className="w-full">Vstoupit</Button>
         </form>
+
+        <hr className="my-6 border-white/10" />
+
+        <form onSubmit={handleAccountLink} className="space-y-3">
+          <p className="text-xs text-[color:var(--theme-muted)]">
+            Propojit účet s e-mailem (volitelné — pošleme ti odkaz na pokračování):
+          </p>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm focus:border-[color:var(--theme-accent)] focus:outline-none"
+            placeholder="jmeno@example.com"
+            autoComplete="email"
+          />
+          <Button type="submit" variant="ghost" size="sm" disabled={emailBusy || !email}>
+            {emailBusy ? "Odesílám…" : "Poslat odkaz"}
+          </Button>
+          {emailMsg && (
+            <p className={`text-xs ${emailMsg.ok ? "text-[color:var(--theme-success)]" : "text-red-400"}`}>
+              {emailMsg.message}
+            </p>
+          )}
+        </form>
       </PanelGlass>
     </motion.div>
   );
@@ -1735,7 +2351,7 @@ export function PinEntry() {
 - [ ] **Step 2: Type-check + commit**
 
 ```bash
-cd /c/Users/lukol/weeks-iot && npx tsc --noEmit && git add src/components/screens/PinEntry.tsx && git commit -m "feat(screens): PinEntry with 3-level PIN verification" && git push
+cd /c/Users/lukol/weeks-iot && npx tsc --noEmit && git add src/components/screens/PinEntry.tsx && git commit -m "feat(screens): PinEntry with 3-level PIN + change-topic + account-email link" && git push
 ```
 
 ---
@@ -1858,14 +2474,16 @@ interface Props {
   onSuccess: () => void;
 }
 
+import type { ValidationResult } from "@/types";
+
 export function CodeValidator({ taskId, onSuccess }: Props) {
   const [code, setCode] = useState("");
-  const [result, setResult] = useState<{ valid: boolean; feedback?: string } | null>(null);
+  const [result, setResult] = useState<ValidationResult | null>(null);
 
   function handleCheck() {
     const r = validateTaskCode(taskId, code);
     setResult(r);
-    if (r.valid) onSuccess();
+    if (r.ok) onSuccess();
   }
 
   return (
@@ -1880,9 +2498,9 @@ export function CodeValidator({ taskId, onSuccess }: Props) {
       />
       <Button onClick={handleCheck} disabled={!code.trim()}>Zkontrolovat</Button>
       {result && (
-        <div className={`flex items-start gap-2 rounded-lg p-3 text-sm ${result.valid ? "bg-[color:var(--theme-success)]/10 text-[color:var(--theme-success)]" : "bg-red-500/10 text-red-400"}`}>
-          {result.valid ? <Check className="h-5 w-5" /> : <X className="h-5 w-5" />}
-          <div>{result.valid ? "Super! Úkol splněn." : result.feedback ?? "Zkus to znovu."}</div>
+        <div className={`flex items-start gap-2 rounded-lg p-3 text-sm ${result.ok ? "bg-[color:var(--theme-success)]/10 text-[color:var(--theme-success)]" : "bg-red-500/10 text-red-400"}`}>
+          {result.ok ? <Check className="h-5 w-5" /> : <X className="h-5 w-5" />}
+          <div>{result.ok ? "Super! Úkol splněn." : result.message ?? "Zkus to znovu."}</div>
         </div>
       )}
     </div>
@@ -2092,9 +2710,72 @@ cd /c/Users/lukol/weeks-iot && npx tsc --noEmit && git add src/components/screen
 
 ---
 
-### Task 29: [Agent] Main page orchestration
+### Task 28a: [Agent] TopicSelect screen (NEW 2026-04-26)
+
+**Files:** `src/components/screens/TopicSelect.tsx` (create)
+
+**Source:** `legacy-vanilla/app.js` `renderTopicSelect()` (~lines 1320–1400). The original is rendered via `container.innerHTML = ...` — we replace with React JSX.
+
+- [ ] **Step 1: Create `src/components/screens/TopicSelect.tsx`**
+
+```typescript
+"use client";
+
+import { motion } from "framer-motion";
+import { PanelGlass } from "@/components/ui/PanelGlass";
+import { TopicButton } from "@/components/ui/TopicButton";
+import { useGameState } from "@/components/providers/GameStateProvider";
+import { TOPIC_OPTIONS } from "@/lib/topics";
+
+export function TopicSelect() {
+  const { dispatch } = useGameState();
+
+  function handleSelect(topicId: string) {
+    dispatch({ type: "SELECT_TOPIC", topicId: topicId as "iot" });
+  }
+
+  return (
+    <motion.section
+      className="topic-screen flex min-h-screen items-center justify-center p-4"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+    >
+      <PanelGlass className="topic-panel w-full max-w-3xl">
+        <h1 className="mb-2 text-3xl font-bold">Vyber si téma tábora</h1>
+        <p className="mb-6 text-sm text-[color:var(--theme-muted)]">
+          Aktuálně je dostupný pouze IoT a elektronika. Další témata připravujeme — můžeš se podívat, co se chystá.
+        </p>
+        <div className="topic-grid grid gap-4 sm:grid-cols-2">
+          {TOPIC_OPTIONS.map((topic) => (
+            <TopicButton
+              key={topic.id}
+              topicId={topic.id}
+              label={topic.label}
+              accent={topic.accent}
+              enabled={topic.enabled}
+              onSelect={handleSelect}
+            />
+          ))}
+        </div>
+      </PanelGlass>
+    </motion.section>
+  );
+}
+```
+
+- [ ] **Step 2: Type-check + commit**
+
+```bash
+cd /c/Users/lukol/weeks-iot && npx tsc --noEmit && git add src/components/screens/TopicSelect.tsx && git commit -m "feat(screens): TopicSelect — 4 topics (1 enabled), gates entry to PIN" && git push
+```
+
+---
+
+### Task 29: [Agent] Main page orchestration (with topic gate)
 
 **Files:** `src/app/page.tsx`
+
+> **CHANGED 2026-04-26:** `topic-select` is the entry screen; `pin-entry` is reachable only once `state.selectedTopic` is set. Defensive fallback: if any later state transition leaves `selectedTopic === null`, `topic-select` renders again.
 
 - [ ] **Step 1: Replace `src/app/page.tsx`**
 
@@ -2102,18 +2783,26 @@ cd /c/Users/lukol/weeks-iot && npx tsc --noEmit && git add src/components/screen
 "use client";
 
 import { useGameState } from "@/components/providers/GameStateProvider";
+import { TopicSelect } from "@/components/screens/TopicSelect";
 import { PinEntry } from "@/components/screens/PinEntry";
 import { TaskList } from "@/components/screens/TaskList";
 import { TaskDetail } from "@/components/screens/TaskDetail";
 import { StyleShop } from "@/components/screens/StyleShop";
 import { AvatarShop } from "@/components/screens/AvatarShop";
 import { LevelBadges } from "@/components/screens/LevelBadges";
+import { isTopicEnabled } from "@/lib/topics";
 
 export default function HomePage() {
   const { state } = useGameState();
   const screen = state.screen.currentScreen;
 
+  // Hard gate: no topic selected (or topic now disabled) → always TopicSelect.
+  if (!state.selectedTopic || !isTopicEnabled(state.selectedTopic)) {
+    return <TopicSelect />;
+  }
+
   switch (screen) {
+    case "topic-select": return <TopicSelect />;
     case "pin-entry":    return <PinEntry />;
     case "task-list":    return <TaskList />;
     case "task-detail":  return <TaskDetail />;
@@ -2131,12 +2820,12 @@ export default function HomePage() {
 cd /c/Users/lukol/weeks-iot && npm run build && npm run dev
 ```
 
-Visit `localhost:3000` → PIN entry should render. Enter daily PIN (e.g., `123`) → TaskList appears with beginner section unlocked.
+Visit `localhost:3000` → TopicSelect renders first. Click "IoT a elektronika" → PinEntry appears. Click "Změnit téma" → back to TopicSelect. Enter daily PIN (e.g., `123`) → TaskList. Visit `localhost:3000/?screen=topics` → TopicSelect even after a previous selection.
 
 - [ ] **Step 3: Commit**
 
 ```bash
-cd /c/Users/lukol/weeks-iot && git add src/app/page.tsx && git commit -m "feat(app): main page switches between screens based on state" && git push
+cd /c/Users/lukol/weeks-iot && git add src/app/page.tsx && git commit -m "feat(app): main page with topic-select gate before PIN entry" && git push
 ```
 
 ---
@@ -2326,8 +3015,12 @@ This document records findings from the audit performed during the v2 Next.js re
 | 4 | No Subresource Integrity on Google Fonts | Low | Accepted | Served via next/font/google which handles self-hosting + caching. |
 | 5 | localStorage read corruption → app crash | Medium | Fixed in v2 | storage.ts wraps JSON.parse in try/catch, resets on error. |
 | 6 | TASK_SOLUTIONS regexes untested for ReDoS | Low | Deferred to v2.1 | Manual scan shows no catastrophic backtracking patterns. Will add test matrix later. |
-| 7 | No CSP headers | Low | Deferred to v3 | Static export on Vercel has safe defaults. Add when adding third-party embeds. |
+| 7 | No CSP headers | Low | Deferred to v3 | Vercel defaults are safe; add when introducing third-party embeds. |
 | 8 | Image assets served from same origin without cache-busting | Info | Accepted | Next.js `<Image>` handles cache headers. |
+| 9 | `/api/notify-account` accepts JSON without auth | Medium | Accepted | Validates input; restricts `accessUrl` to weeks.cz / vercel.app / localhost. No rate limit (Vercel default 30 RPS per IP). v3: add Cloudflare/Vercel firewall rule + per-IP throttle once deployed publicly. |
+| 10 | `/api/notify-account` could be used to spam arbitrary `to:` addresses | Medium | Accepted | Endpoint sends one email per call with our `From:`. Without rate limiting an attacker could enumerate the platform as a relay. Mitigation in v2: low Vercel quota + the URL is noindex; in v3: require a hashed lecturer-issued token in the request. |
+| 11 | Email transport secret (`RESEND_API_KEY`) lives in Vercel env | Info | Accepted | Standard pattern. Documented in `.env.local.example`. Never logged. |
+| 12 | URL params `?email=` and `?screen=topics` are user-controllable | Low | Fixed in v2 | `?email=` only prefills the form input — never auto-submits, never written to state until form submit. `?screen=topics` only changes UI state. Both string-validated before use. |
 
 ## What is / isn't a security boundary
 
@@ -2338,6 +3031,7 @@ This document records findings from the audit performed during the v2 Next.js re
 **IS NOT a security boundary:**
 - Any PIN in client JS (daily, lecturer, admin) — assume kids will find these
 - Section unlocks, star costs, help card costs — all client-enforced game mechanics, not authentication
+- The `/api/notify-account` route — input-validated but not authenticated; treat as a low-quota best-effort notifier, not as identity proof. The recipient address is *not* verified to belong to the kid.
 
 ## Recommendations for v3
 
@@ -2353,6 +3047,7 @@ This document records findings from the audit performed during the v2 Next.js re
 - Ran `npm audit` (see section below)
 - Reviewed regex patterns in TASK_SOLUTIONS for ReDoS risk
 - Verified TLS + noindex via `curl -sI https://iot.weeks.cz`
+- For `/api/notify-account`: replayed crafted inputs (oversized body, malformed JSON, hostile `accessUrl`, non-email `to:`) against the local route; verified each returns 4xx without invoking the email transport.
 
 ## `npm audit` snapshot
 
@@ -2409,34 +3104,58 @@ cd /c/Users/lukol/weeks-iot && git add README.md && git commit -m "docs: rewrite
 
 ## Phase 8: Cutover
 
-### Task 35: [Agent+Lukáš] Incorporate step4n's post-v1 vanilla changes
+### Task 35: [Agent+Lukáš] Incorporate step4n's post-baseline vanilla changes
 
 **Files:** depends on what step4n added
 
-This task runs **immediately before the cutover PR**. Goal: any features step4n added to `dev` branch (vanilla) while v2 was in progress get ported into the Next.js version.
+This task runs **immediately before the cutover PR**. Goal: any features step4n added to `dev` branch (vanilla) **after** the v2 port baseline (`dev` @ `f20a160`, 2026-04-25) get ported into the Next.js version.
 
-- [ ] **Step 1: Diff step4n's dev vs v1 baseline**
+> **Already incorporated by the 2026-04-26 plan update:**
+> - `e865397` "Add topic selector and account email integration" → covered by Task 7a (`/api/notify-account`), Task 14a (`topics.ts`), Task 18 (`STRICT_TASK_RULES`), Task 21 (selectedTopic state + URL params), Task 21a (`account-email.ts`), Task 23a (TopicButton), Task 24 (PinEntry change-topic + email-link form), Task 28a (TopicSelect), Task 29 (orchestration gate).
+> - `f20a160` "Opravil jsem texty a pripravil odkaz na vyber temat" → covered by the diakritika rule across all string-bearing tasks (`themes.ts`, `tasks.ts`, all screen components).
+>
+> Both commits are the port baseline — verify against them, do **not** re-port.
+
+- [ ] **Step 1: Diff step4n's dev vs v2 port baseline**
 
 ```bash
-cd /c/Users/lukol/weeks-iot && git fetch origin && git log origin/main..origin/dev --oneline
+cd /c/Users/lukol/weeks-iot && git fetch origin && git log f20a160..origin/dev --oneline
 ```
 
-Review each commit. Categorize:
-- **New task added** → port to `src/lib/tasks.ts` + `src/lib/task-solutions.ts` + add image to `public/task-images/`
+If the output is empty: skip Steps 2–4 — nothing new on `dev` since the baseline. Proceed directly to Step 5 (parity verification).
+
+Otherwise review each new commit. Categorize:
+- **New task added** → port to `src/lib/tasks.ts` + `src/lib/task-solutions.ts` (+`src/lib/strict-rules.ts` if granular) + add image to `public/task-images/`
 - **Task description edit** → mirror in `src/lib/tasks.ts`
-- **Theme added** → port to `src/lib/themes.ts` + `src/app/globals.css`
+- **Theme added** → port to `src/lib/themes.ts` + `src/app/globals.css` (including the `--page-*` vars per Task 22)
 - **Config change** → mirror in `src/lib/config.ts`
+- **New topic enabled** → flip `enabled: true` in `src/lib/topics.ts`; verify a screen exists for the topic
 - **Style fix** → evaluate whether it applies to Next.js port (may be obsolete)
 
 - [ ] **Step 2: Port each relevant commit into v2-nextjs**
 
 For each commit, read diff in `origin/dev` and apply equivalent change to v2-nextjs branch. Commit with message `port(from-dev): <original commit message>`.
 
-- [ ] **Step 3: Verify step4n's vanilla `main` features all present in v2-nextjs**
+- [ ] **Step 3: Refresh `legacy-vanilla/` to the latest `dev` snapshot (so the audit references match what was ported)**
 
-Checklist matching spec §2 "Feature surface" — go through each item and exercise it in preview URL.
+```bash
+cd /c/Users/lukol/weeks-iot && git checkout origin/dev -- app.js style.css index.html arduino-ukoly-kody.txt assets && git mv -f app.js style.css index.html arduino-ukoly-kody.txt assets legacy-vanilla/ 2>/dev/null || true && git commit -m "chore(legacy-vanilla): refresh snapshot to latest dev before cutover" && git push
+```
 
-- [ ] **Step 4: Commit porting work**
+(If `git mv` reports no change because files are already in `legacy-vanilla/`, that's fine — the checkout above already overwrote them.)
+
+- [ ] **Step 4: Verify step4n's vanilla `dev` features all present in v2-nextjs**
+
+Parity checklist (matches spec §"Source Project Baseline → Feature surface" + the 2026-04-26 addendum):
+- [ ] Topic selector renders with 4 buttons; only `iot` is enabled.
+- [ ] "Změnit téma" button on PinEntry returns to topic-select and clears PIN level.
+- [ ] `?screen=topics` and `?view=topics` both reset selectedTopic on mount.
+- [ ] `?email=foo%40bar.cz` prefills the link-account form (does NOT auto-submit).
+- [ ] Granular validation messages appear when STRICT_TASK_RULES patterns fail (test with one task that has a rule).
+- [ ] All 21 tasks complete end-to-end with `{ ok: true }` validation.
+- [ ] All 8 themes apply background gradients from `--page-*` vars.
+
+- [ ] **Step 5: Commit porting work**
 
 ```bash
 cd /c/Users/lukol/weeks-iot && git push origin v2-nextjs
@@ -2453,20 +3172,28 @@ Vercel preview URL for `v2-nextjs` from GitHub commits/v2-nextjs page → Vercel
 - [ ] **Step 2: Smoke test checklist**
 
 Open preview URL in browser. Go through:
+- [ ] **TopicSelect** renders first (4 buttons; only IoT clickable, others show "Připravujeme")
+- [ ] Click "IoT a elektronika" → PinEntry appears with "Téma: IoT a elektronika" header
 - [ ] PIN entry accepts daily PIN (`123`), routes to TaskList
+- [ ] "Změnit téma" button on PinEntry returns to TopicSelect
+- [ ] Visit `<preview-url>?screen=topics` → TopicSelect even after a previous selection (URL gate works)
+- [ ] Visit `<preview-url>?email=test%40example.com` → PinEntry's account-link form is prefilled
+- [ ] Submit account-link form → either success toast (if Vercel env vars set) or `delivered: false` (if not); never blocks PIN entry
 - [ ] TaskList shows 3 sections (beginner unlocked, advanced/expert locked)
 - [ ] Open a beginner task → TaskDetail renders with description + image
-- [ ] Enter Arduino code → Check button validates → success marks task complete + awards stars
+- [ ] Enter Arduino code that violates a STRICT_TASK_RULES pattern → granular Czech message appears (not generic "Zkus to znovu")
+- [ ] Enter correct Arduino code → Check button validates → success marks task complete + awards stars
 - [ ] Help code / help wiring / skip buttons work (when stars available)
 - [ ] After earning enough stars, unlock advanced section
 - [ ] StyleShop renders 8 themes with live preview
-- [ ] Purchase a theme (if enough stars), switch to it, verify visual change
+- [ ] Purchase a theme (if enough stars), switch to it, verify visual change AND that the page background uses the theme's `--page-*` gradient stops
 - [ ] AvatarShop renders avatars, purchase + select works
 - [ ] Level badges screen shows progression based on stars
 - [ ] PIN entry → admin PIN (`321`) → routes to admin page
 - [ ] Admin page shows stats, reset button works
-- [ ] Close browser, reopen → progress restored from localStorage
+- [ ] Close browser, reopen → progress restored from localStorage (key `iot-camp-screen-state-v6`); selectedTopic still IoT, no re-prompt
 - [ ] `curl -skI <preview-url>` shows `x-robots-tag: noindex, nofollow`
+- [ ] `curl -s -X POST <preview-url>/api/notify-account -H 'Content-Type: application/json' -d '{}'` returns 400 (input validation runs)
 
 - [ ] **Step 3: Document any issues found**
 
@@ -2507,32 +3234,49 @@ Title: `feat: v2 Next.js refactor with full parity + design polish + audit`
 Description:
 ```
 Clean rewrite from vanilla JS to Next.js 16 with full feature parity
-with step4n's original. Weeks design DNA applied to all 8 themes.
-Security + code audit performed — see docs/audit-findings-v2.md.
+with step4n's `dev` branch (incl. topic selector + account-email
+integration from commits e865397 and f20a160). Weeks design DNA applied
+to all 8 themes. Security + code audit performed — see docs/audit-findings-v2.md.
 
-Breaking: localStorage schema bumped to v5 (fresh start, no migration
+Breaking: localStorage schema bumped to v6 (fresh start, no migration
 — pre-production so no real users affected).
 
+Adds: one Vercel serverless route at /api/notify-account (was static
+export only; now mixed). Pages still pre-rendered statically.
+
 After merge:
-1. Vercel auto-deploys main → iot.weeks.cz serves Next.js
-2. Reset dev branch to main (step4n's workflow continues on Next.js)
-3. Message step4n with v2 README + Codex workflow guide
+1. Set RESEND_API_KEY + ACCOUNT_EMAIL_FROM env vars in Vercel project (Production + Preview).
+2. Vercel auto-deploys main → iot.weeks.cz serves Next.js
+3. Reset dev branch to main (step4n's workflow continues on Next.js)
+4. Message step4n with v2 README + Codex workflow guide
 ```
 
-- [ ] **Step 4: [Lukáš] Review + merge**
+- [ ] **Step 4: [Lukáš] Set Vercel env vars BEFORE merge**
+
+In Vercel project `weeks-iot` → Settings → Environment Variables, add for both Production and Preview:
+- `RESEND_API_KEY` = (from https://resend.com dashboard)
+- `ACCOUNT_EMAIL_FROM` = `Weeks IoT <noreply@weeks.cz>`
+
+Without these, `/api/notify-account` returns `{ ok: true, delivered: false }` — fine for previews, surprising for production. Setting before merge avoids a window where account-link emails silently no-op.
+
+- [ ] **Step 5: [Lukáš] Review + merge**
 
 Review files changed. Merge PR. Vercel auto-deploys.
 
-- [ ] **Step 5: [Agent] Verify production**
+- [ ] **Step 6: [Agent] Verify production**
 
 ```bash
 curl -skI https://iot.weeks.cz
 curl -s  https://iot.weeks.cz/robots.txt
+curl -s -X POST https://iot.weeks.cz/api/notify-account -H 'Content-Type: application/json' -d '{}'
 ```
 
-Expected: 200, `x-robots-tag: noindex, nofollow`, `robots.txt` content unchanged.
+Expected:
+- root: 200, `x-robots-tag: noindex, nofollow`
+- `robots.txt`: content unchanged
+- API: 400 `{"ok":false,"error":"Invalid 'to'"}` (validation runs)
 
-Open `https://iot.weeks.cz` in browser. Expected: Next.js version renders (PIN entry screen with Outfit font + glass panel).
+Open `https://iot.weeks.cz` in browser. Expected: Next.js version renders (TopicSelect first, then PinEntry with Outfit font + glass panel).
 
 ---
 
@@ -2581,12 +3325,16 @@ After step4n pulls + accepts + acknowledges, mark cutover complete. Close v2-nex
 
 ## Success Criteria (verify after Task 38)
 
-- [ ] `https://iot.weeks.cz` serves Next.js static export (not vanilla) — View Source shows `__next` scripts
-- [ ] All 21 tasks completable end-to-end with correct validation
-- [ ] 8 themes switchable via style shop, each renders with Weeks DNA (Outfit typography, glass panels)
-- [ ] Progress persists via localStorage `iot-camp-screen-state-v5`
-- [ ] `docs/audit-findings-v2.md` exists with filled severity table
-- [ ] `README.md` is in place, v2 version with Codex workflow
+- [ ] `https://iot.weeks.cz` serves Next.js (not vanilla) — View Source shows `__next` scripts
+- [ ] **TopicSelect renders first** with 4 buttons; only IoT enabled
+- [ ] All 21 tasks completable end-to-end with correct `{ ok: true }` validation
+- [ ] **At least one task surfaces a granular STRICT_TASK_RULES message** when its rule fails
+- [ ] 8 themes switchable via style shop, each renders with Weeks DNA (Outfit typography, glass panels) AND with theme-specific `--page-*` background gradients
+- [ ] Progress persists via localStorage `iot-camp-screen-state-v6`; selectedTopic survives reload
+- [ ] `?screen=topics` resets the topic selection on next visit; `?email=…` prefills the link-account form
+- [ ] `/api/notify-account` returns 400 on bad input; with env vars set, returns `{ ok: true, delivered: true }` for valid input and an email arrives at the recipient
+- [ ] `docs/audit-findings-v2.md` exists with filled severity table (incl. rows 9–12 covering the API route)
+- [ ] `README.md` is in place, v2 version with Codex workflow + a section noting Vercel env vars for the API route
 - [ ] `X-Robots-Tag: noindex, nofollow` header still present on production
 - [ ] `dev` branch reset to match `main` (both on Next.js)
 - [ ] step4n has received hand-off message and re-cloned repo
@@ -2595,12 +3343,15 @@ After step4n pulls + accepts + acknowledges, mark cutover complete. Close v2-nex
 
 ## Known Quirks / Gotchas
 
-- **static export + dynamic Context:** `output: 'export'` requires components not to depend on server-side features. Our usage is all client (useState, useReducer, useEffect) — works, but all components must have `"use client"` directive where hooks are used.
+- **Mixed static + serverless:** `output: 'export'` was dropped (2026-04-26) because of `/api/notify-account`. Pages without server data still pre-render statically; only the one API route runs as a Vercel function. All UI components keep `"use client"` directive.
 - **localStorage on first SSR render:** During build, Next.js does a static prerender without `window`. `loadGameState` is guarded with `typeof window === "undefined"` check. `useEffect` triggers hydration on client.
 - **Font loading FOUC:** Outfit via `next/font/google` is self-hosted, no FOUC in production; dev may flash briefly.
 - **Body background image from weeks.cz:** CSS URL points to `https://weeks.cz/_next/image?q=75&url=%2Fimages%2Fhwlab%2Fhwlab-7976.webp&w=3840`. This is a cross-origin resource — test that it loads in production. Alternative: copy the image into `public/` to avoid cross-origin dependency.
-- **Port fidelity for TASK_SOLUTIONS:** step4n's validators may have non-obvious corner cases. Don't "optimize" — port literally and flag in audit doc.
-- **Czech diacritics:** step4n's strings lack diacritics (Codex stripped them). Port restores proper Czech text. Ensure source file encoding is UTF-8 (Next.js default).
+- **Port fidelity for TASK_SOLUTIONS + STRICT_TASK_RULES:** step4n's validators may have non-obvious corner cases. Don't "optimize" — port literally and flag in audit doc.
+- **`STRICT_TASK_RULES` keys must match `tasks.ts` IDs exactly:** if a task ID is renamed, every consumer (rules + validators + state + image map) updates. Adding a `tsc` check is overkill — a typo here surfaces during the smoke test as "validation absent".
+- **Czech diacritics:** post-Štěpán `dev` already has full diacritics. Port preserves them. Ensure source file encoding is UTF-8 (Next.js default).
+- **TEST_MODE leakage:** `NEXT_PUBLIC_TEST_MODE` is read at build time and embedded in client bundle. Setting it in Vercel Production would seed every kid with TEST_BALANCE on first visit. Confirm it's unset (or `0`) in Production env before each deploy.
+- **`/api/notify-account` and previews:** previews share Vercel env vars per branch by default. `RESEND_API_KEY` set in Preview means previews CAN send real emails — be aware when smoke-testing.
 
 ---
 
