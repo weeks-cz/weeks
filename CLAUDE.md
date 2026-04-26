@@ -47,7 +47,7 @@ npm run lint         # Run ESLint
     /tabor-chytrych-technologii  # Weekend MIX camp page (spring terms + summer #leto section)
     /tabor-3d-tisk          # One-day 3D printing camp (confirmed + připravujeme terms)
     /tabor-iot              # One-day IoT + Arduino camp (confirmed + připravujeme terms)
-    /duben                  # Ad landing page for April 18-19 camps (noindex, minimal layout)
+    /kveten                 # Ad landing page for May 16-17 camps (noindex, minimal layout)
     /o-nas                  # About page (team with real names)
     /kontakt                # Contact page
     /gdpr                   # GDPR page
@@ -257,7 +257,7 @@ Real team members with specialized icons:
 ## Contact Info
 
 Phone: +420 703 046 440 (confirmed April 2026)
-Used in: kontakt page, ContactSection, StructuredData, /duben landing page
+Used in: kontakt page, ContactSection, StructuredData, /kveten landing page
 
 ## DNS Configuration
 
@@ -336,14 +336,11 @@ TXT   @     google-site-verification=5epLUIbGFT0mcISr7rJZPFLcNlcAIFkQXe5cBY9nSdY
 - Add DDM registration URLs (same pattern as confirmed one-day terms)
 
 ### Ad landing pages
-- **`/duben`** — live at weeks.cz/duben, used for IG ad campaign promoting IoT 18.4 + 3D tisk 19.4
-  - Minimal layout (no nav/footer), 2 camp cards with direct DDM registration
-  - Lead capture (záchranná síť) + personal assistance (phone/WhatsApp)
-  - GA4 virtual pageviews: `/ad/duben`, `/registrace-duben-iot`, `/registrace-duben-3d-tisk`, `/lead-duben-*`
-  - Spec: `docs/superpowers/specs/2026-04-08-ad-landing-duben.md`
 - **`/kveten`** — live at weeks.cz/kveten, promoting 3D tisk 16.5 + IoT 17.5
-  - Same pattern as `/duben` (noindex, minimal layout, 2 camp cards)
+  - Minimal layout (noindex, no nav/footer), 2 camp cards with direct DDM registration
+  - Lead capture (záchranná síť) + personal assistance (phone/WhatsApp)
   - GA4 virtual pageviews: `/ad/kveten`, `/registrace-kveten-3d-tisk`, `/registrace-kveten-iot`, `/lead-kveten-*`
+  - Predecessor: `/duben` (April 18-19 campaign, removed after terms passed) — spec at `docs/superpowers/specs/2026-04-08-ad-landing-duben.md`
 
 ### Other pending items
 - Facebook Pixel — when ready for advertising
