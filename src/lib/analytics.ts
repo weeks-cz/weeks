@@ -118,3 +118,10 @@ export function trackRegistrationFormOpen(params: {
     camp_type: params.campType,
   })
 }
+
+// Učebna nav link click — tracks how often visitors discover the IoT learning platform
+// from weeks.cz nav. Expected to be low (campers + lecturers only); high values would
+// suggest the link is mis-styled and pulling casual visitors away from the funnel.
+export function trackUcebnaClick(source: 'desktop' | 'mobile') {
+  sendGAEvent('event', 'ucebna_click', { source })
+}
