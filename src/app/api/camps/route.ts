@@ -95,6 +95,23 @@ const camps3dTisk: CampTerm[] = [
     price: 1490,
     ddmId: null,
   },
+  {
+    id: '3d-786',
+    title: 'Jednodenní tábor 3D tisku',
+    campType: 'oneday',
+    program: '3d-tisk',
+    startDate: '2026-05-16',
+    endDate: '2026-05-16',
+    location: 'HWLab Praha',
+    locationDetail: 'Kongresové centrum Praha, 5. května 11, Praha 4',
+    capacity: 15,
+    spotsLeft: null,
+    enrolledCount: null,
+    status: 'open_with_link',
+    registrationUrl: 'https://www.ddmp6.cz/tabory/?id=786',
+    price: 1490,
+    ddmId: '786',
+  },
 ]
 
 // One-day camps - IoT & elektronika
@@ -168,7 +185,7 @@ const campsIot: CampTerm[] = [
     ddmId: null,
   },
   {
-    id: 'iot-17-05',
+    id: 'iot-787',
     title: 'Jednodenní tábor IoT & elektroniky',
     campType: 'oneday',
     program: 'iot',
@@ -179,10 +196,10 @@ const campsIot: CampTerm[] = [
     capacity: 15,
     spotsLeft: null,
     enrolledCount: null,
-    status: 'collecting_interest',
-    registrationUrl: null,
+    status: 'open_with_link',
+    registrationUrl: 'https://www.ddmp6.cz/tabory/?id=787',
     price: 1490,
-    ddmId: null,
+    ddmId: '787',
   },
 ]
 

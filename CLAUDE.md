@@ -140,7 +140,7 @@ Alternating So/Ne pattern between 3D tisk and IoT:
 | 25–26. 4.   | 3D tisk     | IoT         | Připravujeme |
 | 2–3. 5.     | IoT         | 3D tisk     | Připravujeme |
 | 9–10. 5.    | 3D tisk     | IoT         | Připravujeme |
-| 17. 5.      | IoT         | —           | Připravujeme |
+| 16–17. 5.   | 3D tisk     | IoT         | Potvrzeno    |
 
 ### Summer MIX Terms (July–August 2026)
 
@@ -322,12 +322,14 @@ TXT   @     google-site-verification=5epLUIbGFT0mcISr7rJZPFLcNlcAIFkQXe5cBY9nSdY
 ### Current term status
 - **MIX spring**: 28-29.3 confirmed with DDM registration link (14-15.3 removed — passed)
 - **MIX summer**: 7 weekends (Jul–Aug) — non-binding interest form only
-- **One-day confirmed**: 11-12.4 and 18-19.4 — DDM registration links active
+- **One-day confirmed**: 11-12.4, 18-19.4, and 16-17.5 — DDM registration links active
   - 3D tisk 11.4. → ddmp6.cz/tabory/?id=774
   - IoT 12.4. → ddmp6.cz/tabory/?id=776
   - IoT 18.4. → ddmp6.cz/tabory/?id=773
   - 3D tisk 19.4. → ddmp6.cz/tabory/?id=775
-- **One-day připravujeme**: 25-26.4 through 17.5 — non-binding registration form
+  - 3D tisk 16.5. → ddmp6.cz/tabory/?id=786
+  - IoT 17.5. → ddmp6.cz/tabory/?id=787
+- **One-day připravujeme**: 25-26.4 through 9-10.5 — non-binding registration form
 
 ### When next terms are confirmed by DDM
 - Move připravujeme terms to confirmed as DDM approves them
@@ -339,6 +341,9 @@ TXT   @     google-site-verification=5epLUIbGFT0mcISr7rJZPFLcNlcAIFkQXe5cBY9nSdY
   - Lead capture (záchranná síť) + personal assistance (phone/WhatsApp)
   - GA4 virtual pageviews: `/ad/duben`, `/registrace-duben-iot`, `/registrace-duben-3d-tisk`, `/lead-duben-*`
   - Spec: `docs/superpowers/specs/2026-04-08-ad-landing-duben.md`
+- **`/kveten`** — live at weeks.cz/kveten, promoting 3D tisk 16.5 + IoT 17.5
+  - Same pattern as `/duben` (noindex, minimal layout, 2 camp cards)
+  - GA4 virtual pageviews: `/ad/kveten`, `/registrace-kveten-3d-tisk`, `/registrace-kveten-iot`, `/lead-kveten-*`
 
 ### Other pending items
 - Facebook Pixel — when ready for advertising

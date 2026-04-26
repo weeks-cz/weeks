@@ -22,6 +22,7 @@ const galleryImages: GalleryImage[] = [
 // Potvrzené termíny s DDM registračními linky
 const confirmedTerminy = [
   { id: 'iot-18-04', date: '18. dubna 2026', day: 'sobota', label: 'Sobota 18. dubna', registrationUrl: 'https://www.ddmp6.cz/tabory/?id=773#js-application' },
+  { id: 'iot-17-05', date: '17. května 2026', day: 'neděle', label: 'Neděle 17. května', registrationUrl: 'https://www.ddmp6.cz/tabory/?id=787#js-application' },
 ]
 
 // Připravované termíny
@@ -29,7 +30,6 @@ const pripravujemeTerminy = [
   { id: 'iot-26-04', date: '26. dubna', day: 'neděle', label: 'Neděle 26. dubna' },
   { id: 'iot-02-05', date: '2. května', day: 'sobota', label: 'Sobota 2. května' },
   { id: 'iot-10-05', date: '10. května', day: 'neděle', label: 'Neděle 10. května' },
-  { id: 'iot-17-05', date: '17. května', day: 'neděle', label: 'Neděle 17. května' },
 ]
 
 const dayProgram = [
