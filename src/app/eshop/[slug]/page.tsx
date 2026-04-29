@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { ArrowLeft, ArrowRight, CheckCircle2 } from 'lucide-react'
+import { ArrowLeft, ArrowRight, BookOpen, CheckCircle2, ExternalLink } from 'lucide-react'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { AddToCartButton } from '@/components/shop/AddToCartButton'
@@ -81,6 +81,15 @@ export default async function ShopProductPage({
                     Přejít do košíku
                     <ArrowRight className="ml-1 h-4 w-4" />
                   </Link>
+                  <a
+                    href="https://iot.weeks.cz"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center rounded-lg border border-gray-200 px-5 py-3 font-semibold text-gray-700 transition-colors hover:border-primary-300 hover:text-primary-700"
+                  >
+                    Učebna
+                    <ExternalLink className="ml-2 h-4 w-4" />
+                  </a>
                 </div>
 
                 <p className="mt-4 text-sm text-gray-500">{product.leadTime}</p>
@@ -104,6 +113,33 @@ export default async function ShopProductPage({
             </div>
 
             <div className="rounded-[28px] border border-gray-200 bg-white p-6 shadow-sm">
+              <h2 className="text-xl font-bold text-gray-900">Projekty v Učebně</h2>
+              <div className="mt-5 flex items-start gap-3 rounded-2xl bg-primary-50 p-4 text-sm leading-6 text-primary-900">
+                <BookOpen className="mt-0.5 h-5 w-5 shrink-0 text-primary-700" />
+                <p>
+                  Přístup do Weeks Učebny je součástí sady. Projekty jsou připravené pro komponenty v balení, takže dítě ví, co staví a jak postupovat.
+                </p>
+              </div>
+              <ul className="mt-5 space-y-3">
+                {product.projects.map((item) => (
+                  <li key={item} className="flex items-start gap-3 text-sm leading-6 text-gray-600">
+                    <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-primary-500" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+              <a
+                href="https://iot.weeks.cz"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-primary-700 transition-colors hover:text-primary-900"
+              >
+                Podívat se do Učebny
+                <ExternalLink className="h-4 w-4" />
+              </a>
+            </div>
+
+            <div className="rounded-[28px] border border-gray-200 bg-white p-6 shadow-sm">
               <h2 className="text-xl font-bold text-gray-900">Proč dává smysl</h2>
               <ul className="mt-5 space-y-3">
                 {product.highlights.map((item) => (
@@ -115,9 +151,9 @@ export default async function ShopProductPage({
               </ul>
             </div>
 
-            <div className="rounded-[28px] border border-gray-200 bg-gray-900 p-6 text-white shadow-sm">
+            <div className="rounded-[28px] border border-gray-200 bg-gray-900 p-6 text-white shadow-sm lg:col-span-3">
               <h2 className="text-xl font-bold">Komu ji doporučujeme</h2>
-              <ul className="mt-5 space-y-3 text-sm leading-6 text-white/80">
+              <ul className="mt-5 grid grid-cols-1 gap-3 text-sm leading-6 text-white/80 md:grid-cols-3">
                 {product.idealFor.map((item) => (
                   <li key={item} className="flex items-start gap-3">
                     <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-cta-400" />
@@ -126,7 +162,7 @@ export default async function ShopProductPage({
                 ))}
               </ul>
               <div className="mt-6 rounded-2xl bg-white/10 p-4 text-sm leading-6 text-white/80">
-                Nejste si jistí výběrem? Dejte sadu do košíku a do poznámky napište věk dítěte a předchozí zkušenosti. Ozveme se s doporučením.
+                Nejste si jistí výběrem? Dejte sadu do košíku a do poznámky napište věk dítěte a předchozí zkušenosti. Ozveme se s doporučením vhodné úrovně.
               </div>
             </div>
           </div>

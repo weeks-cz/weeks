@@ -13,10 +13,10 @@ export default function ShopCartPage() {
               Košík
             </p>
             <h1 className="mt-3 text-4xl font-bold tracking-tight text-gray-900">
-              Vybrané sady a poptávka
+              Vybrané Weeks sady
             </h1>
             <p className="mt-4 text-lg leading-8 text-gray-600">
-              Tohle je první MVP bez online platby. Vy nám pošlete vybrané sady a kontakt, my potvrdíme dostupnost a domluvíme se s vámi na dalším kroku.
+              Pošlete nám vybrané sady a kontakt. Potvrdíme dostupnost, doporučíme vhodnou variantu, pokud si nejste jistí, a domluvíme s vámi dokončení objednávky.
             </p>
           </div>
 

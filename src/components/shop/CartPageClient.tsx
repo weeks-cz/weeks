@@ -54,7 +54,7 @@ export function CartPageClient() {
 
       const data = await response.json()
       if (!response.ok) {
-        throw new Error(data.error || 'Nepodarilo se odeslat poptavku')
+        throw new Error(data.error || 'Nepodařilo se odeslat objednávku')
       }
 
       trackShopInquirySubmit(detailedItems.length, totalPrice)
@@ -66,7 +66,7 @@ export function CartPageClient() {
       setNote('')
       setGdprConsent(false)
     } catch (submitError) {
-      setError(submitError instanceof Error ? submitError.message : 'Nepodarilo se odeslat poptavku')
+      setError(submitError instanceof Error ? submitError.message : 'Nepodařilo se odeslat objednávku')
     } finally {
       setIsSubmitting(false)
     }
@@ -78,7 +78,7 @@ export function CartPageClient() {
         <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-trust-600 text-white">
           <CheckCircle2 className="h-7 w-7" />
         </div>
-        <h2 className="mb-3 text-2xl font-bold text-gray-900">Poptávka je odeslaná</h2>
+        <h2 className="mb-3 text-2xl font-bold text-gray-900">Objednávka je odeslaná</h2>
         <p className="mx-auto max-w-2xl text-gray-600">
           Ozveme se vám s potvrzením dostupnosti, doporučením vhodné sady a dalším postupem.
         </p>
@@ -96,7 +96,7 @@ export function CartPageClient() {
       <div className="rounded-3xl border border-dashed border-gray-300 bg-white p-10 text-center">
         <h2 className="mb-3 text-2xl font-bold text-gray-900">Košík je zatím prázdný</h2>
         <p className="mx-auto mb-6 max-w-2xl text-gray-600">
-          Vyberte si sadu, která dává smysl jako domácí pokračování po kroužku nebo jako první vstup do světa Arduino projektů.
+          Vyberte si Weeks sadu chytré elektroniky s přístupem do Učebny a projekty pro domácí tvoření.
         </p>
         <Link href="/eshop" className="btn-secondary">
           Projít nabídku sad
@@ -180,11 +180,11 @@ export function CartPageClient() {
       <div className="h-fit rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
         <div className="mb-6 border-b border-gray-100 pb-6">
           <p className="text-sm font-medium uppercase tracking-[0.2em] text-primary-600">
-            Poptávka
+            Objednávka
           </p>
-          <h2 className="mt-2 text-2xl font-bold text-gray-900">Domluvíme další krok</h2>
+          <h2 className="mt-2 text-2xl font-bold text-gray-900">Dokončíme to spolu</h2>
           <p className="mt-2 text-sm leading-6 text-gray-600">
-            Tohle je zatím poptávkový košík. Po odeslání se vám ozveme s potvrzením dostupnosti a finální domluvou.
+            Po odeslání vám potvrdíme dostupnost sady, přístup do Učebny a finální postup objednávky.
           </p>
           <div className="mt-4 rounded-2xl bg-gray-50 p-4">
             <div className="flex items-center justify-between text-sm text-gray-600">
@@ -259,7 +259,7 @@ export function CartPageClient() {
               required
             />
             <span>
-              Souhlasím se zpracováním osobních údajů za účelem vyřízení poptávky. Více najdete v{' '}
+              Souhlasím se zpracováním osobních údajů za účelem vyřízení objednávky. Více najdete v{' '}
               <Link href="/gdpr" className="font-medium text-primary-600 hover:underline">
                 zásadách ochrany osobních údajů
               </Link>.
@@ -276,7 +276,7 @@ export function CartPageClient() {
             className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gray-900 px-5 py-3.5 font-semibold text-white transition hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-60"
           >
             <Send className="h-4 w-4" />
-            {isSubmitting ? 'Odesílám poptávku...' : 'Odeslat poptávku'}
+            {isSubmitting ? 'Odesílám objednávku...' : 'Odeslat objednávku'}
           </button>
         </form>
       </div>
