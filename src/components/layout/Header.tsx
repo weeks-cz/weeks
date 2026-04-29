@@ -9,6 +9,7 @@ import { trackNavCTA, trackUcebnaClick } from '@/lib/analytics'
 
 const navigation = [
   { name: 'Program', href: '/program' },
+  { name: 'E-shop', href: '/eshop' },
   { name: 'Proč Weeks', href: '/#proc-weeks' },
   { name: 'O nás', href: '/o-nas' },
   { name: 'Kontakt', href: '/kontakt' },

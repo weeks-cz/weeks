@@ -125,3 +125,37 @@ export function trackRegistrationFormOpen(params: {
 export function trackUcebnaClick(source: 'desktop' | 'mobile') {
   sendGAEvent('event', 'ucebna_click', { source })
 }
+
+export function trackShopViewProduct(productSlug: string, productName: string) {
+  sendGAEvent('event', 'shop_view_product', {
+    product_slug: productSlug,
+    product_name: productName,
+  })
+  fbqEvent('ViewContent', {
+    content_name: productName,
+    content_category: 'iot_kit',
+  })
+}
+
+export function trackShopAddToCart(productSlug: string, productName: string) {
+  sendGAEvent('event', 'shop_add_to_cart', {
+    product_slug: productSlug,
+    product_name: productName,
+  })
+  fbqEvent('AddToCart', {
+    content_name: productName,
+    content_category: 'iot_kit',
+  })
+}
+
+export function trackShopInquirySubmit(productCount: number, estimatedValue: number) {
+  sendGAEvent('event', 'shop_inquiry_submit', {
+    product_count: productCount,
+    estimated_value: estimatedValue,
+  })
+  fbqEvent('Lead', {
+    content_name: 'shop_inquiry',
+    value: estimatedValue,
+    currency: 'CZK',
+  })
+}
