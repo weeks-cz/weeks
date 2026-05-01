@@ -50,6 +50,17 @@ const baseFaqs = [
   },
 ]
 
+const kvFaqOverrides: Record<number, { question: string; answer: string }> = {
+  3: {
+    question: 'Kolik stojí letní příměstský tábor?',
+    answer: 'Letní příměstský tábor chytrých technologií stojí 7 490 Kč za celý týden (pondělí–pátek, přibližně 40 hodin programu). Cena zahrnuje materiály pro všechny projekty, svačiny i obědy. Vše, co děti vytvoří, si odnášejí domů.',
+  },
+  4: {
+    question: 'Jak probíhá příměstský tábor?',
+    answer: 'Tábor probíhá celý týden od pondělí do pátku, obvykle od 8 do 16 hodin. Každý den se střídají různé aktivity — 3D tisk, IoT & elektronika, VR a základy programování. Na konci týdne si děti odnášejí vlastní projekty, které v průběhu týdne vytvořily.',
+  },
+}
+
 function FAQItem({ question, answer, index }: { question: string; answer: string; index: number }) {
   const [isOpen, setIsOpen] = useState(false)
   const answerId = `faq-answer-${index}`
@@ -92,19 +103,10 @@ function FAQItem({ question, answer, index }: { question: string; answer: string
 export function FAQSection() {
   const location = useLocation()
 
-  const faqs = baseFaqs.map((faq) => {
-    if (faq.type === 'location') {
-      return {
-        question: faq.question,
-        answer: location.faq.locationAnswer,
-      }
-    }
-    if (faq.type === 'organizer') {
-      return {
-        question: faq.question,
-        answer: location.faq.organizerAnswer,
-      }
-    }
+  const faqs = baseFaqs.map((faq, index) => {
+    if (!location.isDefault && kvFaqOverrides[index]) return kvFaqOverrides[index]
+    if (faq.type === 'location') return { question: faq.question, answer: location.faq.locationAnswer }
+    if (faq.type === 'organizer') return { question: faq.question, answer: location.faq.organizerAnswer }
     return faq
   })
 

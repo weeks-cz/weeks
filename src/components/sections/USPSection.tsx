@@ -4,31 +4,42 @@ import { motion } from 'framer-motion'
 import { Building2, Package, GraduationCap, Shield, Clock, Train } from 'lucide-react'
 import { useLocation } from '@/contexts/LocationContext'
 
-const staticUsps = [
-  {
-    icon: Building2,
-    title: 'Exkluzivní technologie HWLab',
-    description: 'Vaše dítě pracuje se stejným vybavením jako profesionálové - průmyslové 3D tiskárny, VR headsety, CNC stroje a pokročilá IoT zařízení. Žádné hračky.',
-  },
+const defaultTechnologyUsp = {
+  icon: Building2,
+  title: 'Exkluzivní technologie HWLab',
+  description: 'Vaše dítě pracuje se stejným vybavením jako profesionálové - průmyslové 3D tiskárny, VR headsety, CNC stroje a pokročilá IoT zařízení. Žádné hračky.',
+}
+
+const defaultScheduleUsp = {
+  icon: Clock,
+  title: 'Kompletní servis od 9 do 17',
+  description: 'Oběd, svačiny, přestávky na hřišti a střídání aktivit. Rodiče mají celý víkendový den pro sebe, děti mají postaráno o vše.',
+}
+
+const genericUsps = [
   {
     icon: Package,
     title: 'Projekty, které si odnesou domů',
-    description: 'Učíme tvorbou, ne teorií. Každý víkend znamená dokončený projekt - vytištěný model, funkční elektroniku nebo nahrané aplikace.',
+    description: 'Učíme tvorbou, ne teorií. Každý tábor znamená dokončený projekt - vytištěný model, funkční elektroniku nebo nahrané aplikace.',
   },
   {
     icon: GraduationCap,
     title: 'Skuteční odborníci, ne hlídání',
     description: 'Naši lektoři jsou aktivní programátoři, inženýři a designéři. Mají praxi z oboru a vědí, jak zaujmout teenagery i začátečníky od 10 let.',
   },
-  {
-    icon: Clock,
-    title: 'Kompletní servis od 9 do 17',
-    description: 'Oběd, svačiny, přestávky na hřišti a střídání aktivit. Rodiče mají celý víkendový den pro sebe, děti mají postaráno o vše.',
-  },
 ]
 
 export function USPSection() {
   const location = useLocation()
+
+  const techUsp = location.usps.technology
+    ? { icon: Building2, ...location.usps.technology }
+    : defaultTechnologyUsp
+
+  const scheduleUsp = location.usps.schedule
+    ? { icon: Clock, ...location.usps.schedule }
+    : defaultScheduleUsp
+
   return (
     <section id="proc-weeks" className="section-padding bg-gray-50">
       <div className="section-container">
@@ -55,7 +66,7 @@ export function USPSection() {
 
         {/* USP Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {[...staticUsps, { icon: Shield, title: location.usps.organizer.title, description: location.usps.organizer.description }, { icon: Train, title: location.usps.location.title, description: location.usps.location.description }].map((usp, index) => (
+          {[techUsp, ...genericUsps, scheduleUsp, { icon: Shield, title: location.usps.organizer.title, description: location.usps.organizer.description }, { icon: Train, title: location.usps.location.title, description: location.usps.location.description }].map((usp, index) => (
             <motion.div
               key={usp.title}
               initial={{ opacity: 0, y: 20 }}

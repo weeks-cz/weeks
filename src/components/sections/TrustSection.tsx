@@ -5,31 +5,26 @@ import { Users, ShieldCheck, Phone, Heart, MapPin, Clock } from 'lucide-react'
 import Image from 'next/image'
 import { useLocation } from '@/contexts/LocationContext'
 
-const safetyFeatures = [
-  {
-    icon: ShieldCheck,
-    title: 'Pojištění účastníků',
-    description: 'Komplexní pojištění',
-  },
-  {
-    icon: Users,
-    title: 'Malé skupiny',
-    description: '1 lektor na 5 dětí',
-  },
-  {
-    icon: Phone,
-    title: 'Okamžitý kontakt',
-    description: 'Rodič vždy informován',
-  },
-  {
-    icon: Heart,
-    title: 'Proškolení lektoři',
-    description: 'Certifikace DDM',
-  },
+const defaultSafetyFeatures = [
+  { icon: ShieldCheck, title: 'Pojištění účastníků', description: 'Komplexní pojištění' },
+  { icon: Users, title: 'Malé skupiny', description: '1 lektor na 5 dětí' },
+  { icon: Phone, title: 'Okamžitý kontakt', description: 'Rodič vždy informován' },
+  { icon: Heart, title: 'Proškolení lektoři', description: 'Certifikace DDM' },
 ]
+
+const safetyIcons = [ShieldCheck, Users, Phone, Heart]
 
 export function TrustSection() {
   const location = useLocation()
+
+  const safetyItems = location.safetyFeatures
+    ? location.safetyFeatures.map((f, i) => ({ ...f, icon: safetyIcons[i] }))
+    : defaultSafetyFeatures
+
+  // Non-DDM locations (KV) need a separate organizer card alongside venue cards
+  const showOrganizerCard = location.registrationType !== 'ddm'
+  const totalCards = location.venues.length + (showOrganizerCard ? 1 : 0)
+
   return (
     <section id="o-nas" className="section-padding bg-white relative overflow-hidden">
       <div className="section-container">
@@ -65,11 +60,12 @@ export function TrustSection() {
         </div>
 
         {/* Partners Grid */}
-        <div className={`grid gap-8 mb-16 ${location.venues.length === 1 ? 'grid-cols-1' : 'grid-cols-1 lg:grid-cols-2'}`}>
+        <div className={`grid gap-8 mb-16 ${totalCards > 1 ? 'grid-cols-1 lg:grid-cols-2' : 'grid-cols-1'}`}>
+          {/* Venue Cards */}
           {location.venues.map((venue, index) => (
             <motion.div
               key={venue.name}
-              initial={{ opacity: 0, x: index === 0 ? -30 : 30 }}
+              initial={{ opacity: 0, x: index === 0 && totalCards > 1 ? -30 : 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               className={venue.name.includes('HWLab') ?
@@ -79,7 +75,6 @@ export function TrustSection() {
             >
               {venue.name.includes('HWLab') ? (
                 <>
-                  {/* Background Image for HWLab */}
                   <div className="absolute inset-0">
                     <Image
                       src="/images/trust-hwlab.webp"
@@ -90,8 +85,6 @@ export function TrustSection() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/70 to-gray-900/40" />
                   </div>
-
-                  {/* Content for HWLab */}
                   <div className="relative z-10 p-8 h-full flex flex-col justify-end min-h-[320px]">
                     <div className="w-16 h-16 bg-white/10 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-6 border border-white/20">
                       <span className="text-2xl font-bold text-white">HW</span>
@@ -110,10 +103,9 @@ export function TrustSection() {
                 </>
               ) : (
                 <>
-                  {/* Content for other venues (DDM style) */}
                   <div className="relative z-10">
                     <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary-100 rounded-full text-xs font-semibold text-primary-700 mb-4">
-                      Organizátor
+                      {location.registrationType === 'ddm' ? 'Organizátor' : 'Místo konání'}
                     </div>
                     <div className="w-16 h-16 bg-primary-100 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                       <span className="text-2xl font-bold text-primary-600">{venue.name.substring(0, 3).toUpperCase()}</span>
@@ -133,12 +125,49 @@ export function TrustSection() {
                       {venue.address}, {venue.city}
                     </div>
                   </div>
-                  {/* Decorative */}
                   <div className="absolute -right-8 -bottom-8 w-32 h-32 bg-primary-100 rounded-full opacity-50" />
                 </>
               )}
             </motion.div>
           ))}
+
+          {/* Organizer Card (non-DDM locations like KV) */}
+          {showOrganizerCard && (
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="group relative bg-gradient-to-br from-accent-50 to-white rounded-2xl p-8 border border-accent-100 overflow-hidden"
+            >
+              <div className="relative z-10">
+                <div className="inline-flex items-center gap-2 px-3 py-1 bg-accent-100 rounded-full text-xs font-semibold text-accent-700 mb-4">
+                  Organizátor
+                </div>
+                <div className="h-16 mb-6 flex items-center group-hover:scale-105 transition-transform origin-left">
+                  {location.organizer.logoUrl ? (
+                    <Image
+                      src={location.organizer.logoUrl}
+                      alt={location.organizer.name}
+                      width={160}
+                      height={64}
+                      className="object-contain object-left h-full w-auto"
+                    />
+                  ) : (
+                    <div className="w-16 h-16 bg-accent-100 rounded-2xl flex items-center justify-center">
+                      <span className="text-2xl font-bold text-accent-600">{location.organizer.name.substring(0, 2).toUpperCase()}</span>
+                    </div>
+                  )}
+                </div>
+                <h3 className="font-display text-2xl font-bold text-gray-900 mb-3">
+                  {location.organizer.name}
+                </h3>
+                <p className="text-gray-600 leading-relaxed mb-4">
+                  {location.usps.organizer.description}
+                </p>
+              </div>
+              <div className="absolute -right-8 -bottom-8 w-32 h-32 bg-accent-100 rounded-full opacity-50" />
+            </motion.div>
+          )}
         </div>
 
         {/* Safety Section */}
@@ -148,7 +177,6 @@ export function TrustSection() {
           viewport={{ once: true }}
           className="relative rounded-2xl overflow-hidden"
         >
-          {/* Background with Image */}
           <div className="absolute inset-0">
             <Image
               src="/images/trust-safety.webp"
@@ -172,7 +200,7 @@ export function TrustSection() {
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-              {safetyFeatures.map((feature, index) => (
+              {safetyItems.map((feature, index) => (
                 <motion.div
                   key={feature.title}
                   initial={{ opacity: 0, y: 20 }}

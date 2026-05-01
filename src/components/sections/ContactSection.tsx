@@ -6,6 +6,7 @@ import { Mail, Phone, MapPin, Clock } from 'lucide-react'
 import Link from 'next/link'
 import { trackLead } from '@/lib/fbpixel'
 import { useLocation } from '@/contexts/LocationContext'
+import { buildPath } from '@/lib/locations'
 
 export function ContactSection() {
   const location = useLocation()
@@ -195,7 +196,7 @@ export function ContactSection() {
                     />
                     <label htmlFor="contact-gdpr" className="text-xs text-gray-500 cursor-pointer text-left">
                       Souhlasím se zpracováním osobních údajů.{' '}
-                      <Link href="/gdpr" className="underline hover:text-primary-600">
+                      <Link href={buildPath(location, 'gdpr')} className="underline hover:text-primary-600">
                         Více informací
                       </Link>
                     </label>

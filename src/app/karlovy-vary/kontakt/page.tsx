@@ -71,6 +71,36 @@ export default function KVKontakt() {
                 </div>
               </motion.div>
             </div>
+
+            {/* Map */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="max-w-4xl mx-auto mt-8"
+            >
+              <div className="rounded-2xl overflow-hidden border border-gray-200 shadow-sm">
+                <iframe
+                  title={`Mapa – ${venue.name}`}
+                  src={`https://maps.google.com/maps?q=${venue.mapQuery ?? encodeURIComponent(`${venue.address}, ${venue.city}`)}&output=embed&z=16`}
+                  width="100%"
+                  height="380"
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  className="block"
+                />
+              </div>
+              <p className="text-center text-sm text-gray-500 mt-3">
+                <a
+                  href={`https://www.google.com/maps/search/?api=1&query=${venue.mapQuery ?? encodeURIComponent(`${venue.address}, ${venue.city}`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary-600 hover:underline"
+                >
+                  Otevřít v Google Maps
+                </a>
+              </p>
+            </motion.div>
           </div>
         </section>
       </main>

@@ -6,6 +6,7 @@ import { FAQSection } from '@/components/sections/FAQSection'
 import { ContactSection } from '@/components/sections/ContactSection'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
+import { KVRegistrationSection } from './_components/KVRegistrationSection'
 
 export default function KarlovyVaryHome() {
   return (
@@ -14,6 +15,7 @@ export default function KarlovyVaryHome() {
       <main id="main">
         <HeroSection />
         <ProgramSection />
+        <KVRegistrationSection />
         <USPSection />
         <TrustSection />
         <FAQSection />

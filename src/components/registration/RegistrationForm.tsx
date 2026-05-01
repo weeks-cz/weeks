@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { User, Baby, FileCheck, ClipboardList, ArrowRight, ArrowLeft, Loader2 } from 'lucide-react'
+import { User, Baby, MapPin, FileCheck, ClipboardList, ArrowRight, ArrowLeft, Loader2 } from 'lucide-react'
 import { parentSchema, childSchema, consentsSchema, INSURANCE_OPTIONS, type ParentData, type ChildData, type ConsentsData } from '@/lib/registration'
 import { getLocationById } from '@/lib/locations'
 import Link from 'next/link'
@@ -11,9 +11,16 @@ import Link from 'next/link'
 const STEPS = [
   { id: 1, title: 'Zákonný zástupce', icon: User },
   { id: 2, title: 'Dítě', icon: Baby },
-  { id: 3, title: 'Souhlasy', icon: FileCheck },
-  { id: 4, title: 'Shrnutí', icon: ClipboardList },
+  { id: 3, title: 'Vyzvednutí', icon: MapPin },
+  { id: 4, title: 'Souhlasy', icon: FileCheck },
+  { id: 5, title: 'Shrnutí', icon: ClipboardList },
 ]
+
+type PickupFormState = {
+  pickup_method: 'solo' | 'named_persons' | ''
+  pickup_time: string
+  pickup_persons: string
+}
 
 export function RegistrationForm() {
   const searchParams = useSearchParams()
@@ -47,11 +54,20 @@ export function RegistrationForm() {
     child_experience: '',
   })
 
+  const [pickup, setPickup] = useState<PickupFormState>({
+    pickup_method: '',
+    pickup_time: '',
+    pickup_persons: '',
+  })
+
   const [consents, setConsents] = useState<ConsentsData>({
     vop_consent: false as unknown as true,
     gdpr_consent: false as unknown as true,
+    photo_consent: false,
     marketing_consent: false,
   })
+
+  const vopUrl = locationId === 'karlovy-vary' ? '/karlovy-vary/podminky' : '/podminky'
 
   function validateStep(): boolean {
     setFieldErrors({})
@@ -68,6 +84,19 @@ export function RegistrationForm() {
         return false
       }
     } else if (step === 3) {
+      if (!pickup.pickup_method) {
+        setFieldErrors({ pickup_method: ['Zvolte způsob vyzvednutí'] })
+        return false
+      }
+      if (pickup.pickup_method === 'solo' && !pickup.pickup_time.trim()) {
+        setFieldErrors({ pickup_time: ['Uveďte plánovaný čas odchodu'] })
+        return false
+      }
+      if (pickup.pickup_method === 'named_persons' && !pickup.pickup_persons.trim()) {
+        setFieldErrors({ pickup_persons: ['Uveďte osoby oprávněné k vyzvednutí'] })
+        return false
+      }
+    } else if (step === 4) {
       const result = consentsSchema.safeParse(consents)
       if (!result.success) {
         setFieldErrors(result.error.flatten().fieldErrors as Record<string, string[]>)
@@ -79,7 +108,7 @@ export function RegistrationForm() {
 
   function nextStep() {
     if (validateStep()) {
-      setStep(s => Math.min(s + 1, 4))
+      setStep(s => Math.min(s + 1, 5))
     }
   }
 
@@ -99,6 +128,9 @@ export function RegistrationForm() {
         body: JSON.stringify({
           ...parent,
           ...child,
+          pickup_method: pickup.pickup_method,
+          pickup_time: pickup.pickup_time,
+          pickup_persons: pickup.pickup_persons,
           ...consents,
           location_id: locationId,
           program: programId,
@@ -121,6 +153,30 @@ export function RegistrationForm() {
     } finally {
       setIsSubmitting(false)
     }
+  }
+
+  function fillTestData() {
+    setParent({
+      parent_name: 'Jan Testovací',
+      parent_email: 'test@weeks.cz',
+      parent_phone: '+420 703 046 440',
+      parent_address: 'Testovací 1, 360 01 Karlovy Vary',
+    })
+    setChild({
+      child_name: 'Tomáš Testovací',
+      child_birthdate: '2013-05-15',
+      child_insurance: INSURANCE_OPTIONS[0],
+      child_health_notes: '',
+      child_experience: 'Trochu Scratch',
+    })
+    setPickup({ pickup_method: 'solo', pickup_time: '16:00', pickup_persons: '' })
+    setConsents({
+      vop_consent: true as unknown as true,
+      gdpr_consent: true as unknown as true,
+      photo_consent: true,
+      marketing_consent: false,
+    })
+    setStep(5)
   }
 
   function FieldError({ name }: { name: string }) {
@@ -155,22 +211,42 @@ export function RegistrationForm() {
       </div>
 
       {/* Step indicator */}
-      <div className="flex items-center justify-between mb-10 max-w-md mx-auto">
+      <div className="flex items-center justify-between mb-10 max-w-sm mx-auto">
         {STEPS.map((s, i) => (
           <div key={s.id} className="flex items-center">
-            <div className={`flex items-center justify-center w-10 h-10 rounded-full border-2 transition-colors ${
+            <div className={`flex items-center justify-center w-9 h-9 rounded-full border-2 transition-colors ${
               step >= s.id
                 ? 'bg-primary-600 border-primary-600 text-white'
                 : 'border-gray-300 text-gray-400'
             }`}>
-              <s.icon className="w-5 h-5" />
+              <s.icon className="w-4 h-4" />
             </div>
             {i < STEPS.length - 1 && (
-              <div className={`w-8 sm:w-16 h-0.5 mx-1 ${step > s.id ? 'bg-primary-600' : 'bg-gray-200'}`} />
+              <div className={`w-6 sm:w-10 h-0.5 mx-1 ${step > s.id ? 'bg-primary-600' : 'bg-gray-200'}`} />
             )}
           </div>
         ))}
       </div>
+
+      {/* Dev autofill */}
+      {process.env.NODE_ENV === 'development' && (
+        <div className="mb-4 flex justify-center gap-2">
+          <button
+            type="button"
+            onClick={fillTestData}
+            className="px-4 py-2 text-xs font-mono bg-gray-800 text-green-400 rounded-lg border border-gray-600 hover:bg-gray-700 transition-colors"
+          >
+            ⚡ Dev: vyplnit testovací data
+          </button>
+          <button
+            type="button"
+            onClick={() => setStep(1)}
+            className="px-4 py-2 text-xs font-mono bg-gray-800 text-yellow-400 rounded-lg border border-gray-600 hover:bg-gray-700 transition-colors"
+          >
+            ↺ Krok 1
+          </button>
+        </div>
+      )}
 
       {/* Form */}
       <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 shadow-sm">
@@ -240,23 +316,100 @@ export function RegistrationForm() {
             </motion.div>
           )}
 
-          {/* Step 3: Consents */}
+          {/* Step 3: Pickup */}
           {step === 3 && (
             <motion.div key="step3" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+              <h2 className="text-lg font-semibold text-gray-900 mb-6">Způsob vyzvednutí</h2>
+              <div className="space-y-5">
+                <div>
+                  <p className="text-sm font-medium text-gray-700 mb-3">Jak bude dítě vyzvedáváno po skončení tábora? *</p>
+                  <div className="space-y-3">
+                    <label className={`flex items-start gap-3 p-4 rounded-lg border-2 cursor-pointer transition-colors ${pickup.pickup_method === 'solo' ? 'border-primary-500 bg-primary-50' : 'border-gray-200 hover:border-gray-300'}`}>
+                      <input
+                        type="radio"
+                        name="pickup_method"
+                        value="solo"
+                        checked={pickup.pickup_method === 'solo'}
+                        onChange={() => setPickup({ ...pickup, pickup_method: 'solo', pickup_persons: '' })}
+                        className="mt-0.5 accent-primary-600"
+                      />
+                      <div>
+                        <p className="font-medium text-gray-900">Dítě odejde samo</p>
+                        <p className="text-sm text-gray-500 mt-0.5">Dítě odejde po skončení programu samostatně</p>
+                      </div>
+                    </label>
+
+                    <label className={`flex items-start gap-3 p-4 rounded-lg border-2 cursor-pointer transition-colors ${pickup.pickup_method === 'named_persons' ? 'border-primary-500 bg-primary-50' : 'border-gray-200 hover:border-gray-300'}`}>
+                      <input
+                        type="radio"
+                        name="pickup_method"
+                        value="named_persons"
+                        checked={pickup.pickup_method === 'named_persons'}
+                        onChange={() => setPickup({ ...pickup, pickup_method: 'named_persons', pickup_time: '' })}
+                        className="mt-0.5 accent-primary-600"
+                      />
+                      <div>
+                        <p className="font-medium text-gray-900">Vyzvedne jmenovaná osoba</p>
+                        <p className="text-sm text-gray-500 mt-0.5">Dítě vyzvedne zákonný zástupce nebo níže uvedená osoba</p>
+                      </div>
+                    </label>
+                  </div>
+                  <FieldError name="pickup_method" />
+                </div>
+
+                {pickup.pickup_method === 'solo' && (
+                  <motion.div key="pickup-time" initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}>
+                    <label htmlFor="pickup_time" className="block text-sm font-medium text-gray-700 mb-1">Plánovaný čas odchodu *</label>
+                    <input
+                      id="pickup_time"
+                      type="time"
+                      value={pickup.pickup_time}
+                      onChange={e => setPickup({ ...pickup, pickup_time: e.target.value })}
+                      className={inputClass('pickup_time')}
+                      min="08:00"
+                      max="16:00"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">Tábor probíhá 8:00–16:00</p>
+                    <FieldError name="pickup_time" />
+                  </motion.div>
+                )}
+
+                {pickup.pickup_method === 'named_persons' && (
+                  <motion.div key="pickup-persons" initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}>
+                    <label htmlFor="pickup_persons" className="block text-sm font-medium text-gray-700 mb-1">Osoby oprávněné k vyzvednutí *</label>
+                    <textarea
+                      id="pickup_persons"
+                      value={pickup.pickup_persons}
+                      onChange={e => setPickup({ ...pickup, pickup_persons: e.target.value })}
+                      className={inputClass('pickup_persons')}
+                      rows={3}
+                      placeholder={'Jana Nováková, +420 601 111 222\nPetr Novák, +420 602 333 444'}
+                    />
+                    <p className="text-xs text-gray-500 mt-1">Jméno a telefon každé osoby na samostatný řádek. Zákonný zástupce je oprávněn vždy.</p>
+                    <FieldError name="pickup_persons" />
+                  </motion.div>
+                )}
+              </div>
+            </motion.div>
+          )}
+
+          {/* Step 4: Consents */}
+          {step === 4 && (
+            <motion.div key="step4" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
               <h2 className="text-lg font-semibold text-gray-900 mb-6">Souhlasy</h2>
               <div className="space-y-5">
                 <div className="flex items-start gap-3">
-                  <input type="checkbox" id="vop" checked={consents.vop_consent as boolean} onChange={e => setConsents({...consents, vop_consent: e.target.checked as unknown as true})} className="mt-1 w-5 h-5 rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
+                  <input type="checkbox" id="vop" checked={consents.vop_consent as boolean} onChange={e => setConsents({...consents, vop_consent: e.target.checked as unknown as true})} className="mt-1 w-5 h-5 shrink-0 rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
                   <label htmlFor="vop" className="text-sm text-gray-700">
                     Souhlasím s{' '}
-                    <Link href="/podminky" target="_blank" className="text-primary-600 underline hover:text-primary-700">Všeobecnými obchodními podmínkami</Link>
+                    <Link href={vopUrl} target="_blank" className="text-primary-600 underline hover:text-primary-700">Všeobecnými obchodními podmínkami</Link>
                     {' '}*
                   </label>
                 </div>
                 <FieldError name="vop_consent" />
 
                 <div className="flex items-start gap-3">
-                  <input type="checkbox" id="gdpr" checked={consents.gdpr_consent as boolean} onChange={e => setConsents({...consents, gdpr_consent: e.target.checked as unknown as true})} className="mt-1 w-5 h-5 rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
+                  <input type="checkbox" id="gdpr" checked={consents.gdpr_consent as boolean} onChange={e => setConsents({...consents, gdpr_consent: e.target.checked as unknown as true})} className="mt-1 w-5 h-5 shrink-0 rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
                   <label htmlFor="gdpr" className="text-sm text-gray-700">
                     Souhlasím se{' '}
                     <Link href="/gdpr" target="_blank" className="text-primary-600 underline hover:text-primary-700">zpracováním osobních údajů</Link>
@@ -266,7 +419,14 @@ export function RegistrationForm() {
                 <FieldError name="gdpr_consent" />
 
                 <div className="flex items-start gap-3">
-                  <input type="checkbox" id="marketing" checked={consents.marketing_consent} onChange={e => setConsents({...consents, marketing_consent: e.target.checked})} className="mt-1 w-5 h-5 rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
+                  <input type="checkbox" id="photo" checked={consents.photo_consent} onChange={e => setConsents({...consents, photo_consent: e.target.checked})} className="mt-1 w-5 h-5 shrink-0 rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
+                  <label htmlFor="photo" className="text-sm text-gray-700">
+                    Souhlasím s pořizováním fotografií a videí dítěte pro dokumentaci tábora a propagaci na webu a sociálních sítích (nepovinné)
+                  </label>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <input type="checkbox" id="marketing" checked={consents.marketing_consent} onChange={e => setConsents({...consents, marketing_consent: e.target.checked})} className="mt-1 w-5 h-5 shrink-0 rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
                   <label htmlFor="marketing" className="text-sm text-gray-700">
                     Souhlasím se zasíláním novinek a informací o dalších táborech (nepovinné)
                   </label>
@@ -275,9 +435,9 @@ export function RegistrationForm() {
             </motion.div>
           )}
 
-          {/* Step 4: Summary */}
-          {step === 4 && (
-            <motion.div key="step4" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+          {/* Step 5: Summary */}
+          {step === 5 && (
+            <motion.div key="step5" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
               <h2 className="text-lg font-semibold text-gray-900 mb-6">Shrnutí registrace</h2>
               <div className="space-y-6">
                 <div className="bg-primary-50 rounded-xl p-4">
@@ -307,6 +467,29 @@ export function RegistrationForm() {
                     </div>
                   </div>
                 </div>
+
+                <div>
+                  <h3 className="font-medium text-gray-900 mb-2">Vyzvednutí</h3>
+                  <div className="text-sm text-gray-600 space-y-1">
+                    {pickup.pickup_method === 'solo' && (
+                      <p>Dítě odejde samo · čas odchodu: {pickup.pickup_time}</p>
+                    )}
+                    {pickup.pickup_method === 'named_persons' && (
+                      <>
+                        <p>Vyzvedne jmenovaná osoba:</p>
+                        <p className="whitespace-pre-line pl-2">{pickup.pickup_persons}</p>
+                      </>
+                    )}
+                  </div>
+                </div>
+
+                <p className="text-xs text-gray-500 pt-2 border-t border-gray-100">
+                  Odesláním registrace potvrzujete souhlas s{' '}
+                  <Link href={vopUrl} target="_blank" className="underline">VOP</Link>{' '}
+                  a{' '}
+                  <Link href="/gdpr" target="_blank" className="underline">zpracováním osobních údajů</Link>.
+                  Po odeslání budete přesměrováni na platbu.
+                </p>
               </div>
             </motion.div>
           )}
@@ -328,7 +511,7 @@ export function RegistrationForm() {
             </button>
           ) : <div />}
 
-          {step < 4 ? (
+          {step < 5 ? (
             <button onClick={nextStep} className="btn-primary">
               Další
               <ArrowRight className="ml-2 w-4 h-4" />

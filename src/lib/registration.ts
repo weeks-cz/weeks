@@ -15,24 +15,36 @@ export const childSchema = z.object({
   child_experience: z.string().optional().default(''),
 })
 
+export const pickupSchema = z.object({
+  pickup_method: z.enum(['solo', 'named_persons']),
+  pickup_time: z.string().optional().default(''),
+  pickup_persons: z.string().optional().default(''),
+})
+
 export const consentsSchema = z.object({
   vop_consent: z.literal(true, { error: 'Musíte souhlasit s VOP' }),
   gdpr_consent: z.literal(true, { error: 'Musíte souhlasit se zpracováním osobních údajů' }),
+  photo_consent: z.boolean().default(false),
   marketing_consent: z.boolean().default(false),
 })
 
-export const registrationSchema = parentSchema.merge(childSchema).merge(consentsSchema).extend({
-  location_id: z.string(),
-  program: z.string(),
-  term_id: z.string(),
-  term_start: z.string(),
-  term_end: z.string(),
-  payment_amount: z.number(),
-})
+export const registrationSchema = parentSchema
+  .merge(childSchema)
+  .merge(pickupSchema)
+  .merge(consentsSchema)
+  .extend({
+    location_id: z.string(),
+    program: z.string(),
+    term_id: z.string(),
+    term_start: z.string(),
+    term_end: z.string(),
+    payment_amount: z.number(),
+  })
 
 export type RegistrationData = z.infer<typeof registrationSchema>
 export type ParentData = z.infer<typeof parentSchema>
 export type ChildData = z.infer<typeof childSchema>
+export type PickupData = z.infer<typeof pickupSchema>
 export type ConsentsData = z.infer<typeof consentsSchema>
 
 export const INSURANCE_OPTIONS = [

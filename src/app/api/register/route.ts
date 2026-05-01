@@ -16,6 +16,11 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    const ip =
+      request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+      request.headers.get('x-real-ip') ||
+      null
+
     const supabase = createServerClient()
     const { data, error } = await supabase
       .from('registrations')
@@ -23,6 +28,8 @@ export async function POST(request: NextRequest) {
         ...parsed.data,
         status: 'pending',
         payment_status: 'pending',
+        vop_accepted_at: new Date().toISOString(),
+        vop_accepted_ip: ip,
       })
       .select('id')
       .single()

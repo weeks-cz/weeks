@@ -7,17 +7,30 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, ChevronRight } from 'lucide-react'
 import { trackNavCTA } from '@/lib/analytics'
 import { CitySwitcher } from '@/components/ui/CitySwitcher'
-
-const navigation = [
-  { name: 'Program', href: '/program' },
-  { name: 'Proč Weeks', href: '/#proc-weeks' },
-  { name: 'O nás', href: '/o-nas' },
-  { name: 'Kontakt', href: '/kontakt' },
-]
+import { useLocation } from '@/contexts/LocationContext'
+import { buildPath } from '@/lib/locations'
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const location = useLocation()
+
+  const navigation = location.isDefault
+    ? [
+        { name: 'Program', href: '/program' },
+        { name: 'Proč Weeks', href: '/#proc-weeks' },
+        { name: 'O nás', href: '/o-nas' },
+        { name: 'Kontakt', href: '/kontakt' },
+      ]
+    : [
+        { name: 'Program', href: `/${location.slug}#program` },
+        { name: 'Proč Weeks', href: `/${location.slug}#proc-weeks` },
+        { name: 'O nás', href: buildPath(location, 'o-nas') },
+        { name: 'Kontakt', href: buildPath(location, 'kontakt') },
+      ]
+
+  const logoHref = buildPath(location, '')
+  const ctaHref = location.isDefault ? '/#prihlasit' : '#prihlasit'
 
   useEffect(() => {
     const handleScroll = () => {
@@ -38,7 +51,7 @@ export function Header() {
       >
         <nav className="section-container flex items-center justify-between py-4" aria-label="Hlavní navigace">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-3 group">
+        <Link href={logoHref} className="flex items-center gap-3 group">
           <motion.div
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -79,7 +92,7 @@ export function Header() {
           ))}
           <CitySwitcher />
           <Link
-            href="/#prihlasit"
+            href={ctaHref}
             className="ml-4 btn-primary group"
             onClick={() => trackNavCTA('desktop')}
           >
@@ -146,7 +159,7 @@ export function Header() {
                   <CitySwitcher />
                 </div>
                 <Link
-                  href="/#prihlasit"
+                  href={ctaHref}
                   className="btn-primary w-full text-center justify-center"
                   onClick={() => { trackNavCTA('mobile'); setMobileMenuOpen(false) }}
                 >

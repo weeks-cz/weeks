@@ -18,13 +18,14 @@ export interface Organizer {
   name: string
   fullName: string
   url?: string
+  logoUrl?: string
 }
 
 export interface ProgramConfig {
   id: string
   name: string
   slug: string
-  campType: 'weekend' | 'oneday'
+  campType: 'weekend' | 'oneday' | 'week'
   price: number
   capacity: number
   ageRange: string
@@ -68,7 +69,10 @@ export interface Location {
   usps: {
     organizer: { title: string; description: string }
     location: { title: string; description: string }
+    technology?: { title: string; description: string }
+    schedule?: { title: string; description: string }
   }
+  safetyFeatures?: Array<{ title: string; description: string }>
   faq: {
     locationAnswer: string
     organizerAnswer: string
@@ -160,19 +164,20 @@ export const LOCATIONS: Record<string, Location> = {
     isDefault: false,
     organizer: {
       name: 'Weeks',
-      fullName: 'Weeks',
+      fullName: 'Lukáš Kubík, IČO 24878511',
+      logoUrl: '/images/weeks-logo.png',
     },
     venues: [
       {
-        name: 'Vary&Te',
-        fullName: 'Vary&Te Creative Center',
-        address: 'Karlovy Vary',
-        city: 'Karlovy Vary',
-        postalCode: '360 01',
+        name: 'FabLab Vary&Te',
+        fullName: 'FabLab v Kreativní Centrum Vary&Te',
+        address: 'Dykova',
+        city: 'Stará Role',
+        postalCode: '360 17',
         geo: { lat: 50.2318, lng: 12.8714 },
         description: 'Největší kreativní centrum v Karlovarském kraji s FabLabem, GameDev arenou a profesionálními vzdělávacími prostory.',
         url: 'https://varyete.cz',
-        mapQuery: 'Vary&Te+Karlovy+Vary',
+        mapQuery: 'Kreativní+centrum+Vary%26Te+Karlovy+Vary',
       },
     ],
     registrationType: 'internal',
@@ -181,31 +186,45 @@ export const LOCATIONS: Record<string, Location> = {
       titleSuffix: 'Karlovy Vary',
       description: 'IT kempy pro děti 10-15 let v Karlových Varech. 3D tisk, IoT, programování a virtuální realita ve Vary&Te Creative Center.',
     },
-    programs: SHARED_PROGRAMS,
+    programs: [
+      { id: 'letni-primestsky', name: 'Letní příměstský tábor chytrých technologií', slug: 'letni-primestsky', campType: 'week' as const, price: 7490, capacity: 12, ageRange: '10-15', color: 'accent' },
+    ],
     terms: [
-      { id: 'kv-2026-05-10-3d-tisk', program: '3d-tisk', startDate: '2026-05-10', endDate: '2026-05-10', day: 'sobota', status: 'preparing' as const },
-      { id: 'kv-2026-05-11-iot', program: 'iot', startDate: '2026-05-11', endDate: '2026-05-11', day: 'neděle', status: 'preparing' as const },
-      { id: 'kv-2026-05-17-mix', program: 'mix', startDate: '2026-05-17', endDate: '2026-05-18', day: 'sobota', status: 'preparing' as const },
+      { id: 'kv-2026-07-07-letni', program: 'letni-primestsky', startDate: '2026-07-07', endDate: '2026-07-11', day: 'pondělí–pátek', status: 'preparing' as const },
     ],
     hero: {
       badge: 'Nově v Karlových Varech!',
-      subtitle: 'Víkendové i jednodenní formáty v Karlových Varech — 3D tisk, IoT, programování a virtuální realita pro děti 10–15 let.',
+      subtitle: 'Letní příměstský tábor v Karlových Varech — 3D tisk, IoT, VR a programování pro děti 10–15 let.',
     },
     usps: {
       organizer: {
         title: 'Organizováno Weeks',
-        description: 'Kempy organizuje tým Weeks s důrazem na kvalitu výuky, bezpečnost dětí a profesionální přístup.',
+        description: 'Tábory organizuje tým Weeks s důrazem na kvalitu výuky, bezpečnost dětí a profesionální přístup.',
       },
       location: {
         title: 'Vary&Te Creative Center',
         description: 'Největší kreativní centrum v Karlovarském kraji — FabLab, GameDev arena a moderní vzdělávací prostory.',
       },
+      technology: {
+        title: 'Vybavení FabLab Vary&Te',
+        description: 'Vaše dítě pracuje ve FabLabu — průmyslové 3D tiskárny, VR headsety a pokročilá IoT zařízení. Profesionální zázemí největšího kreativního centra v kraji.',
+      },
+      schedule: {
+        title: 'Kompletní servis od 8 do 16',
+        description: 'Celý týden oběd, svačiny, přestávky a střídání aktivit. Rodiče mají klid, děti mají postaráno o vše.',
+      },
     },
+    safetyFeatures: [
+      { title: 'Pojištění účastníků', description: 'Komplexní pojištění' },
+      { title: 'Malé skupiny', description: '1 lektor na 5 dětí' },
+      { title: 'Okamžitý kontakt', description: 'Rodič vždy informován' },
+      { title: 'Proškolení lektoři', description: 'Kurz první pomoci' },
+    ],
     faq: {
-      locationAnswer: 'Kempy probíhají ve Vary&Te Creative Center v Karlových Varech — největším kreativním centru v Karlovarském kraji s profesionálním FabLabem a GameDev arenou.',
-      organizerAnswer: 'Kempy v Karlových Varech organizuje přímo tým Weeks ve spolupráci s Vary&Te Creative Center.',
+      locationAnswer: 'Tábor probíhá ve FabLab v Kreativním centru Vary&Te, Dykova, Stará Role, Karlovy Vary — největším kreativním centru v Karlovarském kraji s profesionálním FabLabem a GameDev arenou.',
+      organizerAnswer: 'Tábory v Karlových Varech organizuje Lukáš Kubík (Weeks) ve spolupráci s Kreativním centrem Vary&Te.',
     },
-    availablePages: AVAILABLE_PAGES,
+    availablePages: ['', 'letni-primestsky', 'o-nas', 'gdpr', 'podminky', 'kontakt'],
   },
 }
 

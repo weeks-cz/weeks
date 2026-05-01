@@ -1,0 +1,372 @@
+import type { Metadata } from 'next'
+import Link from 'next/link'
+import { ArrowLeft } from 'lucide-react'
+import { Header } from '@/components/layout/Header'
+import { Footer } from '@/components/layout/Footer'
+
+const pageTitle = 'Všeobecné obchodní podmínky – Weeks Karlovy Vary'
+const pageDescription = 'Všeobecné obchodní podmínky pro IT tábory Weeks v Karlových Varech. Podmínky přihlášení, platby, storna a účasti.'
+const pageUrl = 'https://weeks.cz/karlovy-vary/podminky'
+
+export const metadata: Metadata = {
+  title: pageTitle,
+  description: pageDescription,
+  alternates: { canonical: pageUrl },
+  openGraph: {
+    title: pageTitle,
+    description: pageDescription,
+    url: pageUrl,
+    type: 'website',
+    locale: 'cs_CZ',
+    siteName: 'Weeks',
+  },
+  robots: { index: true, follow: true },
+}
+
+export default function KVPodminkyPage() {
+  return (
+    <>
+      <Header />
+      <main className="min-h-screen bg-white pt-24 pb-16">
+        <article className="section-container max-w-4xl">
+          <Link
+            href="/karlovy-vary"
+            className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 mb-8 transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Zpět na Karlovy Vary
+          </Link>
+
+          <header className="mb-12">
+            <h1 className="heading-1 text-gray-900 mb-4">
+              Všeobecné obchodní podmínky
+            </h1>
+            <p className="text-gray-600 text-lg">
+              IT tábory Weeks – Karlovy Vary
+            </p>
+            <p className="text-gray-500 text-sm mt-4">
+              Účinnost od: 1. května 2026
+            </p>
+          </header>
+
+          <div className="prose prose-lg max-w-none">
+
+            {/* 1 */}
+            <section className="mb-10">
+              <h2 className="heading-3 text-gray-900 mb-4">1. Úvodní ustanovení</h2>
+              <p className="text-gray-700 mb-4">
+                Tyto všeobecné obchodní podmínky (dále jen „VOP") upravují smluvní vztah mezi pořadatelem
+                IT táborů Weeks v Karlových Varech a zákonným zástupcem přihlašovaného dítěte (dále jen „zákonný zástupce").
+              </p>
+              <p className="text-gray-700">
+                Odesláním závazné přihlášky zákonný zástupce potvrzuje, že se s těmito VOP
+                seznámil, rozumí jim a souhlasí s nimi. VOP jsou platné a závazné ode dne odeslání přihlášky.
+              </p>
+            </section>
+
+            {/* 2 */}
+            <section className="mb-10">
+              <h2 className="heading-3 text-gray-900 mb-4">2. Pořadatel</h2>
+              <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
+                <p className="text-gray-900 font-semibold mb-3">Pořadatelem táborů je:</p>
+                <p className="text-gray-900 font-medium">Lukáš Kubík</p>
+                <p className="text-gray-700 mt-1">IČO: 24878511</p>
+                <p className="text-gray-700">Sídlo: Kováříkova 1145/11, Praha 5, 152 00</p>
+                <p className="text-gray-700 mt-3">
+                  Fyzická osoba podnikající na základě živnostenského oprávnění.
+                </p>
+                <p className="text-gray-700 mt-3">
+                  <strong>E-mail:</strong> info@weeks.cz<br />
+                  <strong>Telefon:</strong> +420 703 046 440<br />
+                  <strong>Web:</strong> weeks.cz
+                </p>
+              </div>
+            </section>
+
+            {/* 3 */}
+            <section className="mb-10">
+              <h2 className="heading-3 text-gray-900 mb-4">3. Místo konání</h2>
+              <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
+                <p className="text-gray-900 font-medium mb-1">FabLab v Kreativní Centrum Vary&amp;Te</p>
+                <p className="text-gray-700">Dykova, Stará Role, 360 17 Karlovy Vary</p>
+                <p className="text-gray-700 mt-3 text-sm">
+                  Provozní doba táborů: <strong>8:00–16:00</strong>
+                </p>
+              </div>
+            </section>
+
+            {/* 4 */}
+            <section className="mb-10">
+              <h2 className="heading-3 text-gray-900 mb-4">4. Přihláška a uzavření smlouvy</h2>
+              <div className="space-y-4">
+                <div className="bg-white p-5 rounded-lg border border-gray-200">
+                  <h3 className="text-base font-semibold text-gray-900 mb-2">4.1 Závazná přihláška</h3>
+                  <p className="text-gray-700 text-base">
+                    Přihlášení na tábor probíhá vyplněním a odesláním závazné elektronické přihlášky
+                    dostupné na webových stránkách weeks.cz. Přihláška je závazná okamžikem jejího odeslání.
+                  </p>
+                </div>
+                <div className="bg-white p-5 rounded-lg border border-gray-200">
+                  <h3 className="text-base font-semibold text-gray-900 mb-2">4.2 Vznik smluvního vztahu</h3>
+                  <p className="text-gray-700 text-base">
+                    Smluvní vztah mezi pořadatelem a zákonným zástupcem vzniká úhradou ceny tábora
+                    v souladu s těmito VOP. Do té doby se jedná o nezávaznou rezervaci.
+                  </p>
+                </div>
+                <div className="bg-white p-5 rounded-lg border border-gray-200">
+                  <h3 className="text-base font-semibold text-gray-900 mb-2">4.3 Potvrzení</h3>
+                  <p className="text-gray-700 text-base">
+                    Po úspěšné platbě obdrží zákonný zástupce potvrzovací e-mail na uvedenou e-mailovou adresu.
+                    Přibližně 7 dní před zahájením tábora bude zaslán nástupní list s praktickými informacemi.
+                  </p>
+                </div>
+              </div>
+            </section>
+
+            {/* 5 */}
+            <section className="mb-10">
+              <h2 className="heading-3 text-gray-900 mb-4">5. Cena tábora</h2>
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div className="bg-primary-50 p-5 rounded-lg border border-primary-200">
+                  <p className="font-semibold text-primary-900 mb-1">MIX – Víkendový tábor</p>
+                  <p className="text-2xl font-bold text-primary-900">2 990 Kč</p>
+                  <p className="text-sm text-primary-700 mt-1">So + Ne, oběd a svačiny v ceně</p>
+                </div>
+                <div className="bg-primary-50 p-5 rounded-lg border border-primary-200">
+                  <p className="font-semibold text-primary-900 mb-1">Jednodenní tábor</p>
+                  <p className="text-2xl font-bold text-primary-900">1 490 Kč</p>
+                  <p className="text-sm text-primary-700 mt-1">So nebo Ne, oběd a svačiny v ceně</p>
+                </div>
+              </div>
+              <p className="text-gray-600 text-sm mt-4">
+                V ceně tábora jsou zahrnuty: odborné vedení, materiál a pomůcky, oběd a svačiny.
+                Doprava na místo konání a zpět není součástí ceny.
+              </p>
+            </section>
+
+            {/* 6 */}
+            <section className="mb-10">
+              <h2 className="heading-3 text-gray-900 mb-4">6. Platební podmínky</h2>
+              <div className="space-y-4">
+                <div className="bg-white p-5 rounded-lg border border-gray-200">
+                  <h3 className="text-base font-semibold text-gray-900 mb-2">6.1 Způsoby platby</h3>
+                  <p className="text-gray-700 text-base mb-2">Platbu lze provést prostřednictvím platební brány Comgate:</p>
+                  <ul className="list-disc pl-5 space-y-1 text-gray-700 text-base">
+                    <li>Platební kartou (VISA, Mastercard)</li>
+                    <li>Apple Pay / Google Pay</li>
+                    <li>Bankovním převodem</li>
+                  </ul>
+                </div>
+                <div className="bg-white p-5 rounded-lg border border-gray-200">
+                  <h3 className="text-base font-semibold text-gray-900 mb-2">6.2 Bankovní převod</h3>
+                  <p className="text-gray-700 text-base mb-2">
+                    Při platbě bankovním převodem je zákonný zástupce povinen uhradit platbu
+                    do <strong>3 pracovních dnů</strong> od odeslání přihlášky.
+                    Po uplynutí této lhůty bez přijetí platby rezervace automaticky zaniká.
+                  </p>
+                  <p className="text-gray-700 text-base">
+                    Číslo účtu pro bankovní převod:{' '}
+                    <strong className="font-mono">[ČÍSLO ÚČTU - DOPLNIT PŘED SPUŠTĚNÍM]</strong>
+                  </p>
+                </div>
+                <div className="bg-white p-5 rounded-lg border border-gray-200">
+                  <h3 className="text-base font-semibold text-gray-900 mb-2">6.3 Faktura</h3>
+                  <p className="text-gray-700 text-base">
+                    Daňový doklad bude zákonném zástupci zaslán e-mailem po přijetí platby.
+                    Pořadatel není plátcem DPH.
+                  </p>
+                </div>
+              </div>
+            </section>
+
+            {/* 7 */}
+            <section className="mb-10">
+              <h2 className="heading-3 text-gray-900 mb-4">7. Storno podmínky</h2>
+              <div className="overflow-hidden rounded-lg border border-gray-200">
+                <table className="w-full text-sm">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-4 py-3 text-left font-semibold text-gray-900">Lhůta před zahájením tábora</th>
+                      <th className="px-4 py-3 text-left font-semibold text-gray-900">Storno poplatek</th>
+                      <th className="px-4 py-3 text-left font-semibold text-gray-900">Vráceno</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100">
+                    <tr className="bg-white">
+                      <td className="px-4 py-3 text-gray-700">30 a více dní</td>
+                      <td className="px-4 py-3 text-green-700 font-medium">0 %</td>
+                      <td className="px-4 py-3 text-gray-700">plná cena</td>
+                    </tr>
+                    <tr className="bg-gray-50">
+                      <td className="px-4 py-3 text-gray-700">15–29 dní</td>
+                      <td className="px-4 py-3 text-amber-700 font-medium">50 %</td>
+                      <td className="px-4 py-3 text-gray-700">polovina ceny</td>
+                    </tr>
+                    <tr className="bg-white">
+                      <td className="px-4 py-3 text-gray-700">14 dní a méně / nenastoupení</td>
+                      <td className="px-4 py-3 text-red-700 font-medium">100 %</td>
+                      <td className="px-4 py-3 text-gray-700">0 Kč</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div className="mt-4 space-y-3">
+                <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+                  <p className="text-green-900 font-medium mb-1 text-sm">Výjimka: náhradní dítě</p>
+                  <p className="text-green-800 text-sm">
+                    Pokud zákonný zástupce zajistí za odhlašované dítě náhradního účastníka,
+                    storno poplatek se neúčtuje.
+                  </p>
+                </div>
+                <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                  <p className="text-blue-900 font-medium mb-1 text-sm">Výjimka: nemoc s lékařským potvrzením</p>
+                  <p className="text-blue-800 text-sm">
+                    V případě nemoci dítěte doložené lékařským potvrzením vydaným nejpozději
+                    v den zahájení tábora může pořadatel přistoupit k individuálnímu řešení —
+                    zpravidla vrácení 50 % ceny bez ohledu na lhůtu.
+                  </p>
+                </div>
+                <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                  <p className="text-gray-900 font-medium mb-1 text-sm">Zrušení ze strany pořadatele</p>
+                  <p className="text-gray-700 text-sm">
+                    Pořadatel je oprávněn tábor zrušit z důvodu nedostatečného počtu přihlášených
+                    nebo z jiných závažných důvodů. V takovém případě vrátí zákonným zástupcům
+                    plnou uhrazenou cenu do 10 pracovních dní.
+                  </p>
+                </div>
+              </div>
+
+              <p className="text-gray-600 text-sm mt-4">
+                Storno musí být oznámeno písemně e-mailem na adresu info@weeks.cz.
+                Vrácení platby proběhne na účet, ze kterého byla platba přijata, do 10 pracovních dní.
+              </p>
+            </section>
+
+            {/* 8 */}
+            <section className="mb-10">
+              <h2 className="heading-3 text-gray-900 mb-4">8. Práva a povinnosti pořadatele</h2>
+              <ul className="list-disc pl-6 space-y-2 text-gray-700">
+                <li>Zajistit odborné vedení tábora kvalifikovanými lektory</li>
+                <li>Zajistit bezpečné prostředí odpovídající charakteru aktivit</li>
+                <li>Zajistit oběd a svačiny po dobu tábora</li>
+                <li>Informovat zákonné zástupce o průběhu tábora při zjištění nestandardní situace</li>
+                <li>Zachovávat mlčenlivost o osobních údajích účastníků v souladu s GDPR</li>
+                <li>Odmítnout účast dítěti, které svým chováním ohrožuje bezpečnost nebo výuku ostatních</li>
+                <li>Upravit program tábora z provozních nebo bezpečnostních důvodů</li>
+              </ul>
+            </section>
+
+            {/* 9 */}
+            <section className="mb-10">
+              <h2 className="heading-3 text-gray-900 mb-4">9. Práva a povinnosti zákonného zástupce a účastníka</h2>
+              <ul className="list-disc pl-6 space-y-2 text-gray-700">
+                <li>Přihlásit zdravé dítě — zákonný zástupce nesmí přivést nemocné dítě na tábor</li>
+                <li>Uvést pravdivé a úplné informace v přihlášce, zejména zdravotní omezení a alergie</li>
+                <li>Dostavit se (nebo zajistit dostavení dítěte) v souladu s nástupním listem</li>
+                <li>Vyzvednou dítě způsobem uvedeným v přihlášce</li>
+                <li>Uhradit cenu tábora v souladu s platebními podmínkami</li>
+                <li>Respektovat pokyny lektorů a organizačního týmu</li>
+                <li>Dbát na to, aby dítě respektovalo vybavení místa konání a ostatní účastníky</li>
+              </ul>
+            </section>
+
+            {/* 10 */}
+            <section className="mb-10">
+              <h2 className="heading-3 text-gray-900 mb-4">10. Ochrana osobních údajů</h2>
+              <p className="text-gray-700 mb-4">
+                Pořadatel zpracovává osobní údaje zákonných zástupců a dětí v rozsahu nezbytném pro
+                organizaci a provoz tábora. Zpracování probíhá v souladu s nařízením GDPR a příslušnými
+                právními předpisy ČR.
+              </p>
+              <p className="text-gray-700 mb-4">
+                Údaje jsou uchovávány po dobu nezbytnou pro plnění smluvních a zákonných povinností,
+                nejdéle 5 let od konání tábora. Zákonný zástupce má právo na přístup ke svým údajům,
+                jejich opravu, výmaz nebo omezení zpracování.
+              </p>
+              <p className="text-gray-700">
+                Podrobné informace o zpracování osobních údajů jsou dostupné na stránce{' '}
+                <Link href="/gdpr" className="text-primary-600 underline hover:text-primary-700">Ochrana osobních údajů (GDPR)</Link>.
+              </p>
+            </section>
+
+            {/* 11 */}
+            <section className="mb-10">
+              <h2 className="heading-3 text-gray-900 mb-4">11. Pořizování fotografií a videí</h2>
+              <p className="text-gray-700 mb-4">
+                Během tábora může docházet k pořizování fotografií a videozáznamů pro dokumentaci
+                a propagaci aktivit na webu weeks.cz a sociálních sítích. Souhlas s fotografováním
+                je nepovinný a zákonný zástupce jej uděluje (nebo neuděluje) při vyplnění přihlášky.
+              </p>
+              <p className="text-gray-700">
+                Souhlas lze kdykoli odvolat písemně na adrese info@weeks.cz.
+                Odvolání souhlasu nemá vliv na zákonnost zpracování před jeho odvoláním.
+              </p>
+            </section>
+
+            {/* 12 */}
+            <section className="mb-10">
+              <h2 className="heading-3 text-gray-900 mb-4">12. Nástupní list</h2>
+              <p className="text-gray-700">
+                Přibližně 7 dní před zahájením tábora obdrží zákonný zástupce na uvedený e-mail
+                nástupní list s praktickými informacemi (přesná adresa, čas nástupu, co přinést,
+                kontakt na lektora). V případě, že e-mail neobdržíte, kontaktujte nás na info@weeks.cz.
+              </p>
+            </section>
+
+            {/* 13 */}
+            <section className="mb-10">
+              <h2 className="heading-3 text-gray-900 mb-4">13. Reklamace a stížnosti</h2>
+              <p className="text-gray-700 mb-4">
+                Reklamace nebo stížnosti uplatňujte písemně na e-mailové adrese info@weeks.cz.
+                Pořadatel se zavazuje reagovat do 5 pracovních dní.
+              </p>
+              <p className="text-gray-700 mb-4">
+                Jako spotřebitel máte právo obrátit se s případnými stížnostmi na Českou obchodní
+                inspekci (www.coi.cz) nebo využít platformu pro online řešení sporů ODR
+                (ec.europa.eu/consumers/odr).
+              </p>
+            </section>
+
+            {/* 14 */}
+            <section className="mb-10">
+              <h2 className="heading-3 text-gray-900 mb-4">14. Závěrečná ustanovení</h2>
+              <p className="text-gray-700 mb-4">
+                Tyto VOP se řídí právním řádem České republiky. Případné spory budou řešeny
+                příslušným soudem v České republice.
+              </p>
+              <p className="text-gray-700 mb-4">
+                Pořadatel si vyhrazuje právo tyto VOP kdykoli změnit. Na přihlášky odeslané
+                přede dnem účinnosti změny se vztahují VOP platné v den odeslání přihlášky.
+              </p>
+              <p className="text-gray-700">
+                Pokud by jakékoli ustanovení těchto VOP bylo shledáno neplatným, ostatní
+                ustanovení zůstávají v plné platnosti.
+              </p>
+            </section>
+
+            {/* Contact */}
+            <section className="mb-10">
+              <h2 className="heading-3 text-gray-900 mb-4">15. Kontakt</h2>
+              <div className="bg-primary-50 p-6 rounded-lg border border-primary-200">
+                <p className="text-primary-900 font-semibold mb-3">Weeks – IT tábory Karlovy Vary</p>
+                <p className="text-primary-800 mb-1"><strong>Pořadatel:</strong> Lukáš Kubík, IČO: 24878511</p>
+                <p className="text-primary-800 mb-1"><strong>Sídlo:</strong> Kováříkova 1145/11, Praha 5, 152 00</p>
+                <p className="text-primary-800 mb-1"><strong>Místo konání:</strong> FabLab v Kreativní Centrum Vary&amp;Te, Dykova, Stará Role, 360 17 Karlovy Vary</p>
+                <p className="text-primary-800 mb-1"><strong>E-mail:</strong> info@weeks.cz</p>
+                <p className="text-primary-800"><strong>Telefon:</strong> +420 703 046 440</p>
+              </div>
+            </section>
+
+            <div className="border-t border-gray-200 pt-8 mt-12">
+              <p className="text-gray-500 text-sm">
+                Tyto VOP jsou platné a účinné od 1. května 2026.
+              </p>
+            </div>
+          </div>
+        </article>
+      </main>
+      <Footer />
+    </>
+  )
+}

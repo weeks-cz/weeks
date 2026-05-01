@@ -101,8 +101,18 @@ export function HeroSection() {
           >
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
               <div className="flex items-center gap-3 p-3 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10">
-                <div className="w-10 h-10 shrink-0 rounded-lg bg-white/10 flex items-center justify-center">
-                  <span className="text-xs font-bold text-white">{location.organizer.name.split(' ')[0]}</span>
+                <div className="w-10 h-10 shrink-0 rounded-lg bg-white/10 flex items-center justify-center overflow-hidden">
+                  {location.organizer.logoUrl ? (
+                    <Image
+                      src={location.organizer.logoUrl}
+                      alt={location.organizer.name}
+                      width={32}
+                      height={32}
+                      className="object-contain w-8 h-8"
+                    />
+                  ) : (
+                    <span className="text-xs font-bold text-white">{location.organizer.name.split(' ')[0]}</span>
+                  )}
                 </div>
                 <div className="min-w-0">
                   <p className="text-xs text-gray-400">Organizátor</p>
@@ -116,7 +126,7 @@ export function HeroSection() {
                 </div>
                 <div className="min-w-0">
                   <p className="text-xs text-gray-400">Místa konání</p>
-                  <p className="text-sm font-medium text-white truncate">{location.venues.map(v => v.city).join(' & ')}</p>
+                  <p className="text-sm font-medium text-white truncate">{location.venues.map(v => v.name).join(' & ')}</p>
                 </div>
               </div>
 

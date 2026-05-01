@@ -4,9 +4,36 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { MapPin, Mail, Phone } from 'lucide-react'
 import { useLocation } from '@/contexts/LocationContext'
+import { buildPath } from '@/lib/locations'
 
 export function Footer() {
   const location = useLocation()
+
+  const logoHref = buildPath(location, '')
+
+  const navLinks = location.isDefault
+    ? [
+        { name: 'Program', href: '/program' },
+        { name: 'Proč Weeks', href: '/#proc-weeks' },
+        { name: 'O nás', href: '/o-nas' },
+        { name: 'Kontakt', href: '/kontakt' },
+      ]
+    : [
+        { name: 'Program', href: `/${location.slug}#program` },
+        { name: 'Proč Weeks', href: `/${location.slug}#proc-weeks` },
+        { name: 'O nás', href: buildPath(location, 'o-nas') },
+        { name: 'Kontakt', href: buildPath(location, 'kontakt') },
+      ]
+
+  const legalLinks = [
+    { name: 'Ochrana osobních údajů', href: buildPath(location, 'gdpr') },
+    { name: 'Podmínky užití', href: buildPath(location, 'podminky') },
+  ]
+
+  const description = location.isDefault
+    ? `Víkendové IT kempy pro děti 10-15 let. 3D tisk, VR, IoT a programování v profesionálním prostředí ${location.venues[0].name}.`
+    : `Letní příměstské IT tábory pro děti 10-15 let. 3D tisk, VR, IoT a programování v ${location.venues[0].name} v Karlových Varech.`
+
   return (
     <footer className="bg-gray-900 text-gray-300 relative overflow-hidden">
       {/* Background decoration */}
@@ -19,7 +46,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8">
           {/* Brand */}
           <div className="lg:col-span-1">
-            <Link href="/" className="flex items-center gap-3 mb-6">
+            <Link href={logoHref} className="flex items-center gap-3 mb-6">
               <Image
                 src="/images/weeks-logo.png"
                 alt=""
@@ -31,8 +58,7 @@ export function Footer() {
               <span className="text-xl font-display font-bold text-white">Weeks</span>
             </Link>
             <p className="text-gray-400 leading-relaxed mb-6">
-              Víkendové IT kempy pro děti 10-15 let. 3D tisk, VR, IoT a programování
-              v profesionálním prostředí {location.venues[0].name}.
+              {description}
             </p>
             <div className="flex items-center gap-3 flex-wrap">
               <div className="px-3 py-1.5 bg-gray-800 rounded-lg text-xs font-medium text-gray-300">
@@ -41,21 +67,23 @@ export function Footer() {
               <div className="px-3 py-1.5 bg-gray-800 rounded-lg text-xs font-medium text-gray-300">
                 {location.venues[0].name}
               </div>
-              <a
-                href="https://www.kudyznudy.cz/?utm_source=kzn&utm_medium=partneri_kzn&utm_campaign=banner"
-                title="Kudyznudy.cz – tipy na výlet"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-3 py-1.5 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors flex items-center"
-              >
-                <Image
-                  src="/images/kudy-z-nudy-white.png"
-                  width={150}
-                  height={33}
-                  alt="Kudyznudy.cz – tipy na výlet"
-                  className="opacity-80 hover:opacity-100 transition-opacity"
-                />
-              </a>
+              {location.isDefault && (
+                <a
+                  href="https://www.kudyznudy.cz/?utm_source=kzn&utm_medium=partneri_kzn&utm_campaign=banner"
+                  title="Kudyznudy.cz – tipy na výlet"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-3 py-1.5 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors flex items-center"
+                >
+                  <Image
+                    src="/images/kudy-z-nudy-white.png"
+                    width={150}
+                    height={33}
+                    alt="Kudyznudy.cz – tipy na výlet"
+                    className="opacity-80 hover:opacity-100 transition-opacity"
+                  />
+                </a>
+              )}
             </div>
           </div>
 
@@ -63,12 +91,7 @@ export function Footer() {
           <div>
             <h3 className="font-display text-white font-semibold mb-5">Navigace</h3>
             <ul className="space-y-3">
-              {[
-                { name: 'Program', href: '/program' },
-                { name: 'Proč Weeks', href: '/#proc-weeks' },
-                { name: 'O nás', href: '/o-nas' },
-                { name: 'Kontakt', href: '/kontakt' },
-              ].map((link) => (
+              {navLinks.map((link) => (
                 <li key={link.name}>
                   <Link
                     href={link.href}
@@ -86,10 +109,7 @@ export function Footer() {
           <div>
             <h3 className="font-display text-white font-semibold mb-5">Právní informace</h3>
             <ul className="space-y-3">
-              {[
-                { name: 'Ochrana osobních údajů', href: '/gdpr' },
-                { name: 'Podmínky užití', href: '/podminky' },
-              ].map((link) => (
+              {legalLinks.map((link) => (
                 <li key={link.name}>
                   <Link
                     href={link.href}

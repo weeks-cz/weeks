@@ -120,6 +120,120 @@ const colorClasses = {
 
 export function ProgramSection() {
   const location = useLocation()
+
+  if (!location.isDefault) {
+    const program = location.programs[0]
+    const term = location.terms[0]
+    const monthNames = ['ledna','února','března','dubna','května','června','července','srpna','září','října','listopadu','prosince']
+    const start = new Date(term.startDate)
+    const end = new Date(term.endDate)
+    const dateRange = `${start.getDate()}.–${end.getDate()}. ${monthNames[start.getMonth()]} ${start.getFullYear()}`
+    const colors = colorClasses[program.color as keyof typeof colorClasses]
+
+    return (
+      <section id="program" className="section-padding bg-gray-50 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-40">
+          <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary-200 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent-200 rounded-full blur-3xl" />
+        </div>
+        <div className="section-container relative z-10">
+          <div className="text-center max-w-3xl mx-auto mb-12">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full text-sm font-medium text-gray-600 shadow-sm mb-6"
+            >
+              <span className="w-2 h-2 rounded-full bg-trust-500 animate-pulse" />
+              Letní příměstský tábor
+            </motion.div>
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4"
+            >
+              Tábor chytrých technologií
+              <br />
+              <span className="text-gradient">v Karlových Varech</span>
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="text-lg text-gray-600"
+            >
+              3D tisk, IoT & elektronika, VR a programování — celý týden v profesionálním prostředí FabLab Vary&Te.
+            </motion.p>
+          </div>
+
+          <div className="max-w-2xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              <Link
+                href={buildPath(location, 'letni-primestsky')}
+                className="group relative bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 block"
+              >
+                <div className="relative h-56 overflow-hidden">
+                  <Image
+                    src="/images/program-mix.webp"
+                    alt={program.name}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 672px"
+                    className="object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-gray-900/20 to-transparent" />
+                  <div className="absolute top-3 left-3 z-10">
+                    <div className={`px-2.5 py-1 rounded-full ${colors.bg} text-xs font-semibold text-white shadow-lg`}>
+                      Příměstský · 5 dní
+                    </div>
+                  </div>
+                  {term.status === 'preparing' && (
+                    <div className="absolute top-3 right-3 z-10">
+                      <div className="px-2.5 py-1 rounded-full bg-cta-500 text-xs font-semibold text-white shadow-lg">
+                        Připravujeme
+                      </div>
+                    </div>
+                  )}
+                  <div className="absolute bottom-3 left-3">
+                    <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${colors.gradient} flex items-center justify-center shadow-lg`}>
+                      <Sparkles className="w-5 h-5 text-white" />
+                    </div>
+                  </div>
+                </div>
+                <div className="p-6">
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="font-display text-xl font-bold text-gray-900 group-hover:text-primary-600 transition-colors">
+                      {program.name}
+                    </h3>
+                    <span className="text-lg font-semibold text-gray-900 whitespace-nowrap ml-4">
+                      {program.price.toLocaleString('cs-CZ')} Kč
+                    </span>
+                  </div>
+                  <p className="text-gray-600 mb-4">
+                    Za jeden týden si vaše dítě vyzkouší 3D tisk, IoT programování, virtuální realitu i základy programování — vše v moderním prostředí FabLab Vary&Te.
+                  </p>
+                  <div className="flex items-center gap-4 pt-3 border-t border-gray-100">
+                    <Calendar className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                    <span className="text-xs font-medium text-gray-600 bg-gray-50 px-2 py-0.5 rounded">
+                      {dateRange}
+                    </span>
+                    <span className="text-xs text-gray-500">{term.day}</span>
+                    <ArrowRight className="w-4 h-4 text-gray-400 ml-auto group-hover:translate-x-1 transition-transform flex-shrink-0" />
+                  </div>
+                </div>
+              </Link>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
   return (
     <section id="program" className="section-padding bg-gray-50 relative overflow-hidden">
       {/* Background Pattern */}
