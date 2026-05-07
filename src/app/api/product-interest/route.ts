@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getShopProduct, productTypeLabels, type ShopProductType } from '@/lib/shop'
+import { getShopProductBySlug, productTypeLabels, type ShopProductType } from '@/lib/shop'
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const VALID_PRODUCT_TYPES: ShopProductType[] = ['set', 'upgrade-kit', 'project']
@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const product = getShopProduct(productSlug)
+    const product = await getShopProductBySlug(productSlug)
     if (!product) {
       return NextResponse.json(
         { error: 'Produkt nebyl nalezen.' },
@@ -48,7 +48,8 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const productTypeLabel = productTypeLabels[productType]
+    const safeProductType = product.type
+    const productTypeLabel = productTypeLabels[safeProductType]
     const subject = `Zájem o produkt Weeks - ${product.name} - ${email}`
     const message = [
       `Produkt: ${product.name}`,
@@ -77,7 +78,7 @@ export async function POST(request: NextRequest) {
           inquiryType: 'product_interest',
           productSlug: product.slug,
           productName: product.name,
-          productType,
+          productType: safeProductType,
           productTypeLabel,
           gdprConsent,
           _subject: subject,
@@ -100,7 +101,7 @@ export async function POST(request: NextRequest) {
         note,
         productSlug: product.slug,
         productName: product.name,
-        productType,
+        productType: safeProductType,
         timestamp: new Date().toISOString(),
       })
     }
@@ -124,7 +125,7 @@ export async function POST(request: NextRequest) {
             gdpr_consent: gdprConsent,
             product_slug: product.slug,
             product_name: product.name,
-            product_type: productType,
+            product_type: safeProductType,
           }),
         })
       } catch (error) {

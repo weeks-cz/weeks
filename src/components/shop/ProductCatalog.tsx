@@ -1,7 +1,6 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { Search, SlidersHorizontal, X } from 'lucide-react'
 import { ProductInterestButton } from '@/components/shop/ProductInterestButton'
@@ -9,26 +8,28 @@ import {
   formatPrice,
   productTypeDescriptions,
   productTypeLabels,
-  shopProducts,
+  type ShopProduct,
   type ShopProductType,
 } from '@/lib/shop'
 
 const productTypes: ShopProductType[] = ['set', 'upgrade-kit', 'project']
+type SortOption = 'default' | 'price-asc' | 'price-desc'
 
-export function ProductCatalog() {
+export function ProductCatalog({ products }: { products: ShopProduct[] }) {
   const [selectedTypes, setSelectedTypes] = useState<ShopProductType[]>([])
   const [selectedLevels, setSelectedLevels] = useState<string[]>([])
   const [query, setQuery] = useState('')
+  const [sortBy, setSortBy] = useState<SortOption>('default')
 
   const levels = useMemo(
-    () => Array.from(new Set(shopProducts.map((product) => product.level))),
-    []
+    () => Array.from(new Set(products.map((product) => product.level).filter(Boolean))),
+    [products]
   )
 
   const filteredProducts = useMemo(() => {
     const normalizedQuery = query.trim().toLocaleLowerCase('cs-CZ')
 
-    return shopProducts.filter((product) => {
+    const matchingProducts = products.filter((product) => {
       const matchesType = selectedTypes.length === 0 || selectedTypes.includes(product.type)
       const matchesLevel = selectedLevels.length === 0 || selectedLevels.includes(product.level)
       const matchesQuery =
@@ -40,7 +41,17 @@ export function ProductCatalog() {
 
       return matchesType && matchesLevel && matchesQuery
     })
-  }, [query, selectedLevels, selectedTypes])
+
+    if (sortBy === 'price-asc') {
+      return [...matchingProducts].sort((a, b) => a.price - b.price)
+    }
+
+    if (sortBy === 'price-desc') {
+      return [...matchingProducts].sort((a, b) => b.price - a.price)
+    }
+
+    return matchingProducts
+  }, [products, query, selectedLevels, selectedTypes, sortBy])
 
   const toggleType = (type: ShopProductType) => {
     setSelectedTypes((current) =>
@@ -62,9 +73,10 @@ export function ProductCatalog() {
     setSelectedTypes([])
     setSelectedLevels([])
     setQuery('')
+    setSortBy('default')
   }
 
-  const hasActiveFilters = selectedTypes.length > 0 || selectedLevels.length > 0 || query.trim().length > 0
+  const hasActiveFilters = selectedTypes.length > 0 || selectedLevels.length > 0 || query.trim().length > 0 || sortBy !== 'default'
 
   return (
     <div className="grid grid-cols-1 gap-8 lg:grid-cols-[260px_1fr]">
@@ -99,6 +111,22 @@ export function ProductCatalog() {
             placeholder="Hledat"
             className="w-full rounded-xl border border-gray-200 py-2.5 pl-9 pr-3 text-sm outline-none transition focus:border-primary-400 focus:ring-2 focus:ring-primary-100"
           />
+        </div>
+
+        <div className="mt-5 border-t border-gray-100 pt-5">
+          <label htmlFor="shop-sort" className="mb-3 block text-xs font-semibold uppercase tracking-[0.16em] text-gray-500">
+            Řazení
+          </label>
+          <select
+            id="shop-sort"
+            value={sortBy}
+            onChange={(event) => setSortBy(event.target.value as SortOption)}
+            className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm font-medium text-gray-800 outline-none transition focus:border-primary-400 focus:ring-2 focus:ring-primary-100"
+          >
+            <option value="default">Doporučené pořadí</option>
+            <option value="price-asc">Cena od nejnižší</option>
+            <option value="price-desc">Cena od nejvyšší</option>
+          </select>
         </div>
 
         <div className="mt-5 border-t border-gray-100 pt-5">
@@ -142,7 +170,7 @@ export function ProductCatalog() {
       <div>
         <div className="mb-4 flex items-center justify-between gap-4">
           <p className="text-sm font-medium text-gray-600">
-            Zobrazeno {filteredProducts.length} z {shopProducts.length} produktů
+            Zobrazeno {filteredProducts.length} z {products.length} produktů
           </p>
         </div>
 
@@ -154,11 +182,10 @@ export function ProductCatalog() {
             >
               <Link href={`/eshop/${product.slug}`} className="block">
                 <div className="relative aspect-[16/9] overflow-hidden bg-gray-100">
-                  <Image
+                  <img
                     src={product.image}
                     alt={product.name}
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                   <div className="absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1 text-[11px] font-semibold text-primary-700 shadow-sm">
                     {product.categoryLabel}

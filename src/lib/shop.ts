@@ -20,6 +20,7 @@ export interface ShopProduct {
   categoryLabel: string
   unlocks: string
   compatibility?: string
+  sortOrder?: number
 }
 
 export const shopProducts: ShopProduct[] = [
@@ -389,4 +390,92 @@ export function getShopProduct(slug: string) {
 
 export function getShopProductsByType(type: ShopProductType) {
   return shopProducts.filter((product) => product.type === type)
+}
+
+function getHubBaseUrl() {
+  return process.env.WEEKS_HUB_API_URL?.replace(/\/$/, '')
+}
+
+function isShopProduct(value: unknown): value is ShopProduct {
+  if (!value || typeof value !== 'object') return false
+
+  const product = value as Partial<ShopProduct>
+  return (
+    typeof product.slug === 'string' &&
+    typeof product.name === 'string' &&
+    typeof product.price === 'number' &&
+    ['set', 'upgrade-kit', 'project'].includes(product.type || '')
+  )
+}
+
+function normalizeProduct(product: ShopProduct): ShopProduct {
+  return {
+    ...product,
+    subtitle: product.subtitle || '',
+    ageRange: product.ageRange || '',
+    level: product.level || '',
+    leadTime: product.leadTime || 'Sbíráme zájem',
+    image: product.image || '/images/gallery/iot-arduino-breadboard.jpg',
+    description: product.description || '',
+    longDescription: product.longDescription || product.description || '',
+    includes: Array.isArray(product.includes) ? product.includes : [],
+    highlights: Array.isArray(product.highlights) ? product.highlights : [],
+    idealFor: Array.isArray(product.idealFor) ? product.idealFor : [],
+    projects: Array.isArray(product.projects) ? product.projects : [],
+    badge: product.badge || '',
+    categoryLabel: product.categoryLabel || productTypeLabels[product.type],
+    unlocks: product.unlocks || '',
+    compatibility: product.compatibility || undefined,
+  }
+}
+
+export async function getShopProducts() {
+  const hubBaseUrl = getHubBaseUrl()
+
+  if (!hubBaseUrl) {
+    return shopProducts
+  }
+
+  try {
+    const response = await fetch(`${hubBaseUrl}/api/shop/products`, {
+      cache: 'no-store',
+    })
+
+    if (!response.ok) {
+      return shopProducts
+    }
+
+    const data = await response.json() as { products?: unknown[] }
+    const products = (data.products || [])
+      .filter(isShopProduct)
+      .map(normalizeProduct)
+
+    return products.length > 0 ? products : shopProducts
+  } catch (error) {
+    console.error('Weeks Hub shop products fetch failed:', error)
+    return shopProducts
+  }
+}
+
+export async function getShopProductBySlug(slug: string) {
+  const hubBaseUrl = getHubBaseUrl()
+
+  if (hubBaseUrl) {
+    try {
+      const response = await fetch(`${hubBaseUrl}/api/shop/products/${slug}`, {
+        cache: 'no-store',
+      })
+
+      if (response.ok) {
+        const data = await response.json() as { product?: unknown }
+        if (isShopProduct(data.product)) {
+          return normalizeProduct(data.product)
+        }
+      }
+    } catch (error) {
+      console.error('Weeks Hub shop product fetch failed:', error)
+    }
+  }
+
+  return getShopProduct(slug)
 }

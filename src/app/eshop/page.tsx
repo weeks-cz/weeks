@@ -3,8 +3,13 @@ import { ArrowRight, Cpu, ExternalLink, Layers3, PackagePlus, ShieldCheck, Spark
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { ProductCatalog } from '@/components/shop/ProductCatalog'
+import { getShopProducts } from '@/lib/shop'
 
-export default function ShopPage() {
+export const dynamic = 'force-dynamic'
+
+export default async function ShopPage() {
+  const products = await getShopProducts()
+
   const howItWorks = [
     {
       title: 'Vyberete cestu',
@@ -131,7 +136,7 @@ export default function ShopPage() {
               </p>
             </div>
 
-            <ProductCatalog />
+            <ProductCatalog products={products} />
           </div>
         </section>
 

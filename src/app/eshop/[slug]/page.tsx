@@ -1,16 +1,13 @@
-import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ArrowLeft, BookOpen, CheckCircle2, ExternalLink } from 'lucide-react'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { ProductInterestButton } from '@/components/shop/ProductInterestButton'
-import { formatPrice, getShopProduct, shopProducts } from '@/lib/shop'
+import { formatPrice, getShopProductBySlug } from '@/lib/shop'
 import { ProductTracking } from '@/components/shop/ProductTracking'
 
-export function generateStaticParams() {
-  return shopProducts.map((product) => ({ slug: product.slug }))
-}
+export const dynamic = 'force-dynamic'
 
 export default async function ShopProductPage({
   params,
@@ -18,7 +15,7 @@ export default async function ShopProductPage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  const product = getShopProduct(slug)
+  const product = await getShopProductBySlug(slug)
 
   if (!product) {
     notFound()
@@ -43,12 +40,10 @@ export default async function ShopProductPage({
 
             <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1.05fr_0.95fr]">
               <div className="relative aspect-[5/4] overflow-hidden rounded-[32px] bg-gray-100">
-                <Image
+                <img
                   src={product.image}
                   alt={product.name}
-                  fill
-                  className="object-cover"
-                  priority
+                  className="h-full w-full object-cover"
                 />
               </div>
 
