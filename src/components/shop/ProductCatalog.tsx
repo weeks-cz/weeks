@@ -79,8 +79,8 @@ export function ProductCatalog({ products }: { products: ShopProduct[] }) {
   const hasActiveFilters = selectedTypes.length > 0 || selectedLevels.length > 0 || query.trim().length > 0 || sortBy !== 'default'
 
   return (
-    <div className="grid grid-cols-1 gap-8 lg:grid-cols-[260px_1fr]">
-      <aside className="h-fit rounded-2xl border border-gray-200 bg-white p-4 shadow-sm lg:sticky lg:top-24">
+    <div className="grid grid-cols-1 gap-8 md:grid-cols-[260px_1fr]">
+      <aside className="h-fit rounded-2xl border border-gray-200 bg-white p-4 shadow-sm md:sticky md:top-24">
         <div className="mb-4 flex items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <SlidersHorizontal className="h-4 w-4 text-primary-600" />
@@ -167,7 +167,7 @@ export function ProductCatalog({ products }: { products: ShopProduct[] }) {
         </div>
       </aside>
 
-      <div>
+      <div className="min-w-0">
         <div className="mb-4 flex items-center justify-between gap-4">
           <p className="text-sm font-medium text-gray-600">
             Zobrazeno {filteredProducts.length} z {products.length} produktů

@@ -39,7 +39,7 @@ export default async function ShopPage() {
       <Header />
       <main className="bg-white">
         <section className="relative overflow-hidden bg-gradient-to-br from-gray-50 via-primary-50/40 to-accent-50/30 pt-32 pb-16">
-          <div className="section-container relative z-10">
+          <div className="relative z-10 mx-auto w-full max-w-[1680px] px-4 sm:px-6 lg:px-8 2xl:px-10">
             <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
               <div className="max-w-3xl">
                 <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-white/80 px-4 py-2 text-sm font-medium text-primary-700 shadow-sm">
@@ -90,7 +90,7 @@ export default async function ShopPage() {
         </section>
 
         <section className="border-y border-gray-100 bg-white py-14">
-          <div className="section-container">
+          <div className="mx-auto w-full max-w-[1680px] px-4 sm:px-6 lg:px-8 2xl:px-10">
             <div className="grid grid-cols-1 gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
               <div>
                 <p className="text-sm font-medium uppercase tracking-[0.2em] text-primary-600">Jak to funguje</p>
@@ -124,8 +124,8 @@ export default async function ShopPage() {
           </div>
         </section>
 
-        <section id="nabidka" className="section-padding">
-          <div className="section-container">
+        <section id="nabidka" className="section-padding bg-gradient-to-b from-gray-50 via-white to-primary-50/30">
+          <div className="mx-auto w-full max-w-[1680px] px-4 sm:px-6 lg:px-8 2xl:px-10">
             <div className="mb-10 flex items-end justify-between gap-6">
               <div>
                 <p className="text-sm font-medium uppercase tracking-[0.2em] text-primary-600">Nabídka</p>
@@ -141,14 +141,14 @@ export default async function ShopPage() {
         </section>
 
         <section className="bg-gray-900 py-16 text-white">
-          <div className="section-container">
+          <div className="mx-auto w-full max-w-[1680px] px-4 sm:px-6 lg:px-8 2xl:px-10">
             <div className="grid grid-cols-1 gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
               <div>
                 <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-medium text-white/80">
                   <ShieldCheck className="h-4 w-4" />
                   Pro rodiče
                 </div>
-                <h2 className="heading-2">Dítě má doma na čem pracovat</h2>
+                <h2 className="heading-2">Mladý kutil má doma na čem pracovat</h2>
                 <p className="mt-4 text-lg leading-8 text-white/70">
                   Nabídku skládáme tak, aby dávala smysl i po první sadě. Zákazník může začít kompletní sadou, navázat levnějším kitem nebo si vybrat jen jeden samostatný projekt.
                 </p>

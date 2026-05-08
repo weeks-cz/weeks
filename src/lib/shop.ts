@@ -1,5 +1,18 @@
 export type ShopProductType = 'set' | 'upgrade-kit' | 'project'
 
+export const productConceptNotice = 'Koncept produktu: finální komponenty, obsah balení a přesné informace doplníme při skutečném uvedení na trh.'
+
+const fallbackShopProductImage = '/images/gallery/iot-breadboard-detail.jpg'
+
+const shopProductImageReplacements: Record<string, string> = {
+  '/images/gallery/iot-arduino-breadboard.jpg': '/images/gallery/iot-breadboard-detail.jpg',
+  '/images/gallery/iot-circuit-design.jpg': '/images/gallery/shop-iot-component-closeup.jpg',
+  '/images/gallery/iot-arduino-programming.jpg': '/images/gallery/shop-iot-component-closeup.jpg',
+  'https://weeks.cz/images/gallery/iot-arduino-breadboard.jpg': '/images/gallery/iot-breadboard-detail.jpg',
+  'https://weeks.cz/images/gallery/iot-circuit-design.jpg': '/images/gallery/shop-iot-component-closeup.jpg',
+  'https://weeks.cz/images/gallery/iot-arduino-programming.jpg': '/images/gallery/shop-iot-component-closeup.jpg',
+}
+
 export interface ShopProduct {
   slug: string
   name: string
@@ -32,7 +45,7 @@ export const shopProducts: ShopProduct[] = [
     ageRange: '10-14 let',
     level: 'Začátečník',
     leadTime: 'Sbíráme zájem',
-    image: '/images/gallery/iot-arduino-breadboard.jpg',
+    image: '/images/gallery/iot-breadboard-detail.jpg',
     description: 'Základní sada chytré elektroniky pro první lekce ve Weeks Učebně a bezpečný domácí start.',
     longDescription: 'Weeks Starter sada je vstupenka do chytré elektroniky bez shánění náhodných součástek. Dítě dostane řídicí desku, nepájivé pole, kabely a základní senzory, aby mohlo ve Weeks Učebně projít prvními projekty od LEDek přes tlačítka až po jednoduchá měření.',
     includes: [
@@ -72,7 +85,7 @@ export const shopProducts: ShopProduct[] = [
     ageRange: '11-15 let',
     level: 'Mírně pokročilý',
     leadTime: 'Sbíráme zájem',
-    image: '/images/gallery/iot-circuit-design.jpg',
+    image: '/images/gallery/shop-iot-component-closeup.jpg',
     description: 'Kompletní sada pro domácí chytrá zařízení se senzory, displejem, WiFi deskou a reálnými scénáři.',
     longDescription: 'Weeks Home Lab je celá sada pro děti, které chtějí stavět chytrou domácnost na stole. Obsahuje základní výbavu i specifické komponenty pro měření prostředí, upozornění, jednoduché alarmy a první internetové propojení. Hodí se pro zákazníka, který ještě žádnou Weeks sadu nemá.',
     includes: [
@@ -152,7 +165,7 @@ export const shopProducts: ShopProduct[] = [
     ageRange: '11-15 let',
     level: 'Navazující',
     leadTime: 'Sbíráme zájem',
-    image: '/images/gallery/iot-circuit-design.jpg',
+    image: '/images/gallery/iot-plant-sensor-2.jpg',
     description: 'Doplňkový balíček se specifickými Home Lab komponenty bez znovunakupování Arduina, breadboardu a kabelů.',
     longDescription: 'Home Lab kit je určený pro děti, které už mají Weeks Starter sadu. Neposíláme znovu základní výbavu, ale jen komponenty potřebné pro další úroveň: WiFi desku, senzory prostředí, displej a prvky pro domácí alarmy. Ze Starter sady tak vznikne Home Lab.',
     includes: [
@@ -268,7 +281,7 @@ export const shopProducts: ShopProduct[] = [
     ageRange: '11-15 let',
     level: 'Mírně pokročilý',
     leadTime: 'Sbíráme zájem',
-    image: '/images/gallery/iot-circuit-design.jpg',
+    image: '/images/gallery/iot-breadboard-detail.jpg',
     description: 'Projekt s displejem, který měří teplotu, vlhkost a tlak a může posílat data do grafů.',
     longDescription: 'Domácí meteostanice ukazuje aktuální stav v pokoji na malém OLED displeji. Dítě si vyzkouší práci se senzorem, displejem i odesíláním dat na internetovou službu pro jednoduché grafy. V Učebně se odemkne jen tento projekt.',
     includes: [
@@ -302,7 +315,7 @@ export const shopProducts: ShopProduct[] = [
     ageRange: '12-16 let',
     level: 'Pokročilý',
     leadTime: 'Sbíráme zájem',
-    image: '/images/gallery/iot-arduino-programming.jpg',
+    image: '/images/gallery/shop-iot-component-closeup.jpg',
     description: 'Designový projekt s RGB světlem, které mění barvu podle počasí, zpráv nebo vlastních pravidel.',
     longDescription: 'Chytrý notifikátor je malá RGB lampička řízená ESP deskou. Dítě ji naprogramuje tak, aby svítila podle počasí, notifikace nebo hodnot z internetu. Projekt je vizuální, dobře se ukazuje a v Učebně se odemkne samostatně.',
     includes: [
@@ -336,7 +349,7 @@ export const shopProducts: ShopProduct[] = [
     ageRange: '10-14 let',
     level: 'Začátečník',
     leadTime: 'Sbíráme zájem',
-    image: '/images/gallery/iot-arduino-breadboard.jpg',
+    image: '/images/gallery/iot-breadboard-detail.jpg',
     description: 'Jednoduchý projekt, který měří vzdálenost a ukazuje zelenou, žlutou nebo červenou.',
     longDescription: 'Parkovací asistent je přehledný projekt na vysvětlení senzorů. Ultrazvuk měří vzdálenost, LEDky ukazují stav a dítě si vyzkouší podmínky v kódu. V Učebně se odemkne jen tento projekt.',
     includes: [
@@ -415,7 +428,7 @@ function normalizeProduct(product: ShopProduct): ShopProduct {
     ageRange: product.ageRange || '',
     level: product.level || '',
     leadTime: product.leadTime || 'Sbíráme zájem',
-    image: product.image || '/images/gallery/iot-arduino-breadboard.jpg',
+    image: shopProductImageReplacements[product.image] || product.image || fallbackShopProductImage,
     description: product.description || '',
     longDescription: product.longDescription || product.description || '',
     includes: Array.isArray(product.includes) ? product.includes : [],

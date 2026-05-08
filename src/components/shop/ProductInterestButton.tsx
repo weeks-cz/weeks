@@ -76,11 +76,11 @@ export function ProductInterestButton({
         type="button"
         onClick={() => setIsOpen(true)}
         className={`inline-flex items-center justify-center gap-2 rounded-lg bg-gray-900 font-semibold text-white transition-colors hover:bg-primary-700 ${
-          compact ? 'w-full px-3 py-2.5 text-sm' : 'px-5 py-3'
+          compact ? 'w-full whitespace-nowrap px-3 py-2.5 text-sm' : 'px-5 py-3'
         }`}
       >
-        <Heart className="h-4 w-4" />
-        {buttonLabel}
+        <Heart className="h-4 w-4 shrink-0" />
+        <span>{buttonLabel}</span>
       </button>
 
       {isOpen && (

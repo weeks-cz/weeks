@@ -4,7 +4,7 @@ import { ArrowLeft, BookOpen, CheckCircle2, ExternalLink } from 'lucide-react'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { ProductInterestButton } from '@/components/shop/ProductInterestButton'
-import { formatPrice, getShopProductBySlug } from '@/lib/shop'
+import { formatPrice, getShopProductBySlug, productConceptNotice } from '@/lib/shop'
 import { ProductTracking } from '@/components/shop/ProductTracking'
 
 export const dynamic = 'force-dynamic'
@@ -69,6 +69,10 @@ export default async function ShopProductPage({
                     {product.compatibility}
                   </div>
                 )}
+
+                <div className="mt-3 rounded-2xl bg-amber-50 p-5 text-sm font-medium leading-6 text-amber-900">
+                  {productConceptNotice}
+                </div>
 
                 <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
                   {[
