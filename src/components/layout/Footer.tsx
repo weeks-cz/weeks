@@ -61,6 +61,7 @@ export function Footer() {
             <ul className="space-y-3">
               {[
                 { name: 'Program', href: '/program' },
+                { name: 'E-shop', href: '/eshop' },
                 { name: 'Proč Weeks', href: '/#proc-weeks' },
                 { name: 'O nás', href: '/o-nas' },
                 { name: 'Kontakt', href: '/kontakt' },
