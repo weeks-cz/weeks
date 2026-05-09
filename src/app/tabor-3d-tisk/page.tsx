@@ -25,6 +25,7 @@ const galleryImages: GalleryImage[] = [
 const confirmedTerminy = [
   { id: '3d-19-04', date: '19. dubna 2026', day: 'neděle', label: 'Neděle 19. dubna', registrationUrl: 'https://www.ddmp6.cz/tabory/?id=775#js-application' },
   { id: '3d-16-05', date: '16. května 2026', day: 'sobota', label: 'Sobota 16. května', registrationUrl: 'https://www.ddmp6.cz/tabory/?id=786#js-application' },
+  { id: '3d-21-06', date: '21. června 2026', day: 'neděle', label: 'Neděle 21. června', registrationUrl: 'https://www.ddmp6.cz/tabory/?id=789#js-application' },
 ]
 
 // Připravované termíny

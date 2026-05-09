@@ -23,6 +23,7 @@ const galleryImages: GalleryImage[] = [
 const confirmedTerminy = [
   { id: 'iot-18-04', date: '18. dubna 2026', day: 'sobota', label: 'Sobota 18. dubna', registrationUrl: 'https://www.ddmp6.cz/tabory/?id=773#js-application' },
   { id: 'iot-17-05', date: '17. května 2026', day: 'neděle', label: 'Neděle 17. května', registrationUrl: 'https://www.ddmp6.cz/tabory/?id=787#js-application' },
+  { id: 'iot-20-06', date: '20. června 2026', day: 'sobota', label: 'Sobota 20. června', registrationUrl: 'https://www.ddmp6.cz/tabory/?id=788#js-application' },
 ]
 
 // Připravované termíny

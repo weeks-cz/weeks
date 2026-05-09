@@ -65,6 +65,28 @@ const confirmedTerms: ConfirmedTerm[] = [
     href: '/tabor-iot',
     registrationUrl: 'https://www.ddmp6.cz/tabory/?id=787',
   },
+  {
+    id: 'iot-20-6',
+    date: '2026-06-20',
+    dateLabel: 'So 20. června',
+    camp: 'IoT & elektronika',
+    campType: 'iot',
+    location: 'HWLab Praha',
+    price: '1 490 Kč',
+    href: '/tabor-iot',
+    registrationUrl: 'https://www.ddmp6.cz/tabory/?id=788',
+  },
+  {
+    id: '3dtisk-21-6',
+    date: '2026-06-21',
+    dateLabel: 'Ne 21. června',
+    camp: '3D tisk',
+    campType: '3d-tisk',
+    location: 'HWLab Praha',
+    price: '1 490 Kč',
+    href: '/tabor-3d-tisk',
+    registrationUrl: 'https://www.ddmp6.cz/tabory/?id=789',
+  },
 ]
 
 const campColors: Record<CampType, { bg: string; text: string }> = {
