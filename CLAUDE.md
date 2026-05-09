@@ -7,7 +7,7 @@ This file provides guidance to Claude Code when working with this repository.
 **Weeks** is a website for IT camps for children (ages 10-15) in Prague, operated under DDM Praha 6. The site offers weekend camps (MIX) and one-day camps (3D tisk, IoT). It appeals to two audiences: parents (who pay) and teenagers (who decide if they want to attend).
 
 **Live URL:** https://weeks.cz
-**GitHub:** https://github.com/lxkask/weeks
+**GitHub:** https://github.com/weeks-cz/weeks (public; transferred from lxkask/weeks on 2026-05-09)
 
 ## Tech Stack
 
@@ -347,3 +347,22 @@ TXT   @     google-site-verification=5epLUIbGFT0mcISr7rJZPFLcNlcAIFkQXe5cBY9nSdY
 - DDM confirmation for remaining one-day camp terms (25.4+)
 - Summer MIX terms: currently interest-only, will need DDM registration when confirmed
 - Consider listing on detske-tabory.info (free) and cesketabory.cz for visibility
+
+## Repo & team workflow
+
+- **Org**: `weeks-cz` on GitHub (free, owned by Lukáš). Owners: Lukáš (lukoluko8), Štěpán (step4n), Kryštof (jezdikk), admin@weeks.cz.
+- **Sister repos**: `weeks-cz/weeks-hub` (app.weeks.cz), `weeks-cz/weeks-iot` (iot.weeks.cz + klicenka.weeks.cz). All public, code-only.
+- **Strategic docs**: live in private repo `weeks-cz/weeks-internal` under `web/docs/`. ROADMAP, content spec, UI/UX spec, plans, specs all moved there 2026-05-09. **Do not commit business strategy or competitive context here** — this repo is public.
+- **Deploys**: Vercel auto-deploys `main` branch to weeks.cz on push.
+- **Vercel Hobby author block**: Free tier rejects deployments when commit author is not Lukáš (lukoluko8@gmail.com). Commits by step4n or jezdikk hit error: *"Git author X must have access to the project on Vercel"*.
+  - **Workaround until Vercel Pro upgrade ($20/mo, deferred until s.r.o.)**: Lukáš (or Claude) squashes Š/K feature branches into a single Lukáš-authored commit on main:
+    ```bash
+    cd <fresh-clone>
+    git checkout main && git pull
+    git read-tree -u --reset <feature-branch>
+    git -c user.email=lukoluko8@gmail.com commit \
+      --author="Lukáš Kubík <lukoluko8@gmail.com>" \
+      -m "feat(...): squashed <feature-branch>"
+    git push origin main
+    ```
+  - This pattern was used 6× during 2026-05 batch deploy. Š/K push to feature branches normally; ask Lukáš (or open issue) when ready to deploy.
