@@ -1,6 +1,7 @@
 'use client'
 
-import { FormEvent, useState } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { CheckCircle2, Heart, Send, X } from 'lucide-react'
 import type { ShopProductType } from '@/lib/shop'
 
@@ -20,6 +21,7 @@ export function ProductInterestButton({
   compact = false,
 }: ProductInterestButtonProps) {
   const [isOpen, setIsOpen] = useState(false)
+  const [isMounted, setIsMounted] = useState(false)
   const [email, setEmail] = useState('')
   const [name, setName] = useState('')
   const [note, setNote] = useState('')
@@ -27,6 +29,24 @@ export function ProductInterestButton({
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
+  useEffect(() => {
+    if (!isOpen) return
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    const handleKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setIsOpen(false)
+    }
+    window.addEventListener('keydown', handleKey)
+    return () => {
+      document.body.style.overflow = previousOverflow
+      window.removeEventListener('keydown', handleKey)
+    }
+  }, [isOpen])
 
   const closeModal = () => {
     setIsOpen(false)
@@ -83,9 +103,17 @@ export function ProductInterestButton({
         <span>{buttonLabel}</span>
       </button>
 
-      {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-950/70 px-4 py-8">
-          <div className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl">
+      {isOpen && isMounted && createPortal(
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto bg-gray-950/70 px-4 py-8"
+          role="dialog"
+          aria-modal="true"
+          onClick={closeModal}
+        >
+          <div
+            className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl"
+            onClick={(event) => event.stopPropagation()}
+          >
             <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="text-sm font-medium text-primary-600">Připravujeme</p>
@@ -196,7 +224,8 @@ export function ProductInterestButton({
               </form>
             )}
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   )
