@@ -5,8 +5,24 @@ import { ArrowRight, Calendar, Mail, Sparkles, Printer, Cpu } from 'lucide-react
 import Link from 'next/link'
 import { useState } from 'react'
 import { trackLead } from '@/lib/fbpixel'
+import type { TermDisplay } from '@/lib/camps'
 
-export function CTASection() {
+interface CTASectionProps {
+  // Soonest upcoming term per program, or null if none scheduled
+  nextTerms: Record<string, TermDisplay | null>
+}
+
+function shortLabel(t: TermDisplay | null | undefined): string | null {
+  if (!t) return null
+  if (t.campType === 'weekend') return t.weekendDateLabel
+  const dayShort = t.dayLabel === 'sobota' ? 'So' : t.dayLabel === 'neděle' ? 'Ne' : ''
+  return dayShort ? `${dayShort} ${t.dateShortLabel}` : t.dateShortLabel
+}
+
+export function CTASection({ nextTerms }: CTASectionProps) {
+  const techNext = shortLabel(nextTerms['tech'])
+  const tisk3dNext = shortLabel(nextTerms['3d-tisk'])
+  const iotNext = shortLabel(nextTerms['iot'])
   const [email, setEmail] = useState('')
   const [gdprConsent, setGdprConsent] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -77,11 +93,13 @@ export function CTASection() {
                 3D tisk, IoT a virtuální realita v jednom víkendu. So + Ne, 2 990 Kč.
               </p>
 
-              <div className="space-y-2 mb-6">
-                <div className="flex items-center gap-2 text-xs text-white/80">
-                  <div className="w-1.5 h-1.5 rounded-full bg-accent-400 flex-shrink-0" />
-                  28. – 29. března
-                </div>
+              <div className="space-y-2 mb-6 min-h-[24px]">
+                {techNext && (
+                  <div className="flex items-center gap-2 text-xs text-white/80">
+                    <div className="w-1.5 h-1.5 rounded-full bg-accent-400 flex-shrink-0" />
+                    Nejbližší: {techNext}
+                  </div>
+                )}
               </div>
 
               <Link
@@ -119,16 +137,13 @@ export function CTASection() {
                 Od návrhu po hotový výtisk na profesionální tiskárně za jeden den. 1 490 Kč.
               </p>
 
-              <div className="space-y-2 mb-6">
-                {[
-                  'Ne 19. dubna',
-                  '+ další termíny',
-                ].map((date, i) => (
-                  <div key={i} className="flex items-center gap-2 text-xs text-white/80">
+              <div className="space-y-2 mb-6 min-h-[24px]">
+                {tisk3dNext && (
+                  <div className="flex items-center gap-2 text-xs text-white/80">
                     <div className="w-1.5 h-1.5 rounded-full bg-primary-400 flex-shrink-0" />
-                    {date}
+                    Nejbližší: {tisk3dNext}
                   </div>
-                ))}
+                )}
               </div>
 
               <Link
@@ -166,16 +181,13 @@ export function CTASection() {
                 Micro:bit/Arduino, senzory a vlastní chytré zařízení za jeden den. 1 490 Kč.
               </p>
 
-              <div className="space-y-2 mb-6">
-                {[
-                  'So 18. dubna',
-                  '+ další termíny',
-                ].map((date, i) => (
-                  <div key={i} className="flex items-center gap-2 text-xs text-white/80">
+              <div className="space-y-2 mb-6 min-h-[24px]">
+                {iotNext && (
+                  <div className="flex items-center gap-2 text-xs text-white/80">
                     <div className="w-1.5 h-1.5 rounded-full bg-trust-400 flex-shrink-0" />
-                    {date}
+                    Nejbližší: {iotNext}
                   </div>
-                ))}
+                )}
               </div>
 
               <Link

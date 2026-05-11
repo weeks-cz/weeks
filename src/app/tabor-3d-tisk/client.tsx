@@ -62,11 +62,13 @@ const campFaqs = [
 ]
 
 interface Tabor3DTiskClientProps {
-  confirmedTerms: TermDisplay[]
-  upcomingTerms: TermDisplay[]
+  open: TermDisplay[]
+  openNoLink: TermDisplay[]
+  collectingInterest: TermDisplay[]
+  full: TermDisplay[]
 }
 
-export default function Tabor3DTiskClient({ confirmedTerms, upcomingTerms }: Tabor3DTiskClientProps) {
+export default function Tabor3DTiskClient({ open, openNoLink, collectingInterest, full }: Tabor3DTiskClientProps) {
   return (
     <>
       <Header />
@@ -421,10 +423,11 @@ export default function Tabor3DTiskClient({ confirmedTerms, upcomingTerms }: Tab
             <TermsList
               program="3d-tisk"
               programTitle="3D tisk"
-              confirmed={confirmedTerms}
-              upcoming={upcomingTerms}
+              open={open}
+              openNoLink={openNoLink}
+              collectingInterest={collectingInterest}
+              full={full}
               accentClasses={{
-                ringColor: 'focus:ring-primary-500',
                 badgeDot: 'bg-trust-400',
                 badgePillBg: 'bg-trust-500/20',
                 badgePillText: 'text-trust-300',

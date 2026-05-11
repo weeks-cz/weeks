@@ -57,11 +57,13 @@ const campFaqs = [
 ]
 
 interface TaborIoTClientProps {
-  confirmedTerms: TermDisplay[]
-  upcomingTerms: TermDisplay[]
+  open: TermDisplay[]
+  openNoLink: TermDisplay[]
+  collectingInterest: TermDisplay[]
+  full: TermDisplay[]
 }
 
-export default function TaborIoTClient({ confirmedTerms, upcomingTerms }: TaborIoTClientProps) {
+export default function TaborIoTClient({ open, openNoLink, collectingInterest, full }: TaborIoTClientProps) {
   return (
     <>
       <Header />
@@ -399,10 +401,11 @@ export default function TaborIoTClient({ confirmedTerms, upcomingTerms }: TaborI
             <TermsList
               program="iot"
               programTitle="IoT & elektronika"
-              confirmed={confirmedTerms}
-              upcoming={upcomingTerms}
+              open={open}
+              openNoLink={openNoLink}
+              collectingInterest={collectingInterest}
+              full={full}
               accentClasses={{
-                ringColor: 'focus:ring-trust-500',
                 badgeDot: 'bg-trust-400',
                 badgePillBg: 'bg-trust-400/20',
                 badgePillText: 'text-trust-200',

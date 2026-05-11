@@ -4,14 +4,14 @@ import { getCampsForProgram } from '@/lib/camps'
 export const revalidate = 300
 
 export default async function TaborChytrychTechnologiiPage() {
-  const { confirmed, upcoming } = await getCampsForProgram('tech')
+  const { open, openNoLink, collectingInterest } = await getCampsForProgram('tech')
 
-  // confirmed = MIX weekends with DDM registration link (open_with_link)
-  // upcoming = summer/future MIX weekends with no link yet (collecting_interest)
+  // open + open_no_link = "registered" weekend MIX terms (rendered as cards)
+  // collecting_interest = summer weekends (multi-select interest form)
   return (
     <TaborChytrychTechnologiiClient
-      confirmedMixTerms={confirmed}
-      summerWeekends={upcoming}
+      confirmedMixTerms={[...open, ...openNoLink]}
+      summerWeekends={collectingInterest}
     />
   )
 }

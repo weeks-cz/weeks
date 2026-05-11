@@ -151,32 +151,70 @@ export const getCamps = unstable_cache(
 )
 
 export async function getCampsForProgram(program: string): Promise<{
-  confirmed: TermDisplay[]
-  upcoming: TermDisplay[]
-  past: TermDisplay[]
+  // Status buckets used by camp pages. Past terms are filtered out entirely.
+  open: TermDisplay[]              // open_with_link — has a DDM URL, "Přihlásit se"
+  openNoLink: TermDisplay[]        // open_no_link — confirmed but no URL yet
+  collectingInterest: TermDisplay[] // collecting_interest — "Nezávazná registrace"
+  full: TermDisplay[]              // full — "Plný"
+  // Legacy combined views for components that don't care about the distinction
+  confirmed: TermDisplay[]         // open_with_link (with DDM link)
+  upcoming: TermDisplay[]          // open_no_link + collecting_interest
 }> {
   const rows = await getCamps()
   const today = new Date().toISOString().slice(0, 10)
 
   const filtered = rows
-    .filter(r => r.program === program)
+    .filter(r => r.program === program && r.end_date >= today && r.status !== 'closed')
     .map(toDisplay)
 
-  const confirmed: TermDisplay[] = []
-  const upcoming: TermDisplay[] = []
-  const past: TermDisplay[] = []
+  const open: TermDisplay[] = []
+  const openNoLink: TermDisplay[] = []
+  const collectingInterest: TermDisplay[] = []
+  const full: TermDisplay[] = []
 
   for (const term of filtered) {
-    if (term.endDate < today) {
-      past.push(term)
-    } else if (term.status === 'open_with_link' || term.registrationUrl) {
-      confirmed.push(term)
-    } else {
-      upcoming.push(term)
-    }
+    if (term.status === 'full') full.push(term)
+    else if (term.status === 'open_with_link' && term.registrationUrl) open.push(term)
+    else if (term.status === 'open_no_link') openNoLink.push(term)
+    else collectingInterest.push(term)
   }
 
-  return { confirmed, upcoming, past }
+  return {
+    open, openNoLink, collectingInterest, full,
+    confirmed: open,
+    upcoming: [...openNoLink, ...collectingInterest],
+  }
+}
+
+// Fetch the nearest upcoming term for each program (for homepage cards).
+// Returns the soonest open or collecting_interest camp per program.
+export async function getNearestTermsByProgram(): Promise<Record<string, TermDisplay | null>> {
+  const rows = await getCamps()
+  const today = new Date().toISOString().slice(0, 10)
+  const result: Record<string, TermDisplay | null> = {}
+
+  for (const program of ['3d-tisk', 'iot', 'tech']) {
+    const nearest = rows
+      .filter(r => r.program === program && r.end_date >= today
+        && r.status !== 'closed' && r.status !== 'full')
+      .sort((a, b) => a.start_date.localeCompare(b.start_date))[0]
+    result[program] = nearest ? toDisplay(nearest) : null
+  }
+
+  return result
+}
+
+// Returns all open + open_no_link terms across all programs, sorted by date.
+// Used by the homepage "Nejbližší termíny" section.
+export async function getAllUpcomingTerms(): Promise<TermDisplay[]> {
+  const rows = await getCamps()
+  const today = new Date().toISOString().slice(0, 10)
+
+  return rows
+    .filter(r => r.end_date >= today
+      && (r.status === 'open_with_link' || r.status === 'open_no_link'))
+    .sort((a, b) => a.start_date.localeCompare(b.start_date))
+    .map(toDisplay)
 }
 
 export { fetchCampsRaw }

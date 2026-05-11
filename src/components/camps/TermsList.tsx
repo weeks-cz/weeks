@@ -1,7 +1,7 @@
 'use client'
 
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowRight, Calendar, Check, ChevronDown } from 'lucide-react'
+import { ArrowRight, Calendar, Check, ChevronDown, Bell } from 'lucide-react'
 import Link from 'next/link'
 import { useState } from 'react'
 import {
@@ -9,40 +9,45 @@ import {
 } from '@/lib/analytics'
 import type { TermDisplay } from '@/lib/camps'
 
-// Client-side rendering of confirmed (with DDM link) + upcoming (interest form)
-// terms for one-day camps. Terms come from the server page as serialised
-// TermDisplay objects.
-
 interface TermsListProps {
   program: '3d-tisk' | 'iot'
   programTitle: string
-  confirmed: TermDisplay[]
-  upcoming: TermDisplay[]
+  // Status buckets — open has DDM link, openNoLink is confirmed but link not ready,
+  // collectingInterest is "we might run this", full is no spots
+  open: TermDisplay[]
+  openNoLink: TermDisplay[]
+  collectingInterest: TermDisplay[]
+  full: TermDisplay[]
   accentClasses: AccentClasses
 }
 
 interface AccentClasses {
-  // Tailwind utility strings — keeps colour theming flexible per camp page
-  ringColor: string         // e.g. 'focus:ring-primary-500'
-  badgeDot: string          // e.g. 'bg-trust-400'
-  badgePillBg: string       // e.g. 'bg-trust-500/20'
-  badgePillText: string     // e.g. 'text-trust-300'
-  primaryBtnBg: string      // submit button bg
-  inputRing: string         // input focus ring
-  checkboxAccent: string    // checkbox text-X
+  badgeDot: string
+  badgePillBg: string
+  badgePillText: string
+  primaryBtnBg: string
+  inputRing: string
+  checkboxAccent: string
 }
 
-export function TermsList({ program, programTitle, confirmed, upcoming, accentClasses }: TermsListProps) {
+export function TermsList({
+  program, programTitle,
+  open, openNoLink, collectingInterest, full,
+  accentClasses,
+}: TermsListProps) {
+  const nothing = open.length + openNoLink.length + collectingInterest.length + full.length === 0
+
   return (
     <div className="max-w-3xl mx-auto space-y-10">
-      {confirmed.length > 0 && (
+      {/* Open with DDM link — primary CTA */}
+      {open.length > 0 && (
         <div>
           <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
             <div className={`w-2.5 h-2.5 rounded-full ${accentClasses.badgeDot}`} />
-            Potvrzené termíny
+            Otevřené registrace
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {confirmed.map((termin, index) => (
+            {open.map((termin, index) => (
               <motion.div
                 key={termin.id}
                 initial={{ opacity: 0, y: 30 }}
@@ -58,7 +63,7 @@ export function TermsList({ program, programTitle, confirmed, upcoming, accentCl
                       <h4 className="text-lg font-bold text-white">{termin.fullLabel}</h4>
                     </div>
                     <span className={`px-3 py-1 rounded-full ${accentClasses.badgePillBg} ${accentClasses.badgePillText} text-xs font-semibold`}>
-                      Potvrzeno
+                      Otevřeno
                     </span>
                   </div>
 
@@ -66,25 +71,23 @@ export function TermsList({ program, programTitle, confirmed, upcoming, accentCl
                     9:00–17:00, {termin.location || 'HWLab Praha'}. Registrace přes DDM Praha 6.
                   </p>
 
-                  {termin.registrationUrl ? (
-                    <a
-                      href={termin.registrationUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-full inline-flex items-center justify-center px-6 py-3 bg-cta-500 hover:bg-cta-400 text-gray-900 font-semibold rounded-xl transition-all duration-300 hover:shadow-xl hover:shadow-cta-500/30 text-sm"
-                      onClick={() => trackRegistrationClick({
-                        termId: termin.id,
-                        termDates: termin.dateLabel,
-                        termLocation: termin.location || 'HWLab Praha',
-                        spotsAvailable: Math.max(0, termin.capacity - termin.enrolledCount),
-                        outboundUrl: termin.registrationUrl!,
-                        campType: 'oneday',
-                      })}
-                    >
-                      Přihlásit se
-                      <ArrowRight className="ml-2 w-4 h-4" />
-                    </a>
-                  ) : null}
+                  <a
+                    href={termin.registrationUrl!}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full inline-flex items-center justify-center px-6 py-3 bg-cta-500 hover:bg-cta-400 text-gray-900 font-semibold rounded-xl transition-all duration-300 hover:shadow-xl hover:shadow-cta-500/30 text-sm"
+                    onClick={() => trackRegistrationClick({
+                      termId: termin.id,
+                      termDates: termin.dateLabel,
+                      termLocation: termin.location || 'HWLab Praha',
+                      spotsAvailable: Math.max(0, termin.capacity - termin.enrolledCount),
+                      outboundUrl: termin.registrationUrl!,
+                      campType: 'oneday',
+                    })}
+                  >
+                    Přihlásit se
+                    <ArrowRight className="ml-2 w-4 h-4" />
+                  </a>
                 </div>
               </motion.div>
             ))}
@@ -92,7 +95,55 @@ export function TermsList({ program, programTitle, confirmed, upcoming, accentCl
         </div>
       )}
 
-      {upcoming.length > 0 && (
+      {/* Open but registration link not yet published — interest form */}
+      {openNoLink.length > 0 && (
+        <div>
+          <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+            <Bell className="w-4 h-4 text-cta-300" />
+            Brzy otevřeme registraci
+          </h3>
+          <p className="text-sm text-white/60 mb-6 max-w-xl">
+            Termín je potvrzený, jen čekáme na zveřejnění registrace v systému DDM Praha 6.
+            Nechte nám email a dáme vědět hned, jak bude otevřená.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {openNoLink.map((termin, index) => (
+              <motion.div
+                key={termin.id}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 overflow-hidden"
+              >
+                <div className="p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-2">
+                      <Calendar className="w-5 h-5 text-white/70" />
+                      <h4 className="text-lg font-bold text-white">{termin.fullLabel}</h4>
+                    </div>
+                    <span className="px-3 py-1 rounded-full bg-cta-500/20 text-cta-300 text-xs font-semibold">
+                      Brzy otevřeme
+                    </span>
+                  </div>
+
+                  <InterestForm
+                    terminId={termin.id}
+                    terminLabel={termin.fullLabel}
+                    program={program}
+                    programTitle={programTitle}
+                    accentClasses={accentClasses}
+                    buttonLabel="Dejte mi vědět"
+                  />
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Collecting interest — non-binding, may or may not run */}
+      {collectingInterest.length > 0 && (
         <div>
           <h3 className="text-lg font-semibold text-white/80 mb-4 flex items-center gap-2">
             <div className="w-2.5 h-2.5 rounded-full bg-cta-400" />
@@ -103,7 +154,7 @@ export function TermsList({ program, programTitle, confirmed, upcoming, accentCl
             Nezavazujete se k ničemu — pouze dostanete včasnou informaci o otevření registrace.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {upcoming.map((termin, index) => (
+            {collectingInterest.map((termin, index) => (
               <motion.div
                 key={termin.id}
                 initial={{ opacity: 0, y: 30 }}
@@ -137,7 +188,28 @@ export function TermsList({ program, programTitle, confirmed, upcoming, accentCl
         </div>
       )}
 
-      {confirmed.length === 0 && upcoming.length === 0 && (
+      {/* Full — muted, no action */}
+      {full.length > 0 && (
+        <div>
+          <h3 className="text-sm font-semibold text-white/50 mb-4">Obsazené termíny</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {full.map((termin) => (
+              <div
+                key={termin.id}
+                className="bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-4 opacity-60"
+              >
+                <div className="flex items-center gap-2 mb-2">
+                  <Calendar className="w-4 h-4 text-white/50" />
+                  <span className="text-sm font-medium text-white/70">{termin.fullLabel}</span>
+                </div>
+                <span className="text-xs text-red-300 font-semibold">Obsazeno</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {nothing && (
         <p className="text-center text-white/60">
           Aktuálně nejsou vypsané žádné termíny. Sledujte nás na sociálních sítích, nebo nám
           napište přes <Link href="/kontakt" className="underline">kontaktní formulář</Link>.
@@ -148,13 +220,14 @@ export function TermsList({ program, programTitle, confirmed, upcoming, accentCl
 }
 
 function InterestForm({
-  terminId, terminLabel, program, programTitle, accentClasses,
+  terminId, terminLabel, program, programTitle, accentClasses, buttonLabel = 'Nezávazná registrace',
 }: {
   terminId: string
   terminLabel: string
   program: '3d-tisk' | 'iot'
   programTitle: string
   accentClasses: AccentClasses
+  buttonLabel?: string
 }) {
   const [isOpen, setIsOpen] = useState(false)
   const [email, setEmail] = useState('')
@@ -210,7 +283,7 @@ function InterestForm({
           }}
           className="btn-outline border-white/50 text-white hover:bg-white/10 inline-flex items-center gap-2"
         >
-          Nezávazná registrace
+          {buttonLabel}
         </button>
       ) : (
         <AnimatePresence>
