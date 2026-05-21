@@ -59,13 +59,25 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  return new NextResponse('Authentication required', {
+  // HTML body s no-store cache. Firefox v některých konfiguracích neukáže basic auth
+  // dialog, pokud 401 response má text/plain content-type nebo cacheovatelné headers —
+  // request pak visí v "Waiting for server" stavu donekonečna. HTML response to fixuje.
+  const html = `<!DOCTYPE html>
+<html lang="cs">
+<head><meta charset="utf-8"><title>Weeks — autentizace</title></head>
+<body style="font-family: system-ui, sans-serif; max-width: 32rem; margin: 4rem auto; padding: 0 1rem; color: #111;">
+  <h1 style="font-size: 1.25rem;">Weeks — pre-launch</h1>
+  <p>Tato část webu je v přípravě a vyžaduje přístupové údaje.</p>
+  <p>Pokud vidíte tuto stránku místo přihlašovacího dialogu, otevřete URL znovu nebo použijte odkaz s vloženými údaji od organizátora.</p>
+</body>
+</html>`
+  return new NextResponse(html, {
     status: 401,
     headers: {
-      // Jednoduchý ASCII realm — některé prohlížeče (Edge, Chrome variants) ignorují
-      // prompt dialog, pokud realm obsahuje non-ASCII znaky nebo závorky.
+      'Content-Type': 'text/html; charset=UTF-8',
       'WWW-Authenticate': 'Basic realm="weeks pre-launch"',
       'X-Robots-Tag': 'noindex, nofollow',
+      'Cache-Control': 'no-store, must-revalidate',
     },
   })
 }
