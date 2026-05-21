@@ -187,14 +187,18 @@ export const LOCATIONS: Record<string, Location> = {
       description: 'IT kempy pro děti 10-15 let v Karlových Varech. 3D tisk, IoT, programování a virtuální realita ve Vary&Te Creative Center.',
     },
     programs: [
-      { id: 'letni-primestsky', name: 'Letní příměstský tábor chytrých technologií', slug: 'letni-primestsky', campType: 'week' as const, price: 7490, capacity: 12, ageRange: '10-15', color: 'accent' },
+      { id: 'letni-primestsky', name: 'Letní příměstský tábor chytrých technologií', slug: 'letni-primestsky', campType: 'week' as const, price: 4990, capacity: 12, ageRange: '10-15', color: 'accent' },
+      { id: 'mix', name: 'Víkendový tábor chytrých technologií', slug: 'tabor-chytrych-technologii', campType: 'weekend' as const, price: 2990, capacity: 12, ageRange: '10-15', color: 'primary' },
     ],
     terms: [
-      { id: 'kv-2026-07-07-letni', program: 'letni-primestsky', startDate: '2026-07-07', endDate: '2026-07-11', day: 'pondělí–pátek', status: 'preparing' as const },
+      { id: 'kv-2026-07-27-letni', program: 'letni-primestsky', startDate: '2026-07-27', endDate: '2026-07-31', day: 'pondělí–pátek', status: 'confirmed' as const },
+      { id: 'kv-2026-08-01-mix', program: 'mix', startDate: '2026-08-01', endDate: '2026-08-02', day: 'sobota–neděle', status: 'confirmed' as const },
+      { id: 'kv-2026-08-03-letni', program: 'letni-primestsky', startDate: '2026-08-03', endDate: '2026-08-07', day: 'pondělí–pátek', status: 'confirmed' as const },
+      { id: 'kv-2026-08-08-mix', program: 'mix', startDate: '2026-08-08', endDate: '2026-08-09', day: 'sobota–neděle', status: 'confirmed' as const },
     ],
     hero: {
       badge: 'Nově v Karlových Varech!',
-      subtitle: 'Letní příměstský tábor v Karlových Varech — 3D tisk, IoT, VR a programování pro děti 10–15 let.',
+      subtitle: 'Letní příměstský tábor (Po–Pá) i víkendový MIX (So–Ne) v Karlových Varech — 3D tisk, modelování, IoT, VR a základy programování.',
     },
     usps: {
       organizer: {
@@ -224,7 +228,7 @@ export const LOCATIONS: Record<string, Location> = {
       locationAnswer: 'Tábor probíhá ve FabLab v Kreativním centru Vary&Te, Dykova, Stará Role, Karlovy Vary — největším kreativním centru v Karlovarském kraji s profesionálním FabLabem a GameDev arenou.',
       organizerAnswer: 'Tábory v Karlových Varech organizuje Lukáš Kubík (Weeks) ve spolupráci s Kreativním centrem Vary&Te.',
     },
-    availablePages: ['', 'letni-primestsky', 'o-nas', 'gdpr', 'podminky', 'kontakt'],
+    availablePages: ['', 'letni-primestsky', 'tabor-chytrych-technologii', 'o-nas', 'gdpr', 'podminky', 'kontakt'],
   },
 }
 

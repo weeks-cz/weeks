@@ -168,7 +168,7 @@ export default function KVMix() {
                   <Users className="w-5 h-5 text-accent-600" />
                 </div>
                 <h3 className="font-semibold text-gray-900 mb-3">Kapacita</h3>
-                <p className="text-sm text-gray-600">Maximálně 15 dětí na termín. Menší skupinka zajišťuje individuální přístup lektorů ke každému dítěti.</p>
+                <p className="text-sm text-gray-600">Maximálně {program.capacity} dětí na termín. Menší skupinka zajišťuje individuální přístup lektorů ke každému dítěti.</p>
               </motion.div>
 
               <motion.div
@@ -373,14 +373,9 @@ export default function KVMix() {
                 </Link>
               </div>
               <p className="text-sm text-white/70">
-                Hledáte jednodenní tábor?{' '}
-                <Link href="/karlovy-vary/tabor-3d-tisk" className="underline hover:text-white transition-colors">
-                  3D tisk
-                </Link>
-                {' '}
-                nebo{' '}
-                <Link href="/karlovy-vary/tabor-iot" className="underline hover:text-white transition-colors">
-                  IoT
+                Hledáte celotýdenní program?{' '}
+                <Link href="/karlovy-vary/letni-primestsky" className="underline hover:text-white transition-colors">
+                  Letní příměstský tábor (Po–Pá)
                 </Link>
               </p>
             </motion.div>

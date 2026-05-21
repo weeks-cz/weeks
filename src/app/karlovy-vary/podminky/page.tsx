@@ -166,7 +166,7 @@ export default function KVPodminkyPage() {
                   </p>
                   <p className="text-gray-700 text-base">
                     Číslo účtu pro bankovní převod:{' '}
-                    <strong className="font-mono">[ČÍSLO ÚČTU - DOPLNIT PŘED SPUŠTĚNÍM]</strong>
+                    <strong className="font-mono">2267467012/3030</strong> (Air Bank, IBAN: CZ29 3030 0000 0022 6746 7012)
                   </p>
                 </div>
                 <div className="bg-white p-5 rounded-lg border border-gray-200">

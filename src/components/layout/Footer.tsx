@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { MapPin, Mail, Phone } from 'lucide-react'
+import { MapPin, Mail, Phone, FileText } from 'lucide-react'
 import { useLocation } from '@/contexts/LocationContext'
 import { buildPath } from '@/lib/locations'
 
@@ -137,6 +137,15 @@ export function Footer() {
                 </li>
               ))}
               <li className="flex items-center gap-3">
+                <Phone className="w-5 h-5 text-primary-500 shrink-0" />
+                <a
+                  href={`tel:${location.contact.phone.replace(/\s/g, '')}`}
+                  className="text-gray-400 hover:text-white transition-colors text-sm"
+                >
+                  {location.contact.phone}
+                </a>
+              </li>
+              <li className="flex items-center gap-3">
                 <Mail className="w-5 h-5 text-primary-500 shrink-0" />
                 <a
                   href={`mailto:${location.contact.email}`}
@@ -148,6 +157,26 @@ export function Footer() {
             </ul>
           </div>
         </div>
+
+        {/* Provozovatel / IČO box — pro non-default lokace (KV = OSVČ Lukáš Kubík) */}
+        {!location.isDefault && (
+          <div className="mt-12 pt-8 border-t border-gray-800">
+            <div className="flex items-start gap-3 max-w-3xl">
+              <FileText className="w-5 h-5 text-primary-500 shrink-0 mt-0.5" />
+              <div className="text-sm text-gray-400 leading-relaxed">
+                <p className="text-gray-300 font-medium mb-1">Provozovatel</p>
+                <p>
+                  {location.organizer.fullName}
+                  {' · '}
+                  Kováříkova 1145/11, 152 00 Praha 5
+                </p>
+                <p className="text-xs text-gray-500 mt-1">
+                  Zapsán v živnostenském rejstříku Úřadu městské části Praha 5.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Copyright */}
         <div className="mt-12 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4">

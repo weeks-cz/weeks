@@ -3,8 +3,8 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  ArrowRight, Printer, Cpu, Glasses, Code2, Clock, MapPin,
-  Calendar, Users, Utensils, ChevronDown, Check, Sparkles,
+  ArrowRight, Printer, Cpu, Clock, MapPin,
+  Calendar, Users, Utensils, ChevronDown, Check, Sparkles, Box,
 } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -18,41 +18,41 @@ const weeklyDays = [
     day: 'Pondělí',
     icon: Printer,
     color: 'primary',
-    title: '3D tisk',
-    description: 'Úvod do světa 3D tisku. Jak tiskárna funguje, jak najít nebo stáhnout model a jak ho poslat na tisk. Každý si spustí svůj první výtisk.',
+    title: '3D tisk — základy',
+    description: 'Úvod do světa 3D tisku. Jak tiskárna funguje, jak najít a připravit model a jak ho poslat na tisk. Každý si spustí svůj první výtisk.',
     highlights: ['Princip FDM tisku', 'Práce s modelem online', 'Spuštění prvního tisku'],
   },
   {
     day: 'Úterý',
-    icon: Sparkles,
+    icon: Box,
     color: 'accent',
     title: '3D modelování',
-    description: 'Z hotových modelů k vlastním kreacím. Děti se naučí základy 3D modelování a navrhnou objekt, který si v průběhu týdne vytisknou.',
+    description: 'Z hotových modelů k vlastním kreacím. Děti se naučí základy 3D modelování a navrhnou vlastní objekt, který si druhý den vytisknou.',
     highlights: ['Základy 3D softwaru', 'Vlastní návrh modelu', 'Příprava pro tisk'],
   },
   {
     day: 'Středa',
-    icon: Cpu,
-    color: 'trust',
-    title: 'IoT & Arduino',
-    description: 'Co je to IoT a k čemu slouží. Každý postaví vlastní chytré zařízení — propojí senzory, LED světla a naprogramuje je na Arduinu.',
-    highlights: ['Programování Arduina', 'Senzory a aktuátory', 'Vlastní IoT zařízení'],
+    icon: Printer,
+    color: 'primary',
+    title: '3D tisk vlastních modelů',
+    description: 'Tisk vlastních návrhů z úterý, dokončování, broušení a finální úpravy. Vše si děti odnesou domů.',
+    highlights: ['Tisk vlastních modelů', 'Post-processing', 'Hotové výtisky domů'],
   },
   {
     day: 'Čtvrtek',
-    icon: Glasses,
-    color: 'accent',
-    title: 'VR & Programování',
-    description: 'Ponor do virtuální reality — interaktivní výzvy a prozkoumávání VR světů. Odpoledne základy programování a algoritmického myšlení.',
-    highlights: ['VR headsety', 'Interaktivní výzvy', 'Základy programování'],
+    icon: Cpu,
+    color: 'trust',
+    title: 'IoT & Arduino — úvod',
+    description: 'Co je to IoT a k čemu slouží. Seznámení s Arduinem a Micro:bitem, práce se senzory a LED diodami, první programy.',
+    highlights: ['Arduino & Micro:bit', 'Senzory a LED', 'První IoT obvod'],
   },
   {
     day: 'Pátek',
-    icon: Code2,
-    color: 'primary',
-    title: 'Finální projekty',
-    description: 'Dotisk modelů, dokončení IoT zařízení a malá výstava pro rodiče. Děti prezentují, co za týden vytvořily, a odnesou si vše domů.',
-    highlights: ['Dokončení projektů', 'Prezentace pro rodiče', 'Výtisk + IoT zařízení domů'],
+    icon: Cpu,
+    color: 'trust',
+    title: 'IoT projekt + výstava',
+    description: 'Dokončení vlastního IoT zařízení a malá výstava pro rodiče. Děti prezentují, co za týden vytvořily, a odnesou si svůj projekt domů.',
+    highlights: ['Vlastní IoT zařízení', 'Prezentace pro rodiče', 'Projekt domů'],
   },
 ]
 
@@ -77,7 +77,7 @@ const campFaqs = [
   },
   {
     question: 'Co si dítě odnese domů?',
-    answer: 'Vytisknutý 3D model (nebo více), vlastní IoT zařízení sestavené na Arduinu a spoustu nových zkušeností. V pátek je malá výstava pro rodiče.',
+    answer: 'Vlastnoručně navržený a vytisknutý 3D model (i více), vlastní IoT zařízení sestavené na Arduinu nebo Micro:bitu a spoustu nových zkušeností. V pátek odpoledne pořádáme malou výstavu pro rodiče.',
   },
   {
     question: 'Je potřeba nějaká předchozí zkušenost?',
@@ -153,19 +153,8 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
 
 export default function LetniPrimestskyCampPage() {
   const location = useLocation()
-  const program = location.programs[0]
-  const term = location.terms[0]
-
-  const registrationUrl = program && term
-    ? `/registrace?location=${location.id}&program=${program.id}&term=${term.id}`
-    : null
-
-  const startDate = term
-    ? new Date(term.startDate).toLocaleDateString('cs-CZ', { day: 'numeric', month: 'long', year: 'numeric' })
-    : ''
-  const endDate = term
-    ? new Date(term.endDate).toLocaleDateString('cs-CZ', { day: 'numeric', month: 'long' })
-    : ''
+  const program = location.programs.find(p => p.id === 'letni-primestsky')
+  const terms = location.terms.filter(t => t.program === 'letni-primestsky')
 
   return (
     <>
@@ -233,8 +222,8 @@ export default function LetniPrimestskyCampPage() {
                 transition={{ delay: 0.2 }}
                 className="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl leading-relaxed"
               >
-                Celý týden 3D tisk, IoT, virtuální realita a programování — vše ve FabLabu
-                Kreativního centra Vary&Te.{' '}
+                Celý týden 3D tisk, 3D modelování a IoT s Arduinem — ve FabLabu
+                Kreativního centra Vary&Te v Karlových Varech.{' '}
                 <span className="text-white font-medium">Pro děti 10–15 let.</span>
               </motion.p>
 
@@ -295,20 +284,19 @@ export default function LetniPrimestskyCampPage() {
               className="max-w-3xl mx-auto text-center mb-16"
             >
               <h2 className="heading-2 text-gray-900 mb-4">
-                4 technologie, <span className="text-gradient">jeden týden</span>
+                3 technologie, <span className="text-gradient">jeden týden</span>
               </h2>
               <p className="text-lg text-gray-600">
-                Program je navržen tak, aby si každé dítě každý den vyzkoušelo
-                něco jiného a zjistilo, co ho baví nejvíc.
+                Týden je rozdělený na dva tematické bloky — první tři dny věnujeme
+                3D tisku a modelování, ve čtvrtek a v pátek se vrhneme na IoT s Arduinem.
               </p>
             </motion.div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {[
-                { icon: Printer, color: 'primary', title: '3D tisk', day: 'Po + Út', description: 'Návrh vlastního modelu a tisk na profesionálních tiskárnách FabLabu.', highlights: ['Návrh v 3D softwaru', 'Prusa tiskárny', 'Výtisk domů'] },
-                { icon: Cpu, color: 'trust', title: 'IoT & Arduino', day: 'Středa', description: 'Programování mikropočítačů, práce se senzory a výroba vlastního chytrého zařízení.', highlights: ['Arduino & Micro:bit', 'Senzory a LED', 'IoT projekt domů'] },
-                { icon: Glasses, color: 'accent', title: 'Virtuální realita', day: 'Čtvrtek', description: 'VR headsety, interaktivní výzvy a prozkoumávání virtuálních světů.', highlights: ['VR headsety', 'Interaktivní výzvy', 'VR zážitky'] },
-                { icon: Code2, color: 'primary', title: 'Programování', day: 'Pátek', description: 'Základy algoritmického myšlení a práce s kódem. Vlastní program nebo hra.', highlights: ['Algoritmické myšlení', 'Základy kódu', 'Vlastní program'] },
+                { icon: Printer, color: 'primary', title: '3D tisk', day: 'Po + St', description: 'Od stažených modelů přes vlastní návrhy až po hotové výtisky. Děti pracují na profesionálních tiskárnách FabLabu.', highlights: ['FDM tisk', 'Profi tiskárny', 'Výtisky domů'] },
+                { icon: Box, color: 'accent', title: '3D modelování', day: 'Úterý', description: 'Z hotových modelů k vlastním kreacím. Děti navrhnou vlastní objekt, který si druhý den vytisknou.', highlights: ['Základy 3D softwaru', 'Vlastní návrh', 'Příprava pro tisk'] },
+                { icon: Cpu, color: 'trust', title: 'IoT & Arduino', day: 'Čt + Pá', description: 'Práce se senzory, LED a mikropočítači. Každé dítě postaví vlastní chytré zařízení a odnese si ho domů.', highlights: ['Arduino & Micro:bit', 'Senzory a LED', 'IoT projekt domů'] },
               ].map((tech, index) => {
                 const colors = colorMap[tech.color as keyof typeof colorMap]
                 return (
@@ -521,48 +509,56 @@ export default function LetniPrimestskyCampPage() {
               )}
             </motion.div>
 
-            <div className="max-w-md mx-auto">
-              {program && term ? (
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  className="bg-white rounded-2xl overflow-hidden shadow-lg"
-                >
-                  <div className="p-6">
-                    <div className="flex items-center gap-2 mb-4">
-                      <Calendar className="w-5 h-5 text-accent-600" />
-                      <h3 className="text-lg font-bold text-gray-900">
-                        {startDate} – {endDate}
-                      </h3>
-                    </div>
+            <div className={`grid gap-6 max-w-4xl mx-auto ${terms.length === 1 ? 'sm:max-w-md' : 'sm:grid-cols-2'}`}>
+              {program && terms.map((term, i) => {
+                const start = new Date(term.startDate).toLocaleDateString('cs-CZ', { day: 'numeric', month: 'long', year: 'numeric' })
+                const end = new Date(term.endDate).toLocaleDateString('cs-CZ', { day: 'numeric', month: 'long' })
+                const url = `/registrace?location=${location.id}&program=${program.id}&term=${term.id}`
+                const isConfirmed = term.status === 'confirmed'
+                return (
+                  <motion.div
+                    key={term.id}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.1 }}
+                    className="bg-white rounded-2xl overflow-hidden shadow-lg"
+                  >
+                    <div className="p-6">
+                      <div className="flex items-center gap-2 mb-4">
+                        <Calendar className="w-5 h-5 text-accent-600" />
+                        <h3 className="text-lg font-bold text-gray-900">
+                          {start} – {end}
+                        </h3>
+                      </div>
 
-                    <div className="flex items-center gap-2 text-sm text-gray-600 mb-3">
-                      <MapPin className="w-4 h-4 text-gray-400 flex-shrink-0" />
-                      <span className="font-medium">{location.venues[0].name}</span>
-                    </div>
-                    <p className="text-xs text-gray-500 ml-6 mb-4">{location.venues[0].address}, {location.venues[0].city}</p>
+                      <div className="flex items-center gap-2 text-sm text-gray-600 mb-3">
+                        <MapPin className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                        <span className="font-medium">{location.venues[0].name}</span>
+                      </div>
+                      <p className="text-xs text-gray-500 ml-6 mb-4">{location.venues[0].address}, {location.venues[0].city}</p>
 
-                    <div className="flex items-center gap-2 mb-6 text-sm">
-                      <div className="w-2 h-2 rounded-full bg-amber-400" />
-                      <span className="font-medium text-amber-700">Připravujeme — registrace brzy otevřena</span>
-                    </div>
+                      <div className="flex items-center gap-2 mb-6 text-sm">
+                        <div className={`w-2 h-2 rounded-full ${isConfirmed ? 'bg-emerald-500' : 'bg-amber-400'}`} />
+                        <span className={`font-medium ${isConfirmed ? 'text-emerald-700' : 'text-amber-700'}`}>
+                          {isConfirmed ? 'Registrace otevřena' : 'Připravujeme — registrace brzy otevřena'}
+                        </span>
+                      </div>
 
-                    {registrationUrl ? (
                       <Link
-                        href={registrationUrl}
+                        href={url}
                         className="w-full btn-primary justify-center"
                       >
-                        Závazná registrace
+                        {isConfirmed ? 'Závazná registrace' : 'Nezávazná registrace'}
                         <ArrowRight className="ml-2 w-5 h-5" />
                       </Link>
-                    ) : null}
-                    <p className="text-xs text-gray-500 text-center mt-3">
-                      5 kroků · platba kartou · faktura automaticky
-                    </p>
-                  </div>
-                </motion.div>
-              ) : null}
+                      <p className="text-xs text-gray-500 text-center mt-3">
+                        5 kroků · platba kartou · faktura automaticky
+                      </p>
+                    </div>
+                  </motion.div>
+                )
+              })}
             </div>
 
             <motion.p
@@ -617,7 +613,7 @@ export default function LetniPrimestskyCampPage() {
                 Připravte své dítě na budoucnost
               </h2>
               <p className="text-xl text-white/90 mb-8">
-                3D tisk, IoT, VR a programování — technologie, které budou formovat svět.
+                3D tisk, 3D modelování a IoT — technologie, které budou formovat svět.
                 Ať je vaše dítě součástí.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">

@@ -122,13 +122,22 @@ export function ProgramSection() {
   const location = useLocation()
 
   if (!location.isDefault) {
-    const program = location.programs[0]
-    const term = location.terms[0]
-    const monthNames = ['ledna','února','března','dubna','května','června','července','srpna','září','října','listopadu','prosince']
-    const start = new Date(term.startDate)
-    const end = new Date(term.endDate)
-    const dateRange = `${start.getDate()}.–${end.getDate()}. ${monthNames[start.getMonth()]} ${start.getFullYear()}`
-    const colors = colorClasses[program.color as keyof typeof colorClasses]
+    const kvPrograms = [
+      {
+        program: location.programs.find(p => p.id === 'letni-primestsky'),
+        href: 'letni-primestsky',
+        badgeLabel: 'Příměstský · 5 dní',
+        description: '3D tisk, vlastní 3D modely a IoT s Arduinem — celý pracovní týden ve FabLabu Vary&Te.',
+        image: '/images/program-mix.webp',
+      },
+      {
+        program: location.programs.find(p => p.id === 'mix'),
+        href: 'tabor-chytrych-technologii',
+        badgeLabel: 'Víkend · So + Ne',
+        description: '3D tisk, IoT, VR i základy programování za jeden víkend — projekty na sebe navazují přes noc.',
+        image: '/images/program-mix.webp',
+      },
+    ].filter(item => item.program)
 
     return (
       <section id="program" className="section-padding bg-gray-50 relative overflow-hidden">
@@ -145,7 +154,7 @@ export function ProgramSection() {
               className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full text-sm font-medium text-gray-600 shadow-sm mb-6"
             >
               <span className="w-2 h-2 rounded-full bg-trust-500 animate-pulse" />
-              Letní příměstský tábor
+              Léto 2026 — Karlovy Vary
             </motion.div>
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
@@ -153,9 +162,9 @@ export function ProgramSection() {
               viewport={{ once: true }}
               className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4"
             >
-              Tábor chytrých technologií
+              Vyberte si formát
               <br />
-              <span className="text-gradient">v Karlových Varech</span>
+              <span className="text-gradient">tábora chytrých technologií</span>
             </motion.h2>
             <motion.p
               initial={{ opacity: 0, y: 20 }}
@@ -164,70 +173,72 @@ export function ProgramSection() {
               transition={{ delay: 0.1 }}
               className="text-lg text-gray-600"
             >
-              3D tisk, IoT & elektronika, VR a programování — celý týden v profesionálním prostředí FabLab Vary&Te.
+              Celotýdenní příměstský tábor (Po–Pá) nebo víkendový MIX (So–Ne) —
+              všechny termíny ve FabLabu Kreativního centra Vary&Te.
             </motion.p>
           </div>
 
-          <div className="max-w-2xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-            >
-              <Link
-                href={buildPath(location, 'letni-primestsky')}
-                className="group relative bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 block"
-              >
-                <div className="relative h-56 overflow-hidden">
-                  <Image
-                    src="/images/program-mix.webp"
-                    alt={program.name}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 672px"
-                    className="object-cover group-hover:scale-105 transition-transform duration-700"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-gray-900/20 to-transparent" />
-                  <div className="absolute top-3 left-3 z-10">
-                    <div className={`px-2.5 py-1 rounded-full ${colors.bg} text-xs font-semibold text-white shadow-lg`}>
-                      Příměstský · 5 dní
-                    </div>
-                  </div>
-                  {term.status === 'preparing' && (
-                    <div className="absolute top-3 right-3 z-10">
-                      <div className="px-2.5 py-1 rounded-full bg-cta-500 text-xs font-semibold text-white shadow-lg">
-                        Připravujeme
+          <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+            {kvPrograms.map((item, idx) => {
+              const program = item.program!
+              const colors = colorClasses[program.color as keyof typeof colorClasses]
+              return (
+                <motion.div
+                  key={program.id}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: idx * 0.1 }}
+                >
+                  <Link
+                    href={buildPath(location, item.href)}
+                    className="group relative bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 block h-full flex flex-col"
+                  >
+                    <div className="relative h-48 overflow-hidden">
+                      <Image
+                        src={item.image}
+                        alt={program.name}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                        className="object-cover group-hover:scale-105 transition-transform duration-700"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-gray-900/20 to-transparent" />
+                      <div className="absolute top-3 left-3 z-10">
+                        <div className={`px-2.5 py-1 rounded-full ${colors.bg} text-xs font-semibold text-white shadow-lg`}>
+                          {item.badgeLabel}
+                        </div>
+                      </div>
+                      <div className="absolute bottom-3 left-3">
+                        <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${colors.gradient} flex items-center justify-center shadow-lg`}>
+                          <Sparkles className="w-5 h-5 text-white" />
+                        </div>
                       </div>
                     </div>
-                  )}
-                  <div className="absolute bottom-3 left-3">
-                    <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${colors.gradient} flex items-center justify-center shadow-lg`}>
-                      <Sparkles className="w-5 h-5 text-white" />
+                    <div className="p-6 flex-grow flex flex-col">
+                      <div className="flex items-center justify-between mb-3">
+                        <h3 className="font-display text-xl font-bold text-gray-900 group-hover:text-primary-600 transition-colors">
+                          {program.name}
+                        </h3>
+                        <span className="text-lg font-semibold text-gray-900 whitespace-nowrap ml-4">
+                          {program.price.toLocaleString('cs-CZ')} Kč
+                        </span>
+                      </div>
+                      <p className="text-gray-600 mb-4 flex-grow">
+                        {item.description}
+                      </p>
+                      <div className="flex items-center gap-2 pt-3 border-t border-gray-100">
+                        <Calendar className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                        <span className="text-xs text-gray-500">
+                          {location.terms.filter(t => t.program === program.id).length} {' '}
+                          {location.terms.filter(t => t.program === program.id).length === 1 ? 'termín' : 'termíny'} v létě 2026
+                        </span>
+                        <ArrowRight className="w-4 h-4 text-gray-400 ml-auto group-hover:translate-x-1 transition-transform flex-shrink-0" />
+                      </div>
                     </div>
-                  </div>
-                </div>
-                <div className="p-6">
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="font-display text-xl font-bold text-gray-900 group-hover:text-primary-600 transition-colors">
-                      {program.name}
-                    </h3>
-                    <span className="text-lg font-semibold text-gray-900 whitespace-nowrap ml-4">
-                      {program.price.toLocaleString('cs-CZ')} Kč
-                    </span>
-                  </div>
-                  <p className="text-gray-600 mb-4">
-                    Za jeden týden si vaše dítě vyzkouší 3D tisk, IoT programování, virtuální realitu i základy programování — vše v moderním prostředí FabLab Vary&Te.
-                  </p>
-                  <div className="flex items-center gap-4 pt-3 border-t border-gray-100">
-                    <Calendar className="w-4 h-4 text-gray-400 flex-shrink-0" />
-                    <span className="text-xs font-medium text-gray-600 bg-gray-50 px-2 py-0.5 rounded">
-                      {dateRange}
-                    </span>
-                    <span className="text-xs text-gray-500">{term.day}</span>
-                    <ArrowRight className="w-4 h-4 text-gray-400 ml-auto group-hover:translate-x-1 transition-transform flex-shrink-0" />
-                  </div>
-                </div>
-              </Link>
-            </motion.div>
+                  </Link>
+                </motion.div>
+              )
+            })}
           </div>
         </div>
       </section>

@@ -14,8 +14,10 @@ export function HeroSection() {
       {/* Background Image with Overlay */}
       <div className="absolute inset-0">
         <Image
-          src="/images/hwlab/hwlab-7976.webp"
-          alt="HWLab - učebna s počítači a 3D tiskárnami"
+          src={location.isDefault ? '/images/hwlab/hwlab-7976.webp' : '/images/program-mix.webp'}
+          alt={location.isDefault
+            ? 'HWLab — učebna s počítači a 3D tiskárnami'
+            : `FabLab Vary&Te — IT tábor v ${location.name}`}
           fill
           sizes="100vw"
           className="object-cover"
