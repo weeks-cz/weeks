@@ -1,6 +1,6 @@
 'use client'
 
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 import { MapPin, ChevronDown } from 'lucide-react'
 import { getAllLocations, getEquivalentPath, type Location } from '@/lib/locations'
@@ -9,13 +9,15 @@ import { useLocation } from '@/contexts/LocationContext'
 export function CitySwitcher() {
   const location = useLocation()
   const pathname = usePathname()
-  const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
   const allLocations = getAllLocations()
 
   function handleSwitch(target: Location) {
     const newPath = getEquivalentPath(pathname, target)
-    router.push(newPath)
+    // Full page reload (ne Next.js router) — basic auth dialog se zobrazí pouze
+    // při top-level navigation. Client-side router.push() by spustil RSC fetch,
+    // který by se na 401 zasekl bez dialogu.
+    window.location.href = newPath
     setIsOpen(false)
   }
 
