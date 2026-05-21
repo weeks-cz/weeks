@@ -91,22 +91,22 @@ export function Header() {
               }`} />
             </Link>
           ))}
-          {location.isDefault && (
-            <a
-              href="https://iot.weeks.cz/"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Učebna — výuková platforma (otevře se v nové záložce)"
-              onClick={() => trackUcebnaClick('desktop')}
-              className={`ml-2 flex items-center text-sm transition-colors ${
-                scrolled ? 'text-gray-500 hover:text-gray-700' : 'text-white/60 hover:text-white/80'
-              }`}
-            >
-              Učebna
-              <ExternalLink className="w-3 h-3 ml-1" aria-hidden="true" />
-            </a>
-          )}
-          <CitySwitcher />
+          <a
+            href="https://iot.weeks.cz/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Učebna — výuková platforma (otevře se v nové záložce)"
+            onClick={() => trackUcebnaClick('desktop')}
+            className={`ml-2 flex items-center text-sm transition-colors ${
+              scrolled ? 'text-gray-500 hover:text-gray-700' : 'text-white/60 hover:text-white/80'
+            }`}
+          >
+            Učebna
+            <ExternalLink className="w-3 h-3 ml-1" aria-hidden="true" />
+          </a>
+          <div className="ml-3">
+            <CitySwitcher />
+          </div>
           <Link
             href={ctaHref}
             className="ml-4 btn-primary group"
@@ -165,26 +165,24 @@ export function Header() {
                   </Link>
                 </motion.div>
               ))}
-              {location.isDefault && (
-                <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: navigation.length * 0.05 }}
-                  className="border-t border-gray-100 pt-2 mt-2"
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: navigation.length * 0.05 }}
+                className="border-t border-gray-100 pt-2 mt-2"
+              >
+                <a
+                  href="https://iot.weeks.cz/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Učebna — výuková platforma (otevře se v nové záložce)"
+                  onClick={() => { trackUcebnaClick('mobile'); setMobileMenuOpen(false) }}
+                  className="flex items-center px-4 py-3 text-sm text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
                 >
-                  <a
-                    href="https://iot.weeks.cz/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="Učebna — výuková platforma (otevře se v nové záložce)"
-                    onClick={() => { trackUcebnaClick('mobile'); setMobileMenuOpen(false) }}
-                    className="flex items-center px-4 py-3 text-sm text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
-                  >
-                    Učebna
-                    <ExternalLink className="w-3 h-3 ml-1.5" aria-hidden="true" />
-                  </a>
-                </motion.div>
-              )}
+                  Učebna
+                  <ExternalLink className="w-3 h-3 ml-1.5" aria-hidden="true" />
+                </a>
+              </motion.div>
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
