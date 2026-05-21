@@ -62,7 +62,9 @@ export function middleware(request: NextRequest) {
   return new NextResponse('Authentication required', {
     status: 401,
     headers: {
-      'WWW-Authenticate': 'Basic realm="weeks.cz — pre-launch (Karlovy Vary)", charset="UTF-8"',
+      // Jednoduchý ASCII realm — některé prohlížeče (Edge, Chrome variants) ignorují
+      // prompt dialog, pokud realm obsahuje non-ASCII znaky nebo závorky.
+      'WWW-Authenticate': 'Basic realm="weeks pre-launch"',
       'X-Robots-Tag': 'noindex, nofollow',
     },
   })
