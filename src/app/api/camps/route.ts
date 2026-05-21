@@ -1,233 +1,92 @@
 import { NextResponse } from 'next/server'
-import { scrapeDDMCapacity, DDM_TERMS } from '@/lib/ddm-scraper'
+import { scrapeDDMCapacity } from '@/lib/ddm-scraper'
+import { fetchCampsRaw, type CampRow } from '@/lib/camps'
 
-// All camp data consolidated from individual camp pages
-// This is the single source of truth for weeks-hub sync
+// Public machine-readable camps endpoint. Source of truth is the shared
+// Supabase `camps` table managed via weeks-hub. Live DDM capacity is
+// fetched on-demand and merged in for camps with a ddm_id.
+//
+// Response shape preserved for backwards compatibility with weeks-hub's
+// existing /api/sync-camps consumer.
 
-interface CampTerm {
+interface CampTermPayload {
   id: string
   title: string
-  campType: 'weekend' | 'oneday'
-  program: string
-  startDate: string  // ISO date YYYY-MM-DD
-  endDate: string    // ISO date YYYY-MM-DD
-  location: string
-  locationDetail: string
+  campType: 'weekend' | 'oneday' | null
+  program: string | null
+  startDate: string
+  endDate: string
+  location: string | null
+  locationDetail: string | null
   capacity: number
-  spotsLeft: number | null  // null = unknown (no DDM link yet)
+  spotsLeft: number | null
   enrolledCount: number | null
-  status: 'collecting_interest' | 'open_no_link' | 'open_with_link' | 'full' | 'closed'
+  status: CampRow['status']
   registrationUrl: string | null
-  price: number
+  price: number | null
   ddmId: string | null
 }
 
-// Weekend camps - Tábor chytrých technologií
-const weekendCamps: CampTerm[] = []
-
-// One-day camps - 3D tisk
-const camps3dTisk: CampTerm[] = [
-  {
-    id: '3d-775',
-    title: 'Jednodenní tábor 3D tisku',
-    campType: 'oneday',
-    program: '3d-tisk',
-    startDate: '2026-04-19',
-    endDate: '2026-04-19',
-    location: 'HWLab Praha',
-    locationDetail: 'Kongresové centrum Praha, 5. května 11, Praha 4',
-    capacity: 15,
-    spotsLeft: null,
-    enrolledCount: null,
-    status: 'open_with_link',
-    registrationUrl: 'https://www.ddmp6.cz/tabory/?id=775',
-    price: 1490,
-    ddmId: '775',
-  },
-  {
-    id: '3d-25-04',
-    title: 'Jednodenní tábor 3D tisku',
-    campType: 'oneday',
-    program: '3d-tisk',
-    startDate: '2026-04-25',
-    endDate: '2026-04-25',
-    location: 'HWLab Praha',
-    locationDetail: 'Kongresové centrum Praha, 5. května 11, Praha 4',
-    capacity: 15,
-    spotsLeft: null,
-    enrolledCount: null,
-    status: 'collecting_interest',
-    registrationUrl: null,
-    price: 1490,
-    ddmId: null,
-  },
-  {
-    id: '3d-03-05',
-    title: 'Jednodenní tábor 3D tisku',
-    campType: 'oneday',
-    program: '3d-tisk',
-    startDate: '2026-05-03',
-    endDate: '2026-05-03',
-    location: 'HWLab Praha',
-    locationDetail: 'Kongresové centrum Praha, 5. května 11, Praha 4',
-    capacity: 15,
-    spotsLeft: null,
-    enrolledCount: null,
-    status: 'collecting_interest',
-    registrationUrl: null,
-    price: 1490,
-    ddmId: null,
-  },
-  {
-    id: '3d-09-05',
-    title: 'Jednodenní tábor 3D tisku',
-    campType: 'oneday',
-    program: '3d-tisk',
-    startDate: '2026-05-09',
-    endDate: '2026-05-09',
-    location: 'HWLab Praha',
-    locationDetail: 'Kongresové centrum Praha, 5. května 11, Praha 4',
-    capacity: 15,
-    spotsLeft: null,
-    enrolledCount: null,
-    status: 'collecting_interest',
-    registrationUrl: null,
-    price: 1490,
-    ddmId: null,
-  },
-]
-
-// One-day camps - IoT & elektronika
-const campsIot: CampTerm[] = [
-  {
-    id: 'iot-773',
-    title: 'Jednodenní tábor IoT & elektroniky',
-    campType: 'oneday',
-    program: 'iot',
-    startDate: '2026-04-18',
-    endDate: '2026-04-18',
-    location: 'HWLab Praha',
-    locationDetail: 'Kongresové centrum Praha, 5. května 11, Praha 4',
-    capacity: 15,
-    spotsLeft: null,
-    enrolledCount: null,
-    status: 'open_with_link',
-    registrationUrl: 'https://www.ddmp6.cz/tabory/?id=773',
-    price: 1490,
-    ddmId: '773',
-  },
-  {
-    id: 'iot-26-04',
-    title: 'Jednodenní tábor IoT & elektroniky',
-    campType: 'oneday',
-    program: 'iot',
-    startDate: '2026-04-26',
-    endDate: '2026-04-26',
-    location: 'HWLab Praha',
-    locationDetail: 'Kongresové centrum Praha, 5. května 11, Praha 4',
-    capacity: 15,
-    spotsLeft: null,
-    enrolledCount: null,
-    status: 'collecting_interest',
-    registrationUrl: null,
-    price: 1490,
-    ddmId: null,
-  },
-  {
-    id: 'iot-02-05',
-    title: 'Jednodenní tábor IoT & elektroniky',
-    campType: 'oneday',
-    program: 'iot',
-    startDate: '2026-05-02',
-    endDate: '2026-05-02',
-    location: 'HWLab Praha',
-    locationDetail: 'Kongresové centrum Praha, 5. května 11, Praha 4',
-    capacity: 15,
-    spotsLeft: null,
-    enrolledCount: null,
-    status: 'collecting_interest',
-    registrationUrl: null,
-    price: 1490,
-    ddmId: null,
-  },
-  {
-    id: 'iot-10-05',
-    title: 'Jednodenní tábor IoT & elektroniky',
-    campType: 'oneday',
-    program: 'iot',
-    startDate: '2026-05-10',
-    endDate: '2026-05-10',
-    location: 'HWLab Praha',
-    locationDetail: 'Kongresové centrum Praha, 5. května 11, Praha 4',
-    capacity: 15,
-    spotsLeft: null,
-    enrolledCount: null,
-    status: 'collecting_interest',
-    registrationUrl: null,
-    price: 1490,
-    ddmId: null,
-  },
-  {
-    id: 'iot-17-05',
-    title: 'Jednodenní tábor IoT & elektroniky',
-    campType: 'oneday',
-    program: 'iot',
-    startDate: '2026-05-17',
-    endDate: '2026-05-17',
-    location: 'HWLab Praha',
-    locationDetail: 'Kongresové centrum Praha, 5. května 11, Praha 4',
-    capacity: 15,
-    spotsLeft: null,
-    enrolledCount: null,
-    status: 'collecting_interest',
-    registrationUrl: null,
-    price: 1490,
-    ddmId: null,
-  },
-]
-
-// Summer weekends - collecting interest
-const summerCamps: CampTerm[] = [
-  { id: 'leto-04-07', title: 'Letní víkendový tábor', campType: 'weekend', program: 'tech', startDate: '2026-07-04', endDate: '2026-07-05', location: 'TBD', locationDetail: '', capacity: 15, spotsLeft: null, enrolledCount: null, status: 'collecting_interest', registrationUrl: null, price: 2990, ddmId: null },
-  { id: 'leto-11-07', title: 'Letní víkendový tábor', campType: 'weekend', program: 'tech', startDate: '2026-07-11', endDate: '2026-07-12', location: 'TBD', locationDetail: '', capacity: 15, spotsLeft: null, enrolledCount: null, status: 'collecting_interest', registrationUrl: null, price: 2990, ddmId: null },
-  { id: 'leto-18-07', title: 'Letní víkendový tábor', campType: 'weekend', program: 'tech', startDate: '2026-07-18', endDate: '2026-07-19', location: 'TBD', locationDetail: '', capacity: 15, spotsLeft: null, enrolledCount: null, status: 'collecting_interest', registrationUrl: null, price: 2990, ddmId: null },
-  { id: 'leto-25-07', title: 'Letní víkendový tábor', campType: 'weekend', program: 'tech', startDate: '2026-07-25', endDate: '2026-07-26', location: 'TBD', locationDetail: '', capacity: 15, spotsLeft: null, enrolledCount: null, status: 'collecting_interest', registrationUrl: null, price: 2990, ddmId: null },
-  { id: 'leto-01-08', title: 'Letní víkendový tábor', campType: 'weekend', program: 'tech', startDate: '2026-08-01', endDate: '2026-08-02', location: 'TBD', locationDetail: '', capacity: 15, spotsLeft: null, enrolledCount: null, status: 'collecting_interest', registrationUrl: null, price: 2990, ddmId: null },
-  { id: 'leto-08-08', title: 'Letní víkendový tábor', campType: 'weekend', program: 'tech', startDate: '2026-08-08', endDate: '2026-08-09', location: 'TBD', locationDetail: '', capacity: 15, spotsLeft: null, enrolledCount: null, status: 'collecting_interest', registrationUrl: null, price: 2990, ddmId: null },
-  { id: 'leto-29-08', title: 'Letní víkendový tábor', campType: 'weekend', program: 'tech', startDate: '2026-08-29', endDate: '2026-08-30', location: 'TBD', locationDetail: '', capacity: 15, spotsLeft: null, enrolledCount: null, status: 'collecting_interest', registrationUrl: null, price: 2990, ddmId: null },
-]
-
-const ALL_CAMPS: CampTerm[] = [...weekendCamps, ...camps3dTisk, ...campsIot, ...summerCamps]
+function toPayload(row: CampRow, live?: { spotsLeft: number; maxCapacity: number }): CampTermPayload {
+  if (live) {
+    const enrolled = Math.max(0, live.maxCapacity - live.spotsLeft)
+    return {
+      id: row.web_source_id || row.id,
+      title: row.title,
+      campType: row.camp_type,
+      program: row.program,
+      startDate: row.start_date,
+      endDate: row.end_date,
+      location: row.location,
+      locationDetail: row.location_detail,
+      capacity: live.maxCapacity,
+      spotsLeft: live.spotsLeft,
+      enrolledCount: enrolled,
+      status: live.spotsLeft <= 0 ? 'full' : row.status,
+      registrationUrl: row.registration_url,
+      price: row.price,
+      ddmId: row.ddm_id,
+    }
+  }
+  return {
+    id: row.web_source_id || row.id,
+    title: row.title,
+    campType: row.camp_type,
+    program: row.program,
+    startDate: row.start_date,
+    endDate: row.end_date,
+    location: row.location,
+    locationDetail: row.location_detail,
+    capacity: row.capacity,
+    spotsLeft: row.ddm_id ? null : row.capacity - row.enrolled_count,
+    enrolledCount: row.ddm_id ? null : row.enrolled_count,
+    status: row.status,
+    registrationUrl: row.registration_url,
+    price: row.price,
+    ddmId: row.ddm_id,
+  }
+}
 
 export async function GET() {
-  // Enrich with live DDM capacity data where available
-  const ddmIds = ALL_CAMPS.filter(c => c.ddmId).map(c => c.ddmId!)
+  const rows = await fetchCampsRaw()
+
+  // Enrich with live DDM capacity where ddm_id is set
+  const ddmIds = Array.from(new Set(rows.filter(r => r.ddm_id).map(r => r.ddm_id!)))
   const capacityData: Record<string, { spotsLeft: number; maxCapacity: number }> = {}
 
   await Promise.all(
-    [...new Set(ddmIds)].map(async (ddmId) => {
+    ddmIds.map(async (ddmId) => {
       const data = await scrapeDDMCapacity(ddmId)
       if (data) capacityData[ddmId] = data
     })
   )
 
-  const enriched = ALL_CAMPS.map(camp => {
-    if (camp.ddmId && capacityData[camp.ddmId]) {
-      const live = capacityData[camp.ddmId]
-      const enrolled = live.maxCapacity - live.spotsLeft
-      return {
-        ...camp,
-        capacity: live.maxCapacity,
-        spotsLeft: live.spotsLeft,
-        enrolledCount: enrolled,
-        status: live.spotsLeft <= 0 ? 'full' as const : camp.status,
-      }
-    }
-    return camp
-  })
+  const camps = rows.map(row =>
+    toPayload(row, row.ddm_id ? capacityData[row.ddm_id] : undefined)
+  )
 
   return NextResponse.json(
-    { camps: enriched, timestamp: new Date().toISOString() },
+    { camps, timestamp: new Date().toISOString() },
     {
       headers: {
         'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',

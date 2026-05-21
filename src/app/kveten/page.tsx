@@ -19,31 +19,14 @@ function trackVirtualPageview(path: string) {
 
 const CAMPS = [
   {
-    id: 'iot' as const,
-    title: 'IoT & elektronika',
-    date: 'Sobota 18. dubna',
-    termin: '18. dubna 2026',
-    time: '8:30 – 16:30',
-    description: 'Micro:bit, Arduino, senzory a vlastní chytré zařízení. Jeden den plný zážitků.',
-    price: '1 490 Kč',
-    ddmUrl: 'https://www.ddmp6.cz/tabory/?id=773',
-    icon: Cpu,
-    gradient: 'from-trust-500/30 to-trust-400/20',
-    iconBg: 'bg-trust-500',
-    buttonBg: 'bg-cta-500 hover:bg-cta-400',
-    buttonShadow: 'hover:shadow-cta-500/30',
-    dotColor: 'bg-trust-400',
-    badgeColor: 'bg-trust-500/20 text-trust-300',
-  },
-  {
     id: '3d-tisk' as const,
     title: '3D tisk',
-    date: 'Neděle 19. dubna',
-    termin: '19. dubna 2026',
+    date: 'Sobota 16. května',
+    termin: '16. května 2026',
     time: '8:30 – 16:30',
     description: 'Od 3D návrhu po hotový výtisk na profesionální tiskárně. Jeden den, vlastní výtvor.',
     price: '1 490 Kč',
-    ddmUrl: 'https://www.ddmp6.cz/tabory/?id=775',
+    ddmUrl: 'https://www.ddmp6.cz/tabory/?id=786#js-application',
     icon: Printer,
     gradient: 'from-primary-500/30 to-primary-400/20',
     iconBg: 'bg-primary-500',
@@ -51,6 +34,23 @@ const CAMPS = [
     buttonShadow: 'hover:shadow-cta-500/30',
     dotColor: 'bg-primary-400',
     badgeColor: 'bg-primary-500/20 text-primary-300',
+  },
+  {
+    id: 'iot' as const,
+    title: 'IoT & elektronika',
+    date: 'Neděle 17. května',
+    termin: '17. května 2026',
+    time: '8:30 – 16:30',
+    description: 'Micro:bit, Arduino, senzory a vlastní chytré zařízení. Jeden den plný zážitků.',
+    price: '1 490 Kč',
+    ddmUrl: 'https://www.ddmp6.cz/tabory/?id=787#js-application',
+    icon: Cpu,
+    gradient: 'from-trust-500/30 to-trust-400/20',
+    iconBg: 'bg-trust-500',
+    buttonBg: 'bg-cta-500 hover:bg-cta-400',
+    buttonShadow: 'hover:shadow-cta-500/30',
+    dotColor: 'bg-trust-400',
+    badgeColor: 'bg-trust-500/20 text-trust-300',
   },
 ]
 
@@ -64,7 +64,7 @@ function CampCard({ camp, index }: { camp: typeof CAMPS[number]; index: number }
   const Icon = camp.icon
 
   const handleDDMClick = () => {
-    trackVirtualPageview(`/registrace-duben-${camp.id}`)
+    trackVirtualPageview(`/registrace-kveten-${camp.id}`)
     trackRegistrationClick({
       termId: camp.id,
       termDates: camp.date,
@@ -99,7 +99,7 @@ function CampCard({ camp, index }: { camp: typeof CAMPS[number]; index: number }
       setEmail('')
       setGdprConsent(false)
 
-      trackVirtualPageview(`/lead-duben-${camp.id}`)
+      trackVirtualPageview(`/lead-kveten-${camp.id}`)
       trackInterestSubmit({
         programId: camp.id,
         programTitle: camp.title,
@@ -243,15 +243,25 @@ function CampCard({ camp, index }: { camp: typeof CAMPS[number]; index: number }
   )
 }
 
-export default function DubenPage() {
+export default function KvetenPage() {
   useEffect(() => {
-    trackVirtualPageview('/ad/duben')
+    trackVirtualPageview('/ad/kveten')
   }, [])
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-gray-950 via-primary-950 to-gray-950">
+      {/* Top bar with back link */}
+      <div className="px-4 pt-4 pb-1 flex justify-end max-w-3xl mx-auto">
+        <Link
+          href="/"
+          className="text-white/30 hover:text-white/60 text-xs transition-colors"
+        >
+          ← Zpět na hlavní web
+        </Link>
+      </div>
+
       {/* Logo */}
-      <div className="pt-6 pb-2 flex justify-center">
+      <div className="pb-2 flex flex-col items-center">
         <Link href="/" aria-label="Weeks — zpět na hlavní stránku">
           <Image
             src="/images/weeks-logo.png"
@@ -260,6 +270,9 @@ export default function DubenPage() {
             height={120}
             className="h-14 w-auto"
           />
+        </Link>
+        <Link href="/" className="text-white/30 hover:text-white/50 text-xs mt-1 transition-colors">
+          Více o nás na Weeks.cz
         </Link>
       </div>
 
@@ -278,7 +291,7 @@ export default function DubenPage() {
           transition={{ delay: 0.2 }}
           className="text-white/60 text-sm sm:text-lg max-w-lg mx-auto"
         >
-          Vyberte si jednodenní tábor pro vaše dítě. Sobota 18. a neděle 19. dubna v Praze.
+          Vyberte si jednodenní tábor pro vaše dítě. Sobota 16. a neděle 17. května v Praze.
         </motion.p>
       </div>
 
@@ -347,6 +360,14 @@ export default function DubenPage() {
           </p>
         </div>
       </motion.div>
+
+      {/* Credibility footer */}
+      <div className="px-4 pb-8 text-center">
+        <p className="text-white/25 text-xs">
+          Tuto zjednodušenou přihlášku pro vás připravil tým z{' '}
+          <Link href="/" className="underline hover:text-white/40 transition-colors">Weeks.cz</Link>
+        </p>
+      </div>
     </main>
   )
 }

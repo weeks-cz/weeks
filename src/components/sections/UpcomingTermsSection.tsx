@@ -5,56 +5,24 @@ import { ArrowRight, Calendar, Clock } from 'lucide-react'
 import Link from 'next/link'
 import { sendGAEvent } from '@next/third-parties/google'
 import { trackRegistrationClick } from '@/lib/analytics'
+import type { TermDisplay } from '@/lib/camps'
 
-type CampType = 'mix' | '3d-tisk' | 'iot'
-
-interface ConfirmedTerm {
-  id: string
-  date: string
-  dateLabel: string
-  camp: string
-  campType: CampType
-  location: string
-  price: string
-  href: string
-  registrationUrl: string
+const campMeta: Record<string, { label: string; href: string; campLabel: string; colors: { bg: string; text: string }; campType: 'weekend' | 'oneday' }> = {
+  'tech':    { label: 'Tábor chytrých technologií', href: '/tabor-chytrych-technologii', campLabel: 'Tábor chytrých technologií', colors: { bg: 'bg-accent-500/20', text: 'text-accent-300' }, campType: 'weekend' },
+  '3d-tisk': { label: '3D tisk',                    href: '/tabor-3d-tisk',              campLabel: '3D tisk',                   colors: { bg: 'bg-primary-400/20', text: 'text-primary-300' }, campType: 'oneday' },
+  'iot':     { label: 'IoT & elektronika',          href: '/tabor-iot',                  campLabel: 'IoT & elektronika',         colors: { bg: 'bg-trust-400/20', text: 'text-trust-300' }, campType: 'oneday' },
 }
 
-const confirmedTerms: ConfirmedTerm[] = [
-  {
-    id: 'iot-18-4',
-    date: '2026-04-18',
-    dateLabel: 'So 18. dubna',
-    camp: 'IoT & elektronika',
-    campType: 'iot',
-    location: 'HWLab Praha',
-    price: '1 490 Kč',
-    href: '/tabor-iot',
-    registrationUrl: 'https://www.ddmp6.cz/tabory/?id=773',
-  },
-  {
-    id: '3dtisk-19-4',
-    date: '2026-04-19',
-    dateLabel: 'Ne 19. dubna',
-    camp: '3D tisk',
-    campType: '3d-tisk',
-    location: 'HWLab Praha',
-    price: '1 490 Kč',
-    href: '/tabor-3d-tisk',
-    registrationUrl: 'https://www.ddmp6.cz/tabory/?id=775',
-  },
-]
-
-const campColors: Record<CampType, { bg: string; text: string }> = {
-  mix: { bg: 'bg-accent-500/20', text: 'text-accent-300' },
-  '3d-tisk': { bg: 'bg-primary-400/20', text: 'text-primary-300' },
-  iot: { bg: 'bg-trust-400/20', text: 'text-trust-300' },
+function shortDateLabel(termin: TermDisplay): string {
+  // "So 18. dubna" / "4. – 5. července"
+  if (termin.campType === 'weekend') return termin.weekendDateLabel
+  const dayShort = termin.dayLabel === 'sobota' ? 'So' : termin.dayLabel === 'neděle' ? 'Ne' : ''
+  return dayShort ? `${dayShort} ${termin.dateShortLabel}` : termin.dateShortLabel
 }
 
-const campBadgeLabels: Record<CampType, string> = {
-  mix: 'Víkendový',
-  '3d-tisk': 'Jednodenní',
-  iot: 'Jednodenní',
+function priceLabel(price: number | null): string {
+  if (!price) return ''
+  return `${price.toLocaleString('cs-CZ').replace(/,/g, ' ')} Kč`
 }
 
 function getUrgency(dateStr: string): { label: string; className: string } | null {
@@ -70,21 +38,22 @@ function getUrgency(dateStr: string): { label: string; className: string } | nul
   return null
 }
 
-export function UpcomingTermsSection() {
-  const now = new Date()
-  now.setHours(0, 0, 0, 0)
-  const upcoming = confirmedTerms.filter((t) => new Date(t.date + 'T00:00:00') >= now)
+export function UpcomingTermsSection({ terms }: { terms: TermDisplay[] }) {
+  // Only render terms with a usable DDM registration link — the homepage CTA
+  // is "Přihlásit se", not interest capture.
+  const usable = terms.filter(t => t.registrationUrl && t.status === 'open_with_link')
 
-  if (upcoming.length === 0) return null
+  if (usable.length === 0) return null
 
-  const handleClick = (term: ConfirmedTerm) => {
+  const handleClick = (term: TermDisplay) => {
+    const meta = campMeta[term.program] ?? campMeta['3d-tisk']
     trackRegistrationClick({
       termId: term.id,
-      termDates: term.dateLabel,
-      termLocation: term.location,
-      spotsAvailable: 15,
-      outboundUrl: term.registrationUrl,
-      campType: term.campType === 'mix' ? 'weekend' : 'oneday',
+      termDates: shortDateLabel(term),
+      termLocation: term.location || 'HWLab Praha',
+      spotsAvailable: Math.max(0, term.capacity - term.enrolledCount),
+      outboundUrl: term.registrationUrl!,
+      campType: meta.campType,
     })
   }
 
@@ -100,7 +69,7 @@ export function UpcomingTermsSection() {
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full text-sm font-medium text-white/80 mb-6">
             <Calendar className="w-4 h-4" />
-            {upcoming.length} {upcoming.length === 1 ? 'termín' : upcoming.length < 5 ? 'termíny' : 'termínů'} s otevřenou registrací
+            {usable.length} {usable.length === 1 ? 'termín' : usable.length < 5 ? 'termíny' : 'termínů'} s otevřenou registrací
           </div>
           <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
             Nejbližší{' '}
@@ -114,9 +83,12 @@ export function UpcomingTermsSection() {
         </motion.div>
 
         <div className="max-w-4xl mx-auto space-y-3">
-          {upcoming.map((term, index) => {
-            const colors = campColors[term.campType]
-            const urgency = getUrgency(term.date)
+          {usable.map((term, index) => {
+            const meta = campMeta[term.program] ?? campMeta['3d-tisk']
+            const colors = meta.colors
+            const urgency = getUrgency(term.startDate)
+            const badgeLabel = meta.campType === 'weekend' ? 'Víkendový' : 'Jednodenní'
+            const dateLabel = shortDateLabel(term)
 
             return (
               <motion.div
@@ -131,19 +103,19 @@ export function UpcomingTermsSection() {
                 <div className="hidden md:flex items-center gap-4 p-4">
                   <div className="flex items-center gap-3 w-52 flex-shrink-0">
                     <Clock className="w-4 h-4 text-white/50 flex-shrink-0" />
-                    <span className="text-white font-medium text-sm">{term.dateLabel}</span>
+                    <span className="text-white font-medium text-sm">{dateLabel}</span>
                   </div>
 
-                  <Link href={term.href} className="flex items-center gap-3 flex-1 min-w-0 group">
+                  <Link href={meta.href} className="flex items-center gap-3 flex-1 min-w-0 group">
                     <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${colors.bg} ${colors.text} flex-shrink-0`}>
-                      {campBadgeLabels[term.campType]}
+                      {badgeLabel}
                     </span>
                     <span className="text-white font-semibold truncate group-hover:text-cta-300 transition-colors">
-                      {term.camp}
+                      {meta.campLabel}
                     </span>
                   </Link>
 
-                  <span className="text-white/70 text-sm font-medium flex-shrink-0">{term.price}</span>
+                  <span className="text-white/70 text-sm font-medium flex-shrink-0">{priceLabel(term.price)}</span>
 
                   {urgency && (
                     <span
@@ -156,7 +128,7 @@ export function UpcomingTermsSection() {
                   )}
 
                   <a
-                    href={term.registrationUrl}
+                    href={term.registrationUrl!}
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={() => handleClick(term)}
@@ -172,7 +144,7 @@ export function UpcomingTermsSection() {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Clock className="w-4 h-4 text-white/50" />
-                      <span className="text-white font-medium text-sm">{term.dateLabel}</span>
+                      <span className="text-white font-medium text-sm">{dateLabel}</span>
                     </div>
                     {urgency && (
                       <span
@@ -187,17 +159,17 @@ export function UpcomingTermsSection() {
 
                   <div className="flex items-center gap-2">
                     <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${colors.bg} ${colors.text}`}>
-                      {campBadgeLabels[term.campType]}
+                      {badgeLabel}
                     </span>
-                    <Link href={term.href} className="text-white font-semibold text-sm hover:text-cta-300 transition-colors truncate">
-                      {term.camp}
+                    <Link href={meta.href} className="text-white font-semibold text-sm hover:text-cta-300 transition-colors truncate">
+                      {meta.campLabel}
                     </Link>
                   </div>
 
                   <div className="flex items-center justify-between">
-                    <span className="text-white/70 text-sm font-medium">{term.price}</span>
+                    <span className="text-white/70 text-sm font-medium">{priceLabel(term.price)}</span>
                     <a
-                      href={term.registrationUrl}
+                      href={term.registrationUrl!}
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={() => handleClick(term)}

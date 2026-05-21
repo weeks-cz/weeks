@@ -8,6 +8,7 @@ import { CookieConsent } from '@/components/ui/CookieConsent'
 import { MetaPixel } from '@/components/analytics/MetaPixel'
 import { QRTracker } from '@/components/analytics/QRTracker'
 import { MotionProvider } from '@/components/providers/MotionProvider'
+import { ShopProvider } from '@/components/shop/ShopProvider'
 
 const GA_ID = (process.env.NEXT_PUBLIC_GA_ID || 'G-9955Q5FRRX').trim()
 
@@ -55,7 +56,7 @@ export const metadata: Metadata = {
     description: siteDescription,
     images: [
       {
-        url: `${siteUrl}/og-image.jpg`,
+        url: `${siteUrl}/og-image-v2.jpg`,
         width: 1200,
         height: 630,
         alt: 'Weeks - IT tábory pro děti',
@@ -66,7 +67,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: siteTitle,
     description: siteDescription,
-    images: [`${siteUrl}/og-image.jpg`],
+    images: [`${siteUrl}/og-image-v2.jpg`],
     creator: '@weeks_cz',
   },
   robots: {
@@ -109,9 +110,11 @@ export default function RootLayout({
         <EventSchema />
       </head>
       <body className={`${dmSans.variable} ${outfit.variable} font-sans`}>
-        <MotionProvider>
-          {children}
-        </MotionProvider>
+        <ShopProvider>
+          <MotionProvider>
+            {children}
+          </MotionProvider>
+        </ShopProvider>
         <CookieConsent />
         <Suspense fallback={null}>
           <QRTracker />

@@ -7,7 +7,7 @@ This file provides guidance to Claude Code when working with this repository.
 **Weeks** is a website for IT camps for children (ages 10-15) in Prague, operated under DDM Praha 6. The site offers weekend camps (MIX) and one-day camps (3D tisk, IoT). It appeals to two audiences: parents (who pay) and teenagers (who decide if they want to attend).
 
 **Live URL:** https://weeks.cz
-**GitHub:** https://github.com/lxkask/weeks
+**GitHub:** https://github.com/weeks-cz/weeks (public; transferred from lxkask/weeks on 2026-05-09)
 
 ## Tech Stack
 
@@ -47,7 +47,7 @@ npm run lint         # Run ESLint
     /tabor-chytrych-technologii  # Weekend MIX camp page (spring terms + summer #leto section)
     /tabor-3d-tisk          # One-day 3D printing camp (confirmed + připravujeme terms)
     /tabor-iot              # One-day IoT + Arduino camp (confirmed + připravujeme terms)
-    /duben                  # Ad landing page for April 18-19 camps (noindex, minimal layout)
+    /kveten                 # Ad landing page for May 16-17 camps (noindex, minimal layout)
     /o-nas                  # About page (team with real names)
     /kontakt                # Contact page
     /gdpr                   # GDPR page
@@ -87,7 +87,7 @@ npm run lint         # Run ESLint
 /public
   /images/hwlab             # HWLab photos
   /images/weeks-logo.png    # Logo
-  og-image.jpg              # Open Graph image (1200x630)
+  og-image-v2.jpg           # Open Graph image (1200x630). Bump version when regenerating to bust social cache.
   favicon.ico               # Favicon (multi-size)
   apple-touch-icon.png      # Apple touch icon
   robots.txt                # Robots rules
@@ -140,7 +140,7 @@ Alternating So/Ne pattern between 3D tisk and IoT:
 | 25–26. 4.   | 3D tisk     | IoT         | Připravujeme |
 | 2–3. 5.     | IoT         | 3D tisk     | Připravujeme |
 | 9–10. 5.    | 3D tisk     | IoT         | Připravujeme |
-| 17. 5.      | IoT         | —           | Připravujeme |
+| 16–17. 5.   | 3D tisk     | IoT         | Potvrzeno    |
 
 ### Summer MIX Terms (July–August 2026)
 
@@ -257,7 +257,7 @@ Real team members with specialized icons:
 ## Contact Info
 
 Phone: +420 703 046 440 (confirmed April 2026)
-Used in: kontakt page, ContactSection, StructuredData, /duben landing page
+Used in: kontakt page, ContactSection, StructuredData, /kveten landing page
 
 ## DNS Configuration
 
@@ -322,26 +322,47 @@ TXT   @     google-site-verification=5epLUIbGFT0mcISr7rJZPFLcNlcAIFkQXe5cBY9nSdY
 ### Current term status
 - **MIX spring**: 28-29.3 confirmed with DDM registration link (14-15.3 removed — passed)
 - **MIX summer**: 7 weekends (Jul–Aug) — non-binding interest form only
-- **One-day confirmed**: 11-12.4 and 18-19.4 — DDM registration links active
+- **One-day confirmed**: 11-12.4, 18-19.4, and 16-17.5 — DDM registration links active
   - 3D tisk 11.4. → ddmp6.cz/tabory/?id=774
   - IoT 12.4. → ddmp6.cz/tabory/?id=776
   - IoT 18.4. → ddmp6.cz/tabory/?id=773
   - 3D tisk 19.4. → ddmp6.cz/tabory/?id=775
-- **One-day připravujeme**: 25-26.4 through 17.5 — non-binding registration form
+  - 3D tisk 16.5. → ddmp6.cz/tabory/?id=786
+  - IoT 17.5. → ddmp6.cz/tabory/?id=787
+- **One-day připravujeme**: 25-26.4 through 9-10.5 — non-binding registration form
 
 ### When next terms are confirmed by DDM
 - Move připravujeme terms to confirmed as DDM approves them
 - Add DDM registration URLs (same pattern as confirmed one-day terms)
 
 ### Ad landing pages
-- **`/duben`** — live at weeks.cz/duben, used for IG ad campaign promoting IoT 18.4 + 3D tisk 19.4
-  - Minimal layout (no nav/footer), 2 camp cards with direct DDM registration
+- **`/kveten`** — live at weeks.cz/kveten, promoting 3D tisk 16.5 + IoT 17.5
+  - Minimal layout (noindex, no nav/footer), 2 camp cards with direct DDM registration
   - Lead capture (záchranná síť) + personal assistance (phone/WhatsApp)
-  - GA4 virtual pageviews: `/ad/duben`, `/registrace-duben-iot`, `/registrace-duben-3d-tisk`, `/lead-duben-*`
-  - Spec: `docs/superpowers/specs/2026-04-08-ad-landing-duben.md`
+  - GA4 virtual pageviews: `/ad/kveten`, `/registrace-kveten-3d-tisk`, `/registrace-kveten-iot`, `/lead-kveten-*`
+  - Predecessor: `/duben` (April 18-19 campaign, removed after terms passed) — spec at `docs/superpowers/specs/2026-04-08-ad-landing-duben.md`
 
 ### Other pending items
 - Facebook Pixel — when ready for advertising
 - DDM confirmation for remaining one-day camp terms (25.4+)
 - Summer MIX terms: currently interest-only, will need DDM registration when confirmed
 - Consider listing on detske-tabory.info (free) and cesketabory.cz for visibility
+
+## Repo & team workflow
+
+- **Org**: `weeks-cz` on GitHub (free, owned by Lukáš). Owners: Lukáš (lukoluko8), Štěpán (step4n), Kryštof (jezdikk), admin@weeks.cz.
+- **Sister repos**: `weeks-cz/weeks-hub` (app.weeks.cz), `weeks-cz/weeks-iot` (iot.weeks.cz + klicenka.weeks.cz). All public, code-only.
+- **Strategic docs**: live in private repo `weeks-cz/weeks-internal` under `web/docs/`. ROADMAP, content spec, UI/UX spec, plans, specs all moved there 2026-05-09. **Do not commit business strategy or competitive context here** — this repo is public.
+- **Deploys**: Vercel auto-deploys `main` branch to weeks.cz on push.
+- **Vercel Hobby author block**: Free tier rejects deployments when commit author is not Lukáš (lukoluko8@gmail.com). Commits by step4n or jezdikk hit error: *"Git author X must have access to the project on Vercel"*.
+  - **Workaround until Vercel Pro upgrade ($20/mo, deferred until s.r.o.)**: Lukáš (or Claude) squashes Š/K feature branches into a single Lukáš-authored commit on main:
+    ```bash
+    cd <fresh-clone>
+    git checkout main && git pull
+    git read-tree -u --reset <feature-branch>
+    git -c user.email=lukoluko8@gmail.com commit \
+      --author="Lukáš Kubík <lukoluko8@gmail.com>" \
+      -m "feat(...): squashed <feature-branch>"
+    git push origin main
+    ```
+  - This pattern was used 6× during 2026-05 batch deploy. Š/K push to feature branches normally; ask Lukáš (or open issue) when ready to deploy.

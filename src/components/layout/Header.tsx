@@ -4,8 +4,8 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, ChevronRight } from 'lucide-react'
-import { trackNavCTA } from '@/lib/analytics'
+import { Menu, X, ChevronRight, ExternalLink } from 'lucide-react'
+import { trackNavCTA, trackUcebnaClick } from '@/lib/analytics'
 import { CitySwitcher } from '@/components/ui/CitySwitcher'
 import { useLocation } from '@/contexts/LocationContext'
 import { buildPath } from '@/lib/locations'
@@ -18,6 +18,7 @@ export function Header() {
   const navigation = location.isDefault
     ? [
         { name: 'Program', href: '/program' },
+        { name: 'E-shop', href: '/eshop' },
         { name: 'Proč Weeks', href: '/#proc-weeks' },
         { name: 'O nás', href: '/o-nas' },
         { name: 'Kontakt', href: '/kontakt' },
@@ -90,6 +91,21 @@ export function Header() {
               }`} />
             </Link>
           ))}
+          {location.isDefault && (
+            <a
+              href="https://iot.weeks.cz/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Učebna — výuková platforma (otevře se v nové záložce)"
+              onClick={() => trackUcebnaClick('desktop')}
+              className={`ml-2 flex items-center text-sm transition-colors ${
+                scrolled ? 'text-gray-500 hover:text-gray-700' : 'text-white/60 hover:text-white/80'
+              }`}
+            >
+              Učebna
+              <ExternalLink className="w-3 h-3 ml-1" aria-hidden="true" />
+            </a>
+          )}
           <CitySwitcher />
           <Link
             href={ctaHref}
@@ -149,10 +165,30 @@ export function Header() {
                   </Link>
                 </motion.div>
               ))}
+              {location.isDefault && (
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: navigation.length * 0.05 }}
+                  className="border-t border-gray-100 pt-2 mt-2"
+                >
+                  <a
+                    href="https://iot.weeks.cz/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Učebna — výuková platforma (otevře se v nové záložce)"
+                    onClick={() => { trackUcebnaClick('mobile'); setMobileMenuOpen(false) }}
+                    className="flex items-center px-4 py-3 text-sm text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
+                  >
+                    Učebna
+                    <ExternalLink className="w-3 h-3 ml-1.5" aria-hidden="true" />
+                  </a>
+                </motion.div>
+              )}
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: navigation.length * 0.05 }}
+                transition={{ delay: (navigation.length + 1) * 0.05 }}
                 className="pt-2 flex flex-col gap-2"
               >
                 <div className="flex justify-center">

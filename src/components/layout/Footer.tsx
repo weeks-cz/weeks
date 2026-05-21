@@ -14,6 +14,7 @@ export function Footer() {
   const navLinks = location.isDefault
     ? [
         { name: 'Program', href: '/program' },
+        { name: 'E-shop', href: '/eshop' },
         { name: 'Proč Weeks', href: '/#proc-weeks' },
         { name: 'O nás', href: '/o-nas' },
         { name: 'Kontakt', href: '/kontakt' },

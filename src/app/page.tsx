@@ -4,16 +4,23 @@ import { ProgramSection } from '@/components/sections/ProgramSection'
 import { USPSection } from '@/components/sections/USPSection'
 import { TrustSection } from '@/components/sections/TrustSection'
 import { UpcomingTermsSection } from '@/components/sections/UpcomingTermsSection'
+import { CTASection } from '@/components/sections/CTASection'
 import { FAQSection } from '@/components/sections/FAQSection'
 import { ContactSection } from '@/components/sections/ContactSection'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
-import { LocationProvider } from '@/contexts/LocationContext'
-import { LOCATIONS } from '@/lib/locations'
+import { getAllUpcomingTerms, getNearestTermsByProgram } from '@/lib/camps'
 
-export default function Home() {
+export const revalidate = 300
+
+export default async function Home() {
+  const [upcomingTerms, nearestTerms] = await Promise.all([
+    getAllUpcomingTerms(),
+    getNearestTermsByProgram(),
+  ])
+
   return (
-    <LocationProvider location={LOCATIONS['praha']}>
+    <>
       <Header />
       <main id="main">
         <HeroSection />
@@ -21,11 +28,12 @@ export default function Home() {
         <ProgramSection />
         <USPSection />
         <TrustSection />
-        <UpcomingTermsSection />
+        <UpcomingTermsSection terms={upcomingTerms} />
+        <CTASection nextTerms={nearestTerms} />
         <FAQSection />
         <ContactSection />
       </main>
       <Footer />
-    </LocationProvider>
+    </>
   )
 }
