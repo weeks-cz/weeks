@@ -41,7 +41,7 @@ function priceLabel(price: number | null): string {
 }
 
 function daysWord(n: number): string {
-  return n >= 2 && n <= 4 ? 'dny' : 'dní'
+  return n === 1 ? 'den' : n >= 2 && n <= 4 ? 'dny' : 'dní'
 }
 
 interface AccentClasses {
@@ -74,14 +74,12 @@ function TermHeading({ term }: { term: TermDisplay }) {
         <h4 className="text-lg font-bold text-white">{term.fullLabel}</h4>
       </div>
       <div className="mt-1.5 flex flex-wrap items-center gap-2">
-        {term.dayCount > 1 && (
-          <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-white/15 text-white text-xs font-semibold">
-            {term.dayCount} {daysWord(term.dayCount)}
-            {dayName(term.startDate) && dayName(term.endDate)
-              ? ` · ${dayName(term.startDate)}–${dayName(term.endDate)}`
-              : ''}
-          </span>
-        )}
+        <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-white/15 text-white text-xs font-semibold">
+          {term.dayCount} {daysWord(term.dayCount)}
+          {term.dayCount > 1 && dayName(term.startDate) && dayName(term.endDate)
+            ? ` · ${dayName(term.startDate)}–${dayName(term.endDate)}`
+            : ''}
+        </span>
         {term.price != null && (
           <span className="text-sm font-semibold text-white/90">{priceLabel(term.price)}</span>
         )}

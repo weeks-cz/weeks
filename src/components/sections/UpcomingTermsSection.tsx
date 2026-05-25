@@ -25,6 +25,11 @@ function priceLabel(price: number | null): string {
   return `${price.toLocaleString('cs-CZ').replace(/,/g, ' ')} Kč`
 }
 
+// Délka tábora fakticky (1 den / 2 dny / 5 dní) — místo kategorie "Jednodenní"
+function daysWord(n: number): string {
+  return n === 1 ? 'den' : n >= 2 && n <= 4 ? 'dny' : 'dní'
+}
+
 function getUrgency(dateStr: string): { label: string; className: string } | null {
   const now = new Date()
   now.setHours(0, 0, 0, 0)
@@ -93,7 +98,7 @@ export function UpcomingTermsSection({ terms }: { terms: TermDisplay[] }) {
             const meta = campMeta[term.program] ?? campMeta['3d-tisk']
             const colors = meta.colors
             const urgency = getUrgency(term.startDate)
-            const badgeLabel = meta.campType === 'weekend' ? 'Víkendový' : 'Jednodenní'
+            const badgeLabel = `${term.dayCount} ${daysWord(term.dayCount)}`
             const dateLabel = shortDateLabel(term)
 
             return (

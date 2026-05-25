@@ -125,7 +125,7 @@ export function CTASection({ nextTerms }: CTASectionProps) {
                   <Printer className="w-5 h-5 text-white" />
                 </div>
                 <span className="px-2.5 py-1 bg-primary-500/20 rounded-full text-xs font-semibold text-primary-300">
-                  Jednodenní
+                  1 den
                 </span>
               </div>
 
@@ -169,7 +169,7 @@ export function CTASection({ nextTerms }: CTASectionProps) {
                   <Cpu className="w-5 h-5 text-white" />
                 </div>
                 <span className="px-2.5 py-1 bg-trust-500/20 rounded-full text-xs font-semibold text-trust-300">
-                  Jednodenní
+                  1 den
                 </span>
               </div>
 
