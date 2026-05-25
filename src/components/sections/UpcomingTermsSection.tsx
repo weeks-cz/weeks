@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { ArrowRight, Calendar, Clock, Sparkles } from 'lucide-react'
+import { ArrowRight, Calendar, Clock } from 'lucide-react'
 import Link from 'next/link'
 import { sendGAEvent } from '@next/third-parties/google'
 import { trackRegistrationClick } from '@/lib/analytics'
@@ -54,6 +54,9 @@ export function UpcomingTermsSection({ terms }: { terms: TermDisplay[] }) {
 
   if (usable.length === 0 && highlights.length === 0) return null
 
+  // Jeden seznam, jednotná struktura řádku, seřazeno podle data
+  const shown = [...usable, ...highlights].sort((a, b) => a.startDate.localeCompare(b.startDate))
+
   const handleClick = (term: TermDisplay) => {
     const meta = campMeta[term.program] ?? campMeta['3d-tisk']
     trackRegistrationClick({
@@ -94,12 +97,36 @@ export function UpcomingTermsSection({ terms }: { terms: TermDisplay[] }) {
         </motion.div>
 
         <div className="max-w-4xl mx-auto space-y-3">
-          {usable.map((term, index) => {
+          {shown.map((term, index) => {
             const meta = campMeta[term.program] ?? campMeta['3d-tisk']
             const colors = meta.colors
-            const urgency = getUrgency(term.startDate)
+            const hasLink = !!term.registrationUrl && term.status === 'open_with_link'
+            const marker = hasLink
+              ? getUrgency(term.startDate)
+              : { label: 'Nově', className: 'bg-cta-400 text-gray-900' }
             const badgeLabel = `${term.dayCount} ${daysWord(term.dayCount)}`
             const dateLabel = shortDateLabel(term)
+
+            const cta = hasLink ? (
+              <a
+                href={term.registrationUrl!}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => handleClick(term)}
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-cta-500 hover:bg-cta-400 text-gray-900 font-semibold rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-cta-500/30 text-sm flex-shrink-0"
+              >
+                Přihlásit se
+                <ArrowRight className="w-4 h-4" />
+              </a>
+            ) : (
+              <Link
+                href={`${meta.href}#terminy`}
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/15 hover:bg-white/25 text-white font-semibold rounded-xl transition-colors text-sm flex-shrink-0"
+              >
+                Zjistit víc
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            )
 
             return (
               <motion.div
@@ -128,26 +155,16 @@ export function UpcomingTermsSection({ terms }: { terms: TermDisplay[] }) {
 
                   <span className="text-white/70 text-sm font-medium flex-shrink-0">{priceLabel(term.price)}</span>
 
-                  {urgency && (
+                  {marker && (
                     <span
-                      className={`px-2.5 py-1 rounded-full text-xs font-bold ${urgency.className} flex-shrink-0`}
+                      className={`px-2.5 py-1 rounded-full text-xs font-bold ${marker.className} flex-shrink-0`}
                       role="status"
-                      aria-label={`Do začátku zbývá: ${urgency.label}`}
                     >
-                      {urgency.label}
+                      {marker.label}
                     </span>
                   )}
 
-                  <a
-                    href={term.registrationUrl!}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => handleClick(term)}
-                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-cta-500 hover:bg-cta-400 text-gray-900 font-semibold rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-cta-500/30 text-sm flex-shrink-0"
-                  >
-                    Přihlásit se
-                    <ArrowRight className="w-4 h-4" />
-                  </a>
+                  {cta}
                 </div>
 
                 {/* Mobile layout */}
@@ -157,13 +174,12 @@ export function UpcomingTermsSection({ terms }: { terms: TermDisplay[] }) {
                       <Clock className="w-4 h-4 text-white/50" />
                       <span className="text-white font-medium text-sm">{dateLabel}</span>
                     </div>
-                    {urgency && (
+                    {marker && (
                       <span
-                        className={`px-2.5 py-1 rounded-full text-xs font-bold ${urgency.className}`}
+                        className={`px-2.5 py-1 rounded-full text-xs font-bold ${marker.className}`}
                         role="status"
-                        aria-label={`Do začátku zbývá: ${urgency.label}`}
                       >
-                        {urgency.label}
+                        {marker.label}
                       </span>
                     )}
                   </div>
@@ -179,52 +195,9 @@ export function UpcomingTermsSection({ terms }: { terms: TermDisplay[] }) {
 
                   <div className="flex items-center justify-between">
                     <span className="text-white/70 text-sm font-medium">{priceLabel(term.price)}</span>
-                    <a
-                      href={term.registrationUrl!}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={() => handleClick(term)}
-                      className="inline-flex items-center gap-2 px-5 py-2.5 bg-cta-500 hover:bg-cta-400 text-gray-900 font-semibold rounded-xl transition-all duration-300 text-sm"
-                    >
-                      Přihlásit se
-                      <ArrowRight className="w-4 h-4" />
-                    </a>
+                    {cta}
                   </div>
                 </div>
-              </motion.div>
-            )
-          })}
-
-          {/* Weekend specials without an open registration link yet — shown last
-              (typically a later date) with a "Zjistit víc" CTA to the detail page */}
-          {highlights.map((term) => {
-            const meta = campMeta[term.program] ?? campMeta['3d-tisk']
-            return (
-              <motion.div
-                key={`hl-${term.id}`}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className="bg-gradient-to-r from-white/15 to-white/5 backdrop-blur-sm rounded-2xl border border-cta-400/50 p-4 flex flex-col md:flex-row md:items-center gap-3"
-              >
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-cta-400 text-gray-900 text-xs font-bold self-start md:self-center">
-                  <Sparkles className="w-3.5 h-3.5" /> NOVĚ
-                </span>
-                <div className="flex items-center gap-2 md:w-44 flex-shrink-0">
-                  <Clock className="w-4 h-4 text-white/50" />
-                  <span className="text-white font-medium text-sm">{shortDateLabel(term)}</span>
-                </div>
-                <div className="flex-1 min-w-0">
-                  <span className="text-white font-semibold">Dvoudenní {meta.campLabel}</span>
-                  {term.price ? <span className="text-white/60 text-sm ml-2">{priceLabel(term.price)}</span> : null}
-                </div>
-                <Link
-                  href={`${meta.href}#terminy`}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/15 hover:bg-white/25 text-white font-semibold rounded-xl transition-colors text-sm flex-shrink-0 self-start md:self-auto"
-                >
-                  Zjistit víc
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
               </motion.div>
             )
           })}
