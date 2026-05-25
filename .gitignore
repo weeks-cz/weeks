@@ -49,10 +49,12 @@ next-env.d.ts
 *.HEIC
 *.heic
 Kryštof - Telefon/
-Screenshot*.png
+Screenshot*
 
 # Working documents (keep locally, not in repo)
 *.pdf
-*.docx*.pdf
+*.docx
+*.json.bak
+zonemaster_result_*.json
 Co je špatně*.txt
 weeks_logo.png
