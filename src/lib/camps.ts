@@ -18,6 +18,7 @@ export interface CampRow {
   camp_type: 'weekend' | 'oneday' | null
   price: number | null
   ddm_id: string | null
+  single_day_option: boolean
   day_label: string | null
   display_order: number
   web_source_id: string | null
@@ -39,6 +40,7 @@ export interface TermDisplay {
   status: CampRow['status']
   registrationUrl: string | null
   ddmId: string | null
+  singleDayOption: boolean
   price: number | null
   capacity: number
   enrolledCount: number
@@ -111,6 +113,7 @@ function toDisplay(row: CampRow): TermDisplay {
     status: row.status,
     registrationUrl: row.registration_url,
     ddmId: row.ddm_id,
+    singleDayOption: row.single_day_option ?? false,
     price: row.price,
     capacity: row.capacity,
     enrolledCount: row.enrolled_count,
@@ -156,6 +159,7 @@ export async function getCampsForProgram(program: string): Promise<{
   openNoLink: TermDisplay[]        // open_no_link — confirmed but no URL yet
   collectingInterest: TermDisplay[] // collecting_interest — "Nezávazná registrace"
   full: TermDisplay[]              // full — "Plný"
+  weekend: TermDisplay[]           // camp_type === 'weekend' — rendered separately (2-day special)
   // Legacy combined views for components that don't care about the distinction
   confirmed: TermDisplay[]         // open_with_link (with DDM link)
   upcoming: TermDisplay[]          // open_no_link + collecting_interest
@@ -171,8 +175,10 @@ export async function getCampsForProgram(program: string): Promise<{
   const openNoLink: TermDisplay[] = []
   const collectingInterest: TermDisplay[] = []
   const full: TermDisplay[] = []
+  const weekend: TermDisplay[] = []
 
   for (const term of filtered) {
+    if (term.campType === 'weekend') { weekend.push(term); continue }
     if (term.status === 'full') full.push(term)
     else if (term.status === 'open_with_link' && term.registrationUrl) open.push(term)
     else if (term.status === 'open_no_link') openNoLink.push(term)
@@ -180,7 +186,7 @@ export async function getCampsForProgram(program: string): Promise<{
   }
 
   return {
-    open, openNoLink, collectingInterest, full,
+    open, openNoLink, collectingInterest, full, weekend,
     confirmed: open,
     upcoming: [...openNoLink, ...collectingInterest],
   }
