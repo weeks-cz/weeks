@@ -302,7 +302,7 @@ export function ProgramSection() {
             </span>
             <div className="flex-1 min-w-0">
               <p className="font-display text-lg font-bold text-white">
-                Dvoudenní 3D tisk — víkend 2.–3. července
+                Dvoudenní 3D tisk — 2.–3. července (čtvrtek + pátek)
               </p>
               <p className="text-sm text-white/80">
                 Víc času na vlastní projekty. Stačí přijít i jen na jeden den. · 2 990 Kč

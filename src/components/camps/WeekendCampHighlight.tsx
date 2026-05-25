@@ -24,6 +24,16 @@ function formatPrice(price: number | null): string {
   return `${price.toLocaleString('cs-CZ')} Kč`
 }
 
+const DAY_NAMES = ['neděle', 'pondělí', 'úterý', 'středa', 'čtvrtek', 'pátek', 'sobota']
+
+// Skutečný název dne z ISO data (T12:00 kvůli časovým zónám) — ať výběr dne
+// sedí na reálné datum tábora, ne na předpoklad So/Ne.
+function dayName(iso: string): string {
+  if (!iso) return ''
+  const d = new Date(iso + 'T12:00:00')
+  return Number.isNaN(d.getTime()) ? '' : DAY_NAMES[d.getDay()]
+}
+
 export function WeekendCampHighlight({ terms, program, programTitle }: WeekendCampHighlightProps) {
   if (terms.length === 0) return null
   return (
@@ -39,6 +49,8 @@ function WeekendCard({ term, program, programTitle }: { term: TermDisplay; progr
   const year = term.startDate.slice(0, 4)
   const baseTermin = `Dvoudenní ${programTitle} ${term.weekendDateLabel} ${year}`
   const hasLink = term.status === 'open_with_link' && !!term.registrationUrl
+  // Skutečné dny tábora (např. čtvrtek + pátek) — odvozené z datumů
+  const dayOptions = Array.from(new Set([dayName(term.startDate), dayName(term.endDate)].filter(Boolean)))
 
   return (
     <motion.div
@@ -83,7 +95,7 @@ function WeekendCard({ term, program, programTitle }: { term: TermDisplay; progr
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Blok A: celý víkend */}
           <div className="rounded-2xl border border-gray-200 p-5">
-            <h4 className="font-semibold text-gray-900 mb-1">Celý víkend (oba dny)</h4>
+            <h4 className="font-semibold text-gray-900 mb-1">Oba dny</h4>
             {hasLink ? (
               <>
                 <p className="text-sm text-gray-500 mb-4">Registrace přes DDM Praha 6.</p>
@@ -112,7 +124,7 @@ function WeekendCard({ term, program, programTitle }: { term: TermDisplay; progr
                 <WaitlistForm
                   program={program}
                   programTitle={programTitle}
-                  termin={`${baseTermin} — celý víkend`}
+                  termin={`${baseTermin} — oba dny`}
                   buttonLabel="Dejte mi vědět"
                 />
               </>
@@ -126,7 +138,7 @@ function WeekendCard({ term, program, programTitle }: { term: TermDisplay; progr
               <p className="text-sm text-gray-500 mb-4">
                 Napište nám a domluvíme se na jednodenní účasti.
               </p>
-              <SingleDayForm program={program} programTitle={programTitle} baseTermin={baseTermin} />
+              <SingleDayForm program={program} programTitle={programTitle} baseTermin={baseTermin} days={dayOptions} />
               <div className="mt-4 pt-4 border-t border-primary-100 space-y-2 text-sm">
                 <a href={INFO_PHONE_HREF} className="flex items-center gap-2 text-gray-700 hover:text-primary-700">
                   <Phone className="w-4 h-4 text-primary-600" /> {INFO_PHONE_LABEL}
@@ -212,11 +224,11 @@ function WaitlistForm({ program, programTitle, termin, buttonLabel = 'Odeslat' }
   )
 }
 
-function SingleDayForm({ program, programTitle, baseTermin }: {
-  program: Program; programTitle: string; baseTermin: string
+function SingleDayForm({ program, programTitle, baseTermin, days }: {
+  program: Program; programTitle: string; baseTermin: string; days: string[]
 }) {
   const [email, setEmail] = useState('')
-  const [day, setDay] = useState<'sobota' | 'neděle'>('sobota')
+  const [day, setDay] = useState(days[0] ?? '')
   const [gdpr, setGdpr] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
@@ -259,7 +271,7 @@ function SingleDayForm({ program, programTitle, baseTermin }: {
         className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-400 text-sm"
       />
       <div className="flex gap-2">
-        {(['sobota', 'neděle'] as const).map((d) => (
+        {days.map((d) => (
           <button
             type="button" key={d} onClick={() => setDay(d)}
             className={`flex-1 px-3 py-2 rounded-lg text-sm font-medium border transition-colors ${day === d ? 'bg-primary-600 text-white border-primary-600' : 'bg-white text-gray-700 border-gray-300 hover:border-primary-400'}`}
