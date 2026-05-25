@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { ArrowRight, Calendar, Clock } from 'lucide-react'
+import { ArrowRight, Calendar, Clock, Sparkles } from 'lucide-react'
 import Link from 'next/link'
 import { sendGAEvent } from '@next/third-parties/google'
 import { trackRegistrationClick } from '@/lib/analytics'
@@ -43,7 +43,11 @@ export function UpcomingTermsSection({ terms }: { terms: TermDisplay[] }) {
   // is "Přihlásit se", not interest capture.
   const usable = terms.filter(t => t.registrationUrl && t.status === 'open_with_link')
 
-  if (usable.length === 0) return null
+  // Weekend specials without an open DDM link yet — shown as a highlighted
+  // "coming soon" card with a "Zjistit víc" CTA to the camp detail page.
+  const highlights = terms.filter(t => t.campType === 'weekend' && !(t.registrationUrl && t.status === 'open_with_link'))
+
+  if (usable.length === 0 && highlights.length === 0) return null
 
   const handleClick = (term: TermDisplay) => {
     const meta = campMeta[term.program] ?? campMeta['3d-tisk']
@@ -67,10 +71,12 @@ export function UpcomingTermsSection({ terms }: { terms: TermDisplay[] }) {
           onViewportEnter={() => sendGAEvent('event', 'view_homepage_terminy', {})}
           className="text-center mb-10"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full text-sm font-medium text-white/80 mb-6">
-            <Calendar className="w-4 h-4" />
-            {usable.length} {usable.length === 1 ? 'termín' : usable.length < 5 ? 'termíny' : 'termínů'} s otevřenou registrací
-          </div>
+          {usable.length > 0 && (
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full text-sm font-medium text-white/80 mb-6">
+              <Calendar className="w-4 h-4" />
+              {usable.length} {usable.length === 1 ? 'termín' : usable.length < 5 ? 'termíny' : 'termínů'} s otevřenou registrací
+            </div>
+          )}
           <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
             Nejbližší{' '}
             <span className="bg-gradient-to-r from-cta-400 to-cta-300 bg-clip-text text-transparent">
@@ -83,6 +89,38 @@ export function UpcomingTermsSection({ terms }: { terms: TermDisplay[] }) {
         </motion.div>
 
         <div className="max-w-4xl mx-auto space-y-3">
+          {/* Highlighted weekend specials without an open registration link yet */}
+          {highlights.map((term) => {
+            const meta = campMeta[term.program] ?? campMeta['3d-tisk']
+            return (
+              <motion.div
+                key={`hl-${term.id}`}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="bg-gradient-to-r from-white/15 to-white/5 backdrop-blur-sm rounded-2xl border border-cta-400/50 p-4 flex flex-col md:flex-row md:items-center gap-3"
+              >
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-cta-400 text-gray-900 text-xs font-bold self-start">
+                  <Sparkles className="w-3.5 h-3.5" /> NOVĚ
+                </span>
+                <div className="flex items-center gap-2 md:w-44 flex-shrink-0">
+                  <Clock className="w-4 h-4 text-white/50" />
+                  <span className="text-white font-medium text-sm">{shortDateLabel(term)}</span>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <span className="text-white font-semibold">Dvoudenní {meta.campLabel}</span>
+                  {term.price ? <span className="text-white/60 text-sm ml-2">{priceLabel(term.price)}</span> : null}
+                </div>
+                <Link
+                  href={`${meta.href}#dvoudenni`}
+                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/15 hover:bg-white/25 text-white font-semibold rounded-xl transition-colors text-sm flex-shrink-0 self-start md:self-auto"
+                >
+                  Zjistit víc
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </motion.div>
+            )
+          })}
           {usable.map((term, index) => {
             const meta = campMeta[term.program] ?? campMeta['3d-tisk']
             const colors = meta.colors

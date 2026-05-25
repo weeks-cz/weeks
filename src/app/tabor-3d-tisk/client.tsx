@@ -193,6 +193,29 @@ export default function Tabor3DTiskClient({ open, openNoLink, collectingInterest
           </div>
         </section>
 
+        {/* Dvoudenní speciál — hned pod hero pro maximální viditelnost */}
+        {weekend.length > 0 && (
+          <section id="dvoudenni" className="section-padding bg-gray-50 scroll-mt-24">
+            <div className="section-container">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="text-center mb-10"
+              >
+                <h2 className="heading-2 text-gray-900 mb-3">
+                  Novinka: <span className="text-gradient">dvoudenní 3D tisk</span>
+                </h2>
+                <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                  Víkendová verze tábora — dva dny a víc prostoru na vlastní projekty.
+                  A když to vyjde jen na jeden den, klidně přijďte jen na jeden.
+                </p>
+              </motion.div>
+              <WeekendCampHighlight terms={weekend} program="3d-tisk" programTitle="3D tisk" />
+            </div>
+          </section>
+        )}
+
         {/* O programu */}
         <section id="program" className="section-padding bg-white scroll-mt-24">
           <div className="section-container">
@@ -401,29 +424,6 @@ export default function Tabor3DTiskClient({ open, openNoLink, collectingInterest
           title="Co si děti odnesou domů"
           subtitle="Podívejte se na ukázky 3D výtisků, které děti vytvořily na našich táborech"
         />
-
-        {/* Dvoudenní speciál */}
-        {weekend.length > 0 && (
-          <section id="dvoudenni" className="section-padding bg-gray-50 scroll-mt-24">
-            <div className="section-container">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className="text-center mb-10"
-              >
-                <h2 className="heading-2 text-gray-900 mb-3">
-                  Novinka: <span className="text-gradient">dvoudenní 3D tisk</span>
-                </h2>
-                <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                  Víkendová verze tábora — dva dny a víc prostoru na vlastní projekty.
-                  A když to vyjde jen na jeden den, klidně přijďte jen na jeden.
-                </p>
-              </motion.div>
-              <WeekendCampHighlight terms={weekend} program="3d-tisk" programTitle="3D tisk" />
-            </div>
-          </section>
-        )}
 
         {/* Termíny */}
         <section id="terminy" className="section-padding bg-gradient-to-br from-primary-600 to-primary-800 scroll-mt-24">
