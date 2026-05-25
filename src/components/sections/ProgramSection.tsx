@@ -294,7 +294,7 @@ export function ProgramSection() {
           className="mb-8"
         >
           <Link
-            href={`${buildPath(location, 'tabor-3d-tisk')}#dvoudenni`}
+            href={`${buildPath(location, 'tabor-3d-tisk')}#terminy`}
             className="group flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 rounded-2xl bg-gradient-to-r from-primary-600 to-primary-500 p-5 shadow-lg hover:shadow-xl transition-shadow"
           >
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cta-400 text-gray-900 text-xs font-bold self-start">

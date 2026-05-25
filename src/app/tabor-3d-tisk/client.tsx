@@ -8,7 +8,6 @@ import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { GallerySection, GalleryImage } from '@/components/sections/GallerySection'
 import { TermsList, FAQAccordion } from '@/components/camps/TermsList'
-import { WeekendCampHighlight } from '@/components/camps/WeekendCampHighlight'
 import type { TermDisplay } from '@/lib/camps'
 
 const galleryImages: GalleryImage[] = [
@@ -67,10 +66,9 @@ interface Tabor3DTiskClientProps {
   openNoLink: TermDisplay[]
   collectingInterest: TermDisplay[]
   full: TermDisplay[]
-  weekend: TermDisplay[]
 }
 
-export default function Tabor3DTiskClient({ open, openNoLink, collectingInterest, full, weekend }: Tabor3DTiskClientProps) {
+export default function Tabor3DTiskClient({ open, openNoLink, collectingInterest, full }: Tabor3DTiskClientProps) {
   return (
     <>
       <Header />
@@ -192,29 +190,6 @@ export default function Tabor3DTiskClient({ open, openNoLink, collectingInterest
             </div>
           </div>
         </section>
-
-        {/* Dvoudenní speciál — hned pod hero pro maximální viditelnost */}
-        {weekend.length > 0 && (
-          <section id="dvoudenni" className="section-padding bg-gray-50 scroll-mt-24">
-            <div className="section-container">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className="text-center mb-10"
-              >
-                <h2 className="heading-2 text-gray-900 mb-3">
-                  Novinka: <span className="text-gradient">dvoudenní 3D tisk</span>
-                </h2>
-                <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                  Dvoudenní verze tábora (čtvrtek + pátek) — dva dny a víc prostoru na vlastní
-                  projekty. A když to vyjde jen na jeden den, klidně přijďte jen na jeden.
-                </p>
-              </motion.div>
-              <WeekendCampHighlight terms={weekend} program="3d-tisk" programTitle="3D tisk" />
-            </div>
-          </section>
-        )}
 
         {/* O programu */}
         <section id="program" className="section-padding bg-white scroll-mt-24">
@@ -438,40 +413,13 @@ export default function Tabor3DTiskClient({ open, openNoLink, collectingInterest
                 Termíny
               </h2>
               <p className="text-xl text-white/90 max-w-2xl mx-auto">
-                Jednodenní tábor 3D tisku, 9:00–17:00.
+                Jednodenní i dvoudenní 3D tisk, 9:00–17:00. Cena u každého termínu.
               </p>
               <p className="text-lg text-white/70 mt-2">
-                Cena: <span className="font-bold text-white">1 490 Kč</span> za den (vč. oběda a materiálů)
+                Jednodenní <span className="font-bold text-white">1 490 Kč</span> · dvoudenní{' '}
+                <span className="font-bold text-white">2 990 Kč</span> (vč. oběda a materiálů)
               </p>
             </motion.div>
-
-            {/* Odkaz na dvoudenní variantu (detail + registrace je nahoře) */}
-            {weekend.map((w) => (
-              <motion.a
-                key={w.id}
-                href="#dvoudenni"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className="max-w-3xl mx-auto mb-10 flex flex-col sm:flex-row sm:items-center gap-3 rounded-2xl bg-white/10 backdrop-blur-sm border border-cta-400/40 p-5 hover:bg-white/15 transition-colors group"
-              >
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cta-400 text-gray-900 text-xs font-bold self-start sm:self-center">
-                  NOVĚ
-                </span>
-                <div className="flex-1 min-w-0">
-                  <p className="text-white font-semibold">
-                    Dvoudenní 3D tisk — {w.weekendDateLabel}
-                  </p>
-                  <p className="text-white/70 text-sm">
-                    {w.price != null ? `${w.price.toLocaleString('cs-CZ')} Kč` : ''} · stačí i jen jeden den
-                  </p>
-                </div>
-                <span className="text-cta-300 font-semibold inline-flex items-center gap-2 whitespace-nowrap group-hover:translate-x-1 transition-transform self-start sm:self-center">
-                  Zobrazit detail
-                  <ArrowRight className="w-4 h-4" />
-                </span>
-              </motion.a>
-            ))}
 
             <TermsList
               program="3d-tisk"

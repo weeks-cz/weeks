@@ -9,6 +9,50 @@ import {
 } from '@/lib/analytics'
 import type { TermDisplay } from '@/lib/camps'
 
+const INFO_PHONE_LABEL = '+420 703 046 440'
+const INFO_PHONE_HREF = 'tel:+420703046440'
+const INFO_EMAIL = 'admin@weeks.cz'
+
+const DAY_NAMES = ['neděle', 'pondělí', 'úterý', 'středa', 'čtvrtek', 'pátek', 'sobota']
+
+function dayName(iso: string): string {
+  if (!iso) return ''
+  const d = new Date(iso + 'T12:00:00')
+  return Number.isNaN(d.getTime()) ? '' : DAY_NAMES[d.getDay()]
+}
+
+// Seznam názvů dní termínu (např. ['čtvrtek','pátek'])
+function enumerateDays(startIso: string, endIso: string): string[] {
+  const start = new Date(startIso + 'T12:00:00')
+  const end = new Date(endIso + 'T12:00:00')
+  if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) return []
+  const out: string[] = []
+  const d = new Date(start)
+  while (d.getTime() <= end.getTime() && out.length < 7) {
+    out.push(DAY_NAMES[d.getDay()])
+    d.setDate(d.getDate() + 1)
+  }
+  return out
+}
+
+function priceLabel(price: number | null): string {
+  if (price == null) return ''
+  return `${price.toLocaleString('cs-CZ')} Kč`
+}
+
+function daysWord(n: number): string {
+  return n >= 2 && n <= 4 ? 'dny' : 'dní'
+}
+
+interface AccentClasses {
+  badgeDot: string
+  badgePillBg: string
+  badgePillText: string
+  primaryBtnBg: string
+  inputRing: string
+  checkboxAccent: string
+}
+
 interface TermsListProps {
   program: '3d-tisk' | 'iot'
   programTitle: string
@@ -21,13 +65,29 @@ interface TermsListProps {
   accentClasses: AccentClasses
 }
 
-interface AccentClasses {
-  badgeDot: string
-  badgePillBg: string
-  badgePillText: string
-  primaryBtnBg: string
-  inputRing: string
-  checkboxAccent: string
+// Datum + případně počet dní (vícedenní) + cena — jednotná hlavička karty
+function TermHeading({ term }: { term: TermDisplay }) {
+  return (
+    <div className="min-w-0">
+      <div className="flex items-center gap-2">
+        <Calendar className="w-5 h-5 text-white/70 flex-shrink-0" />
+        <h4 className="text-lg font-bold text-white">{term.fullLabel}</h4>
+      </div>
+      <div className="mt-1.5 flex flex-wrap items-center gap-2">
+        {term.dayCount > 1 && (
+          <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-white/15 text-white text-xs font-semibold">
+            {term.dayCount} {daysWord(term.dayCount)}
+            {dayName(term.startDate) && dayName(term.endDate)
+              ? ` · ${dayName(term.startDate)}–${dayName(term.endDate)}`
+              : ''}
+          </span>
+        )}
+        {term.price != null && (
+          <span className="text-sm font-semibold text-white/90">{priceLabel(term.price)}</span>
+        )}
+      </div>
+    </div>
+  )
 }
 
 export function TermsList({
@@ -57,12 +117,9 @@ export function TermsList({
                 className="bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 overflow-hidden"
               >
                 <div className="p-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-2">
-                      <Calendar className="w-5 h-5 text-white/70" />
-                      <h4 className="text-lg font-bold text-white">{termin.fullLabel}</h4>
-                    </div>
-                    <span className={`px-3 py-1 rounded-full ${accentClasses.badgePillBg} ${accentClasses.badgePillText} text-xs font-semibold`}>
+                  <div className="flex items-start justify-between gap-2 mb-4">
+                    <TermHeading term={termin} />
+                    <span className={`px-3 py-1 rounded-full ${accentClasses.badgePillBg} ${accentClasses.badgePillText} text-xs font-semibold flex-shrink-0`}>
                       Otevřeno
                     </span>
                   </div>
@@ -82,12 +139,21 @@ export function TermsList({
                       termLocation: termin.location || 'HWLab Praha',
                       spotsAvailable: Math.max(0, termin.capacity - termin.enrolledCount),
                       outboundUrl: termin.registrationUrl!,
-                      campType: 'oneday',
+                      campType: termin.dayCount > 1 ? 'weekend' : 'oneday',
                     })}
                   >
                     Přihlásit se
                     <ArrowRight className="ml-2 w-4 h-4" />
                   </a>
+
+                  {termin.singleDayOption && (
+                    <SingleDayDisclosure
+                      term={termin}
+                      program={program}
+                      programTitle={programTitle}
+                      accentClasses={accentClasses}
+                    />
+                  )}
                 </div>
               </motion.div>
             ))}
@@ -117,12 +183,9 @@ export function TermsList({
                 className="bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 overflow-hidden"
               >
                 <div className="p-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-2">
-                      <Calendar className="w-5 h-5 text-white/70" />
-                      <h4 className="text-lg font-bold text-white">{termin.fullLabel}</h4>
-                    </div>
-                    <span className="px-3 py-1 rounded-full bg-cta-500/20 text-cta-300 text-xs font-semibold">
+                  <div className="flex items-start justify-between gap-2 mb-4">
+                    <TermHeading term={termin} />
+                    <span className="px-3 py-1 rounded-full bg-cta-500/20 text-cta-300 text-xs font-semibold flex-shrink-0">
                       Brzy otevřeme
                     </span>
                   </div>
@@ -135,6 +198,15 @@ export function TermsList({
                     accentClasses={accentClasses}
                     buttonLabel="Dejte mi vědět"
                   />
+
+                  {termin.singleDayOption && (
+                    <SingleDayDisclosure
+                      term={termin}
+                      program={program}
+                      programTitle={programTitle}
+                      accentClasses={accentClasses}
+                    />
+                  )}
                 </div>
               </motion.div>
             ))}
@@ -168,10 +240,7 @@ export function TermsList({
                     <span className="inline-block px-3 py-1 rounded-full bg-cta-500/20 text-cta-300 text-xs font-semibold mb-3">
                       Připravujeme
                     </span>
-                    <div className="flex items-center gap-2">
-                      <Calendar className="w-5 h-5 text-white/70 flex-shrink-0" />
-                      <h4 className="text-base font-bold text-white">{termin.fullLabel}</h4>
-                    </div>
+                    <TermHeading term={termin} />
                   </div>
 
                   <InterestForm
@@ -181,6 +250,15 @@ export function TermsList({
                     programTitle={programTitle}
                     accentClasses={accentClasses}
                   />
+
+                  {termin.singleDayOption && (
+                    <SingleDayDisclosure
+                      term={termin}
+                      program={program}
+                      programTitle={programTitle}
+                      accentClasses={accentClasses}
+                    />
+                  )}
                 </div>
               </motion.div>
             ))}
@@ -328,6 +406,134 @@ function InterestForm({
               {isSubmitting ? 'Odesílám...' : 'Odeslat'}
             </button>
           </motion.form>
+        </AnimatePresence>
+      )}
+    </div>
+  )
+}
+
+// Rozbalovací "Můžu přijít jen na jeden den?" — pro vícedenní termíny s povolenou
+// jednodenní účastí. Email + výběr konkrétního dne (z datumů) + kontakt.
+function SingleDayDisclosure({
+  term, program, programTitle, accentClasses,
+}: {
+  term: TermDisplay
+  program: '3d-tisk' | 'iot'
+  programTitle: string
+  accentClasses: AccentClasses
+}) {
+  const days = enumerateDays(term.startDate, term.endDate)
+  const [isOpen, setIsOpen] = useState(false)
+  const [email, setEmail] = useState('')
+  const [day, setDay] = useState(days[0] ?? '')
+  const [gdprConsent, setGdprConsent] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSubmitted, setIsSubmitted] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+    setError(null)
+    const termin = `${programTitle} ${term.weekendDateLabel} — jen jeden den (${day})`
+    try {
+      const response = await fetch('/api/waitlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, program, termin, gdprConsent }),
+      })
+      const data = await response.json()
+      if (!response.ok) throw new Error(data.error || 'Něco se pokazilo')
+      setIsSubmitted(true)
+      trackInterestSubmit({ programId: program, programTitle, termin, campType: 'oneday' })
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Nepodařilo se odeslat. Zkuste to znovu.')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  return (
+    <div className="mt-4 pt-4 border-t border-white/15">
+      {!isOpen ? (
+        <button
+          onClick={() => setIsOpen(true)}
+          className="inline-flex items-center gap-1.5 text-sm font-medium text-white/80 hover:text-white transition-colors"
+          aria-expanded={false}
+        >
+          <ChevronDown className="w-4 h-4" />
+          Můžu přijít jen na jeden den?
+        </button>
+      ) : isSubmitted ? (
+        <div className="p-4 bg-trust-50 border border-trust-200 rounded-xl text-center">
+          <Check className="w-6 h-6 text-trust-600 mx-auto mb-2" />
+          <p className="text-sm font-medium text-trust-800">Děkujeme! Ozveme se vám.</p>
+        </div>
+      ) : (
+        <AnimatePresence>
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <p className="text-xs text-white/60 mb-3">
+              Jasně — stačí přijít i jen na jeden den. Program dítěti přizpůsobíme.
+              Nechte nám email a den, ozveme se vám.
+            </p>
+            <form onSubmit={handleSubmit} className="space-y-3">
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="váš@email.cz"
+                className={`w-full px-4 py-2.5 rounded-lg border border-white/30 bg-white/10 text-white placeholder-white/40 focus:outline-none focus:ring-2 ${accentClasses.inputRing} text-sm`}
+                required
+              />
+              {days.length > 1 && (
+                <div className="flex flex-wrap gap-2">
+                  {days.map((d) => (
+                    <button
+                      type="button"
+                      key={d}
+                      onClick={() => setDay(d)}
+                      className={`flex-1 min-w-[5rem] px-3 py-2 rounded-lg text-sm font-medium border transition-colors ${day === d ? 'bg-white text-gray-900 border-white' : 'bg-white/10 text-white border-white/30 hover:border-white/60'}`}
+                    >
+                      {d.charAt(0).toUpperCase() + d.slice(1)}
+                    </button>
+                  ))}
+                </div>
+              )}
+              <div className="flex items-start gap-2">
+                <input
+                  type="checkbox"
+                  id={`gdpr-1d-${term.id}`}
+                  checked={gdprConsent}
+                  onChange={(e) => setGdprConsent(e.target.checked)}
+                  className={`mt-1 w-4 h-4 rounded border-white/30 bg-white/10 ${accentClasses.checkboxAccent}`}
+                  required
+                />
+                <label htmlFor={`gdpr-1d-${term.id}`} className="text-xs text-white/60 cursor-pointer">
+                  Souhlasím se{' '}
+                  <Link href="/gdpr" className="underline hover:text-white">
+                    zpracováním osobních údajů
+                  </Link>
+                </label>
+              </div>
+              {error && <p className="text-sm text-red-300">{error}</p>}
+              <button
+                type="submit"
+                disabled={isSubmitting || !gdprConsent || !email.trim()}
+                className={`w-full ${accentClasses.primaryBtnBg} text-white font-semibold py-2.5 px-4 rounded-xl transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed`}
+              >
+                {isSubmitting ? 'Odesílám...' : 'Napište nám'}
+              </button>
+            </form>
+            <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs text-white/60">
+              <a href={INFO_PHONE_HREF} className="hover:text-white">{INFO_PHONE_LABEL}</a>
+              <a href={`mailto:${INFO_EMAIL}`} className="hover:text-white">{INFO_EMAIL}</a>
+            </div>
+          </motion.div>
         </AnimatePresence>
       )}
     </div>

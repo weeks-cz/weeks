@@ -214,7 +214,7 @@ export function UpcomingTermsSection({ terms }: { terms: TermDisplay[] }) {
                   {term.price ? <span className="text-white/60 text-sm ml-2">{priceLabel(term.price)}</span> : null}
                 </div>
                 <Link
-                  href={`${meta.href}#dvoudenni`}
+                  href={`${meta.href}#terminy`}
                   className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/15 hover:bg-white/25 text-white font-semibold rounded-xl transition-colors text-sm flex-shrink-0 self-start md:self-auto"
                 >
                   Zjistit víc

@@ -36,6 +36,7 @@ export interface TermDisplay {
   campType: 'weekend' | 'oneday' | null
   startDate: string
   endDate: string
+  dayCount: number          // počet dní termínu (1 = jednodenní, 2+ = vícedenní)
   dayLabel: string | null
   status: CampRow['status']
   registrationUrl: string | null
@@ -95,12 +96,20 @@ function toDisplay(row: CampRow): TermDisplay {
   const dayLabel = row.day_label || ''
   const dateShortLabel = formatCzechDate(row.start_date, false)
   const dateLabel = formatCzechDate(row.start_date, true)
-  const weekendDateLabel = row.camp_type === 'weekend'
+  // Vícedenní = start != end (nezávisle na camp_type, ať to funguje obecně)
+  const isMultiDay = !!row.end_date && row.start_date !== row.end_date
+  const start = parseIsoDate(row.start_date)
+  const end = parseIsoDate(row.end_date)
+  const dayCount = start && end
+    ? Math.max(1, Math.round((end.getTime() - start.getTime()) / 86400000) + 1)
+    : 1
+  const weekendDateLabel = isMultiDay
     ? formatWeekendDate(row.start_date, row.end_date)
     : dateShortLabel
-  const fullLabel = dayLabel
-    ? `${capitalize(dayLabel)} ${dateShortLabel}`
-    : weekendDateLabel
+  // U vícedenních ber rozsah dat; u jednodenních den + datum
+  const fullLabel = isMultiDay
+    ? weekendDateLabel
+    : (dayLabel ? `${capitalize(dayLabel)} ${dateShortLabel}` : weekendDateLabel)
 
   return {
     id: row.web_source_id || row.id,
@@ -109,6 +118,7 @@ function toDisplay(row: CampRow): TermDisplay {
     campType: row.camp_type,
     startDate: row.start_date,
     endDate: row.end_date,
+    dayCount,
     dayLabel: row.day_label,
     status: row.status,
     registrationUrl: row.registration_url,
@@ -159,7 +169,6 @@ export async function getCampsForProgram(program: string): Promise<{
   openNoLink: TermDisplay[]        // open_no_link — confirmed but no URL yet
   collectingInterest: TermDisplay[] // collecting_interest — "Nezávazná registrace"
   full: TermDisplay[]              // full — "Plný"
-  weekend: TermDisplay[]           // camp_type === 'weekend' — rendered separately (2-day special)
   // Legacy combined views for components that don't care about the distinction
   confirmed: TermDisplay[]         // open_with_link (with DDM link)
   upcoming: TermDisplay[]          // open_no_link + collecting_interest
@@ -175,10 +184,8 @@ export async function getCampsForProgram(program: string): Promise<{
   const openNoLink: TermDisplay[] = []
   const collectingInterest: TermDisplay[] = []
   const full: TermDisplay[] = []
-  const weekend: TermDisplay[] = []
 
   for (const term of filtered) {
-    if (term.campType === 'weekend') { weekend.push(term); continue }
     if (term.status === 'full') full.push(term)
     else if (term.status === 'open_with_link' && term.registrationUrl) open.push(term)
     else if (term.status === 'open_no_link') openNoLink.push(term)
@@ -186,7 +193,7 @@ export async function getCampsForProgram(program: string): Promise<{
   }
 
   return {
-    open, openNoLink, collectingInterest, full, weekend,
+    open, openNoLink, collectingInterest, full,
     confirmed: open,
     upcoming: [...openNoLink, ...collectingInterest],
   }
