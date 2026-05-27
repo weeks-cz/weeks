@@ -119,6 +119,34 @@ export function trackRegistrationFormOpen(params: {
   })
 }
 
+export function trackInternalRegistrationSubmit(params: {
+  locationId: string
+  programId: string
+  programTitle: string
+  termId: string
+  termStart: string
+  termEnd: string
+  value: number
+}) {
+  sendGAEvent('event', 'internal_registration_submit', {
+    location_id: params.locationId,
+    program_id: params.programId,
+    program_title: params.programTitle,
+    term_id: params.termId,
+    term_start: params.termStart,
+    term_end: params.termEnd,
+    value: params.value,
+    currency: 'CZK',
+  })
+  fbqEvent('CompleteRegistration', {
+    content_name: params.programTitle,
+    content_category: params.locationId,
+    content_ids: params.programId,
+    value: params.value,
+    currency: 'CZK',
+  })
+}
+
 // Učebna nav link click — tracks how often visitors discover the IoT learning platform
 // from weeks.cz nav. Expected to be low (campers + lecturers only); high values would
 // suggest the link is mis-styled and pulling casual visitors away from the funnel.
