@@ -25,11 +25,18 @@ export async function POST(request: NextRequest) {
     const status = await getStatus(transId, cfg)
 
     const supabase = createServerClient()
-    const update: Record<string, unknown> = { payment_status: status }
+    // Translate the Comgate-domain status into the DB column vocabulary.
+    // DB CHECK: payment_status IN ('pending','completed','refunded');
+    //           status IN ('pending','paid','confirmed','cancelled').
+    const update: Record<string, unknown> = {}
     if (status === 'paid') {
+      update.payment_status = 'completed'
       update.status = 'paid'
       update.payment_method = 'comgate_bank_transfer'
       update.payment_completed_at = new Date().toISOString()
+    } else {
+      // pending or cancelled: keep payment_status 'pending' so the user can retry.
+      update.payment_status = 'pending'
     }
     await supabase.from('registrations').update(update).eq('id', registrationId)
 
