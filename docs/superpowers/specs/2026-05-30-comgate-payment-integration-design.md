@@ -87,16 +87,9 @@ Nově od `/platba/[id]`:
 - `src/components/registration/PaymentMock.tsx`
 
 ### Datový model — `registrations` (Supabase)
-Přidat sloupec `comgate_trans_id text`. Stávající sloupce (`payment_status`, `payment_method`, `payment_completed_at`, `status`) zůstávají.
+**OPRAVA (implementace 2026-05-30):** Žádný nový sloupec ani ruční SQL **není potřeba**. Migrace `supabase/migrations/010_registrations_kv.sql` (od týmu, součást KV expanze) už přidává `comgate_payment_id text` (+ partial unique index) a `comgate_status text`. Kód proto používá tyto existující sloupce — `comgate_payment_id` pro transId a `comgate_status` pro surový stav z Comgate. Stávající `payment_status`, `payment_method`, `payment_completed_at`, `status` zůstávají.
 
-**SQL k ručnímu spuštění** (tabulku spravuje weeks-hub — Lukáš spustí v Supabase SQL editoru):
-```sql
-alter table public.registrations
-  add column if not exists comgate_trans_id text;
-
-create index if not exists registrations_comgate_trans_id_idx
-  on public.registrations (comgate_trans_id);
-```
+(Původní návrh počítal s novým sloupcem `comgate_trans_id` + ručním SQL — to bylo při implementaci zrušeno jako zbytečné.)
 
 ---
 

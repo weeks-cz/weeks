@@ -486,7 +486,9 @@ git commit -m "feat(payment): trusted server-side price lookup"
 
 ---
 
-## Task 6: Manual SQL migration file
+## Task 6: Manual SQL migration file — OBSOLETE (column already exists)
+
+> **Correction (implementation):** The `registrations` table already has `comgate_payment_id` and `comgate_status` columns via `supabase/migrations/010_registrations_kv.sql`. No new column or manual SQL is needed. The code uses `comgate_payment_id` (transId) and `comgate_status` (raw Comgate status). The SQL file below was created then deleted; this task is a no-op.
 
 **Files:**
 - Create: `docs/superpowers/sql/2026-05-30-comgate-trans-id.sql`
