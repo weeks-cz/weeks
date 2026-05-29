@@ -5,6 +5,7 @@ export default defineConfig({
   test: {
     environment: 'node',
     include: ['src/**/*.test.ts'],
+    alias: { 'server-only': path.resolve(__dirname, 'src/lib/__mocks__/server-only.ts') },
   },
   resolve: {
     alias: { '@': path.resolve(__dirname, 'src') },
