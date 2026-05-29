@@ -25,6 +25,22 @@ export async function POST(request: NextRequest) {
     const status = await getStatus(transId, cfg)
 
     const supabase = createServerClient()
+
+    // Only act on the callback for the registration's CURRENT transaction. If the
+    // user cancelled and retried, a late callback for the superseded transId must
+    // not clobber the newer transaction's state. Acknowledge (code=0) but skip.
+    const { data: reg } = await supabase
+      .from('registrations')
+      .select('comgate_trans_id')
+      .eq('id', registrationId)
+      .single()
+    if (!reg || reg.comgate_trans_id !== transId) {
+      return new NextResponse('code=0&message=OK', {
+        status: 200,
+        headers: { 'Content-Type': 'text/plain' },
+      })
+    }
+
     // Translate the Comgate-domain status into the DB column vocabulary.
     // DB CHECK: payment_status IN ('pending','completed','refunded');
     //           status IN ('pending','paid','confirmed','cancelled').
@@ -34,8 +50,13 @@ export async function POST(request: NextRequest) {
       update.status = 'paid'
       update.payment_method = 'comgate_bank_transfer'
       update.payment_completed_at = new Date().toISOString()
+    } else if (status === 'cancelled') {
+      // Keep payment_status 'pending' (DB has no 'cancelled' for it) so a retry is
+      // possible; mark the order status cancelled for visibility. Safe now that the
+      // transId guard above prevents a stale callback from clobbering a paid retry.
+      update.payment_status = 'pending'
+      update.status = 'cancelled'
     } else {
-      // pending or cancelled: keep payment_status 'pending' so the user can retry.
       update.payment_status = 'pending'
     }
     await supabase.from('registrations').update(update).eq('id', registrationId)

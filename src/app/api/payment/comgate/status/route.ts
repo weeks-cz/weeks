@@ -19,6 +19,8 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Not found' }, { status: 404 })
   }
   // Normalize the DB columns to a UI-friendly value ('paid' | 'pending').
+  // status 'paid'/'confirmed' = order complete; payment_status 'completed' = bank
+  // transfer received. Anything else (incl. 'refunded') reads as not-yet-paid here.
   const paid =
     data.status === 'paid' || data.status === 'confirmed' || data.payment_status === 'completed'
   return NextResponse.json({ paymentStatus: paid ? 'paid' : 'pending' })
