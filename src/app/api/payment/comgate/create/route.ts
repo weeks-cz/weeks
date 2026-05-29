@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
 
     await supabase
       .from('registrations')
-      .update({ comgate_trans_id: transId, payment_status: 'pending' })
+      .update({ comgate_payment_id: transId, comgate_status: 'pending', payment_status: 'pending' })
       .eq('id', reg.id)
 
     return NextResponse.json({ redirectUrl: redirect })

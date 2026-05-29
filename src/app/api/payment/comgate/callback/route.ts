@@ -31,10 +31,10 @@ export async function POST(request: NextRequest) {
     // not clobber the newer transaction's state. Acknowledge (code=0) but skip.
     const { data: reg } = await supabase
       .from('registrations')
-      .select('comgate_trans_id')
+      .select('comgate_payment_id')
       .eq('id', registrationId)
       .single()
-    if (!reg || reg.comgate_trans_id !== transId) {
+    if (!reg || reg.comgate_payment_id !== transId) {
       return new NextResponse('code=0&message=OK', {
         status: 200,
         headers: { 'Content-Type': 'text/plain' },
@@ -45,6 +45,7 @@ export async function POST(request: NextRequest) {
     // DB CHECK: payment_status IN ('pending','completed','refunded');
     //           status IN ('pending','paid','confirmed','cancelled').
     const update: Record<string, unknown> = {}
+    update.comgate_status = status
     if (status === 'paid') {
       update.payment_status = 'completed'
       update.status = 'paid'
