@@ -89,7 +89,7 @@ const campFaqs = [
   },
   {
     question: 'Jak probíhá platba?',
-    answer: 'Platba probíhá bezpečně kartou online přímo při registraci. Fakturu obdržíte automaticky emailem.',
+    answer: 'Platba probíhá bezpečně zrychleným bankovním převodem přes platební bránu Comgate přímo při registraci. Daňový doklad obdržíte po zaplacení.',
   },
   {
     question: 'Kde přesně tábor probíhá?',
@@ -553,7 +553,7 @@ export default function LetniPrimestskyCampPage() {
                         <ArrowRight className="ml-2 w-5 h-5" />
                       </Link>
                       <p className="text-xs text-gray-500 text-center mt-3">
-                        5 kroků · platba kartou · faktura automaticky
+                        5 kroků · bankovní převod · faktura automaticky
                       </p>
                     </div>
                   </motion.div>

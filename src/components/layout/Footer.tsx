@@ -169,7 +169,7 @@ export function Footer() {
                 <p>
                   {location.organizer.fullName}
                   {' · '}
-                  Kováříkova 1145/11, 152 00 Praha 5
+                  Kováříkova 1145/11, Hlubočepy, 152 00 Praha 5
                 </p>
                 <p className="text-xs text-gray-500 mt-1">
                   Zapsán v živnostenském rejstříku Úřadu městské části Praha 5.

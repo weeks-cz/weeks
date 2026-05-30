@@ -111,9 +111,12 @@ export default function PodminkyPage() {
               <div className="bg-primary-50 p-6 rounded-lg border border-primary-200 mt-6">
                 <p className="text-primary-900 font-medium mb-2">Důležité upozornění</p>
                 <p className="text-primary-800 text-base">
-                  Tento Web <strong>není e-shop</strong> a neuskutečňují se na něm žádné přímé
-                  nákupy nebo platby. Registrace a přihlašování na kempy probíhá výhradně přes
-                  externí registrační systém DDM Praha 6.
+                  Registrace a platby pro tábory v Praze probíhají výhradně přes registrační systém
+                  DDM Praha 6. Online platby na tomto webu se týkají pouze táborů v Karlových Varech,
+                  pro které platí samostatné{' '}
+                  <Link href="/karlovy-vary/podminky" className="underline">obchodní podmínky</Link> a{' '}
+                  <Link href="/karlovy-vary/gdpr" className="underline">zásady ochrany osobních údajů</Link>,
+                  jejichž provozovatelem je Lukáš Kubík (IČ 24878511).
                 </p>
               </div>
             </section>

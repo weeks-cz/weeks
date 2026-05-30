@@ -4,9 +4,13 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Cookie, X } from 'lucide-react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 export function CookieConsent() {
   const [isVisible, setIsVisible] = useState(false)
+  const pathname = usePathname()
+  // Karlovy Vary má vlastní GDPR (provozovatel Lukáš Kubík); Praha používá /gdpr.
+  const gdprHref = pathname?.startsWith('/karlovy-vary') ? '/karlovy-vary/gdpr' : '/gdpr'
 
   useEffect(() => {
     const consent = localStorage.getItem('cookie-consent')
@@ -50,10 +54,10 @@ export function CookieConsent() {
                     Používáme cookies
                   </h3>
                   <p className="text-sm text-gray-600 mb-4">
-                    Tento web provozuje DDM Praha 6 a používá cookies pro zlepšení vašeho zážitku a analýzu návštěvnosti.
+                    Tento web používá cookies pro zlepšení vašeho zážitku a analýzu návštěvnosti.
                     Kliknutím na &quot;Přijmout vše&quot; souhlasíte s použitím všech cookies.
                     Více informací najdete v našich{' '}
-                    <Link href="/gdpr" className="text-primary-600 hover:underline">
+                    <Link href={gdprHref} className="text-primary-600 hover:underline">
                       zásadách ochrany osobních údajů
                     </Link>.
                   </p>

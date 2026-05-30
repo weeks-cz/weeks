@@ -66,6 +66,7 @@ export default function KVGDPRPage() {
               <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
                 <p className="text-gray-900 font-semibold mb-2">Lukáš Kubík</p>
                 <p className="text-gray-700 text-base mb-1">IČO: 24878511</p>
+                <p className="text-gray-700 text-base mb-1">Sídlo: Kováříkova 1145/11, Hlubočepy, 152 00 Praha 5</p>
                 <p className="text-gray-700 text-base mb-1">Projekt: Weeks – Letní příměstský tábor chytrých technologií</p>
                 <p className="text-gray-700 text-base mb-1">Email: info@weeks.cz</p>
                 <p className="text-gray-700 text-base">Web: weeks.cz/karlovy-vary</p>
@@ -206,6 +207,7 @@ export default function KVGDPRPage() {
                 <li><strong>Supabase</strong> – cloudová databáze pro uložení registračních dat (servery v EU)</li>
                 <li><strong>Formspree</strong> – zpracování kontaktních formulářů a zasílání emailů</li>
                 <li><strong>Vercel</strong> – hosting webové aplikace</li>
+                <li><strong>Comgate a.s.</strong> – provozovatel platební brány (zpracování platby), IČ 27924505</li>
               </ul>
               <p className="text-gray-700 mt-4">
                 Vaše údaje neprodáváme třetím stranám pro jejich marketingové účely.
