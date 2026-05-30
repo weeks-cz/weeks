@@ -71,7 +71,7 @@ export default function KVPodminkyPage() {
                 <p className="text-gray-900 font-semibold mb-3">Pořadatelem táborů je:</p>
                 <p className="text-gray-900 font-medium">Lukáš Kubík</p>
                 <p className="text-gray-700 mt-1">IČO: 24878511</p>
-                <p className="text-gray-700">Sídlo: Kováříkova 1145/11, Praha 5, 152 00</p>
+                <p className="text-gray-700">Sídlo: Kováříkova 1145/11, Hlubočepy, 152 00 Praha 5</p>
                 <p className="text-gray-700 mt-3">
                   Fyzická osoba podnikající na základě živnostenského oprávnění.
                 </p>
@@ -149,13 +149,11 @@ export default function KVPodminkyPage() {
               <h2 className="heading-3 text-gray-900 mb-4">6. Platební podmínky</h2>
               <div className="space-y-4">
                 <div className="bg-white p-5 rounded-lg border border-gray-200">
-                  <h3 className="text-base font-semibold text-gray-900 mb-2">6.1 Způsoby platby</h3>
-                  <p className="text-gray-700 text-base mb-2">Platbu lze provést prostřednictvím platební brány Comgate:</p>
-                  <ul className="list-disc pl-5 space-y-1 text-gray-700 text-base">
-                    <li>Platební kartou (VISA, Mastercard)</li>
-                    <li>Apple Pay / Google Pay</li>
-                    <li>Bankovním převodem</li>
-                  </ul>
+                  <h3 className="text-base font-semibold text-gray-900 mb-2">6.1 Způsob platby</h3>
+                  <p className="text-gray-700 text-base">
+                    Platba probíhá zrychleným bankovním převodem prostřednictvím platební brány Comgate.
+                    Po odeslání přihlášky budete přesměrováni na bránu, kde platbu dokončíte tlačítkem své banky.
+                  </p>
                 </div>
                 <div className="bg-white p-5 rounded-lg border border-gray-200">
                   <h3 className="text-base font-semibold text-gray-900 mb-2">6.2 Bankovní převod</h3>
@@ -174,6 +172,13 @@ export default function KVPodminkyPage() {
                   <p className="text-gray-700 text-base">
                     Daňový doklad bude zákonném zástupci zaslán e-mailem po přijetí platby.
                     Pořadatel není plátcem DPH.
+                  </p>
+                </div>
+                <div className="bg-white p-5 rounded-lg border border-gray-200">
+                  <h3 className="text-base font-semibold text-gray-900 mb-2">6.4 Provozovatel platební brány</h3>
+                  <p className="text-gray-700 text-base">
+                    Platební služby zajišťuje společnost <strong>Comgate a.s.</strong>, IČ: 27924505,
+                    DIČ: CZ27924505, se sídlem Gočárova třída 1754/48b, Pražské Předměstí, 500 02 Hradec Králové.
                   </p>
                 </div>
               </div>
@@ -286,7 +291,7 @@ export default function KVPodminkyPage() {
               </p>
               <p className="text-gray-700">
                 Podrobné informace o zpracování osobních údajů jsou dostupné na stránce{' '}
-                <Link href="/gdpr" className="text-primary-600 underline hover:text-primary-700">Ochrana osobních údajů (GDPR)</Link>.
+                <Link href="/karlovy-vary/gdpr" className="text-primary-600 underline hover:text-primary-700">Ochrana osobních údajů (GDPR)</Link>.
               </p>
             </section>
 
@@ -351,7 +356,7 @@ export default function KVPodminkyPage() {
               <div className="bg-primary-50 p-6 rounded-lg border border-primary-200">
                 <p className="text-primary-900 font-semibold mb-3">Weeks – IT tábory Karlovy Vary</p>
                 <p className="text-primary-800 mb-1"><strong>Pořadatel:</strong> Lukáš Kubík, IČO: 24878511</p>
-                <p className="text-primary-800 mb-1"><strong>Sídlo:</strong> Kováříkova 1145/11, Praha 5, 152 00</p>
+                <p className="text-primary-800 mb-1"><strong>Sídlo:</strong> Kováříkova 1145/11, Hlubočepy, 152 00 Praha 5</p>
                 <p className="text-primary-800 mb-1"><strong>Místo konání:</strong> FabLab v Kreativní Centrum Vary&amp;Te, Dykova, Stará Role, 360 17 Karlovy Vary</p>
                 <p className="text-primary-800 mb-1"><strong>E-mail:</strong> info@weeks.cz</p>
                 <p className="text-primary-800"><strong>Telefon:</strong> +420 703 046 440</p>

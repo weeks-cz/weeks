@@ -29,19 +29,35 @@ export function RegistrationConfirmation({ registrationId }: RegistrationConfirm
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
+    let cancelled = false
+    let attempts = 0
     async function fetchRegistration() {
       try {
         const response = await fetch(`/api/registration/${registrationId}`)
         if (!response.ok) throw new Error('Registrace nenalezena')
         const data = await response.json()
+        if (cancelled) return
         setRegistration(data.registration)
+        // The Comgate callback may still be in flight right after the user returns
+        // from the gateway. Re-poll a few times so the page flips to "paid" without
+        // a manual refresh.
+        const paid =
+          data.registration?.payment_status === 'completed' || data.registration?.status === 'paid'
+        if (!paid && attempts < 4) {
+          attempts += 1
+          setTimeout(fetchRegistration, 4000)
+        }
       } catch (err) {
+        if (cancelled) return
         setError(err instanceof Error ? err.message : 'Nepodařilo se načíst registraci')
       } finally {
-        setLoading(false)
+        if (!cancelled) setLoading(false)
       }
     }
     fetchRegistration()
+    return () => {
+      cancelled = true
+    }
   }, [registrationId])
 
   if (loading) {
@@ -89,7 +105,7 @@ export function RegistrationConfirmation({ registrationId }: RegistrationConfirm
         </h1>
         <p className="text-gray-600">
           {isPaid
-            ? `Potvrzení jsme odeslali na ${registration.parent_email}.`
+            ? 'Registraci i platbu jsme zaznamenali. Potvrzovací e-maily zatím nerozesíláme — s dotazy se ozvěte na info@weeks.cz.'
             : isPending
             ? 'Vaše registrace čeká na dokončení platby.'
             : 'Tato registrace byla zrušena.'}

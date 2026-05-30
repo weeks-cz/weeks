@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { isProtectedPath } from './lib/middleware-auth'
 
 // Basic auth pro KV preview-on-domain.
 //
@@ -7,21 +8,11 @@ import { NextRequest, NextResponse } from 'next/server'
 // /platba, /api/register, /api/payment/*). Vše ostatní (Praha homepage, /program,
 // /tabor-*, /o-nas atd.) zůstává veřejně přístupné.
 //
+// Veřejné výjimky (bez basic auth): KV právní stránky (/karlovy-vary/gdpr, /karlovy-vary/podminky)
+// a Comgate callback (/api/payment/comgate/callback — server-to-server, bez auth headeru).
+//
 // Až bude Comgate schválen a KV poputuje do veřejného launche, env vars se odstraní —
 // middleware projde bez ověření, KV bude veřejně dostupné.
-
-const PROTECTED_PREFIXES = [
-  '/karlovy-vary',
-  '/registrace',
-  '/platba',
-  '/api/register',
-  '/api/payment',
-  '/api/registration',
-]
-
-function isProtectedPath(pathname: string): boolean {
-  return PROTECTED_PREFIXES.some(prefix => pathname === prefix || pathname.startsWith(prefix + '/'))
-}
 
 export function middleware(request: NextRequest) {
   const user = process.env.PREVIEW_AUTH_USER
