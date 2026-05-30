@@ -34,10 +34,29 @@ export async function POST(request: NextRequest) {
       returnBaseUrl: origin,
     })
 
-    await supabase
+    // Diagnostic: is the service-role key reaching the function? (boolean only — no secret leak)
+    console.log('[comgate/create] hasServiceRole:', !!process.env.SUPABASE_SERVICE_ROLE_KEY, 'transId:', transId)
+
+    // Persist the transId — and VERIFY it actually wrote a row. A silent 0-row update
+    // (e.g. RLS blocking because the anon key is in use) must NOT proceed: that would
+    // mean the customer pays but we can never match the callback. Fail loudly instead.
+    const { data: updated, error: updateError } = await supabase
       .from('registrations')
       .update({ comgate_payment_id: transId, comgate_status: 'pending', payment_status: 'pending' })
       .eq('id', reg.id)
+      .select('id')
+
+    if (updateError || !updated || updated.length === 0) {
+      console.error('[comgate/create] failed to persist transId', {
+        updateError,
+        updatedCount: updated?.length ?? 0,
+        registrationId: reg.id,
+      })
+      return NextResponse.json(
+        { error: 'Payment init failed (could not persist transaction)' },
+        { status: 500 }
+      )
+    }
 
     return NextResponse.json({ redirectUrl: redirect })
   } catch (e) {
