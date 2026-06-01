@@ -12,6 +12,8 @@ import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { useLocation } from '@/contexts/LocationContext'
 import { buildPath } from '@/lib/locations'
+import { ProjectGallery } from '../_components/ProjectGallery'
+import { VenueShowcase } from '../_components/VenueShowcase'
 
 const weeklyDays = [
   {
@@ -164,13 +166,12 @@ export default function LetniPrimestskyCampPage() {
         <section className="relative pt-32 pb-20 overflow-hidden">
           <div className="absolute inset-0">
             <Image
-              src="/images/program-mix.webp"
-              alt="Letní příměstský tábor chytrých technologií Karlovy Vary"
+              src="/images/varyete/fablab-1.avif"
+              alt="FabLab Kreativního centra Vary&Te v Karlových Varech — 3D tisk"
               fill
               sizes="100vw"
               className="object-cover"
               priority
-              quality={75}
             />
             <div className="absolute inset-0 bg-gradient-to-r from-gray-900/95 via-gray-900/85 to-gray-900/60" />
             <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-gray-900/30" />
@@ -431,6 +432,9 @@ export default function LetniPrimestskyCampPage() {
           </div>
         </section>
 
+        {/* Kde to probíhá — Vary&Te FabLab */}
+        <VenueShowcase />
+
         {/* Praktické informace */}
         <section className="section-padding bg-gray-50">
           <div className="section-container">
@@ -488,6 +492,9 @@ export default function LetniPrimestskyCampPage() {
             </motion.div>
           </div>
         </section>
+
+        {/* Co si dítě odnese — galerie projektů */}
+        <ProjectGallery />
 
         {/* Registrace */}
         <section id="registrace" className="section-padding bg-gradient-to-br from-accent-600 to-primary-700 scroll-mt-24">

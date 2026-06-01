@@ -6,7 +6,10 @@ import { useLocation } from '@/contexts/LocationContext'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Sparkles, Clock, Users, MapPin, Calendar, ArrowRight, Utensils, Laptop, Cpu, Printer, ChevronDown } from 'lucide-react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useState } from 'react'
+import { ProjectGallery } from '../_components/ProjectGallery'
+import { VenueShowcase } from '../_components/VenueShowcase'
 
 const sobotaProgram = [
   { time: '8:30', title: 'Příchod dětí', description: '' },
@@ -58,18 +61,94 @@ export default function KVMix() {
       <Header />
       <main className="pt-20">
         {/* Hero */}
-        <section className="relative py-20 bg-gradient-to-br from-accent-600 to-accent-800 overflow-hidden">
+        <section className="relative pt-32 pb-20 overflow-hidden">
+          <div className="absolute inset-0">
+            <Image
+              src="/images/varyete/fablab-5.avif"
+              alt="FabLab Kreativního centra Vary&Te v Karlových Varech"
+              fill
+              sizes="100vw"
+              className="object-cover"
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-gray-900/95 via-gray-900/85 to-gray-900/60" />
+            <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-gray-900/30" />
+          </div>
+
           <div className="section-container relative z-10">
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-              <span className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full text-white/90 text-sm font-medium mb-6 backdrop-blur-sm border border-white/20">
-                <Sparkles className="w-4 h-4" />
-                Víkendový tábor
-              </span>
-              <h1 className="heading-1 text-white mb-4">Tábor chytrých technologií</h1>
-              <p className="text-xl text-white/80 max-w-2xl">
-                So + Ne: 3D tisk, IoT, virtuální realita a základy programování.
-              </p>
-            </motion.div>
+            <div className="max-w-3xl">
+              <motion.span
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full text-white/90 text-sm font-medium mb-6 backdrop-blur-sm border border-white/20"
+              >
+                <Sparkles className="w-4 h-4 text-cta-400" />
+                Víkendový tábor · So + Ne
+              </motion.span>
+              <motion.h1
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+                className="font-display text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white mb-6 leading-[1.1]"
+              >
+                Tábor chytrých{' '}
+                <span className="bg-gradient-to-r from-accent-400 via-primary-400 to-accent-400 bg-clip-text text-transparent">
+                  technologií
+                </span>
+              </motion.h1>
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.15 }}
+                className="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl leading-relaxed"
+              >
+                Za jeden víkend si vaše dítě vyzkouší 3D tisk, virtuální realitu i&nbsp;IoT
+                s&nbsp;Arduinem — ve FabLabu Vary&amp;Te v&nbsp;Karlových Varech.{' '}
+                <span className="text-white font-medium">A vlastní projekty si odnese domů.</span>
+              </motion.p>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="flex flex-col sm:flex-row gap-4"
+              >
+                <Link
+                  href="#terminy"
+                  className="group inline-flex items-center justify-center px-8 py-4 bg-cta-500 hover:bg-cta-400 text-gray-900 font-semibold rounded-xl transition-all duration-300 hover:shadow-xl hover:shadow-cta-500/30 hover:-translate-y-0.5"
+                >
+                  Zobrazit termíny
+                  <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </Link>
+                <Link
+                  href="/karlovy-vary/kontakt"
+                  className="inline-flex items-center justify-center px-8 py-4 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white font-semibold rounded-xl border border-white/20 transition-all duration-300"
+                >
+                  Máte dotazy?
+                </Link>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.4 }}
+                className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-3"
+              >
+                {[
+                  { icon: Calendar, label: '2 dny', sublabel: 'So + Ne' },
+                  { icon: Clock, label: '9:00–16:30', sublabel: 'oba dny' },
+                  { icon: Users, label: `Max ${program.capacity}`, sublabel: 'dětí' },
+                  { icon: Utensils, label: 'Obědy', sublabel: 'v ceně' },
+                ].map((fact, i) => (
+                  <div key={i} className="flex items-center gap-3 p-3 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10">
+                    <fact.icon className="w-5 h-5 text-accent-400 flex-shrink-0" />
+                    <div>
+                      <p className="text-sm font-semibold text-white">{fact.label}</p>
+                      <p className="text-xs text-gray-400">{fact.sublabel}</p>
+                    </div>
+                  </div>
+                ))}
+              </motion.div>
+            </div>
           </div>
         </section>
 
@@ -254,6 +333,12 @@ export default function KVMix() {
             </AnimatePresence>
           </div>
         </section>
+
+        {/* Kde to probíhá — Vary&Te FabLab */}
+        <VenueShowcase />
+
+        {/* Co si dítě odnese — galerie projektů */}
+        <ProjectGallery />
 
         {/* Terms */}
         <section id="terminy" className="section-padding bg-gray-50">
