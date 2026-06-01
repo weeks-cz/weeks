@@ -36,7 +36,7 @@ const baseFaqs = [
   },
   {
     question: 'Co když se dítěti kemp nebude líbit?',
-    answer: 'Pokud dítě první den rozhodne, že to není pro něj, vrátíme 50% ceny. Naším cílem je, aby se děti bavily a učily se zároveň - pokud to nefunguje, nechceme nikoho nutit.',
+    answer: 'Mrzelo by nás to — ozvěte se nám a společně najdeme řešení. Vrácení peněz a storno se řídí storno podmínkami v našich obchodních podmínkách (VOP); v případě nemoci doložené lékařským potvrzením řešíme situaci individuálně.',
   },
   {
     type: 'location',

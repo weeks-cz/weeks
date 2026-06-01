@@ -69,7 +69,8 @@ const dailySchedule = [
   { time: '14:00', title: 'Odpolední blok', description: 'Pokračování práce na projektech, nová témata nebo kreativní výzvy.' },
   { time: '15:00', title: 'Přestávka', description: 'Odpolední pauza a svačina.' },
   { time: '15:15', title: 'Tvůrčí práce', description: 'Samostatná práce na vlastním projektu, individuální přístup lektorů.' },
-  { time: '16:00', title: 'Postupný odchod', description: 'Shrnutí dne, prostor pro dotazy rodičů.' },
+  { time: '16:00', title: 'Dokončení a úklid', description: 'Dokončení projektů, úklid pracoviště a shrnutí dne.' },
+  { time: '17:00', title: 'Postupný odchod', description: 'Prostor pro dotazy rodičů.' },
 ]
 
 const campFaqs = [
@@ -202,7 +203,7 @@ export default function LetniPrimestskyCampPage() {
                 <Sparkles className="w-4 h-4 text-cta-400" />
                 <span>Pondělí – Pátek</span>
                 <span className="w-px h-4 bg-white/30" />
-                <span className="text-cta-400">8:00 – 16:00</span>
+                <span className="text-cta-400">8:00 – 17:00</span>
               </motion.div>
 
               <motion.h1
@@ -258,7 +259,7 @@ export default function LetniPrimestskyCampPage() {
               >
                 {[
                   { icon: Calendar, label: '5 dní', sublabel: 'Po – Pá' },
-                  { icon: Clock, label: '8:00–16:00', sublabel: 'každý den' },
+                  { icon: Clock, label: '8:00–17:00', sublabel: 'každý den' },
                   { icon: Users, label: 'Max 15', sublabel: 'dětí' },
                   { icon: Utensils, label: 'Obědy', sublabel: 'v ceně' },
                 ].map((fact, i) => (
@@ -401,7 +402,7 @@ export default function LetniPrimestskyCampPage() {
                 Typický <span className="text-gradient">den tábora</span>
               </h2>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                Střídáme tvoření, přestávky a venkovní aktivity. Rodiče mají klid — děti jsou v rukou zkušených lektorů od 8:00 do 16:00.
+                Střídáme tvoření, přestávky a venkovní aktivity. Rodiče mají klid — děti jsou v rukou zkušených lektorů od 8:00 do 17:00.
               </p>
             </motion.div>
 
@@ -411,7 +412,7 @@ export default function LetniPrimestskyCampPage() {
                   <Clock className="w-6 h-6 text-white" />
                   <div>
                     <h3 className="text-lg font-bold text-white">Denní harmonogram</h3>
-                    <p className="text-sm text-white/80">Pondělí – Pátek, 8:00 – 16:00</p>
+                    <p className="text-sm text-white/80">Pondělí – Pátek, 8:00 – 17:00</p>
                   </div>
                 </div>
               </div>

@@ -133,9 +133,9 @@ export default function KVPodminkyPage() {
                   <p className="text-sm text-primary-700 mt-1">So + Ne, oběd v ceně</p>
                 </div>
                 <div className="bg-primary-50 p-5 rounded-lg border border-primary-200">
-                  <p className="font-semibold text-primary-900 mb-1">Jednodenní tábor</p>
-                  <p className="text-2xl font-bold text-primary-900">1 490 Kč</p>
-                  <p className="text-sm text-primary-700 mt-1">So nebo Ne, oběd v ceně</p>
+                  <p className="font-semibold text-primary-900 mb-1">Letní příměstský tábor</p>
+                  <p className="text-2xl font-bold text-primary-900">4 990 Kč</p>
+                  <p className="text-sm text-primary-700 mt-1">Po–Pá (celý týden), oběd v ceně</p>
                 </div>
               </div>
               <p className="text-gray-600 text-sm mt-4">
@@ -384,8 +384,7 @@ export default function KVPodminkyPage() {
               <h2 className="heading-3 text-gray-900 mb-4">15. Kontakt</h2>
               <div className="bg-primary-50 p-6 rounded-lg border border-primary-200">
                 <p className="text-primary-900 font-semibold mb-3">Weeks – IT tábory Karlovy Vary</p>
-                <p className="text-primary-800 mb-1"><strong>Pořadatel:</strong> Lukáš Kubík, IČO: 24878511</p>
-                <p className="text-primary-800 mb-1"><strong>Sídlo:</strong> Kováříkova 1145/11, Hlubočepy, 152 00 Praha 5</p>
+                <p className="text-primary-800 mb-1"><strong>Pořadatel:</strong> Lukáš Kubík, IČO: 24878511 (úplná adresa sídla v čl. 1)</p>
                 <p className="text-primary-800 mb-1"><strong>Místo konání:</strong> FabLab v Kreativní Centrum Vary&amp;Te, Dykova, Stará Role, 360 17 Karlovy Vary</p>
                 <p className="text-primary-800 mb-1"><strong>E-mail:</strong> info@weeks.cz</p>
                 <p className="text-primary-800"><strong>Telefon:</strong> +420 703 046 440</p>

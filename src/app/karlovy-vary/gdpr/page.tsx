@@ -66,7 +66,6 @@ export default function KVGDPRPage() {
               <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
                 <p className="text-gray-900 font-semibold mb-2">Lukáš Kubík</p>
                 <p className="text-gray-700 text-base mb-1">IČO: 24878511</p>
-                <p className="text-gray-700 text-base mb-1">Sídlo: Kováříkova 1145/11, Hlubočepy, 152 00 Praha 5</p>
                 <p className="text-gray-700 text-base mb-1">Projekt: Weeks – Letní příměstský tábor chytrých technologií</p>
                 <p className="text-gray-700 text-base mb-1">Email: info@weeks.cz</p>
                 <p className="text-gray-700 text-base">Web: weeks.cz/karlovy-vary</p>

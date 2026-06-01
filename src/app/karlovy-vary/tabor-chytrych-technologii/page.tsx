@@ -12,32 +12,34 @@ import { ProjectGallery } from '../_components/ProjectGallery'
 import { VenueShowcase } from '../_components/VenueShowcase'
 
 const sobotaProgram = [
-  { time: '8:30', title: 'Příchod dětí', description: '' },
-  { time: '9:00', title: 'Seznámení a úvod', description: 'Představení lektorů, organizační info a úvod do programu tábora.' },
-  { time: '9:30', title: '3D tisk – teorie', description: 'Základní principy fungování tiskárny, jak najít model online a základy přípravy pro tisk.' },
-  { time: '10:00', title: '3D tisk – praxe', description: 'Praktické ovládání tiskárny, spuštění prvních tisků od začátku do konce.' },
-  { time: '10:30', title: 'Přestávka', description: 'Svačina a pití.' },
-  { time: '10:45', title: 'Virtuální realita', description: 'VR headsety, interaktivní výzvy a zážitky.' },
+  { time: '9:00', title: 'Příchod dětí', description: '' },
+  { time: '9:15', title: 'Seznámení a úvod', description: 'Představení lektorů, organizační info a úvod do programu tábora.' },
+  { time: '9:45', title: '3D tisk – teorie', description: 'Základní principy fungování tiskárny, jak najít model online a základy přípravy pro tisk.' },
+  { time: '10:15', title: '3D tisk – praxe', description: 'Praktické ovládání tiskárny, spuštění prvních tisků od začátku do konce.' },
+  { time: '10:45', title: 'Přestávka', description: 'Svačina a pití.' },
+  { time: '11:00', title: 'Virtuální realita', description: 'VR headsety, interaktivní výzvy a zážitky.' },
   { time: '12:00', title: 'Oběd', description: 'Zajištěný oběd pro všechny účastníky.' },
   { time: '13:00', title: 'Poobědová pauza', description: 'Venkovní aktivita (v případě špatného počasí organizovaný program uvnitř).' },
   { time: '14:00', title: 'Návrh vlastního modelu', description: 'Základy modelování v jednoduchém programu, tisk vymodelovaného objektu.' },
   { time: '15:00', title: 'Přestávka', description: 'Odpolední pauza.' },
   { time: '15:15', title: '3D tisk – samostatná práce', description: 'Samostatné modelování, individuální příprava tisku pro vlastní objekty.' },
-  { time: '16:30', title: 'Postupný odchod', description: 'Prostor pro dotazy rodičů.' },
+  { time: '16:30', title: 'Dokončení a úklid', description: 'Dokončení projektů a úklid pracoviště.' },
+  { time: '17:00', title: 'Postupný odchod', description: 'Prostor pro dotazy rodičů.' },
 ]
 
 const nedeleProgram = [
-  { time: '8:30', title: 'Příchod dětí', description: '' },
-  { time: '9:00', title: 'Kontrola a vyjmutí tisků', description: 'Prohlídka modelů vytištěných přes noc.' },
-  { time: '9:30', title: 'Úvod do IoT', description: 'Co je to IoT a k čemu slouží. Seznámení s Arduinem.' },
-  { time: '10:30', title: 'Přestávka', description: 'Svačina a pití.' },
-  { time: '10:45', title: 'Arduino I', description: 'Seznámení s Arduinem, první Arduino projekt.' },
+  { time: '9:00', title: 'Příchod dětí', description: '' },
+  { time: '9:15', title: 'Kontrola a vyjmutí tisků', description: 'Prohlídka modelů vytištěných přes noc.' },
+  { time: '9:45', title: 'Úvod do IoT', description: 'Co je to IoT a k čemu slouží. Seznámení s Arduinem.' },
+  { time: '10:45', title: 'Přestávka', description: 'Svačina a pití.' },
+  { time: '11:00', title: 'Arduino I', description: 'Seznámení s Arduinem, první Arduino projekt.' },
   { time: '12:00', title: 'Oběd', description: 'Zajištěný oběd pro všechny účastníky.' },
   { time: '13:00', title: 'Poobědová pauza', description: 'Venkovní aktivita (v případě špatného počasí organizovaný program uvnitř).' },
   { time: '14:00', title: 'Arduino II', description: 'Pokračování s Arduino projekty.' },
   { time: '15:00', title: 'Přestávka', description: 'Odpolední pauza.' },
   { time: '15:15', title: 'IoT zařízení', description: 'Výroba chytrého zařízení, které si děti odnesou domů.' },
-  { time: '16:30', title: 'Postupný odchod', description: 'Předání vytisknutých modelů, prostor pro dotazy rodičů.' },
+  { time: '16:30', title: 'Dokončení a předání', description: 'Předání vytisknutých modelů a vlastního IoT zařízení.' },
+  { time: '17:00', title: 'Postupný odchod', description: 'Prostor pro dotazy rodičů.' },
 ]
 
 const campFaqs = [
@@ -135,7 +137,7 @@ export default function KVMix() {
               >
                 {[
                   { icon: Calendar, label: '2 dny', sublabel: 'So + Ne' },
-                  { icon: Clock, label: '9:00–16:30', sublabel: 'oba dny' },
+                  { icon: Clock, label: '9:00–17:00', sublabel: 'oba dny' },
                   { icon: Users, label: `Max ${program.capacity}`, sublabel: 'dětí' },
                   { icon: Utensils, label: 'Obědy', sublabel: 'v ceně' },
                 ].map((fact, i) => (
@@ -180,7 +182,7 @@ export default function KVMix() {
                   <div className="space-y-3">
                     <div className="flex items-center gap-3 text-gray-600">
                       <Clock className="w-5 h-5 text-accent-500" />
-                      <span>So 9:00 – Ne 16:00 (víkendový program)</span>
+                      <span>So + Ne, 9:00–17:00 (oba dny)</span>
                     </div>
                     <div className="flex items-center gap-3 text-gray-600">
                       <Users className="w-5 h-5 text-accent-500" />
@@ -261,7 +263,7 @@ export default function KVMix() {
                   <Clock className="w-5 h-5 text-accent-600" />
                 </div>
                 <h3 className="font-semibold text-gray-900 mb-3">Čas</h3>
-                <p className="text-sm text-gray-600">Sobota + neděle. Příchod od 8:30, program 9:00–16:30 oba dny.</p>
+                <p className="text-sm text-gray-600">Sobota + neděle. Program 9:00–17:00 oba dny.</p>
               </motion.div>
             </div>
           </div>

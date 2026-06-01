@@ -166,13 +166,10 @@ export function Footer() {
               <FileText className="w-5 h-5 text-primary-500 shrink-0 mt-0.5" />
               <div className="text-sm text-gray-400 leading-relaxed">
                 <p className="text-gray-300 font-medium mb-1">Provozovatel</p>
-                <p>
-                  {location.organizer.fullName}
-                  {' · '}
-                  Kováříkova 1145/11, Hlubočepy, 152 00 Praha 5
-                </p>
+                <p>{location.organizer.fullName}</p>
                 <p className="text-xs text-gray-500 mt-1">
-                  Zapsán v živnostenském rejstříku Úřadu městské části Praha 5.
+                  Úplné kontaktní a fakturační údaje najdete v{' '}
+                  <Link href={buildPath(location, 'podminky')} className="underline hover:text-gray-300">obchodních podmínkách</Link>.
                 </p>
               </div>
             </div>

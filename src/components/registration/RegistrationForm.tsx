@@ -94,10 +94,6 @@ export function RegistrationForm() {
         setFieldErrors({ pickup_time: ['Uveďte plánovaný čas odchodu'] })
         return false
       }
-      if (pickup.pickup_method === 'named_persons' && !pickup.pickup_persons.trim()) {
-        setFieldErrors({ pickup_persons: ['Uveďte osoby oprávněné k vyzvednutí'] })
-        return false
-      }
     } else if (step === 4) {
       const result = consentsSchema.safeParse(consents)
       if (!result.success) {
@@ -376,7 +372,7 @@ export function RegistrationForm() {
                       onChange={e => setPickup({ ...pickup, pickup_time: e.target.value })}
                       className={inputClass('pickup_time')}
                       min="08:00"
-                      max="16:00"
+                      max="17:00"
                     />
                     <p className="text-xs text-gray-500 mt-1">Standardně dítě odchází po skončení programu. Čas vyberte, jen pokud má odejít dříve.</p>
                     <FieldError name="pickup_time" />
@@ -385,7 +381,7 @@ export function RegistrationForm() {
 
                 {pickup.pickup_method === 'named_persons' && (
                   <motion.div key="pickup-persons" initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}>
-                    <label htmlFor="pickup_persons" className="block text-sm font-medium text-gray-700 mb-1">Osoby oprávněné k vyzvednutí *</label>
+                    <label htmlFor="pickup_persons" className="block text-sm font-medium text-gray-700 mb-1">Kdo smí dítě vyzvednout? (nepovinné)</label>
                     <textarea
                       id="pickup_persons"
                       value={pickup.pickup_persons}
@@ -394,7 +390,7 @@ export function RegistrationForm() {
                       rows={3}
                       placeholder={'Jana Nováková, +420 601 111 222\nPetr Novák, +420 602 333 444'}
                     />
-                    <p className="text-xs text-gray-500 mt-1">Jméno a telefon každé osoby na samostatný řádek. Zákonný zástupce je oprávněn vždy.</p>
+                    <p className="text-xs text-gray-500 mt-1">Zákonný zástupce smí dítě vyzvednout vždy. Vyplňte, jen pokud bude dítě vyzvedávat někdo jiný — jméno a telefon každé osoby na samostatný řádek.</p>
                     <FieldError name="pickup_persons" />
                   </motion.div>
                 )}

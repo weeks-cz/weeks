@@ -214,19 +214,19 @@ export const LOCATIONS: Record<string, Location> = {
         description: 'Vaše dítě pracuje ve FabLabu — průmyslové 3D tiskárny, VR headsety a pokročilá IoT zařízení. Profesionální zázemí největšího kreativního centra v kraji.',
       },
       schedule: {
-        title: 'Kompletní servis od 8 do 16',
+        title: 'Kompletní servis od 8 do 17',
         description: 'Celý týden oběd, přestávky a střídání aktivit. Rodiče mají klid, děti mají postaráno o vše.',
       },
     },
     safetyFeatures: [
-      { title: 'Pojištění účastníků', description: 'Komplexní pojištění' },
+      { title: 'Bezpečné prostředí', description: 'Stálý dohled lektorů' },
       { title: 'Malé skupiny', description: '1 lektor na 5 dětí' },
       { title: 'Okamžitý kontakt', description: 'Rodič vždy informován' },
       { title: 'Proškolení lektoři', description: 'Kurz první pomoci' },
     ],
     faq: {
       locationAnswer: 'Tábor probíhá ve FabLab v Kreativním centru Vary&Te, Dykova, Stará Role, Karlovy Vary — největším kreativním centru v Karlovarském kraji s profesionálním FabLabem a GameDev arenou.',
-      organizerAnswer: 'Tábory v Karlových Varech organizuje Lukáš Kubík (Weeks) ve spolupráci s Kreativním centrem Vary&Te.',
+      organizerAnswer: 'Tábory v Karlových Varech organizuje Weeks ve spolupráci s Kreativním centrem Vary&Te.',
     },
     availablePages: ['', 'letni-primestsky', 'tabor-chytrych-technologii', 'o-nas', 'gdpr', 'podminky', 'kontakt'],
   },
