@@ -69,6 +69,7 @@ export function RegistrationForm() {
   })
 
   const vopUrl = locationId === 'karlovy-vary' ? '/karlovy-vary/podminky' : '/podminky'
+  const gdprUrl = locationId === 'karlovy-vary' ? '/karlovy-vary/gdpr' : '/gdpr'
 
   function validateStep(): boolean {
     setFieldErrors({})
@@ -420,7 +421,7 @@ export function RegistrationForm() {
                   <input type="checkbox" id="gdpr" checked={consents.gdpr_consent as boolean} onChange={e => setConsents({...consents, gdpr_consent: e.target.checked as unknown as true})} className="mt-1 w-5 h-5 shrink-0 rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
                   <label htmlFor="gdpr" className="text-sm text-gray-700">
                     Souhlasím se{' '}
-                    <Link href="/gdpr" target="_blank" className="text-primary-600 underline hover:text-primary-700">zpracováním osobních údajů</Link>
+                    <Link href={gdprUrl} target="_blank" className="text-primary-600 underline hover:text-primary-700">zpracováním osobních údajů</Link>
                     {' '}*
                   </label>
                 </div>
@@ -495,7 +496,7 @@ export function RegistrationForm() {
                   Odesláním registrace potvrzujete souhlas s{' '}
                   <Link href={vopUrl} target="_blank" className="underline">VOP</Link>{' '}
                   a{' '}
-                  <Link href="/gdpr" target="_blank" className="underline">zpracováním osobních údajů</Link>.
+                  <Link href={gdprUrl} target="_blank" className="underline">zpracováním osobních údajů</Link>.
                   Po odeslání budete přesměrováni na platbu.
                 </p>
               </div>
