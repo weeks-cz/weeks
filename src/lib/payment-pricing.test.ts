@@ -13,8 +13,8 @@ describe('getTrustedPriceKc', () => {
 
 describe('getTrustedCapacity', () => {
   it('returns the configured capacity for known KV programs', () => {
-    expect(getTrustedCapacity('karlovy-vary', 'mix')).toBe(12)
-    expect(getTrustedCapacity('karlovy-vary', 'letni-primestsky')).toBe(12)
+    expect(getTrustedCapacity('karlovy-vary', 'mix')).toBe(15)
+    expect(getTrustedCapacity('karlovy-vary', 'letni-primestsky')).toBe(15)
   })
   it('throws for an unknown program (never silently default capacity)', () => {
     expect(() => getTrustedCapacity('karlovy-vary', 'nonexistent')).toThrow()

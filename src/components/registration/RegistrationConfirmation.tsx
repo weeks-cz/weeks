@@ -168,7 +168,10 @@ export function RegistrationConfirmation({ registrationId }: RegistrationConfirm
             {isPending ? 'Dokončit platbu' : 'Zkusit platbu znovu'}
           </Link>
         )}
-        <Link href="/" className="btn-outline">
+        <Link
+          href={registration.location_id && registration.location_id !== 'praha' ? `/${registration.location_id}` : '/'}
+          className="btn-outline"
+        >
           Zpět na hlavní stránku
         </Link>
       </div>

@@ -53,7 +53,7 @@ const baseFaqs = [
 const kvFaqOverrides: Record<number, { question: string; answer: string }> = {
   3: {
     question: 'Kolik stojí letní příměstský tábor?',
-    answer: 'Letní příměstský tábor chytrých technologií stojí 7 490 Kč za celý týden (pondělí–pátek, přibližně 40 hodin programu). Cena zahrnuje materiály pro všechny projekty, svačiny i obědy. Vše, co děti vytvoří, si odnášejí domů.',
+    answer: 'Letní příměstský tábor chytrých technologií stojí 4 990 Kč za celý týden (pondělí–pátek, přibližně 40 hodin programu). Cena zahrnuje materiály pro všechny projekty i obědy. Vše, co děti vytvoří, si odnášejí domů.',
   },
   4: {
     question: 'Jak probíhá příměstský tábor?',

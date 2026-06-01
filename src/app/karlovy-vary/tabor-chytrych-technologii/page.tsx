@@ -358,6 +358,8 @@ export default function KVMix() {
                       <Calendar className="w-5 h-5 text-accent-500" />
                       <span className="font-semibold text-gray-900">
                         {new Date(term.startDate).toLocaleDateString('cs-CZ', { day: 'numeric', month: 'long' })}
+                        {' – '}
+                        {new Date(term.endDate).toLocaleDateString('cs-CZ', { day: 'numeric', month: 'long' })}
                       </span>
                     </div>
                     <p className="text-sm text-gray-500 mb-4">So + Ne · {venue.name}</p>

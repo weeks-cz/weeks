@@ -130,16 +130,16 @@ export default function KVPodminkyPage() {
                 <div className="bg-primary-50 p-5 rounded-lg border border-primary-200">
                   <p className="font-semibold text-primary-900 mb-1">MIX – Víkendový tábor</p>
                   <p className="text-2xl font-bold text-primary-900">2 990 Kč</p>
-                  <p className="text-sm text-primary-700 mt-1">So + Ne, oběd a svačiny v ceně</p>
+                  <p className="text-sm text-primary-700 mt-1">So + Ne, oběd v ceně</p>
                 </div>
                 <div className="bg-primary-50 p-5 rounded-lg border border-primary-200">
                   <p className="font-semibold text-primary-900 mb-1">Jednodenní tábor</p>
                   <p className="text-2xl font-bold text-primary-900">1 490 Kč</p>
-                  <p className="text-sm text-primary-700 mt-1">So nebo Ne, oběd a svačiny v ceně</p>
+                  <p className="text-sm text-primary-700 mt-1">So nebo Ne, oběd v ceně</p>
                 </div>
               </div>
               <p className="text-gray-600 text-sm mt-4">
-                V ceně tábora jsou zahrnuty: odborné vedení, materiál a pomůcky, oběd a svačiny.
+                V ceně tábora jsou zahrnuty: odborné vedení, materiál a pomůcky, oběd.
                 Doprava na místo konání a zpět není součástí ceny.
               </p>
             </section>
@@ -263,7 +263,7 @@ export default function KVPodminkyPage() {
               <ul className="list-disc pl-6 space-y-2 text-gray-700">
                 <li>Zajistit odborné vedení tábora kvalifikovanými lektory</li>
                 <li>Zajistit bezpečné prostředí odpovídající charakteru aktivit</li>
-                <li>Zajistit oběd a svačiny po dobu tábora</li>
+                <li>Zajistit oběd po dobu tábora</li>
                 <li>Informovat zákonné zástupce o průběhu tábora při zjištění nestandardní situace</li>
                 <li>Zachovávat mlčenlivost o osobních údajích účastníků v souladu s GDPR</li>
                 <li>Odmítnout účast dítěti, které svým chováním ohrožuje bezpečnost nebo výuku ostatních</li>
@@ -283,6 +283,19 @@ export default function KVPodminkyPage() {
                 <li>Respektovat pokyny lektorů a organizačního týmu</li>
                 <li>Dbát na to, aby dítě respektovalo vybavení místa konání a ostatní účastníky</li>
               </ul>
+              <div className="mt-4 space-y-3">
+                <p className="text-gray-700">
+                  <strong>Cennosti.</strong> Pořadatel doporučuje nevybavovat dítě cennými předměty
+                  (mobilní telefon, tablet, šperky, vyšší hotovost). Za ztrátu, poškození nebo odcizení
+                  cenných předmětů, které si dítě přinese na tábor, pořadatel nenese odpovědnost.
+                </p>
+                <p className="text-gray-700">
+                  <strong>Pozdní vyzvednutí.</strong> Zákonný zástupce je povinen vyzvednout dítě
+                  (nebo zajistit jeho odchod) nejpozději do konce denního programu. Při pozdním
+                  vyzvednutí je pořadatel oprávněn účtovat poplatek za prodloužený dohled ve výši
+                  150 Kč za každých započatých 30 minut po skončení denního programu.
+                </p>
+              </div>
             </section>
 
             {/* 10 */}
@@ -325,6 +338,13 @@ export default function KVPodminkyPage() {
                 Přibližně 7 dní před zahájením tábora obdrží zákonný zástupce na uvedený e-mail
                 nástupní list s praktickými informacemi (přesná adresa, čas nástupu, co přinést,
                 kontakt na lektora). V případě, že e-mail neobdržíte, kontaktujte nás na info@weeks.cz.
+              </p>
+              <p className="text-gray-700 mt-4">
+                <strong>Povinné dokumenty při nástupu.</strong> Zákonný zástupce je povinen v den nástupu
+                předat vedoucímu tábora vlastnoručně podepsané <strong>Prohlášení o bezinfekčnosti</strong>{' '}
+                (ne starší než 1 den) a <strong>kopii průkazu zdravotní pojišťovny</strong> dítěte.
+                Bez předání těchto dokumentů nemůže být dítěti umožněna účast na táboře. Formulář
+                prohlášení o bezinfekčnosti je součástí nástupního listu.
               </p>
             </section>
 

@@ -47,6 +47,7 @@ export interface CreatePaymentInput {
   label: string
   email: string
   returnBaseUrl: string
+  locationId: string
 }
 
 export function buildCreateParams(input: CreatePaymentInput, cfg: ComgateConfig): URLSearchParams {
@@ -63,9 +64,9 @@ export function buildCreateParams(input: CreatePaymentInput, cfg: ComgateConfig)
     test: String(cfg.test),
     lang: 'cs',
     country: 'CZ',
-    url_paid: `${input.returnBaseUrl}/registrace/${input.registrationId}`,
-    url_pending: `${input.returnBaseUrl}/registrace/${input.registrationId}`,
-    url_cancelled: `${input.returnBaseUrl}/platba/${input.registrationId}`,
+    url_paid: `${input.returnBaseUrl}/registrace/${input.registrationId}?location=${encodeURIComponent(input.locationId)}`,
+    url_pending: `${input.returnBaseUrl}/registrace/${input.registrationId}?location=${encodeURIComponent(input.locationId)}`,
+    url_cancelled: `${input.returnBaseUrl}/platba/${input.registrationId}?location=${encodeURIComponent(input.locationId)}`,
   })
 }
 

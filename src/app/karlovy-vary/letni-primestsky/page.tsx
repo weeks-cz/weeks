@@ -259,7 +259,7 @@ export default function LetniPrimestskyCampPage() {
                 {[
                   { icon: Calendar, label: '5 dní', sublabel: 'Po – Pá' },
                   { icon: Clock, label: '8:00–16:00', sublabel: 'každý den' },
-                  { icon: Users, label: 'Max 12', sublabel: 'dětí' },
+                  { icon: Users, label: 'Max 15', sublabel: 'dětí' },
                   { icon: Utensils, label: 'Obědy', sublabel: 'v ceně' },
                 ].map((fact, i) => (
                   <div key={i} className="flex items-center gap-3 p-3 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10">
@@ -463,7 +463,7 @@ export default function LetniPrimestskyCampPage() {
                   {
                     icon: Users,
                     title: 'Kapacita',
-                    text: 'Maximálně 12 dětí na turnus. Poměr lektorů 1 : 5 zajišťuje individuální přístup a bezpečnost každého dítěte.',
+                    text: 'Maximálně 15 dětí na turnus. Poměr lektorů 1 : 5 zajišťuje individuální přístup a bezpečnost každého dítěte.',
                   },
                   {
                     icon: MapPin,

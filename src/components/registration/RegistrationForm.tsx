@@ -368,7 +368,7 @@ export function RegistrationForm() {
 
                 {pickup.pickup_method === 'solo' && (
                   <motion.div key="pickup-time" initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}>
-                    <label htmlFor="pickup_time" className="block text-sm font-medium text-gray-700 mb-1">Plánovaný čas odchodu *</label>
+                    <label htmlFor="pickup_time" className="block text-sm font-medium text-gray-700 mb-1">V kolik hodin smí dítě odejít? *</label>
                     <input
                       id="pickup_time"
                       type="time"
@@ -378,7 +378,7 @@ export function RegistrationForm() {
                       min="08:00"
                       max="16:00"
                     />
-                    <p className="text-xs text-gray-500 mt-1">Tábor probíhá 8:00–16:00</p>
+                    <p className="text-xs text-gray-500 mt-1">Standardně dítě odchází po skončení programu. Čas vyberte, jen pokud má odejít dříve.</p>
                     <FieldError name="pickup_time" />
                   </motion.div>
                 )}

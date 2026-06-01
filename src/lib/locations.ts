@@ -184,11 +184,11 @@ export const LOCATIONS: Record<string, Location> = {
     contact: { phone: '+420 703 046 440', email: 'info@weeks.cz' },
     seo: {
       titleSuffix: 'Karlovy Vary',
-      description: 'IT kempy pro děti 10-15 let v Karlových Varech. 3D tisk, IoT, programování a virtuální realita ve Vary&Te Creative Center.',
+      description: 'IT kempy pro děti 9-15 let v Karlových Varech. 3D tisk, IoT, programování a virtuální realita ve Vary&Te Creative Center.',
     },
     programs: [
-      { id: 'letni-primestsky', name: 'Letní příměstský tábor chytrých technologií', slug: 'letni-primestsky', campType: 'week' as const, price: 4990, capacity: 12, ageRange: '10-15', color: 'accent' },
-      { id: 'mix', name: 'Víkendový tábor chytrých technologií', slug: 'tabor-chytrych-technologii', campType: 'weekend' as const, price: 2990, capacity: 12, ageRange: '10-15', color: 'primary' },
+      { id: 'letni-primestsky', name: 'Letní příměstský tábor chytrých technologií', slug: 'letni-primestsky', campType: 'week' as const, price: 4990, capacity: 15, ageRange: '9-15', color: 'accent' },
+      { id: 'mix', name: 'Víkendový tábor chytrých technologií', slug: 'tabor-chytrych-technologii', campType: 'weekend' as const, price: 2990, capacity: 15, ageRange: '9-15', color: 'primary' },
     ],
     terms: [
       { id: 'kv-2026-07-27-letni', program: 'letni-primestsky', startDate: '2026-07-27', endDate: '2026-07-31', day: 'pondělí–pátek', status: 'confirmed' as const },
@@ -215,7 +215,7 @@ export const LOCATIONS: Record<string, Location> = {
       },
       schedule: {
         title: 'Kompletní servis od 8 do 16',
-        description: 'Celý týden oběd, svačiny, přestávky a střídání aktivit. Rodiče mají klid, děti mají postaráno o vše.',
+        description: 'Celý týden oběd, přestávky a střídání aktivit. Rodiče mají klid, děti mají postaráno o vše.',
       },
     },
     safetyFeatures: [

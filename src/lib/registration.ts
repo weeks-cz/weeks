@@ -9,7 +9,18 @@ export const parentSchema = z.object({
 
 export const childSchema = z.object({
   child_name: z.string().min(3, 'Jméno musí mít alespoň 3 znaky'),
-  child_birthdate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Zadejte datum ve formátu RRRR-MM-DD'),
+  child_birthdate: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Zadejte datum ve formátu RRRR-MM-DD')
+    .refine((s) => {
+      const d = new Date(`${s}T00:00:00`)
+      return !Number.isNaN(d.getTime()) && d <= new Date()
+    }, 'Datum narození nemůže být v budoucnosti')
+    .refine((s) => {
+      const d = new Date(`${s}T00:00:00`)
+      const age = (Date.now() - d.getTime()) / (365.25 * 24 * 60 * 60 * 1000)
+      return age >= 5 && age <= 18
+    }, 'Tábor je určen dětem přibližně 9–15 let — zkontrolujte prosím datum narození'),
   child_insurance: z.string().min(2, 'Zadejte zdravotní pojišťovnu'),
   child_health_notes: z.string().optional().default(''),
   child_experience: z.string().optional().default(''),

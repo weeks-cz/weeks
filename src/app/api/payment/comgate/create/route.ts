@@ -42,6 +42,7 @@ export async function POST(request: NextRequest) {
       label: `Weeks tábor – ${reg.child_name ?? 'registrace'}`,
       email: (reg.parent_email as string) ?? '',
       returnBaseUrl: origin,
+      locationId: reg.location_id as string,
     })
 
     // Diagnostic: is the service-role key reaching the function? (boolean only — no secret leak)

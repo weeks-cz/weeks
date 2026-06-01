@@ -31,7 +31,7 @@ const cfg: ComgateConfig = { merchant: 'M123', secret: 'S456', test: true, metho
 describe('buildCreateParams', () => {
   it('builds form params with price in haléře and prepareOnly', () => {
     const p = buildCreateParams(
-      { registrationId: 'reg-1', priceKc: 2990, label: 'Tábor', email: 'a@b.cz', returnBaseUrl: 'https://weeks.cz' },
+      { registrationId: 'reg-1', priceKc: 2990, label: 'Tábor', email: 'a@b.cz', returnBaseUrl: 'https://weeks.cz', locationId: 'karlovy-vary' },
       cfg
     )
     expect(p.get('merchant')).toBe('M123')
@@ -48,12 +48,12 @@ describe('buildCreateParams', () => {
   })
   it('points return URLs back at the registration and payment pages', () => {
     const p = buildCreateParams(
-      { registrationId: 'reg-1', priceKc: 2990, label: 'Tábor', email: 'a@b.cz', returnBaseUrl: 'https://weeks.cz' },
+      { registrationId: 'reg-1', priceKc: 2990, label: 'Tábor', email: 'a@b.cz', returnBaseUrl: 'https://weeks.cz', locationId: 'karlovy-vary' },
       cfg
     )
-    expect(p.get('url_paid')).toBe('https://weeks.cz/registrace/reg-1')
-    expect(p.get('url_pending')).toBe('https://weeks.cz/registrace/reg-1')
-    expect(p.get('url_cancelled')).toBe('https://weeks.cz/platba/reg-1')
+    expect(p.get('url_paid')).toBe('https://weeks.cz/registrace/reg-1?location=karlovy-vary')
+    expect(p.get('url_pending')).toBe('https://weeks.cz/registrace/reg-1?location=karlovy-vary')
+    expect(p.get('url_cancelled')).toBe('https://weeks.cz/platba/reg-1?location=karlovy-vary')
   })
 })
 
