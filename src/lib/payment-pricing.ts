@@ -12,3 +12,16 @@ export function getTrustedPriceKc(locationId: string, program: string): number {
   }
   return cfg.price
 }
+
+/**
+ * Trusted per-program capacity for anti-overbooking. Like the price, this is
+ * resolved server-side from location config — never trusted from the client.
+ */
+export function getTrustedCapacity(locationId: string, program: string): number {
+  const location = getLocationById(locationId)
+  const cfg = location.programs.find((p) => p.id === program)
+  if (!cfg) {
+    throw new Error(`No trusted capacity for location=${locationId} program=${program}`)
+  }
+  return cfg.capacity
+}

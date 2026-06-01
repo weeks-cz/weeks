@@ -1,9 +1,10 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
-import { CheckCircle2, Clock, XCircle, Loader2 } from 'lucide-react'
+import { CheckCircle2, Clock, XCircle, Loader2, CreditCard } from 'lucide-react'
 import Link from 'next/link'
+import { trackPaymentCompleted } from '@/lib/analytics'
 
 interface RegistrationData {
   id: string
@@ -27,6 +28,7 @@ export function RegistrationConfirmation({ registrationId }: RegistrationConfirm
   const [registration, setRegistration] = useState<RegistrationData | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const paidTracked = useRef(false)
 
   useEffect(() => {
     let cancelled = false
@@ -43,6 +45,15 @@ export function RegistrationConfirmation({ registrationId }: RegistrationConfirm
         // a manual refresh.
         const paid =
           data.registration?.payment_status === 'completed' || data.registration?.status === 'paid'
+        // Fire the conversion event exactly once.
+        if (paid && !paidTracked.current) {
+          paidTracked.current = true
+          trackPaymentCompleted({
+            registrationId,
+            program: data.registration?.program ?? '',
+            value: data.registration?.payment_amount ?? 0,
+          })
+        }
         if (!paid && attempts < 4) {
           attempts += 1
           setTimeout(fetchRegistration, 4000)
@@ -105,7 +116,7 @@ export function RegistrationConfirmation({ registrationId }: RegistrationConfirm
         </h1>
         <p className="text-gray-600">
           {isPaid
-            ? 'Registraci i platbu jsme zaznamenali. Potvrzovací e-maily zatím nerozesíláme — s dotazy se ozvěte na info@weeks.cz.'
+            ? 'Registraci i platbu jsme zaznamenali. Potvrzení a daňový doklad jsme vám poslali e-mailem — zkontrolujte prosím i složku se spamem. S dotazy se ozvěte na info@weeks.cz.'
             : isPending
             ? 'Vaše registrace čeká na dokončení platby.'
             : 'Tato registrace byla zrušena.'}
@@ -147,7 +158,16 @@ export function RegistrationConfirmation({ registrationId }: RegistrationConfirm
         </div>
       </div>
 
-      <div className="text-center mt-8">
+      <div className="flex flex-col items-center gap-3 mt-8">
+        {!isPaid && (
+          <Link
+            href={`/platba/${registration.id}?location=${registration.location_id}`}
+            className="btn-primary w-full sm:w-auto justify-center"
+          >
+            <CreditCard className="w-4 h-4 mr-2" />
+            {isPending ? 'Dokončit platbu' : 'Zkusit platbu znovu'}
+          </Link>
+        )}
         <Link href="/" className="btn-outline">
           Zpět na hlavní stránku
         </Link>

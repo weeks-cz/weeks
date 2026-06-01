@@ -1,0 +1,22 @@
+-- Security: remove the public-read RLS hole on registrations.
+--
+-- Migration 009 created:
+--   "Anyone can read registration by id"  USING (true)   -- SELECT
+--   "Anyone can create registrations"     WITH CHECK (true) -- INSERT
+--
+-- USING (true) means anyone holding the public anon key can read EVERY row and
+-- EVERY column (birthdate, health notes, address, phone) straight through
+-- PostgREST — not just the confirmation API's whitelist. weeks-web reads and
+-- writes registrations exclusively with the service-role key, which bypasses
+-- RLS, so this policy grants nothing we need and leaks PII.
+DROP POLICY IF EXISTS "Anyone can read registration by id" ON registrations;
+
+-- ─────────────────────────────────────────────────────────────────────────────
+-- OPTIONAL (apply after confirming weeks-hub does NOT insert registrations with
+-- the anon key). The anon INSERT policy lets anyone POST rows directly via
+-- PostgREST, bypassing the API's capacity check + rate limiting — a griefing /
+-- overbooking vector (rows sit 'pending' and consume spots). Registration
+-- inserts in weeks-web go through the service-role RPC, so dropping this is safe
+-- for this app. Left commented because it touches the shared DB.
+--
+-- DROP POLICY IF EXISTS "Anyone can create registrations" ON registrations;

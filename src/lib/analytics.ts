@@ -126,6 +126,56 @@ export function trackUcebnaClick(source: 'desktop' | 'mobile') {
   sendGAEvent('event', 'ucebna_click', { source })
 }
 
+// ── KV internal registration → payment funnel ───────────────────────────────
+// Three steps measure drop-off between submitting the form, starting the payment,
+// and the payment actually completing.
+
+// Step 1: registration row created (form submitted successfully)
+export function trackRegistrationSubmit(params: {
+  locationId: string
+  program: string
+  termId: string
+  value: number
+}) {
+  sendGAEvent('event', 'registration_submit', {
+    location_id: params.locationId,
+    program: params.program,
+    term_id: params.termId,
+    value: params.value,
+    currency: 'CZK',
+  })
+  fbqEvent('InitiateCheckout', {
+    content_name: `${params.program} ${params.termId}`,
+    value: params.value,
+    currency: 'CZK',
+  })
+}
+
+// Step 2: user pushed through to the Comgate gateway
+export function trackPaymentInitiated(registrationId: string) {
+  sendGAEvent('event', 'payment_initiated', { registration_id: registrationId })
+  fbqEvent('AddPaymentInfo')
+}
+
+// Step 3: payment confirmed (fired once when confirmation page sees 'paid')
+export function trackPaymentCompleted(params: {
+  registrationId: string
+  program: string
+  value: number
+}) {
+  sendGAEvent('event', 'payment_completed', {
+    registration_id: params.registrationId,
+    program: params.program,
+    value: params.value,
+    currency: 'CZK',
+  })
+  fbqEvent('Purchase', {
+    content_name: params.program,
+    value: params.value,
+    currency: 'CZK',
+  })
+}
+
 export function trackShopViewProduct(productSlug: string, productName: string) {
   sendGAEvent('event', 'shop_view_product', {
     product_slug: productSlug,

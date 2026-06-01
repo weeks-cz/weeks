@@ -71,6 +71,7 @@ export function buildCreateParams(input: CreatePaymentInput, cfg: ComgateConfig)
 
 const CREATE_URL = 'https://payments.comgate.cz/v1.0/create'
 const STATUS_URL = 'https://payments.comgate.cz/v1.0/status'
+const REFUND_URL = 'https://payments.comgate.cz/v1.0/refund'
 
 export interface CreateResult {
   transId: string
@@ -103,6 +104,44 @@ export async function createPayment(input: CreatePaymentInput, cfg = getComgateC
     body: buildCreateParams(input, cfg).toString(),
   })
   return parseCreateResponse(await res.text())
+}
+
+/**
+ * Refund (full or partial) an existing Comgate transaction. `amountKc` is the
+ * amount to return in koruna — the caller computes it per the VOP storno table.
+ * Throws if Comgate rejects the refund.
+ */
+export function buildRefundParams(
+  transId: string,
+  amountKc: number,
+  cfg: ComgateConfig
+): URLSearchParams {
+  return new URLSearchParams({
+    merchant: cfg.merchant,
+    secret: cfg.secret,
+    transId,
+    amount: String(korunyToHalere(amountKc)),
+    curr: 'CZK',
+    test: String(cfg.test),
+  })
+}
+
+export async function refundPayment(
+  transId: string,
+  amountKc: number,
+  cfg = getComgateConfig()
+): Promise<void> {
+  const res = await fetch(REFUND_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: buildRefundParams(transId, amountKc, cfg).toString(),
+  })
+  const params = new URLSearchParams(await res.text())
+  if (params.get('code') !== '0') {
+    throw new Error(
+      `Comgate refund failed: code=${params.get('code')} message=${params.get('message') ?? ''}`
+    )
+  }
 }
 
 export async function getStatus(transId: string, cfg = getComgateConfig()): Promise<PaymentStatus> {

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { korunyToHalere, mapComgateStatus, buildCreateParams, parseCreateResponse, verifyCallbackIdentity, type ComgateConfig } from './comgate'
+import { korunyToHalere, mapComgateStatus, buildCreateParams, buildRefundParams, parseCreateResponse, verifyCallbackIdentity, type ComgateConfig } from './comgate'
 
 describe('korunyToHalere', () => {
   it('converts koruny to integer haléře', () => {
@@ -54,6 +54,18 @@ describe('buildCreateParams', () => {
     expect(p.get('url_paid')).toBe('https://weeks.cz/registrace/reg-1')
     expect(p.get('url_pending')).toBe('https://weeks.cz/registrace/reg-1')
     expect(p.get('url_cancelled')).toBe('https://weeks.cz/platba/reg-1')
+  })
+})
+
+describe('buildRefundParams', () => {
+  it('builds refund params with amount in haléře', () => {
+    const p = buildRefundParams('ABCD-1234', 1495, cfg)
+    expect(p.get('merchant')).toBe('M123')
+    expect(p.get('secret')).toBe('S456')
+    expect(p.get('transId')).toBe('ABCD-1234')
+    expect(p.get('amount')).toBe('149500')
+    expect(p.get('curr')).toBe('CZK')
+    expect(p.get('test')).toBe('true')
   })
 })
 

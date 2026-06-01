@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { User, Baby, MapPin, FileCheck, ClipboardList, ArrowRight, ArrowLeft, Loader2 } from 'lucide-react'
 import { parentSchema, childSchema, consentsSchema, INSURANCE_OPTIONS, type ParentData, type ChildData, type ConsentsData } from '@/lib/registration'
 import { getLocationById } from '@/lib/locations'
+import { trackRegistrationSubmit } from '@/lib/analytics'
 import Link from 'next/link'
 
 const STEPS = [
@@ -146,6 +147,13 @@ export function RegistrationForm() {
       if (!response.ok) {
         throw new Error(data.error || 'Registrace se nezdařila')
       }
+
+      trackRegistrationSubmit({
+        locationId,
+        program: programId,
+        termId,
+        value: program?.price || 0,
+      })
 
       router.push(`${data.paymentUrl}?location=${locationId}`)
     } catch (err) {
@@ -497,7 +505,7 @@ export function RegistrationForm() {
 
         {/* Error */}
         {error && (
-          <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+          <div role="alert" aria-live="assertive" className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
             <p className="text-sm text-red-700">{error}</p>
           </div>
         )}

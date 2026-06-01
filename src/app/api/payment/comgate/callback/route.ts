@@ -1,8 +1,108 @@
 import { NextRequest, NextResponse } from 'next/server'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import { createServerClient } from '@/lib/supabase'
 import { getComgateConfig, getStatus, verifyCallbackIdentity } from '@/lib/comgate'
+import { reportError, reportMessage } from '@/lib/observability'
+import { issuePaidInvoice, isFakturoidConfigured } from '@/lib/fakturoid'
+import { buildConfirmationEmail, sendEmail, isEmailConfigured } from '@/lib/email'
+import { getLocationById } from '@/lib/locations'
+import { formatTermLabel } from '@/lib/dates'
 
 export const dynamic = 'force-dynamic'
+
+/**
+ * Generate the Fakturoid daňový doklad for a settled registration — exactly once.
+ *
+ * Idempotency: atomically claim by flipping fakturoid_invoice_id NULL → 'pending'
+ * (only one concurrent callback wins). If the claim returns no row, another call
+ * already handled it. On API failure we release the claim so a later callback can
+ * retry. Invoice failure is alerted but does NOT fail the Comgate acknowledgement
+ * (the payment is already recorded; the doc can be regenerated).
+ */
+async function ensurePaidInvoice(supabase: SupabaseClient, registrationId: string) {
+  if (!isFakturoidConfigured()) return
+
+  const { data: claimed } = await supabase
+    .from('registrations')
+    .update({ fakturoid_invoice_id: 'pending' })
+    .eq('id', registrationId)
+    .is('fakturoid_invoice_id', null)
+    .select('id, parent_name, parent_email, parent_address, program, location_id, term_start, term_end, payment_amount')
+
+  if (!claimed || claimed.length === 0) return // already issued or in progress
+  const reg = claimed[0]
+
+  try {
+    const location = getLocationById(reg.location_id as string)
+    const programCfg = location.programs.find((p) => p.id === reg.program)
+    const invoiceId = await issuePaidInvoice({
+      parentName: reg.parent_name as string,
+      parentEmail: reg.parent_email as string,
+      parentAddress: reg.parent_address as string,
+      registrationId: reg.id as string,
+      programName: programCfg?.name ?? (reg.program as string),
+      termLabel: formatTermLabel(reg.term_start as string, reg.term_end as string),
+      priceKc: reg.payment_amount as number,
+      // Fakturoid email is a paid-plan feature; only send for real (live) payments.
+      sendEmail: process.env.COMGATE_TEST === 'false',
+    })
+    await supabase
+      .from('registrations')
+      .update({ fakturoid_invoice_id: invoiceId })
+      .eq('id', registrationId)
+  } catch (e) {
+    // Release the claim so the next callback/retry re-attempts.
+    await supabase
+      .from('registrations')
+      .update({ fakturoid_invoice_id: null })
+      .eq('id', registrationId)
+    reportMessage('Fakturoid invoice generation failed', {
+      registrationId,
+      error: e instanceof Error ? e.message : String(e),
+    })
+  }
+}
+
+/**
+ * Send the post-payment confirmation email — exactly once. Same atomic-claim
+ * idempotency as the invoice: flip confirmation_sent_at NULL → now() (one
+ * callback wins), release on send failure so a retry can re-send.
+ */
+async function ensureConfirmationEmail(supabase: SupabaseClient, registrationId: string) {
+  if (!isEmailConfigured()) return
+
+  const { data: claimed } = await supabase
+    .from('registrations')
+    .update({ confirmation_sent_at: new Date().toISOString() })
+    .eq('id', registrationId)
+    .is('confirmation_sent_at', null)
+    .select('id, parent_email, child_name, program, location_id, term_start, term_end, payment_amount')
+
+  if (!claimed || claimed.length === 0) return
+  const reg = claimed[0]
+
+  try {
+    const location = getLocationById(reg.location_id as string)
+    const programCfg = location.programs.find((p) => p.id === reg.program)
+    const { subject, html } = buildConfirmationEmail({
+      childName: reg.child_name as string,
+      programName: programCfg?.name ?? (reg.program as string),
+      termLabel: formatTermLabel(reg.term_start as string, reg.term_end as string),
+      locationName: location.name,
+      priceKc: reg.payment_amount as number,
+    })
+    await sendEmail({ to: reg.parent_email as string, subject, html })
+  } catch (e) {
+    await supabase
+      .from('registrations')
+      .update({ confirmation_sent_at: null })
+      .eq('id', registrationId)
+    reportMessage('Confirmation email failed', {
+      registrationId,
+      error: e instanceof Error ? e.message : String(e),
+    })
+  }
+}
 
 // Comgate sends a server-to-server POST (form-urlencoded). This is the source of
 // truth for payment state. Must respond with "code=0&message=OK".
@@ -60,14 +160,38 @@ export async function POST(request: NextRequest) {
     } else {
       update.payment_status = 'pending'
     }
-    await supabase.from('registrations').update(update).eq('id', registrationId)
+    const { error: updateError } = await supabase
+      .from('registrations')
+      .update(update)
+      .eq('id', registrationId)
+
+    // A failed write here when the payment is PAID is the worst case: the customer
+    // paid but our record didn't flip. Alert immediately. Returning code=1 makes
+    // Comgate retry the callback, giving us another chance to reconcile.
+    if (updateError) {
+      reportMessage('Comgate callback: failed to persist payment status', {
+        route: 'comgate/callback',
+        status,
+        registrationId,
+        transId,
+        updateError,
+      })
+      return new NextResponse('code=1&message=db error', { status: 500 })
+    }
+
+    // Payment settled → issue the daňový doklad + send confirmation (both
+    // idempotent, best-effort — neither failure blocks the Comgate ack).
+    if (status === 'paid') {
+      await ensurePaidInvoice(supabase, registrationId)
+      await ensureConfirmationEmail(supabase, registrationId)
+    }
 
     return new NextResponse('code=0&message=OK', {
       status: 200,
       headers: { 'Content-Type': 'text/plain' },
     })
   } catch (e) {
-    console.error('Comgate callback error:', e)
+    reportError(e, { route: 'comgate/callback', reason: 'unhandled' })
     return new NextResponse('code=1&message=error', { status: 500 })
   }
 }

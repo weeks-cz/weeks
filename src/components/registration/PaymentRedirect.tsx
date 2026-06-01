@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Landmark, Loader2, Lock, AlertTriangle } from 'lucide-react'
+import { trackPaymentInitiated } from '@/lib/analytics'
 
 interface PaymentRedirectProps {
   registrationId: string
@@ -25,6 +26,7 @@ export function PaymentRedirect({ registrationId }: PaymentRedirectProps) {
       if (!res.ok || !data.redirectUrl) {
         throw new Error(data.error || 'Platbu se nepodařilo zahájit')
       }
+      trackPaymentInitiated(registrationId)
       window.location.href = data.redirectUrl
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Platbu se nepodařilo zahájit')
@@ -57,7 +59,7 @@ export function PaymentRedirect({ registrationId }: PaymentRedirectProps) {
           zrychleným bankovním převodem přes tlačítko své banky.
         </p>
         {error && (
-          <div className="p-3 bg-red-50 border border-red-200 rounded-lg mb-4">
+          <div role="alert" aria-live="assertive" className="p-3 bg-red-50 border border-red-200 rounded-lg mb-4">
             <p className="text-sm text-red-700">{error}</p>
           </div>
         )}

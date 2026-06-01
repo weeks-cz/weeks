@@ -2,14 +2,24 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createServerClient } from '@/lib/supabase'
 import { createPayment } from '@/lib/comgate'
 import { getTrustedPriceKc } from '@/lib/payment-pricing'
+import { API_ERRORS } from '@/lib/api-messages'
+import { rateLimit, clientIp } from '@/lib/rate-limit'
+import { reportError } from '@/lib/observability'
 
 export const dynamic = 'force-dynamic'
 
 export async function POST(request: NextRequest) {
   try {
+    // Abuse guard: max 15 payment-init attempts per IP per 10 min. Fail-open.
+    const ip = clientIp(request)
+    const limited = await rateLimit(`pay:${ip}`, 15, 600)
+    if (!limited.ok) {
+      return NextResponse.json({ error: API_ERRORS.rateLimited }, { status: 429 })
+    }
+
     const { registrationId } = await request.json()
     if (!registrationId) {
-      return NextResponse.json({ error: 'Missing registrationId' }, { status: 400 })
+      return NextResponse.json({ error: API_ERRORS.invalidRequest }, { status: 400 })
     }
 
     const supabase = createServerClient()
@@ -20,7 +30,7 @@ export async function POST(request: NextRequest) {
       .single()
 
     if (error || !reg) {
-      return NextResponse.json({ error: 'Registration not found' }, { status: 404 })
+      return NextResponse.json({ error: API_ERRORS.notFound }, { status: 404 })
     }
 
     const priceKc = getTrustedPriceKc(reg.location_id as string, reg.program as string)
@@ -47,20 +57,19 @@ export async function POST(request: NextRequest) {
       .select('id')
 
     if (updateError || !updated || updated.length === 0) {
-      console.error('[comgate/create] failed to persist transId', {
-        updateError,
+      reportError(updateError ?? new Error('transId persisted 0 rows'), {
+        route: 'comgate/create',
+        reason: 'persist-transId',
         updatedCount: updated?.length ?? 0,
         registrationId: reg.id,
+        transId,
       })
-      return NextResponse.json(
-        { error: 'Payment init failed (could not persist transaction)' },
-        { status: 500 }
-      )
+      return NextResponse.json({ error: API_ERRORS.paymentInitFailed }, { status: 500 })
     }
 
     return NextResponse.json({ redirectUrl: redirect })
   } catch (e) {
-    console.error('Comgate create error:', e)
-    return NextResponse.json({ error: 'Payment init failed' }, { status: 500 })
+    reportError(e, { route: 'comgate/create', reason: 'unhandled' })
+    return NextResponse.json({ error: API_ERRORS.gatewayUnavailable }, { status: 502 })
   }
 }
