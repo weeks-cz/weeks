@@ -151,8 +151,11 @@ export default function KVPodminkyPage() {
                 <div className="bg-white p-5 rounded-lg border border-gray-200">
                   <h3 className="text-base font-semibold text-gray-900 mb-2">6.1 Způsob platby</h3>
                   <p className="text-gray-700 text-base">
-                    Platba probíhá zrychleným bankovním převodem prostřednictvím platební brány Comgate.
-                    Po odeslání přihlášky budete přesměrováni na bránu, kde platbu dokončíte tlačítkem své banky.
+                    Platba probíhá zrychleným bankovním převodem prostřednictvím{' '}
+                    <a href="https://www.comgate.eu/cs/platebni-brana" target="_blank" rel="noopener noreferrer" className="text-primary-600 underline hover:text-primary-700">platební brány Comgate</a>.
+                    Po odeslání přihlášky budete přesměrováni na bránu, kde platbu dokončíte platebním tlačítkem své banky.
+                    Jak platba bankovním tlačítkem probíhá, popisuje{' '}
+                    <a href="https://help.comgate.cz/docs/bankovni-prevody" target="_blank" rel="noopener noreferrer" className="text-primary-600 underline hover:text-primary-700">nápověda Comgate</a>.
                   </p>
                 </div>
                 <div className="bg-white p-5 rounded-lg border border-gray-200">
@@ -176,9 +179,15 @@ export default function KVPodminkyPage() {
                 </div>
                 <div className="bg-white p-5 rounded-lg border border-gray-200">
                   <h3 className="text-base font-semibold text-gray-900 mb-2">6.4 Provozovatel platební brány</h3>
-                  <p className="text-gray-700 text-base">
-                    Platební služby zajišťuje společnost <strong>Comgate a.s.</strong>, IČ: 27924505,
+                  <p className="text-gray-700 text-base mb-2">
+                    Platební služby zajišťuje společnost{' '}
+                    <a href="https://www.comgate.eu/cs/platebni-brana" target="_blank" rel="noopener noreferrer" className="text-primary-600 underline hover:text-primary-700"><strong>Comgate a.s.</strong></a>, IČ: 27924505,
                     DIČ: CZ27924505, se sídlem Gočárova třída 1754/48b, Pražské Předměstí, 500 02 Hradec Králové.
+                  </p>
+                  <p className="text-gray-700 text-base">
+                    Reklamace a dotazy k platbám vyřizuje přímo Comgate:{' '}
+                    <a href="mailto:platby-podpora@comgate.cz" className="text-primary-600 underline hover:text-primary-700">platby-podpora@comgate.cz</a>,
+                    tel. <a href="tel:+420228224267" className="text-primary-600 underline hover:text-primary-700">+420 228 224 267</a>.
                   </p>
                 </div>
               </div>

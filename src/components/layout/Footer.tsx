@@ -159,10 +159,10 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Provozovatel / IČO box — pro non-default lokace (KV = OSVČ Lukáš Kubík) */}
+        {/* Provozovatel + platební brána — pro non-default lokace (KV = OSVČ Lukáš Kubík) */}
         {!location.isDefault && (
-          <div className="mt-12 pt-8 border-t border-gray-800">
-            <div className="flex items-start gap-3 max-w-3xl">
+          <div className="mt-12 pt-8 border-t border-gray-800 flex flex-col md:flex-row md:items-start md:justify-between gap-6">
+            <div className="flex items-start gap-3 max-w-2xl">
               <FileText className="w-5 h-5 text-primary-500 shrink-0 mt-0.5" />
               <div className="text-sm text-gray-400 leading-relaxed">
                 <p className="text-gray-300 font-medium mb-1">Provozovatel</p>
@@ -175,6 +175,24 @@ export function Footer() {
                   Zapsán v živnostenském rejstříku Úřadu městské části Praha 5.
                 </p>
               </div>
+            </div>
+            <div className="shrink-0">
+              <p className="text-xs text-gray-500 mb-2 md:text-right">Platby zajišťuje</p>
+              <a
+                href="https://www.comgate.eu/cs/platebni-brana"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex bg-white rounded-lg px-3 py-2 hover:opacity-90 transition-opacity"
+                aria-label="Comgate – platební brána"
+              >
+                <Image
+                  src="/images/comgate-logo.png"
+                  width={119}
+                  height={28}
+                  alt="Comgate"
+                  className="h-7 w-auto"
+                />
+              </a>
             </div>
           </div>
         )}
