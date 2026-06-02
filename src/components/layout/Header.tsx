@@ -117,24 +117,27 @@ export function Header() {
           </Link>
         </div>
 
-        {/* Mobile Menu Button */}
-        <motion.button
-          type="button"
-          whileTap={{ scale: 0.9 }}
-          className={`md:hidden p-2 rounded-lg transition-colors ${
-            scrolled ? 'hover:bg-gray-100' : 'hover:bg-white/10'
-          }`}
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          aria-label={mobileMenuOpen ? 'Zavřít menu' : 'Otevřít menu'}
-          aria-expanded={mobileMenuOpen}
-          aria-controls="mobile-menu"
-        >
-          {mobileMenuOpen ? (
-            <X className={`h-6 w-6 ${scrolled ? 'text-gray-700' : 'text-white'}`} aria-hidden="true" />
-          ) : (
-            <Menu className={`h-6 w-6 ${scrolled ? 'text-gray-700' : 'text-white'}`} aria-hidden="true" />
-          )}
-        </motion.button>
+        {/* Mobile: city switcher (always visible) + menu button */}
+        <div className="flex items-center gap-2 md:hidden">
+          <CitySwitcher compact />
+          <motion.button
+            type="button"
+            whileTap={{ scale: 0.9 }}
+            className={`shrink-0 p-2 rounded-lg transition-colors ${
+              scrolled ? 'hover:bg-gray-100' : 'hover:bg-white/10'
+            }`}
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label={mobileMenuOpen ? 'Zavřít menu' : 'Otevřít menu'}
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-menu"
+          >
+            {mobileMenuOpen ? (
+              <X className={`h-6 w-6 ${scrolled ? 'text-gray-700' : 'text-white'}`} aria-hidden="true" />
+            ) : (
+              <Menu className={`h-6 w-6 ${scrolled ? 'text-gray-700' : 'text-white'}`} aria-hidden="true" />
+            )}
+          </motion.button>
+        </div>
       </nav>
 
       {/* Mobile Navigation */}
@@ -189,9 +192,6 @@ export function Header() {
                 transition={{ delay: (navigation.length + 1) * 0.05 }}
                 className="pt-2 flex flex-col gap-2"
               >
-                <div className="flex justify-center">
-                  <CitySwitcher />
-                </div>
                 <Link
                   href={ctaHref}
                   className="btn-primary w-full text-center justify-center"

@@ -6,7 +6,7 @@ import { MapPin, ChevronDown } from 'lucide-react'
 import { getAllLocations, getEquivalentPath, type Location } from '@/lib/locations'
 import { useLocation } from '@/contexts/LocationContext'
 
-export function CitySwitcher() {
+export function CitySwitcher({ compact = false }: { compact?: boolean }) {
   const location = useLocation()
   const pathname = usePathname()
   const [isOpen, setIsOpen] = useState(false)
@@ -25,12 +25,14 @@ export function CitySwitcher() {
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-slate-600 hover:text-primary-600 rounded-full border border-slate-200 hover:border-primary-300 transition-colors bg-white/80 backdrop-blur-sm"
+        className={`flex items-center font-medium text-slate-700 hover:text-primary-600 rounded-full border border-slate-200 hover:border-primary-300 transition-colors bg-white/90 backdrop-blur-sm shadow-sm ${
+          compact ? 'gap-1 px-2.5 py-1 text-xs' : 'gap-1.5 px-3 py-1.5 text-sm'
+        }`}
         aria-label={`Město: ${location.name}. Klikněte pro změnu.`}
       >
-        <MapPin className="w-3.5 h-3.5" />
-        <span>{location.name}</span>
-        <ChevronDown className={`w-3 h-3 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+        <MapPin className="w-3.5 h-3.5 shrink-0" />
+        <span className={compact ? 'truncate max-w-[110px]' : ''}>{location.name}</span>
+        <ChevronDown className={`w-3 h-3 shrink-0 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
       {isOpen && (
