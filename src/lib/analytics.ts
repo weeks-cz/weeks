@@ -4,9 +4,35 @@
 
 import { sendGAEvent } from '@next/third-parties/google'
 
-function fbqEvent(eventName: string, params?: Record<string, string | number>) {
+type FbqParam = string | number | boolean | string[]
+
+function fbqEvent(eventName: string, params?: Record<string, FbqParam>) {
   if (typeof window !== 'undefined' && typeof window.fbq === 'function') {
     window.fbq('track', eventName, params)
+  }
+}
+
+function getKvCampProduct(program: string) {
+  if (program === 'letni-primestsky') {
+    return {
+      id: 'letni-primestsky',
+      name: 'Letní příměstský tábor chytrých technologií',
+      category: 'summer_camp',
+    }
+  }
+
+  if (program === 'mix') {
+    return {
+      id: 'mix',
+      name: 'Víkendový tábor chytrých technologií',
+      category: 'weekend_camp',
+    }
+  }
+
+  return {
+    id: program,
+    name: program,
+    category: 'camp',
   }
 }
 
@@ -137,15 +163,21 @@ export function trackRegistrationSubmit(params: {
   termId: string
   value: number
 }) {
+  const product = getKvCampProduct(params.program)
+
   sendGAEvent('event', 'registration_submit', {
     location_id: params.locationId,
     program: params.program,
+    program_name: product.name,
     term_id: params.termId,
     value: params.value,
     currency: 'CZK',
   })
   fbqEvent('InitiateCheckout', {
-    content_name: `${params.program} ${params.termId}`,
+    content_name: product.name,
+    content_category: product.category,
+    content_ids: [product.id],
+    content_type: 'product',
     value: params.value,
     currency: 'CZK',
   })
@@ -160,17 +192,26 @@ export function trackPaymentInitiated(registrationId: string) {
 // Step 3: payment confirmed (fired once when confirmation page sees 'paid')
 export function trackPaymentCompleted(params: {
   registrationId: string
+  locationId: string
   program: string
   value: number
 }) {
+  const product = getKvCampProduct(params.program)
+
   sendGAEvent('event', 'payment_completed', {
     registration_id: params.registrationId,
+    location_id: params.locationId,
     program: params.program,
+    program_name: product.name,
     value: params.value,
     currency: 'CZK',
   })
   fbqEvent('Purchase', {
-    content_name: params.program,
+    content_name: product.name,
+    content_category: product.category,
+    content_ids: [product.id],
+    content_type: 'product',
+    num_items: 1,
     value: params.value,
     currency: 'CZK',
   })

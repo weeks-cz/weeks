@@ -33,6 +33,8 @@ export function RegistrationConfirmation({ registrationId }: RegistrationConfirm
   useEffect(() => {
     let cancelled = false
     let attempts = 0
+    const purchaseStorageKey = `weeks:meta-purchase:${registrationId}`
+
     async function fetchRegistration() {
       try {
         const response = await fetch(`/api/registration/${registrationId}`)
@@ -47,12 +49,19 @@ export function RegistrationConfirmation({ registrationId }: RegistrationConfirm
           data.registration?.payment_status === 'completed' || data.registration?.status === 'paid'
         // Fire the conversion event exactly once.
         if (paid && !paidTracked.current) {
+          const alreadyTracked =
+            typeof window !== 'undefined' && localStorage.getItem(purchaseStorageKey) === '1'
+
           paidTracked.current = true
-          trackPaymentCompleted({
-            registrationId,
-            program: data.registration?.program ?? '',
-            value: data.registration?.payment_amount ?? 0,
-          })
+          if (!alreadyTracked) {
+            trackPaymentCompleted({
+              registrationId,
+              locationId: data.registration?.location_id ?? '',
+              program: data.registration?.program ?? '',
+              value: data.registration?.payment_amount ?? 0,
+            })
+            localStorage.setItem(purchaseStorageKey, '1')
+          }
         }
         if (!paid && attempts < 4) {
           attempts += 1
