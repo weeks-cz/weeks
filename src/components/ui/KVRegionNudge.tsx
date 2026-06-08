@@ -8,6 +8,10 @@ import Link from 'next/link'
 
 const DISMISS_KEY = 'kv-nudge-dismissed'
 
+// 'card' = výrazná kartička pro návštěvníky z Karlovarska (geo).
+// 'pill' = nenápadný odkaz vlevo dole pro všechny ostatní (i VPN / když geo selže).
+type Mode = 'hidden' | 'pill' | 'card'
+
 // Na kterých (pražských) stránkách smí nudge vyskočit. NE na KV, NE na reklamních /
 // checkout stránkách, kde by rušil konverzi — jen na hlavních obsahových stránkách,
 // kam zájemce o tábor reálně přistane.
@@ -20,7 +24,7 @@ function isEligiblePath(pathname: string): boolean {
 
 export function KVRegionNudge() {
   const pathname = usePathname()
-  const [show, setShow] = useState(false)
+  const [mode, setMode] = useState<Mode>('hidden')
 
   useEffect(() => {
     if (!pathname || !isEligiblePath(pathname)) return
@@ -28,19 +32,24 @@ export function KVRegionNudge() {
 
     let cancelled = false
 
-    const maybeShow = () => {
+    const decide = () => {
       fetch('/api/geo')
         .then((r) => (r.ok ? r.json() : null))
         .then((data) => {
-          if (!cancelled && data?.isKarlovarsko) setShow(true)
+          if (cancelled) return
+          // Karlovarsko → silná kartička; jinak jemný pill (fail-open).
+          setMode(data?.isKarlovarsko ? 'card' : 'pill')
         })
-        .catch(() => {})
+        // VPN / ad-blocker /api/geo často zablokuje — i tak ukaž aspoň pill.
+        .catch(() => {
+          if (!cancelled) setMode('pill')
+        })
     }
 
     // Nezobrazovat přes cookie lištu — počkat, až je souhlas vyřešen,
     // ať se dole nepřekrývají dvě vyskakovací karty.
     if (localStorage.getItem('cookie-consent')) {
-      maybeShow()
+      decide()
       return () => {
         cancelled = true
       }
@@ -48,7 +57,7 @@ export function KVRegionNudge() {
 
     const onConsent = () => {
       window.removeEventListener('cookie-consent-updated', onConsent)
-      maybeShow()
+      decide()
     }
     window.addEventListener('cookie-consent-updated', onConsent)
     return () => {
@@ -59,13 +68,14 @@ export function KVRegionNudge() {
 
   const dismiss = () => {
     localStorage.setItem(DISMISS_KEY, '1')
-    setShow(false)
+    setMode('hidden')
   }
 
   return (
     <AnimatePresence>
-      {show && (
+      {mode === 'card' && (
         <motion.div
+          key="card"
           initial={{ y: 100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 100, opacity: 0 }}
@@ -103,6 +113,36 @@ export function KVRegionNudge() {
                 <X className="w-4 h-4 text-gray-400" />
               </button>
             </div>
+          </div>
+        </motion.div>
+      )}
+
+      {mode === 'pill' && (
+        <motion.div
+          key="pill"
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: 20, opacity: 0 }}
+          transition={{ duration: 0.25 }}
+          className="fixed bottom-4 left-4 z-40 max-w-[calc(100vw-2rem)]"
+        >
+          <div className="flex items-center gap-1 rounded-full bg-white/95 backdrop-blur-sm border border-gray-200 shadow-lg pl-3 pr-1.5 py-1.5">
+            <Link
+              href="/karlovy-vary"
+              onClick={dismiss}
+              className="flex items-center gap-1.5 text-xs sm:text-sm font-medium text-gray-600 hover:text-primary-600 transition-colors min-w-0"
+            >
+              <MapPin className="w-4 h-4 text-primary-500 shrink-0" />
+              <span className="truncate">Tábory i v Karlových Varech</span>
+              <ArrowRight className="w-3.5 h-3.5 shrink-0" />
+            </Link>
+            <button
+              onClick={dismiss}
+              className="shrink-0 p-1 rounded-full hover:bg-gray-100 transition-colors"
+              aria-label="Zavřít"
+            >
+              <X className="w-3.5 h-3.5 text-gray-400" />
+            </button>
           </div>
         </motion.div>
       )}
