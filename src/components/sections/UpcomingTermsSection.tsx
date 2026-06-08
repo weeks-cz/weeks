@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion'
 import { ArrowRight, Calendar, Clock } from 'lucide-react'
 import Link from 'next/link'
+import { useEffect } from 'react'
 import { sendGAEvent } from '@next/third-parties/google'
 import { trackRegistrationClick } from '@/lib/analytics'
 import type { TermDisplay } from '@/lib/camps'
@@ -25,6 +26,15 @@ function priceLabel(price: number | null): string {
   return `${price.toLocaleString('cs-CZ').replace(/,/g, ' ')} Kč`
 }
 
+// Meta Pixel "Lead" tracking — pouze pro kampaňový víkend 20.–21. 6.
+// (So = IoT & elektronika, Ne = 3D tisk). Vrací null pro ostatní termíny,
+// aby se Lead s content_name 'Tabor 20-21.6' nefíroval omylem jinde.
+function fbLead(term: TermDisplay): { name: string; category: 'sobota' | 'nedele' } | null {
+  if (term.startDate === '2026-06-20') return { name: 'Tabor 20-21.6', category: 'sobota' }
+  if (term.startDate === '2026-06-21') return { name: 'Tabor 20-21.6', category: 'nedele' }
+  return null
+}
+
 // Délka tábora fakticky (1 den / 2 dny / 5 dní) — místo kategorie "Jednodenní"
 function daysWord(n: number): string {
   return n === 1 ? 'den' : n >= 2 && n <= 4 ? 'dny' : 'dní'
@@ -44,6 +54,22 @@ function getUrgency(dateStr: string): { label: string; className: string } | nul
 }
 
 export function UpcomingTermsSection({ terms }: { terms: TermDisplay[] }) {
+  // Meta Pixel "Lead": delegovaný klik na document, ať chytá i dynamicky
+  // vykreslené odkazy. Neblokuje navigaci (žádný preventDefault, žádné čekání).
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      if (typeof window.fbq !== 'function') return
+      const link = (e.target as HTMLElement | null)?.closest<HTMLAnchorElement>('a[data-fb-lead-name]')
+      if (!link) return
+      window.fbq('track', 'Lead', {
+        content_name: link.dataset.fbLeadName,
+        content_category: link.dataset.fbLeadCategory,
+      })
+    }
+    document.addEventListener('click', onClick)
+    return () => document.removeEventListener('click', onClick)
+  }, [])
+
   // Only render terms with a usable DDM registration link — the homepage CTA
   // is "Přihlásit se", not interest capture.
   const usable = terms.filter(t => t.registrationUrl && t.status === 'open_with_link')
@@ -107,11 +133,14 @@ export function UpcomingTermsSection({ terms }: { terms: TermDisplay[] }) {
             const badgeLabel = `${term.dayCount} ${daysWord(term.dayCount)}`
             const dateLabel = shortDateLabel(term)
 
+            const fb = fbLead(term)
             const cta = hasLink ? (
               <a
                 href={term.registrationUrl!}
                 target="_blank"
                 rel="noopener noreferrer"
+                data-fb-lead-name={fb?.name}
+                data-fb-lead-category={fb?.category}
                 onClick={() => handleClick(term)}
                 className="inline-flex items-center gap-2 px-5 py-2.5 bg-cta-500 hover:bg-cta-400 text-gray-900 font-semibold rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-cta-500/30 text-sm flex-shrink-0"
               >
