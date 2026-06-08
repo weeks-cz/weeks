@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { User, Baby, MapPin, FileCheck, ClipboardList, ArrowRight, ArrowLeft, Loader2 } from 'lucide-react'
@@ -70,6 +70,19 @@ export function RegistrationForm() {
 
   const vopUrl = locationId === 'karlovy-vary' ? '/karlovy-vary/podminky' : '/podminky'
   const gdprUrl = locationId === 'karlovy-vary' ? '/karlovy-vary/gdpr' : '/gdpr'
+
+  // Varuj při opuštění rozdělaného formuláře (zavření záložky / externí navigace).
+  // Neplatí pro odeslání → /platba, protože to je client-side router.push (bez unloadu).
+  useEffect(() => {
+    const dirty = step > 1 || !!parent.parent_name || !!parent.parent_email || !!child.child_name
+    if (!dirty) return
+    const handler = (e: BeforeUnloadEvent) => {
+      e.preventDefault()
+      e.returnValue = ''
+    }
+    window.addEventListener('beforeunload', handler)
+    return () => window.removeEventListener('beforeunload', handler)
+  }, [step, parent.parent_name, parent.parent_email, child.child_name])
 
   function validateStep(): boolean {
     setFieldErrors({})
@@ -224,12 +237,16 @@ export function RegistrationForm() {
       <div className="flex items-center justify-between mb-10 max-w-sm mx-auto">
         {STEPS.map((s, i) => (
           <div key={s.id} className="flex items-center">
-            <div className={`flex items-center justify-center w-9 h-9 rounded-full border-2 transition-colors ${
-              step >= s.id
-                ? 'bg-primary-600 border-primary-600 text-white'
-                : 'border-gray-300 text-gray-400'
-            }`}>
-              <s.icon className="w-4 h-4" />
+            <div
+              aria-current={step === s.id ? 'step' : undefined}
+              aria-label={`Krok ${s.id}: ${s.title}${step === s.id ? ' – aktuální' : step > s.id ? ' – hotovo' : ''}`}
+              className={`flex items-center justify-center w-9 h-9 rounded-full border-2 transition-colors ${
+                step >= s.id
+                  ? 'bg-primary-600 border-primary-600 text-white'
+                  : 'border-gray-300 text-gray-400'
+              }`}
+            >
+              <s.icon className="w-4 h-4" aria-hidden="true" />
             </div>
             {i < STEPS.length - 1 && (
               <div className={`w-6 sm:w-10 h-0.5 mx-1 ${step > s.id ? 'bg-primary-600' : 'bg-gray-200'}`} />
