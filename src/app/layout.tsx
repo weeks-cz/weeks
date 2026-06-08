@@ -92,9 +92,8 @@ export const metadata: Metadata = {
     ],
   },
   manifest: '/site.webmanifest',
-  verification: {
-    google: 'google-site-verification-code-here',
-  },
+  // Google Search Console je ověřená přes DNS TXT záznam (viz CLAUDE.md / subreg.cz),
+  // proto zde není potřeba meta tag.
 }
 
 export default function RootLayout({

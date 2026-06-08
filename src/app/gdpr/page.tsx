@@ -234,6 +234,7 @@ export default function GDPRPage() {
                 <li><strong>Google (Google Analytics)</strong> – měření návštěvnosti, pouze s Vaším souhlasem</li>
                 <li><strong>Meta Platforms (Facebook Pixel)</strong> – měření účinnosti reklam, pouze s Vaším souhlasem</li>
                 <li><strong>Sanity</strong> – správa obsahu webu</li>
+                <li><strong>Sentry</strong> – monitoring chyb serverové části aplikace (pomáhá nám rychle odhalit a opravit závady)</li>
               </ul>
               <p className="text-gray-700 mt-4">
                 Všichni zpracovatelé jsou pečlivě vybráni a zavázáni k ochraně osobních údajů v souladu

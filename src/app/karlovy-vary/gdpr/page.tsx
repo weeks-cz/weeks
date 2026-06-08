@@ -220,9 +220,12 @@ export default function KVGDPRPage() {
               </p>
               <ul className="list-disc pl-6 space-y-2 text-gray-700">
                 <li><strong>Supabase</strong> – cloudová databáze pro uložení registračních dat (servery v EU)</li>
-                <li><strong>Formspree</strong> – zpracování kontaktních formulářů a zasílání emailů</li>
+                <li><strong>Formspree</strong> – zpracování kontaktních a zájmových formulářů</li>
+                <li><strong>Resend</strong> – odesílání transakčních e-mailů (potvrzení registrace, nástupní list)</li>
+                <li><strong>Fakturoid</strong> – vystavení a evidence daňových dokladů (faktur)</li>
                 <li><strong>Vercel</strong> – hosting webové aplikace</li>
                 <li><strong>Comgate a.s.</strong> – provozovatel platební brány (zpracování platby), IČ 27924505</li>
+                <li><strong>Sentry</strong> – monitoring chyb serverové části aplikace</li>
               </ul>
               <p className="text-gray-700 mt-4">
                 Vaše údaje neprodáváme třetím stranám pro jejich marketingové účely.
