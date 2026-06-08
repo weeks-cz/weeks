@@ -145,7 +145,8 @@ export default function GDPRPage() {
                 <li>Do doby, než požádáte o výmaz Vašich údajů</li>
               </ul>
               <p className="text-gray-700 mt-4">
-                Po uplynutí této doby jsou Vaše údaje automaticky vymazány z našeho systému.
+                Po uplynutí uvedené doby — nebo kdykoli na základě Vaší žádosti — Vaše údaje
+                z naší evidence odstraníme nebo anonymizujeme. O výmaz můžete požádat na info@weeks.cz.
               </p>
             </section>
 

@@ -85,6 +85,7 @@ export default function KVGDPRPage() {
                 <li><strong>Telefonní číslo</strong> – pro urgentní kontakt v průběhu tábora</li>
                 <li><strong>Stravovací omezení a alergie</strong> – pro zajištění bezpečnosti dítěte</li>
                 <li><strong>Zdravotní omezení</strong> – pouze pokud jsou relevantní pro bezpečnou účast</li>
+                <li><strong>IP adresa při odeslání registrace</strong> – uchováváme jako doklad o udělení souhlasu s obchodními podmínkami (oprávněný zájem, čl. 6 odst. 1 písm. f) GDPR)</li>
               </ul>
               <div className="bg-primary-50 p-6 rounded-lg border border-primary-200 mt-6">
                 <p className="text-primary-900 font-medium mb-2">Záchranná síť (waitlist)</p>
@@ -156,6 +157,10 @@ export default function KVGDPRPage() {
                 <li><strong>Účetní doklady</strong> – 5 let od konce zdaňovacího období (zákonná povinnost)</li>
                 <li><strong>Emailová adresa pro novinky</strong> – do odvolání souhlasu, maximálně 3 roky od poslední interakce</li>
               </ul>
+              <p className="text-gray-700 mt-4">
+                Po uplynutí uvedených dob údaje z evidence odstraníme nebo anonymizujeme. O výmaz
+                svých údajů (mimo zákonem povinné účetní doklady) můžete kdykoli požádat na info@weeks.cz.
+              </p>
             </section>
 
             <section className="mb-12">
