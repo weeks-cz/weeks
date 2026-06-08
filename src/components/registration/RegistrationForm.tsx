@@ -107,7 +107,12 @@ export function RegistrationForm() {
   function nextStep() {
     if (validateStep()) {
       setStep(s => Math.min(s + 1, 5))
+      return
     }
+    // Neúspěšná validace — posuň pohled na první chybu (čtečky ji oznámí přes role="alert").
+    setTimeout(() => {
+      document.querySelector('[role="alert"]')?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }, 50)
   }
 
   function prevStep() {
@@ -187,7 +192,7 @@ export function RegistrationForm() {
   function FieldError({ name }: { name: string }) {
     const errors = fieldErrors[name]
     if (!errors?.length) return null
-    return <p className="text-sm text-red-600 mt-1">{errors[0]}</p>
+    return <p role="alert" className="text-sm text-red-600 mt-1">{errors[0]}</p>
   }
 
   const inputClass = (name: string) =>
