@@ -22,9 +22,10 @@ interface RegistrationData {
 
 interface RegistrationConfirmationProps {
   registrationId: string
+  token?: string
 }
 
-export function RegistrationConfirmation({ registrationId }: RegistrationConfirmationProps) {
+export function RegistrationConfirmation({ registrationId, token }: RegistrationConfirmationProps) {
   const [registration, setRegistration] = useState<RegistrationData | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -35,7 +36,7 @@ export function RegistrationConfirmation({ registrationId }: RegistrationConfirm
     let attempts = 0
     async function fetchRegistration() {
       try {
-        const response = await fetch(`/api/registration/${registrationId}`)
+        const response = await fetch(`/api/registration/${registrationId}?t=${encodeURIComponent(token ?? '')}`)
         if (!response.ok) throw new Error('Registrace nenalezena')
         const data = await response.json()
         if (cancelled) return
@@ -69,7 +70,7 @@ export function RegistrationConfirmation({ registrationId }: RegistrationConfirm
     return () => {
       cancelled = true
     }
-  }, [registrationId])
+  }, [registrationId, token])
 
   if (loading) {
     return (

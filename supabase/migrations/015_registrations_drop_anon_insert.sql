@@ -1,0 +1,15 @@
+-- Security: remove the public-INSERT RLS hole on registrations.
+--
+-- Migration 009 created "Anyone can create registrations" WITH CHECK (true).
+-- Because NEXT_PUBLIC_SUPABASE_ANON_KEY is exposed in the browser, anyone can POST
+-- rows directly to PostgREST, bypassing the API's server-side capacity check and
+-- rate limiting — a griefing / overbooking vector (junk rows sit 'pending' and
+-- consume spots).
+--
+-- weeks-web inserts registrations ONLY through the service-role `create_registration`
+-- RPC, which bypasses RLS, so dropping this policy changes nothing for the app.
+--
+-- ⚠️ BEFORE APPLYING: confirm no other client (e.g. weeks-hub) inserts into
+-- `registrations` using the anon key. If something does, switch it to the
+-- service-role RPC first.
+DROP POLICY IF EXISTS "Anyone can create registrations" ON registrations;

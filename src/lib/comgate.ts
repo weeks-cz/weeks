@@ -48,9 +48,14 @@ export interface CreatePaymentInput {
   email: string
   returnBaseUrl: string
   locationId: string
+  // HMAC access token, appended to the /registrace confirmation URLs so the
+  // [id] API can authorize the read (anti-IDOR). Computed server-side by the caller.
+  confirmToken?: string
 }
 
 export function buildCreateParams(input: CreatePaymentInput, cfg: ComgateConfig): URLSearchParams {
+  const loc = encodeURIComponent(input.locationId)
+  const tok = input.confirmToken ? `&t=${input.confirmToken}` : ''
   return new URLSearchParams({
     merchant: cfg.merchant,
     secret: cfg.secret,
@@ -64,9 +69,9 @@ export function buildCreateParams(input: CreatePaymentInput, cfg: ComgateConfig)
     test: String(cfg.test),
     lang: 'cs',
     country: 'CZ',
-    url_paid: `${input.returnBaseUrl}/registrace/${input.registrationId}?location=${encodeURIComponent(input.locationId)}`,
-    url_pending: `${input.returnBaseUrl}/registrace/${input.registrationId}?location=${encodeURIComponent(input.locationId)}`,
-    url_cancelled: `${input.returnBaseUrl}/platba/${input.registrationId}?location=${encodeURIComponent(input.locationId)}`,
+    url_paid: `${input.returnBaseUrl}/registrace/${input.registrationId}?location=${loc}${tok}`,
+    url_pending: `${input.returnBaseUrl}/registrace/${input.registrationId}?location=${loc}${tok}`,
+    url_cancelled: `${input.returnBaseUrl}/platba/${input.registrationId}?location=${loc}`,
   })
 }
 

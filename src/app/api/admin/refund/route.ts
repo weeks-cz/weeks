@@ -82,10 +82,20 @@ export async function POST(request: NextRequest) {
 
     await refundPayment(reg.comgate_payment_id as string, refundKc)
 
-    const { error: updateError } = await supabase
-      .from('registrations')
-      .update({ payment_status: 'refunded', status: 'cancelled' })
-      .eq('id', reg.id)
+    // The money is already back at Comgate. Persist the state with a few retries to
+    // minimise the orphaned window (refunded at Comgate but DB still 'completed').
+    // A second refund attempt on retry is harmless: Comgate rejects an already-
+    // refunded transaction, and the payment_status='refunded' guard above short-circuits.
+    let updateError: unknown = null
+    for (let attempt = 0; attempt < 3; attempt++) {
+      const { error: e } = await supabase
+        .from('registrations')
+        .update({ payment_status: 'refunded', status: 'cancelled' })
+        .eq('id', reg.id)
+      updateError = e
+      if (!e) break
+      await new Promise((r) => setTimeout(r, 300))
+    }
 
     if (updateError) {
       // Refund went through at Comgate but our record didn't flip — must be

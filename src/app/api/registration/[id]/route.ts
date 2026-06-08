@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createServerClient } from '@/lib/supabase'
 import { API_ERRORS } from '@/lib/api-messages'
 import { reportError } from '@/lib/observability'
+import { verifyRegistrationToken } from '@/lib/registration-token'
 
 export const dynamic = 'force-dynamic'
 
@@ -20,6 +21,13 @@ export async function GET(
 
   if (!id) {
     return NextResponse.json({ error: API_ERRORS.notFound }, { status: 400 })
+  }
+
+  // Anti-IDOR: the bare UUID is not enough — require the HMAC access token that
+  // only the server can compute (carried on the confirmation URL from Comgate).
+  const token = request.nextUrl.searchParams.get('t')
+  if (!verifyRegistrationToken(id, token)) {
+    return NextResponse.json({ error: API_ERRORS.notFound }, { status: 403 })
   }
 
   try {

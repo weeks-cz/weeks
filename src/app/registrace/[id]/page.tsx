@@ -11,6 +11,7 @@ import { getLocationById, DEFAULT_LOCATION } from '@/lib/locations'
 function ConfirmationContent({ id }: { id: string }) {
   const searchParams = useSearchParams()
   const locationId = searchParams.get('location') || ''
+  const token = searchParams.get('t') || ''
   const location = locationId ? getLocationById(locationId) : DEFAULT_LOCATION
 
   return (
@@ -18,7 +19,7 @@ function ConfirmationContent({ id }: { id: string }) {
       <Header />
       <main className="min-h-screen bg-slate-50 pt-24 pb-16">
         <div className="section-container">
-          <RegistrationConfirmation registrationId={id} />
+          <RegistrationConfirmation registrationId={id} token={token} />
         </div>
       </main>
       <Footer />

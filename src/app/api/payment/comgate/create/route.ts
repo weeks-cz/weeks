@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createServerClient } from '@/lib/supabase'
 import { createPayment } from '@/lib/comgate'
 import { getTrustedPriceKc } from '@/lib/payment-pricing'
+import { registrationToken } from '@/lib/registration-token'
 import { API_ERRORS } from '@/lib/api-messages'
 import { rateLimit, clientIp } from '@/lib/rate-limit'
 import { reportError } from '@/lib/observability'
@@ -43,6 +44,7 @@ export async function POST(request: NextRequest) {
       email: (reg.parent_email as string) ?? '',
       returnBaseUrl: origin,
       locationId: reg.location_id as string,
+      confirmToken: registrationToken(reg.id as string),
     })
 
     // Diagnostic: is the service-role key reaching the function? (boolean only — no secret leak)
