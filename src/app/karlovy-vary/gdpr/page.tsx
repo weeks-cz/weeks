@@ -147,6 +147,17 @@ export default function KVGDPRPage() {
                     Vedení účetních dokladů v souladu s účetními a daňovými předpisy ČR.
                   </p>
                 </div>
+                <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
+                  <p className="text-gray-900 font-semibold mb-2">
+                    Výslovný souhlas se zvláštní kategorií údajů (čl. 9 odst. 2 písm. a) GDPR)
+                  </p>
+                  <p className="text-gray-700 text-base">
+                    Pokud v registraci uvedete zdravotní omezení nebo alergie dítěte (zvláštní
+                    kategorie osobních údajů), zpracováváme je na základě Vašeho výslovného souhlasu
+                    výhradně za účelem zajištění bezpečné účasti dítěte na táboře. Uvedení těchto
+                    údajů je dobrovolné.
+                  </p>
+                </div>
               </div>
             </section>
 

@@ -317,6 +317,7 @@ export function RegistrationForm() {
                 <div>
                   <label htmlFor="child_health" className="block text-sm font-medium text-gray-700 mb-1">Zdravotní omezení / alergie</label>
                   <textarea id="child_health" value={child.child_health_notes} onChange={e => setChild({...child, child_health_notes: e.target.value})} className={inputClass('child_health_notes')} rows={3} placeholder="Nepovinné — uveďte případné alergie, léky, omezení..." />
+                  <p className="text-xs text-gray-500 mt-1">Nepovinné. Uvádějte jen údaje nutné pro bezpečnost — použijeme je výhradně k zajištění bezpečné účasti dítěte na táboře.</p>
                 </div>
                 <div>
                   <label htmlFor="child_exp" className="block text-sm font-medium text-gray-700 mb-1">Zkušenosti s technologiemi</label>
@@ -423,7 +424,7 @@ export function RegistrationForm() {
                   <label htmlFor="gdpr" className="text-sm text-gray-700">
                     Souhlasím se{' '}
                     <Link href={gdprUrl} target="_blank" className="text-primary-600 underline hover:text-primary-700">zpracováním osobních údajů</Link>
-                    {' '}*
+                    , včetně případných zdravotních údajů dítěte, výhradně pro zajištění bezpečné účasti na táboře{' '}*
                   </label>
                 </div>
                 <FieldError name="gdpr_consent" />
