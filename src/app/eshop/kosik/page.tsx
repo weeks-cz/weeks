@@ -1,6 +1,13 @@
+import type { Metadata } from 'next'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { CartPageClient } from '@/components/shop/CartPageClient'
+
+// Košík nepatří do vyhledávačů.
+export const metadata: Metadata = {
+  title: { absolute: 'Košík | Weeks E-shop' },
+  robots: { index: false, follow: false },
+}
 
 export default function ShopCartPage() {
   return (

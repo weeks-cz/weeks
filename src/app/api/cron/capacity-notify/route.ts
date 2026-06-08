@@ -62,7 +62,8 @@ export async function GET(request: Request) {
   // Verify authorization
   const authHeader = request.headers.get('authorization')
   const cronSecret = process.env.CRON_SECRET
-  if (cronSecret && authHeader !== `Bearer ${cronSecret}`) {
+  // Fail closed: a missing CRON_SECRET must NOT open the endpoint to the public.
+  if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 

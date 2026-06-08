@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ArrowLeft, BookOpen, CheckCircle2, ExternalLink } from 'lucide-react'
@@ -8,6 +9,28 @@ import { formatPrice, getShopProductBySlug, productConceptNotice } from '@/lib/s
 import { ProductTracking } from '@/components/shop/ProductTracking'
 
 export const dynamic = 'force-dynamic'
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}): Promise<Metadata> {
+  const { slug } = await params
+  const product = await getShopProductBySlug(slug)
+  if (!product) return { title: { absolute: 'Produkt nenalezen | Weeks' } }
+  const url = `https://weeks.cz/eshop/${product.slug}`
+  return {
+    title: { absolute: `${product.name} | Weeks E-shop` },
+    description: `${product.name} — stavebnice a projekt Weeks pro mladé tvůrce, navazuje na výukovou Učebnu Weeks.`,
+    alternates: { canonical: url },
+    openGraph: {
+      title: `${product.name} | Weeks E-shop`,
+      url,
+      type: 'website',
+      locale: 'cs_CZ',
+    },
+  }
+}
 
 export default async function ShopProductPage({
   params,

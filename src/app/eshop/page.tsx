@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowRight, Cpu, ExternalLink, Layers3, PackagePlus, ShieldCheck, Sparkles } from 'lucide-react'
 import { Header } from '@/components/layout/Header'
@@ -6,6 +7,19 @@ import { ProductCatalog } from '@/components/shop/ProductCatalog'
 import { getShopProducts } from '@/lib/shop'
 
 export const dynamic = 'force-dynamic'
+
+export const metadata: Metadata = {
+  title: { absolute: 'E-shop — stavebnice a projekty pro děti | Weeks' },
+  description: 'Stavebnice a projekty Weeks pro mladé tvůrce — chytrý květináč, meteostanice a další. Navazují na výukovou Učebnu Weeks.',
+  alternates: { canonical: 'https://weeks.cz/eshop' },
+  openGraph: {
+    title: 'E-shop — stavebnice a projekty pro děti | Weeks',
+    description: 'Stavebnice a projekty Weeks pro mladé tvůrce — chytrý květináč, meteostanice a další.',
+    url: 'https://weeks.cz/eshop',
+    type: 'website',
+    locale: 'cs_CZ',
+  },
+}
 
 export default async function ShopPage() {
   const products = await getShopProducts()

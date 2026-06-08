@@ -1,7 +1,17 @@
 import { NextResponse } from 'next/server'
+import { rateLimit, clientIp } from '@/lib/rate-limit'
 
 export async function POST(request: Request) {
   try {
+    // Abuse guard: max 5 messages per IP per 10 min. Fail-open (Redis hiccup ≠ block).
+    const limited = await rateLimit(`contact:${clientIp(request)}`, 5, 600)
+    if (!limited.ok) {
+      return NextResponse.json(
+        { error: 'Příliš mnoho zpráv. Zkuste to prosím za chvíli.' },
+        { status: 429 }
+      )
+    }
+
     const body = await request.json()
     const { name, email, message } = body
 

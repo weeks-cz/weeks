@@ -72,6 +72,13 @@ export async function POST(request: NextRequest) {
     if (!refundKc || refundKc <= 0) {
       return NextResponse.json({ error: 'No valid refund amount' }, { status: 400 })
     }
+    // Never refund more than was actually paid.
+    if (refundKc > (reg.payment_amount as number)) {
+      return NextResponse.json(
+        { error: `Refund ${refundKc} Kč exceeds paid amount ${reg.payment_amount} Kč` },
+        { status: 400 }
+      )
+    }
 
     await refundPayment(reg.comgate_payment_id as string, refundKc)
 

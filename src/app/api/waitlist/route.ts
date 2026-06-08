@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { rateLimit, clientIp } from '@/lib/rate-limit'
 
 // Email validation regex
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -30,6 +31,15 @@ interface WaitlistRequestBody {
 
 export async function POST(request: NextRequest) {
   try {
+    // Abuse guard: max 8 submissions per IP per 10 min. Fail-open (Redis hiccup ≠ block).
+    const limited = await rateLimit(`waitlist:${clientIp(request)}`, 8, 600)
+    if (!limited.ok) {
+      return NextResponse.json(
+        { error: 'Příliš mnoho pokusů. Zkuste to prosím za chvíli.' },
+        { status: 429 }
+      )
+    }
+
     // Parse request body
     const body: WaitlistRequestBody = await request.json()
     const { email, program, childName, childAge, termin, gdprConsent } = body
