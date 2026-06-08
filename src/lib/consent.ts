@@ -14,6 +14,8 @@ export interface ConsentState {
 
 const STORAGE_KEY = 'cookie-consent'
 export const CONSENT_EVENT = 'cookie-consent-updated'
+// Odvolání/změna souhlasu — banner se znovu otevře (GDPR čl. 7(3): odvolat stejně snadno).
+export const CONSENT_REOPEN_EVENT = 'cookie-consent-reopen'
 
 // Migrace starých string hodnot ('all' / 'necessary') na strukturovaný souhlas.
 function parse(raw: string | null): ConsentState | null {
@@ -55,4 +57,10 @@ export function setConsent(consent: { analytics: boolean; marketing: boolean }):
   const value: ConsentState = { ...consent, ts: Date.now() }
   localStorage.setItem(STORAGE_KEY, JSON.stringify(value))
   window.dispatchEvent(new Event(CONSENT_EVENT))
+}
+
+// Znovu otevře cookie lištu, aby uživatel mohl souhlas kdykoli změnit nebo odvolat.
+export function openCookieSettings(): void {
+  if (typeof window === 'undefined') return
+  window.dispatchEvent(new Event(CONSENT_REOPEN_EVENT))
 }

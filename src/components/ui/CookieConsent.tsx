@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Cookie, X, ChevronDown } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { setConsent, isConsentDecided } from '@/lib/consent'
+import { setConsent, isConsentDecided, getConsent, CONSENT_REOPEN_EVENT } from '@/lib/consent'
 
 function Toggle({
   checked, onChange, disabled, label,
@@ -76,6 +76,20 @@ export function CookieConsent() {
       const timer = setTimeout(() => setIsVisible(true), 1500)
       return () => clearTimeout(timer)
     }
+  }, [])
+
+  // Odkaz „Nastavení cookies" v patičce znovu otevře lištu s předvyplněnou aktuální volbou,
+  // ať jde souhlas kdykoli změnit/odvolat (GDPR čl. 7(3)).
+  useEffect(() => {
+    const reopen = () => {
+      const current = getConsent()
+      setAnalytics(current?.analytics ?? false)
+      setMarketing(current?.marketing ?? false)
+      setShowSettings(true)
+      setIsVisible(true)
+    }
+    window.addEventListener(CONSENT_REOPEN_EVENT, reopen)
+    return () => window.removeEventListener(CONSENT_REOPEN_EVENT, reopen)
   }, [])
 
   const close = () => setIsVisible(false)

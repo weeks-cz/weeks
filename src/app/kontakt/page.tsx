@@ -63,6 +63,7 @@ export default function ContactPage() {
     name: '',
     email: '',
     message: '',
+    gdprConsent: false,
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
@@ -81,7 +82,7 @@ export default function ContactPage() {
 
       if (response.ok) {
         setSubmitStatus('success')
-        setFormData({ name: '', email: '', message: '' })
+        setFormData({ name: '', email: '', message: '', gdprConsent: false })
         trackLead()
       } else {
         setSubmitStatus('error')
@@ -247,9 +248,27 @@ export default function ContactPage() {
                     </div>
                   </div>
 
+                  <div className="flex items-start gap-2">
+                    <input
+                      type="checkbox"
+                      id="gdpr-contact"
+                      required
+                      checked={formData.gdprConsent}
+                      onChange={(e) => setFormData({ ...formData, gdprConsent: e.target.checked })}
+                      className="mt-1 w-4 h-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                    />
+                    <label htmlFor="gdpr-contact" className="text-sm text-gray-600 cursor-pointer">
+                      Souhlasím se{' '}
+                      <Link href="/gdpr" className="underline hover:text-gray-900">
+                        zpracováním osobních údajů
+                      </Link>{' '}
+                      za účelem zpracování mého dotazu.
+                    </label>
+                  </div>
+
                   <button
                     type="submit"
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || !formData.gdprConsent}
                     className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isSubmitting ? (

@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { MapPin, Mail, Phone, FileText, ArrowRight } from 'lucide-react'
 import { useLocation } from '@/contexts/LocationContext'
 import { buildPath } from '@/lib/locations'
+import { openCookieSettings } from '@/lib/consent'
 
 export function Footer() {
   const location = useLocation()
@@ -136,6 +137,16 @@ export function Footer() {
                   </Link>
                 </li>
               ))}
+              <li>
+                <button
+                  type="button"
+                  onClick={openCookieSettings}
+                  className="text-gray-400 hover:text-white transition-colors inline-flex items-center gap-2 group"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-gray-600 group-hover:bg-primary-500 transition-colors" />
+                  Nastavení cookies
+                </button>
+              </li>
             </ul>
           </div>
 

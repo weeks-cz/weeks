@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from 'next'
 import { Suspense } from 'react'
 import { DM_Sans, Outfit } from 'next/font/google'
 import './globals.css'
-import { OrganizationSchema, LocalBusinessSchema, EventSchema } from '@/components/seo/StructuredData'
 import { CookieConsent } from '@/components/ui/CookieConsent'
 import { KVRegionNudge } from '@/components/ui/KVRegionNudge'
 import { MetaPixel } from '@/components/analytics/MetaPixel'
@@ -105,11 +104,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="cs">
-      <head>
-        <OrganizationSchema />
-        <LocalBusinessSchema />
-        <EventSchema />
-      </head>
       <body className={`${dmSans.variable} ${outfit.variable} font-sans`}>
         <ShopProvider>
           <MotionProvider>

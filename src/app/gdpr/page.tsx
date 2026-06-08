@@ -228,8 +228,11 @@ export default function GDPRPage() {
                 Vaše osobní údaje můžeme předávat následujícím kategoriím příjemců:
               </p>
               <ul className="list-disc pl-6 space-y-2 text-gray-700">
-                <li><strong>Poskytovatel emailových služeb</strong> – pro technické zajištění rozesílky emailů</li>
-                <li><strong>Poskytovatel hostingu</strong> – pro technický provoz webu</li>
+                <li><strong>Formspree</strong> – zpracování odeslaných formulářů (kontakt, registrace zájmu)</li>
+                <li><strong>Vercel</strong> – hosting a technický provoz webu</li>
+                <li><strong>Google (Google Analytics)</strong> – měření návštěvnosti, pouze s Vaším souhlasem</li>
+                <li><strong>Meta Platforms (Facebook Pixel)</strong> – měření účinnosti reklam, pouze s Vaším souhlasem</li>
+                <li><strong>Sanity</strong> – správa obsahu webu</li>
               </ul>
               <p className="text-gray-700 mt-4">
                 Všichni zpracovatelé jsou pečlivě vybráni a zavázáni k ochraně osobních údajů v souladu
@@ -252,13 +255,32 @@ export default function GDPRPage() {
                 <div className="bg-white p-6 rounded-lg border border-gray-200">
                   <h3 className="text-lg font-semibold text-gray-900 mb-2">Analytické cookies</h3>
                   <p className="text-gray-700 text-base">
-                    Slouží k měření návštěvnosti a analýze chování uživatelů na webu.
+                    Slouží k měření návštěvnosti a analýze chování uživatelů na webu (Google Analytics).
                     Používáme je pouze s Vaším souhlasem.
+                  </p>
+                </div>
+                <div className="bg-white p-6 rounded-lg border border-gray-200">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Marketingové cookies</h3>
+                  <p className="text-gray-700 text-base">
+                    Slouží k měření účinnosti reklam a cílení (Facebook Pixel / Meta).
+                    Aktivujeme je pouze s Vaším souhlasem.
                   </p>
                 </div>
               </div>
               <p className="text-gray-700 mt-4">
-                Nastavení cookies můžete kdykoli změnit v nastavení Vašeho prohlížeče.
+                Svůj souhlas s cookies můžete kdykoli změnit nebo odvolat odkazem
+                <strong> „Nastavení cookies"</strong> v patičce webu — stejně snadno, jako jste jej udělili.
+              </p>
+            </section>
+
+            <section className="mb-12">
+              <h2 className="heading-3 text-gray-900 mb-4">10a. Přibližná poloha podle IP adresy</h2>
+              <p className="text-gray-700 mb-4">
+                Pro zobrazení nabídky táborů z nejbližšího místa odvozujeme z Vaší IP adresy
+                přibližný region (kraj). Tuto informaci <strong>neukládáme</strong> — slouží pouze
+                k jednorázovému zobrazení upozornění na tábory ve Vašem kraji (např. v Karlových Varech).
+                Právním základem je náš oprávněný zájem nabídnout relevantní obsah; zpracování je
+                minimální a nevede k identifikaci konkrétní osoby.
               </p>
             </section>
 

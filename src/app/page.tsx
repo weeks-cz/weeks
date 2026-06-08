@@ -9,6 +9,7 @@ import { FAQSection } from '@/components/sections/FAQSection'
 import { ContactSection } from '@/components/sections/ContactSection'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
+import { OrganizationSchema, LocalBusinessSchema, EventSchema } from '@/components/seo/StructuredData'
 import { getAllUpcomingTerms, getNearestTermsByProgram } from '@/lib/camps'
 
 export const revalidate = 300
@@ -21,6 +22,9 @@ export default async function Home() {
 
   return (
     <>
+      <OrganizationSchema />
+      <LocalBusinessSchema />
+      <EventSchema />
       <Header />
       <main id="main">
         <HeroSection />
