@@ -87,7 +87,7 @@ export default function KVPodminkyPage() {
             <section className="mb-10">
               <h2 className="heading-3 text-gray-900 mb-4">3. Místo konání</h2>
               <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
-                <p className="text-gray-900 font-medium mb-1">FabLab v Kreativní Centrum Vary&amp;Te</p>
+                <p className="text-gray-900 font-medium mb-1">FabLab v Kreativní Centrum VARY&amp;TE</p>
                 <p className="text-gray-700">Dykova, Stará Role, 360 17 Karlovy Vary</p>
                 <p className="text-gray-700 mt-3 text-sm">
                   Provozní doba táborů: <strong>8:00–16:00</strong>
@@ -385,7 +385,7 @@ export default function KVPodminkyPage() {
               <div className="bg-primary-50 p-6 rounded-lg border border-primary-200">
                 <p className="text-primary-900 font-semibold mb-3">Weeks – IT tábory Karlovy Vary</p>
                 <p className="text-primary-800 mb-1"><strong>Pořadatel:</strong> Lukáš Kubík, IČO: 24878511 (úplná adresa sídla v čl. 1)</p>
-                <p className="text-primary-800 mb-1"><strong>Místo konání:</strong> FabLab v Kreativní Centrum Vary&amp;Te, Dykova, Stará Role, 360 17 Karlovy Vary</p>
+                <p className="text-primary-800 mb-1"><strong>Místo konání:</strong> FabLab v Kreativní Centrum VARY&amp;TE, Dykova, Stará Role, 360 17 Karlovy Vary</p>
                 <p className="text-primary-800 mb-1"><strong>E-mail:</strong> info@weeks.cz</p>
                 <p className="text-primary-800"><strong>Telefon:</strong> +420 703 046 440</p>
               </div>

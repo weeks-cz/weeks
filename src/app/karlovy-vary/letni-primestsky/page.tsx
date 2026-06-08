@@ -96,7 +96,7 @@ const campFaqs = [
   },
   {
     question: 'Kde přesně tábor probíhá?',
-    answer: 'Ve FabLabu v Kreativním centru Vary&Te, Dykova, Stará Role — největším kreativním centru v Karlovarském kraji s profesionálním zázemím pro 3D tisk, VR a IoT.',
+    answer: 'Ve FabLabu v Kreativním centru VARY&TE, Dykova, Stará Role — největším kreativním centru v Karlovarském kraji s profesionálním zázemím pro 3D tisk, VR a IoT.',
   },
 ]
 
@@ -168,7 +168,7 @@ export default function LetniPrimestskyCampPage() {
           <div className="absolute inset-0">
             <Image
               src="/images/varyete/fablab-1.avif"
-              alt="FabLab Kreativního centra Vary&Te v Karlových Varech — 3D tisk"
+              alt="FabLab Kreativního centra VARY&TE v Karlových Varech — 3D tisk"
               fill
               sizes="100vw"
               className="object-cover"
@@ -225,7 +225,7 @@ export default function LetniPrimestskyCampPage() {
                 className="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl leading-relaxed"
               >
                 Celý týden 3D tisk, 3D modelování a IoT s Arduinem — ve FabLabu
-                Kreativního centra Vary&Te v Karlových Varech.{' '}
+                Kreativního centra VARY&TE v Karlových Varech.{' '}
                 <span className="text-white font-medium">Pro děti 10–15 let.</span>
               </motion.p>
 
@@ -433,7 +433,7 @@ export default function LetniPrimestskyCampPage() {
           </div>
         </section>
 
-        {/* Kde to probíhá — Vary&Te FabLab */}
+        {/* Kde to probíhá — VARY&TE FabLab */}
         <VenueShowcase />
 
         {/* Praktické informace */}
@@ -469,7 +469,7 @@ export default function LetniPrimestskyCampPage() {
                   {
                     icon: MapPin,
                     title: 'Místo',
-                    text: 'FabLab v Kreativním centru Vary&Te, Dykova, Stará Role, Karlovy Vary. Největší kreativní centrum v Karlovarském kraji.',
+                    text: 'FabLab v Kreativním centru VARY&TE, Dykova, Stará Role, Karlovy Vary. Největší kreativní centrum v Karlovarském kraji.',
                   },
                 ].map((info, i) => (
                   <motion.div

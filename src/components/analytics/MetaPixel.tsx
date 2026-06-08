@@ -4,26 +4,18 @@ import { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import Script from 'next/script'
 import { FB_PIXEL_ID, pageview } from '@/lib/fbpixel'
+import { hasConsent, CONSENT_EVENT } from '@/lib/consent'
 
 export function MetaPixel() {
   const pathname = usePathname()
   const [consentGiven, setConsentGiven] = useState(false)
 
   useEffect(() => {
-    // Check initial consent state
-    if (localStorage.getItem('cookie-consent') === 'all') {
-      setConsentGiven(true)
-    }
-
-    // Listen for consent updates from CookieConsent component
-    const handleConsentUpdate = () => {
-      if (localStorage.getItem('cookie-consent') === 'all') {
-        setConsentGiven(true)
-      }
-    }
-
-    window.addEventListener('cookie-consent-updated', handleConsentUpdate)
-    return () => window.removeEventListener('cookie-consent-updated', handleConsentUpdate)
+    // Marketing souhlas → Pixel se smí načíst (reaguje i na pozdější změnu souhlasu).
+    const update = () => setConsentGiven(hasConsent('marketing'))
+    update()
+    window.addEventListener(CONSENT_EVENT, update)
+    return () => window.removeEventListener(CONSENT_EVENT, update)
   }, [])
 
   // Track pageview on route change

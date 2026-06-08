@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 import { MapPin, Cpu, Printer, ShieldCheck } from 'lucide-react'
 import { useLocation } from '@/contexts/LocationContext'
 
-// Ukázka skutečného místa konání — FabLab Kreativního centra Vary&Te.
+// Ukázka skutečného místa konání — FabLab Kreativního centra VARY&TE.
 // Fotky z varyete.cz (partner). Dělá z "místa" hmatatelný, důvěryhodný prostor.
 const features = [
   { icon: Printer, text: 'Profesionální 3D tiskárny, VR a Arduino soupravy' },
@@ -34,7 +34,7 @@ export function VenueShowcase() {
             <h2 className="font-display text-3xl md:text-4xl font-bold text-white mb-5 leading-tight">
               FabLab Kreativního centra{' '}
               <span className="bg-gradient-to-r from-accent-400 to-primary-400 bg-clip-text text-transparent">
-                Vary&amp;Te
+                VARY&amp;TE
               </span>
             </h2>
             <p className="text-lg text-gray-300 mb-8 leading-relaxed">
@@ -66,13 +66,13 @@ export function VenueShowcase() {
             className="grid grid-cols-2 gap-3 sm:gap-4"
           >
             <div className="relative col-span-2 aspect-[16/9] rounded-2xl overflow-hidden">
-              <Image src="/images/varyete/fablab-1.avif" alt="FabLab Vary&Te — práce s 3D tiskem" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
+              <Image src="/images/varyete/fablab-1.avif" alt="FabLab VARY&TE — práce s 3D tiskem" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
             </div>
             <div className="relative aspect-square rounded-2xl overflow-hidden">
-              <Image src="/images/varyete/fablab-5.avif" alt="Pracoviště ve FabLabu Vary&Te" fill sizes="(max-width: 1024px) 50vw, 25vw" className="object-cover" />
+              <Image src="/images/varyete/fablab-5.avif" alt="Pracoviště ve FabLabu VARY&TE" fill sizes="(max-width: 1024px) 50vw, 25vw" className="object-cover" />
             </div>
             <div className="relative aspect-square rounded-2xl overflow-hidden">
-              <Image src="/images/varyete/fablab-6.avif" alt="Tvoření ve FabLabu Vary&Te" fill sizes="(max-width: 1024px) 50vw, 25vw" className="object-cover" />
+              <Image src="/images/varyete/fablab-6.avif" alt="Tvoření ve FabLabu VARY&TE" fill sizes="(max-width: 1024px) 50vw, 25vw" className="object-cover" />
             </div>
           </motion.div>
         </div>

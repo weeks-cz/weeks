@@ -164,7 +164,7 @@ export default function KVAboutPage() {
               </h2>
               <p className="text-xl text-gray-600 max-w-2xl mx-auto">
                 Weeks v Karlových Varech je projekt organizovaný Lukášem Kubíkem,
-                který probíhá v Kreativním centru Vary&amp;Te.
+                který probíhá v Kreativním centru VARY&amp;TE.
               </p>
             </motion.div>
 
@@ -183,7 +183,7 @@ export default function KVAboutPage() {
                   <span className="text-2xl font-bold text-accent-600">V&amp;T</span>
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-3">
-                  Kreativní centrum Vary&amp;Te
+                  Kreativní centrum VARY&amp;TE
                 </h3>
                 <p className="text-gray-600 mb-6">
                   Moderní kreativní centrum v Karlových Varech vybavené profesionálními nástroji

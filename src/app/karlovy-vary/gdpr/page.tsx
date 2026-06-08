@@ -262,7 +262,7 @@ export default function KVGDPRPage() {
                 <p className="text-primary-900 font-semibold mb-2">Weeks – Letní příměstský tábor Karlovy Vary</p>
                 <p className="text-primary-800 text-base mb-1">Správce: Lukáš Kubík, IČO 24878511</p>
                 <p className="text-primary-800 text-base mb-1">Email: info@weeks.cz</p>
-                <p className="text-primary-800 text-base">Místo konání: Kreativní centrum Vary&amp;Te, Stará Role 175, Karlovy Vary</p>
+                <p className="text-primary-800 text-base">Místo konání: Kreativní centrum VARY&amp;TE, Stará Role 175, Karlovy Vary</p>
               </div>
             </section>
 

@@ -127,7 +127,7 @@ export function ProgramSection() {
         program: location.programs.find(p => p.id === 'letni-primestsky'),
         href: 'letni-primestsky',
         badgeLabel: 'Příměstský · 5 dní',
-        description: '3D tisk, vlastní 3D modely a IoT s Arduinem — celý pracovní týden ve FabLabu Vary&Te.',
+        description: '3D tisk, vlastní 3D modely a IoT s Arduinem — celý pracovní týden ve FabLabu VARY&TE.',
         image: '/images/program-mix.webp',
       },
       {
@@ -174,7 +174,7 @@ export function ProgramSection() {
               className="text-lg text-gray-600"
             >
               Celotýdenní příměstský tábor (Po–Pá) nebo víkendový MIX (So–Ne) —
-              všechny termíny ve FabLabu Kreativního centra Vary&Te.
+              všechny termíny ve FabLabu Kreativního centra VARY&TE.
             </motion.p>
           </div>
 

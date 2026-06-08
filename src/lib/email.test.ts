@@ -29,7 +29,7 @@ describe('buildNastupniListEmail', () => {
     childName: 'Tomáš Novák',
     programName: 'Víkendový tábor chytrých technologií',
     termLabel: '1. 8. 2026 – 2. 8. 2026',
-    venueName: 'FabLab Vary&Te',
+    venueName: 'FabLab VARY&TE',
     venueAddress: 'Dykova, 360 17 Stará Role',
     contactPhone: '+420 703 046 440',
     contactEmail: 'info@weeks.cz',
@@ -38,7 +38,7 @@ describe('buildNastupniListEmail', () => {
     expect(r.subject).toBe('Nástupní list – Víkendový tábor chytrých technologií (1. 8. 2026 – 2. 8. 2026)')
   })
   it('includes venue, time window and contact', () => {
-    expect(r.html).toContain('FabLab Vary&Te')
+    expect(r.html).toContain('FabLab VARY&TE')
     expect(r.html).toContain('Dykova, 360 17 Stará Role')
     expect(r.html).toContain('8:00 – 16:00')
     expect(r.html).toContain('+420 703 046 440')

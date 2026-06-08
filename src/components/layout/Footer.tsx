@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { MapPin, Mail, Phone, FileText } from 'lucide-react'
+import { MapPin, Mail, Phone, FileText, ArrowRight } from 'lucide-react'
 import { useLocation } from '@/contexts/LocationContext'
 import { buildPath } from '@/lib/locations'
 
@@ -30,6 +30,12 @@ export function Footer() {
     { name: 'Ochrana osobních údajů', href: buildPath(location, 'gdpr') },
     { name: 'Podmínky užití', href: buildPath(location, 'podminky') },
   ]
+
+  // Trvalá, nenápadná záchytka pro druhou lokaci — pro ty, kdo přepínač měst v hlavičce
+  // přehlédnou. Plná navigace (<a>), ať se LocationProvider znovu vyhodnotí podle cesty.
+  const otherCity = location.isDefault
+    ? { href: '/karlovy-vary', label: 'Tábory v Karlových Varech' }
+    : { href: '/', label: 'Tábory v Praze' }
 
   const description = location.isDefault
     ? `Víkendové IT kempy pro děti 10-15 let. 3D tisk, VR, IoT a programování v profesionálním prostředí ${location.venues[0].name}.`
@@ -86,6 +92,15 @@ export function Footer() {
                 </a>
               )}
             </div>
+
+            <a
+              href={otherCity.href}
+              className="mt-6 inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-white transition-colors"
+            >
+              <MapPin className="w-4 h-4 text-primary-500" />
+              {otherCity.label}
+              <ArrowRight className="w-4 h-4" />
+            </a>
           </div>
 
           {/* Quick Links */}

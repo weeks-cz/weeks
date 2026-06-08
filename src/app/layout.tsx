@@ -1,11 +1,12 @@
 import type { Metadata, Viewport } from 'next'
 import { Suspense } from 'react'
 import { DM_Sans, Outfit } from 'next/font/google'
-import { GoogleAnalytics } from '@next/third-parties/google'
 import './globals.css'
 import { OrganizationSchema, LocalBusinessSchema, EventSchema } from '@/components/seo/StructuredData'
 import { CookieConsent } from '@/components/ui/CookieConsent'
+import { KVRegionNudge } from '@/components/ui/KVRegionNudge'
 import { MetaPixel } from '@/components/analytics/MetaPixel'
+import { GoogleAnalyticsGated } from '@/components/analytics/GoogleAnalyticsGated'
 import { QRTracker } from '@/components/analytics/QRTracker'
 import { MotionProvider } from '@/components/providers/MotionProvider'
 import { ShopProvider } from '@/components/shop/ShopProvider'
@@ -116,11 +117,12 @@ export default function RootLayout({
           </MotionProvider>
         </ShopProvider>
         <CookieConsent />
+        <KVRegionNudge />
         <Suspense fallback={null}>
           <QRTracker />
         </Suspense>
         <MetaPixel />
-        <GoogleAnalytics gaId={GA_ID} />
+        <GoogleAnalyticsGated gaId={GA_ID} />
       </body>
     </html>
   )

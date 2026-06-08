@@ -66,7 +66,7 @@ export function KVRegistrationSection() {
           </h2>
           <p className="text-lg text-gray-600">
             Vyberte si formát i konkrétní termín. Příměstský tábor (Po–Pá) i víkendový MIX (So–Ne)
-            probíhají ve FabLabu Vary&Te v Karlových Varech.
+            probíhají ve FabLabu VARY&TE v Karlových Varech.
           </p>
         </motion.div>
 

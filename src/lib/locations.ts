@@ -169,8 +169,8 @@ export const LOCATIONS: Record<string, Location> = {
     },
     venues: [
       {
-        name: 'FabLab Vary&Te',
-        fullName: 'FabLab v Kreativní Centrum Vary&Te',
+        name: 'FabLab VARY&TE',
+        fullName: 'FabLab v Kreativní Centrum VARY&TE',
         address: 'Dykova',
         city: 'Stará Role',
         postalCode: '360 17',
@@ -184,7 +184,7 @@ export const LOCATIONS: Record<string, Location> = {
     contact: { phone: '+420 703 046 440', email: 'info@weeks.cz' },
     seo: {
       titleSuffix: 'Karlovy Vary',
-      description: 'IT kempy pro děti 9-15 let v Karlových Varech. 3D tisk, IoT, programování a virtuální realita ve Vary&Te Creative Center.',
+      description: 'IT kempy pro děti 9-15 let v Karlových Varech. 3D tisk, IoT, programování a virtuální realita ve VARY&TE Creative Center.',
     },
     programs: [
       { id: 'letni-primestsky', name: 'Letní příměstský tábor chytrých technologií', slug: 'letni-primestsky', campType: 'week' as const, price: 4990, capacity: 15, ageRange: '9-15', color: 'accent' },
@@ -206,11 +206,11 @@ export const LOCATIONS: Record<string, Location> = {
         description: 'Tábory organizuje tým Weeks s důrazem na kvalitu výuky, bezpečnost dětí a profesionální přístup.',
       },
       location: {
-        title: 'Vary&Te Creative Center',
+        title: 'VARY&TE Creative Center',
         description: 'Největší kreativní centrum v Karlovarském kraji — FabLab, GameDev arena a moderní vzdělávací prostory.',
       },
       technology: {
-        title: 'Vybavení FabLab Vary&Te',
+        title: 'Vybavení FabLab VARY&TE',
         description: 'Vaše dítě pracuje ve FabLabu — průmyslové 3D tiskárny, VR headsety a pokročilá IoT zařízení. Profesionální zázemí největšího kreativního centra v kraji.',
       },
       schedule: {
@@ -225,8 +225,8 @@ export const LOCATIONS: Record<string, Location> = {
       { title: 'Proškolení lektoři', description: 'Kurz první pomoci' },
     ],
     faq: {
-      locationAnswer: 'Tábor probíhá ve FabLab v Kreativním centru Vary&Te, Dykova, Stará Role, Karlovy Vary — největším kreativním centru v Karlovarském kraji s profesionálním FabLabem a GameDev arenou.',
-      organizerAnswer: 'Tábory v Karlových Varech organizuje Weeks ve spolupráci s Kreativním centrem Vary&Te.',
+      locationAnswer: 'Tábor probíhá ve FabLab v Kreativním centru VARY&TE, Dykova, Stará Role, Karlovy Vary — největším kreativním centru v Karlovarském kraji s profesionálním FabLabem a GameDev arenou.',
+      organizerAnswer: 'Tábory v Karlových Varech organizuje Weeks ve spolupráci s Kreativním centrem VARY&TE.',
     },
     availablePages: ['', 'letni-primestsky', 'tabor-chytrych-technologii', 'o-nas', 'gdpr', 'podminky', 'kontakt'],
   },

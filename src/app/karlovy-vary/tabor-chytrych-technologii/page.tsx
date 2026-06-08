@@ -67,7 +67,7 @@ export default function KVMix() {
           <div className="absolute inset-0">
             <Image
               src="/images/varyete/fablab-5.avif"
-              alt="FabLab Kreativního centra Vary&Te v Karlových Varech"
+              alt="FabLab Kreativního centra VARY&TE v Karlových Varech"
               fill
               sizes="100vw"
               className="object-cover"
@@ -105,7 +105,7 @@ export default function KVMix() {
                 className="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl leading-relaxed"
               >
                 Za jeden víkend si vaše dítě vyzkouší 3D tisk, virtuální realitu i&nbsp;IoT
-                s&nbsp;Arduinem — ve FabLabu Vary&amp;Te v&nbsp;Karlových Varech.{' '}
+                s&nbsp;Arduinem — ve FabLabu VARY&amp;TE v&nbsp;Karlových Varech.{' '}
                 <span className="text-white font-medium">A vlastní projekty si odnese domů.</span>
               </motion.p>
               <motion.div
@@ -235,7 +235,7 @@ export default function KVMix() {
                   <Laptop className="w-5 h-5 text-accent-600" />
                 </div>
                 <h3 className="font-semibold text-gray-900 mb-3">Vybavení</h3>
-                <p className="text-sm text-gray-600">Veškeré technické vybavení — 3D tiskárny, VR headsety, Arduina i senzory — je na místě ve Vary&Te. Děti nemusí nic nosit.</p>
+                <p className="text-sm text-gray-600">Veškeré technické vybavení — 3D tiskárny, VR headsety, Arduina i senzory — je na místě ve VARY&TE. Děti nemusí nic nosit.</p>
               </motion.div>
 
               <motion.div
@@ -336,7 +336,7 @@ export default function KVMix() {
           </div>
         </section>
 
-        {/* Kde to probíhá — Vary&Te FabLab */}
+        {/* Kde to probíhá — VARY&TE FabLab */}
         <VenueShowcase />
 
         {/* Co si dítě odnese — galerie projektů */}
