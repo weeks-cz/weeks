@@ -6,6 +6,9 @@ import * as Sentry from '@sentry/nextjs'
 //
 // No-op unless SENTRY_DSN is set AND we're in production, so local dev and
 // preview stay quiet.
+//
+// NOTE: this file MUST live in src/ (not the repo root) because the project uses a
+// src/ directory — Next.js only picks up src/instrumentation.ts in that case.
 
 const dsn = process.env.SENTRY_DSN
 const enabled = !!dsn && process.env.NODE_ENV === 'production'
