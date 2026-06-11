@@ -219,7 +219,7 @@ export default function KVAboutPage() {
                   Weeks
                 </h3>
                 <p className="text-gray-600 mb-6">
-                  Weeks je projekt zaměřený na IT vzdělávání dětí a mládeže ve věku 10–15 let.
+                  Weeks je projekt zaměřený na IT vzdělávání dětí a mládeže ve věku 9–15 let.
                   Kombinuje praktické workshopy, profesionální vybavení a zkušené lektory z praxe.
                 </p>
                 <div className="flex items-center gap-2 text-sm text-primary-600 font-medium">

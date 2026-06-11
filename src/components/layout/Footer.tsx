@@ -38,9 +38,10 @@ export function Footer() {
     ? { href: '/karlovy-vary', label: 'Tábory v Karlových Varech' }
     : { href: '/', label: 'Tábory v Praze' }
 
+  const ageRange = location.programs[0]?.ageRange ?? '10-15'
   const description = location.isDefault
-    ? `Víkendové IT kempy pro děti 10-15 let. 3D tisk, VR, IoT a programování v profesionálním prostředí ${location.venues[0].name}.`
-    : `Letní příměstské IT tábory pro děti 10-15 let. 3D tisk, VR, IoT a programování v ${location.venues[0].name} v Karlových Varech.`
+    ? `Víkendové IT kempy pro děti ${ageRange} let. 3D tisk, VR, IoT a programování v profesionálním prostředí ${location.venues[0].name}.`
+    : `Letní příměstské IT tábory pro děti ${ageRange} let. 3D tisk, VR, IoT a programování v ${location.venues[0].name} v Karlových Varech.`
 
   return (
     <footer className="bg-gray-900 text-gray-300 relative overflow-hidden">

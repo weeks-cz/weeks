@@ -9,6 +9,8 @@ import { useLocation } from '@/contexts/LocationContext'
 
 export function HeroSection() {
   const location = useLocation()
+  // Věk bereme z configu lokace (Praha 10–15, KV 9–15), ne natvrdo.
+  const ageLabel = (location.programs[0]?.ageRange ?? '10-15').replace('-', '–')
   return (
     <section className="relative min-h-screen flex items-center pt-32 pb-24 overflow-hidden">
       {/* Background Image with Overlay */}
@@ -67,7 +69,7 @@ export function HeroSection() {
           >
             {location.hero.subtitle} Profesionální vybavení,
             zkušení instruktoři a projekty, které si Vaše dítě odnese domů.
-            <span className="text-white font-medium"> Pro děti 10–15 let.</span>
+            <span className="text-white font-medium"> Pro děti {ageLabel} let.</span>
           </motion.p>
 
           {/* CTAs */}
@@ -134,7 +136,7 @@ export function HeroSection() {
 
               <div className="flex items-center gap-3 p-3 rounded-xl bg-primary-500/20 backdrop-blur-sm border border-primary-400/30">
                 <div className="h-10 shrink-0 rounded-lg bg-primary-500/30 flex items-center justify-center px-3">
-                  <span className="text-sm font-bold text-white">10–15</span>
+                  <span className="text-sm font-bold text-white">{ageLabel}</span>
                 </div>
                 <div className="min-w-0">
                   <p className="text-xs text-gray-400">Věková skupina</p>

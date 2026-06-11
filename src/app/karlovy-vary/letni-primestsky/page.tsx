@@ -226,7 +226,7 @@ export default function LetniPrimestskyCampPage() {
               >
                 Celý týden 3D tisk, 3D modelování a IoT s Arduinem — ve FabLabu
                 Kreativního centra VARY&TE v Karlových Varech.{' '}
-                <span className="text-white font-medium">Pro děti 10–15 let.</span>
+                <span className="text-white font-medium">Pro děti 9–15 let.</span>
               </motion.p>
 
               <motion.div

@@ -90,7 +90,7 @@ export default function KVPodminkyPage() {
                 <p className="text-gray-900 font-medium mb-1">FabLab v Kreativní Centrum VARY&amp;TE</p>
                 <p className="text-gray-700">Dykova, Stará Role, 360 17 Karlovy Vary</p>
                 <p className="text-gray-700 mt-3 text-sm">
-                  Provozní doba táborů: <strong>8:00–16:00</strong>
+                  Provozní doba táborů: <strong>8:00–17:00</strong>
                 </p>
               </div>
             </section>

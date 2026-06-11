@@ -85,7 +85,7 @@ export function KVRegistrationSection() {
                     <h3 className="text-xl font-bold text-gray-900">{program.name}</h3>
                   </div>
                   <p className="text-sm text-gray-500">
-                    {program.campType === 'week' ? 'Po–Pá, 8:00–16:00' : 'So–Ne, 8:30–16:30'}
+                    {program.campType === 'week' ? 'Po–Pá, 8:00–17:00' : 'So–Ne, 9:00–17:00'}
                     {' · '}
                     Max {program.capacity} dětí
                     {' · '}
