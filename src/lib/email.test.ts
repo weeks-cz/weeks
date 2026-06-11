@@ -65,7 +65,7 @@ describe('buildPaymentReminderEmail', () => {
     expect(r.html).toContain(`${(4990).toLocaleString('cs-CZ')} Kč`)
   })
   it('frames the spot as reserved only after payment, with a no-pressure opt-out', () => {
-    expect(r.html).toContain('místo se rezervuje až po zaplacení')
+    expect(r.html).toContain('Místo se rezervuje až po zaplacení')
     expect(r.html).toContain('ignorovat')
   })
 })

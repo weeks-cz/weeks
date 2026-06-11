@@ -142,7 +142,7 @@ export interface PaymentReminderParams {
 export function buildPaymentReminderEmail(p: PaymentReminderParams): { subject: string; html: string } {
   const body = `
     <p>Dobrý den,</p>
-    <p>děkujeme za zájem o náš <strong>${p.programName}</strong> v ${p.locationName}. Registraci pro <strong>${p.childName}</strong> máme rozepsanou, ale zatím u ní nevidíme dokončenou platbu — a místo se rezervuje až po zaplacení (volná místa se obsazují průběžně).</p>
+    <p>děkujeme za zájem o náš <strong>${p.programName}</strong> v ${p.locationName}. Registraci pro <strong>${p.childName}</strong> máme rozepsanou, ale zatím u ní nevidíme dokončenou platbu. Místo se rezervuje až po zaplacení (volná místa se obsazují průběžně).</p>
     <p>Dokončit ji můžete jedním kliknutím:</p>
     <p style="text-align:center;margin:24px 0;">
       <a href="${p.paymentUrl}" style="display:inline-block;background:#4f46e5;color:#fff;text-decoration:none;font-weight:600;padding:12px 28px;border-radius:10px;">Dokončit platbu</a>
