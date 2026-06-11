@@ -129,3 +129,32 @@ export function buildNastupniListEmail(p: NastupniListParams): { subject: string
     html: layout('Nástupní list 🎒', body),
   }
 }
+
+export interface PaymentReminderParams {
+  childName: string
+  programName: string
+  locationName: string
+  termLabel: string
+  priceKc: number
+  paymentUrl: string
+}
+
+export function buildPaymentReminderEmail(p: PaymentReminderParams): { subject: string; html: string } {
+  const body = `
+    <p>Dobrý den,</p>
+    <p>děkujeme za zájem o náš <strong>${p.programName}</strong> v ${p.locationName}. Registraci pro <strong>${p.childName}</strong> máme rozepsanou, ale zatím u ní nevidíme dokončenou platbu — a místo se rezervuje až po zaplacení (volná místa se obsazují průběžně).</p>
+    <p>Dokončit ji můžete jedním kliknutím:</p>
+    <p style="text-align:center;margin:24px 0;">
+      <a href="${p.paymentUrl}" style="display:inline-block;background:#4f46e5;color:#fff;text-decoration:none;font-weight:600;padding:12px 28px;border-radius:10px;">Dokončit platbu</a>
+    </p>
+    <table style="width:100%;border-collapse:collapse;margin:16px 0;font-size:14px;">
+      <tr><td style="padding:6px 0;color:#64748b;">Termín</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.termLabel}</td></tr>
+      <tr><td style="padding:6px 0;color:#64748b;">Cena</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.priceKc.toLocaleString('cs-CZ')} Kč</td></tr>
+    </table>
+    <p>Pokud už o místo nemáte zájem, nic neřešte — stačí tento e-mail ignorovat.</p>
+    <p>S pozdravem,<br>tým Weeks</p>`
+  return {
+    subject: `Dokončení registrace – ${p.programName}`,
+    html: layout('Dokončení registrace', body),
+  }
+}
