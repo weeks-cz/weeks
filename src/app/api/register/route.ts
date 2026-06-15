@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest, NextResponse, after } from 'next/server'
 import { registrationSchema } from '@/lib/registration'
 import { createServerClient } from '@/lib/supabase'
 import { getTrustedCapacity, getTrustedPriceKc } from '@/lib/payment-pricing'
@@ -70,29 +70,32 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: API_ERRORS.registrationFailed }, { status: 500 })
     }
 
-    // Instant "registration received — please pay" email. Best-effort: a failure
-    // here must NOT fail the registration (the row is already safely inserted),
-    // so it's caught and only reported.
+    // Instant "registration received — please pay" email. Sent AFTER the response
+    // (via next/server `after`) so the Resend round-trip never delays the redirect
+    // to payment. Best-effort: a failure is reported but can't affect the
+    // already-inserted registration.
     if (isEmailConfigured()) {
-      try {
-        const d = parsed.data
-        const location = getLocationById(d.location_id)
-        const programCfg = location.programs.find((p) => p.id === d.program)
-        const { subject, html } = buildRegistrationReceivedEmail({
-          childName: d.child_name,
-          programName: programCfg?.name ?? d.program,
-          termLabel: formatTermLabel(d.term_start, d.term_end),
-          locationName: location.name,
-          priceKc: trustedPrice,
-          paymentUrl: `${SITE_URL}/platba/${newId}?location=${d.location_id}`,
-        })
-        await sendEmail({ to: d.parent_email, subject, html })
-      } catch (e) {
-        reportMessage('Registration-received email failed', {
-          registrationId: newId,
-          error: e instanceof Error ? e.message : String(e),
-        })
-      }
+      const d = parsed.data
+      after(async () => {
+        try {
+          const location = getLocationById(d.location_id)
+          const programCfg = location.programs.find((p) => p.id === d.program)
+          const { subject, html } = buildRegistrationReceivedEmail({
+            childName: d.child_name,
+            programName: programCfg?.name ?? d.program,
+            termLabel: formatTermLabel(d.term_start, d.term_end),
+            locationName: location.name,
+            priceKc: trustedPrice,
+            paymentUrl: `${SITE_URL}/platba/${newId}?location=${d.location_id}`,
+          })
+          await sendEmail({ to: d.parent_email, subject, html })
+        } catch (e) {
+          reportMessage('Registration-received email failed', {
+            registrationId: newId,
+            error: e instanceof Error ? e.message : String(e),
+          })
+        }
+      })
     }
 
     return NextResponse.json({
