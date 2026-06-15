@@ -26,12 +26,21 @@ export async function POST(request: NextRequest) {
     const supabase = createServerClient()
     const { data: reg, error } = await supabase
       .from('registrations')
-      .select('id, location_id, program, parent_email, child_name')
+      .select('id, location_id, program, parent_email, child_name, payment_status')
       .eq('id', registrationId)
       .single()
 
     if (error || !reg) {
       return NextResponse.json({ error: API_ERRORS.notFound }, { status: 404 })
+    }
+
+    // Guard against double payment: if this registration is already paid, do NOT
+    // start a new Comgate transaction (which would also reset payment_status back
+    // to 'pending'). The registration email keeps a pay link in the parent's inbox,
+    // so an already-paid parent re-clicking it is a real path. A gateway-'cancelled'
+    // registration keeps payment_status 'pending', so retries still work.
+    if (reg.payment_status === 'completed') {
+      return NextResponse.json({ error: API_ERRORS.alreadyPaid }, { status: 409 })
     }
 
     const priceKc = getTrustedPriceKc(reg.location_id as string, reg.program as string)

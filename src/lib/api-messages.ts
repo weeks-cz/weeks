@@ -11,6 +11,8 @@ export const API_ERRORS = {
   registrationFailed:
     'Registraci se nepodařilo uložit. Zkuste to prosím za chvíli znovu. Pokud potíže přetrvávají, ozvěte se nám na info@weeks.cz.',
   notFound: 'Registrace nebyla nalezena. Zkontrolujte prosím odkaz.',
+  alreadyPaid:
+    'Tato registrace je už zaplacená. Děkujeme — nic dalšího není potřeba řešit. V případě dotazů nás kontaktujte na info@weeks.cz.',
   paymentInitFailed:
     'Platbu se nepodařilo zahájit. Zkuste to prosím za chvíli znovu. Pokud potíže přetrvávají, ozvěte se nám na info@weeks.cz.',
   gatewayUnavailable:
