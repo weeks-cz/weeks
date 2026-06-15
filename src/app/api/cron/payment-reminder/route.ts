@@ -92,10 +92,20 @@ export async function GET(request: Request) {
     }
   }
 
+  // Heartbeat: a one-line summary in the runtime logs confirms the cron ran and
+  // what it did every day — visible via `vercel logs` even on a 0-candidate run,
+  // so "no reminders went out" can be told apart from "the cron didn't run".
+  // A genuine failure (failed > 0) is additionally escalated to Sentry.
+  const candidateCount = candidates?.length ?? 0
+  console.log('[payment-reminder] heartbeat', { candidates: candidateCount, sent, failed })
+  if (failed > 0) {
+    reportMessage('Payment reminder cron: some sends failed', { candidates: candidateCount, sent, failed })
+  }
+
   return NextResponse.json({
     ok: true,
     window: { notBefore, olderThan },
-    candidates: candidates?.length ?? 0,
+    candidates: candidateCount,
     sent,
     failed,
   })

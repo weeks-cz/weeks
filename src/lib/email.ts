@@ -96,6 +96,41 @@ export function buildConfirmationEmail(p: ConfirmationParams): { subject: string
   }
 }
 
+export interface RegistrationReceivedParams {
+  childName: string
+  programName: string
+  termLabel: string
+  locationName: string
+  priceKc: number
+  paymentUrl: string
+}
+
+// Sent immediately after a registration is created (before payment). Distinct from
+// buildConfirmationEmail, which goes out only AFTER the payment settles. The point
+// is to close the "am I even registered?" gap: the parent gets instant proof we
+// have the registration, plus a clear path to pay. Spot is reserved only on payment.
+export function buildRegistrationReceivedEmail(p: RegistrationReceivedParams): { subject: string; html: string } {
+  const body = `
+    <p>Dobrý den,</p>
+    <p>děkujeme za registraci, máme ji u nás uloženou. Aby bylo místo pro <strong>${p.childName}</strong> závazně rezervované, zbývá poslední krok: <strong>dokončit platbu</strong>. Kapacita je omezená, místo proto rezervujeme až po přijetí platby.</p>
+    <p style="text-align:center;margin:24px 0;">
+      <a href="${p.paymentUrl}" style="display:inline-block;background:#4f46e5;color:#fff;text-decoration:none;font-weight:600;padding:12px 28px;border-radius:10px;">Zaplatit a rezervovat místo</a>
+    </p>
+    <table style="width:100%;border-collapse:collapse;margin:16px 0;font-size:14px;">
+      <tr><td style="padding:6px 0;color:#64748b;">Tábor</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.programName}</td></tr>
+      <tr><td style="padding:6px 0;color:#64748b;">Místo</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.locationName}</td></tr>
+      <tr><td style="padding:6px 0;color:#64748b;">Termín</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.termLabel}</td></tr>
+      <tr><td style="padding:6px 0;color:#64748b;">Cena</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.priceKc.toLocaleString('cs-CZ')} Kč</td></tr>
+    </table>
+    <p style="font-size:14px;color:#475569;">Po zaplacení vám obratem přijde <strong>potvrzení a daňový doklad</strong>. Přibližně týden před táborem pošleme <strong>nástupní list</strong> s podrobnostmi.</p>
+    <p style="font-size:13px;color:#94a3b8;">Pokud jste se neregistrovali vy nebo si to rozmyslíte, nemusíte nic řešit, bez platby registrace po čase propadne.</p>
+    <p>S pozdravem,<br>tým Weeks</p>`
+  return {
+    subject: `Máme vaši registraci – zbývá dokončit platbu`,
+    html: layout('Registrace přijata ✅', body),
+  }
+}
+
 export interface NastupniListParams {
   childName: string
   programName: string
