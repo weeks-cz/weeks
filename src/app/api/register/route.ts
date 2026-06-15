@@ -4,7 +4,12 @@ import { createServerClient } from '@/lib/supabase'
 import { getTrustedCapacity, getTrustedPriceKc } from '@/lib/payment-pricing'
 import { API_ERRORS } from '@/lib/api-messages'
 import { rateLimit, clientIp } from '@/lib/rate-limit'
-import { reportError } from '@/lib/observability'
+import { reportError, reportMessage } from '@/lib/observability'
+import { buildRegistrationReceivedEmail, sendEmail, isEmailConfigured } from '@/lib/email'
+import { getLocationById } from '@/lib/locations'
+import { formatTermLabel } from '@/lib/dates'
+
+const SITE_URL = 'https://weeks.cz'
 
 export const dynamic = 'force-dynamic'
 
@@ -63,6 +68,31 @@ export async function POST(request: NextRequest) {
       }
       reportError(error, { route: 'register', reason: 'rpc-insert' })
       return NextResponse.json({ error: API_ERRORS.registrationFailed }, { status: 500 })
+    }
+
+    // Instant "registration received — please pay" email. Best-effort: a failure
+    // here must NOT fail the registration (the row is already safely inserted),
+    // so it's caught and only reported.
+    if (isEmailConfigured()) {
+      try {
+        const d = parsed.data
+        const location = getLocationById(d.location_id)
+        const programCfg = location.programs.find((p) => p.id === d.program)
+        const { subject, html } = buildRegistrationReceivedEmail({
+          childName: d.child_name,
+          programName: programCfg?.name ?? d.program,
+          termLabel: formatTermLabel(d.term_start, d.term_end),
+          locationName: location.name,
+          priceKc: trustedPrice,
+          paymentUrl: `${SITE_URL}/platba/${newId}?location=${d.location_id}`,
+        })
+        await sendEmail({ to: d.parent_email, subject, html })
+      } catch (e) {
+        reportMessage('Registration-received email failed', {
+          registrationId: newId,
+          error: e instanceof Error ? e.message : String(e),
+        })
+      }
     }
 
     return NextResponse.json({
