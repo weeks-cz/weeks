@@ -14,6 +14,7 @@ import { useLocation } from '@/contexts/LocationContext'
 import { buildPath } from '@/lib/locations'
 import { ProjectGallery } from '../_components/ProjectGallery'
 import { VenueShowcase } from '../_components/VenueShowcase'
+import { CampViewTracker } from '../_components/CampViewTracker'
 
 const weeklyDays = [
   {
@@ -161,6 +162,7 @@ export default function LetniPrimestskyCampPage() {
 
   return (
     <>
+      <CampViewTracker location={location.id} program="letni-primestsky" value={program?.price ?? 4990} />
       <Header />
       <main>
         {/* Hero */}

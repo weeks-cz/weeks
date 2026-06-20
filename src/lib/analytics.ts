@@ -96,6 +96,29 @@ export function trackViewOneDayCamp(programId: string, source: string) {
   })
 }
 
+// Camp detail page viewed. Fires on load of a KV camp page (weekly/weekend) —
+// the page paid ads land on directly. Without this the camp pages emitted NO
+// Pixel/GA event on view, so Meta got no "product viewed" signal to optimise on
+// and we couldn't measure landing→detail. content_name keys location+program.
+export function trackViewCampDetail(params: {
+  location: string
+  program: string
+  value: number
+}) {
+  sendGAEvent('event', 'view_camp_detail', {
+    location: params.location,
+    program: params.program,
+    value: params.value,
+    currency: 'CZK',
+  })
+  fbqEvent('ViewContent', {
+    content_name: `${params.location}_${params.program}`,
+    content_category: 'camp_detail',
+    value: params.value,
+    currency: 'CZK',
+  })
+}
+
 // QR code scan: fires when visitor arrives via /go/[slug] redirect (utm_medium=qr)
 export function trackQRScan(params: {
   source: string   // utm_source (e.g. 'plakat')

@@ -10,6 +10,7 @@ import Image from 'next/image'
 import { useState } from 'react'
 import { ProjectGallery } from '../_components/ProjectGallery'
 import { VenueShowcase } from '../_components/VenueShowcase'
+import { CampViewTracker } from '../_components/CampViewTracker'
 
 const sobotaProgram = [
   { time: '9:00', title: 'Příchod dětí', description: '' },
@@ -60,6 +61,7 @@ export default function KVMix() {
 
   return (
     <>
+      <CampViewTracker location={location.id} program="mix" value={program.price} />
       <Header />
       <main className="pt-20">
         {/* Hero */}
