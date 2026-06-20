@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Landmark, Loader2, Lock, AlertTriangle } from 'lucide-react'
+import { Landmark, Loader2, Lock, AlertTriangle, ShieldCheck } from 'lucide-react'
 import { trackPaymentInitiated } from '@/lib/analytics'
 
 interface PaymentRedirectProps {
@@ -54,10 +54,18 @@ export function PaymentRedirect({ registrationId }: PaymentRedirectProps) {
             <p className="text-sm text-gray-500">Zabezpečená platební brána Comgate</p>
           </div>
         </div>
-        <p className="text-gray-600 text-sm mb-6">
+        <p className="text-gray-600 text-sm mb-4">
           Po kliknutí budete přesměrováni na platební bránu Comgate, kde platbu dokončíte
           zrychleným bankovním převodem přes tlačítko své banky.
         </p>
+        <div className="flex items-start gap-2.5 p-3 mb-6 bg-trust-50 border border-trust-200 rounded-lg">
+          <ShieldCheck className="w-5 h-5 text-trust-600 flex-shrink-0 mt-0.5" />
+          <p className="text-sm text-trust-800">
+            <span className="font-semibold">Bez rizika.</span> Zrušíte-li více než 30 dní před
+            táborem, vrátíme vám celou částku. Při nemoci doložené potvrzením řešíme situaci
+            individuálně.
+          </p>
+        </div>
         {error && (
           <div role="alert" aria-live="assertive" className="p-3 bg-red-50 border border-red-200 rounded-lg mb-4">
             <p className="text-sm text-red-700">{error}</p>

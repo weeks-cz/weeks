@@ -163,6 +163,23 @@ export function trackUcebnaClick(source: 'desktop' | 'mobile') {
 // Three steps measure drop-off between submitting the form, starting the payment,
 // and the payment actually completing.
 
+// Step 0: per-step progress through the multi-step KV form (1 = opened … 5 =
+// summary). Comparing counts of registration_step[1..5] vs registration_submit
+// pinpoints WHERE the ~2/3 form→payment drop-off happens, instead of guessing.
+export function trackRegistrationStep(params: {
+  step: number
+  locationId: string
+  program: string
+  termId: string
+}) {
+  sendGAEvent('event', 'registration_step', {
+    step: params.step,
+    location_id: params.locationId,
+    program: params.program,
+    term_id: params.termId,
+  })
+}
+
 // Step 1: registration row created (form submitted successfully)
 export function trackRegistrationSubmit(params: {
   locationId: string

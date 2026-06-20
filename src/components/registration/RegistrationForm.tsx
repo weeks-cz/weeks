@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { User, Baby, MapPin, FileCheck, ClipboardList, ArrowRight, ArrowLeft, Loader2 } from 'lucide-react'
 import { parentSchema, childSchema, consentsSchema, INSURANCE_OPTIONS, type ParentData, type ChildData, type ConsentsData } from '@/lib/registration'
 import { getLocationById } from '@/lib/locations'
-import { trackRegistrationSubmit } from '@/lib/analytics'
+import { trackRegistrationSubmit, trackRegistrationStep } from '@/lib/analytics'
 import Link from 'next/link'
 
 const STEPS = [
@@ -71,6 +71,12 @@ export function RegistrationForm() {
   const vopUrl = locationId === 'karlovy-vary' ? '/karlovy-vary/podminky' : '/podminky'
   const gdprUrl = locationId === 'karlovy-vary' ? '/karlovy-vary/gdpr' : '/gdpr'
 
+  // Měření trychtýře: zaznamenej otevření formuláře (krok 1) jednou při načtení.
+  useEffect(() => {
+    trackRegistrationStep({ step: 1, locationId, program: programId, termId })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   // Varuj při opuštění rozdělaného formuláře (zavření záložky / externí navigace).
   // Neplatí pro odeslání → /platba, protože to je client-side router.push (bez unloadu).
   useEffect(() => {
@@ -119,7 +125,9 @@ export function RegistrationForm() {
 
   function nextStep() {
     if (validateStep()) {
-      setStep(s => Math.min(s + 1, 5))
+      const next = Math.min(step + 1, 5)
+      setStep(next)
+      trackRegistrationStep({ step: next, locationId, program: programId, termId })
       return
     }
     // Neúspěšná validace — posuň pohled na první chybu (čtečky ji oznámí přes role="alert").

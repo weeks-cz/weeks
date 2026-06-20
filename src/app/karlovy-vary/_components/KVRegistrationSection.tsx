@@ -5,11 +5,13 @@ import { motion } from 'framer-motion'
 import { Mail, CalendarDays, Users, CheckCircle, ArrowRight, Sparkles, Calendar } from 'lucide-react'
 import Link from 'next/link'
 import { useLocation } from '@/contexts/LocationContext'
+import { useTermCapacity, SpotsLeftBadge } from './SpotsLeft'
 
 const FORMSPREE_ID = process.env.NEXT_PUBLIC_FORMSPREE_ID ?? 'mrezolbj'
 
 export function KVRegistrationSection() {
   const location = useLocation()
+  const capacity = useTermCapacity(location.id)
 
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -125,6 +127,12 @@ export function KVRegistrationSection() {
                           {isConfirmed ? 'Registrace otevřena' : 'Připravujeme'}
                         </span>
                       </div>
+
+                      {isConfirmed && capacity?.[term.id] && (
+                        <div className="mb-4">
+                          <SpotsLeftBadge {...capacity[term.id]} />
+                        </div>
+                      )}
 
                       <Link
                         href={url}

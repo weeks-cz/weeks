@@ -15,6 +15,7 @@ import { buildPath } from '@/lib/locations'
 import { ProjectGallery } from '../_components/ProjectGallery'
 import { VenueShowcase } from '../_components/VenueShowcase'
 import { CampViewTracker } from '../_components/CampViewTracker'
+import { useTermCapacity, SpotsLeftBadge } from '../_components/SpotsLeft'
 
 const weeklyDays = [
   {
@@ -159,6 +160,7 @@ export default function LetniPrimestskyCampPage() {
   const location = useLocation()
   const program = location.programs.find(p => p.id === 'letni-primestsky')
   const terms = location.terms.filter(t => t.program === 'letni-primestsky')
+  const capacity = useTermCapacity(location.id)
 
   return (
     <>
@@ -548,12 +550,18 @@ export default function LetniPrimestskyCampPage() {
                       </div>
                       <p className="text-xs text-gray-500 ml-6 mb-4">{location.venues[0].address}, {location.venues[0].city}</p>
 
-                      <div className="flex items-center gap-2 mb-6 text-sm">
+                      <div className="flex items-center gap-2 mb-3 text-sm">
                         <div className={`w-2 h-2 rounded-full ${isConfirmed ? 'bg-emerald-500' : 'bg-amber-400'}`} />
                         <span className={`font-medium ${isConfirmed ? 'text-emerald-700' : 'text-amber-700'}`}>
                           {isConfirmed ? 'Registrace otevřena' : 'Připravujeme — registrace brzy otevřena'}
                         </span>
                       </div>
+
+                      {isConfirmed && capacity?.[term.id] && (
+                        <div className="mb-6">
+                          <SpotsLeftBadge {...capacity[term.id]} />
+                        </div>
+                      )}
 
                       <Link
                         href={url}
@@ -620,11 +628,12 @@ export default function LetniPrimestskyCampPage() {
               className="max-w-3xl mx-auto text-center"
             >
               <h2 className="heading-2 text-white mb-6">
-                Připravte své dítě na budoucnost
+                V Karlových Varech je jen 15 míst na turnus
               </h2>
               <p className="text-xl text-white/90 mb-8">
-                3D tisk, 3D modelování a IoT — technologie, které budou formovat svět.
-                Ať je vaše dítě součástí.
+                Letní příměstský tábor, ze kterého si vaše dítě odnese vlastní 3D výtisk
+                i sestavené zařízení — a vy máte celý týden jistotu, že je o něj dobře
+                postaráno. Termíny se plní, s přihláškou neváhejte.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <a
