@@ -7,6 +7,7 @@ import { issuePaidInvoice, isFakturoidConfigured } from '@/lib/fakturoid'
 import { buildConfirmationEmail, sendEmail, isEmailConfigured } from '@/lib/email'
 import { getLocationById } from '@/lib/locations'
 import { formatTermLabel } from '@/lib/dates'
+import { sendMetaEvent, isMetaCapiConfigured } from '@/lib/meta-capi'
 
 export const dynamic = 'force-dynamic'
 
@@ -104,6 +105,44 @@ async function ensureConfirmationEmail(supabase: SupabaseClient, registrationId:
   }
 }
 
+/**
+ * Send the server-side Meta "Purchase" conversion — the keystone signal the
+ * browser Pixel misses for cookie-declining / iOS visitors. event_id is the
+ * registration id, shared with the browser Purchase event for deduplication.
+ *
+ * Best-effort: meta-capi never throws, and Comgate may re-deliver this callback —
+ * Meta dedupes repeat sends by (event_id, event_name), so resending is harmless.
+ */
+async function ensurePurchaseConversion(supabase: SupabaseClient, registrationId: string) {
+  if (!isMetaCapiConfigured()) return
+
+  const { data: reg } = await supabase
+    .from('registrations')
+    .select('parent_name, parent_email, parent_phone, parent_address, program, location_id, payment_amount')
+    .eq('id', registrationId)
+    .single()
+  if (!reg) return
+
+  const location = getLocationById(reg.location_id as string)
+  const programCfg = location.programs.find((p) => p.id === reg.program)
+
+  await sendMetaEvent({
+    eventName: 'Purchase',
+    eventId: registrationId,
+    userData: {
+      email: reg.parent_email as string,
+      phone: reg.parent_phone as string | undefined,
+      fullName: reg.parent_name as string | undefined,
+      address: reg.parent_address as string | undefined,
+    },
+    customData: {
+      value: reg.payment_amount as number,
+      currency: 'CZK',
+      contentName: programCfg?.name ?? (reg.program as string),
+    },
+  })
+}
+
 // Comgate sends a server-to-server POST (form-urlencoded). This is the source of
 // truth for payment state. Must respond with "code=0&message=OK".
 export async function POST(request: NextRequest) {
@@ -184,6 +223,7 @@ export async function POST(request: NextRequest) {
     if (status === 'paid') {
       await ensurePaidInvoice(supabase, registrationId)
       await ensureConfirmationEmail(supabase, registrationId)
+      await ensurePurchaseConversion(supabase, registrationId)
     }
 
     return new NextResponse('code=0&message=OK', {

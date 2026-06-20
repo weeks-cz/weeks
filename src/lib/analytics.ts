@@ -4,9 +4,19 @@
 
 import { sendGAEvent } from '@next/third-parties/google'
 
-function fbqEvent(eventName: string, params?: Record<string, string | number>) {
+function fbqEvent(
+  eventName: string,
+  params?: Record<string, string | number>,
+  // When set, fbq sends `{ eventID }` so Meta can deduplicate this browser event
+  // against the matching server-side Conversions API event (same id on both).
+  eventId?: string
+) {
   if (typeof window !== 'undefined' && typeof window.fbq === 'function') {
-    window.fbq('track', eventName, params)
+    if (eventId) {
+      window.fbq('track', eventName, params, { eventID: eventId })
+    } else {
+      window.fbq('track', eventName, params)
+    }
   }
 }
 
@@ -136,6 +146,8 @@ export function trackRegistrationSubmit(params: {
   program: string
   termId: string
   value: number
+  // Registration id — dedupes against the server-side InitiateCheckout (/api/register).
+  registrationId?: string
 }) {
   sendGAEvent('event', 'registration_submit', {
     location_id: params.locationId,
@@ -144,11 +156,15 @@ export function trackRegistrationSubmit(params: {
     value: params.value,
     currency: 'CZK',
   })
-  fbqEvent('InitiateCheckout', {
-    content_name: `${params.program} ${params.termId}`,
-    value: params.value,
-    currency: 'CZK',
-  })
+  fbqEvent(
+    'InitiateCheckout',
+    {
+      content_name: `${params.program} ${params.termId}`,
+      value: params.value,
+      currency: 'CZK',
+    },
+    params.registrationId
+  )
 }
 
 // Step 2: user pushed through to the Comgate gateway
@@ -169,11 +185,17 @@ export function trackPaymentCompleted(params: {
     value: params.value,
     currency: 'CZK',
   })
-  fbqEvent('Purchase', {
-    content_name: params.program,
-    value: params.value,
-    currency: 'CZK',
-  })
+  fbqEvent(
+    'Purchase',
+    {
+      content_name: params.program,
+      value: params.value,
+      currency: 'CZK',
+    },
+    // Dedupes against the server-side Purchase (Comgate callback), which uses the
+    // registration id as its event_id.
+    params.registrationId
+  )
 }
 
 export function trackShopViewProduct(productSlug: string, productName: string) {

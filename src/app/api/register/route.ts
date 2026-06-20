@@ -8,6 +8,7 @@ import { reportError, reportMessage } from '@/lib/observability'
 import { buildRegistrationReceivedEmail, sendEmail, isEmailConfigured } from '@/lib/email'
 import { getLocationById } from '@/lib/locations'
 import { formatTermLabel } from '@/lib/dates'
+import { sendMetaEvent, isMetaCapiConfigured } from '@/lib/meta-capi'
 
 const SITE_URL = 'https://weeks.cz'
 
@@ -95,6 +96,43 @@ export async function POST(request: NextRequest) {
             error: e instanceof Error ? e.message : String(e),
           })
         }
+      })
+    }
+
+    // Server-side Meta "InitiateCheckout" — higher-volume optimisation signal than
+    // Purchase, and consent-independent. Here (unlike the Comgate callback) we have
+    // the visitor's _fbp/_fbc cookies + IP + UA, so match quality is strong. event_id
+    // is the registration id, shared with the browser InitiateCheckout for dedup.
+    // Sent after the response so the Graph round-trip never delays the payment redirect.
+    if (isMetaCapiConfigured()) {
+      const d = parsed.data
+      const fbp = request.cookies.get('_fbp')?.value
+      const fbc = request.cookies.get('_fbc')?.value
+      const userAgent = request.headers.get('user-agent') ?? undefined
+      const referer = request.headers.get('referer') ?? undefined
+      after(async () => {
+        const location = getLocationById(d.location_id)
+        const programCfg = location.programs.find((p) => p.id === d.program)
+        await sendMetaEvent({
+          eventName: 'InitiateCheckout',
+          eventId: newId as string,
+          eventSourceUrl: referer,
+          userData: {
+            email: d.parent_email,
+            phone: d.parent_phone,
+            fullName: d.parent_name,
+            address: d.parent_address,
+            fbp,
+            fbc,
+            clientIp: ip,
+            userAgent,
+          },
+          customData: {
+            value: trustedPrice,
+            currency: 'CZK',
+            contentName: programCfg?.name ?? d.program,
+          },
+        })
       })
     }
 

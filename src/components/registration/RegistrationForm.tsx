@@ -168,6 +168,7 @@ export function RegistrationForm() {
         program: programId,
         termId,
         value: program?.price || 0,
+        registrationId: data.registrationId,
       })
 
       router.push(`${data.paymentUrl}?location=${locationId}`)
