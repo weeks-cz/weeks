@@ -128,7 +128,9 @@ export function KVRegistrationSection() {
                         </span>
                       </div>
 
-                      {isConfirmed && capacity?.[term.id] && (
+                      {/* Počítadlo míst jen u příměstského (týdenního) — u víkendového
+                          MIXu ho neukazujeme, prázdné termíny by působily jako slabý signál. */}
+                      {isConfirmed && program.campType === 'week' && capacity?.[term.id] && (
                         <div className="mb-4">
                           <SpotsLeftBadge {...capacity[term.id]} />
                         </div>

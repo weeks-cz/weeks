@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import { CheckCircle2, Clock, XCircle, Loader2, CreditCard } from 'lucide-react'
 import Link from 'next/link'
 import { trackPaymentCompleted } from '@/lib/analytics'
+import { sklikConversionHit } from '@/lib/sklik'
 
 interface RegistrationData {
   id: string
@@ -54,6 +55,8 @@ export function RegistrationConfirmation({ registrationId, token }: Registration
             program: data.registration?.program ?? '',
             value: data.registration?.payment_amount ?? 0,
           })
+          // Sklik konverze (no-op bez NEXT_PUBLIC_SKLIK_CONVERSION_ID / marketing souhlasu)
+          sklikConversionHit(data.registration?.payment_amount ?? undefined)
         }
         if (!paid && attempts < 4) {
           attempts += 1

@@ -5,6 +5,7 @@ import './globals.css'
 import { CookieConsent } from '@/components/ui/CookieConsent'
 import { KVRegionNudge } from '@/components/ui/KVRegionNudge'
 import { MetaPixel } from '@/components/analytics/MetaPixel'
+import { SklikTracking } from '@/components/analytics/SklikTracking'
 import { GoogleAnalyticsGated } from '@/components/analytics/GoogleAnalyticsGated'
 import { QRTracker } from '@/components/analytics/QRTracker'
 import { MotionProvider } from '@/components/providers/MotionProvider'
@@ -115,6 +116,7 @@ export default function RootLayout({
           <QRTracker />
         </Suspense>
         <MetaPixel />
+        <SklikTracking />
         <GoogleAnalyticsGated gaId={GA_ID} />
       </body>
     </html>
