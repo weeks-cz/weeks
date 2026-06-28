@@ -44,6 +44,10 @@ export const registrationSchema = parentSchema
   .merge(pickupSchema)
   .merge(consentsSchema)
   .extend({
+    // Nepovinná poznámka k objednávce, kterou rodič vyplní v posledním kroku
+    // (shrnutí) před platbou. Strop délky chrání DB i admin výpis u veřejného
+    // free-text pole.
+    customer_note: z.string().max(1000, 'Poznámka může mít nejvýše 1000 znaků').optional().default(''),
     location_id: z.string(),
     program: z.string(),
     term_id: z.string(),

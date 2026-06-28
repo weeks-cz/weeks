@@ -68,6 +68,8 @@ export function RegistrationForm() {
     marketing_consent: false,
   })
 
+  const [customerNote, setCustomerNote] = useState('')
+
   const vopUrl = locationId === 'karlovy-vary' ? '/karlovy-vary/podminky' : '/podminky'
   const gdprUrl = locationId === 'karlovy-vary' ? '/karlovy-vary/gdpr' : '/gdpr'
 
@@ -156,6 +158,7 @@ export function RegistrationForm() {
           pickup_time: pickup.pickup_time,
           pickup_persons: pickup.pickup_persons,
           ...consents,
+          customer_note: customerNote,
           location_id: locationId,
           program: programId,
           term_id: termId,
@@ -518,6 +521,19 @@ export function RegistrationForm() {
                       </>
                     )}
                   </div>
+                </div>
+
+                <div className="pt-2 border-t border-gray-100">
+                  <label htmlFor="customer_note" className="block text-sm font-medium text-gray-700 mb-1">Poznámka k objednávce (nepovinné)</label>
+                  <textarea
+                    id="customer_note"
+                    value={customerNote}
+                    onChange={e => setCustomerNote(e.target.value)}
+                    maxLength={1000}
+                    rows={3}
+                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors"
+                    placeholder="Cokoliv, co bychom měli vědět — např. kdo vám tábor doporučil."
+                  />
                 </div>
 
                 <p className="text-xs text-gray-500 pt-2 border-t border-gray-100">
