@@ -102,41 +102,44 @@ export default function AboutPage() {
       <Header />
       <main>
         {/* Hero Section */}
-        <section className="relative pt-32 pb-16 overflow-hidden bg-gradient-to-br from-gray-50 via-primary-50/30 to-accent-50/20">
-          <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary-200/30 rounded-full blur-3xl" />
-            <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-accent-200/30 rounded-full blur-3xl" />
-          </div>
-
-          <div className="section-container relative z-10">
+        <section className="bg-paper blueprint-grid border-b border-ink/15 pt-32 pb-16">
+          <div className="section-container">
             <div className="max-w-4xl mx-auto text-center">
               {/* Breadcrumb */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="mb-8"
+                className="mb-8 font-mono text-xs uppercase tracking-[0.2em]"
               >
-                <Link href="/" className="text-gray-500 hover:text-primary-600 transition-colors">
+                <Link href="/" className="text-ink/50 hover:text-primary-600 transition-colors">
                   Domů
                 </Link>
-                <span className="text-gray-400 mx-2">/</span>
-                <span className="text-gray-900 font-medium">O nás</span>
+                <span className="text-ink/30 mx-2">/</span>
+                <span className="text-ink font-medium">O nás</span>
               </motion.div>
+
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mono-label mb-4"
+              >
+                O projektu
+              </motion.p>
 
               <motion.h1
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="heading-1 text-gray-900 mb-6"
+                className="heading-1 text-ink mb-6"
               >
-                O projektu <span className="text-gradient">Weeks</span>
+                Weeks
               </motion.h1>
 
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="text-xl text-gray-600 max-w-2xl mx-auto"
+                className="text-xl text-ink-500 max-w-2xl mx-auto"
               >
                 Víkendové IT kempy, kde děti získávají praktické dovednosti
                 s nejmodernějšími technologiemi pod vedením zkušených lektorů.
@@ -146,7 +149,7 @@ export default function AboutPage() {
         </section>
 
         {/* Mission Section */}
-        <section className="section-padding bg-white">
+        <section className="section-padding bg-paper">
           <div className="section-container">
             <div className="max-w-4xl mx-auto">
               <motion.div
@@ -155,15 +158,15 @@ export default function AboutPage() {
                 viewport={{ once: true }}
                 className="text-center mb-16"
               >
-                <h2 className="heading-2 text-gray-900 mb-6">
-                  Naše <span className="text-gradient">mise</span>
+                <p className="mono-label mb-4">Naše mise</p>
+                <h2 className="heading-2 text-ink mb-6">
+                  Každé dítě má potenciál tvořit
                 </h2>
-                <p className="text-lg text-gray-600 mb-4">
-                  Věříme, že každé dítě má potenciál tvořit a inovovat. V době, kdy technologie
-                  pronikají do všech aspektů života, je důležité, aby děti nebyly jen pasivními
+                <p className="text-lg text-ink-500 mb-4">
+                  V době, kdy technologie pronikají do všech aspektů života, je důležité, aby děti nebyly jen pasivními
                   uživateli, ale aktivními tvůrci.
                 </p>
-                <p className="text-lg text-gray-600">
+                <p className="text-lg text-ink-500">
                   Weeks není jen o výuce programování nebo 3D tisku. Jde o rozvoj kritického myšlení,
                   kreativity a schopnosti řešit problémy. Učíme děti, že chyba není neúspěch,
                   ale příležitost k učení. Že nejlepší projekty vznikají iterací a experimentováním.
@@ -179,15 +182,15 @@ export default function AboutPage() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: index * 0.1 }}
-                    className="p-6 bg-gray-50 rounded-2xl"
+                    className="p-6 bg-paper-soft rounded-md border border-ink/15"
                   >
-                    <div className="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center mb-4">
+                    <div className="w-12 h-12 bg-white border border-ink/15 rounded-sm flex items-center justify-center mb-4">
                       <value.icon className="w-6 h-6 text-primary-600" />
                     </div>
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                    <h3 className="font-display text-lg font-semibold text-ink mb-2">
                       {value.title}
                     </h3>
-                    <p className="text-gray-600">
+                    <p className="text-ink-500">
                       {value.description}
                     </p>
                   </motion.div>
@@ -198,7 +201,7 @@ export default function AboutPage() {
         </section>
 
         {/* Partners Section */}
-        <section className="section-padding bg-gray-50">
+        <section className="section-padding bg-paper-soft border-y border-ink/15">
           <div className="section-container">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -206,10 +209,11 @@ export default function AboutPage() {
               viewport={{ once: true }}
               className="text-center mb-16"
             >
-              <h2 className="heading-2 text-gray-900 mb-4">
-                Organizátor a <span className="text-gradient">zázemí</span>
+              <p className="mono-label mb-4">Partneři</p>
+              <h2 className="heading-2 text-ink mb-4">
+                Organizátor a zázemí
               </h2>
-              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              <p className="text-xl text-ink-500 max-w-2xl mx-auto">
                 Weeks je projekt organizovaný DDM Praha 6, který probíhá
                 ve dvou lokalitách – HWLab Praha a DDM Praha 6 – Bílá hora.
               </p>
@@ -225,17 +229,17 @@ export default function AboutPage() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: index * 0.2 }}
-                    className="bg-white rounded-2xl p-8 md:p-12 shadow-sm"
+                    className="card-maker p-8 md:p-12"
                   >
                     <div className="flex flex-col md:flex-row gap-8">
                       {/* Logo/Icon */}
                       <div className="flex-shrink-0">
                         {'role' in partner && (
-                          <div className={`inline-flex items-center gap-2 px-3 py-1 ${colors.bg} rounded-full text-xs font-semibold ${colors.text} mb-3`}>
+                          <span className="border border-ink rounded-sm font-mono text-xs font-medium px-2.5 py-1 text-ink block mb-3 w-fit">
                             {partner.role}
-                          </div>
+                          </span>
                         )}
-                        <div className={`w-24 h-24 ${colors.bg} rounded-2xl flex items-center justify-center`}>
+                        <div className={`w-24 h-24 border border-ink rounded-sm flex items-center justify-center bg-white`}>
                           <span className={`text-3xl font-bold ${colors.text}`}>
                             {partner.shortName}
                           </span>
@@ -245,10 +249,10 @@ export default function AboutPage() {
                       {/* Content */}
                       <div className="flex-1">
                         <div className="flex flex-col md:flex-row md:items-center justify-between mb-4">
-                          <h3 className="text-2xl font-bold text-gray-900">
+                          <h3 className="font-display text-2xl font-bold text-ink">
                             {partner.name}
                           </h3>
-                          <div className="flex gap-4 text-sm text-gray-500 mt-2 md:mt-0">
+                          <div className="flex gap-4 text-sm text-ink-500 mt-2 md:mt-0">
                             <div className="flex items-center gap-1">
                               <MapPin className="w-4 h-4" />
                               <span>{partner.location}</span>
@@ -260,7 +264,7 @@ export default function AboutPage() {
                           </div>
                         </div>
 
-                        <p className="text-gray-600 mb-6">
+                        <p className="text-ink-500 mb-6">
                           {partner.description}
                         </p>
 
@@ -268,7 +272,7 @@ export default function AboutPage() {
                           {partner.details.map((detail, i) => (
                             <li key={i} className="flex items-start gap-2">
                               <Award className={`w-5 h-5 ${colors.text} flex-shrink-0 mt-0.5`} />
-                              <span className="text-gray-700">{detail}</span>
+                              <span className="text-ink">{detail}</span>
                             </li>
                           ))}
                         </ul>
@@ -282,7 +286,7 @@ export default function AboutPage() {
         </section>
 
         {/* Team Section */}
-        <section className="section-padding bg-white">
+        <section className="section-padding bg-paper">
           <div className="section-container">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -290,10 +294,11 @@ export default function AboutPage() {
               viewport={{ once: true }}
               className="text-center mb-16"
             >
-              <h2 className="heading-2 text-gray-900 mb-4">
-                Lektorský <span className="text-gradient">tým</span>
+              <p className="mono-label mb-4">Tým</p>
+              <h2 className="heading-2 text-ink mb-4">
+                Lektorský tým
               </h2>
-              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              <p className="text-xl text-ink-500 max-w-2xl mx-auto">
                 Naši lektoři jsou odborníci z praxe s vášní pro výuku. Každý z nich prošel
                 školením DDM Praha 6, má ověřené reference a individuální přístup k dětem.
               </p>
@@ -307,19 +312,19 @@ export default function AboutPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
-                  className="text-center"
+                  className="card-maker p-6 text-center flex flex-col"
                 >
                   {/* Icon */}
-                  <div className="w-32 h-32 bg-gradient-to-br from-primary-200 to-accent-200 rounded-full mx-auto mb-4 flex items-center justify-center">
-                    <member.icon className="w-16 h-16 text-white" />
+                  <div className="w-24 h-24 bg-primary-600 border border-ink rounded-sm mx-auto mb-4 flex items-center justify-center">
+                    <member.icon className="w-12 h-12 text-white" />
                   </div>
-                  <h3 className="font-semibold text-gray-900 mb-1">
+                  <h3 className="font-display font-semibold text-ink mb-1">
                     {member.name}
                   </h3>
-                  <p className="text-sm text-primary-600 font-medium mb-2">
+                  <p className="mono-label mb-2">
                     {member.role}
                   </p>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-ink-500">
                     {member.description}
                   </p>
                 </motion.div>
@@ -329,7 +334,7 @@ export default function AboutPage() {
         </section>
 
         {/* Safety & Certification Section */}
-        <section className="section-padding bg-trust-50">
+        <section className="section-padding bg-paper-soft border-y border-ink/15">
           <div className="section-container">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -337,12 +342,13 @@ export default function AboutPage() {
               viewport={{ once: true }}
               className="max-w-4xl mx-auto"
             >
-              <h2 className="heading-2 text-trust-800 mb-8 text-center">
+              <p className="mono-label text-center mb-4">Bezpečnost</p>
+              <h2 className="heading-2 text-ink mb-8 text-center">
                 Bezpečnost a certifikace
               </h2>
 
-              <div className="bg-white rounded-2xl p-8 md:p-12">
-                <p className="text-lg text-gray-700 mb-8 text-center">
+              <div className="card-maker p-8 md:p-12">
+                <p className="text-lg text-ink-500 mb-8 text-center">
                   Bezpečnost dětí je naší absolutní prioritou. Dodržujeme přísné protokoly
                   a standardy stanovené DDM Praha 6.
                 </p>
@@ -351,10 +357,10 @@ export default function AboutPage() {
                   <div className="flex items-start gap-4 p-4">
                     <ShieldCheck className="w-8 h-8 text-trust-600 flex-shrink-0" />
                     <div>
-                      <h3 className="font-semibold text-gray-900 mb-1">
+                      <h3 className="font-semibold text-ink mb-1">
                         Pojištění účastníků
                       </h3>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-ink-500">
                         Každé dítě je pojištěno po celou dobu konání kempu
                       </p>
                     </div>
@@ -363,10 +369,10 @@ export default function AboutPage() {
                   <div className="flex items-start gap-4 p-4">
                     <Users className="w-8 h-8 text-trust-600 flex-shrink-0" />
                     <div>
-                      <h3 className="font-semibold text-gray-900 mb-1">
+                      <h3 className="font-semibold text-ink mb-1">
                         Malé skupiny
                       </h3>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-ink-500">
                         Maximálně 5 dětí na jednoho lektora pro individuální přístup
                       </p>
                     </div>
@@ -375,10 +381,10 @@ export default function AboutPage() {
                   <div className="flex items-start gap-4 p-4">
                     <Award className="w-8 h-8 text-trust-600 flex-shrink-0" />
                     <div>
-                      <h3 className="font-semibold text-gray-900 mb-1">
+                      <h3 className="font-semibold text-ink mb-1">
                         Certifikovaní lektoři
                       </h3>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-ink-500">
                         Všichni instruktoři prošli školením a mají ověřené reference
                       </p>
                     </div>
@@ -387,10 +393,10 @@ export default function AboutPage() {
                   <div className="flex items-start gap-4 p-4">
                     <Heart className="w-8 h-8 text-trust-600 flex-shrink-0" />
                     <div>
-                      <h3 className="font-semibold text-gray-900 mb-1">
+                      <h3 className="font-semibold text-ink mb-1">
                         Okamžitý kontakt
                       </h3>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-ink-500">
                         Rodiče mají vždy k dispozici kontakt na lektory
                       </p>
                     </div>
@@ -402,7 +408,7 @@ export default function AboutPage() {
         </section>
 
         {/* CTA Section */}
-        <section className="section-padding bg-white">
+        <section className="section-padding bg-paper">
           <div className="section-container">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -410,10 +416,10 @@ export default function AboutPage() {
               viewport={{ once: true }}
               className="max-w-3xl mx-auto text-center"
             >
-              <h2 className="heading-2 text-gray-900 mb-6">
+              <h2 className="heading-2 text-ink mb-6">
                 Máte dotazy?
               </h2>
-              <p className="text-xl text-gray-600 mb-8">
+              <p className="text-xl text-ink-500 mb-8">
                 Rádi vám zodpovíme jakékoliv otázky ohledně našich kempů,
                 bezpečnosti nebo programu.
               </p>
