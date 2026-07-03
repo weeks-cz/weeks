@@ -286,34 +286,6 @@ export function ProgramSection() {
           </motion.p>
         </div>
 
-        {/* NOVĚ: Dvoudenní 3D tisk — zvýrazněný pruh nad kartami */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mb-8"
-        >
-          <Link
-            href={`${buildPath(location, 'tabor-3d-tisk')}#terminy`}
-            className="group flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 rounded-2xl bg-gradient-to-r from-primary-600 to-primary-500 p-5 shadow-lg hover:shadow-xl transition-shadow"
-          >
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cta-400 text-gray-900 text-xs font-bold self-start">
-              <Sparkles className="w-3.5 h-3.5" /> NOVĚ
-            </span>
-            <div className="flex-1 min-w-0">
-              <p className="font-display text-lg font-bold text-white">
-                Dvoudenní 3D tisk — 2.–3. července (čtvrtek + pátek)
-              </p>
-              <p className="text-sm text-white/80">
-                Víc času na vlastní projekty. Stačí přijít i jen na jeden den. · 2 990 Kč
-              </p>
-            </div>
-            <span className="inline-flex items-center gap-2 text-white font-semibold whitespace-nowrap group-hover:translate-x-1 transition-transform self-start sm:self-auto">
-              Více <ArrowRight className="w-4 h-4" />
-            </span>
-          </Link>
-        </motion.div>
-
         {/* Hlavní tábory - všechny 3 rovnocenně */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           {mainCamps.map((camp, index) => {

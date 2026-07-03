@@ -1,13 +1,13 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { ArrowRight, Printer, Cpu, Glasses, Clock, MapPin, Calendar, Users, Utensils, Laptop, Check, Sparkles, Sun } from 'lucide-react'
+import { ArrowRight, Printer, Cpu, Glasses, Clock, MapPin, Calendar, Users, Utensils, Laptop, Check, Sparkles } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { useState, useEffect } from 'react'
-import { trackRegistrationClick, trackInterestSubmit } from '@/lib/analytics'
+import { trackRegistrationClick } from '@/lib/analytics'
 import { GallerySection, GalleryImage } from '@/components/sections/GallerySection'
 import { FAQAccordion } from '@/components/camps/TermsList'
 import type { TermDisplay } from '@/lib/camps'
@@ -30,8 +30,7 @@ const galleryImages: GalleryImage[] = [
 ]
 
 // MIX weekend terms come from server props now (see TaborChytrychTechnologiiClient).
-// The confirmedMixTerms prop carries open/open_with_link camps; summerWeekends
-// carries collecting_interest camps for the multi-select interest form.
+// The confirmedMixTerms prop carries open/open_with_link camps.
 
 const sobotaProgram = [
   { time: '8:30', title: 'Příchod dětí', description: '' },
@@ -85,185 +84,12 @@ const campFaqs = [
   },
 ]
 
-function SummerInterestForm({ summerWeekends }: { summerWeekends: TermDisplay[] }) {
-  const [selected, setSelected] = useState<string[]>([])
-  const [email, setEmail] = useState('')
-  const [gdprConsent, setGdprConsent] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isSubmitted, setIsSubmitted] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-
-  const toggleWeekend = (id: string) => {
-    setSelected(prev => prev.includes(id) ? prev.filter(s => s !== id) : [...prev, id])
-  }
-
-  const selectAll = () => {
-    if (selected.length === summerWeekends.length) {
-      setSelected([])
-    } else {
-      setSelected(summerWeekends.map(w => w.id))
-    }
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (selected.length === 0) return
-    setIsSubmitting(true)
-    setError(null)
-
-    const selectedLabels = summerWeekends
-      .filter(w => selected.includes(w.id))
-      .map(w => w.weekendDateLabel)
-      .join(', ')
-
-    try {
-      const response = await fetch('/api/waitlist', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email,
-          program: 'mix-leto',
-          termin: `Léto 2026: ${selectedLabels}`,
-          gdprConsent,
-        }),
-      })
-
-      const data = await response.json()
-      if (!response.ok) throw new Error(data.error || 'Něco se pokazilo')
-
-      setIsSubmitted(true)
-      trackInterestSubmit({
-        programId: 'mix',
-        programTitle: 'Tábor chytrých technologií – léto',
-        termin: selectedLabels,
-        campType: 'weekend',
-      })
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Nepodařilo se odeslat. Zkuste to znovu.')
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
-
-  if (isSubmitted) {
-    return (
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="p-8 text-center"
-      >
-        <div className="w-14 h-14 bg-trust-500 rounded-full flex items-center justify-center mx-auto mb-4">
-          <Check className="w-7 h-7 text-white" />
-        </div>
-        <h3 className="text-xl font-bold text-white mb-2">Děkujeme za váš zájem!</h3>
-        <p className="text-white/70">
-          Budeme vás kontaktovat nejpozději 14 dní před otevřením registrace
-          na vámi vybrané termíny.
-        </p>
-      </motion.div>
-    )
-  }
-
-  return (
-    <form onSubmit={handleSubmit} className="p-6 md:p-8">
-      <p className="text-white/70 text-sm mb-6">
-        Vyberte víkendy, které vám vyhovují. Můžete vybrat více termínů.
-        Nejpozději 14 dní předem vás budeme informovat o otevření registrace.
-        <span className="text-white font-medium"> Nezavazujete se k ničemu.</span>
-      </p>
-
-      {/* Select all */}
-      <div className="flex items-center justify-between mb-4">
-        <span className="text-xs text-white/50">
-          {selected.length > 0 ? `Vybráno: ${selected.length} z ${summerWeekends.length}` : 'Žádný termín nevybrán'}
-        </span>
-        <button
-          type="button"
-          onClick={selectAll}
-          className="text-xs text-cta-300 hover:text-cta-200 font-medium transition-colors"
-        >
-          {selected.length === summerWeekends.length ? 'Zrušit výběr' : 'Vybrat vše'}
-        </button>
-      </div>
-
-      {/* Weekend checkboxes */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-6">
-        {summerWeekends.map(weekend => {
-          const isSelected = selected.includes(weekend.id)
-          return (
-            <button
-              key={weekend.id}
-              type="button"
-              onClick={() => toggleWeekend(weekend.id)}
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl border text-left transition-all duration-200 ${
-                isSelected
-                  ? 'bg-cta-500/20 border-cta-400/50 text-white'
-                  : 'bg-white/5 border-white/15 text-white/70 hover:bg-white/10 hover:border-white/25'
-              }`}
-            >
-              <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center flex-shrink-0 transition-colors ${
-                isSelected ? 'bg-cta-500 border-cta-500' : 'border-white/30'
-              }`}>
-                {isSelected && <Check className="w-3 h-3 text-gray-900" />}
-              </div>
-              <div className="flex items-center gap-2">
-                <Calendar className="w-4 h-4 flex-shrink-0 opacity-60" />
-                <span className="text-sm font-medium">{weekend.weekendDateLabel}</span>
-              </div>
-            </button>
-          )
-        })}
-      </div>
-
-      {/* Email + submit */}
-      <div className="space-y-3">
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="váš@email.cz"
-          className="w-full px-4 py-3 rounded-xl border border-white/20 bg-white/10 text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-cta-400"
-          required
-        />
-        <div className="flex items-start gap-2">
-          <input
-            type="checkbox"
-            id="summer-gdpr"
-            checked={gdprConsent}
-            onChange={(e) => setGdprConsent(e.target.checked)}
-            className="mt-1 w-4 h-4 rounded border-white/30 bg-white/10 text-cta-500 focus:ring-cta-500"
-            required
-          />
-          <label htmlFor="summer-gdpr" className="text-xs text-white/50 cursor-pointer">
-            Souhlasím se{' '}
-            <Link href="/gdpr" className="underline hover:text-white">
-              zpracováním osobních údajů
-            </Link>
-          </label>
-        </div>
-        {error && (
-          <p className="text-sm text-red-300">{error}</p>
-        )}
-        <button
-          type="submit"
-          disabled={isSubmitting || !gdprConsent || !email.trim() || selected.length === 0}
-          className="w-full py-3 px-6 bg-cta-500 hover:bg-cta-400 text-gray-900 font-semibold rounded-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {isSubmitting ? 'Odesílám...' : `Nezávazná registrace${selected.length > 0 ? ` (${selected.length} ${selected.length === 1 ? 'termín' : selected.length < 5 ? 'termíny' : 'termínů'})` : ''}`}
-        </button>
-      </div>
-    </form>
-  )
-}
-
 interface TaborChytrychTechnologiiClientProps {
   confirmedMixTerms: TermDisplay[]
-  summerWeekends: TermDisplay[]
 }
 
 export default function TaborChytrychTechnologiiClient({
   confirmedMixTerms,
-  summerWeekends,
 }: TaborChytrychTechnologiiClientProps) {
   const [liveCapacity, setLiveCapacity] = useState<Record<string, { spotsLeft: number; maxCapacity: number }>>({})
 
@@ -671,7 +497,7 @@ export default function TaborChytrychTechnologiiClient({
               <p className="text-xl text-white/90 max-w-2xl mx-auto">
                 {confirmedMixTerms.length > 0
                   ? 'Víkendový tábor So+Ne, 9:00–17:00. Registrace přes DDM Praha 6.'
-                  : <>Podívejte se na <a href="#leto" className="underline hover:text-white">letní termíny</a> níže.</>}
+                  : 'Nové termíny právě chystáme. Ozvěte se nám a dáme vám včas vědět.'}
               </p>
               <p className="text-lg text-white/70 mt-2">
                 Cena: <span className="font-bold text-white">2 990 Kč</span> za víkend (vč. obědů a materiálů)
@@ -758,54 +584,6 @@ export default function TaborChytrychTechnologiiClient({
             >
               Registrace probíhá přes systém DDM Praha 6. Po přihlášení vám přijde potvrzení emailem.
             </motion.p>
-          </div>
-        </section>
-
-        {/* Letní tábory 2026 */}
-        <section id="leto" className="section-padding bg-gradient-to-br from-cta-600 via-cta-700 to-primary-800 scroll-mt-24 relative overflow-hidden">
-          {/* Decorative sun element */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-cta-400/10 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 left-0 w-48 h-48 bg-primary-400/10 rounded-full blur-3xl" />
-
-          <div className="section-container relative z-10">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-center mb-10"
-            >
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-sm font-semibold text-cta-200 mb-6 border border-white/10">
-                <Sun className="w-4 h-4" />
-                Léto 2026
-              </div>
-              <h2 className="heading-2 text-white mb-4">
-                Letní víkendové tábory
-              </h2>
-              <p className="text-xl text-white/90 max-w-2xl mx-auto">
-                Sbíráme zájem o letní termíny. Vyberte víkendy, které se vám hodí,
-                a my vás budeme včas informovat.
-              </p>
-              <p className="text-lg text-white/70 mt-2">
-                Cena: <span className="font-bold text-white">2 990 Kč</span> za víkend (So + Ne, vč. obědů a materiálů)
-              </p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="max-w-2xl mx-auto"
-            >
-              <div className="bg-white/10 backdrop-blur-sm rounded-2xl border border-white/15 overflow-hidden">
-                <div className="px-6 pt-6 md:px-8 md:pt-8 pb-0">
-                  <div className="flex items-center gap-3 mb-2">
-                    <Sun className="w-6 h-6 text-cta-300" />
-                    <h3 className="text-lg font-bold text-white">Nezávazná registrace – léto 2026</h3>
-                  </div>
-                </div>
-                <SummerInterestForm summerWeekends={summerWeekends} />
-              </div>
-            </motion.div>
           </div>
         </section>
 
