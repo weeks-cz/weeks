@@ -66,17 +66,20 @@ function FAQItem({ question, answer, index }: { question: string; answer: string
   const answerId = `faq-answer-${index}`
 
   return (
-    <div className="border-b border-gray-200 last:border-0">
+    <div className="border-b border-ink/15 last:border-0">
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full py-5 flex items-center justify-between text-left focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded-lg"
+        className="w-full py-5 flex items-center gap-4 text-left focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded-md"
         aria-expanded={isOpen}
         aria-controls={answerId}
       >
-        <span className="font-semibold text-gray-900 pr-4">{question}</span>
+        <span className="font-mono text-sm text-ink/40 w-9 shrink-0" aria-hidden="true">
+          Q{String(index + 1).padStart(2, '0')}
+        </span>
+        <span className="font-display font-semibold text-ink pr-4 flex-1">{question}</span>
         <ChevronDown
-          className={`w-5 h-5 text-gray-500 transition-transform flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`}
+          className={`w-5 h-5 text-ink/50 transition-transform flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`}
           aria-hidden="true"
         />
       </button>
@@ -92,7 +95,7 @@ function FAQItem({ question, answer, index }: { question: string; answer: string
             transition={{ duration: 0.2 }}
             className="overflow-hidden"
           >
-            <p className="pb-5 text-gray-600">{answer}</p>
+            <p className="pb-5 pl-[52px] text-ink-500">{answer}</p>
           </motion.div>
         )}
       </AnimatePresence>
@@ -111,7 +114,7 @@ export function FAQSection() {
   })
 
   return (
-    <section id="faq" className="section-padding bg-gray-50">
+    <section id="faq" className="section-padding bg-paper-soft border-b border-ink/15">
       <div className="section-container">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -119,20 +122,21 @@ export function FAQSection() {
           viewport={{ once: true }}
           className="max-w-3xl mx-auto"
         >
-          <h2 className="heading-2 text-gray-900 mb-4 text-center">
-            Časté dotazy <span className="text-gradient">rodičů</span>
+          <p className="mono-label mb-4">FAQ</p>
+          <h2 className="heading-2 text-ink mb-4">
+            Časté dotazy <span className="text-primary-600">rodičů</span>
           </h2>
-          <p className="text-xl text-gray-600 mb-12 text-center">
+          <p className="text-xl text-ink-500 mb-12">
             Odpovědi na nejčastější otázky. Nenašli jste odpověď? Napište nám.
           </p>
 
-          <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm">
+          <div className="border-t border-ink/15">
             {faqs.map((faq, index) => (
               <FAQItem key={faq.question} question={faq.question} answer={faq.answer || ''} index={index} />
             ))}
           </div>
 
-          <p className="text-center text-gray-500 mt-8">
+          <p className="text-ink-500 mt-8">
             Máte další otázky?{' '}
             <a href="#kontakt" className="text-primary-600 hover:underline font-medium">
               Kontaktujte nás
