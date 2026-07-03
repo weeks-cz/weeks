@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useCallback, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, ChevronLeft, ChevronRight } from 'lucide-react'
@@ -25,6 +26,10 @@ export function GallerySection({
   subtitle = 'Podívejte se na ukázky projektů z našich táborů',
 }: GallerySectionProps) {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
+  // Portal až po mountu (SSR nemá document); zároveň lightbox unikne stacking
+  // contextům framer-motion sekcí, kvůli kterým se překrýval s headerem.
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
 
   const openLightbox = useCallback((index: number) => {
     setLightboxIndex(index)
@@ -118,14 +123,15 @@ export function GallerySection({
         </div>
       </section>
 
-      {/* Lightbox */}
+      {/* Lightbox — portál na body: nad headerem/nudge, mimo stacking contexty sekce */}
+      {mounted && createPortal(
       <AnimatePresence>
         {lightboxIndex !== null && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4"
+            className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-ink/95 backdrop-blur-sm p-4 pb-6"
             onClick={closeLightbox}
             role="dialog"
             aria-modal="true"
@@ -165,7 +171,7 @@ export function GallerySection({
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.2 }}
-              className="relative max-w-5xl max-h-[85vh] w-full h-full"
+              className="relative max-w-5xl w-full flex-1 min-h-0"
               onClick={(e) => e.stopPropagation()}
             >
               <Image
@@ -178,14 +184,16 @@ export function GallerySection({
               />
             </motion.div>
 
-            {/* Caption + counter */}
-            <div className="absolute bottom-4 left-0 right-0 text-center">
-              <p className="text-white/90 font-medium mb-1">{images[lightboxIndex].alt}</p>
-              <p className="text-white/50 text-sm">{lightboxIndex + 1} / {images.length}</p>
+            {/* Caption + counter — pod fotkou, ne přes ni */}
+            <div className="shrink-0 mt-4 text-center" onClick={(e) => e.stopPropagation()}>
+              <p className="text-paper font-medium mb-1">{images[lightboxIndex].alt}</p>
+              <p className="font-mono text-paper/50 text-sm">{lightboxIndex + 1} / {images.length}</p>
             </div>
           </motion.div>
         )}
-      </AnimatePresence>
+      </AnimatePresence>,
+      document.body
+      )}
     </>
   )
 }
