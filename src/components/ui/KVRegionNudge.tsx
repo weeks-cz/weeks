@@ -84,16 +84,16 @@ export function KVRegionNudge() {
           role="region"
           aria-label="Tábory v Karlových Varech"
         >
-          <div className="bg-white rounded-2xl shadow-2xl border border-primary-100 p-4">
+          <div className="bg-white rounded-md shadow-hard border border-ink p-4">
             <div className="flex items-start gap-3">
-              <div className="w-10 h-10 shrink-0 rounded-xl bg-primary-100 flex items-center justify-center">
-                <MapPin className="w-5 h-5 text-primary-600" />
+              <div className="w-10 h-10 shrink-0 rounded-sm bg-primary-600 border border-ink flex items-center justify-center">
+                <MapPin className="w-5 h-5 text-white" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-gray-900 mb-1">
+                <p className="text-sm font-display font-semibold text-ink mb-1">
                   Vypadá to, že jste z Karlovarska
                 </p>
-                <p className="text-sm text-gray-600 mb-3">
+                <p className="text-sm text-ink-500 mb-3">
                   Pořádáme IT tábory i v Karlových Varech — letní příměstské i víkendové.
                 </p>
                 <Link
@@ -107,10 +107,10 @@ export function KVRegionNudge() {
               </div>
               <button
                 onClick={dismiss}
-                className="shrink-0 p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
+                className="shrink-0 p-1.5 hover:bg-paper-soft rounded-md transition-colors"
                 aria-label="Zavřít"
               >
-                <X className="w-4 h-4 text-gray-400" />
+                <X className="w-4 h-4 text-ink/40" />
               </button>
             </div>
           </div>
@@ -126,11 +126,11 @@ export function KVRegionNudge() {
           transition={{ duration: 0.25 }}
           className="fixed bottom-4 left-4 z-40 max-w-[calc(100vw-2rem)]"
         >
-          <div className="flex items-center gap-1 rounded-full bg-white/95 backdrop-blur-sm border border-gray-200 shadow-lg pl-3 pr-1.5 py-1.5">
+          <div className="flex items-center gap-1 rounded-sm bg-white/95 backdrop-blur-sm border border-ink/20 shadow-hard-sm pl-3 pr-1.5 py-1.5">
             <Link
               href="/karlovy-vary"
               onClick={dismiss}
-              className="flex items-center gap-1.5 text-xs sm:text-sm font-medium text-gray-600 hover:text-primary-600 transition-colors min-w-0"
+              className="flex items-center gap-1.5 text-xs sm:text-sm font-medium text-ink-500 hover:text-primary-600 transition-colors min-w-0"
             >
               <MapPin className="w-4 h-4 text-primary-500 shrink-0" />
               <span className="truncate">Tábory i v Karlových Varech</span>
@@ -138,10 +138,10 @@ export function KVRegionNudge() {
             </Link>
             <button
               onClick={dismiss}
-              className="shrink-0 p-1 rounded-full hover:bg-gray-100 transition-colors"
+              className="shrink-0 p-1 rounded-sm hover:bg-paper-soft transition-colors"
               aria-label="Zavřít"
             >
-              <X className="w-3.5 h-3.5 text-gray-400" />
+              <X className="w-3.5 h-3.5 text-ink/40" />
             </button>
           </div>
         </motion.div>

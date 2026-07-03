@@ -259,9 +259,9 @@ export function HeroSection() {
               transition={{ duration: 0.9, delay: 0.5, ease: EASE_OUT }}
             >
               <Image
-                src={location.isDefault ? '/images/hwlab/hwlab-7976.webp' : '/images/program-mix.webp'}
+                src={location.isDefault ? '/images/hwlab/hero-print-day.webp' : '/images/program-mix.webp'}
                 alt={location.isDefault
-                  ? 'HWLab — učebna s počítači a 3D tiskárnami'
+                  ? 'Děti tisknou na 3D tiskárnách Prusa na táboře Weeks v HWLab'
                   : `FabLab VARY&TE — IT tábor v ${location.name}`}
                 width={880}
                 height={660}
