@@ -89,32 +89,20 @@ const specializations = [
 
 const colorClasses = {
   primary: {
-    bg: 'bg-primary-500',
-    bgLight: 'bg-primary-50',
+    bg: 'bg-primary-600',
     text: 'text-primary-600',
-    border: 'border-primary-200',
-    gradient: 'from-primary-500 to-primary-600',
   },
   accent: {
     bg: 'bg-accent-500',
-    bgLight: 'bg-accent-50',
     text: 'text-accent-600',
-    border: 'border-accent-200',
-    gradient: 'from-accent-500 to-accent-600',
   },
   trust: {
-    bg: 'bg-trust-500',
-    bgLight: 'bg-trust-50',
+    bg: 'bg-trust-600',
     text: 'text-trust-600',
-    border: 'border-trust-200',
-    gradient: 'from-trust-500 to-trust-600',
   },
   cta: {
     bg: 'bg-cta-500',
-    bgLight: 'bg-cta-50',
     text: 'text-cta-600',
-    border: 'border-cta-200',
-    gradient: 'from-cta-500 to-cta-600',
   },
 }
 
@@ -140,48 +128,43 @@ export function ProgramSection() {
     ].filter(item => item.program)
 
     return (
-      <section id="program" className="section-padding bg-gray-50 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-40">
-          <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary-200 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent-200 rounded-full blur-3xl" />
-        </div>
-        <div className="section-container relative z-10">
-          <div className="text-center max-w-3xl mx-auto mb-12">
-            <motion.div
+      <section id="program" className="section-padding bg-paper-soft border-b border-ink/15">
+        <div className="section-container">
+          <div className="max-w-3xl mb-12">
+            <motion.p
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full text-sm font-medium text-gray-600 shadow-sm mb-6"
+              className="mono-label mb-4"
             >
-              <span className="w-2 h-2 rounded-full bg-trust-500 animate-pulse" />
               Léto 2026 — Karlovy Vary
-            </motion.div>
+            </motion.p>
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4"
+              className="heading-2 text-ink mb-4"
             >
               Vyberte si formát
               <br />
-              <span className="text-gradient">tábora chytrých technologií</span>
+              <span className="text-primary-600">tábora chytrých technologií</span>
             </motion.h2>
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
-              className="text-lg text-gray-600"
+              className="text-lg text-ink-500"
             >
               Celotýdenní příměstský tábor (Po–Pá) nebo víkendový MIX (So–Ne) —
               všechny termíny ve FabLabu Kreativního centra VARY&TE.
             </motion.p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-6 max-w-5xl">
             {kvPrograms.map((item, idx) => {
               const program = item.program!
-              const colors = colorClasses[program.color as keyof typeof colorClasses]
+              const colors = colorClasses[program.color as keyof typeof colorClasses] ?? colorClasses.primary
               return (
                 <motion.div
                   key={program.id}
@@ -192,47 +175,39 @@ export function ProgramSection() {
                 >
                   <Link
                     href={buildPath(location, item.href)}
-                    className="group relative bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 block h-full flex flex-col"
+                    className="card-maker group overflow-hidden block h-full flex flex-col"
                   >
-                    <div className="relative h-48 overflow-hidden">
+                    <div className="relative h-48 overflow-hidden border-b border-ink/15">
                       <Image
                         src={item.image}
                         alt={program.name}
                         fill
                         sizes="(max-width: 768px) 100vw, 50vw"
-                        className="object-cover group-hover:scale-105 transition-transform duration-700"
+                        className="object-cover group-hover:scale-[1.03] transition-transform duration-700"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-gray-900/20 to-transparent" />
                       <div className="absolute top-3 left-3 z-10">
-                        <div className={`px-2.5 py-1 rounded-full ${colors.bg} text-xs font-semibold text-white shadow-lg`}>
+                        <span className="px-2.5 py-1 bg-paper border border-ink rounded-sm font-mono text-xs font-medium text-ink">
                           {item.badgeLabel}
-                        </div>
-                      </div>
-                      <div className="absolute bottom-3 left-3">
-                        <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${colors.gradient} flex items-center justify-center shadow-lg`}>
-                          <Sparkles className="w-5 h-5 text-white" />
-                        </div>
+                        </span>
                       </div>
                     </div>
                     <div className="p-6 flex-grow flex flex-col">
-                      <div className="flex items-center justify-between mb-3">
-                        <h3 className="font-display text-xl font-bold text-gray-900 group-hover:text-primary-600 transition-colors">
-                          {program.name}
-                        </h3>
-                        <span className="text-lg font-semibold text-gray-900 whitespace-nowrap ml-4">
-                          {program.price.toLocaleString('cs-CZ')} Kč
-                        </span>
+                      <div className="mono-label mb-3">
+                        {program.price.toLocaleString('cs-CZ')} Kč
                       </div>
-                      <p className="text-gray-600 mb-4 flex-grow">
+                      <h3 className="font-display text-xl font-bold text-ink group-hover:text-primary-600 transition-colors mb-3">
+                        {program.name}
+                      </h3>
+                      <p className="text-ink-500 mb-4 flex-grow">
                         {item.description}
                       </p>
-                      <div className="flex items-center gap-2 pt-3 border-t border-gray-100">
-                        <Calendar className="w-4 h-4 text-gray-400 flex-shrink-0" />
-                        <span className="text-xs text-gray-500">
+                      <div className="flex items-center gap-2 pt-3 border-t border-ink/15">
+                        <Calendar className={`w-4 h-4 flex-shrink-0 ${colors.text}`} />
+                        <span className="font-mono text-xs text-ink-500">
                           {location.terms.filter(t => t.program === program.id).length} {' '}
                           {location.terms.filter(t => t.program === program.id).length === 1 ? 'termín' : 'termíny'} v létě 2026
                         </span>
-                        <ArrowRight className="w-4 h-4 text-gray-400 ml-auto group-hover:translate-x-1 transition-transform flex-shrink-0" />
+                        <ArrowRight className="w-4 h-4 text-ink/40 ml-auto group-hover:translate-x-1 transition-transform flex-shrink-0" />
                       </div>
                     </div>
                   </Link>
@@ -246,41 +221,34 @@ export function ProgramSection() {
   }
 
   return (
-    <section id="program" className="section-padding bg-gray-50 relative overflow-hidden">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-40">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary-200 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent-200 rounded-full blur-3xl" />
-      </div>
-
-      <div className="section-container relative z-10">
+    <section id="program" className="section-padding bg-paper-soft border-b border-ink/15">
+      <div className="section-container">
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12">
-          <motion.div
+        <div className="max-w-3xl mb-12">
+          <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full text-sm font-medium text-gray-600 shadow-sm mb-6"
+            className="mono-label mb-4"
           >
-            <span className="w-2 h-2 rounded-full bg-trust-500 animate-pulse" />
             7 programů na výběr
-          </motion.div>
+          </motion.p>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4"
+            className="heading-2 text-ink mb-4"
           >
             Vyberte si podle toho,
             <br />
-            <span className="text-gradient">co vaše dítě baví</span>
+            <span className="text-primary-600">co vaše dítě baví</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-lg text-gray-600"
+            className="text-lg text-ink-500"
           >
             Nebo zkuste všechno! Každý si odnese vlastní projekt a nové znalosti.
           </motion.p>
@@ -295,9 +263,9 @@ export function ProgramSection() {
         >
           <Link
             href={`${buildPath(location, 'tabor-3d-tisk')}#terminy`}
-            className="group flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 rounded-2xl bg-gradient-to-r from-primary-600 to-primary-500 p-5 shadow-lg hover:shadow-xl transition-shadow"
+            className="group flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 rounded-md bg-primary-600 border border-ink p-5 shadow-hard-sm hover:shadow-hard hover:-translate-y-0.5 hover:-translate-x-0.5 transition-all duration-200"
           >
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cta-400 text-gray-900 text-xs font-bold self-start">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-cta-400 border border-ink rounded-sm font-mono text-xs font-bold text-ink self-start">
               <Sparkles className="w-3.5 h-3.5" /> NOVĚ
             </span>
             <div className="flex-1 min-w-0">
@@ -325,32 +293,32 @@ export function ProgramSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
+                className="h-full"
               >
                 <Link
                   href={buildPath(location, camp.href.replace(/^\//, ''))}
-                  className="group relative bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 block h-full"
+                  className="card-maker group overflow-hidden block h-full flex flex-col"
                 >
                   {/* Image */}
-                  <div className="relative h-48 overflow-hidden">
+                  <div className="relative h-48 overflow-hidden border-b border-ink/15">
                     <Image
                       src={camp.image}
                       alt={`${camp.title} - tábor pro děti`}
                       fill
                       sizes="(max-width: 768px) 100vw, 33vw"
-                      className="object-cover group-hover:scale-105 transition-transform duration-700"
+                      className="object-cover group-hover:scale-[1.03] transition-transform duration-700"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-gray-900/20 to-transparent" />
 
                     {/* Badge */}
                     <div className="absolute top-3 left-3 z-10">
-                      <div className={`px-2.5 py-1 rounded-full ${colors.bg} text-xs font-semibold text-white shadow-lg`}>
+                      <span className="px-2.5 py-1 bg-paper border border-ink rounded-sm font-mono text-xs font-medium text-ink">
                         {camp.badge}
-                      </div>
+                      </span>
                     </div>
 
                     {/* Icon */}
                     <div className="absolute bottom-3 left-3">
-                      <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${colors.gradient} flex items-center justify-center shadow-lg`}>
+                      <div className={`w-10 h-10 rounded-sm border border-ink ${colors.bg} flex items-center justify-center`}>
                         <camp.icon className="w-5 h-5 text-white" />
                       </div>
                     </div>
@@ -358,27 +326,25 @@ export function ProgramSection() {
 
                   {/* Content */}
                   <div className="p-5 flex flex-col flex-1">
-                    <div className="flex items-center justify-between mb-2">
-                      <h4 className="font-display text-lg font-bold text-gray-900 group-hover:text-primary-600 transition-colors">
-                        {camp.title}
-                      </h4>
-                      <span className="text-sm font-semibold text-gray-900">{camp.price}</span>
-                    </div>
-                    <p className="text-sm text-gray-600 leading-relaxed mb-4 flex-1">
+                    <div className="mono-label mb-2">{camp.price}</div>
+                    <h4 className="font-display text-lg font-bold text-ink group-hover:text-primary-600 transition-colors mb-2">
+                      {camp.title}
+                    </h4>
+                    <p className="text-sm text-ink-500 leading-relaxed mb-4 flex-1">
                       {camp.description}
                     </p>
 
                     {/* Next dates */}
-                    <div className="flex items-center gap-4 pt-3 border-t border-gray-100">
-                      <Calendar className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                    <div className="flex items-center gap-3 pt-3 border-t border-ink/15">
+                      <Calendar className={`w-4 h-4 flex-shrink-0 ${colors.text}`} />
                       <div className="flex flex-wrap gap-2">
                         {camp.nextDates.map((date, i) => (
-                          <span key={i} className="text-xs font-medium text-gray-600 bg-gray-50 px-2 py-0.5 rounded">
+                          <span key={i} className="font-mono text-xs text-ink border border-ink/20 px-2 py-0.5 rounded-sm">
                             {date}
                           </span>
                         ))}
                       </div>
-                      <ArrowRight className="w-4 h-4 text-gray-400 ml-auto group-hover:translate-x-1 transition-transform flex-shrink-0" />
+                      <ArrowRight className="w-4 h-4 text-ink/40 ml-auto group-hover:translate-x-1 transition-transform flex-shrink-0" />
                     </div>
                   </div>
                 </Link>
@@ -392,12 +358,12 @@ export function ProgramSection() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-8"
+          className="mb-8 pt-4 border-t border-ink/15"
         >
-          <h3 className="text-xl font-semibold text-gray-700">
+          <h3 className="font-display text-xl font-semibold text-ink">
             Další specializace
           </h3>
-          <p className="text-gray-500 mt-1">
+          <p className="text-ink-500 mt-1">
             Pro děti, které už vědí, čemu se chtějí věnovat
           </p>
         </motion.div>
@@ -416,29 +382,28 @@ export function ProgramSection() {
               >
                 <Link
                   href={buildPath(location, `program#${program.id}`)}
-                  className="group relative bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 block"
+                  className="card-maker group overflow-hidden block h-full"
                 >
                   {/* Image */}
-                  <div className="relative h-40 overflow-hidden">
+                  <div className="relative h-40 overflow-hidden border-b border-ink/15">
                     <Image
                       src={program.image}
                       alt={`${program.title} - ukázka z víkendového tábora`}
                       fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-                      className="object-cover group-hover:scale-105 transition-transform duration-700"
+                      className="object-cover group-hover:scale-[1.03] transition-transform duration-700"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-gray-900/20 to-transparent" />
 
                     {/* Badge */}
                     <div className="absolute top-3 right-3">
-                      <div className={`px-2.5 py-1 rounded-full bg-white/90 backdrop-blur-sm text-xs font-semibold ${colors.text}`}>
+                      <span className={`px-2.5 py-1 bg-paper border border-ink/20 rounded-sm font-mono text-xs font-medium ${colors.text}`}>
                         {program.badge}
-                      </div>
+                      </span>
                     </div>
 
                     {/* Icon */}
                     <div className="absolute bottom-3 left-3">
-                      <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${colors.gradient} flex items-center justify-center shadow-lg`}>
+                      <div className={`w-10 h-10 rounded-sm border border-ink ${colors.bg} flex items-center justify-center`}>
                         <program.icon className="w-5 h-5 text-white" />
                       </div>
                     </div>
@@ -446,10 +411,10 @@ export function ProgramSection() {
 
                   {/* Content */}
                   <div className="p-5">
-                    <h4 className="font-display text-lg font-bold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors">
+                    <h4 className="font-display text-lg font-bold text-ink mb-2 group-hover:text-primary-600 transition-colors">
                       {program.title}
                     </h4>
-                    <p className="text-sm text-gray-600 leading-relaxed">
+                    <p className="text-sm text-ink-500 leading-relaxed">
                       {program.description}
                     </p>
                   </div>
