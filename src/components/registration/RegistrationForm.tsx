@@ -221,13 +221,13 @@ export function RegistrationForm() {
   }
 
   const inputClass = (name: string) =>
-    `w-full px-4 py-3 rounded-lg border ${fieldErrors[name] ? 'border-red-300 bg-red-50' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors`
+    `w-full px-4 py-3 rounded-md bg-white border ${fieldErrors[name] ? 'border-red-300 bg-red-50' : 'border-ink/20'} text-ink placeholder:text-ink/40 focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink`
 
   if (!program || !term) {
     return (
       <div className="max-w-lg mx-auto text-center py-20">
         <h1 className="heading-2 mb-4">Registrace</h1>
-        <p className="text-gray-600 mb-6">Neplatný odkaz na registraci. Vyberte si tábor a termín.</p>
+        <p className="text-ink-500 mb-6">Neplatný odkaz na registraci. Vyberte si tábor a termín.</p>
         <Link href={`/${location.slug || ''}`} className="btn-primary">
           Zpět na výběr táborů
         </Link>
@@ -240,7 +240,7 @@ export function RegistrationForm() {
       {/* Header */}
       <div className="text-center mb-8">
         <h1 className="heading-2 mb-2">Registrace na tábor</h1>
-        <p className="text-gray-600">
+        <p className="text-ink-500">
           {program.name} · {location.name} · {new Date(term.startDate).toLocaleDateString('cs-CZ', { day: 'numeric', month: 'long', year: 'numeric' })}
         </p>
       </div>
@@ -252,16 +252,16 @@ export function RegistrationForm() {
             <div
               aria-current={step === s.id ? 'step' : undefined}
               aria-label={`Krok ${s.id}: ${s.title}${step === s.id ? ' – aktuální' : step > s.id ? ' – hotovo' : ''}`}
-              className={`flex items-center justify-center w-9 h-9 rounded-full border-2 transition-colors ${
+              className={`flex items-center justify-center w-9 h-9 rounded-sm border transition-colors ${
                 step >= s.id
                   ? 'bg-primary-600 border-primary-600 text-white'
-                  : 'border-gray-300 text-gray-400'
+                  : 'border-ink/30 text-ink/50'
               }`}
             >
               <s.icon className="w-4 h-4" aria-hidden="true" />
             </div>
             {i < STEPS.length - 1 && (
-              <div className={`w-6 sm:w-10 h-0.5 mx-1 ${step > s.id ? 'bg-primary-600' : 'bg-gray-200'}`} />
+              <div className={`w-6 sm:w-10 h-0.5 mx-1 ${step > s.id ? 'bg-primary-600' : 'bg-ink/15'}`} />
             )}
           </div>
         ))}
@@ -273,14 +273,14 @@ export function RegistrationForm() {
           <button
             type="button"
             onClick={fillTestData}
-            className="px-4 py-2 text-xs font-mono bg-gray-800 text-green-400 rounded-lg border border-gray-600 hover:bg-gray-700 transition-colors"
+            className="px-4 py-2 text-xs font-mono bg-ink text-green-400 rounded-md border border-ink/30 hover:bg-ink/90 transition-colors"
           >
             ⚡ Dev: vyplnit testovací data
           </button>
           <button
             type="button"
             onClick={() => setStep(1)}
-            className="px-4 py-2 text-xs font-mono bg-gray-800 text-yellow-400 rounded-lg border border-gray-600 hover:bg-gray-700 transition-colors"
+            className="px-4 py-2 text-xs font-mono bg-ink text-yellow-400 rounded-md border border-ink/30 hover:bg-ink/90 transition-colors"
           >
             ↺ Krok 1
           </button>
@@ -288,30 +288,30 @@ export function RegistrationForm() {
       )}
 
       {/* Form */}
-      <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 shadow-sm">
+      <div className="bg-paper rounded-md border border-ink/15 p-6 sm:p-8">
         <AnimatePresence mode="wait">
           {/* Step 1: Parent */}
           {step === 1 && (
             <motion.div key="step1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-              <h2 className="text-lg font-semibold text-gray-900 mb-6">Zákonný zástupce</h2>
+              <h2 className="mono-label mb-6">Zákonný zástupce</h2>
               <div className="space-y-4">
                 <div>
-                  <label htmlFor="parent_name" className="block text-sm font-medium text-gray-700 mb-1">Jméno a příjmení *</label>
+                  <label htmlFor="parent_name" className="block text-sm font-medium text-ink mb-1">Jméno a příjmení *</label>
                   <input id="parent_name" type="text" value={parent.parent_name} onChange={e => setParent({...parent, parent_name: e.target.value})} className={inputClass('parent_name')} placeholder="Jan Novák" />
                   <FieldError name="parent_name" />
                 </div>
                 <div>
-                  <label htmlFor="parent_email" className="block text-sm font-medium text-gray-700 mb-1">E-mail *</label>
+                  <label htmlFor="parent_email" className="block text-sm font-medium text-ink mb-1">E-mail *</label>
                   <input id="parent_email" type="email" value={parent.parent_email} onChange={e => setParent({...parent, parent_email: e.target.value})} className={inputClass('parent_email')} placeholder="jan@email.cz" />
                   <FieldError name="parent_email" />
                 </div>
                 <div>
-                  <label htmlFor="parent_phone" className="block text-sm font-medium text-gray-700 mb-1">Telefon *</label>
+                  <label htmlFor="parent_phone" className="block text-sm font-medium text-ink mb-1">Telefon *</label>
                   <input id="parent_phone" type="tel" value={parent.parent_phone} onChange={e => setParent({...parent, parent_phone: e.target.value})} className={inputClass('parent_phone')} placeholder="+420 123 456 789" />
                   <FieldError name="parent_phone" />
                 </div>
                 <div>
-                  <label htmlFor="parent_address" className="block text-sm font-medium text-gray-700 mb-1">Fakturační adresa *</label>
+                  <label htmlFor="parent_address" className="block text-sm font-medium text-ink mb-1">Fakturační adresa *</label>
                   <input id="parent_address" type="text" value={parent.parent_address} onChange={e => setParent({...parent, parent_address: e.target.value})} className={inputClass('parent_address')} placeholder="Ulice 123, 360 01 Karlovy Vary" />
                   <FieldError name="parent_address" />
                 </div>
@@ -322,20 +322,20 @@ export function RegistrationForm() {
           {/* Step 2: Child */}
           {step === 2 && (
             <motion.div key="step2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-              <h2 className="text-lg font-semibold text-gray-900 mb-6">Údaje o dítěti</h2>
+              <h2 className="mono-label mb-6">Údaje o dítěti</h2>
               <div className="space-y-4">
                 <div>
-                  <label htmlFor="child_name" className="block text-sm font-medium text-gray-700 mb-1">Jméno a příjmení *</label>
+                  <label htmlFor="child_name" className="block text-sm font-medium text-ink mb-1">Jméno a příjmení *</label>
                   <input id="child_name" type="text" value={child.child_name} onChange={e => setChild({...child, child_name: e.target.value})} className={inputClass('child_name')} placeholder="Tomáš Novák" />
                   <FieldError name="child_name" />
                 </div>
                 <div>
-                  <label htmlFor="child_birthdate" className="block text-sm font-medium text-gray-700 mb-1">Datum narození *</label>
+                  <label htmlFor="child_birthdate" className="block text-sm font-medium text-ink mb-1">Datum narození *</label>
                   <input id="child_birthdate" type="date" value={child.child_birthdate} onChange={e => setChild({...child, child_birthdate: e.target.value})} className={inputClass('child_birthdate')} />
                   <FieldError name="child_birthdate" />
                 </div>
                 <div>
-                  <label htmlFor="child_insurance" className="block text-sm font-medium text-gray-700 mb-1">Zdravotní pojišťovna *</label>
+                  <label htmlFor="child_insurance" className="block text-sm font-medium text-ink mb-1">Zdravotní pojišťovna *</label>
                   <select id="child_insurance" value={child.child_insurance} onChange={e => setChild({...child, child_insurance: e.target.value})} className={inputClass('child_insurance')}>
                     {INSURANCE_OPTIONS.map(opt => (
                       <option key={opt} value={opt}>{opt}</option>
@@ -344,12 +344,12 @@ export function RegistrationForm() {
                   <FieldError name="child_insurance" />
                 </div>
                 <div>
-                  <label htmlFor="child_health" className="block text-sm font-medium text-gray-700 mb-1">Zdravotní omezení / alergie</label>
+                  <label htmlFor="child_health" className="block text-sm font-medium text-ink mb-1">Zdravotní omezení / alergie</label>
                   <textarea id="child_health" value={child.child_health_notes} onChange={e => setChild({...child, child_health_notes: e.target.value})} className={inputClass('child_health_notes')} rows={3} placeholder="Nepovinné — uveďte případné alergie, léky, omezení..." />
-                  <p className="text-xs text-gray-500 mt-1">Nepovinné. Uvádějte jen údaje nutné pro bezpečnost — použijeme je výhradně k zajištění bezpečné účasti dítěte na táboře.</p>
+                  <p className="text-xs text-ink-500 mt-1">Nepovinné. Uvádějte jen údaje nutné pro bezpečnost — použijeme je výhradně k zajištění bezpečné účasti dítěte na táboře.</p>
                 </div>
                 <div>
-                  <label htmlFor="child_exp" className="block text-sm font-medium text-gray-700 mb-1">Zkušenosti s technologiemi</label>
+                  <label htmlFor="child_exp" className="block text-sm font-medium text-ink mb-1">Zkušenosti s technologiemi</label>
                   <textarea id="child_exp" value={child.child_experience} onChange={e => setChild({...child, child_experience: e.target.value})} className={inputClass('child_experience')} rows={2} placeholder="Nepovinné — jaké má dítě zkušenosti s počítači, programováním..." />
                 </div>
               </div>
@@ -359,12 +359,12 @@ export function RegistrationForm() {
           {/* Step 3: Pickup */}
           {step === 3 && (
             <motion.div key="step3" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-              <h2 className="text-lg font-semibold text-gray-900 mb-6">Způsob vyzvednutí</h2>
+              <h2 className="mono-label mb-6">Způsob vyzvednutí</h2>
               <div className="space-y-5">
                 <div>
-                  <p className="text-sm font-medium text-gray-700 mb-3">Jak bude dítě vyzvedáváno po skončení tábora? *</p>
+                  <p className="text-sm font-medium text-ink mb-3">Jak bude dítě vyzvedáváno po skončení tábora? *</p>
                   <div className="space-y-3">
-                    <label className={`flex items-start gap-3 p-4 rounded-lg border-2 cursor-pointer transition-colors ${pickup.pickup_method === 'solo' ? 'border-primary-500 bg-primary-50' : 'border-gray-200 hover:border-gray-300'}`}>
+                    <label className={`flex items-start gap-3 p-4 rounded-md border cursor-pointer transition-colors ${pickup.pickup_method === 'solo' ? 'border-primary-600 bg-primary-50' : 'border-ink/15 hover:border-ink/30'}`}>
                       <input
                         type="radio"
                         name="pickup_method"
@@ -374,12 +374,12 @@ export function RegistrationForm() {
                         className="mt-0.5 accent-primary-600"
                       />
                       <div>
-                        <p className="font-medium text-gray-900">Dítě odejde samo</p>
-                        <p className="text-sm text-gray-500 mt-0.5">Dítě odejde po skončení programu samostatně</p>
+                        <p className="font-medium text-ink">Dítě odejde samo</p>
+                        <p className="text-sm text-ink-500 mt-0.5">Dítě odejde po skončení programu samostatně</p>
                       </div>
                     </label>
 
-                    <label className={`flex items-start gap-3 p-4 rounded-lg border-2 cursor-pointer transition-colors ${pickup.pickup_method === 'named_persons' ? 'border-primary-500 bg-primary-50' : 'border-gray-200 hover:border-gray-300'}`}>
+                    <label className={`flex items-start gap-3 p-4 rounded-md border cursor-pointer transition-colors ${pickup.pickup_method === 'named_persons' ? 'border-primary-600 bg-primary-50' : 'border-ink/15 hover:border-ink/30'}`}>
                       <input
                         type="radio"
                         name="pickup_method"
@@ -389,8 +389,8 @@ export function RegistrationForm() {
                         className="mt-0.5 accent-primary-600"
                       />
                       <div>
-                        <p className="font-medium text-gray-900">Vyzvedne jmenovaná osoba</p>
-                        <p className="text-sm text-gray-500 mt-0.5">Dítě vyzvedne zákonný zástupce nebo níže uvedená osoba</p>
+                        <p className="font-medium text-ink">Vyzvedne jmenovaná osoba</p>
+                        <p className="text-sm text-ink-500 mt-0.5">Dítě vyzvedne zákonný zástupce nebo níže uvedená osoba</p>
                       </div>
                     </label>
                   </div>
@@ -399,7 +399,7 @@ export function RegistrationForm() {
 
                 {pickup.pickup_method === 'solo' && (
                   <motion.div key="pickup-time" initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}>
-                    <label htmlFor="pickup_time" className="block text-sm font-medium text-gray-700 mb-1">V kolik hodin smí dítě odejít? *</label>
+                    <label htmlFor="pickup_time" className="block text-sm font-medium text-ink mb-1">V kolik hodin smí dítě odejít? *</label>
                     <input
                       id="pickup_time"
                       type="time"
@@ -409,14 +409,14 @@ export function RegistrationForm() {
                       min="08:00"
                       max="17:00"
                     />
-                    <p className="text-xs text-gray-500 mt-1">Standardně dítě odchází po skončení programu. Čas vyberte, jen pokud má odejít dříve.</p>
+                    <p className="text-xs text-ink-500 mt-1">Standardně dítě odchází po skončení programu. Čas vyberte, jen pokud má odejít dříve.</p>
                     <FieldError name="pickup_time" />
                   </motion.div>
                 )}
 
                 {pickup.pickup_method === 'named_persons' && (
                   <motion.div key="pickup-persons" initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}>
-                    <label htmlFor="pickup_persons" className="block text-sm font-medium text-gray-700 mb-1">Kdo smí dítě vyzvednout? (nepovinné)</label>
+                    <label htmlFor="pickup_persons" className="block text-sm font-medium text-ink mb-1">Kdo smí dítě vyzvednout? (nepovinné)</label>
                     <textarea
                       id="pickup_persons"
                       value={pickup.pickup_persons}
@@ -425,7 +425,7 @@ export function RegistrationForm() {
                       rows={3}
                       placeholder={'Jana Nováková, +420 601 111 222\nPetr Novák, +420 602 333 444'}
                     />
-                    <p className="text-xs text-gray-500 mt-1">Zákonný zástupce smí dítě vyzvednout vždy. Vyplňte, jen pokud bude dítě vyzvedávat někdo jiný — jméno a telefon každé osoby na samostatný řádek.</p>
+                    <p className="text-xs text-ink-500 mt-1">Zákonný zástupce smí dítě vyzvednout vždy. Vyplňte, jen pokud bude dítě vyzvedávat někdo jiný — jméno a telefon každé osoby na samostatný řádek.</p>
                     <FieldError name="pickup_persons" />
                   </motion.div>
                 )}
@@ -436,11 +436,11 @@ export function RegistrationForm() {
           {/* Step 4: Consents */}
           {step === 4 && (
             <motion.div key="step4" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-              <h2 className="text-lg font-semibold text-gray-900 mb-6">Souhlasy</h2>
+              <h2 className="mono-label mb-6">Souhlasy</h2>
               <div className="space-y-5">
                 <div className="flex items-start gap-3">
-                  <input type="checkbox" id="vop" checked={consents.vop_consent as boolean} onChange={e => setConsents({...consents, vop_consent: e.target.checked as unknown as true})} className="mt-1 w-5 h-5 shrink-0 rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
-                  <label htmlFor="vop" className="text-sm text-gray-700">
+                  <input type="checkbox" id="vop" checked={consents.vop_consent as boolean} onChange={e => setConsents({...consents, vop_consent: e.target.checked as unknown as true})} className="mt-1 w-5 h-5 shrink-0 rounded-sm border-ink/30 text-primary-600 focus:ring-primary-500" />
+                  <label htmlFor="vop" className="text-sm text-ink">
                     Souhlasím s{' '}
                     <Link href={vopUrl} target="_blank" className="text-primary-600 underline hover:text-primary-700">Všeobecnými obchodními podmínkami</Link>
                     {' '}*
@@ -449,8 +449,8 @@ export function RegistrationForm() {
                 <FieldError name="vop_consent" />
 
                 <div className="flex items-start gap-3">
-                  <input type="checkbox" id="gdpr" checked={consents.gdpr_consent as boolean} onChange={e => setConsents({...consents, gdpr_consent: e.target.checked as unknown as true})} className="mt-1 w-5 h-5 shrink-0 rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
-                  <label htmlFor="gdpr" className="text-sm text-gray-700">
+                  <input type="checkbox" id="gdpr" checked={consents.gdpr_consent as boolean} onChange={e => setConsents({...consents, gdpr_consent: e.target.checked as unknown as true})} className="mt-1 w-5 h-5 shrink-0 rounded-sm border-ink/30 text-primary-600 focus:ring-primary-500" />
+                  <label htmlFor="gdpr" className="text-sm text-ink">
                     Souhlasím se{' '}
                     <Link href={gdprUrl} target="_blank" className="text-primary-600 underline hover:text-primary-700">zpracováním osobních údajů</Link>
                     , včetně případných zdravotních údajů dítěte, výhradně pro zajištění bezpečné účasti na táboře{' '}*
@@ -459,15 +459,15 @@ export function RegistrationForm() {
                 <FieldError name="gdpr_consent" />
 
                 <div className="flex items-start gap-3">
-                  <input type="checkbox" id="photo" checked={consents.photo_consent} onChange={e => setConsents({...consents, photo_consent: e.target.checked})} className="mt-1 w-5 h-5 shrink-0 rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
-                  <label htmlFor="photo" className="text-sm text-gray-700">
+                  <input type="checkbox" id="photo" checked={consents.photo_consent} onChange={e => setConsents({...consents, photo_consent: e.target.checked})} className="mt-1 w-5 h-5 shrink-0 rounded-sm border-ink/30 text-primary-600 focus:ring-primary-500" />
+                  <label htmlFor="photo" className="text-sm text-ink">
                     Souhlasím s pořizováním fotografií a videí dítěte pro dokumentaci tábora a propagaci na webu a sociálních sítích (nepovinné)
                   </label>
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <input type="checkbox" id="marketing" checked={consents.marketing_consent} onChange={e => setConsents({...consents, marketing_consent: e.target.checked})} className="mt-1 w-5 h-5 shrink-0 rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
-                  <label htmlFor="marketing" className="text-sm text-gray-700">
+                  <input type="checkbox" id="marketing" checked={consents.marketing_consent} onChange={e => setConsents({...consents, marketing_consent: e.target.checked})} className="mt-1 w-5 h-5 shrink-0 rounded-sm border-ink/30 text-primary-600 focus:ring-primary-500" />
+                  <label htmlFor="marketing" className="text-sm text-ink">
                     Souhlasím se zasíláním novinek a informací o dalších táborech (nepovinné)
                   </label>
                 </div>
@@ -478,19 +478,19 @@ export function RegistrationForm() {
           {/* Step 5: Summary */}
           {step === 5 && (
             <motion.div key="step5" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-              <h2 className="text-lg font-semibold text-gray-900 mb-6">Shrnutí registrace</h2>
+              <h2 className="mono-label mb-6">Shrnutí registrace</h2>
               <div className="space-y-6">
-                <div className="bg-primary-50 rounded-xl p-4">
-                  <h3 className="font-medium text-primary-900 mb-2">Tábor</h3>
-                  <p className="text-primary-700">{program.name}</p>
-                  <p className="text-sm text-primary-600">{location.name} · {new Date(term.startDate).toLocaleDateString('cs-CZ', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
-                  <p className="text-lg font-bold text-primary-900 mt-2">{program.price.toLocaleString('cs-CZ')} Kč</p>
+                <div className="border border-primary-300 rounded-md bg-white p-4">
+                  <h3 className="font-medium text-ink mb-2">Tábor</h3>
+                  <p className="text-ink">{program.name}</p>
+                  <p className="text-sm text-ink-500">{location.name} · {new Date(term.startDate).toLocaleDateString('cs-CZ', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                  <p className="text-lg font-bold text-ink mt-2 font-mono">{program.price.toLocaleString('cs-CZ')} Kč</p>
                 </div>
 
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
-                    <h3 className="font-medium text-gray-900 mb-2">Zákonný zástupce</h3>
-                    <div className="text-sm text-gray-600 space-y-1">
+                    <h3 className="font-medium text-ink mb-2">Zákonný zástupce</h3>
+                    <div className="text-sm text-ink-500 space-y-1">
                       <p>{parent.parent_name}</p>
                       <p>{parent.parent_email}</p>
                       <p>{parent.parent_phone}</p>
@@ -498,8 +498,8 @@ export function RegistrationForm() {
                     </div>
                   </div>
                   <div>
-                    <h3 className="font-medium text-gray-900 mb-2">Dítě</h3>
-                    <div className="text-sm text-gray-600 space-y-1">
+                    <h3 className="font-medium text-ink mb-2">Dítě</h3>
+                    <div className="text-sm text-ink-500 space-y-1">
                       <p>{child.child_name}</p>
                       <p>Narozen/a: {child.child_birthdate}</p>
                       <p>Pojišťovna: {child.child_insurance}</p>
@@ -509,8 +509,8 @@ export function RegistrationForm() {
                 </div>
 
                 <div>
-                  <h3 className="font-medium text-gray-900 mb-2">Vyzvednutí</h3>
-                  <div className="text-sm text-gray-600 space-y-1">
+                  <h3 className="font-medium text-ink mb-2">Vyzvednutí</h3>
+                  <div className="text-sm text-ink-500 space-y-1">
                     {pickup.pickup_method === 'solo' && (
                       <p>Dítě odejde samo · čas odchodu: {pickup.pickup_time}</p>
                     )}
@@ -523,20 +523,20 @@ export function RegistrationForm() {
                   </div>
                 </div>
 
-                <div className="pt-2 border-t border-gray-100">
-                  <label htmlFor="customer_note" className="block text-sm font-medium text-gray-700 mb-1">Poznámka k objednávce (nepovinné)</label>
+                <div className="pt-2 border-t border-ink/15">
+                  <label htmlFor="customer_note" className="block text-sm font-medium text-ink mb-1">Poznámka k objednávce (nepovinné)</label>
                   <textarea
                     id="customer_note"
                     value={customerNote}
                     onChange={e => setCustomerNote(e.target.value)}
                     maxLength={1000}
                     rows={3}
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors"
+                    className="w-full px-4 py-3 rounded-md bg-white border border-ink/20 text-ink placeholder:text-ink/40 focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink"
                     placeholder="Cokoliv, co bychom měli vědět — např. kdo vám tábor doporučil."
                   />
                 </div>
 
-                <p className="text-xs text-gray-500 pt-2 border-t border-gray-100">
+                <p className="text-xs text-ink-500 pt-2 border-t border-ink/15">
                   Odesláním registrace potvrzujete souhlas s{' '}
                   <Link href={vopUrl} target="_blank" className="underline">VOP</Link>{' '}
                   a{' '}
@@ -550,15 +550,15 @@ export function RegistrationForm() {
 
         {/* Error */}
         {error && (
-          <div role="alert" aria-live="assertive" className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
-            <p className="text-sm text-red-700">{error}</p>
+          <div role="alert" aria-live="assertive" className="mt-4 p-3 bg-red-50 border border-red-300 rounded-md">
+            <p className="text-sm text-red-600">{error}</p>
           </div>
         )}
 
         {/* Navigation */}
-        <div className="flex justify-between mt-8 pt-6 border-t border-gray-100">
+        <div className="flex justify-between mt-8 pt-6 border-t border-ink/15">
           {step > 1 ? (
-            <button onClick={prevStep} className="flex items-center gap-2 px-4 py-2 rounded-lg text-gray-600 hover:text-gray-900 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2">
+            <button onClick={prevStep} className="flex items-center gap-2 px-4 py-2 rounded-md text-ink hover:text-ink transition-colors focus:outline-none focus:ring-1 focus:ring-primary-500">
               <ArrowLeft className="w-4 h-4" />
               Zpět
             </button>
