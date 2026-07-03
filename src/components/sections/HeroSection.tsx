@@ -268,7 +268,7 @@ export function HeroSection() {
                 sizes="(min-width: 1024px) 40vw, 100vw"
                 className="object-cover w-full aspect-[4/3]"
                 priority
-                quality={88}
+                quality={90}
               />
             </motion.div>
           </motion.div>
