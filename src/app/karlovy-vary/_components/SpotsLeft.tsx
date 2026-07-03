@@ -42,7 +42,7 @@ function mistoLabel(n: number): string {
 export function SpotsLeftBadge({ spotsLeft, maxCapacity }: TermCapacity) {
   if (spotsLeft <= 0) {
     return (
-      <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full bg-gray-100 text-gray-500">
+      <span className="inline-flex items-center gap-1.5 font-mono text-xs px-2 py-0.5 rounded-sm border border-ink/20 bg-white text-ink/50">
         <Users className="w-3.5 h-3.5" />
         Vyprodáno
       </span>
@@ -52,16 +52,16 @@ export function SpotsLeftBadge({ spotsLeft, maxCapacity }: TermCapacity) {
   const urgent = spotsLeft <= 4
   const low = spotsLeft <= 7
   const cls = urgent
-    ? 'bg-red-50 text-red-700'
+    ? 'border-red-600 text-red-600'
     : low
-    ? 'bg-amber-50 text-amber-700'
-    : 'bg-emerald-50 text-emerald-700'
+    ? 'border-cta-600 text-cta-600'
+    : 'border-trust-600 text-trust-600'
   const text = urgent
     ? `Poslední ${spotsLeft} ${mistoLabel(spotsLeft)}!`
     : `Zbývá ${spotsLeft} ${mistoLabel(spotsLeft)} z ${maxCapacity}`
 
   return (
-    <span className={`inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full ${cls}`}>
+    <span className={`inline-flex items-center gap-1.5 font-mono text-xs px-2 py-0.5 rounded-sm border bg-white ${cls}`}>
       <Users className="w-3.5 h-3.5" />
       {text}
     </span>

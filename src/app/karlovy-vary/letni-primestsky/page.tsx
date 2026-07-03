@@ -126,16 +126,16 @@ const colorMap = {
 function FAQItem({ question, answer }: { question: string; answer: string }) {
   const [isOpen, setIsOpen] = useState(false)
   return (
-    <div className="border-b border-gray-200 last:border-0">
+    <div className="border-b border-ink/15 last:border-0">
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         className="w-full py-5 flex items-center justify-between text-left focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded-lg"
         aria-expanded={isOpen}
       >
-        <span className="font-semibold text-gray-900 pr-4">{question}</span>
+        <span className="font-semibold text-ink pr-4">{question}</span>
         <ChevronDown
-          className={`w-5 h-5 text-gray-500 transition-transform flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`}
+          className={`w-5 h-5 text-ink-500 transition-transform flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`}
           aria-hidden="true"
         />
       </button>
@@ -148,7 +148,7 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
             transition={{ duration: 0.2 }}
             className="overflow-hidden"
           >
-            <p className="pb-5 text-gray-600">{answer}</p>
+            <p className="pb-5 text-ink-500">{answer}</p>
           </motion.div>
         )}
       </AnimatePresence>
@@ -168,56 +168,41 @@ export default function LetniPrimestskyCampPage() {
       <Header />
       <main>
         {/* Hero */}
-        <section className="relative pt-32 pb-20 overflow-hidden">
-          <div className="absolute inset-0">
-            <Image
-              src="/images/varyete/fablab-1.avif"
-              alt="FabLab Kreativního centra VARY&TE v Karlových Varech — 3D tisk"
-              fill
-              sizes="100vw"
-              className="object-cover"
-              priority
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-gray-900/95 via-gray-900/85 to-gray-900/60" />
-            <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-gray-900/30" />
-          </div>
-
+        <section className="relative bg-paper blueprint-grid border-b border-ink/15 overflow-hidden pt-32 pb-20">
           <div className="section-container relative z-10">
             <div className="max-w-3xl">
               {/* Breadcrumb */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="mb-8"
+                className="mb-8 font-mono text-xs uppercase tracking-[0.2em]"
               >
-                <Link href={buildPath(location, '')} className="text-gray-400 hover:text-primary-400 transition-colors">
+                <Link href={buildPath(location, '')} className="text-ink/50 hover:text-primary-600 transition-colors">
                   Domů
                 </Link>
-                <span className="text-gray-500 mx-2">/</span>
-                <span className="text-white font-medium">Letní příměstský tábor</span>
+                <span className="text-ink/30 mx-2">/</span>
+                <span className="text-ink font-medium">Letní příměstský tábor</span>
               </motion.div>
 
-              {/* Badge */}
-              <motion.div
+              {/* Mono kóta */}
+              <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm text-white/90 rounded-full text-sm font-medium mb-6 border border-white/20"
+                className="mono-label mb-6 flex items-center gap-2"
               >
-                <Sparkles className="w-4 h-4 text-cta-400" />
-                <span>Pondělí – Pátek</span>
-                <span className="w-px h-4 bg-white/30" />
-                <span className="text-cta-400">8:00 – 17:00</span>
-              </motion.div>
+                <Sparkles className="w-4 h-4 text-primary-600" aria-hidden="true" />
+                Pondělí – Pátek · 8:00 – 17:00
+              </motion.p>
 
               <motion.h1
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.15 }}
-                className="font-display text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white mb-6 leading-[1.1]"
+                className="heading-1 text-ink mb-6"
               >
                 Letní příměstský tábor{' '}
-                <span className="bg-gradient-to-r from-accent-400 via-primary-400 to-accent-400 bg-clip-text text-transparent">
+                <span className="text-primary-600">
                   chytrých technologií
                 </span>
               </motion.h1>
@@ -226,11 +211,11 @@ export default function LetniPrimestskyCampPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl leading-relaxed"
+                className="text-lg md:text-xl text-ink-500 mb-8 max-w-2xl leading-relaxed"
               >
                 Celý týden 3D tisk, 3D modelování a IoT s Arduinem — ve FabLabu
                 Kreativního centra VARY&TE v Karlových Varech.{' '}
-                <span className="text-white font-medium">Pro děti 9–15 let.</span>
+                <span className="text-ink font-medium">Pro děti 9–15 let.</span>
               </motion.p>
 
               <motion.div
@@ -241,25 +226,25 @@ export default function LetniPrimestskyCampPage() {
               >
                 <a
                   href="#registrace"
-                  className="group inline-flex items-center justify-center px-8 py-4 bg-cta-500 hover:bg-cta-400 text-gray-900 font-semibold rounded-xl transition-all duration-300 hover:shadow-xl hover:shadow-cta-500/30 hover:-translate-y-0.5"
+                  className="btn-primary group px-8 py-4"
                 >
                   Přihlásit dítě
                   <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </a>
                 <a
                   href="#program"
-                  className="group inline-flex items-center justify-center px-8 py-4 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white font-semibold rounded-xl border border-white/20 transition-all duration-300"
+                  className="btn-outline px-8 py-4"
                 >
                   Co děti čeká
                 </a>
               </motion.div>
 
-              {/* Quick facts */}
-              <motion.div
+              {/* Spec sheet — technický štítek tábora */}
+              <motion.dl
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}
-                className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-3"
+                className="mt-12 grid grid-cols-2 sm:grid-cols-4 border border-ink rounded-md overflow-hidden bg-white"
               >
                 {[
                   { icon: Calendar, label: '5 dní', sublabel: 'Po – Pá' },
@@ -267,32 +252,34 @@ export default function LetniPrimestskyCampPage() {
                   { icon: Users, label: 'Max 15', sublabel: 'dětí' },
                   { icon: Utensils, label: 'Obědy', sublabel: 'v ceně' },
                 ].map((fact, i) => (
-                  <div key={i} className="flex items-center gap-3 p-3 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10">
-                    <fact.icon className="w-5 h-5 text-accent-400 flex-shrink-0" />
-                    <div>
-                      <p className="text-sm font-semibold text-white">{fact.label}</p>
-                      <p className="text-xs text-gray-400">{fact.sublabel}</p>
-                    </div>
+                  <div
+                    key={i}
+                    className={`p-4 border-ink/15 ${i % 2 === 1 ? 'border-l' : ''} ${i >= 2 ? 'border-t sm:border-t-0' : ''} ${i > 0 ? 'sm:border-l' : ''}`}
+                  >
+                    <fact.icon className="w-4 h-4 text-primary-600 mb-2" aria-hidden="true" />
+                    <dd className="font-display text-sm font-semibold text-ink">{fact.label}</dd>
+                    <dt className="font-mono text-xs text-ink/50 uppercase tracking-wider mt-0.5">{fact.sublabel}</dt>
                   </div>
                 ))}
-              </motion.div>
+              </motion.dl>
             </div>
           </div>
         </section>
 
         {/* O programu */}
-        <section id="program" className="section-padding bg-white scroll-mt-24">
+        <section id="program" className="section-padding bg-paper scroll-mt-24">
           <div className="section-container">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="max-w-3xl mx-auto text-center mb-16"
+              className="max-w-3xl mx-auto mb-16"
             >
-              <h2 className="heading-2 text-gray-900 mb-4">
-                3 technologie, <span className="text-gradient">jeden týden</span>
+              <p className="mono-label mb-4">Program</p>
+              <h2 className="heading-2 text-ink mb-4">
+                3 technologie, <span className="text-primary-600">jeden týden</span>
               </h2>
-              <p className="text-lg text-gray-600">
+              <p className="text-lg text-ink-500">
                 Týden je rozdělený na dva tematické bloky — první tři dny věnujeme
                 3D tisku a modelování, ve čtvrtek a v pátek se vrhneme na IoT s Arduinem.
               </p>
@@ -312,7 +299,7 @@ export default function LetniPrimestskyCampPage() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: index * 0.1 }}
-                    className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-lg transition-shadow"
+                    className="card-maker p-6"
                   >
                     <div className="flex items-center gap-3 mb-4">
                       <div className={`w-12 h-12 rounded-xl ${colors.bg} flex items-center justify-center`}>
@@ -322,11 +309,11 @@ export default function LetniPrimestskyCampPage() {
                         {tech.day}
                       </div>
                     </div>
-                    <h3 className="text-lg font-bold text-gray-900 mb-3">{tech.title}</h3>
-                    <p className="text-gray-600 text-sm mb-4">{tech.description}</p>
+                    <h3 className="text-lg font-bold text-ink mb-3">{tech.title}</h3>
+                    <p className="text-ink-500 text-sm mb-4">{tech.description}</p>
                     <ul className="space-y-2">
                       {tech.highlights.map((h, i) => (
-                        <li key={i} className="flex items-center gap-2 text-sm text-gray-700">
+                        <li key={i} className="flex items-center gap-2 text-sm text-ink-500">
                           <Check className={`w-4 h-4 ${colors.check} flex-shrink-0`} />
                           {h}
                         </li>
@@ -340,7 +327,7 @@ export default function LetniPrimestskyCampPage() {
         </section>
 
         {/* Týdenní přehled */}
-        <section id="harmonogram" className="section-padding bg-gray-50 scroll-mt-24">
+        <section id="harmonogram" className="section-padding bg-paper-soft border-y border-ink/15 scroll-mt-24">
           <div className="section-container">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -348,10 +335,10 @@ export default function LetniPrimestskyCampPage() {
               viewport={{ once: true }}
               className="text-center mb-12"
             >
-              <h2 className="heading-2 text-gray-900 mb-4">
+              <h2 className="heading-2 text-ink mb-4">
                 Týdenní <span className="text-gradient">přehled</span>
               </h2>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              <p className="text-lg text-ink-500 max-w-2xl mx-auto">
                 Každý den nové téma. Projekty na sebe navazují — to, co dítě vytvoří v pondělí, si v pátek odnese domů.
               </p>
             </motion.div>
@@ -366,7 +353,7 @@ export default function LetniPrimestskyCampPage() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: index * 0.08 }}
-                    className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100"
+                    className="card-maker-md overflow-hidden shadow-sm border border-ink/10"
                   >
                     <div className={`bg-gradient-to-r ${colors.gradient} p-4`}>
                       <p className="text-xs font-semibold text-white/80 uppercase tracking-wide mb-1">{day.day}</p>
@@ -376,10 +363,10 @@ export default function LetniPrimestskyCampPage() {
                       </div>
                     </div>
                     <div className="p-4">
-                      <p className="text-xs text-gray-600 mb-3">{day.description}</p>
+                      <p className="text-xs text-ink-500 mb-3">{day.description}</p>
                       <ul className="space-y-1.5">
                         {day.highlights.map((h, i) => (
-                          <li key={i} className="flex items-center gap-1.5 text-xs text-gray-700">
+                          <li key={i} className="flex items-center gap-1.5 text-xs text-ink-500">
                             <Check className={`w-3.5 h-3.5 ${colors.check} flex-shrink-0`} />
                             {h}
                           </li>
@@ -402,15 +389,15 @@ export default function LetniPrimestskyCampPage() {
               viewport={{ once: true }}
               className="text-center mb-12"
             >
-              <h2 className="heading-2 text-gray-900 mb-4">
+              <h2 className="heading-2 text-ink mb-4">
                 Typický <span className="text-gradient">den tábora</span>
               </h2>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              <p className="text-lg text-ink-500 max-w-2xl mx-auto">
                 Střídáme tvoření, přestávky a venkovní aktivity. Rodiče mají klid — děti jsou v rukou zkušených lektorů od 8:00 do 17:00.
               </p>
             </motion.div>
 
-            <div className="max-w-2xl mx-auto bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+            <div className="max-w-2xl mx-auto card-maker-md border border-ink/10 shadow-sm overflow-hidden">
               <div className="bg-gradient-to-r from-accent-600 to-primary-600 p-5">
                 <div className="flex items-center gap-3">
                   <Clock className="w-6 h-6 text-white" />
@@ -422,12 +409,12 @@ export default function LetniPrimestskyCampPage() {
               </div>
               <div className="p-5">
                 {dailySchedule.map((item, i) => (
-                  <div key={i} className={`flex gap-4 py-3 ${i < dailySchedule.length - 1 ? 'border-b border-gray-100' : ''}`}>
+                  <div key={i} className={`flex gap-4 py-3 ${i < dailySchedule.length - 1 ? 'border-b border-ink/10' : ''}`}>
                     <span className="text-sm font-mono font-semibold text-accent-600 w-12 flex-shrink-0">{item.time}</span>
                     <div>
-                      <p className="font-medium text-gray-900 text-sm">{item.title}</p>
+                      <p className="font-medium text-ink text-sm">{item.title}</p>
                       {item.description && (
-                        <p className="text-xs text-gray-500 mt-0.5">{item.description}</p>
+                        <p className="text-xs text-ink-500 mt-0.5">{item.description}</p>
                       )}
                     </div>
                   </div>
@@ -441,7 +428,7 @@ export default function LetniPrimestskyCampPage() {
         <VenueShowcase />
 
         {/* Praktické informace */}
-        <section className="section-padding bg-gray-50">
+        <section className="section-padding bg-paper-soft border-y border-ink/15">
           <div className="section-container">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -449,7 +436,7 @@ export default function LetniPrimestskyCampPage() {
               viewport={{ once: true }}
               className="max-w-4xl mx-auto"
             >
-              <h2 className="heading-2 text-gray-900 mb-8 text-center">
+              <h2 className="heading-2 text-ink mb-8 text-center">
                 Praktické <span className="text-gradient">informace</span>
               </h2>
 
@@ -482,14 +469,14 @@ export default function LetniPrimestskyCampPage() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.1 }}
-                    className="flex gap-4 p-5 rounded-xl bg-white border border-gray-100"
+                    className="flex gap-4 p-5 rounded-xl bg-white border border-ink/10"
                   >
                     <div className="w-10 h-10 rounded-lg bg-accent-100 flex items-center justify-center flex-shrink-0">
                       <info.icon className="w-5 h-5 text-accent-600" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-900 mb-1">{info.title}</h3>
-                      <p className="text-sm text-gray-600">{info.text}</p>
+                      <h3 className="font-semibold text-ink mb-1">{info.title}</h3>
+                      <p className="text-sm text-ink-500">{info.text}</p>
                     </div>
                   </motion.div>
                 ))}
@@ -502,7 +489,7 @@ export default function LetniPrimestskyCampPage() {
         <ProjectGallery />
 
         {/* Registrace */}
-        <section id="registrace" className="section-padding bg-gradient-to-br from-accent-600 to-primary-700 scroll-mt-24">
+        <section id="registrace" className="section-padding bg-ink text-paper blueprint-grid-dark border-y border-ink scroll-mt-24">
           <div className="section-container">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -510,11 +497,11 @@ export default function LetniPrimestskyCampPage() {
               viewport={{ once: true }}
               className="text-center mb-12"
             >
-              <h2 className="heading-2 text-white mb-4">
+              <h2 className="heading-2 text-paper mb-4">
                 Termín a registrace
               </h2>
               {program && (
-                <p className="text-xl text-white/90">
+                <p className="text-xl text-paper/90">
                   Cena: <span className="font-bold text-white">{program.price.toLocaleString('cs-CZ')} Kč</span>{' '}
                   za celý týden (vč. obědů a materiálů)
                 </p>
@@ -534,21 +521,21 @@ export default function LetniPrimestskyCampPage() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.1 }}
-                    className="bg-white rounded-2xl overflow-hidden shadow-lg"
+                    className="card-maker-md overflow-hidden shadow-lg"
                   >
                     <div className="p-6">
                       <div className="flex items-center gap-2 mb-4">
                         <Calendar className="w-5 h-5 text-accent-600" />
-                        <h3 className="text-lg font-bold text-gray-900">
+                        <h3 className="text-lg font-bold text-ink">
                           {start} – {end}
                         </h3>
                       </div>
 
-                      <div className="flex items-center gap-2 text-sm text-gray-600 mb-3">
-                        <MapPin className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                      <div className="flex items-center gap-2 text-sm text-ink-500 mb-3">
+                        <MapPin className="w-4 h-4 text-ink/50 flex-shrink-0" />
                         <span className="font-medium">{location.venues[0].name}</span>
                       </div>
-                      <p className="text-xs text-gray-500 ml-6 mb-4">{location.venues[0].address}, {location.venues[0].city}</p>
+                      <p className="text-xs text-ink-500 ml-6 mb-4">{location.venues[0].address}, {location.venues[0].city}</p>
 
                       <div className="flex items-center gap-2 mb-3 text-sm">
                         <div className={`w-2 h-2 rounded-full ${isConfirmed ? 'bg-emerald-500' : 'bg-amber-400'}`} />
@@ -570,7 +557,7 @@ export default function LetniPrimestskyCampPage() {
                         {isConfirmed ? 'Závazná registrace' : 'Nezávazná registrace'}
                         <ArrowRight className="ml-2 w-5 h-5" />
                       </Link>
-                      <p className="text-xs text-gray-500 text-center mt-3">
+                      <p className="text-xs text-ink-500 text-center mt-3">
                         5 kroků · bankovní převod · faktura automaticky
                       </p>
                     </div>
@@ -583,7 +570,7 @@ export default function LetniPrimestskyCampPage() {
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
-              className="text-center text-white/60 mt-8 text-sm"
+              className="text-center text-paper/60 mt-8 text-sm"
             >
               Registrace probíhá přímo přes systém Weeks. Po přihlášení vám přijde potvrzení emailem.
             </motion.p>
@@ -591,7 +578,7 @@ export default function LetniPrimestskyCampPage() {
         </section>
 
         {/* FAQ */}
-        <section className="section-padding bg-gray-50">
+        <section className="section-padding bg-paper-soft border-y border-ink/15">
           <div className="section-container">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -599,17 +586,17 @@ export default function LetniPrimestskyCampPage() {
               viewport={{ once: true }}
               className="max-w-3xl mx-auto"
             >
-              <h2 className="heading-2 text-gray-900 mb-4 text-center">
+              <h2 className="heading-2 text-ink mb-4 text-center">
                 Časté dotazy <span className="text-gradient">k táboru</span>
               </h2>
-              <p className="text-lg text-gray-600 mb-10 text-center">
+              <p className="text-lg text-ink-500 mb-10 text-center">
                 Nenašli jste odpověď?{' '}
                 <Link href={buildPath(location, 'kontakt')} className="text-primary-600 hover:underline font-medium">
                   Kontaktujte nás
                 </Link>
               </p>
 
-              <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm">
+              <div className="card-maker-md p-6 md:p-8 shadow-sm">
                 {campFaqs.map((faq) => (
                   <FAQItem key={faq.question} {...faq} />
                 ))}
@@ -627,10 +614,10 @@ export default function LetniPrimestskyCampPage() {
               viewport={{ once: true }}
               className="max-w-3xl mx-auto text-center"
             >
-              <h2 className="heading-2 text-white mb-6">
+              <h2 className="heading-2 text-paper mb-6">
                 V Karlových Varech je jen 15 míst na turnus
               </h2>
-              <p className="text-xl text-white/90 mb-8">
+              <p className="text-xl text-paper/90 mb-8">
                 Letní příměstský tábor, ze kterého si vaše dítě odnese vlastní 3D výtisk
                 i sestavené zařízení — a vy máte celý týden jistotu, že je o něj dobře
                 postaráno. Termíny se plní, s přihláškou neváhejte.
@@ -638,7 +625,7 @@ export default function LetniPrimestskyCampPage() {
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <a
                   href="#registrace"
-                  className="inline-flex items-center justify-center px-8 py-4 bg-white hover:bg-gray-100 text-primary-600 font-semibold rounded-xl transition-all duration-300"
+                  className="inline-flex items-center justify-center px-8 py-4 bg-white hover:bg-paper-soft text-primary-600 font-semibold rounded-xl transition-all duration-300"
                 >
                   Přihlásit dítě
                   <ArrowRight className="ml-2 w-5 h-5" />
