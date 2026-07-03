@@ -65,11 +65,15 @@ export function HeroSection() {
   const kota = `${location.hero.badge} · Registrace otevřena`
   const typed = useTypewriter(kota)
 
-  // CNC kurzor: mono souřadnice + zvýrazněná buňka blueprint mřížky.
-  // Jen na zařízeních s přesným kurzorem a bez reduced-motion.
+  // Interaktivní mřížka: buňky blueprint gridu se za kurzorem rozsvítí a pohasnou
+  // (fading trail) + měkká záře pod kurzorem. Jen na zařízeních s přesným
+  // kurzorem a bez reduced-motion.
   const sectionRef = useRef<HTMLElement>(null)
   const [cursorEnabled, setCursorEnabled] = useState(false)
   const [cursor, setCursor] = useState<{ x: number; y: number } | null>(null)
+  const [trail, setTrail] = useState<{ key: number; cx: number; cy: number }[]>([])
+  const lastCell = useRef('')
+  const trailKey = useRef(0)
 
   useEffect(() => {
     setCursorEnabled(window.matchMedia('(pointer: fine)').matches && !reduced)
@@ -78,10 +82,22 @@ export function HeroSection() {
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!cursorEnabled || !sectionRef.current) return
     const rect = sectionRef.current.getBoundingClientRect()
-    setCursor({ x: e.clientX - rect.left, y: e.clientY - rect.top })
-  }
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+    setCursor({ x, y })
 
-  const pad = (v: number) => String(Math.max(0, Math.round(v))).padStart(4, '0')
+    const cx = Math.floor(x / 32) * 32
+    const cy = Math.floor(y / 32) * 32
+    const cellId = `${cx},${cy}`
+    if (cellId === lastCell.current) return
+    lastCell.current = cellId
+    const key = ++trailKey.current
+    setTrail(t => [...t.slice(-24), { key, cx, cy }])
+    // Buňku odstraníme až po doběhnutí fade animace (0.9 s)
+    setTimeout(() => {
+      setTrail(t => t.filter(c => c.key !== key))
+    }, 950)
+  }
 
   return (
     <section
@@ -90,25 +106,23 @@ export function HeroSection() {
       onMouseLeave={() => setCursor(null)}
       className="relative bg-paper blueprint-grid border-b border-ink/15 overflow-hidden"
     >
-      {/* CNC kurzor — zvýrazněná buňka mřížky + souřadnice */}
-      {cursorEnabled && cursor && (
-        <>
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute w-8 h-8 bg-primary-600/[0.06] border border-primary-600/25 transition-[left,top] duration-75 ease-linear"
-            style={{
-              left: Math.floor(cursor.x / 32) * 32,
-              top: Math.floor(cursor.y / 32) * 32,
-            }}
-          />
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute z-10 whitespace-nowrap font-mono text-[10px] tracking-[0.15em] text-ink/60 bg-paper/85 border border-ink/15 rounded-sm px-1.5 py-0.5"
-            style={{ left: cursor.x + 14, top: cursor.y + 14 }}
-          >
-            X {pad(cursor.x)} · Y {pad(cursor.y)}
-          </div>
-        </>
+      {/* Interaktivní mřížka — fading trail buněk + měkká záře pod kurzorem */}
+      {cursorEnabled && (
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
+          {trail.map(c => (
+            <div
+              key={c.key}
+              className="cell-fade absolute w-8 h-8 bg-primary-500/[0.13]"
+              style={{ left: c.cx, top: c.cy }}
+            />
+          ))}
+          {cursor && (
+            <div
+              className="absolute w-56 h-56 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary-500/[0.07] blur-3xl transition-[left,top] duration-150 ease-out"
+              style={{ left: cursor.x, top: cursor.y }}
+            />
+          )}
+        </div>
       )}
 
       <div className="section-container grid lg:grid-cols-12 gap-12 lg:gap-10 items-center pt-32 pb-16 md:pt-40 md:pb-24">
