@@ -56,12 +56,6 @@ export function GallerySection({
     return () => window.removeEventListener('keydown', handleKey)
   }, [lightboxIndex, closeLightbox, goNext, goPrev])
 
-  const gradientMap = {
-    primary: 'from-primary-500 to-primary-600',
-    trust: 'from-trust-500 to-trust-600',
-    accent: 'from-accent-500 to-accent-600',
-  }
-
   const textColorMap = {
     primary: 'text-primary-600',
     trust: 'text-trust-600',
@@ -70,21 +64,22 @@ export function GallerySection({
 
   return (
     <>
-      <section className="section-padding bg-gray-50">
+      <section className="section-padding bg-paper">
         <div className="section-container">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-10"
+            className="mb-10"
           >
-            <h2 className="heading-2 text-gray-900 mb-4">
+            <p className="mono-label mb-4">{title.split(' ').slice(0, -1).join(' ')}</p>
+            <h2 className="heading-2 text-ink mb-4">
               {title.split(' ').slice(0, -1).join(' ')}{' '}
               <span className={textColorMap[accentColor]}>
                 {title.split(' ').slice(-1)}
               </span>
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-lg text-ink-500 max-w-2xl">
               {subtitle}
             </p>
           </motion.div>
@@ -101,8 +96,8 @@ export function GallerySection({
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.05 }}
                   onClick={() => openLightbox(index)}
-                  className={`relative overflow-hidden rounded-2xl group cursor-pointer focus:outline-none focus:ring-2 focus:ring-${accentColor}-500 focus:ring-offset-2 ${
-                    isFeatured ? 'col-span-2 row-span-2' : ''
+                  className={`relative overflow-hidden rounded-md group cursor-pointer focus:outline-none focus:ring-2 focus:ring-${accentColor}-500 focus:ring-offset-2 border border-ink/15 ${
+                    isFeatured ? 'col-span-2 row-span-2 shadow-hard' : ''
                   }`}
                   aria-label={`Zobrazit: ${image.alt}`}
                 >
@@ -115,9 +110,6 @@ export function GallerySection({
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
-                    <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <p className="text-white text-sm font-medium">{image.alt}</p>
-                    </div>
                   </div>
                 </motion.button>
               )
