@@ -41,16 +41,31 @@ export function Header() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  // Fullscreen mobilní menu: zamknout scroll stránky, dokud je otevřené.
+  useEffect(() => {
+    if (!mobileMenuOpen) return
+    const previous = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = previous
+    }
+  }, [mobileMenuOpen])
+
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled
-            ? 'bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100'
-            : 'bg-gray-900/50 backdrop-blur-sm'
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b ${
+          mobileMenuOpen
+            ? 'bg-ink border-paper/20'
+            : 'bg-paper/95 backdrop-blur-md border-ink/15'
         }`}
       >
-        <nav className="section-container flex items-center justify-between py-4" aria-label="Hlavní navigace">
+        <nav
+          className={`section-container relative z-10 flex items-center justify-between transition-all duration-300 ${
+            scrolled && !mobileMenuOpen ? 'py-2.5' : 'py-4'
+          }`}
+          aria-label="Hlavní navigace"
+        >
         {/* Logo */}
         <Link href={logoHref} className="flex items-center gap-3 group">
           <motion.div
@@ -69,7 +84,7 @@ export function Header() {
             />
           </motion.div>
           <span className={`text-xl font-display font-bold tracking-tight transition-colors ${
-            scrolled ? 'text-gray-900 group-hover:text-primary-600' : 'text-white group-hover:text-primary-300'
+            mobileMenuOpen ? 'text-paper' : 'text-ink group-hover:text-primary-600'
           }`}>
             Weeks
           </span>
@@ -81,14 +96,10 @@ export function Header() {
             <Link
               key={item.name}
               href={item.href}
-              className={`relative px-4 py-2 font-medium transition-colors group ${
-                scrolled ? 'text-gray-600 hover:text-gray-900' : 'text-white/90 hover:text-white'
-              }`}
+              className="relative px-4 py-2 font-medium text-ink/70 hover:text-ink transition-colors group"
             >
               {item.name}
-              <span className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 group-hover:w-2/3 transition-all duration-300 ${
-                scrolled ? 'bg-primary-500' : 'bg-white'
-              }`} />
+              <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-cta-500 group-hover:w-2/3 transition-all duration-300" />
             </Link>
           ))}
           <a
@@ -97,9 +108,7 @@ export function Header() {
             rel="noopener noreferrer"
             aria-label="Učebna — výuková platforma (otevře se v nové záložce)"
             onClick={() => trackUcebnaClick('desktop')}
-            className={`ml-2 flex items-center text-sm transition-colors ${
-              scrolled ? 'text-gray-500 hover:text-gray-700' : 'text-white/60 hover:text-white/80'
-            }`}
+            className="ml-2 flex items-center text-sm text-ink/50 hover:text-ink transition-colors"
           >
             Učebna
             <ExternalLink className="w-3 h-3 ml-1" aria-hidden="true" />
@@ -123,8 +132,8 @@ export function Header() {
           <motion.button
             type="button"
             whileTap={{ scale: 0.9 }}
-            className={`shrink-0 p-2 rounded-lg transition-colors ${
-              scrolled ? 'hover:bg-gray-100' : 'hover:bg-white/10'
+            className={`shrink-0 p-2 rounded-md transition-colors ${
+              mobileMenuOpen ? 'hover:bg-paper/10' : 'hover:bg-ink/5'
             }`}
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label={mobileMenuOpen ? 'Zavřít menu' : 'Otevřít menu'}
@@ -132,65 +141,68 @@ export function Header() {
             aria-controls="mobile-menu"
           >
             {mobileMenuOpen ? (
-              <X className={`h-6 w-6 ${scrolled ? 'text-gray-700' : 'text-white'}`} aria-hidden="true" />
+              <X className="h-6 w-6 text-paper" aria-hidden="true" />
             ) : (
-              <Menu className={`h-6 w-6 ${scrolled ? 'text-gray-700' : 'text-white'}`} aria-hidden="true" />
+              <Menu className="h-6 w-6 text-ink" aria-hidden="true" />
             )}
           </motion.button>
         </div>
       </nav>
 
-      {/* Mobile Navigation */}
+      {/* Mobile Navigation — fullscreen ink overlay */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
             id="mobile-menu"
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="md:hidden bg-white border-b border-gray-100 overflow-hidden"
+            className="md:hidden fixed inset-0 bg-ink text-paper blueprint-grid-dark overflow-y-auto"
           >
-            <div className="section-container py-4 space-y-1">
-              {navigation.map((item, index) => (
-                <motion.div
-                  key={item.name}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.05 }}
-                >
-                  <Link
-                    href={item.href}
-                    className="block px-4 py-3 text-gray-700 hover:text-primary-600 hover:bg-primary-50 font-medium rounded-lg transition-colors"
-                    onClick={() => setMobileMenuOpen(false)}
+            <div className="section-container flex min-h-full flex-col justify-between pt-28 pb-10">
+              <div className="space-y-2">
+                {navigation.map((item, index) => (
+                  <motion.div
+                    key={item.name}
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.05 }}
                   >
-                    {item.name}
-                  </Link>
-                </motion.div>
-              ))}
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: navigation.length * 0.05 }}
-                className="border-t border-gray-100 pt-2 mt-2"
-              >
-                <a
-                  href="https://iot.weeks.cz/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Učebna — výuková platforma (otevře se v nové záložce)"
-                  onClick={() => { trackUcebnaClick('mobile'); setMobileMenuOpen(false) }}
-                  className="flex items-center px-4 py-3 text-sm text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
+                    <Link
+                      href={item.href}
+                      className="block py-2 font-display text-4xl font-bold tracking-tight text-paper hover:text-cta-400 transition-colors"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      {item.name}
+                    </Link>
+                  </motion.div>
+                ))}
+                <motion.div
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: navigation.length * 0.05 }}
+                  className="border-t border-paper/20 pt-4 mt-6"
                 >
-                  Učebna
-                  <ExternalLink className="w-3 h-3 ml-1.5" aria-hidden="true" />
-                </a>
-              </motion.div>
+                  <a
+                    href="https://iot.weeks.cz/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Učebna — výuková platforma (otevře se v nové záložce)"
+                    onClick={() => { trackUcebnaClick('mobile'); setMobileMenuOpen(false) }}
+                    className="inline-flex items-center py-2 text-paper/60 hover:text-paper transition-colors"
+                  >
+                    Učebna
+                    <ExternalLink className="w-4 h-4 ml-1.5" aria-hidden="true" />
+                  </a>
+                </motion.div>
+              </div>
+
               <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: (navigation.length + 1) * 0.05 }}
-                className="pt-2 flex flex-col gap-2"
+                className="space-y-6"
               >
                 <Link
                   href={ctaHref}
@@ -200,6 +212,9 @@ export function Header() {
                   Vybrat termín
                   <ChevronRight className="ml-1 w-4 h-4" />
                 </Link>
+                <p className="mono-label-dark">
+                  WEEKS — IT TÁBORY · PRAHA &amp; KARLOVY VARY
+                </p>
               </motion.div>
             </div>
           </motion.div>

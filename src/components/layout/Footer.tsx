@@ -44,14 +44,16 @@ export function Footer() {
     : `Letní příměstské IT tábory pro děti ${ageRange} let. 3D tisk, VR, IoT a programování v ${location.venues[0].name} v Karlových Varech.`
 
   return (
-    <footer className="bg-gray-900 text-gray-300 relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-24 -right-24 w-96 h-96 bg-primary-900/20 rounded-full blur-3xl" />
-        <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-accent-900/20 rounded-full blur-3xl" />
-      </div>
+    <footer className="bg-ink text-paper/70 blueprint-grid-dark border-t border-ink relative overflow-hidden">
+      <div className="section-container pt-12 pb-16 relative z-10">
+        {/* Typografický watermark */}
+        <p
+          aria-hidden="true"
+          className="font-display text-6xl md:text-8xl font-bold text-paper/10 select-none leading-none mb-12"
+        >
+          WEEKS
+        </p>
 
-      <div className="section-container py-16 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8">
           {/* Brand */}
           <div className="lg:col-span-1">
@@ -64,16 +66,16 @@ export function Footer() {
                 className="w-10 h-10 object-contain"
                 aria-hidden="true"
               />
-              <span className="text-xl font-display font-bold text-white">Weeks</span>
+              <span className="text-xl font-display font-bold text-paper">Weeks</span>
             </Link>
-            <p className="text-gray-400 leading-relaxed mb-6">
+            <p className="text-paper/60 leading-relaxed mb-6">
               {description}
             </p>
             <div className="flex items-center gap-3 flex-wrap">
-              <div className="px-3 py-1.5 bg-gray-800 rounded-lg text-xs font-medium text-gray-300">
+              <div className="px-3 py-1.5 border border-paper/20 rounded-sm font-mono text-xs text-paper/70">
                 {location.organizer.name}
               </div>
-              <div className="px-3 py-1.5 bg-gray-800 rounded-lg text-xs font-medium text-gray-300">
+              <div className="px-3 py-1.5 border border-paper/20 rounded-sm font-mono text-xs text-paper/70">
                 {location.venues[0].name}
               </div>
               {location.isDefault && (
@@ -82,7 +84,7 @@ export function Footer() {
                   title="Kudyznudy.cz – tipy na výlet"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-3 py-1.5 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors flex items-center"
+                  className="px-3 py-1.5 border border-paper/20 rounded-sm hover:border-paper/50 transition-colors flex items-center"
                 >
                   <Image
                     src="/images/kudy-z-nudy-white.png"
@@ -97,9 +99,9 @@ export function Footer() {
 
             <a
               href={otherCity.href}
-              className="mt-6 inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-white transition-colors"
+              className="mt-6 inline-flex items-center gap-1.5 text-sm text-paper/60 hover:text-paper transition-colors"
             >
-              <MapPin className="w-4 h-4 text-primary-500" />
+              <MapPin className="w-4 h-4 text-accent-400" />
               {otherCity.label}
               <ArrowRight className="w-4 h-4" />
             </a>
@@ -107,15 +109,15 @@ export function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h3 className="font-display text-white font-semibold mb-5">Navigace</h3>
+            <h3 className="mono-label-dark mb-5">Navigace</h3>
             <ul className="space-y-3">
               {navLinks.map((link) => (
                 <li key={link.name}>
                   <Link
                     href={link.href}
-                    className="text-gray-400 hover:text-white transition-colors inline-flex items-center gap-2 group"
+                    className="text-paper/60 hover:text-paper transition-colors inline-flex items-center gap-2 group"
                   >
-                    <span className="w-1.5 h-1.5 rounded-full bg-gray-600 group-hover:bg-primary-500 transition-colors" />
+                    <span className="w-1.5 h-1.5 bg-paper/30 group-hover:bg-cta-400 transition-colors" />
                     {link.name}
                   </Link>
                 </li>
@@ -125,15 +127,15 @@ export function Footer() {
 
           {/* Legal */}
           <div>
-            <h3 className="font-display text-white font-semibold mb-5">Právní informace</h3>
+            <h3 className="mono-label-dark mb-5">Právní informace</h3>
             <ul className="space-y-3">
               {legalLinks.map((link) => (
                 <li key={link.name}>
                   <Link
                     href={link.href}
-                    className="text-gray-400 hover:text-white transition-colors inline-flex items-center gap-2 group"
+                    className="text-paper/60 hover:text-paper transition-colors inline-flex items-center gap-2 group"
                   >
-                    <span className="w-1.5 h-1.5 rounded-full bg-gray-600 group-hover:bg-primary-500 transition-colors" />
+                    <span className="w-1.5 h-1.5 bg-paper/30 group-hover:bg-cta-400 transition-colors" />
                     {link.name}
                   </Link>
                 </li>
@@ -142,9 +144,9 @@ export function Footer() {
                 <button
                   type="button"
                   onClick={openCookieSettings}
-                  className="text-gray-400 hover:text-white transition-colors inline-flex items-center gap-2 group"
+                  className="text-paper/60 hover:text-paper transition-colors inline-flex items-center gap-2 group"
                 >
-                  <span className="w-1.5 h-1.5 rounded-full bg-gray-600 group-hover:bg-primary-500 transition-colors" />
+                  <span className="w-1.5 h-1.5 bg-paper/30 group-hover:bg-cta-400 transition-colors" />
                   Nastavení cookies
                 </button>
               </li>
@@ -153,31 +155,31 @@ export function Footer() {
 
           {/* Contact */}
           <div>
-            <h3 className="font-display text-white font-semibold mb-5">Kontakt</h3>
+            <h3 className="mono-label-dark mb-5">Kontakt</h3>
             <ul className="space-y-4">
               {location.venues.map((venue) => (
                 <li key={venue.name} className="flex items-start gap-3">
-                  <MapPin className="w-5 h-5 text-primary-500 shrink-0 mt-0.5" />
-                  <span className="text-gray-400 text-sm">
-                    <span className="text-gray-300 font-medium">{venue.name}</span><br />
+                  <MapPin className="w-5 h-5 text-accent-400 shrink-0 mt-0.5" />
+                  <span className="text-paper/60 text-sm">
+                    <span className="text-paper font-medium">{venue.name}</span><br />
                     {venue.address}, {venue.city}
                   </span>
                 </li>
               ))}
               <li className="flex items-center gap-3">
-                <Phone className="w-5 h-5 text-primary-500 shrink-0" />
+                <Phone className="w-5 h-5 text-accent-400 shrink-0" />
                 <a
                   href={`tel:${location.contact.phone.replace(/\s/g, '')}`}
-                  className="text-gray-400 hover:text-white transition-colors text-sm"
+                  className="font-mono text-paper/60 hover:text-paper transition-colors text-sm"
                 >
                   {location.contact.phone}
                 </a>
               </li>
               <li className="flex items-center gap-3">
-                <Mail className="w-5 h-5 text-primary-500 shrink-0" />
+                <Mail className="w-5 h-5 text-accent-400 shrink-0" />
                 <a
                   href={`mailto:${location.contact.email}`}
-                  className="text-gray-400 hover:text-white transition-colors text-sm"
+                  className="font-mono text-paper/60 hover:text-paper transition-colors text-sm"
                 >
                   {location.contact.email}
                 </a>
@@ -188,25 +190,25 @@ export function Footer() {
 
         {/* Provozovatel + platební brána — pro non-default lokace (KV = OSVČ Lukáš Kubík) */}
         {!location.isDefault && (
-          <div className="mt-12 pt-8 border-t border-gray-800 flex flex-col md:flex-row md:items-start md:justify-between gap-6">
+          <div className="mt-12 pt-8 border-t border-paper/15 flex flex-col md:flex-row md:items-start md:justify-between gap-6">
             <div className="flex items-start gap-3 max-w-2xl">
-              <FileText className="w-5 h-5 text-primary-500 shrink-0 mt-0.5" />
-              <div className="text-sm text-gray-400 leading-relaxed">
-                <p className="text-gray-300 font-medium mb-1">Provozovatel</p>
+              <FileText className="w-5 h-5 text-accent-400 shrink-0 mt-0.5" />
+              <div className="text-sm text-paper/60 leading-relaxed">
+                <p className="text-paper font-medium mb-1">Provozovatel</p>
                 <p>{location.organizer.fullName}</p>
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-paper/40 mt-1">
                   Úplné kontaktní a fakturační údaje najdete v{' '}
-                  <Link href={buildPath(location, 'podminky')} className="underline hover:text-gray-300">obchodních podmínkách</Link>.
+                  <Link href={buildPath(location, 'podminky')} className="underline hover:text-paper">obchodních podmínkách</Link>.
                 </p>
               </div>
             </div>
             <div className="shrink-0">
-              <p className="text-xs text-gray-500 mb-2 md:text-right">Platby zajišťuje</p>
+              <p className="font-mono text-xs text-paper/40 mb-2 md:text-right">Platby zajišťuje</p>
               <a
                 href="https://www.comgate.eu/cs/platebni-brana"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex bg-white rounded-lg px-3 py-2 hover:opacity-90 transition-opacity"
+                className="inline-flex bg-white rounded-sm px-3 py-2 hover:opacity-90 transition-opacity"
                 aria-label="Comgate – platební brána"
               >
                 <Image
@@ -222,11 +224,11 @@ export function Footer() {
         )}
 
         {/* Copyright */}
-        <div className="mt-12 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-gray-400">
+        <div className="mt-12 pt-8 border-t border-paper/15 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="font-mono text-xs text-paper/50">
             {new Date().getFullYear()} Weeks. Všechna práva vyhrazena.
           </p>
-          <p className="text-sm text-gray-400">
+          <p className="text-sm text-paper/50">
             Projekt Weeks je organizován {location.organizer.name}
           </p>
         </div>
