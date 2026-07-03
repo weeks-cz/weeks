@@ -429,11 +429,10 @@ export default function Tabor3DTiskClient({ open, openNoLink, collectingInterest
                 Termíny
               </h2>
               <p className="text-xl text-paper/90 max-w-2xl mx-auto">
-                Jednodenní i dvoudenní 3D tisk, 9:00–17:00. Cena u každého termínu.
+                Jednodenní 3D tisk, 9:00–17:00.
               </p>
               <p className="text-lg text-paper/70 mt-2">
-                Jednodenní <span className="font-bold text-paper font-mono">1 490 Kč</span> · dvoudenní{' '}
-                <span className="font-bold text-paper font-mono">2 990 Kč</span> (vč. oběda a materiálů)
+                <span className="font-bold text-paper font-mono">1 490 Kč</span> (vč. oběda a materiálů)
               </p>
             </motion.div>
 

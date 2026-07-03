@@ -1,6 +1,5 @@
 import { HeroSection } from '@/components/sections/HeroSection'
 import { TickerStrip } from '@/components/ui/TickerStrip'
-import { SummerBanner } from '@/components/sections/SummerBanner'
 import { ProgramSection } from '@/components/sections/ProgramSection'
 import { USPSection } from '@/components/sections/USPSection'
 import { TrustSection } from '@/components/sections/TrustSection'
@@ -30,7 +29,6 @@ export default async function Home() {
       <main id="main">
         <HeroSection />
         <TickerStrip />
-        <SummerBanner />
         <ProgramSection />
         <USPSection />
         <TrustSection />
