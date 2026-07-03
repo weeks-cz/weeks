@@ -25,10 +25,10 @@ export function AddToCartButton({ productSlug, productName }: AddToCartButtonPro
     <button
       type="button"
       onClick={handleClick}
-      className={`inline-flex items-center justify-center gap-2 rounded-lg px-5 py-3 font-semibold transition-all duration-200 ${
+      className={`inline-flex items-center justify-center gap-2 rounded-md px-5 py-3 font-semibold transition-all duration-200 border border-ink ${
         added
-          ? 'bg-trust-600 text-white shadow-lg shadow-trust-600/20'
-          : 'bg-gray-900 text-white hover:bg-primary-700'
+          ? 'bg-trust-600 text-paper shadow-hard-sm hover:shadow-hard'
+          : 'bg-cta-500 text-ink shadow-hard-sm hover:shadow-hard'
       }`}
     >
       {added ? <Check className="h-4 w-4" /> : <ShoppingCart className="h-4 w-4" />}

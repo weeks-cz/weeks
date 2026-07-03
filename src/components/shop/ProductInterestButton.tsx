@@ -95,7 +95,7 @@ export function ProductInterestButton({
       <button
         type="button"
         onClick={() => setIsOpen(true)}
-        className={`inline-flex items-center justify-center gap-2 rounded-lg bg-gray-900 font-semibold text-white transition-colors hover:bg-primary-700 ${
+        className={`btn-outline ${
           compact ? 'w-full whitespace-nowrap px-3 py-2.5 text-sm' : 'px-5 py-3'
         }`}
       >
@@ -105,24 +105,24 @@ export function ProductInterestButton({
 
       {isOpen && isMounted && createPortal(
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto bg-gray-950/70 px-4 py-8"
+          className="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto bg-ink/70 px-4 py-8"
           role="dialog"
           aria-modal="true"
           onClick={closeModal}
         >
           <div
-            className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl"
+            className="w-full max-w-lg rounded-md border border-ink/15 bg-paper p-6 card-maker shadow-hard"
             onClick={(event) => event.stopPropagation()}
           >
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-sm font-medium text-primary-600">Připravujeme</p>
-                <h2 className="mt-1 text-2xl font-bold text-gray-900">{productName}</h2>
+                <p className="mono-label">Připravujeme</p>
+                <h2 className="mt-1 text-2xl font-bold text-ink">{productName}</h2>
               </div>
               <button
                 type="button"
                 onClick={closeModal}
-                className="rounded-full p-2 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-700"
+                className="rounded-sm p-2 text-ink/50 transition-colors hover:bg-ink/10 hover:text-ink"
                 aria-label="Zavřít formulář"
               >
                 <X className="h-5 w-5" />
@@ -130,12 +130,12 @@ export function ProductInterestButton({
             </div>
 
             {isSubmitted ? (
-              <div className="mt-6 rounded-2xl border border-trust-100 bg-trust-50 p-5">
+              <div className="mt-6 rounded-md border border-trust-200 bg-trust-50 p-5">
                 <div className="flex items-start gap-3">
                   <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-trust-600" />
                   <div>
-                    <h3 className="font-semibold text-gray-900">Děkujeme za zájem.</h3>
-                    <p className="mt-1 text-sm leading-6 text-gray-600">
+                    <h3 className="font-semibold text-ink">Děkujeme za zájem.</h3>
+                    <p className="mt-1 text-sm leading-6 text-ink-500">
                       Až budeme produkt skládat do finální podoby, ozveme se vám s novinkami a dostupností.
                     </p>
                   </div>
@@ -143,19 +143,19 @@ export function ProductInterestButton({
                 <button
                   type="button"
                   onClick={closeModal}
-                  className="mt-5 inline-flex items-center justify-center rounded-lg bg-gray-900 px-5 py-3 font-semibold text-white transition-colors hover:bg-primary-700"
+                  className="btn-primary mt-5 w-full"
                 >
                   Zavřít
                 </button>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-                <p className="text-sm leading-6 text-gray-600">
+                <p className="text-sm leading-6 text-ink-500">
                   Necháte nám kontakt a my vám dáme vědět, jakmile bude produkt dostupný nebo budeme ladit jeho finální podobu.
                 </p>
 
                 <div>
-                  <label htmlFor={`interest-email-${productSlug}`} className="mb-2 block text-sm font-medium text-gray-700">
+                  <label htmlFor={`interest-email-${productSlug}`} className="mb-2 block text-sm font-medium text-ink">
                     E-mail
                   </label>
                   <input
@@ -163,13 +163,13 @@ export function ProductInterestButton({
                     type="email"
                     value={email}
                     onChange={(event) => setEmail(event.target.value)}
-                    className="w-full rounded-xl border border-gray-200 px-4 py-3 text-gray-900 outline-none transition focus:border-primary-400 focus:ring-2 focus:ring-primary-100"
+                    className="w-full rounded-md bg-white border border-ink/20 px-4 py-3 font-mono text-sm text-ink placeholder:text-ink/40 outline-none transition focus:border-ink focus:ring-1 focus:ring-ink"
                     required
                   />
                 </div>
 
                 <div>
-                  <label htmlFor={`interest-name-${productSlug}`} className="mb-2 block text-sm font-medium text-gray-700">
+                  <label htmlFor={`interest-name-${productSlug}`} className="mb-2 block text-sm font-medium text-ink">
                     Jméno
                   </label>
                   <input
@@ -177,13 +177,13 @@ export function ProductInterestButton({
                     type="text"
                     value={name}
                     onChange={(event) => setName(event.target.value)}
-                    className="w-full rounded-xl border border-gray-200 px-4 py-3 text-gray-900 outline-none transition focus:border-primary-400 focus:ring-2 focus:ring-primary-100"
+                    className="w-full rounded-md bg-white border border-ink/20 px-4 py-3 text-ink placeholder:text-ink/40 outline-none transition focus:border-ink focus:ring-1 focus:ring-ink"
                     placeholder="Volitelné"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor={`interest-note-${productSlug}`} className="mb-2 block text-sm font-medium text-gray-700">
+                  <label htmlFor={`interest-note-${productSlug}`} className="mb-2 block text-sm font-medium text-ink">
                     Poznámka
                   </label>
                   <textarea
@@ -191,24 +191,24 @@ export function ProductInterestButton({
                     value={note}
                     onChange={(event) => setNote(event.target.value)}
                     rows={3}
-                    className="w-full rounded-xl border border-gray-200 px-4 py-3 text-gray-900 outline-none transition focus:border-primary-400 focus:ring-2 focus:ring-primary-100"
+                    className="w-full rounded-md bg-white border border-ink/20 px-4 py-3 text-ink placeholder:text-ink/40 outline-none transition focus:border-ink focus:ring-1 focus:ring-ink"
                     placeholder="Třeba věk dítěte nebo jestli už máte Starter sadu."
                   />
                 </div>
 
-                <label className="flex items-start gap-3 text-sm leading-6 text-gray-600">
+                <label className="flex items-start gap-3 text-sm leading-6 text-ink-500">
                   <input
                     type="checkbox"
                     checked={gdprConsent}
                     onChange={(event) => setGdprConsent(event.target.checked)}
-                    className="mt-1 h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                    className="mt-1 h-4 w-4 rounded-sm border-ink/30 text-primary-600 focus:ring-primary-500"
                     required
                   />
                   <span>Souhlasím se zpracováním osobních údajů za účelem kontaktování ohledně připravovaných Weeks produktů.</span>
                 </label>
 
                 {error && (
-                  <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">
+                  <p className="rounded-md border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-700">
                     {error}
                   </p>
                 )}
@@ -216,7 +216,7 @@ export function ProductInterestButton({
                 <button
                   type="submit"
                   disabled={isSubmitting || !email.trim() || !gdprConsent}
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-gray-900 px-5 py-3 font-semibold text-white transition-colors hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="btn-primary w-full"
                 >
                   <Send className="h-4 w-4" />
                   {isSubmitting ? 'Odesílám...' : 'Odeslat zájem'}
