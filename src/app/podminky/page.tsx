@@ -241,9 +241,9 @@ export default function PodminkyPage() {
                   v souvislosti s použitím webu
                 </li>
               </ul>
-              <div className="bg-accent-50 p-6 rounded-lg border border-accent-200 mt-6">
-                <p className="text-accent-900 font-medium mb-2">Odpovědnost za kempy</p>
-                <p className="text-accent-800 text-base">
+              <div className="bg-accent-500/10 p-6 rounded-lg border border-accent-400/40 mt-6">
+                <p className="text-accent-300 font-medium mb-2">Odpovědnost za kempy</p>
+                <p className="text-slate-300 text-base">
                   Za průběh, bezpečnost a kvalitu víkendových kempů odpovídá výhradně
                   DDM Praha 6 a HWLab Praha jako místo konání. Podmínky účasti a pravidla
                   odpovědnosti najdete v dokumentech DDM Praha 6.
