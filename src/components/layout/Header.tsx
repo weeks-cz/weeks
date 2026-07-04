@@ -9,6 +9,7 @@ import { trackNavCTA, trackUcebnaClick } from '@/lib/analytics'
 import { CitySwitcher } from '@/components/ui/CitySwitcher'
 import { useLocation } from '@/contexts/LocationContext'
 import { buildPath } from '@/lib/locations'
+import { MagneticButton } from '@/components/effects/MagneticButton'
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -43,13 +44,7 @@ export function Header() {
 
   return (
     <>
-      <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled
-            ? 'bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100'
-            : 'bg-gray-900/50 backdrop-blur-sm'
-        }`}
-      >
+      <header className="fixed top-0 left-0 right-0 z-50 bg-night/80 backdrop-blur-md border-b border-white/10">
         <nav className="section-container flex items-center justify-between py-4" aria-label="Hlavní navigace">
         {/* Logo */}
         <Link href={logoHref} className="flex items-center gap-3 group">
@@ -63,14 +58,12 @@ export function Header() {
               alt=""
               width={44}
               height={44}
-              className="w-11 h-11 object-contain"
+              className="w-11 h-11 object-contain brightness-0 invert"
               priority
               aria-hidden="true"
             />
           </motion.div>
-          <span className={`text-xl font-display font-bold tracking-tight transition-colors ${
-            scrolled ? 'text-gray-900 group-hover:text-primary-600' : 'text-white group-hover:text-primary-300'
-          }`}>
+          <span className="text-xl font-display font-bold tracking-tight text-white group-hover:text-accent-400 transition-colors">
             Weeks
           </span>
         </Link>
@@ -81,14 +74,12 @@ export function Header() {
             <Link
               key={item.name}
               href={item.href}
-              className={`relative px-4 py-2 font-medium transition-colors group ${
-                scrolled ? 'text-gray-600 hover:text-gray-900' : 'text-white/90 hover:text-white'
-              }`}
+              className="relative px-4 py-2 font-medium text-slate-300 hover:text-white transition-colors group"
             >
               {item.name}
-              <span className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 group-hover:w-2/3 transition-all duration-300 ${
-                scrolled ? 'bg-primary-500' : 'bg-white'
-              }`} />
+              <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 group-hover:w-2/3 transition-all duration-300 decoration-accent-400 underline-offset-8 decoration-2" style={{
+                backgroundColor: 'var(--accent-400, rgb(34, 211, 238))'
+              }} />
             </Link>
           ))}
           <a
@@ -97,9 +88,7 @@ export function Header() {
             rel="noopener noreferrer"
             aria-label="Učebna — výuková platforma (otevře se v nové záložce)"
             onClick={() => trackUcebnaClick('desktop')}
-            className={`ml-2 flex items-center text-sm transition-colors ${
-              scrolled ? 'text-gray-500 hover:text-gray-700' : 'text-white/60 hover:text-white/80'
-            }`}
+            className="ml-2 flex items-center text-sm text-slate-400 hover:text-accent-400 transition-colors"
           >
             Učebna
             <ExternalLink className="w-3 h-3 ml-1" aria-hidden="true" />
@@ -107,14 +96,16 @@ export function Header() {
           <div className="ml-3">
             <CitySwitcher />
           </div>
-          <Link
-            href={ctaHref}
-            className="ml-4 btn-primary group"
-            onClick={() => trackNavCTA('desktop')}
-          >
-            Vybrat termín
-            <ChevronRight className="ml-1 w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-          </Link>
+          <MagneticButton>
+            <Link
+              href={ctaHref}
+              className="ml-4 btn-primary group"
+              onClick={() => trackNavCTA('desktop')}
+            >
+              Vybrat termín
+              <ChevronRight className="ml-1 w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+            </Link>
+          </MagneticButton>
         </div>
 
         {/* Mobile: city switcher (always visible) + menu button */}
@@ -123,18 +114,16 @@ export function Header() {
           <motion.button
             type="button"
             whileTap={{ scale: 0.9 }}
-            className={`shrink-0 p-2 rounded-lg transition-colors ${
-              scrolled ? 'hover:bg-gray-100' : 'hover:bg-white/10'
-            }`}
+            className="shrink-0 p-2 rounded-lg hover:bg-white/10 transition-colors"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label={mobileMenuOpen ? 'Zavřít menu' : 'Otevřít menu'}
             aria-expanded={mobileMenuOpen}
             aria-controls="mobile-menu"
           >
             {mobileMenuOpen ? (
-              <X className={`h-6 w-6 ${scrolled ? 'text-gray-700' : 'text-white'}`} aria-hidden="true" />
+              <X className="h-6 w-6 text-white" aria-hidden="true" />
             ) : (
-              <Menu className={`h-6 w-6 ${scrolled ? 'text-gray-700' : 'text-white'}`} aria-hidden="true" />
+              <Menu className="h-6 w-6 text-white" aria-hidden="true" />
             )}
           </motion.button>
         </div>
@@ -146,33 +135,36 @@ export function Header() {
           <motion.div
             id="mobile-menu"
             initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
+            animate={{ opacity: 1, height: '100vh' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.2 }}
-            className="md:hidden bg-white border-b border-gray-100 overflow-hidden"
+            className="fixed inset-0 top-[calc(var(--header-height,60px))] md:hidden bg-night overflow-y-auto"
           >
-            <div className="section-container py-4 space-y-1">
-              {navigation.map((item, index) => (
-                <motion.div
-                  key={item.name}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.05 }}
-                >
-                  <Link
-                    href={item.href}
-                    className="block px-4 py-3 text-gray-700 hover:text-primary-600 hover:bg-primary-50 font-medium rounded-lg transition-colors"
-                    onClick={() => setMobileMenuOpen(false)}
+            <div className="section-container py-12 space-y-6 flex flex-col h-full">
+              <nav className="space-y-6 flex-1">
+                {navigation.map((item, index) => (
+                  <motion.div
+                    key={item.name}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.05 }}
                   >
-                    {item.name}
-                  </Link>
-                </motion.div>
-              ))}
+                    <Link
+                      href={item.href}
+                      className="block text-4xl font-display font-bold text-white hover:text-accent-400 transition-colors"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      {item.name}
+                    </Link>
+                  </motion.div>
+                ))}
+              </nav>
+
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: navigation.length * 0.05 }}
-                className="border-t border-gray-100 pt-2 mt-2"
+                className="border-t border-white/10 pt-6 space-y-6"
               >
                 <a
                   href="https://iot.weeks.cz/"
@@ -180,27 +172,24 @@ export function Header() {
                   rel="noopener noreferrer"
                   aria-label="Učebna — výuková platforma (otevře se v nové záložce)"
                   onClick={() => { trackUcebnaClick('mobile'); setMobileMenuOpen(false) }}
-                  className="flex items-center px-4 py-3 text-sm text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
+                  className="flex items-center text-slate-400 hover:text-accent-400 transition-colors"
                 >
                   Učebna
-                  <ExternalLink className="w-3 h-3 ml-1.5" aria-hidden="true" />
+                  <ExternalLink className="w-4 h-4 ml-2" aria-hidden="true" />
                 </a>
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: (navigation.length + 1) * 0.05 }}
-                className="pt-2 flex flex-col gap-2"
-              >
+
                 <Link
                   href={ctaHref}
-                  className="btn-primary w-full text-center justify-center"
+                  className="block btn-primary w-full text-center"
                   onClick={() => { trackNavCTA('mobile'); setMobileMenuOpen(false) }}
                 >
                   Vybrat termín
-                  <ChevronRight className="ml-1 w-4 h-4" />
                 </Link>
               </motion.div>
+
+              <div className="border-t border-white/10 pt-6 pb-6">
+                <p className="data-label text-accent-400 font-mono text-xs uppercase tracking-wider">WEEKS — IT TÁBORY · PRAHA & KARLOVY VARY</p>
+              </div>
             </div>
           </motion.div>
         )}
