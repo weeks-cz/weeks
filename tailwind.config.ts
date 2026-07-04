@@ -61,10 +61,21 @@ const config: Config = {
           800: '#92400E',
           900: '#78350F',
         },
+        // Night palette
+        night: {
+          DEFAULT: '#0A0C16',
+          800: '#12152A',
+          700: '#1B1F3A',
+        },
       },
       fontFamily: {
-        sans: ['var(--font-dm-sans)', 'system-ui', 'sans-serif'],
-        display: ['var(--font-outfit)', 'var(--font-dm-sans)', 'system-ui', 'sans-serif'],
+        sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
+        display: ['var(--font-display)', 'var(--font-sans)', 'system-ui', 'sans-serif'],
+        mono: ['var(--font-mono)', 'ui-monospace', 'monospace'],
+      },
+      boxShadow: {
+        glow: '0 0 24px 0 rgba(34, 211, 238, 0.25)',
+        'glow-amber': '0 0 24px 0 rgba(245, 158, 11, 0.35)',
       },
       animation: {
         'fade-in': 'fadeIn 0.5s ease-in-out',
