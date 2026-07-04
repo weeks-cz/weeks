@@ -134,7 +134,7 @@ export function HeroSection() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="lg:col-span-5 hidden lg:flex flex-col items-center"
           >
-            <div className="w-full aspect-square rounded-lg border border-white/15 overflow-hidden shadow-glow">
+            <div className="relative w-full aspect-square rounded-lg border border-white/15 overflow-hidden shadow-glow">
               <Image
                 src="/images/hwlab/hero-print-day.webp"
                 alt="HWLab — IT tábor"
