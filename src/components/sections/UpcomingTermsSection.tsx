@@ -96,40 +96,25 @@ export function UpcomingTermsSection({ terms }: { terms: TermDisplay[] }) {
   }
 
   return (
-    <section id="prihlasit" className="section-padding bg-gradient-to-br from-primary-600 to-primary-800">
+    <section id="prihlasit" className="section-padding bg-night">
       <div className="section-container">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           onViewportEnter={() => sendGAEvent('event', 'view_homepage_terminy', {})}
-          className="text-center mb-10"
+          className="mb-10"
         >
-          {usable.length > 0 && (
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full text-sm font-medium text-white/80 mb-6">
-              <Calendar className="w-4 h-4" />
-              {usable.length} {usable.length === 1 ? 'termín' : usable.length < 5 ? 'termíny' : 'termínů'} s otevřenou registrací
-            </div>
-          )}
-          <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
-            Nejbližší{' '}
-            <span className="bg-gradient-to-r from-cta-400 to-cta-300 bg-clip-text text-transparent">
-              termíny
-            </span>
+          <p className="data-label mb-4">04 / TERMÍNY</p>
+          <h2 className="heading-2 mb-8">
+            Nejbližší <span className="text-gradient">termíny</span>
           </h2>
-          <p className="text-lg text-white/70 max-w-2xl mx-auto">
-            Vyberte si a přihlaste se — registrace přes DDM Praha 6
-          </p>
         </motion.div>
 
         <div className="max-w-4xl mx-auto space-y-3">
           {shown.map((term, index) => {
             const meta = campMeta[term.program] ?? campMeta['3d-tisk']
-            const colors = meta.colors
             const hasLink = !!term.registrationUrl && term.status === 'open_with_link'
-            const marker = hasLink
-              ? getUrgency(term.startDate)
-              : { label: 'Nově', className: 'bg-cta-400 text-gray-900' }
             const badgeLabel = `${term.dayCount} ${daysWord(term.dayCount)}`
             const dateLabel = shortDateLabel(term)
 
@@ -142,20 +127,22 @@ export function UpcomingTermsSection({ terms }: { terms: TermDisplay[] }) {
                 data-fb-lead-name={fb?.name}
                 data-fb-lead-category={fb?.category}
                 onClick={() => handleClick(term)}
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-cta-500 hover:bg-cta-400 text-gray-900 font-semibold rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-cta-500/30 text-sm flex-shrink-0"
+                className="btn-primary text-sm px-4 py-2 flex-shrink-0"
               >
                 Přihlásit se
-                <ArrowRight className="w-4 h-4" />
               </a>
             ) : (
               <Link
                 href={`${meta.href}#terminy`}
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/15 hover:bg-white/25 text-white font-semibold rounded-xl transition-colors text-sm flex-shrink-0"
+                className="inline-flex items-center gap-2 px-4 py-2 border border-white/25 text-accent-400 font-mono text-xs hover:border-accent-400/60 hover:shadow-glow transition-all rounded-lg flex-shrink-0"
               >
-                Zjistit víc
-                <ArrowRight className="w-4 h-4" />
+                Mám zájem
               </Link>
             )
+
+            const cardClass = hasLink
+              ? 'card-glow'
+              : 'bg-night-800 border-dashed border border-white/25 rounded-lg transition-all duration-300'
 
             return (
               <motion.div
@@ -164,66 +151,44 @@ export function UpcomingTermsSection({ terms }: { terms: TermDisplay[] }) {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.05 }}
-                className="bg-white/10 backdrop-blur-sm rounded-2xl border border-white/10 hover:border-white/20 transition-colors"
+                className={`${cardClass} p-4`}
               >
                 {/* Desktop layout */}
-                <div className="hidden md:flex items-center gap-4 p-4">
-                  <div className="flex items-center gap-3 w-52 flex-shrink-0">
-                    <Clock className="w-4 h-4 text-white/50 flex-shrink-0" />
-                    <span className="text-white font-medium text-sm">{dateLabel}</span>
+                <div className="hidden md:flex items-center gap-6">
+                  <div className="w-40 flex-shrink-0">
+                    <span className="font-mono text-sm text-accent-400">{dateLabel}</span>
                   </div>
 
-                  <Link href={meta.href} className="flex items-center gap-3 flex-1 min-w-0 group">
-                    <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${colors.bg} ${colors.text} flex-shrink-0`}>
-                      {badgeLabel}
-                    </span>
-                    <span className="text-white font-semibold truncate group-hover:text-cta-300 transition-colors">
+                  <div className="flex-1 min-w-0">
+                    <Link href={meta.href} className="inline-block group">
+                      <span className="font-display text-white font-semibold group-hover:text-accent-400 transition-colors">
+                        {meta.campLabel}
+                      </span>
+                    </Link>
+                  </div>
+
+                  <div className="flex items-center gap-4 flex-shrink-0">
+                    <span className="font-mono text-xs text-slate-400">{badgeLabel}</span>
+                    <span className="font-mono text-xs text-slate-400">{priceLabel(term.price)}</span>
+                    {cta}
+                  </div>
+                </div>
+
+                {/* Mobile layout */}
+                <div className="md:hidden space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="font-mono text-xs text-accent-400">{dateLabel}</span>
+                    <span className="font-mono text-xs text-slate-400">{badgeLabel}</span>
+                  </div>
+
+                  <Link href={meta.href} className="block group">
+                    <span className="font-display text-white font-semibold group-hover:text-accent-400 transition-colors">
                       {meta.campLabel}
                     </span>
                   </Link>
 
-                  <span className="text-white/70 text-sm font-medium flex-shrink-0">{priceLabel(term.price)}</span>
-
-                  {marker && (
-                    <span
-                      className={`px-2.5 py-1 rounded-full text-xs font-bold ${marker.className} flex-shrink-0`}
-                      role="status"
-                    >
-                      {marker.label}
-                    </span>
-                  )}
-
-                  {cta}
-                </div>
-
-                {/* Mobile layout */}
-                <div className="md:hidden p-4 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <Clock className="w-4 h-4 text-white/50" />
-                      <span className="text-white font-medium text-sm">{dateLabel}</span>
-                    </div>
-                    {marker && (
-                      <span
-                        className={`px-2.5 py-1 rounded-full text-xs font-bold ${marker.className}`}
-                        role="status"
-                      >
-                        {marker.label}
-                      </span>
-                    )}
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${colors.bg} ${colors.text}`}>
-                      {badgeLabel}
-                    </span>
-                    <Link href={meta.href} className="text-white font-semibold text-sm hover:text-cta-300 transition-colors truncate">
-                      {meta.campLabel}
-                    </Link>
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <span className="text-white/70 text-sm font-medium">{priceLabel(term.price)}</span>
+                  <div className="flex items-center justify-between gap-3">
+                    <span className="font-mono text-xs text-slate-400">{priceLabel(term.price)}</span>
                     {cta}
                   </div>
                 </div>
