@@ -17,7 +17,7 @@ function ConfirmationContent({ id }: { id: string }) {
   return (
     <LocationProvider location={location}>
       <Header />
-      <main className="min-h-screen bg-slate-50 pt-24 pb-16">
+      <main className="min-h-screen bg-night pt-24 pb-16">
         <div className="section-container">
           <RegistrationConfirmation registrationId={id} token={token} />
         </div>
@@ -31,7 +31,7 @@ export default function ConfirmationPage({ params }: { params: Promise<{ id: str
   const { id } = use(params)
 
   return (
-    <Suspense fallback={<div className="min-h-screen bg-slate-50 flex items-center justify-center text-gray-500">Načítání...</div>}>
+    <Suspense fallback={<div className="min-h-screen bg-night flex items-center justify-center text-slate-500">Načítání...</div>}>
       <ConfirmationContent id={id} />
     </Suspense>
   )
