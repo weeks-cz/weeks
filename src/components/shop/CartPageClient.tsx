@@ -271,7 +271,7 @@ export function CartPageClient() {
           <button
             type="submit"
             disabled={isSubmitting || !gdprConsent}
-            className="btn-primary w-full justify-center"
+            className="btn-primary w-full justify-center disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Send className="h-4 w-4" />
             {isSubmitting ? 'Odesílám objednávku...' : 'Odeslat objednávku'}
