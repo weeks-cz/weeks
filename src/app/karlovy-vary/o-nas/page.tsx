@@ -57,12 +57,7 @@ export default function KVAboutPage() {
       <Header />
       <main>
         {/* Hero Section */}
-        <section className="relative pt-32 pb-16 overflow-hidden bg-gradient-to-br from-gray-50 via-primary-50/30 to-accent-50/20">
-          <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary-200/30 rounded-full blur-3xl" />
-            <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-accent-200/30 rounded-full blur-3xl" />
-          </div>
-
+        <section className="relative pt-32 pb-16 overflow-hidden bg-night">
           <div className="section-container relative z-10">
             <div className="max-w-4xl mx-auto text-center">
               <motion.div
@@ -70,27 +65,23 @@ export default function KVAboutPage() {
                 animate={{ opacity: 1, y: 0 }}
                 className="mb-8"
               >
-                <Link href="/karlovy-vary" className="text-gray-500 hover:text-primary-600 transition-colors">
-                  Domů
-                </Link>
-                <span className="text-gray-400 mx-2">/</span>
-                <span className="text-gray-900 font-medium">O nás</span>
+                <p className="data-label mb-4">O NÁS</p>
               </motion.div>
 
               <motion.h1
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="heading-1 text-gray-900 mb-6"
+                className="heading-1 text-white mb-6"
               >
-                O projektu <span className="text-gradient">Weeks</span>
+                O projektu Weeks
               </motion.h1>
 
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="text-xl text-gray-600 max-w-2xl mx-auto"
+                className="text-xl text-slate-300 max-w-2xl mx-auto"
               >
                 Letní příměstské IT tábory v Karlových Varech, kde děti získávají
                 praktické dovednosti s nejmodernějšími technologiemi.
@@ -100,7 +91,7 @@ export default function KVAboutPage() {
         </section>
 
         {/* Mission Section */}
-        <section className="section-padding bg-white">
+        <section className="section-padding bg-night-800">
           <div className="section-container">
             <div className="max-w-4xl mx-auto">
               <motion.div
@@ -109,15 +100,15 @@ export default function KVAboutPage() {
                 viewport={{ once: true }}
                 className="text-center mb-16"
               >
-                <h2 className="heading-2 text-gray-900 mb-6">
+                <h2 className="heading-2 text-white mb-6">
                   Naše <span className="text-gradient">mise</span>
                 </h2>
-                <p className="text-lg text-gray-600 mb-4">
+                <p className="text-lg text-slate-300 mb-4">
                   Věříme, že každé dítě má potenciál tvořit a inovovat. V době, kdy technologie
                   pronikají do všech aspektů života, je důležité, aby děti nebyly jen pasivními
                   uživateli, ale aktivními tvůrci.
                 </p>
-                <p className="text-lg text-gray-600">
+                <p className="text-lg text-slate-300">
                   Weeks v Karlových Varech není jen o výuce programování nebo 3D tisku. Jde o rozvoj
                   kritického myšlení, kreativity a schopnosti řešit problémy. Učíme děti, že chyba
                   není neúspěch, ale příležitost k učení.
@@ -132,15 +123,15 @@ export default function KVAboutPage() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: index * 0.1 }}
-                    className="p-6 bg-gray-50 rounded-2xl"
+                    className="card-glow p-6 rounded-2xl"
                   >
-                    <div className="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center mb-4">
-                      <value.icon className="w-6 h-6 text-primary-600" />
+                    <div className="w-12 h-12 bg-primary-500/20 rounded-xl flex items-center justify-center mb-4">
+                      <value.icon className="w-6 h-6 text-primary-400" />
                     </div>
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                    <h3 className="text-xl font-semibold text-white mb-2">
                       {value.title}
                     </h3>
-                    <p className="text-gray-600">
+                    <p className="text-slate-300">
                       {value.description}
                     </p>
                   </motion.div>
@@ -151,7 +142,7 @@ export default function KVAboutPage() {
         </section>
 
         {/* Venue & Organizer Section */}
-        <section className="section-padding bg-gray-50">
+        <section className="section-padding bg-night">
           <div className="section-container">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -159,10 +150,10 @@ export default function KVAboutPage() {
               viewport={{ once: true }}
               className="text-center mb-16"
             >
-              <h2 className="heading-2 text-gray-900 mb-4">
+              <h2 className="heading-2 text-white mb-4">
                 Zázemí a <span className="text-gradient">organizátor</span>
               </h2>
-              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              <p className="text-xl text-slate-300 max-w-2xl mx-auto">
                 Weeks v Karlových Varech je projekt organizovaný Lukášem Kubíkem,
                 který probíhá v Kreativním centru VARY&amp;TE.
               </p>
@@ -174,23 +165,23 @@ export default function KVAboutPage() {
                 initial={{ opacity: 0, x: -30 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                className="bg-white rounded-2xl p-8 shadow-sm"
+                className="card-glow rounded-2xl p-8"
               >
-                <div className="inline-flex items-center gap-2 px-3 py-1 bg-accent-100 rounded-full text-xs font-semibold text-accent-700 mb-4">
+                <div className="inline-flex items-center gap-2 px-3 py-1 bg-accent-500/20 rounded-full text-xs font-semibold text-accent-400 mb-4 border border-accent-500/30">
                   Místo konání
                 </div>
-                <div className="w-16 h-16 bg-accent-100 rounded-2xl flex items-center justify-center mb-6">
-                  <span className="text-2xl font-bold text-accent-600">V&amp;T</span>
+                <div className="w-16 h-16 bg-accent-500/20 rounded-2xl flex items-center justify-center mb-6 border border-accent-500/30">
+                  <span className="text-2xl font-bold text-accent-400">V&amp;T</span>
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                <h3 className="text-2xl font-bold text-white mb-3">
                   Kreativní centrum VARY&amp;TE
                 </h3>
-                <p className="text-gray-600 mb-6">
+                <p className="text-slate-300 mb-6">
                   Moderní kreativní centrum v Karlových Varech vybavené profesionálními nástroji
                   pro 3D tisk, digitální výrobu a technologické vzdělávání. Příjemné prostředí
                   s klimatizovanými učebnami a kuchyňkou pro přípravu svačin.
                 </p>
-                <div className="flex items-center gap-2 text-sm text-accent-600 font-medium">
+                <div className="flex items-center gap-2 text-sm text-accent-400 font-medium">
                   <MapPin className="w-4 h-4" />
                   Stará Role 175, Karlovy Vary
                 </div>
@@ -201,9 +192,9 @@ export default function KVAboutPage() {
                 initial={{ opacity: 0, x: 30 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                className="bg-white rounded-2xl p-8 shadow-sm"
+                className="card-glow rounded-2xl p-8"
               >
-                <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary-100 rounded-full text-xs font-semibold text-primary-700 mb-4">
+                <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary-500/20 rounded-full text-xs font-semibold text-primary-400 mb-4 border border-primary-500/30">
                   Organizátor
                 </div>
                 <div className="h-16 mb-6 flex items-center">
@@ -215,14 +206,14 @@ export default function KVAboutPage() {
                     className="object-contain h-full w-auto"
                   />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                <h3 className="text-2xl font-bold text-white mb-3">
                   Weeks
                 </h3>
-                <p className="text-gray-600 mb-6">
+                <p className="text-slate-300 mb-6">
                   Weeks je projekt zaměřený na IT vzdělávání dětí a mládeže ve věku 9–15 let.
                   Kombinuje praktické workshopy, profesionální vybavení a zkušené lektory z praxe.
                 </p>
-                <div className="flex items-center gap-2 text-sm text-primary-600 font-medium">
+                <div className="flex items-center gap-2 text-sm text-primary-400 font-medium">
                   <Award className="w-4 h-4" />
                   Lektoři s praxí z oboru
                 </div>
@@ -232,7 +223,7 @@ export default function KVAboutPage() {
         </section>
 
         {/* Team Section */}
-        <section className="section-padding bg-white">
+        <section className="section-padding bg-night-800">
           <div className="section-container">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -240,44 +231,46 @@ export default function KVAboutPage() {
               viewport={{ once: true }}
               className="text-center mb-16"
             >
-              <h2 className="heading-2 text-gray-900 mb-4">
+              <h2 className="heading-2 text-white mb-4">
                 Lektorský <span className="text-gradient">tým</span>
               </h2>
-              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              <p className="text-xl text-slate-300 max-w-2xl mx-auto">
                 Naši lektoři jsou odborníci z praxe s vášní pro výuku a individuální přístup k dětem.
               </p>
             </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-              {teamMembers.map((member, index) => (
-                <motion.div
-                  key={member.name}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                  className="text-center"
-                >
-                  <div className="w-32 h-32 bg-gradient-to-br from-primary-200 to-accent-200 rounded-full mx-auto mb-4 flex items-center justify-center">
-                    <member.icon className="w-16 h-16 text-white" />
-                  </div>
-                  <h3 className="font-semibold text-gray-900 mb-1">
-                    {member.name}
-                  </h3>
-                  <p className="text-sm text-primary-600 font-medium mb-2">
-                    {member.role}
-                  </p>
-                  <p className="text-sm text-gray-600">
-                    {member.description}
-                  </p>
-                </motion.div>
-              ))}
+            <div className="paper-island rounded-2xl p-10 md:p-12 max-w-6xl mx-auto">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {teamMembers.map((member, index) => (
+                  <motion.div
+                    key={member.name}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.1 }}
+                    className="text-center"
+                  >
+                    <div className="w-32 h-32 bg-gradient-to-br from-primary-300 to-accent-200 rounded-full mx-auto mb-4 flex items-center justify-center">
+                      <member.icon className="w-16 h-16 text-primary-600" />
+                    </div>
+                    <h3 className="font-semibold text-night mb-1">
+                      {member.name}
+                    </h3>
+                    <p className="text-sm text-primary-600 font-medium mb-2">
+                      {member.role}
+                    </p>
+                    <p className="text-sm text-slate-600">
+                      {member.description}
+                    </p>
+                  </motion.div>
+                ))}
+              </div>
             </div>
           </div>
         </section>
 
         {/* Safety Section */}
-        <section className="section-padding bg-trust-50">
+        <section className="section-padding bg-night">
           <div className="section-container">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -285,60 +278,60 @@ export default function KVAboutPage() {
               viewport={{ once: true }}
               className="max-w-4xl mx-auto"
             >
-              <h2 className="heading-2 text-trust-800 mb-8 text-center">
+              <h2 className="heading-2 text-white mb-8 text-center">
                 Bezpečnost a péče
               </h2>
 
-              <div className="bg-white rounded-2xl p-8 md:p-12">
-                <p className="text-lg text-gray-700 mb-8 text-center">
+              <div className="card-glow rounded-2xl p-8 md:p-12">
+                <p className="text-lg text-slate-300 mb-8 text-center">
                   Bezpečnost dětí je naší absolutní prioritou. Dodržujeme přísné
                   protokoly a dbáme na pohodu každého dítěte.
                 </p>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="flex items-start gap-4 p-4">
-                    <ShieldCheck className="w-8 h-8 text-trust-600 flex-shrink-0" />
+                    <ShieldCheck className="w-8 h-8 text-trust-400 flex-shrink-0" />
                     <div>
-                      <h3 className="font-semibold text-gray-900 mb-1">
+                      <h3 className="font-semibold text-white mb-1">
                         Pojištění účastníků
                       </h3>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-slate-400">
                         Každé dítě je pojištěno po celou dobu tábora
                       </p>
                     </div>
                   </div>
 
                   <div className="flex items-start gap-4 p-4">
-                    <Users className="w-8 h-8 text-trust-600 flex-shrink-0" />
+                    <Users className="w-8 h-8 text-trust-400 flex-shrink-0" />
                     <div>
-                      <h3 className="font-semibold text-gray-900 mb-1">
+                      <h3 className="font-semibold text-white mb-1">
                         Malé skupiny
                       </h3>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-slate-400">
                         Maximálně 5 dětí na lektora pro individuální přístup
                       </p>
                     </div>
                   </div>
 
                   <div className="flex items-start gap-4 p-4">
-                    <Award className="w-8 h-8 text-trust-600 flex-shrink-0" />
+                    <Award className="w-8 h-8 text-trust-400 flex-shrink-0" />
                     <div>
-                      <h3 className="font-semibold text-gray-900 mb-1">
+                      <h3 className="font-semibold text-white mb-1">
                         Kurz první pomoci
                       </h3>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-slate-400">
                         Všichni lektoři mají absolvovaný kurz první pomoci
                       </p>
                     </div>
                   </div>
 
                   <div className="flex items-start gap-4 p-4">
-                    <Heart className="w-8 h-8 text-trust-600 flex-shrink-0" />
+                    <Heart className="w-8 h-8 text-trust-400 flex-shrink-0" />
                     <div>
-                      <h3 className="font-semibold text-gray-900 mb-1">
+                      <h3 className="font-semibold text-white mb-1">
                         Okamžitý kontakt
                       </h3>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-slate-400">
                         Rodiče mají vždy k dispozici kontakt na lektory
                       </p>
                     </div>
@@ -350,7 +343,7 @@ export default function KVAboutPage() {
         </section>
 
         {/* CTA Section */}
-        <section className="section-padding bg-white">
+        <section className="section-padding bg-night-800">
           <div className="section-container">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -358,13 +351,13 @@ export default function KVAboutPage() {
               viewport={{ once: true }}
               className="max-w-3xl mx-auto text-center"
             >
-              <h2 className="heading-2 text-gray-900 mb-6">
+              <h2 className="heading-2 text-white mb-6">
                 Máte dotazy?
               </h2>
-              <p className="text-xl text-gray-600 mb-8">
+              <p className="text-xl text-slate-300 mb-8">
                 Rádi vám zodpovíme jakékoliv otázky ohledně tábora, bezpečnosti nebo programu.
               </p>
-              <Link href="/karlovy-vary#kontakt" className="btn-primary">
+              <Link href="/karlovy-vary/kontakt" className="btn-primary">
                 Kontaktujte nás
               </Link>
             </motion.div>

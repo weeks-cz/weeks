@@ -65,8 +65,9 @@ export default function KVMix() {
       <Header />
       <main className="pt-20">
         {/* Hero */}
-        <section className="relative pt-32 pb-20 overflow-hidden">
-          <div className="absolute inset-0">
+        <section className="relative pt-32 pb-20 overflow-hidden bg-night">
+          <div className="absolute inset-0 opacity-20 pointer-events-none noise" />
+          <div className="absolute inset-0 opacity-40">
             <Image
               src="/images/varyete/fablab-5.avif"
               alt="FabLab Kreativního centra VARY&TE v Karlových Varech"
@@ -74,16 +75,26 @@ export default function KVMix() {
               sizes="100vw"
               className="object-cover"
               priority
+              quality={75}
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-gray-900/95 via-gray-900/85 to-gray-900/60" />
-            <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-gray-900/30" />
           </div>
+          <div className="absolute inset-0 bg-gradient-to-r from-night/95 via-night/85 to-night/60" />
 
           <div className="section-container relative z-10">
             <div className="max-w-3xl">
+              {/* Breadcrumb */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mb-8"
+              >
+                <p className="data-label mb-4">TÁBORY / VÍKENDOVÝ TÁBOR</p>
+              </motion.div>
+
               <motion.span
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.05 }}
                 className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full text-white/90 text-sm font-medium mb-6 backdrop-blur-sm border border-white/20"
               >
                 <Sparkles className="w-4 h-4 text-cta-400" />
@@ -93,39 +104,56 @@ export default function KVMix() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="font-display text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white mb-6 leading-[1.1]"
+                className="heading-1 text-white mb-6"
               >
-                Tábor chytrých{' '}
-                <span className="bg-gradient-to-r from-accent-400 via-primary-400 to-accent-400 bg-clip-text text-transparent">
-                  technologií
-                </span>
+                Tábor chytrých technologií
               </motion.h1>
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.15 }}
-                className="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl leading-relaxed"
+                className="text-lg md:text-xl text-slate-300 mb-8 max-w-2xl leading-relaxed"
               >
                 Za jeden víkend si vaše dítě vyzkouší 3D tisk, virtuální realitu i&nbsp;IoT
                 s&nbsp;Arduinem — ve FabLabu VARY&amp;TE v&nbsp;Karlových Varech.{' '}
                 <span className="text-white font-medium">A vlastní projekty si odnese domů.</span>
               </motion.p>
+
+              {/* Spec sheet */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
+                className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 max-w-2xl"
+              >
+                {[
+                  { label: 'VĚK', value: '10–15 let' },
+                  { label: 'KAPACITA', value: 'Max 15' },
+                  { label: 'CENA', value: '2 990 Kč' },
+                  { label: 'ČAS', value: '9:00–17:00' },
+                ].map((spec, i) => (
+                  <div key={i} className="card-glow p-4">
+                    <p className="data-label text-xs mb-2">{spec.label}</p>
+                    <p className="font-display text-white text-lg">{spec.value}</p>
+                  </div>
+                ))}
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.25 }}
                 className="flex flex-col sm:flex-row gap-4"
               >
                 <Link
                   href="#terminy"
-                  className="group inline-flex items-center justify-center px-8 py-4 bg-cta-500 hover:bg-cta-400 text-gray-900 font-semibold rounded-xl transition-all duration-300 hover:shadow-xl hover:shadow-cta-500/30 hover:-translate-y-0.5"
+                  className="btn-primary inline-flex items-center justify-center"
                 >
                   Zobrazit termíny
-                  <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="ml-2 w-5 h-5" />
                 </Link>
                 <Link
                   href="/karlovy-vary/kontakt"
-                  className="inline-flex items-center justify-center px-8 py-4 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white font-semibold rounded-xl border border-white/20 transition-all duration-300"
+                  className="btn-outline inline-flex items-center justify-center"
                 >
                   Máte dotazy?
                 </Link>
@@ -157,11 +185,11 @@ export default function KVMix() {
         </section>
 
         {/* Info */}
-        <section className="section-padding">
+        <section className="section-padding bg-night-800">
           <div className="section-container">
             <div className="grid md:grid-cols-2 gap-12">
               <div>
-                <h2 className="heading-2 mb-6">Co se naučíte</h2>
+                <h2 className="heading-2 text-white mb-6">Co se naučíte</h2>
                 <div className="space-y-4">
                   {[
                     '3D tisk — od návrhu po hotový výtisk',
@@ -170,38 +198,38 @@ export default function KVMix() {
                     'Programování základů — C# a Python',
                   ].map((item, i) => (
                     <div key={i} className="flex items-start gap-3">
-                      <div className="w-6 h-6 rounded-full bg-accent-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <span className="text-xs font-bold text-accent-600">{i + 1}</span>
+                      <div className="w-6 h-6 rounded-full bg-primary-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <span className="text-xs font-bold text-primary-400">{i + 1}</span>
                       </div>
-                      <p className="text-gray-700">{item}</p>
+                      <p className="text-slate-300">{item}</p>
                     </div>
                   ))}
                 </div>
               </div>
               <div className="space-y-6">
-                <div className="bg-gray-50 rounded-2xl p-6">
-                  <h3 className="font-semibold text-gray-900 mb-4">Praktické informace</h3>
+                <div className="card-glow rounded-2xl p-6">
+                  <h3 className="font-semibold text-white mb-4">Praktické informace</h3>
                   <div className="space-y-3">
-                    <div className="flex items-center gap-3 text-gray-600">
-                      <Clock className="w-5 h-5 text-accent-500" />
+                    <div className="flex items-center gap-3 text-slate-300">
+                      <Clock className="w-5 h-5 text-accent-400" />
                       <span>So + Ne, 9:00–17:00 (oba dny)</span>
                     </div>
-                    <div className="flex items-center gap-3 text-gray-600">
-                      <Users className="w-5 h-5 text-accent-500" />
+                    <div className="flex items-center gap-3 text-slate-300">
+                      <Users className="w-5 h-5 text-accent-400" />
                       <span>Max. {program.capacity} dětí ve skupině</span>
                     </div>
-                    <div className="flex items-center gap-3 text-gray-600">
-                      <MapPin className="w-5 h-5 text-accent-500" />
+                    <div className="flex items-center gap-3 text-slate-300">
+                      <MapPin className="w-5 h-5 text-accent-400" />
                       <span>{venue.name}, {venue.city}</span>
                     </div>
-                    <div className="flex items-center gap-3 text-gray-600">
-                      <span className="text-2xl font-bold text-accent-600">{program.price.toLocaleString('cs-CZ')} Kč</span>
+                    <div className="flex items-center gap-3">
+                      <span className="text-2xl font-bold text-cta-400">{program.price.toLocaleString('cs-CZ')} Kč</span>
                     </div>
                   </div>
                 </div>
-                <div className="bg-gray-50 rounded-2xl p-6">
-                  <h3 className="font-semibold text-gray-900 mb-2">Věk</h3>
-                  <p className="text-gray-600">{program.ageRange} let</p>
+                <div className="card-glow rounded-2xl p-6">
+                  <h3 className="font-semibold text-white mb-2">Věk</h3>
+                  <p className="text-slate-300">{program.ageRange} let</p>
                 </div>
               </div>
             </div>
@@ -209,21 +237,21 @@ export default function KVMix() {
         </section>
 
         {/* Practical Info Cards */}
-        <section className="section-padding bg-accent-50">
+        <section className="section-padding bg-night-800">
           <div className="section-container">
-            <h2 className="heading-2 text-center mb-10">Na co se máte těšit</h2>
+            <h2 className="heading-2 text-center mb-10 text-white">Na co se máte těšit</h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="bg-white rounded-xl p-6 border border-accent-200"
+                className="card-glow rounded-xl p-6"
               >
-                <div className="w-10 h-10 rounded-lg bg-accent-100 flex items-center justify-center mb-4">
-                  <Utensils className="w-5 h-5 text-accent-600" />
+                <div className="w-10 h-10 rounded-lg bg-accent-500/20 flex items-center justify-center mb-4">
+                  <Utensils className="w-5 h-5 text-accent-400" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-3">Stravování</h3>
-                <p className="text-sm text-gray-600">Oběd je zajištěný a v ceně oba dny. Na dopoledne a odpoledne si děti přinesou vlastní svačinu. Pití je k dispozici po celý den.</p>
+                <h3 className="font-semibold text-white mb-3">Stravování</h3>
+                <p className="text-sm text-slate-300">Oběd je zajištěný a v ceně oba dny. Na dopoledne a odpoledne si děti přinesou vlastní svačinu. Pití je k dispozici po celý den.</p>
               </motion.div>
 
               <motion.div
@@ -231,13 +259,13 @@ export default function KVMix() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.1 }}
-                className="bg-white rounded-xl p-6 border border-accent-200"
+                className="card-glow rounded-xl p-6"
               >
-                <div className="w-10 h-10 rounded-lg bg-accent-100 flex items-center justify-center mb-4">
-                  <Laptop className="w-5 h-5 text-accent-600" />
+                <div className="w-10 h-10 rounded-lg bg-accent-500/20 flex items-center justify-center mb-4">
+                  <Laptop className="w-5 h-5 text-accent-400" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-3">Vybavení</h3>
-                <p className="text-sm text-gray-600">Veškeré technické vybavení — 3D tiskárny, VR headsety, Arduina i senzory — je na místě ve VARY&TE. Děti nemusí nic nosit.</p>
+                <h3 className="font-semibold text-white mb-3">Vybavení</h3>
+                <p className="text-sm text-slate-300">Veškeré technické vybavení — 3D tiskárny, VR headsety, Arduina i senzory — je na místě ve VARY&TE. Děti nemusí nic nosit.</p>
               </motion.div>
 
               <motion.div
@@ -245,13 +273,13 @@ export default function KVMix() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.2 }}
-                className="bg-white rounded-xl p-6 border border-accent-200"
+                className="card-glow rounded-xl p-6"
               >
-                <div className="w-10 h-10 rounded-lg bg-accent-100 flex items-center justify-center mb-4">
-                  <Users className="w-5 h-5 text-accent-600" />
+                <div className="w-10 h-10 rounded-lg bg-accent-500/20 flex items-center justify-center mb-4">
+                  <Users className="w-5 h-5 text-accent-400" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-3">Kapacita</h3>
-                <p className="text-sm text-gray-600">Maximálně {program.capacity} dětí na termín. Menší skupinka zajišťuje individuální přístup lektorů ke každému dítěti.</p>
+                <h3 className="font-semibold text-white mb-3">Kapacita</h3>
+                <p className="text-sm text-slate-300">Maximálně {program.capacity} dětí na termín. Menší skupinka zajišťuje individuální přístup lektorů ke každému dítěti.</p>
               </motion.div>
 
               <motion.div
@@ -259,31 +287,31 @@ export default function KVMix() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.3 }}
-                className="bg-white rounded-xl p-6 border border-accent-200"
+                className="card-glow rounded-xl p-6"
               >
-                <div className="w-10 h-10 rounded-lg bg-accent-100 flex items-center justify-center mb-4">
-                  <Clock className="w-5 h-5 text-accent-600" />
+                <div className="w-10 h-10 rounded-lg bg-accent-500/20 flex items-center justify-center mb-4">
+                  <Clock className="w-5 h-5 text-accent-400" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-3">Čas</h3>
-                <p className="text-sm text-gray-600">Sobota + neděle. Program 9:00–17:00 oba dny.</p>
+                <h3 className="font-semibold text-white mb-3">Čas</h3>
+                <p className="text-sm text-slate-300">Sobota + neděle. Program 9:00–17:00 oba dny.</p>
               </motion.div>
             </div>
           </div>
         </section>
 
         {/* Day Schedules */}
-        <section className="section-padding">
+        <section className="section-padding bg-night">
           <div className="section-container">
-            <h2 className="heading-2 text-center mb-10">Program tábora</h2>
+            <h2 className="heading-2 text-center mb-10 text-white">Program tábora</h2>
 
             {/* Day Tabs */}
-            <div className="flex gap-4 mb-8 justify-center">
+            <div className="flex gap-4 mb-8 justify-center flex-wrap">
               <button
                 onClick={() => setActiveDay('sobota')}
                 className={`px-6 py-3 rounded-lg font-semibold transition-all ${
                   activeDay === 'sobota'
-                    ? 'bg-accent-600 text-white shadow-lg'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    ? 'bg-primary-500/20 text-primary-300 border border-primary-500/40'
+                    : 'bg-white/5 text-slate-400 border border-white/10 hover:bg-white/10'
                 }`}
               >
                 <div className="flex items-center gap-2">
@@ -295,8 +323,8 @@ export default function KVMix() {
                 onClick={() => setActiveDay('neděle')}
                 className={`px-6 py-3 rounded-lg font-semibold transition-all ${
                   activeDay === 'neděle'
-                    ? 'bg-accent-600 text-white shadow-lg'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    ? 'bg-trust-500/20 text-trust-300 border border-trust-500/40'
+                    : 'bg-white/5 text-slate-400 border border-white/10 hover:bg-white/10'
                 }`}
               >
                 <div className="flex items-center gap-2">
@@ -317,17 +345,17 @@ export default function KVMix() {
                 className="max-w-3xl mx-auto space-y-3"
               >
                 {(activeDay === 'sobota' ? sobotaProgram : nedeleProgram).map((item, i) => (
-                  <div key={i} className="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-sm transition-shadow">
+                  <div key={i} className="card-glow rounded-lg overflow-hidden hover:border-accent-400/60 transition-all">
                     <div className="p-4 flex gap-4">
                       <div className="flex-shrink-0">
-                        <span className="inline-flex items-center justify-center w-16 h-16 rounded-lg bg-accent-100">
-                          <span className="font-semibold text-accent-600 text-sm">{item.time}</span>
+                        <span className="inline-flex items-center justify-center w-16 h-16 rounded-lg bg-accent-500/20">
+                          <span className="font-mono font-semibold text-accent-300 text-sm">{item.time}</span>
                         </span>
                       </div>
                       <div className="flex-grow">
-                        <h4 className="font-semibold text-gray-900">{item.title}</h4>
+                        <h4 className="font-semibold text-white">{item.title}</h4>
                         {item.description && (
-                          <p className="text-sm text-gray-600 mt-1">{item.description}</p>
+                          <p className="text-sm text-slate-400 mt-1">{item.description}</p>
                         )}
                       </div>
                     </div>
@@ -345,9 +373,9 @@ export default function KVMix() {
         <ProjectGallery />
 
         {/* Terms */}
-        <section id="terminy" className="section-padding bg-gray-50">
+        <section id="terminy" className="section-padding bg-night-800">
           <div className="section-container">
-            <h2 className="heading-2 text-center mb-10">Termíny — {location.name}</h2>
+            <h2 className="heading-2 text-center mb-10 text-white">Termíny — {location.name}</h2>
             {terms.length > 0 ? (
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
                 {terms.map((term) => (
@@ -356,17 +384,17 @@ export default function KVMix() {
                     initial={{ opacity: 0, y: 10 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className={`bg-white rounded-xl p-6 ${term.status === 'preparing' ? 'border-2 border-dashed border-gray-300' : 'border border-gray-200 shadow-sm'}`}
+                    className={`rounded-xl p-6 ${term.status === 'preparing' ? 'card-glow border-dashed' : 'card-glow'}`}
                   >
                     <div className="flex items-center gap-2 mb-3">
-                      <Calendar className="w-5 h-5 text-accent-500" />
-                      <span className="font-semibold text-gray-900">
+                      <Calendar className="w-5 h-5 text-accent-400" />
+                      <span className="font-semibold text-white">
                         {new Date(term.startDate).toLocaleDateString('cs-CZ', { day: 'numeric', month: 'long' })}
                         {' – '}
                         {new Date(term.endDate).toLocaleDateString('cs-CZ', { day: 'numeric', month: 'long' })}
                       </span>
                     </div>
-                    <p className="text-sm text-gray-500 mb-4">So + Ne · {venue.name}</p>
+                    <p className="text-sm text-slate-400 mb-4">So + Ne · {venue.name}</p>
                     {term.status === 'confirmed' ? (
                       <Link
                         href={`/registrace?location=${location.id}&program=${program.id}&term=${term.id}`}
@@ -399,9 +427,9 @@ export default function KVMix() {
         </section>
 
         {/* FAQ Section */}
-        <section className="section-padding">
+        <section className="section-padding bg-night">
           <div className="section-container max-w-3xl">
-            <h2 className="heading-2 text-center mb-10">Často kladené otázky</h2>
+            <h2 className="heading-2 text-center mb-10 text-white">Často kladené otázky</h2>
             <div className="space-y-3">
               {campFaqs.map((faq, i) => (
                 <motion.div
@@ -409,15 +437,15 @@ export default function KVMix() {
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
                   viewport={{ once: true }}
-                  className="bg-white border border-gray-200 rounded-lg overflow-hidden"
+                  className="card-glow rounded-lg overflow-hidden"
                 >
                   <button
                     onClick={() => setOpenFaqIndex(openFaqIndex === i ? null : i)}
-                    className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
+                    className="w-full px-6 py-4 flex items-center justify-between hover:bg-night-700/50 transition-colors"
                   >
-                    <h3 className="font-semibold text-gray-900 text-left">{faq.question}</h3>
+                    <h3 className="font-semibold text-white text-left">{faq.question}</h3>
                     <ChevronDown
-                      className={`w-5 h-5 text-accent-600 flex-shrink-0 transition-transform ${
+                      className={`w-5 h-5 text-accent-400 flex-shrink-0 transition-transform ${
                         openFaqIndex === i ? 'rotate-180' : ''
                       }`}
                     />
@@ -429,9 +457,9 @@ export default function KVMix() {
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
                         transition={{ duration: 0.2 }}
-                        className="border-t border-gray-100 bg-gray-50"
+                        className="border-t border-white/10 bg-night-800/50"
                       >
-                        <p className="px-6 py-4 text-gray-600">{faq.answer}</p>
+                        <p className="px-6 py-4 text-slate-300">{faq.answer}</p>
                       </motion.div>
                     )}
                   </AnimatePresence>
@@ -442,7 +470,7 @@ export default function KVMix() {
         </section>
 
         {/* Bottom CTA */}
-        <section className="relative py-20 bg-gradient-to-br from-accent-600 via-accent-700 to-accent-800 overflow-hidden">
+        <section className="relative py-20 bg-gradient-to-br from-primary-600/10 via-accent-600/10 to-trust-600/10 border-t border-white/10 overflow-hidden">
           <div className="section-container relative z-10">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -450,8 +478,8 @@ export default function KVMix() {
               viewport={{ once: true }}
               className="max-w-2xl mx-auto text-center"
             >
-              <h2 className="heading-1 text-white mb-4">3D tisk, IoT i VR za jeden víkend</h2>
-              <p className="text-lg text-white/80 mb-8">
+              <h2 className="heading-2 text-white mb-4">3D tisk, IoT i VR za jeden víkend</h2>
+              <p className="text-lg text-slate-300 mb-8">
                 Vaše dítě projde všemi technologiemi za 2 dny a odnese si domů vlastní projekty. Žádné předchozí zkušenosti nepotřebuje.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">

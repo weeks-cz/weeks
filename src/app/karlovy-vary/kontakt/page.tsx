@@ -14,12 +14,12 @@ export default function KVKontakt() {
   return (
     <>
       <Header />
-      <main className="pt-20">
-        <section className="section-padding">
+      <main className="pt-20 bg-night">
+        <section className="section-padding bg-night">
           <div className="section-container">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12">
-              <h1 className="heading-1 mb-4">Kontakt — {location.name}</h1>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              <h1 className="heading-1 text-white mb-4">Kontakt — {location.name}</h1>
+              <p className="text-lg text-slate-300 max-w-2xl mx-auto">
                 Máte dotazy ohledně IT táborů v {location.name === 'Karlovy Vary' ? 'Karlových Varech' : location.name}? Rádi vám pomůžeme.
               </p>
             </motion.div>
@@ -27,43 +27,44 @@ export default function KVKontakt() {
             <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
               {/* Contact info */}
               <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }}>
-                <div className="bg-white rounded-2xl border border-gray-200 p-8 space-y-6">
-                  <h2 className="text-xl font-semibold text-gray-900">Spojte se s námi</h2>
+                <div className="card-glow rounded-2xl p-8 space-y-6">
+                  <h2 className="text-xl font-semibold text-white">Spojte se s námi</h2>
                   <div className="space-y-4">
-                    <a href={`mailto:${location.contact.email}`} className="flex items-center gap-3 text-gray-600 hover:text-primary-600 transition-colors">
-                      <Mail className="w-5 h-5 text-primary-500" />
-                      <span>{location.contact.email}</span>
+                    <a href={`mailto:${location.contact.email}`} className="flex items-center gap-3 text-slate-300 hover:text-accent-400 transition-colors">
+                      <Mail className="w-5 h-5 text-accent-400" />
+                      <span className="font-mono text-sm uppercase tracking-wide">{location.contact.email}</span>
                     </a>
-                    <a href={`tel:${location.contact.phone.replace(/\s/g, '')}`} className="flex items-center gap-3 text-gray-600 hover:text-primary-600 transition-colors">
-                      <Phone className="w-5 h-5 text-primary-500" />
-                      <span>{location.contact.phone}</span>
+                    <a href={`tel:${location.contact.phone.replace(/\s/g, '')}`} className="flex items-center gap-3 text-slate-300 hover:text-accent-400 transition-colors">
+                      <Phone className="w-5 h-5 text-accent-400" />
+                      <span className="font-mono text-sm uppercase tracking-wide">{location.contact.phone}</span>
                     </a>
                   </div>
-                  <div className="pt-4 border-t border-gray-100">
-                    <h3 className="font-medium text-gray-900 mb-2">Organizátor</h3>
-                    <p className="text-gray-600">{location.organizer.fullName}</p>
+                  <div className="pt-4 border-t border-white/10">
+                    <h3 className="font-medium text-white mb-2 data-label">ORGANIZÁTOR</h3>
+                    <p className="text-slate-300">{location.organizer.fullName}</p>
                   </div>
                 </div>
               </motion.div>
 
               {/* Venue card */}
               <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }}>
-                <div className="bg-white rounded-2xl border border-gray-200 p-8 space-y-4">
-                  <h2 className="text-xl font-semibold text-gray-900">Místo konání</h2>
+                <div className="card-glow rounded-2xl p-8 space-y-4">
+                  <h2 className="text-xl font-semibold text-white">Místo konání</h2>
                   <div>
-                    <h3 className="font-medium text-gray-900">{venue.name}</h3>
-                    <p className="text-sm text-gray-500">{venue.fullName}</p>
+                    <h3 className="font-medium text-white">{venue.name}</h3>
+                    <p className="text-sm text-slate-400">{venue.fullName}</p>
                   </div>
-                  <div className="flex items-start gap-3 text-gray-600">
-                    <MapPin className="w-5 h-5 text-primary-500 flex-shrink-0 mt-0.5" />
+                  <div className="flex items-start gap-3 text-slate-300">
+                    <MapPin className="w-5 h-5 text-accent-400 flex-shrink-0 mt-0.5" />
                     <div>
+                      <p className="font-mono text-xs uppercase tracking-wide mb-2">ADRESA</p>
                       <p>{venue.address}</p>
                       <p>{venue.city}, {venue.postalCode}</p>
                     </div>
                   </div>
-                  <p className="text-sm text-gray-600">{venue.description}</p>
+                  <p className="text-sm text-slate-400">{venue.description}</p>
                   {venue.url && (
-                    <a href={venue.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 text-sm font-medium">
+                    <a href={venue.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-accent-400 hover:text-accent-300 text-sm font-medium">
                       <ExternalLink className="w-4 h-4" />
                       {venue.url.replace('https://', '')}
                     </a>
@@ -79,7 +80,7 @@ export default function KVKontakt() {
               transition={{ delay: 0.3 }}
               className="max-w-4xl mx-auto mt-8"
             >
-              <div className="rounded-2xl overflow-hidden border border-gray-200 shadow-sm">
+              <div className="rounded-lg overflow-hidden border border-white/10 shadow-glow">
                 <iframe
                   title={`Mapa – ${venue.name}`}
                   src={`https://maps.google.com/maps?q=${venue.mapQuery ?? encodeURIComponent(`${venue.address}, ${venue.city}`)}&output=embed&z=16`}
@@ -90,12 +91,12 @@ export default function KVKontakt() {
                   className="block"
                 />
               </div>
-              <p className="text-center text-sm text-gray-500 mt-3">
+              <p className="text-center text-sm text-slate-400 mt-3">
                 <a
                   href={`https://www.google.com/maps/search/?api=1&query=${venue.mapQuery ?? encodeURIComponent(`${venue.address}, ${venue.city}`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-primary-600 hover:underline"
+                  className="text-accent-400 hover:underline"
                 >
                   Otevřít v Google Maps
                 </a>

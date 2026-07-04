@@ -17,7 +17,7 @@ const projects = [
 
 export function ProjectGallery() {
   return (
-    <section className="section-padding bg-white">
+    <section className="section-padding bg-night">
       <div className="section-container">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -25,14 +25,14 @@ export function ProjectGallery() {
           viewport={{ once: true }}
           className="max-w-2xl mx-auto text-center mb-12"
         >
-          <span className="inline-flex items-center gap-2 px-4 py-2 bg-accent-50 text-accent-700 rounded-full text-sm font-medium mb-4">
+          <span className="inline-flex items-center gap-2 px-4 py-2 bg-primary-500/10 text-primary-400 rounded-full text-sm font-medium mb-4 border border-primary-500/20">
             <Sparkles className="w-4 h-4" />
             Hmatatelný výsledek
           </span>
-          <h2 className="heading-2 text-gray-900 mb-4">
+          <h2 className="heading-2 text-white mb-4">
             Co si vaše dítě <span className="text-gradient">odnese domů</span>
           </h2>
-          <p className="text-lg text-gray-600">
+          <p className="text-lg text-slate-300">
             Žádné pracovní listy do šuplíku. Každé dítě si odnáší vlastnoručně navržené
             a vytisknuté 3D modely i sestavené chytré zařízení — a hlavně zkušenost, že to dokáže.
           </p>
@@ -46,7 +46,7 @@ export function ProjectGallery() {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.06 }}
-              className="group relative aspect-[4/3] rounded-2xl overflow-hidden shadow-sm"
+              className="group relative aspect-[4/3] rounded-lg overflow-hidden border border-white/10 hover:border-accent-400/60 transition-all duration-300 hover:shadow-glow"
             >
               <Image
                 src={p.src}

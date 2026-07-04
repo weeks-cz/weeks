@@ -18,7 +18,7 @@ export function VenueShowcase() {
   const venue = location.venues[0]
 
   return (
-    <section className="section-padding bg-gray-900 overflow-hidden">
+    <section className="section-padding bg-night overflow-hidden">
       <div className="section-container">
         <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
           {/* Text */}
@@ -37,7 +37,7 @@ export function VenueShowcase() {
                 VARY&amp;TE
               </span>
             </h2>
-            <p className="text-lg text-gray-300 mb-8 leading-relaxed">
+            <p className="text-lg text-slate-300 mb-8 leading-relaxed">
               Tábory probíhají v{' '}{venue.name} — největším kreativním centru
               v{' '}Karlovarském kraji. Děti tvoří v{' '}profesionálně vybaveném
               prostoru, jaký by doma ani ve škole nenašly.
@@ -48,11 +48,11 @@ export function VenueShowcase() {
                   <div className="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0">
                     <f.icon className="w-5 h-5 text-accent-400" />
                   </div>
-                  <span className="text-gray-200 pt-1.5">{f.text}</span>
+                  <span className="text-slate-300 pt-1.5">{f.text}</span>
                 </li>
               ))}
             </ul>
-            <p className="mt-8 text-sm text-gray-400 flex items-center gap-2">
+            <p className="mt-8 text-sm text-slate-400 flex items-center gap-2">
               <MapPin className="w-4 h-4 flex-shrink-0" />
               {venue.address}, {venue.city}
             </p>
@@ -65,13 +65,13 @@ export function VenueShowcase() {
             viewport={{ once: true }}
             className="grid grid-cols-2 gap-3 sm:gap-4"
           >
-            <div className="relative col-span-2 aspect-[16/9] rounded-2xl overflow-hidden">
+            <div className="relative col-span-2 aspect-[16/9] rounded-lg overflow-hidden border border-white/10 hover:border-accent-400/60 transition-all duration-300 hover:shadow-glow">
               <Image src="/images/varyete/fablab-1.avif" alt="FabLab VARY&TE — práce s 3D tiskem" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
             </div>
-            <div className="relative aspect-square rounded-2xl overflow-hidden">
+            <div className="relative aspect-square rounded-lg overflow-hidden border border-white/10 hover:border-accent-400/60 transition-all duration-300 hover:shadow-glow">
               <Image src="/images/varyete/fablab-5.avif" alt="Pracoviště ve FabLabu VARY&TE" fill sizes="(max-width: 1024px) 50vw, 25vw" className="object-cover" />
             </div>
-            <div className="relative aspect-square rounded-2xl overflow-hidden">
+            <div className="relative aspect-square rounded-lg overflow-hidden border border-white/10 hover:border-accent-400/60 transition-all duration-300 hover:shadow-glow">
               <Image src="/images/varyete/fablab-6.avif" alt="Tvoření ve FabLabu VARY&TE" fill sizes="(max-width: 1024px) 50vw, 25vw" className="object-cover" />
             </div>
           </motion.div>
