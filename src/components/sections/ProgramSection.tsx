@@ -1,11 +1,11 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Printer, Cpu, Box, Globe, Gamepad2, Code2, Sparkles, ArrowRight, Calendar } from 'lucide-react'
-import Image from 'next/image'
+import { Printer, Cpu, Box, Globe, Gamepad2, Code2, Sparkles, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import { useLocation } from '@/contexts/LocationContext'
 import { buildPath } from '@/lib/locations'
+import { CountUp } from '@/components/effects/CountUp'
 
 // Všechny 3 hlavní tábory - rovnocenné
 const mainCamps = [
@@ -87,36 +87,6 @@ const specializations = [
   },
 ]
 
-const colorClasses = {
-  primary: {
-    bg: 'bg-primary-500',
-    bgLight: 'bg-primary-50',
-    text: 'text-primary-600',
-    border: 'border-primary-200',
-    gradient: 'from-primary-500 to-primary-600',
-  },
-  accent: {
-    bg: 'bg-accent-500',
-    bgLight: 'bg-accent-50',
-    text: 'text-accent-600',
-    border: 'border-accent-200',
-    gradient: 'from-accent-500 to-accent-600',
-  },
-  trust: {
-    bg: 'bg-trust-500',
-    bgLight: 'bg-trust-50',
-    text: 'text-trust-600',
-    border: 'border-trust-200',
-    gradient: 'from-trust-500 to-trust-600',
-  },
-  cta: {
-    bg: 'bg-cta-500',
-    bgLight: 'bg-cta-50',
-    text: 'text-cta-600',
-    border: 'border-cta-200',
-    gradient: 'from-cta-500 to-cta-600',
-  },
-}
 
 export function ProgramSection() {
   const location = useLocation()
@@ -128,60 +98,39 @@ export function ProgramSection() {
         href: 'letni-primestsky',
         badgeLabel: 'Příměstský · 5 dní',
         description: '3D tisk, vlastní 3D modely a IoT s Arduinem — celý pracovní týden ve FabLabu VARY&TE.',
-        image: '/images/program-mix.webp',
       },
       {
         program: location.programs.find(p => p.id === 'mix'),
         href: 'tabor-chytrych-technologii',
         badgeLabel: 'Víkend · So + Ne',
         description: '3D tisk, IoT, VR i základy programování za jeden víkend — projekty na sebe navazují přes noc.',
-        image: '/images/program-mix.webp',
       },
     ].filter(item => item.program)
 
     return (
-      <section id="program" className="section-padding bg-gray-50 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-40">
-          <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary-200 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent-200 rounded-full blur-3xl" />
-        </div>
-        <div className="section-container relative z-10">
-          <div className="text-center max-w-3xl mx-auto mb-12">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full text-sm font-medium text-gray-600 shadow-sm mb-6"
-            >
-              <span className="w-2 h-2 rounded-full bg-trust-500 animate-pulse" />
-              Léto 2026 — Karlovy Vary
-            </motion.div>
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4"
-            >
+      <section id="program" className="section-padding bg-night">
+        <div className="section-container">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mb-12"
+          >
+            <p className="data-label mb-4">01 / TÁBORY</p>
+            <h2 className="heading-2">
               Vyberte si formát
               <br />
-              <span className="text-gradient">tábora chytrých technologií</span>
-            </motion.h2>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
-              className="text-lg text-gray-600"
-            >
+              tábora chytrých technologií
+            </h2>
+            <p className="text-slate-400 mt-6 max-w-2xl">
               Celotýdenní příměstský tábor (Po–Pá) nebo víkendový MIX (So–Ne) —
               všechny termíny ve FabLabu Kreativního centra VARY&TE.
-            </motion.p>
-          </div>
+            </p>
+          </motion.div>
 
           <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
             {kvPrograms.map((item, idx) => {
               const program = item.program!
-              const colors = colorClasses[program.color as keyof typeof colorClasses]
               return (
                 <motion.div
                   key={program.id}
@@ -192,48 +141,38 @@ export function ProgramSection() {
                 >
                   <Link
                     href={buildPath(location, item.href)}
-                    className="group relative bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 block h-full flex flex-col"
+                    className="group card-glow p-6 flex flex-col h-full"
                   >
-                    <div className="relative h-48 overflow-hidden">
-                      <Image
-                        src={item.image}
-                        alt={program.name}
-                        fill
-                        sizes="(max-width: 768px) 100vw, 50vw"
-                        className="object-cover group-hover:scale-105 transition-transform duration-700"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-gray-900/20 to-transparent" />
-                      <div className="absolute top-3 left-3 z-10">
-                        <div className={`px-2.5 py-1 rounded-full ${colors.bg} text-xs font-semibold text-white shadow-lg`}>
-                          {item.badgeLabel}
-                        </div>
-                      </div>
-                      <div className="absolute bottom-3 left-3">
-                        <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${colors.gradient} flex items-center justify-center shadow-lg`}>
-                          <Sparkles className="w-5 h-5 text-white" />
-                        </div>
+                    <div className="absolute top-0 left-0 right-0 h-0.5 border-t-primary-400" style={{ height: '2px' }} />
+
+                    {/* Metadata */}
+                    <div className="mb-4 pb-4 border-b border-white/10">
+                      <p className="data-label text-xs">
+                        {item.badgeLabel} · {program.price.toLocaleString('cs-CZ')} Kč
+                      </p>
+                    </div>
+
+                    {/* Icon and badge */}
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="w-10 h-10 rounded-lg bg-night flex items-center justify-center">
+                        <Sparkles className="w-5 h-5 text-accent-400" />
                       </div>
                     </div>
-                    <div className="p-6 flex-grow flex flex-col">
-                      <div className="flex items-center justify-between mb-3">
-                        <h3 className="font-display text-xl font-bold text-gray-900 group-hover:text-primary-600 transition-colors">
-                          {program.name}
-                        </h3>
-                        <span className="text-lg font-semibold text-gray-900 whitespace-nowrap ml-4">
-                          {program.price.toLocaleString('cs-CZ')} Kč
-                        </span>
-                      </div>
-                      <p className="text-gray-600 mb-4 flex-grow">
-                        {item.description}
+
+                    {/* Content */}
+                    <h3 className="heading-3 mb-2">
+                      {program.name}
+                    </h3>
+                    <p className="text-slate-400 text-sm leading-relaxed flex-grow">
+                      {item.description}
+                    </p>
+
+                    {/* Terms info */}
+                    <div className="mt-4 pt-4 border-t border-white/10">
+                      <p className="text-xs text-slate-500">
+                        {location.terms.filter(t => t.program === program.id).length} {' '}
+                        {location.terms.filter(t => t.program === program.id).length === 1 ? 'termín' : 'termíny'} v létě 2026
                       </p>
-                      <div className="flex items-center gap-2 pt-3 border-t border-gray-100">
-                        <Calendar className="w-4 h-4 text-gray-400 flex-shrink-0" />
-                        <span className="text-xs text-gray-500">
-                          {location.terms.filter(t => t.program === program.id).length} {' '}
-                          {location.terms.filter(t => t.program === program.id).length === 1 ? 'termín' : 'termíny'} v létě 2026
-                        </span>
-                        <ArrowRight className="w-4 h-4 text-gray-400 ml-auto group-hover:translate-x-1 transition-transform flex-shrink-0" />
-                      </div>
                     </div>
                   </Link>
                 </motion.div>
@@ -246,50 +185,42 @@ export function ProgramSection() {
   }
 
   return (
-    <section id="program" className="section-padding bg-gray-50 relative overflow-hidden">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-40">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary-200 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent-200 rounded-full blur-3xl" />
-      </div>
-
-      <div className="section-container relative z-10">
+    <section id="program" className="section-padding bg-night">
+      <div className="section-container">
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full text-sm font-medium text-gray-600 shadow-sm mb-6"
-          >
-            <span className="w-2 h-2 rounded-full bg-trust-500 animate-pulse" />
-            7 programů na výběr
-          </motion.div>
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4"
-          >
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mb-12"
+        >
+          <p className="data-label mb-4">01 / TÁBORY</p>
+          <h2 className="heading-2">
             Vyberte si podle toho,
             <br />
-            <span className="text-gradient">co vaše dítě baví</span>
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="text-lg text-gray-600"
-          >
+            co vaše dítě baví
+          </h2>
+          <p className="text-slate-400 mt-6 max-w-2xl">
             Nebo zkuste všechno! Každý si odnese vlastní projekt a nové znalosti.
-          </motion.p>
-        </div>
+          </p>
+        </motion.div>
 
         {/* Hlavní tábory - všechny 3 rovnocenně */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           {mainCamps.map((camp, index) => {
-            const colors = colorClasses[camp.color as keyof typeof colorClasses]
+            // Determine day format from nextDates
+            let dayFormat = ''
+            if (camp.id === 'mix') {
+              dayFormat = 'SO+NE'
+            } else if (camp.id === '3d-tisk') {
+              dayFormat = 'NE'
+            } else if (camp.id === 'iot') {
+              dayFormat = 'SO'
+            }
+
+            // Determine border color
+            const borderColor = camp.id === 'iot' ? 'border-t-trust-400' : 'border-t-primary-400'
+
             return (
               <motion.div
                 key={camp.id}
@@ -300,59 +231,37 @@ export function ProgramSection() {
               >
                 <Link
                   href={buildPath(location, camp.href.replace(/^\//, ''))}
-                  className="group relative bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 block h-full"
+                  className="group card-glow p-6 flex flex-col h-full"
                 >
-                  {/* Image */}
-                  <div className="relative h-48 overflow-hidden">
-                    <Image
-                      src={camp.image}
-                      alt={`${camp.title} - tábor pro děti`}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                      className="object-cover group-hover:scale-105 transition-transform duration-700"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-gray-900/20 to-transparent" />
+                  {/* Top border accent */}
+                  <div className={`absolute top-0 left-0 right-0 h-0.5 ${borderColor}`} style={{ height: '2px' }} />
 
-                    {/* Badge */}
-                    <div className="absolute top-3 left-3 z-10">
-                      <div className={`px-2.5 py-1 rounded-full ${colors.bg} text-xs font-semibold text-white shadow-lg`}>
+                  {/* Metadata row */}
+                  <div className="mb-4 pb-4 border-b border-white/10">
+                    <p className="data-label text-xs">
+                      {dayFormat} · {camp.price} · MAX 15
+                    </p>
+                  </div>
+
+                  {/* Icon and badge */}
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="w-10 h-10 rounded-lg bg-night flex items-center justify-center">
+                      <camp.icon className="w-5 h-5 text-accent-400" />
+                    </div>
+                    {camp.badge && (
+                      <div className="font-mono text-xs border border-white/20 rounded px-2 py-0.5 text-slate-300">
                         {camp.badge}
                       </div>
-                    </div>
-
-                    {/* Icon */}
-                    <div className="absolute bottom-3 left-3">
-                      <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${colors.gradient} flex items-center justify-center shadow-lg`}>
-                        <camp.icon className="w-5 h-5 text-white" />
-                      </div>
-                    </div>
+                    )}
                   </div>
 
                   {/* Content */}
-                  <div className="p-5 flex flex-col flex-1">
-                    <div className="flex items-center justify-between mb-2">
-                      <h4 className="font-display text-lg font-bold text-gray-900 group-hover:text-primary-600 transition-colors">
-                        {camp.title}
-                      </h4>
-                      <span className="text-sm font-semibold text-gray-900">{camp.price}</span>
-                    </div>
-                    <p className="text-sm text-gray-600 leading-relaxed mb-4 flex-1">
-                      {camp.description}
-                    </p>
-
-                    {/* Next dates */}
-                    <div className="flex items-center gap-4 pt-3 border-t border-gray-100">
-                      <Calendar className="w-4 h-4 text-gray-400 flex-shrink-0" />
-                      <div className="flex flex-wrap gap-2">
-                        {camp.nextDates.map((date, i) => (
-                          <span key={i} className="text-xs font-medium text-gray-600 bg-gray-50 px-2 py-0.5 rounded">
-                            {date}
-                          </span>
-                        ))}
-                      </div>
-                      <ArrowRight className="w-4 h-4 text-gray-400 ml-auto group-hover:translate-x-1 transition-transform flex-shrink-0" />
-                    </div>
-                  </div>
+                  <h4 className="heading-3 mb-2">
+                    {camp.title}
+                  </h4>
+                  <p className="text-slate-400 text-sm leading-relaxed flex-grow">
+                    {camp.description}
+                  </p>
                 </Link>
               </motion.div>
             )
@@ -364,20 +273,19 @@ export function ProgramSection() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-8"
+          className="mb-8"
         >
-          <h3 className="text-xl font-semibold text-gray-700">
+          <h3 className="heading-3 text-white">
             Další specializace
           </h3>
-          <p className="text-gray-500 mt-1">
+          <p className="text-slate-400 mt-2 text-sm">
             Pro děti, které už vědí, čemu se chtějí věnovat
           </p>
         </motion.div>
 
         {/* Specializace Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
           {specializations.map((program, index) => {
-            const colors = colorClasses[program.color as keyof typeof colorClasses]
             return (
               <motion.div
                 key={program.id}
@@ -388,65 +296,32 @@ export function ProgramSection() {
               >
                 <Link
                   href={buildPath(location, `program#${program.id}`)}
-                  className="group relative bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 block"
+                  className="group card-glow p-6 flex flex-col h-full"
                 >
-                  {/* Image */}
-                  <div className="relative h-40 overflow-hidden">
-                    <Image
-                      src={program.image}
-                      alt={`${program.title} - ukázka z víkendového tábora`}
-                      fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-                      className="object-cover group-hover:scale-105 transition-transform duration-700"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-gray-900/20 to-transparent" />
-
-                    {/* Badge */}
-                    <div className="absolute top-3 right-3">
-                      <div className={`px-2.5 py-1 rounded-full bg-white/90 backdrop-blur-sm text-xs font-semibold ${colors.text}`}>
+                  {/* Icon and badge */}
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="w-10 h-10 rounded-lg bg-night flex items-center justify-center">
+                      <program.icon className="w-5 h-5 text-accent-400" />
+                    </div>
+                    {program.badge && (
+                      <div className="font-mono text-xs border border-white/20 rounded px-2 py-0.5 text-slate-300">
                         {program.badge}
                       </div>
-                    </div>
-
-                    {/* Icon */}
-                    <div className="absolute bottom-3 left-3">
-                      <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${colors.gradient} flex items-center justify-center shadow-lg`}>
-                        <program.icon className="w-5 h-5 text-white" />
-                      </div>
-                    </div>
+                    )}
                   </div>
 
                   {/* Content */}
-                  <div className="p-5">
-                    <h4 className="font-display text-lg font-bold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors">
-                      {program.title}
-                    </h4>
-                    <p className="text-sm text-gray-600 leading-relaxed">
-                      {program.description}
-                    </p>
-                  </div>
+                  <h4 className="heading-3 mb-2">
+                    {program.title}
+                  </h4>
+                  <p className="text-slate-400 text-sm leading-relaxed">
+                    {program.description}
+                  </p>
                 </Link>
               </motion.div>
             )
           })}
         </div>
-
-        {/* CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.3 }}
-          className="mt-12 text-center"
-        >
-          <Link
-            href={buildPath(location, 'program')}
-            className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 font-semibold group"
-          >
-            Zobrazit detaily všech programů
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </Link>
-        </motion.div>
       </div>
     </section>
   )

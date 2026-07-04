@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion'
 import { Building2, Package, GraduationCap, Shield, Clock, Train } from 'lucide-react'
 import { useLocation } from '@/contexts/LocationContext'
+import { CountUp } from '@/components/effects/CountUp'
 
 const defaultTechnologyUsp = {
   icon: Building2,
@@ -40,54 +41,63 @@ export function USPSection() {
     ? { icon: Clock, ...location.usps.schedule }
     : defaultScheduleUsp
 
+  // Build the USP list with indices
+  const usps = [techUsp, ...genericUsps, scheduleUsp, { icon: Shield, title: location.usps.organizer.title, description: location.usps.organizer.description }, { icon: Train, title: location.usps.location.title, description: location.usps.location.description }]
+
   return (
-    <section id="proc-weeks" className="section-padding bg-gray-50">
+    <section id="proc-weeks" className="section-padding bg-night">
       <div className="section-container">
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="heading-2 text-gray-900 mb-4"
-          >
-            Proč zvolit <span className="text-gradient">Weeks</span>?
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="text-xl text-gray-600"
-          >
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mb-16"
+        >
+          <p className="data-label mb-4">02 / PROČ WEEKS</p>
+          <h2 className="heading-2">
             Kombinace profesionálního zázemí, odborných lektorů a zábavy.
-          </motion.p>
-        </div>
+          </h2>
+        </motion.div>
 
-        {/* USP Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {[techUsp, ...genericUsps, scheduleUsp, { icon: Shield, title: location.usps.organizer.title, description: location.usps.organizer.description }, { icon: Train, title: location.usps.location.title, description: location.usps.location.description }].map((usp, index) => (
-            <motion.div
-              key={usp.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              className="flex gap-4"
-            >
-              <div className="flex-shrink-0 w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center">
-                <usp.icon className="w-6 h-6 text-primary-600" />
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-1">
-                  {usp.title}
-                </h3>
-                <p className="text-gray-600">
-                  {usp.description}
-                </p>
-              </div>
-            </motion.div>
-          ))}
+        {/* USP Rows */}
+        <div className="space-y-8 max-w-3xl">
+          {usps.map((usp, index) => {
+            const indexNum = String(index + 1).padStart(2, '0')
+
+            return (
+              <motion.div
+                key={usp.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.05 }}
+                className="border-t border-white/10 pt-6 first:border-t-0 first:pt-0"
+              >
+                <div className="flex gap-6">
+                  {/* Index */}
+                  <div className="flex-shrink-0 w-12 flex items-start">
+                    <p className="font-mono text-sm text-white/30">
+                      {indexNum}
+                    </p>
+                  </div>
+
+                  {/* Content */}
+                  <div className="flex-grow">
+                    <div className="flex items-start gap-3 mb-2">
+                      <usp.icon className="w-5 h-5 text-accent-400 mt-0.5 flex-shrink-0" />
+                      <h3 className="heading-3">
+                        {usp.title}
+                      </h3>
+                    </div>
+                    <p className="text-slate-400 text-sm leading-relaxed">
+                      {usp.description}
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+            )
+          })}
         </div>
       </div>
     </section>
