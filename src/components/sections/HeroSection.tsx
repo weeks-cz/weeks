@@ -1,168 +1,153 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { ArrowRight, Sparkles, Play, MapPin } from 'lucide-react'
+import { ArrowRight, Play, MapPin } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { trackViewTerms } from '@/lib/analytics'
 import { useLocation } from '@/contexts/LocationContext'
+import { AuroraGlow } from '@/components/effects/AuroraGlow'
+import { MagneticButton } from '@/components/effects/MagneticButton'
 
 export function HeroSection() {
   const location = useLocation()
-  // Věk bereme z configu lokace (Praha 10–15, KV 9–15), ne natvrdo.
   const ageLabel = (location.programs[0]?.ageRange ?? '10-15').replace('-', '–')
+
   return (
-    <section className="relative min-h-screen flex items-center pt-32 pb-24 overflow-hidden">
-      {/* Background Image with Overlay */}
-      <div className="absolute inset-0">
-        <Image
-          src={location.isDefault ? '/images/hwlab/hwlab-7976.webp' : '/images/program-mix.webp'}
-          alt={location.isDefault
-            ? 'HWLab — učebna s počítači a 3D tiskárnami'
-            : `FabLab VARY&TE — IT tábor v ${location.name}`}
-          fill
-          sizes="100vw"
-          className="object-cover"
-          priority
-          quality={75}
-        />
-        {/* Stronger gradient overlay for better readability */}
-        <div className="absolute inset-0 bg-gradient-to-r from-gray-900/95 via-gray-900/85 to-gray-900/60" />
-        <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-gray-900/30" />
-      </div>
+    <section className="relative bg-night noise overflow-hidden min-h-screen flex items-center pt-32 pb-24">
+      {/* Aurora Glow Background */}
+      <AuroraGlow />
 
       <div className="section-container relative z-10">
-        <div className="max-w-3xl">
-          {/* Badge */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm text-white/90 rounded-full text-sm font-medium mb-8 border border-white/20"
-          >
-            <Sparkles className="w-4 h-4 text-cta-400" />
-            <span>{location.hero.badge}</span>
-            <span className="w-px h-4 bg-white/30" />
-            <span className="text-cta-400">Registrace otevřena</span>
-          </motion.div>
-
-          {/* Headline */}
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="font-display text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight text-white mb-6 leading-[1.1]"
-          >
-            IT tábory,
-            <br />
-            <span className="bg-gradient-to-r from-primary-400 via-accent-400 to-primary-400 bg-clip-text text-transparent">
-              kde děti tvoří budoucnost
-            </span>
-          </motion.h1>
-
-          {/* Subheadline */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-lg md:text-xl text-gray-300 mb-10 max-w-2xl leading-relaxed"
-          >
-            {location.hero.subtitle} Profesionální vybavení,
-            zkušení instruktoři a projekty, které si Vaše dítě odnese domů.
-            <span className="text-white font-medium"> Pro děti {ageLabel} let.</span>
-          </motion.p>
-
-          {/* CTAs */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="flex flex-col sm:flex-row gap-4"
-          >
-            <Link
-              href="#prihlasit"
-              className="group inline-flex items-center justify-center px-8 py-4 bg-cta-500 hover:bg-cta-400 text-gray-900 font-semibold rounded-xl transition-all duration-300 hover:shadow-xl hover:shadow-cta-500/30 hover:-translate-y-0.5"
-              onClick={() => trackViewTerms('homepage_hero')}
+        <div className="grid lg:grid-cols-12 gap-12 items-center">
+          {/* Left Column (7 cols) */}
+          <div className="lg:col-span-7 space-y-8">
+            {/* Kicker Label */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="data-label"
             >
-              Vybrat termín
-              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </Link>
-            <Link
-              href="#program"
-              className="group inline-flex items-center justify-center px-8 py-4 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white font-semibold rounded-xl border border-white/20 transition-all duration-300"
-            >
-              <Play className="mr-2 w-5 h-5" />
-              Co děti čeká
-            </Link>
-          </motion.div>
+              {location.hero.badge}
+            </motion.p>
 
-          {/* Trust badges - simplified */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.5 }}
-            className="mt-16 pt-8 pb-4 border-t border-white/10"
-          >
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
-              <div className="flex items-center gap-3 p-3 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10">
-                <div className="w-10 h-10 shrink-0 rounded-lg bg-white/10 flex items-center justify-center overflow-hidden">
-                  {location.organizer.logoUrl ? (
-                    <Image
-                      src={location.organizer.logoUrl}
-                      alt={location.organizer.name}
-                      width={32}
-                      height={32}
-                      className="object-contain w-8 h-8"
-                    />
-                  ) : (
+            {/* Headline */}
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="heading-1"
+            >
+              IT tábory,
+              <br />
+              <span className="text-gradient">kde děti tvoří budoucnost</span>
+            </motion.h1>
+
+            {/* Subheadline */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="text-lg text-slate-400 max-w-xl"
+            >
+              {location.hero.subtitle} Profesionální vybavení,
+              zkušení instruktoři a projekty, které si Vaše dítě odnese domů.
+              <span className="text-white font-medium"> Pro děti {ageLabel} let.</span>
+            </motion.p>
+
+            {/* CTAs */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="flex flex-col sm:flex-row gap-4"
+            >
+              <MagneticButton>
+                <Link
+                  href="#prihlasit"
+                  className="btn-primary inline-flex items-center justify-center px-8 py-4"
+                  onClick={() => trackViewTerms('homepage_hero')}
+                >
+                  Vybrat termín
+                  <ArrowRight className="ml-2 w-5 h-5" />
+                </Link>
+              </MagneticButton>
+              <Link
+                href="#program"
+                className="btn-outline inline-flex items-center justify-center px-8 py-4"
+              >
+                <Play className="mr-2 w-5 h-5" />
+                Co děti čeká
+              </Link>
+            </motion.div>
+
+            {/* Trust Chips */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+              className="pt-8 mt-8 border-t border-white/10 flex flex-col sm:flex-row gap-6"
+            >
+              <div className="flex items-center gap-3">
+                {location.organizer.logoUrl ? (
+                  <Image
+                    src={location.organizer.logoUrl}
+                    alt={location.organizer.name}
+                    width={24}
+                    height={24}
+                    className="w-6 h-6 shrink-0"
+                  />
+                ) : (
+                  <div className="w-6 h-6 rounded bg-white/10 flex items-center justify-center shrink-0">
                     <span className="text-xs font-bold text-white">{location.organizer.name.split(' ')[0]}</span>
-                  )}
-                </div>
-                <div className="min-w-0">
-                  <p className="text-xs text-gray-400">Organizátor</p>
-                  <p className="text-sm font-medium text-white truncate">{location.organizer.name}</p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3 p-3 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10">
-                <div className="w-10 h-10 shrink-0 rounded-lg bg-white/10 flex items-center justify-center">
-                  <MapPin className="w-5 h-5 text-white" />
-                </div>
-                <div className="min-w-0">
-                  <p className="text-xs text-gray-400">Místa konání</p>
-                  <p className="text-sm font-medium text-white truncate">{location.venues.map(v => v.name).join(' & ')}</p>
+                  </div>
+                )}
+                <div>
+                  <p className="data-label text-slate-500">Organizátor</p>
+                  <p className="text-sm text-white">{location.organizer.name}</p>
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 p-3 rounded-xl bg-primary-500/20 backdrop-blur-sm border border-primary-400/30">
-                <div className="h-10 shrink-0 rounded-lg bg-primary-500/30 flex items-center justify-center px-3">
-                  <span className="text-sm font-bold text-white">{ageLabel}</span>
-                </div>
-                <div className="min-w-0">
-                  <p className="text-xs text-gray-400">Věková skupina</p>
-                  <p className="text-sm font-medium text-white">let</p>
+              <div className="flex items-center gap-3">
+                <MapPin className="w-5 h-5 text-white shrink-0" />
+                <div>
+                  <p className="data-label text-slate-500">Místa konání</p>
+                  <p className="text-sm text-white">{location.venues.map(v => v.name).join(' & ')}</p>
                 </div>
               </div>
+
+              <div className="flex items-center gap-3">
+                <div className="px-2 py-1 rounded bg-white/10 text-xs font-bold text-white shrink-0">{ageLabel}</div>
+                <div>
+                  <p className="data-label text-slate-500">Věková skupina</p>
+                  <p className="text-sm text-white">let</p>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Right Column (5 cols) - Photo */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="lg:col-span-5 hidden lg:flex flex-col items-center"
+          >
+            <div className="w-full aspect-square rounded-lg border border-white/15 overflow-hidden shadow-glow">
+              <Image
+                src="/images/hwlab/hero-print-day.webp"
+                alt="HWLab — IT tábor"
+                fill
+                className="object-cover"
+                priority
+                sizes="(max-width: 1024px) 0, (max-width: 1280px) 40vw, 35vw"
+              />
             </div>
+            <p className="font-mono text-sm text-slate-400 mt-4">HWLAB — PRAHA 6</p>
           </motion.div>
         </div>
       </div>
-
-      {/* Scroll indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1, duration: 0.6 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
-      >
-        <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity }}
-          className="w-6 h-10 rounded-full border-2 border-white/30 flex justify-center pt-2"
-        >
-          <motion.div className="w-1.5 h-1.5 rounded-full bg-white/60" />
-        </motion.div>
-      </motion.div>
     </section>
   )
 }
