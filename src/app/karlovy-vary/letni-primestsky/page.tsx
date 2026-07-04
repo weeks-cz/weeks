@@ -126,16 +126,16 @@ const colorMap = {
 function FAQItem({ question, answer }: { question: string; answer: string }) {
   const [isOpen, setIsOpen] = useState(false)
   return (
-    <div className="border-b border-gray-200 last:border-0">
+    <div className="border-b border-white/10 last:border-0">
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         className="w-full py-5 flex items-center justify-between text-left focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded-lg"
         aria-expanded={isOpen}
       >
-        <span className="font-semibold text-gray-900 pr-4">{question}</span>
+        <span className="font-semibold text-white pr-4">{question}</span>
         <ChevronDown
-          className={`w-5 h-5 text-gray-500 transition-transform flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`}
+          className={`w-5 h-5 text-slate-400 transition-transform flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`}
           aria-hidden="true"
         />
       </button>
@@ -148,7 +148,7 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
             transition={{ duration: 0.2 }}
             className="overflow-hidden"
           >
-            <p className="pb-5 text-gray-600">{answer}</p>
+            <p className="pb-5 text-slate-300">{answer}</p>
           </motion.div>
         )}
       </AnimatePresence>
@@ -235,7 +235,7 @@ export default function LetniPrimestskyCampPage() {
               >
                 <a
                   href="#registrace"
-                  className="group inline-flex items-center justify-center px-8 py-4 bg-cta-500 hover:bg-cta-400 text-gray-900 font-semibold rounded-xl transition-all duration-300 hover:shadow-xl hover:shadow-cta-500/30 hover:-translate-y-0.5"
+                  className="group inline-flex items-center justify-center px-8 py-4 bg-cta-500 hover:bg-cta-400 text-night font-semibold rounded-xl transition-all duration-300 hover:shadow-xl hover:shadow-cta-500/30 hover:-translate-y-0.5"
                 >
                   Přihlásit dítě
                   <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -265,7 +265,7 @@ export default function LetniPrimestskyCampPage() {
                     <fact.icon className="w-5 h-5 text-accent-400 flex-shrink-0" />
                     <div>
                       <p className="text-sm font-semibold text-white">{fact.label}</p>
-                      <p className="text-xs text-gray-400">{fact.sublabel}</p>
+                      <p className="text-xs text-slate-400">{fact.sublabel}</p>
                     </div>
                   </div>
                 ))}
@@ -564,7 +564,7 @@ export default function LetniPrimestskyCampPage() {
                         {isConfirmed ? 'Závazná registrace' : 'Nezávazná registrace'}
                         <ArrowRight className="ml-2 w-5 h-5" />
                       </Link>
-                      <p className="text-xs text-gray-500 text-center mt-3">
+                      <p className="text-xs text-slate-400 text-center mt-3">
                         5 kroků · bankovní převod · faktura automaticky
                       </p>
                     </div>
@@ -632,7 +632,7 @@ export default function LetniPrimestskyCampPage() {
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <a
                   href="#registrace"
-                  className="inline-flex items-center justify-center px-8 py-4 bg-white hover:bg-gray-100 text-primary-600 font-semibold rounded-xl transition-all duration-300"
+                  className="inline-flex items-center justify-center px-8 py-4 bg-cta-500 hover:bg-cta-400 text-night font-semibold rounded-xl transition-all duration-300"
                 >
                   Přihlásit dítě
                   <ArrowRight className="ml-2 w-5 h-5" />

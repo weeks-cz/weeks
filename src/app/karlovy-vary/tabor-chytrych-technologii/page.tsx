@@ -175,7 +175,7 @@ export default function KVMix() {
                     <fact.icon className="w-5 h-5 text-accent-400 flex-shrink-0" />
                     <div>
                       <p className="text-sm font-semibold text-white">{fact.label}</p>
-                      <p className="text-xs text-gray-400">{fact.sublabel}</p>
+                      <p className="text-xs text-slate-400">{fact.sublabel}</p>
                     </div>
                   </div>
                 ))}
@@ -421,7 +421,7 @@ export default function KVMix() {
                 ))}
               </div>
             ) : (
-              <p className="text-center text-gray-500">Termíny budou brzy vypsány.</p>
+              <p className="text-center text-slate-300">Termíny budou brzy vypsány.</p>
             )}
           </div>
         </section>

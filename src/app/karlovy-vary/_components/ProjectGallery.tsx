@@ -55,7 +55,7 @@ export function ProjectGallery() {
                 sizes="(max-width: 1024px) 50vw, 33vw"
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-gray-900/10 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-night/80 via-night/10 to-transparent" />
               <figcaption className="absolute bottom-0 left-0 right-0 p-3 sm:p-4">
                 <span className="inline-block px-2 py-0.5 rounded-md bg-white/20 backdrop-blur-sm text-white/90 text-[10px] sm:text-xs font-medium mb-1">
                   {p.tag}
