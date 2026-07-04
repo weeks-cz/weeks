@@ -108,9 +108,9 @@ export default function PodminkyPage() {
                 <li>Sběr kontaktních údajů (emailů) pro informování o nových termínech</li>
                 <li>Poskytování obecných informací o aktivitách</li>
               </ul>
-              <div className="bg-primary-50 p-6 rounded-lg border border-primary-200 mt-6">
-                <p className="text-primary-900 font-medium mb-2">Důležité upozornění</p>
-                <p className="text-primary-800 text-base">
+              <div className="bg-primary-500/10 p-6 rounded-lg border border-primary-400/40 mt-6">
+                <p className="text-primary-300 font-medium mb-2">Důležité upozornění</p>
+                <p className="text-slate-300 text-base">
                   Registrace a platby pro tábory v Praze probíhají výhradně přes registrační systém
                   DDM Praha 6. Online platby na tomto webu se týkají pouze táborů v Karlových Varech,
                   pro které platí samostatné{' '}
@@ -126,7 +126,7 @@ export default function PodminkyPage() {
               <p className="text-slate-300 mb-4">
                 Přihlašování účastníků na víkendové kempy probíhá následovně:
               </p>
-              <div className="bg-white p-6 rounded-lg border border-white/10 space-y-4">
+              <div className="bg-night-800 p-6 rounded-lg border border-white/10 space-y-4">
                 <div>
                   <h3 className="text-lg font-semibold text-white mb-2">4.1 Waitlist formulář</h3>
                   <p className="text-slate-300 text-base">
@@ -174,14 +174,14 @@ export default function PodminkyPage() {
                 které poskytly souhlas k jejich použití.
               </p>
               <div className="space-y-4">
-                <div className="bg-white p-6 rounded-lg border border-white/10">
+                <div className="bg-night-800 p-6 rounded-lg border border-white/10">
                   <h3 className="text-lg font-semibold text-white mb-2">6.1 Zakázané použití</h3>
                   <p className="text-slate-300 text-base">
                     Bez předchozího písemného souhlasu není dovoleno kopírovat, distribuovat,
                     upravovat, zobrazovat nebo jinak používat obsah tohoto webu pro komerční účely.
                   </p>
                 </div>
-                <div className="bg-white p-6 rounded-lg border border-white/10">
+                <div className="bg-night-800 p-6 rounded-lg border border-white/10">
                   <h3 className="text-lg font-semibold text-white mb-2">6.2 Osobní použití</h3>
                   <p className="text-slate-300 text-base">
                     Obsah můžete používat pro osobní, nekomerční účely, pokud zachováte všechna
@@ -194,7 +194,7 @@ export default function PodminkyPage() {
             <section className="mb-12">
               <h2 className="font-display text-2xl font-bold text-white mb-4">7. Odpovědnost za obsah</h2>
               <div className="space-y-4">
-                <div className="bg-white p-6 rounded-lg border border-white/10">
+                <div className="bg-night-800 p-6 rounded-lg border border-white/10">
                   <h3 className="text-lg font-semibold text-white mb-2">7.1 Přesnost informací</h3>
                   <p className="text-slate-300 text-base">
                     Veškeré informace na tomto webu jsou poskytovány v dobré víře. Snažíme se
@@ -202,14 +202,14 @@ export default function PodminkyPage() {
                     nebo správnost.
                   </p>
                 </div>
-                <div className="bg-white p-6 rounded-lg border border-white/10">
+                <div className="bg-night-800 p-6 rounded-lg border border-white/10">
                   <h3 className="text-lg font-semibold text-white mb-2">7.2 Změny informací</h3>
                   <p className="text-slate-300 text-base">
                     Vyhrazujeme si právo kdykoli změnit nebo aktualizovat obsah webu bez předchozího
                     upozornění.
                   </p>
                 </div>
-                <div className="bg-white p-6 rounded-lg border border-white/10">
+                <div className="bg-night-800 p-6 rounded-lg border border-white/10">
                   <h3 className="text-lg font-semibold text-white mb-2">7.3 Externí odkazy</h3>
                   <p className="text-slate-300 text-base">
                     Web může obsahovat odkazy na externí webové stránky třetích stran. Neneseme

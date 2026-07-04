@@ -99,21 +99,21 @@ export default function KVPodminkyPage() {
             <section className="mb-10">
               <h2 className="font-display text-2xl font-bold text-white mb-4">4. Přihláška a uzavření smlouvy</h2>
               <div className="space-y-4">
-                <div className="bg-white p-5 rounded-lg border border-white/10">
+                <div className="bg-night-800 p-5 rounded-lg border border-white/10">
                   <h3 className="text-base font-semibold text-white mb-2">4.1 Závazná přihláška</h3>
                   <p className="text-slate-300 text-base">
                     Přihlášení na tábor probíhá vyplněním a odesláním závazné elektronické přihlášky
                     dostupné na webových stránkách weeks.cz. Přihláška je závazná okamžikem jejího odeslání.
                   </p>
                 </div>
-                <div className="bg-white p-5 rounded-lg border border-white/10">
+                <div className="bg-night-800 p-5 rounded-lg border border-white/10">
                   <h3 className="text-base font-semibold text-white mb-2">4.2 Vznik smluvního vztahu</h3>
                   <p className="text-slate-300 text-base">
                     Smluvní vztah mezi pořadatelem a zákonným zástupcem vzniká úhradou ceny tábora
                     v souladu s těmito VOP. Do té doby se jedná o nezávaznou rezervaci.
                   </p>
                 </div>
-                <div className="bg-white p-5 rounded-lg border border-white/10">
+                <div className="bg-night-800 p-5 rounded-lg border border-white/10">
                   <h3 className="text-base font-semibold text-white mb-2">4.3 Potvrzení</h3>
                   <p className="text-slate-300 text-base">
                     Po úspěšné platbě obdrží zákonný zástupce potvrzovací e-mail na uvedenou e-mailovou adresu.
@@ -138,7 +138,7 @@ export default function KVPodminkyPage() {
                   <p className="text-sm text-primary-700 mt-1">Po–Pá (celý týden), oběd v ceně</p>
                 </div>
               </div>
-              <p className="text-gray-600 text-sm mt-4">
+              <p className="text-slate-300 text-sm mt-4">
                 V ceně tábora jsou zahrnuty: odborné vedení, materiál a pomůcky, oběd.
                 Doprava na místo konání a zpět není součástí ceny.
               </p>
@@ -148,7 +148,7 @@ export default function KVPodminkyPage() {
             <section className="mb-10">
               <h2 className="font-display text-2xl font-bold text-white mb-4">6. Platební podmínky</h2>
               <div className="space-y-4">
-                <div className="bg-white p-5 rounded-lg border border-white/10">
+                <div className="bg-night-800 p-5 rounded-lg border border-white/10">
                   <h3 className="text-base font-semibold text-white mb-2">6.1 Způsob platby</h3>
                   <p className="text-slate-300 text-base">
                     Platba probíhá zrychleným bankovním převodem prostřednictvím{' '}
@@ -158,7 +158,7 @@ export default function KVPodminkyPage() {
                     <a href="https://help.comgate.cz/docs/bankovni-prevody" target="_blank" rel="noopener noreferrer" className="text-primary-600 underline hover:text-primary-700">nápověda Comgate</a>.
                   </p>
                 </div>
-                <div className="bg-white p-5 rounded-lg border border-white/10">
+                <div className="bg-night-800 p-5 rounded-lg border border-white/10">
                   <h3 className="text-base font-semibold text-white mb-2">6.2 Bankovní převod</h3>
                   <p className="text-slate-300 text-base mb-2">
                     Při platbě bankovním převodem je zákonný zástupce povinen uhradit platbu
@@ -170,14 +170,14 @@ export default function KVPodminkyPage() {
                     <strong className="font-mono">2267467012/3030</strong> (Air Bank, IBAN: CZ29 3030 0000 0022 6746 7012)
                   </p>
                 </div>
-                <div className="bg-white p-5 rounded-lg border border-white/10">
+                <div className="bg-night-800 p-5 rounded-lg border border-white/10">
                   <h3 className="text-base font-semibold text-white mb-2">6.3 Faktura</h3>
                   <p className="text-slate-300 text-base">
                     Daňový doklad bude zákonném zástupci zaslán e-mailem po přijetí platby.
                     Pořadatel není plátcem DPH.
                   </p>
                 </div>
-                <div className="bg-white p-5 rounded-lg border border-white/10">
+                <div className="bg-night-800 p-5 rounded-lg border border-white/10">
                   <h3 className="text-base font-semibold text-white mb-2">6.4 Provozovatel platební brány</h3>
                   <p className="text-slate-300 text-base mb-2">
                     Platební služby zajišťuje společnost{' '}
@@ -205,20 +205,20 @@ export default function KVPodminkyPage() {
                       <th className="px-4 py-3 text-left font-semibold text-white">Vráceno</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-100">
-                    <tr className="bg-white">
+                  <tbody className="divide-y divide-white/10">
+                    <tr className="bg-night-800">
                       <td className="px-4 py-3 text-slate-300">30 a více dní</td>
-                      <td className="px-4 py-3 text-green-700 font-medium">0 %</td>
+                      <td className="px-4 py-3 text-trust-400 font-medium">0 %</td>
                       <td className="px-4 py-3 text-slate-300">plná cena</td>
                     </tr>
                     <tr className="bg-night-800">
                       <td className="px-4 py-3 text-slate-300">15–29 dní</td>
-                      <td className="px-4 py-3 text-amber-700 font-medium">50 %</td>
+                      <td className="px-4 py-3 text-cta-400 font-medium">50 %</td>
                       <td className="px-4 py-3 text-slate-300">polovina ceny</td>
                     </tr>
-                    <tr className="bg-white">
+                    <tr className="bg-night-800">
                       <td className="px-4 py-3 text-slate-300">14 dní a méně / nenastoupení</td>
-                      <td className="px-4 py-3 text-red-700 font-medium">100 %</td>
+                      <td className="px-4 py-3 text-red-400 font-medium">100 %</td>
                       <td className="px-4 py-3 text-slate-300">0 Kč</td>
                     </tr>
                   </tbody>
@@ -226,16 +226,16 @@ export default function KVPodminkyPage() {
               </div>
 
               <div className="mt-4 space-y-3">
-                <div className="bg-green-50 p-4 rounded-lg border border-green-200">
-                  <p className="text-green-900 font-medium mb-1 text-sm">Výjimka: náhradní dítě</p>
-                  <p className="text-green-800 text-sm">
+                <div className="bg-trust-500/10 p-4 rounded-lg border border-trust-400/40">
+                  <p className="text-trust-400 font-medium mb-1 text-sm">Výjimka: náhradní dítě</p>
+                  <p className="text-slate-300 text-sm">
                     Pokud zákonný zástupce zajistí za odhlašované dítě náhradního účastníka,
                     storno poplatek se neúčtuje.
                   </p>
                 </div>
-                <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-                  <p className="text-blue-900 font-medium mb-1 text-sm">Výjimka: nemoc s lékařským potvrzením</p>
-                  <p className="text-blue-800 text-sm">
+                <div className="bg-primary-500/10 p-4 rounded-lg border border-primary-400/40">
+                  <p className="text-primary-300 font-medium mb-1 text-sm">Výjimka: nemoc s lékařským potvrzením</p>
+                  <p className="text-slate-300 text-sm">
                     V případě nemoci dítěte doložené lékařským potvrzením vydaným nejpozději
                     v den zahájení tábora může pořadatel přistoupit k individuálnímu řešení —
                     zpravidla vrácení 50 % ceny bez ohledu na lhůtu.
@@ -251,7 +251,7 @@ export default function KVPodminkyPage() {
                 </div>
               </div>
 
-              <p className="text-gray-600 text-sm mt-4">
+              <p className="text-slate-300 text-sm mt-4">
                 Storno musí být oznámeno písemně e-mailem na adresu info@weeks.cz.
                 Vrácení platby proběhne na účet, ze kterého byla platba přijata, do 10 pracovních dní.
               </p>

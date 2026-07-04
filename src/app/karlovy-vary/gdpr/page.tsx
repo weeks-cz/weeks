@@ -188,7 +188,7 @@ export default function KVGDPRPage() {
                   { title: 'Právo vznést námitku', text: 'Máte právo vznést námitku proti zpracování Vašich osobních údajů pro účely přímého marketingu.' },
                   { title: 'Právo odvolat souhlas', text: 'Máte právo kdykoli odvolat souhlas se zpracováním údajů, aniž by to mělo vliv na zákonnost zpracování před jeho odvoláním.' },
                 ].map((item) => (
-                  <div key={item.title} className="bg-white p-6 rounded-lg border border-white/10">
+                  <div key={item.title} className="bg-night-800 p-6 rounded-lg border border-white/10">
                     <h3 className="text-lg font-semibold text-white mb-2">{item.title}</h3>
                     <p className="text-slate-300 text-base">{item.text}</p>
                   </div>
@@ -245,13 +245,13 @@ export default function KVGDPRPage() {
             <section className="mb-12">
               <h2 className="font-display text-2xl font-bold text-white mb-4">10. Cookies a sledovací technologie</h2>
               <div className="space-y-4">
-                <div className="bg-white p-6 rounded-lg border border-white/10">
+                <div className="bg-night-800 p-6 rounded-lg border border-white/10">
                   <h3 className="text-lg font-semibold text-white mb-2">Nezbytné cookies</h3>
                   <p className="text-slate-300 text-base">
                     Technické cookies nutné pro správné fungování webu. Tyto cookies nevyžadují souhlas.
                   </p>
                 </div>
-                <div className="bg-white p-6 rounded-lg border border-white/10">
+                <div className="bg-night-800 p-6 rounded-lg border border-white/10">
                   <h3 className="text-lg font-semibold text-white mb-2">Analytické cookies</h3>
                   <p className="text-slate-300 text-base">
                     Slouží k měření návštěvnosti a analýze chování uživatelů. Používáme je pouze s Vaším souhlasem.
