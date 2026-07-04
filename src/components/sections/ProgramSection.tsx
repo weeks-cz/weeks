@@ -208,15 +208,8 @@ export function ProgramSection() {
         {/* Hlavní tábory - všechny 3 rovnocenně */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           {mainCamps.map((camp, index) => {
-            // Determine day format from nextDates
-            let dayFormat = ''
-            if (camp.id === 'mix') {
-              dayFormat = 'SO+NE'
-            } else if (camp.id === '3d-tisk') {
-              dayFormat = 'NE'
-            } else if (camp.id === 'iot') {
-              dayFormat = 'SO'
-            }
+            // Use truthful format from badge field
+            const dayFormat = camp.badge.toUpperCase()
 
             // Determine border color
             const borderColor = camp.id === 'iot' ? 'border-t-trust-400' : 'border-t-primary-400'

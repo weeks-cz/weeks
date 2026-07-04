@@ -3,7 +3,6 @@
 import { motion } from 'framer-motion'
 import { Building2, Package, GraduationCap, Shield, Clock, Train } from 'lucide-react'
 import { useLocation } from '@/contexts/LocationContext'
-import { CountUp } from '@/components/effects/CountUp'
 
 const defaultTechnologyUsp = {
   icon: Building2,
