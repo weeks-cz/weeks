@@ -199,7 +199,7 @@ function CampCard({ camp, index }: { camp: typeof CAMPS[number]; index: number }
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="váš@email.cz"
-                className="flex-1 px-3 py-2 rounded-lg text-sm text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cta-500 min-w-0"
+                className="flex-1 px-3 py-2 rounded-lg text-sm bg-white/20 text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-accent-400 min-w-0"
                 required
               />
               <button

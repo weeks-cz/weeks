@@ -32,12 +32,12 @@ export default function KVGDPRPage() {
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-white pt-24 pb-16">
-        <article className="section-container max-w-4xl">
+      <main className="min-h-screen bg-night pt-24 pb-16">
+        <article className="section-container max-w-3xl">
           {/* Back link */}
           <Link
             href="/karlovy-vary"
-            className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 mb-8 transition-colors"
+            className="inline-flex items-center gap-2 text-accent-400 hover:text-accent-300 mb-8 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             Zpět na hlavní stránku
@@ -45,39 +45,39 @@ export default function KVGDPRPage() {
 
           {/* Header */}
           <header className="mb-12">
-            <h1 className="heading-1 text-gray-900 mb-4">
+            <h1 className="font-display text-4xl font-bold text-white mb-4">
               Ochrana osobních údajů
             </h1>
-            <p className="text-gray-600 text-lg">
+            <p className="text-slate-300 text-lg">
               Zásady zpracování osobních údajů v souladu s nařízením GDPR
             </p>
-            <p className="text-gray-500 text-sm mt-4">
+            <p className="text-slate-500 text-sm mt-4">
               Účinnost od: 1. května 2026
             </p>
           </header>
 
           {/* Content */}
-          <div className="prose prose-lg max-w-none">
+          <div className="space-y-8">
             <section className="mb-12">
-              <h2 className="heading-3 text-gray-900 mb-4">1. Správce osobních údajů</h2>
-              <p className="text-gray-700 mb-4">
+              <h2 className="font-display text-2xl font-bold text-white mb-4">1. Správce osobních údajů</h2>
+              <p className="text-slate-300 mb-4">
                 Správcem Vašich osobních údajů je:
               </p>
-              <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
-                <p className="text-gray-900 font-semibold mb-2">Lukáš Kubík</p>
-                <p className="text-gray-700 text-base mb-1">IČO: 24878511</p>
-                <p className="text-gray-700 text-base mb-1">Projekt: Weeks – Letní příměstský tábor chytrých technologií</p>
-                <p className="text-gray-700 text-base mb-1">Email: info@weeks.cz</p>
-                <p className="text-gray-700 text-base">Web: weeks.cz/karlovy-vary</p>
+              <div className="bg-night-800 p-6 rounded-lg border border-white/10">
+                <p className="text-white font-semibold mb-2">Lukáš Kubík</p>
+                <p className="text-slate-300 text-base mb-1">IČO: 24878511</p>
+                <p className="text-slate-300 text-base mb-1">Projekt: Weeks – Letní příměstský tábor chytrých technologií</p>
+                <p className="text-slate-300 text-base mb-1">Email: info@weeks.cz</p>
+                <p className="text-slate-300 text-base">Web: weeks.cz/karlovy-vary</p>
               </div>
             </section>
 
             <section className="mb-12">
-              <h2 className="heading-3 text-gray-900 mb-4">2. Jaké osobní údaje sbíráme</h2>
-              <p className="text-gray-700 mb-4">
+              <h2 className="font-display text-2xl font-bold text-white mb-4">2. Jaké osobní údaje sbíráme</h2>
+              <p className="text-slate-300 mb-4">
                 Prostřednictvím registračního formuláře na tábor sbíráme následující osobní údaje:
               </p>
-              <ul className="list-disc pl-6 space-y-2 text-gray-700">
+              <ul className="list-disc pl-6 space-y-2 text-slate-300">
                 <li><strong>Jméno a příjmení dítěte</strong> – pro identifikaci účastníka</li>
                 <li><strong>Věk dítěte</strong> – pro zařazení do vhodné skupiny</li>
                 <li><strong>Jméno a příjmení rodiče / zákonného zástupce</strong></li>
@@ -87,9 +87,9 @@ export default function KVGDPRPage() {
                 <li><strong>Zdravotní omezení</strong> – pouze pokud jsou relevantní pro bezpečnou účast</li>
                 <li><strong>IP adresa při odeslání registrace</strong> – uchováváme jako doklad o udělení souhlasu s obchodními podmínkami (oprávněný zájem, čl. 6 odst. 1 písm. f) GDPR)</li>
               </ul>
-              <div className="bg-primary-50 p-6 rounded-lg border border-primary-200 mt-6">
-                <p className="text-primary-900 font-medium mb-2">Záchranná síť (waitlist)</p>
-                <p className="text-primary-800 text-base">
+              <div className="bg-night-800 p-6 rounded-lg border border-white/10 mt-6">
+                <p className="text-white font-medium mb-2">Záchranná síť (waitlist)</p>
+                <p className="text-slate-300 text-base">
                   Pokud zadáte pouze emailovou adresu do formuláře pro odběr novinek,
                   zpracováváme pouze tuto adresu — bez dalších osobních údajů.
                 </p>
@@ -97,20 +97,20 @@ export default function KVGDPRPage() {
             </section>
 
             <section className="mb-12">
-              <h2 className="heading-3 text-gray-900 mb-4">3. Účel zpracování osobních údajů</h2>
+              <h2 className="font-display text-2xl font-bold text-white mb-4">3. Účel zpracování osobních údajů</h2>
               <div className="space-y-6">
-                <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
-                  <p className="text-gray-900 font-semibold mb-2">Registrace a organizace tábora</p>
-                  <ul className="list-disc pl-6 space-y-1 text-gray-700">
+                <div className="bg-night-800 p-6 rounded-lg border border-white/10">
+                  <p className="text-white font-semibold mb-2">Registrace a organizace tábora</p>
+                  <ul className="list-disc pl-6 space-y-1 text-slate-300">
                     <li>Zpracování a potvrzení přihlášky</li>
                     <li>Komunikace s rodiči před táborem, v jeho průběhu a po něm</li>
                     <li>Zajištění stravování a bezpečnosti dítěte</li>
                     <li>Fakturace a vedení účetních dokladů</li>
                   </ul>
                 </div>
-                <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
-                  <p className="text-gray-900 font-semibold mb-2">Informování o novinkách (pouze se souhlasem)</p>
-                  <ul className="list-disc pl-6 space-y-1 text-gray-700">
+                <div className="bg-night-800 p-6 rounded-lg border border-white/10">
+                  <p className="text-white font-semibold mb-2">Informování o novinkách (pouze se souhlasem)</p>
+                  <ul className="list-disc pl-6 space-y-1 text-slate-300">
                     <li>Zasílání informací o nových termínech a volných místech</li>
                     <li>Marketingová komunikace týkající se aktivit Weeks</li>
                   </ul>
@@ -119,39 +119,39 @@ export default function KVGDPRPage() {
             </section>
 
             <section className="mb-12">
-              <h2 className="heading-3 text-gray-900 mb-4">4. Právní základ zpracování</h2>
+              <h2 className="font-display text-2xl font-bold text-white mb-4">4. Právní základ zpracování</h2>
               <div className="space-y-4">
-                <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
-                  <p className="text-gray-900 font-semibold mb-2">
+                <div className="bg-night-800 p-6 rounded-lg border border-white/10">
+                  <p className="text-white font-semibold mb-2">
                     Plnění smlouvy (čl. 6 odst. 1 písm. b) GDPR)
                   </p>
-                  <p className="text-gray-700 text-base">
+                  <p className="text-slate-300 text-base">
                     Zpracování registračních údajů je nezbytné pro splnění smlouvy (přihláška na tábor),
                     jejíž stranou je subjekt údajů (zákonný zástupce dítěte).
                   </p>
                 </div>
-                <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
-                  <p className="text-gray-900 font-semibold mb-2">
+                <div className="bg-night-800 p-6 rounded-lg border border-white/10">
+                  <p className="text-white font-semibold mb-2">
                     Souhlas subjektu údajů (čl. 6 odst. 1 písm. a) GDPR)
                   </p>
-                  <p className="text-gray-700 text-base">
+                  <p className="text-slate-300 text-base">
                     Zpracování emailové adresy pro zasílání novinek a marketingové komunikace
                     je podmíněno Vaším dobrovolným souhlasem. Souhlas můžete kdykoli odvolat.
                   </p>
                 </div>
-                <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
-                  <p className="text-gray-900 font-semibold mb-2">
+                <div className="bg-night-800 p-6 rounded-lg border border-white/10">
+                  <p className="text-white font-semibold mb-2">
                     Splnění právní povinnosti (čl. 6 odst. 1 písm. c) GDPR)
                   </p>
-                  <p className="text-gray-700 text-base">
+                  <p className="text-slate-300 text-base">
                     Vedení účetních dokladů v souladu s účetními a daňovými předpisy ČR.
                   </p>
                 </div>
-                <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
-                  <p className="text-gray-900 font-semibold mb-2">
+                <div className="bg-night-800 p-6 rounded-lg border border-white/10">
+                  <p className="text-white font-semibold mb-2">
                     Výslovný souhlas se zvláštní kategorií údajů (čl. 9 odst. 2 písm. a) GDPR)
                   </p>
-                  <p className="text-gray-700 text-base">
+                  <p className="text-slate-300 text-base">
                     Pokud v registraci uvedete zdravotní omezení nebo alergie dítěte (zvláštní
                     kategorie osobních údajů), zpracováváme je na základě Vašeho výslovného souhlasu
                     výhradně za účelem zajištění bezpečné účasti dítěte na táboře. Uvedení těchto
@@ -162,21 +162,21 @@ export default function KVGDPRPage() {
             </section>
 
             <section className="mb-12">
-              <h2 className="heading-3 text-gray-900 mb-4">5. Doba uchovávání údajů</h2>
-              <ul className="list-disc pl-6 space-y-2 text-gray-700">
+              <h2 className="font-display text-2xl font-bold text-white mb-4">5. Doba uchovávání údajů</h2>
+              <ul className="list-disc pl-6 space-y-2 text-slate-300">
                 <li><strong>Registrační údaje</strong> – po dobu trvání tábora a 1 rok po jeho skončení (pro případné reklamace)</li>
                 <li><strong>Účetní doklady</strong> – 5 let od konce zdaňovacího období (zákonná povinnost)</li>
                 <li><strong>Emailová adresa pro novinky</strong> – do odvolání souhlasu, maximálně 3 roky od poslední interakce</li>
               </ul>
-              <p className="text-gray-700 mt-4">
+              <p className="text-slate-300 mt-4">
                 Po uplynutí uvedených dob údaje z evidence odstraníme nebo anonymizujeme. O výmaz
                 svých údajů (mimo zákonem povinné účetní doklady) můžete kdykoli požádat na info@weeks.cz.
               </p>
             </section>
 
             <section className="mb-12">
-              <h2 className="heading-3 text-gray-900 mb-4">6. Vaše práva</h2>
-              <p className="text-gray-700 mb-4">
+              <h2 className="font-display text-2xl font-bold text-white mb-4">6. Vaše práva</h2>
+              <p className="text-slate-300 mb-4">
                 V souvislosti se zpracováním Vašich osobních údajů máte následující práva:
               </p>
               <div className="space-y-4">
@@ -188,37 +188,37 @@ export default function KVGDPRPage() {
                   { title: 'Právo vznést námitku', text: 'Máte právo vznést námitku proti zpracování Vašich osobních údajů pro účely přímého marketingu.' },
                   { title: 'Právo odvolat souhlas', text: 'Máte právo kdykoli odvolat souhlas se zpracováním údajů, aniž by to mělo vliv na zákonnost zpracování před jeho odvoláním.' },
                 ].map((item) => (
-                  <div key={item.title} className="bg-white p-6 rounded-lg border border-gray-200">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">{item.title}</h3>
-                    <p className="text-gray-700 text-base">{item.text}</p>
+                  <div key={item.title} className="bg-white p-6 rounded-lg border border-white/10">
+                    <h3 className="text-lg font-semibold text-white mb-2">{item.title}</h3>
+                    <p className="text-slate-300 text-base">{item.text}</p>
                   </div>
                 ))}
               </div>
             </section>
 
             <section className="mb-12">
-              <h2 className="heading-3 text-gray-900 mb-4">7. Jak uplatnit Vaše práva</h2>
-              <p className="text-gray-700 mb-4">
+              <h2 className="font-display text-2xl font-bold text-white mb-4">7. Jak uplatnit Vaše práva</h2>
+              <p className="text-slate-300 mb-4">
                 Pro uplatnění Vašich práv nás kontaktujte:
               </p>
-              <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
-                <ul className="space-y-2 text-gray-700">
+              <div className="bg-night-800 p-6 rounded-lg border border-white/10">
+                <ul className="space-y-2 text-slate-300">
                   <li><strong>Email:</strong> info@weeks.cz</li>
                   <li><strong>Odhlášení z odběru:</strong> Pomocí odkazu v patičce každého emailu</li>
                 </ul>
               </div>
-              <p className="text-gray-700 mt-4">
+              <p className="text-slate-300 mt-4">
                 Na Vaši žádost odpovíme bez zbytečného odkladu, nejpozději do jednoho měsíce od
                 obdržení žádosti.
               </p>
             </section>
 
             <section className="mb-12">
-              <h2 className="heading-3 text-gray-900 mb-4">8. Předávání údajů třetím stranám</h2>
-              <p className="text-gray-700 mb-4">
+              <h2 className="font-display text-2xl font-bold text-white mb-4">8. Předávání údajů třetím stranám</h2>
+              <p className="text-slate-300 mb-4">
                 Vaše osobní údaje jsou zpracovávány za pomoci následujících zpracovatelů:
               </p>
-              <ul className="list-disc pl-6 space-y-2 text-gray-700">
+              <ul className="list-disc pl-6 space-y-2 text-slate-300">
                 <li><strong>Supabase</strong> – cloudová databáze pro uložení registračních dat (servery v EU)</li>
                 <li><strong>Formspree</strong> – zpracování kontaktních a zájmových formulářů</li>
                 <li><strong>Resend</strong> – odesílání transakčních e-mailů (potvrzení registrace, nástupní list)</li>
@@ -227,14 +227,14 @@ export default function KVGDPRPage() {
                 <li><strong>Comgate a.s.</strong> – provozovatel platební brány (zpracování platby), IČ 27924505</li>
                 <li><strong>Sentry</strong> – monitoring chyb serverové části aplikace</li>
               </ul>
-              <p className="text-gray-700 mt-4">
+              <p className="text-slate-300 mt-4">
                 Vaše údaje neprodáváme třetím stranám pro jejich marketingové účely.
               </p>
             </section>
 
             <section className="mb-12">
-              <h2 className="heading-3 text-gray-900 mb-4">9. Zabezpečení osobních údajů</h2>
-              <ul className="list-disc pl-6 space-y-2 text-gray-700">
+              <h2 className="font-display text-2xl font-bold text-white mb-4">9. Zabezpečení osobních údajů</h2>
+              <ul className="list-disc pl-6 space-y-2 text-slate-300">
                 <li>Šifrované připojení (HTTPS)</li>
                 <li>Data v databázi chráněna pomocí Row Level Security (Supabase)</li>
                 <li>Přístup k registračním datům pouze pro oprávněné osoby</li>
@@ -243,17 +243,17 @@ export default function KVGDPRPage() {
             </section>
 
             <section className="mb-12">
-              <h2 className="heading-3 text-gray-900 mb-4">10. Cookies a sledovací technologie</h2>
+              <h2 className="font-display text-2xl font-bold text-white mb-4">10. Cookies a sledovací technologie</h2>
               <div className="space-y-4">
-                <div className="bg-white p-6 rounded-lg border border-gray-200">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Nezbytné cookies</h3>
-                  <p className="text-gray-700 text-base">
+                <div className="bg-white p-6 rounded-lg border border-white/10">
+                  <h3 className="text-lg font-semibold text-white mb-2">Nezbytné cookies</h3>
+                  <p className="text-slate-300 text-base">
                     Technické cookies nutné pro správné fungování webu. Tyto cookies nevyžadují souhlas.
                   </p>
                 </div>
-                <div className="bg-white p-6 rounded-lg border border-gray-200">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Analytické cookies</h3>
-                  <p className="text-gray-700 text-base">
+                <div className="bg-white p-6 rounded-lg border border-white/10">
+                  <h3 className="text-lg font-semibold text-white mb-2">Analytické cookies</h3>
+                  <p className="text-slate-300 text-base">
                     Slouží k měření návštěvnosti a analýze chování uživatelů. Používáme je pouze s Vaším souhlasem.
                   </p>
                 </div>
@@ -261,32 +261,32 @@ export default function KVGDPRPage() {
             </section>
 
             <section className="mb-12">
-              <h2 className="heading-3 text-gray-900 mb-4">11. Právo podat stížnost</h2>
-              <p className="text-gray-700 mb-4">
+              <h2 className="font-display text-2xl font-bold text-white mb-4">11. Právo podat stížnost</h2>
+              <p className="text-slate-300 mb-4">
                 Pokud se domníváte, že zpracováváme Vaše osobní údaje v rozporu s právními předpisy,
                 máte právo podat stížnost u dozorového úřadu:
               </p>
-              <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
-                <p className="text-gray-900 font-semibold mb-2">Úřad pro ochranu osobních údajů</p>
-                <p className="text-gray-700 text-base mb-1">Pplk. Sochora 27</p>
-                <p className="text-gray-700 text-base mb-1">170 00 Praha 7</p>
-                <p className="text-gray-700 text-base mb-1">Web: www.uoou.cz</p>
-                <p className="text-gray-700 text-base">Email: posta@uoou.cz</p>
+              <div className="bg-night-800 p-6 rounded-lg border border-white/10">
+                <p className="text-white font-semibold mb-2">Úřad pro ochranu osobních údajů</p>
+                <p className="text-slate-300 text-base mb-1">Pplk. Sochora 27</p>
+                <p className="text-slate-300 text-base mb-1">170 00 Praha 7</p>
+                <p className="text-slate-300 text-base mb-1">Web: www.uoou.cz</p>
+                <p className="text-slate-300 text-base">Email: posta@uoou.cz</p>
               </div>
             </section>
 
             <section className="mb-12">
-              <h2 className="heading-3 text-gray-900 mb-4">12. Kontakt</h2>
-              <div className="bg-primary-50 p-6 rounded-lg border border-primary-200">
-                <p className="text-primary-900 font-semibold mb-2">Weeks – Letní příměstský tábor Karlovy Vary</p>
-                <p className="text-primary-800 text-base mb-1">Správce: Lukáš Kubík, IČO 24878511</p>
-                <p className="text-primary-800 text-base mb-1">Email: info@weeks.cz</p>
-                <p className="text-primary-800 text-base">Místo konání: Kreativní centrum VARY&amp;TE, Stará Role 175, Karlovy Vary</p>
+              <h2 className="font-display text-2xl font-bold text-white mb-4">12. Kontakt</h2>
+              <div className="bg-night-800 p-6 rounded-lg border border-white/10">
+                <p className="text-white font-semibold mb-2">Weeks – Letní příměstský tábor Karlovy Vary</p>
+                <p className="text-slate-300 text-base mb-1">Správce: Lukáš Kubík, IČO 24878511</p>
+                <p className="text-slate-300 text-base mb-1">Email: info@weeks.cz</p>
+                <p className="text-slate-300 text-base">Místo konání: Kreativní centrum VARY&amp;TE, Stará Role 175, Karlovy Vary</p>
               </div>
             </section>
 
-            <div className="border-t border-gray-200 pt-8 mt-12">
-              <p className="text-gray-500 text-sm">
+            <div className="border-t border-white/10 pt-8 mt-12">
+              <p className="text-slate-400 text-sm">
                 Tyto zásady ochrany osobních údajů jsou platné a účinné od 1. května 2026.
               </p>
             </div>
