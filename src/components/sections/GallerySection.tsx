@@ -70,7 +70,7 @@ export function GallerySection({
 
   return (
     <>
-      <section className="section-padding bg-gray-50">
+      <section className="section-padding bg-night">
         <div className="section-container">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -78,13 +78,14 @@ export function GallerySection({
             viewport={{ once: true }}
             className="text-center mb-10"
           >
-            <h2 className="heading-2 text-gray-900 mb-4">
+            <p className="data-label mb-4">GALERIE</p>
+            <h2 className="heading-2 text-white mb-4">
               {title.split(' ').slice(0, -1).join(' ')}{' '}
-              <span className={textColorMap[accentColor]}>
+              <span className={accentColor === 'primary' ? 'text-primary-400' : accentColor === 'trust' ? 'text-trust-400' : 'text-accent-400'}>
                 {title.split(' ').slice(-1)}
               </span>
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-lg text-slate-300 max-w-2xl mx-auto">
               {subtitle}
             </p>
           </motion.div>
@@ -101,7 +102,7 @@ export function GallerySection({
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.05 }}
                   onClick={() => openLightbox(index)}
-                  className={`relative overflow-hidden rounded-2xl group cursor-pointer focus:outline-none focus:ring-2 focus:ring-${accentColor}-500 focus:ring-offset-2 ${
+                  className={`relative overflow-hidden rounded-lg group cursor-pointer focus:outline-none focus:ring-2 focus:ring-accent-400 focus:ring-offset-2 border border-white/10 hover:border-accent-400/60 transition-all duration-300 ${
                     isFeatured ? 'col-span-2 row-span-2' : ''
                   }`}
                   aria-label={`Zobrazit: ${image.alt}`}

@@ -112,8 +112,9 @@ export function TermsList({
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 overflow-hidden"
+                className="card-glow relative overflow-hidden"
               >
+                <div className={`h-1 ${program === '3d-tisk' ? 'bg-primary-400' : 'bg-trust-400'}`} />
                 <div className="p-6">
                   <div className="flex items-start justify-between gap-2 mb-4">
                     <TermHeading term={termin} />
@@ -122,7 +123,7 @@ export function TermsList({
                     </span>
                   </div>
 
-                  <p className="text-sm text-white/70 mb-6">
+                  <p className="text-sm text-slate-400 mb-6">
                     9:00–17:00, {termin.location || 'HWLab Praha'}. Registrace přes DDM Praha 6.
                   </p>
 
@@ -166,7 +167,7 @@ export function TermsList({
             <Bell className="w-4 h-4 text-cta-300" />
             Brzy otevřeme registraci
           </h3>
-          <p className="text-sm text-white/60 mb-6 max-w-xl">
+          <p className="text-sm text-slate-400 mb-6 max-w-xl">
             Termín je potvrzený, jen čekáme na zveřejnění registrace v systému DDM Praha 6.
             Nechte nám email a dáme vědět hned, jak bude otevřená.
           </p>
@@ -178,8 +179,9 @@ export function TermsList({
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 overflow-hidden"
+                className="card-glow relative overflow-hidden"
               >
+                <div className={`h-1 ${program === '3d-tisk' ? 'bg-primary-400' : 'bg-trust-400'}`} />
                 <div className="p-6">
                   <div className="flex items-start justify-between gap-2 mb-4">
                     <TermHeading term={termin} />
@@ -215,11 +217,11 @@ export function TermsList({
       {/* Collecting interest — non-binding, may or may not run */}
       {collectingInterest.length > 0 && (
         <div>
-          <h3 className="text-lg font-semibold text-white/80 mb-4 flex items-center gap-2">
+          <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
             <div className="w-2.5 h-2.5 rounded-full bg-cta-400" />
             Připravované termíny
           </h3>
-          <p className="text-sm text-white/60 mb-6 max-w-xl">
+          <p className="text-sm text-slate-400 mb-6 max-w-xl">
             Zanechte nám email a dáme vám vědět nejpozději 14 dní před termínem, zda se tábor otevře.
             Nezavazujete se k ničemu — pouze dostanete včasnou informaci o otevření registrace.
           </p>
@@ -231,7 +233,7 @@ export function TermsList({
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-white/5 backdrop-blur-sm rounded-2xl border border-dashed border-white/30 overflow-hidden"
+                className="bg-night-800 rounded-lg border border-dashed border-white/25 overflow-hidden"
               >
                 <div className="p-6">
                   <div className="mb-4">
@@ -267,18 +269,18 @@ export function TermsList({
       {/* Full — muted, no action */}
       {full.length > 0 && (
         <div>
-          <h3 className="text-sm font-semibold text-white/50 mb-4">Obsazené termíny</h3>
+          <h3 className="text-sm font-semibold text-slate-400 mb-4">Obsazené termíny</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {full.map((termin) => (
               <div
                 key={termin.id}
-                className="bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-4 opacity-60"
+                className="bg-night-800/50 rounded-lg border border-white/10 p-4 opacity-60"
               >
                 <div className="flex items-center gap-2 mb-2">
-                  <Calendar className="w-4 h-4 text-white/50" />
-                  <span className="text-sm font-medium text-white/70">{termin.fullLabel}</span>
+                  <Calendar className="w-4 h-4 text-slate-500" />
+                  <span className="text-sm font-medium text-slate-400">{termin.fullLabel}</span>
                 </div>
-                <span className="text-xs text-red-300 font-semibold">Obsazeno</span>
+                <span className="text-xs text-red-400 font-semibold">Obsazeno</span>
               </div>
             ))}
           </div>
@@ -357,7 +359,7 @@ function InterestForm({
             trackViewOneDayCamp(program, `termin_${terminId}`)
             trackRegistrationFormOpen({ programId: program, programTitle, termin: terminLabel, campType: 'oneday' })
           }}
-          className="btn-outline border-white/50 text-white hover:bg-white/10 inline-flex items-center gap-2"
+          className="btn-secondary text-white hover:bg-white/10 inline-flex items-center gap-2"
         >
           {buttonLabel}
         </button>
@@ -376,7 +378,7 @@ function InterestForm({
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="váš@email.cz"
-              className={`w-full px-4 py-2.5 rounded-lg border border-white/30 bg-white/10 text-white placeholder-white/40 focus:outline-none focus:ring-2 ${accentClasses.inputRing} text-sm`}
+              className="w-full bg-night border border-white/15 text-white placeholder:text-slate-500 rounded-lg focus:border-accent-400 focus:ring-1 focus:ring-accent-400 px-4 py-2.5 text-sm"
               required
             />
             <div className="flex items-start gap-2">
@@ -385,21 +387,21 @@ function InterestForm({
                 id={`gdpr-${terminId}`}
                 checked={gdprConsent}
                 onChange={(e) => setGdprConsent(e.target.checked)}
-                className={`mt-1 w-4 h-4 rounded border-white/30 bg-white/10 ${accentClasses.checkboxAccent}`}
+                className={`mt-1 w-4 h-4 rounded border-white/30 bg-night ${accentClasses.checkboxAccent}`}
                 required
               />
-              <label htmlFor={`gdpr-${terminId}`} className="text-xs text-white/60 cursor-pointer">
+              <label htmlFor={`gdpr-${terminId}`} className="text-xs text-slate-400 cursor-pointer">
                 Souhlasím se{' '}
                 <Link href="/gdpr" className="underline hover:text-white">
                   zpracováním osobních údajů
                 </Link>
               </label>
             </div>
-            {error && <p className="text-sm text-red-300">{error}</p>}
+            {error && <p className="text-sm text-red-400">{error}</p>}
             <button
               type="submit"
               disabled={isSubmitting || !gdprConsent || !email.trim()}
-              className={`w-full ${accentClasses.primaryBtnBg} text-white font-semibold py-2.5 px-4 rounded-xl transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed`}
+              className={`w-full ${accentClasses.primaryBtnBg} text-white font-semibold py-2.5 px-4 rounded-lg transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed`}
             >
               {isSubmitting ? 'Odesílám...' : 'Odeslat'}
             </button>
@@ -463,9 +465,9 @@ function SingleDayDisclosure({
           Můžu přijít jen na jeden den?
         </button>
       ) : isSubmitted ? (
-        <div className="p-4 bg-trust-50 border border-trust-200 rounded-xl text-center">
-          <Check className="w-6 h-6 text-trust-600 mx-auto mb-2" />
-          <p className="text-sm font-medium text-trust-800">Děkujeme! Ozveme se vám.</p>
+        <div className="p-4 bg-night-800 border border-trust-500/30 rounded-lg text-center">
+          <Check className="w-6 h-6 text-trust-400 mx-auto mb-2" />
+          <p className="text-sm font-medium text-white">Děkujeme! Ozveme se vám.</p>
         </div>
       ) : (
         <AnimatePresence>
@@ -475,7 +477,7 @@ function SingleDayDisclosure({
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.2 }}
           >
-            <p className="text-xs text-white/60 mb-3">
+            <p className="text-xs text-slate-400 mb-3">
               Jasně — stačí přijít i jen na jeden den. Program dítěti přizpůsobíme.
               Nechte nám email a den, ozveme se vám.
             </p>
@@ -485,7 +487,7 @@ function SingleDayDisclosure({
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="váš@email.cz"
-                className={`w-full px-4 py-2.5 rounded-lg border border-white/30 bg-white/10 text-white placeholder-white/40 focus:outline-none focus:ring-2 ${accentClasses.inputRing} text-sm`}
+                className="w-full bg-night border border-white/15 text-white placeholder:text-slate-500 rounded-lg focus:border-accent-400 focus:ring-1 focus:ring-accent-400 px-4 py-2.5 text-sm"
                 required
               />
               {days.length > 1 && (
@@ -495,7 +497,7 @@ function SingleDayDisclosure({
                       type="button"
                       key={d}
                       onClick={() => setDay(d)}
-                      className={`flex-1 min-w-[5rem] px-3 py-2 rounded-lg text-sm font-medium border transition-colors ${day === d ? 'bg-white text-gray-900 border-white' : 'bg-white/10 text-white border-white/30 hover:border-white/60'}`}
+                      className={`flex-1 min-w-[5rem] px-3 py-2 rounded-lg text-sm font-medium border transition-colors ${day === d ? 'bg-accent-400 text-night border-accent-400' : 'bg-night-800 text-white border-white/25 hover:border-accent-400/60'}`}
                     >
                       {d.charAt(0).toUpperCase() + d.slice(1)}
                     </button>
@@ -508,26 +510,26 @@ function SingleDayDisclosure({
                   id={`gdpr-1d-${term.id}`}
                   checked={gdprConsent}
                   onChange={(e) => setGdprConsent(e.target.checked)}
-                  className={`mt-1 w-4 h-4 rounded border-white/30 bg-white/10 ${accentClasses.checkboxAccent}`}
+                  className={`mt-1 w-4 h-4 rounded border-white/30 bg-night ${accentClasses.checkboxAccent}`}
                   required
                 />
-                <label htmlFor={`gdpr-1d-${term.id}`} className="text-xs text-white/60 cursor-pointer">
+                <label htmlFor={`gdpr-1d-${term.id}`} className="text-xs text-slate-400 cursor-pointer">
                   Souhlasím se{' '}
                   <Link href="/gdpr" className="underline hover:text-white">
                     zpracováním osobních údajů
                   </Link>
                 </label>
               </div>
-              {error && <p className="text-sm text-red-300">{error}</p>}
+              {error && <p className="text-sm text-red-400">{error}</p>}
               <button
                 type="submit"
                 disabled={isSubmitting || !gdprConsent || !email.trim()}
-                className={`w-full ${accentClasses.primaryBtnBg} text-white font-semibold py-2.5 px-4 rounded-xl transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed`}
+                className={`w-full ${accentClasses.primaryBtnBg} text-white font-semibold py-2.5 px-4 rounded-lg transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed`}
               >
                 {isSubmitting ? 'Odesílám...' : 'Napište nám'}
               </button>
             </form>
-            <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs text-white/60">
+            <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-400">
               <a href={INFO_PHONE_HREF} className="hover:text-white">{INFO_PHONE_LABEL}</a>
               <a href={`mailto:${INFO_EMAIL}`} className="hover:text-white">{INFO_EMAIL}</a>
             </div>
@@ -540,7 +542,7 @@ function SingleDayDisclosure({
 
 export function FAQAccordion({ items, focusRingClass }: { items: { question: string; answer: string }[]; focusRingClass: string }) {
   return (
-    <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm">
+    <div className="card-glow p-6 md:p-8">
       {items.map((faq) => (
         <FAQItem key={faq.question} {...faq} focusRingClass={focusRingClass} />
       ))}
@@ -552,16 +554,16 @@ function FAQItem({ question, answer, focusRingClass }: { question: string; answe
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <div className="border-b border-gray-200 last:border-0">
+    <div className="border-b border-white/10 last:border-0">
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         className={`w-full py-5 flex items-center justify-between text-left focus:outline-none focus:ring-2 ${focusRingClass} focus:ring-offset-2 rounded-lg`}
         aria-expanded={isOpen}
       >
-        <span className="font-semibold text-gray-900 pr-4">{question}</span>
+        <span className="font-semibold text-white pr-4">{question}</span>
         <ChevronDown
-          className={`w-5 h-5 text-gray-500 transition-transform flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`}
+          className={`w-5 h-5 text-slate-400 transition-transform flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`}
           aria-hidden="true"
         />
       </button>
@@ -574,7 +576,7 @@ function FAQItem({ question, answer, focusRingClass }: { question: string; answe
             transition={{ duration: 0.2 }}
             className="overflow-hidden"
           >
-            <p className="pb-5 text-gray-600">{answer}</p>
+            <p className="pb-5 text-slate-400">{answer}</p>
           </motion.div>
         )}
       </AnimatePresence>

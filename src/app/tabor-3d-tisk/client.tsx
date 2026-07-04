@@ -74,8 +74,9 @@ export default function Tabor3DTiskClient({ open, openNoLink, collectingInterest
       <Header />
       <main>
         {/* Hero Section */}
-        <section className="relative pt-32 pb-20 overflow-hidden">
-          <div className="absolute inset-0">
+        <section className="relative pt-32 pb-20 overflow-hidden bg-night">
+          <div className="absolute inset-0 opacity-20 pointer-events-none noise" />
+          <div className="absolute inset-0 opacity-40">
             <Image
               src="/images/program-3dtisk.webp"
               alt="Jednodenní tábor 3D tisku - děti pracují s 3D tiskárnami"
@@ -85,9 +86,8 @@ export default function Tabor3DTiskClient({ open, openNoLink, collectingInterest
               priority
               quality={75}
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-gray-900/95 via-gray-900/85 to-gray-900/60" />
-            <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-gray-900/30" />
           </div>
+          <div className="absolute inset-0 bg-gradient-to-r from-night/95 via-night/85 to-night/60" />
 
           <div className="section-container relative z-10">
             <div className="max-w-3xl">
@@ -97,52 +97,48 @@ export default function Tabor3DTiskClient({ open, openNoLink, collectingInterest
                 animate={{ opacity: 1, y: 0 }}
                 className="mb-8"
               >
-                <Link href="/" className="text-gray-400 hover:text-primary-400 transition-colors">
-                  Domů
-                </Link>
-                <span className="text-gray-500 mx-2">/</span>
-                <Link href="/program" className="text-gray-400 hover:text-primary-400 transition-colors">
-                  Programy
-                </Link>
-                <span className="text-gray-500 mx-2">/</span>
-                <span className="text-white font-medium">3D tisk</span>
-              </motion.div>
-
-              {/* Badge */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm text-white/90 rounded-full text-sm font-medium mb-6 border border-white/20"
-              >
-                <Printer className="w-4 h-4 text-primary-400" />
-                <span>Jednodenní tábor</span>
-                <span className="w-px h-4 bg-white/30" />
-                <span className="text-primary-400">9:00 – 17:00</span>
+                <p className="data-label mb-4">TÁBORY / 3D TISK</p>
               </motion.div>
 
               <motion.h1
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.15 }}
-                className="font-display text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white mb-6 leading-[1.1]"
+                className="heading-1 text-white mb-6"
               >
-                Jednodenní tábor{' '}
-                <span className="bg-gradient-to-r from-primary-400 to-primary-300 bg-clip-text text-transparent">
-                  3D tisku
-                </span>
+                Jednodenní tábor 3D tisku
               </motion.h1>
 
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl leading-relaxed"
+                className="text-lg md:text-xl text-slate-300 mb-8 max-w-2xl leading-relaxed"
               >
                 Za jeden den si vaše dítě navrhne vlastní 3D model, vytiskne ho na profesionální
                 tiskárně Prusa a odnese si ho domů.
                 <span className="text-white font-medium"> Pro děti 10–15 let.</span>
               </motion.p>
+
+              {/* Spec sheet */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.25 }}
+                className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 max-w-2xl"
+              >
+                {[
+                  { label: 'VĚK', value: '10–15 let' },
+                  { label: 'KAPACITA', value: 'Max 15' },
+                  { label: 'CENA', value: '1 490 Kč' },
+                  { label: 'ČAS', value: '9:00–17:00' },
+                ].map((spec, i) => (
+                  <div key={i} className="card-glow p-4">
+                    <p className="data-label text-xs mb-2">{ spec.label }</p>
+                    <p className="font-display text-white text-lg">{spec.value}</p>
+                  </div>
+                ))}
+              </motion.div>
 
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -152,47 +148,24 @@ export default function Tabor3DTiskClient({ open, openNoLink, collectingInterest
               >
                 <a
                   href="#terminy"
-                  className="group inline-flex items-center justify-center px-8 py-4 bg-cta-500 hover:bg-cta-400 text-gray-900 font-semibold rounded-xl transition-all duration-300 hover:shadow-xl hover:shadow-cta-500/30 hover:-translate-y-0.5"
+                  className="btn-primary inline-flex items-center justify-center"
                 >
                   Zobrazit termíny
-                  <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="ml-2 w-5 h-5" />
                 </a>
                 <a
                   href="#program"
-                  className="group inline-flex items-center justify-center px-8 py-4 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white font-semibold rounded-xl border border-white/20 transition-all duration-300"
+                  className="btn-secondary inline-flex items-center justify-center"
                 >
                   Co děti čeká
                 </a>
-              </motion.div>
-
-              {/* Quick facts */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.5 }}
-                className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-3"
-              >
-                {[
-                  { icon: Calendar, label: '1 den', sublabel: 'So / Ne' },
-                  { icon: Clock, label: '8 hodin', sublabel: 'programu' },
-                  { icon: Users, label: 'Max 15', sublabel: 'dětí' },
-                  { icon: Utensils, label: 'Oběd', sublabel: 'v ceně' },
-                ].map((fact, i) => (
-                  <div key={i} className="flex items-center gap-3 p-3 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10">
-                    <fact.icon className="w-5 h-5 text-primary-400 flex-shrink-0" />
-                    <div>
-                      <p className="text-sm font-semibold text-white">{fact.label}</p>
-                      <p className="text-xs text-gray-400">{fact.sublabel}</p>
-                    </div>
-                  </div>
-                ))}
               </motion.div>
             </div>
           </div>
         </section>
 
         {/* O programu */}
-        <section id="program" className="section-padding bg-white scroll-mt-24">
+        <section id="program" className="section-padding bg-night scroll-mt-24">
           <div className="section-container">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -200,10 +173,11 @@ export default function Tabor3DTiskClient({ open, openNoLink, collectingInterest
               viewport={{ once: true }}
               className="max-w-3xl mx-auto text-center mb-16"
             >
-              <h2 className="heading-2 text-gray-900 mb-4">
-                Od nápadu k hotovému <span className="text-gradient">výrobku</span>
+              <p className="data-label mb-4">PROGRAM</p>
+              <h2 className="heading-2 text-white mb-4">
+                Od nápadu k hotovému <span className="text-primary-400">výrobku</span>
               </h2>
-              <p className="text-lg text-gray-600">
+              <p className="text-lg text-slate-300">
                 Za jeden den projdete celým procesem 3D tisku – od prvního návrhu po hotový výtisk,
                 který si odnesete domů.
               </p>
@@ -236,24 +210,22 @@ export default function Tabor3DTiskClient({ open, openNoLink, collectingInterest
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
-                  className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-lg transition-shadow"
+                  className="card-glow p-6"
                 >
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 rounded-xl bg-primary-50 flex items-center justify-center">
-                      <block.icon className="w-6 h-6 text-primary-600" />
+                    <div className="w-12 h-12 rounded-lg bg-primary-400/10 flex items-center justify-center">
+                      <block.icon className="w-6 h-6 text-primary-400" />
                     </div>
-                    <div className="px-3 py-1 rounded-full bg-primary-100 text-primary-700 text-xs font-semibold">
-                      Krok {index + 1}
-                    </div>
+                    <p className="data-label text-xs">Krok {index + 1}</p>
                   </div>
 
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">{block.title}</h3>
-                  <p className="text-gray-600 mb-4">{block.description}</p>
+                  <h3 className="text-xl font-bold text-white mb-3">{block.title}</h3>
+                  <p className="text-slate-400 mb-4">{block.description}</p>
 
                   <ul className="space-y-2">
                     {block.highlights.map((h, i) => (
-                      <li key={i} className="flex items-center gap-2 text-sm text-gray-700">
-                        <Check className="w-4 h-4 text-primary-600 flex-shrink-0" />
+                      <li key={i} className="flex items-center gap-2 text-sm text-slate-300">
+                        <Check className="w-4 h-4 text-primary-400 flex-shrink-0" />
                         {h}
                       </li>
                     ))}
@@ -269,12 +241,13 @@ export default function Tabor3DTiskClient({ open, openNoLink, collectingInterest
               viewport={{ once: true }}
               className="mt-12 text-center"
             >
-              <p className="text-sm font-medium text-gray-500 mb-4">Tiskneme na tiskárnách Prusa Research</p>
+              <p className="data-label mb-4">VYBAVENÍ</p>
+              <p className="text-slate-300 mb-6">Tiskneme na tiskárnách Prusa Research</p>
               <div className="flex flex-wrap justify-center gap-2">
                 {printerModels.map(model => (
-                  <span key={model} className="px-3 py-1.5 bg-primary-50 text-primary-700 rounded-full text-sm font-medium border border-primary-100">
-                    {model}
-                  </span>
+                  <div key={model} className="card-glow px-3 py-1.5">
+                    <p className="font-mono text-white text-sm">{model}</p>
+                  </div>
                 ))}
               </div>
             </motion.div>
@@ -282,7 +255,7 @@ export default function Tabor3DTiskClient({ open, openNoLink, collectingInterest
         </section>
 
         {/* Harmonogram */}
-        <section id="harmonogram" className="section-padding bg-gray-50 scroll-mt-24">
+        <section id="harmonogram" className="section-padding bg-night scroll-mt-24">
           <div className="section-container">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -290,10 +263,11 @@ export default function Tabor3DTiskClient({ open, openNoLink, collectingInterest
               viewport={{ once: true }}
               className="text-center mb-12"
             >
-              <h2 className="heading-2 text-gray-900 mb-4">
-                Harmonogram <span className="text-gradient">dne</span>
+              <p className="data-label mb-4">HARMONOGRAM</p>
+              <h2 className="heading-2 text-white mb-4">
+                Program <span className="text-primary-400">dne</span>
               </h2>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              <p className="text-lg text-slate-300 max-w-2xl mx-auto">
                 Příchod od 8:30, program 9:00–16:30. Střídáme tvoření, přestávky i venkovní aktivity.
               </p>
             </motion.div>
@@ -304,30 +278,18 @@ export default function Tabor3DTiskClient({ open, openNoLink, collectingInterest
               viewport={{ once: true }}
               className="max-w-2xl mx-auto"
             >
-              <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
-                <div className="bg-gradient-to-r from-primary-600 to-primary-500 p-5">
-                  <div className="flex items-center gap-3">
-                    <Printer className="w-6 h-6 text-white" />
-                    <div>
-                      <h3 className="text-lg font-bold text-white">3D tisk – program dne</h3>
-                      <p className="text-sm text-white/80">Od návrhu po hotový výtisk</p>
+              <div className="pl-4">
+                <div className="space-y-0 border-l border-white/15">
+                  {dayProgram.map((item, i) => (
+                    <div key={i} className="pb-6 pl-6 relative">
+                      <div className="absolute left-0 top-0 w-2 h-2 rounded-full bg-accent-400 -ml-1 mt-1" />
+                      <p className="font-mono text-sm text-accent-400 mb-1">{item.time}</p>
+                      <p className="text-white font-semibold text-sm">{item.title}</p>
+                      {item.description && (
+                        <p className="text-xs text-slate-400 mt-0.5">{item.description}</p>
+                      )}
                     </div>
-                  </div>
-                </div>
-                <div className="p-5">
-                  <div className="space-y-0">
-                    {dayProgram.map((item, i) => (
-                      <div key={i} className={`flex gap-4 py-3 ${i < dayProgram.length - 1 ? 'border-b border-gray-100' : ''}`}>
-                        <span className="text-sm font-mono font-semibold text-primary-600 w-12 flex-shrink-0">{item.time}</span>
-                        <div>
-                          <p className="font-medium text-gray-900 text-sm">{item.title}</p>
-                          {item.description && (
-                            <p className="text-xs text-gray-500 mt-0.5">{item.description}</p>
-                          )}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                  ))}
                 </div>
               </div>
             </motion.div>
@@ -335,7 +297,7 @@ export default function Tabor3DTiskClient({ open, openNoLink, collectingInterest
         </section>
 
         {/* Praktické informace */}
-        <section className="section-padding bg-white">
+        <section className="section-padding bg-night">
           <div className="section-container">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -343,8 +305,9 @@ export default function Tabor3DTiskClient({ open, openNoLink, collectingInterest
               viewport={{ once: true }}
               className="max-w-4xl mx-auto"
             >
-              <h2 className="heading-2 text-gray-900 mb-8 text-center">
-                Praktické <span className="text-gradient">informace</span>
+              <p className="data-label text-center mb-4">PRAKTICKÉ INFORMACE</p>
+              <h2 className="heading-2 text-white mb-8 text-center">
+                Co byste měli vědět
               </h2>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -376,14 +339,14 @@ export default function Tabor3DTiskClient({ open, openNoLink, collectingInterest
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.1 }}
-                    className="flex gap-4 p-5 rounded-xl bg-gray-50 border border-gray-100"
+                    className="flex gap-4 p-5 card-glow"
                   >
-                    <div className="w-10 h-10 rounded-lg bg-primary-100 flex items-center justify-center flex-shrink-0">
-                      <info.icon className="w-5 h-5 text-primary-600" />
+                    <div className="w-10 h-10 rounded-lg bg-primary-400/10 flex items-center justify-center flex-shrink-0">
+                      <info.icon className="w-5 h-5 text-primary-400" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-900 mb-1">{info.title}</h3>
-                      <p className="text-sm text-gray-600">{info.text}</p>
+                      <h3 className="font-semibold text-white mb-1">{info.title}</h3>
+                      <p className="text-sm text-slate-400">{info.text}</p>
                     </div>
                   </motion.div>
                 ))}
@@ -401,7 +364,7 @@ export default function Tabor3DTiskClient({ open, openNoLink, collectingInterest
         />
 
         {/* Termíny */}
-        <section id="terminy" className="section-padding bg-gradient-to-br from-primary-600 to-primary-800 scroll-mt-24">
+        <section id="terminy" className="section-padding bg-night scroll-mt-24">
           <div className="section-container">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -409,14 +372,15 @@ export default function Tabor3DTiskClient({ open, openNoLink, collectingInterest
               viewport={{ once: true }}
               className="text-center mb-12"
             >
+              <p className="data-label mb-4">TERMÍNY</p>
               <h2 className="heading-2 text-white mb-4">
-                Termíny
+                Vyberte si termín
               </h2>
-              <p className="text-xl text-white/90 max-w-2xl mx-auto">
+              <p className="text-xl text-slate-300 max-w-2xl mx-auto">
                 Jednodenní 3D tisk, 9:00–17:00.
               </p>
-              <p className="text-lg text-white/70 mt-2">
-                <span className="font-bold text-white">1 490 Kč</span> (vč. oběda a materiálů)
+              <p className="text-lg text-white mt-2">
+                <span className="font-bold">1 490 Kč</span> <span className="text-slate-400">(vč. oběda a materiálů)</span>
               </p>
             </motion.div>
 
@@ -428,9 +392,9 @@ export default function Tabor3DTiskClient({ open, openNoLink, collectingInterest
               collectingInterest={collectingInterest}
               full={full}
               accentClasses={{
-                badgeDot: 'bg-trust-400',
-                badgePillBg: 'bg-trust-500/20',
-                badgePillText: 'text-trust-300',
+                badgeDot: 'bg-primary-400',
+                badgePillBg: 'bg-primary-500/20',
+                badgePillText: 'text-primary-300',
                 primaryBtnBg: 'bg-primary-600 hover:bg-primary-700',
                 inputRing: 'focus:ring-primary-400',
                 checkboxAccent: 'text-primary-400 focus:ring-primary-400',
@@ -441,7 +405,7 @@ export default function Tabor3DTiskClient({ open, openNoLink, collectingInterest
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
-              className="text-center text-white/60 mt-8 text-sm"
+              className="text-center text-slate-400 mt-8 text-sm"
             >
               Registrace potvrzených termínů probíhá přes systém DDM Praha 6.
             </motion.p>
@@ -449,7 +413,7 @@ export default function Tabor3DTiskClient({ open, openNoLink, collectingInterest
         </section>
 
         {/* FAQ */}
-        <section className="section-padding bg-gray-50">
+        <section className="section-padding bg-night">
           <div className="section-container">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -457,23 +421,24 @@ export default function Tabor3DTiskClient({ open, openNoLink, collectingInterest
               viewport={{ once: true }}
               className="max-w-3xl mx-auto"
             >
-              <h2 className="heading-2 text-gray-900 mb-4 text-center">
-                Časté dotazy <span className="text-gradient">k táboru</span>
+              <p className="data-label text-center mb-4">DOTAZY</p>
+              <h2 className="heading-2 text-white mb-4 text-center">
+                Časté dotazy <span className="text-primary-400">k táboru</span>
               </h2>
-              <p className="text-lg text-gray-600 mb-10 text-center">
+              <p className="text-lg text-slate-300 mb-10 text-center">
                 Nenašli jste odpověď?{' '}
-                <Link href="/kontakt" className="text-primary-600 hover:underline font-medium">
+                <Link href="/kontakt" className="text-accent-400 hover:text-accent-300 font-medium">
                   Kontaktujte nás
                 </Link>
               </p>
 
-              <FAQAccordion items={campFaqs} focusRingClass="focus:ring-primary-500" />
+              <FAQAccordion items={campFaqs} focusRingClass="focus:ring-primary-400" />
             </motion.div>
           </div>
         </section>
 
         {/* Bottom CTA + crosslink */}
-        <section className="section-padding bg-gradient-to-br from-primary-600 via-primary-700 to-primary-800">
+        <section className="section-padding bg-night-800">
           <div className="section-container">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -484,32 +449,32 @@ export default function Tabor3DTiskClient({ open, openNoLink, collectingInterest
               <h2 className="heading-2 text-white mb-6">
                 Od nápadu k výrobku za jeden den
               </h2>
-              <p className="text-xl text-white/90 mb-8">
+              <p className="text-xl text-slate-300 mb-8">
                 Vaše dítě si navrhne, vytiskne a odnese domů vlastní 3D model.
                 Žádné předchozí zkušenosti nepotřebuje.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <a
                   href="#terminy"
-                  className="inline-flex items-center justify-center px-8 py-4 bg-white hover:bg-gray-100 text-primary-600 font-semibold rounded-xl transition-all duration-300"
+                  className="btn-primary inline-flex items-center justify-center"
                 >
                   Zobrazit termíny
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </a>
                 <Link
                   href="/kontakt"
-                  className="inline-flex items-center justify-center px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl border border-white/20 transition-all duration-300"
+                  className="btn-secondary inline-flex items-center justify-center"
                 >
                   Máte dotazy?
                 </Link>
               </div>
 
               {/* Crosslink to weekend camp */}
-              <div className="mt-12 pt-8 border-t border-white/20">
-                <p className="text-white/70 mb-3">Hledáte víkendový tábor?</p>
+              <div className="mt-12 pt-8 border-t border-white/10">
+                <p className="text-slate-400 mb-3">Hledáte víkendový tábor?</p>
                 <Link
                   href="/tabor-chytrych-technologii"
-                  className="inline-flex items-center gap-2 text-white hover:text-primary-200 font-semibold transition-colors"
+                  className="inline-flex items-center gap-2 text-white hover:text-accent-300 font-semibold transition-colors"
                 >
                   Tábor chytrých technologií – 3D tisk, IoT i VR za víkend
                   <ArrowRight className="w-4 h-4" />
