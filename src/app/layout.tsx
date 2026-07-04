@@ -10,6 +10,7 @@ import { GoogleAnalyticsGated } from '@/components/analytics/GoogleAnalyticsGate
 import { QRTracker } from '@/components/analytics/QRTracker'
 import { MotionProvider } from '@/components/providers/MotionProvider'
 import { ShopProvider } from '@/components/shop/ShopProvider'
+import { SpotlightCursor } from '@/components/effects/SpotlightCursor'
 
 const GA_ID = (process.env.NEXT_PUBLIC_GA_ID || 'G-9955Q5FRRX').trim()
 
@@ -118,6 +119,7 @@ export default function RootLayout({
           </MotionProvider>
         </ShopProvider>
         <CookieConsent />
+        <SpotlightCursor />
         <KVRegionNudge />
         <Suspense fallback={null}>
           <QRTracker />
