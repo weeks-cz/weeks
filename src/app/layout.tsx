@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import { Suspense } from 'react'
-import { DM_Sans, Outfit } from 'next/font/google'
+import { Fraunces, Plus_Jakarta_Sans } from 'next/font/google'
 import './globals.css'
 import { CookieConsent } from '@/components/ui/CookieConsent'
 import { KVRegionNudge } from '@/components/ui/KVRegionNudge'
@@ -13,16 +13,17 @@ import { ShopProvider } from '@/components/shop/ShopProvider'
 
 const GA_ID = (process.env.NEXT_PUBLIC_GA_ID || 'G-9955Q5FRRX').trim()
 
-const dmSans = DM_Sans({
+const jakarta = Plus_Jakarta_Sans({
   subsets: ['latin', 'latin-ext'],
-  variable: '--font-dm-sans',
+  variable: '--font-sans',
   display: 'swap',
 })
 
-const outfit = Outfit({
+const fraunces = Fraunces({
   subsets: ['latin', 'latin-ext'],
-  variable: '--font-outfit',
+  variable: '--font-display',
   display: 'swap',
+  axes: ['SOFT', 'opsz'],
 })
 
 const siteUrl = 'https://weeks.cz'
@@ -104,7 +105,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="cs">
-      <body className={`${dmSans.variable} ${outfit.variable} font-sans`}>
+      <body className={`${jakarta.variable} ${fraunces.variable} font-sans`}>
         <ShopProvider>
           <MotionProvider>
             {children}

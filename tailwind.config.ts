@@ -61,10 +61,20 @@ const config: Config = {
           800: '#92400E',
           900: '#78350F',
         },
+        // Cream - Light Premium
+        cream: {
+          DEFAULT: '#FDFCFA',
+          deep: '#F6F4EE',
+        },
       },
       fontFamily: {
-        sans: ['var(--font-dm-sans)', 'system-ui', 'sans-serif'],
-        display: ['var(--font-outfit)', 'var(--font-dm-sans)', 'system-ui', 'sans-serif'],
+        sans: 'var(--font-sans)',
+        display: ['var(--font-display)', 'serif'],
+      },
+      boxShadow: {
+        soft: '0 1px 2px rgba(15, 23, 42, 0.04), 0 8px 24px rgba(79, 70, 229, 0.06)',
+        'soft-lg': '0 2px 4px rgba(15, 23, 42, 0.04), 0 16px 48px rgba(79, 70, 229, 0.10)',
+        bloom: '0 4px 8px rgba(15, 23, 42, 0.04), 0 24px 64px rgba(79, 70, 229, 0.16)',
       },
       animation: {
         'fade-in': 'fadeIn 0.5s ease-in-out',
