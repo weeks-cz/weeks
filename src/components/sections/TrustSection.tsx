@@ -4,7 +4,6 @@ import { motion } from 'framer-motion'
 import { Users, ShieldCheck, Phone, Heart, MapPin } from 'lucide-react'
 import Image from 'next/image'
 import { useLocation } from '@/contexts/LocationContext'
-import { CountUp } from '@/components/effects/CountUp'
 
 const defaultSafetyFeatures = [
   { icon: ShieldCheck, title: 'Pojištění účastníků', description: 'Komplexní pojištění' },

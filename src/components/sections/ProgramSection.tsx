@@ -5,7 +5,6 @@ import { Printer, Cpu, Box, Globe, Gamepad2, Code2, Sparkles, ArrowRight } from 
 import Link from 'next/link'
 import { useLocation } from '@/contexts/LocationContext'
 import { buildPath } from '@/lib/locations'
-import { CountUp } from '@/components/effects/CountUp'
 
 // Všechny 3 hlavní tábory - rovnocenné
 const mainCamps = [
