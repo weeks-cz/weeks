@@ -90,6 +90,10 @@ export function LocalBusinessSchema({ location = DEFAULT_LOCATION }: { location?
 }
 
 export function EventSchema({ location = DEFAULT_LOCATION }: { location?: Location }) {
+  // Po skončení sezóny Event nevydáváme vůbec. Fallback dole by jinak Googlu
+  // nabídl propadlý termín s availability InStock — tedy nabídku, která neexistuje.
+  if (location.season?.status === 'ended') return null
+
   const url = locationUrl(location)
   const mainProgram = location.programs.find((p) => p.id === 'mix') ?? location.programs[0]
 

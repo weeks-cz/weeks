@@ -16,6 +16,7 @@ import { ProjectGallery } from '../_components/ProjectGallery'
 import { VenueShowcase } from '../_components/VenueShowcase'
 import { CampViewTracker } from '../_components/CampViewTracker'
 import { useTermCapacity, SpotsLeftBadge } from '../_components/SpotsLeft'
+import { SeasonClosedPanel } from '../_components/SeasonClosed'
 
 const weeklyDays = [
   {
@@ -161,6 +162,7 @@ export default function LetniPrimestskyCampPage() {
   const program = location.programs.find(p => p.id === 'letni-primestsky')
   const terms = location.terms.filter(t => t.program === 'letni-primestsky')
   const capacity = useTermCapacity(location.id)
+  const seasonEnded = location.season?.status === 'ended'
 
   return (
     <>
@@ -243,7 +245,7 @@ export default function LetniPrimestskyCampPage() {
                   href="#registrace"
                   className="group inline-flex items-center justify-center px-8 py-4 bg-cta-500 hover:bg-cta-400 text-gray-900 font-semibold rounded-xl transition-all duration-300 hover:shadow-xl hover:shadow-cta-500/30 hover:-translate-y-0.5"
                 >
-                  Přihlásit dítě
+                  {seasonEnded ? 'Termíny 2027' : 'Přihlásit dítě'}
                   <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </a>
                 <a
@@ -511,15 +513,23 @@ export default function LetniPrimestskyCampPage() {
               className="text-center mb-12"
             >
               <h2 className="heading-2 text-white mb-4">
-                Termín a registrace
+                {seasonEnded ? 'Termíny a registrace' : 'Termín a registrace'}
               </h2>
               {program && (
                 <p className="text-xl text-white/90">
-                  Cena: <span className="font-bold text-white">{program.price.toLocaleString('cs-CZ')} Kč</span>{' '}
-                  za celý týden (vč. obědů a materiálů)
+                  {seasonEnded ? (
+                    <>Cena letos byla <span className="font-bold text-white">{program.price.toLocaleString('cs-CZ')} Kč</span> za celý týden včetně obědů a materiálů.</>
+                  ) : (
+                    <>
+                      Cena: <span className="font-bold text-white">{program.price.toLocaleString('cs-CZ')} Kč</span>{' '}
+                      za celý týden (vč. obědů a materiálů)
+                    </>
+                  )}
                 </p>
               )}
             </motion.div>
+
+            {seasonEnded && <SeasonClosedPanel source="kv-letni-primestsky" />}
 
             <div className={`grid gap-6 max-w-4xl mx-auto ${terms.length === 1 ? 'sm:max-w-md' : 'sm:grid-cols-2'}`}>
               {program && terms.map((term, i) => {
@@ -579,14 +589,16 @@ export default function LetniPrimestskyCampPage() {
               })}
             </div>
 
-            <motion.p
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              className="text-center text-white/60 mt-8 text-sm"
-            >
-              Registrace probíhá přímo přes systém Weeks. Po přihlášení vám přijde potvrzení emailem.
-            </motion.p>
+            {!seasonEnded && (
+              <motion.p
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                className="text-center text-white/60 mt-8 text-sm"
+              >
+                Registrace probíhá přímo přes systém Weeks. Po přihlášení vám přijde potvrzení emailem.
+              </motion.p>
+            )}
           </div>
         </section>
 
@@ -628,19 +640,32 @@ export default function LetniPrimestskyCampPage() {
               className="max-w-3xl mx-auto text-center"
             >
               <h2 className="heading-2 text-white mb-6">
-                V Karlových Varech je jen 15 míst na turnus
+                {seasonEnded
+                  ? 'Chcete být u toho příští léto?'
+                  : 'V Karlových Varech je jen 15 míst na turnus'}
               </h2>
               <p className="text-xl text-white/90 mb-8">
-                Letní příměstský tábor, ze kterého si vaše dítě odnese vlastní 3D výtisk
-                i sestavené zařízení — a vy máte celý týden jistotu, že je o něj dobře
-                postaráno. Termíny se plní, s přihláškou neváhejte.
+                {seasonEnded ? (
+                  <>
+                    Letní příměstský tábor, ze kterého si vaše dítě odnese vlastní 3D výtisk
+                    i sestavené zařízení. Na turnus bereme jen 15 dětí, a kdo o termínech ví
+                    první, má nejlepší výběr. Nechte nám kontakt a ozveme se vám, jakmile
+                    vypíšeme {location.season?.nextSeasonLabel}.
+                  </>
+                ) : (
+                  <>
+                    Letní příměstský tábor, ze kterého si vaše dítě odnese vlastní 3D výtisk
+                    i sestavené zařízení — a vy máte celý týden jistotu, že je o něj dobře
+                    postaráno. Termíny se plní, s přihláškou neváhejte.
+                  </>
+                )}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <a
                   href="#registrace"
                   className="inline-flex items-center justify-center px-8 py-4 bg-white hover:bg-gray-100 text-primary-600 font-semibold rounded-xl transition-all duration-300"
                 >
-                  Přihlásit dítě
+                  {seasonEnded ? 'Chci vědět o termínech' : 'Přihlásit dítě'}
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </a>
                 <Link

@@ -44,6 +44,22 @@ export interface TermConfig {
   venue?: string
 }
 
+/**
+ * Stav sezóny pro danou lokalitu. Když je `ended`, stránky nezobrazují žádné
+ * termíny ani registrační tlačítka — místo nich off-season panel se sběrem
+ * kontaktů na další léto. Prázdné `terms` samo o sobě nestačí: u Prahy znamená
+ * „termíny se teprve chystají", u KV „sezóna dojela".
+ */
+export interface SeasonConfig {
+  status: 'open' | 'ended'
+  /** Nadpis off-season panelu. */
+  heading: string
+  /** Vysvětlení pro rodiče — co bylo, co bude a kdy. */
+  message: string
+  /** Sezóna, na kterou sbíráme kontakty (do e-mailu i do GA). */
+  nextSeasonLabel: string
+}
+
 export interface Location {
   id: string
   name: string
@@ -62,6 +78,7 @@ export interface Location {
   }
   programs: ProgramConfig[]
   terms: TermConfig[]
+  season?: SeasonConfig
   hero: {
     badge: string
     subtitle: string
@@ -190,12 +207,18 @@ export const LOCATIONS: Record<string, Location> = {
       { id: 'letni-primestsky', name: 'Letní příměstský tábor chytrých technologií', slug: 'letni-primestsky', campType: 'week' as const, price: 4990, capacity: 15, ageRange: '9-15', color: 'accent' },
       { id: 'mix', name: 'Víkendový tábor chytrých technologií', slug: 'tabor-chytrych-technologii', campType: 'weekend' as const, price: 2990, capacity: 15, ageRange: '9-15', color: 'primary' },
     ],
-    terms: [
-      { id: 'kv-2026-07-27-letni', program: 'letni-primestsky', startDate: '2026-07-27', endDate: '2026-07-31', day: 'pondělí–pátek', status: 'confirmed' as const },
-      { id: 'kv-2026-08-01-mix', program: 'mix', startDate: '2026-08-01', endDate: '2026-08-02', day: 'sobota–neděle', status: 'confirmed' as const },
-      { id: 'kv-2026-08-03-letni', program: 'letni-primestsky', startDate: '2026-08-03', endDate: '2026-08-07', day: 'pondělí–pátek', status: 'confirmed' as const },
-      { id: 'kv-2026-08-08-mix', program: 'mix', startDate: '2026-08-08', endDate: '2026-08-09', day: 'sobota–neděle', status: 'confirmed' as const },
-    ],
+    // Léto 2026 dojelo — poslední turnus 27.–31. 7., srpnové termíny zrušeny.
+    // Termíny na 2027 sem přibydou na jaře; do té doby off-season panel (viz `season`).
+    terms: [],
+    season: {
+      status: 'ended',
+      heading: 'Letní sezóna 2026 je uzavřena',
+      message:
+        'Letošní turnusy ve FabLabu VARY&TE máme za sebou a registrace jsou zavřené. ' +
+        'Termíny na léto 2027 vypíšeme na jaře — nechte nám kontakt a ozveme se vám ' +
+        'mezi prvními, ještě než registraci otevřeme veřejně.',
+      nextSeasonLabel: 'léto 2027',
+    },
     hero: {
       badge: 'Nově v Karlových Varech!',
       subtitle: 'Letní příměstský tábor (Po–Pá) i víkendový MIX (So–Ne) v Karlových Varech — 3D tisk, modelování, IoT, VR a základy programování.',

@@ -84,6 +84,21 @@ export function trackInterestSubmit(params: {
   })
 }
 
+// Off-season: kontakt zanechaný na příští sezónu (KV po létě 2026).
+// Jen GA — do Meta se to jako Lead neposílá, žádná kampaň na to teď necílí
+// a falešná hodnota konverze by zbytečně zašuměla optimalizaci.
+export function trackSeasonInterest(params: {
+  locationId: string
+  season: string
+  source: string
+}) {
+  sendGAEvent('event', 'season_interest_submit', {
+    location_id: params.locationId,
+    season: params.season,
+    source: params.source,
+  })
+}
+
 // One-day camp page view tracking
 export function trackViewOneDayCamp(programId: string, source: string) {
   sendGAEvent('event', 'view_oneday_camp', {

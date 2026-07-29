@@ -6,6 +6,7 @@ import { Mail, CalendarDays, Users, CheckCircle, ArrowRight, Sparkles, Calendar 
 import Link from 'next/link'
 import { useLocation } from '@/contexts/LocationContext'
 import { useTermCapacity, SpotsLeftBadge } from './SpotsLeft'
+import { SeasonClosedPanel } from './SeasonClosed'
 
 const FORMSPREE_ID = process.env.NEXT_PUBLIC_FORMSPREE_ID ?? 'mrezolbj'
 
@@ -51,6 +52,26 @@ export function KVRegistrationSection() {
     const terms = location.terms.filter(t => t.program === program.id)
     return { program, terms }
   }).filter(b => b.terms.length > 0)
+
+  // Po skončení sezóny nezmizí celá sekce (hero na ni odkazuje kotvou #prihlasit) —
+  // místo termínů se ukáže off-season panel se sběrem kontaktů na příští léto.
+  if (location.season?.status === 'ended') {
+    return (
+      <section id="prihlasit" className="section-padding bg-gray-50 scroll-mt-24">
+        <div className="section-container">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="heading-2 text-gray-900 mb-8 text-center"
+          >
+            Termíny <span className="text-gradient">{location.name}</span>
+          </motion.h2>
+          <SeasonClosedPanel source="kv-homepage" />
+        </div>
+      </section>
+    )
+  }
 
   if (blocks.length === 0) return null
 

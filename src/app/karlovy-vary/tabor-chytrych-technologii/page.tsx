@@ -11,6 +11,7 @@ import { useState } from 'react'
 import { ProjectGallery } from '../_components/ProjectGallery'
 import { VenueShowcase } from '../_components/VenueShowcase'
 import { CampViewTracker } from '../_components/CampViewTracker'
+import { SeasonClosedPanel } from '../_components/SeasonClosed'
 
 const sobotaProgram = [
   { time: '9:00', title: 'Příchod dětí', description: '' },
@@ -56,6 +57,7 @@ export default function KVMix() {
   const program = location.programs.find(p => p.id === 'mix')!
   const terms = location.terms.filter(t => t.program === 'mix')
   const venue = location.venues[0]
+  const seasonEnded = location.season?.status === 'ended'
   const [activeDay, setActiveDay] = useState<'sobota' | 'neděle'>('sobota')
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null)
 
@@ -348,7 +350,9 @@ export default function KVMix() {
         <section id="terminy" className="section-padding bg-gray-50">
           <div className="section-container">
             <h2 className="heading-2 text-center mb-10">Termíny — {location.name}</h2>
-            {terms.length > 0 ? (
+            {seasonEnded ? (
+              <SeasonClosedPanel source="kv-mix" />
+            ) : terms.length > 0 ? (
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
                 {terms.map((term) => (
                   <motion.div

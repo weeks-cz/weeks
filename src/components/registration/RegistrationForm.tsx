@@ -224,12 +224,19 @@ export function RegistrationForm() {
     `w-full px-4 py-3 rounded-lg border ${fieldErrors[name] ? 'border-red-300 bg-red-50' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors`
 
   if (!program || !term) {
+    // Odkazy z loňských reklam a e-mailů míří na termíny, které už v configu nejsou.
+    // Když je sezóna uzavřená, řekněme rovnou proč — „neplatný odkaz" by vypadalo jako chyba.
+    const seasonEnded = location.season?.status === 'ended'
     return (
       <div className="max-w-lg mx-auto text-center py-20">
-        <h1 className="heading-2 mb-4">Registrace</h1>
-        <p className="text-gray-600 mb-6">Neplatný odkaz na registraci. Vyberte si tábor a termín.</p>
-        <Link href={`/${location.slug || ''}`} className="btn-primary">
-          Zpět na výběr táborů
+        <h1 className="heading-2 mb-4">{seasonEnded ? 'Registrace je uzavřená' : 'Registrace'}</h1>
+        <p className="text-gray-600 mb-6">
+          {seasonEnded
+            ? `Letošní sezóna už skončila a tento termín se nekoná. Termíny na ${location.season?.nextSeasonLabel} vypíšeme na jaře — nechte nám kontakt a ozveme se vám mezi prvními.`
+            : 'Neplatný odkaz na registraci. Vyberte si tábor a termín.'}
+        </p>
+        <Link href={`/${location.slug || ''}${seasonEnded ? '#prihlasit' : ''}`} className="btn-primary">
+          {seasonEnded ? 'Chci vědět o termínech' : 'Zpět na výběr táborů'}
         </Link>
       </div>
     )

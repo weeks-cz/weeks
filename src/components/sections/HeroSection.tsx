@@ -11,6 +11,9 @@ export function HeroSection() {
   const location = useLocation()
   // Věk bereme z configu lokace (Praha 10–15, KV 9–15), ne natvrdo.
   const ageLabel = (location.programs[0]?.ageRange ?? '10-15').replace('-', '–')
+  // Po skončení sezóny hero neslibuje otevřenou registraci — kotva #prihlasit
+  // vede na off-season panel se sběrem kontaktů na další léto.
+  const seasonEnded = location.season?.status === 'ended'
   return (
     <section className="relative min-h-screen flex items-center pt-32 pb-24 overflow-hidden">
       {/* Background Image with Overlay */}
@@ -43,7 +46,11 @@ export function HeroSection() {
             <Sparkles className="w-4 h-4 text-cta-400" />
             <span>{location.hero.badge}</span>
             <span className="w-px h-4 bg-white/30" />
-            <span className="text-cta-400">Registrace otevřena</span>
+            <span className="text-cta-400">
+              {seasonEnded
+                ? `Připravujeme ${location.season?.nextSeasonLabel}`
+                : 'Registrace otevřena'}
+            </span>
           </motion.div>
 
           {/* Headline */}
@@ -84,7 +91,7 @@ export function HeroSection() {
               className="group inline-flex items-center justify-center px-8 py-4 bg-cta-500 hover:bg-cta-400 text-gray-900 font-semibold rounded-xl transition-all duration-300 hover:shadow-xl hover:shadow-cta-500/30 hover:-translate-y-0.5"
               onClick={() => trackViewTerms('homepage_hero')}
             >
-              Vybrat termín
+              {seasonEnded ? 'Termíny na příští léto' : 'Vybrat termín'}
               <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Link>
             <Link

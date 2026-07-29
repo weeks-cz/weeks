@@ -31,7 +31,11 @@ export function Header() {
       ]
 
   const logoHref = buildPath(location, '')
-  const ctaHref = location.isDefault ? '/#prihlasit' : '#prihlasit'
+  // Absolutní cesta, ne holá kotva — na podstránkách lokace (např. /karlovy-vary/letni-primestsky)
+  // žádné #prihlasit není a tlačítko by neudělalo nic.
+  const ctaHref = location.isDefault ? '/#prihlasit' : `${buildPath(location, '')}#prihlasit`
+  const seasonEnded = location.season?.status === 'ended'
+  const ctaLabel = seasonEnded ? 'Léto 2027' : 'Vybrat termín'
 
   useEffect(() => {
     const handleScroll = () => {
@@ -112,7 +116,7 @@ export function Header() {
             className="ml-4 btn-primary group"
             onClick={() => trackNavCTA('desktop')}
           >
-            Vybrat termín
+            {ctaLabel}
             <ChevronRight className="ml-1 w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
           </Link>
         </div>
@@ -197,7 +201,7 @@ export function Header() {
                   className="btn-primary w-full text-center justify-center"
                   onClick={() => { trackNavCTA('mobile'); setMobileMenuOpen(false) }}
                 >
-                  Vybrat termín
+                  {ctaLabel}
                   <ChevronRight className="ml-1 w-4 h-4" />
                 </Link>
               </motion.div>

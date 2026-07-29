@@ -120,6 +120,7 @@ const colorClasses = {
 
 export function ProgramSection() {
   const location = useLocation()
+  const seasonEnded = location.season?.status === 'ended'
 
   if (!location.isDefault) {
     const kvPrograms = [
@@ -153,8 +154,10 @@ export function ProgramSection() {
               viewport={{ once: true }}
               className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full text-sm font-medium text-gray-600 shadow-sm mb-6"
             >
-              <span className="w-2 h-2 rounded-full bg-trust-500 animate-pulse" />
-              Léto 2026 — Karlovy Vary
+              <span className={`w-2 h-2 rounded-full ${seasonEnded ? 'bg-gray-400' : 'bg-trust-500 animate-pulse'}`} />
+              {seasonEnded
+                ? `Připravujeme ${location.season?.nextSeasonLabel} — ${location.name}`
+                : `Léto 2026 — ${location.name}`}
             </motion.div>
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
@@ -229,8 +232,14 @@ export function ProgramSection() {
                       <div className="flex items-center gap-2 pt-3 border-t border-gray-100">
                         <Calendar className="w-4 h-4 text-gray-400 flex-shrink-0" />
                         <span className="text-xs text-gray-500">
-                          {location.terms.filter(t => t.program === program.id).length} {' '}
-                          {location.terms.filter(t => t.program === program.id).length === 1 ? 'termín' : 'termíny'} v létě 2026
+                          {seasonEnded ? (
+                            `Termíny na ${location.season?.nextSeasonLabel} vypíšeme na jaře`
+                          ) : (
+                            <>
+                              {location.terms.filter(t => t.program === program.id).length}{' '}
+                              {location.terms.filter(t => t.program === program.id).length === 1 ? 'termín' : 'termíny'} v létě 2026
+                            </>
+                          )}
                         </span>
                         <ArrowRight className="w-4 h-4 text-gray-400 ml-auto group-hover:translate-x-1 transition-transform flex-shrink-0" />
                       </div>
