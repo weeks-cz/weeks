@@ -114,7 +114,7 @@ function TurnusListContent({ turnusy }: { turnusy: Turnus[] }) {
  */
 function TurnusListSkeleton() {
   return (
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3" aria-busy="true" aria-label="Načítáme turnusy">
+    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3" role="status" aria-busy="true" aria-label="Načítáme turnusy">
       {[0, 1, 2].map((i) => (
         <div key={i} className="flex flex-col bg-paper border border-ink/15 rounded-md p-6 animate-pulse">
           <div className="flex items-start justify-between gap-3 mb-4">

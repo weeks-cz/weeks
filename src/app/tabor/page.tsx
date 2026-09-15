@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { Suspense, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   ArrowRight, Printer, Cpu, Clock, MapPin,
@@ -10,11 +11,11 @@ import Link from 'next/link'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { getVenue, type VenueId } from '@/lib/cities'
-import { getTurnusy, isBookable } from '@/lib/turnusy'
+import { getTurnusy, isBookable, type Turnus } from '@/lib/turnusy'
 import { SITE, getSiteFaq } from '@/lib/site'
 import { ProjectGallery } from '@/components/turnusy/ProjectGallery'
 import { VenueShowcase } from '@/components/turnusy/VenueShowcase'
-import { TurnusList } from '@/components/turnusy/TurnusList'
+import { TurnusList, filtrMest, platneMesto } from '@/components/turnusy/TurnusList'
 import { TurnusInterestForm } from '@/components/turnusy/TurnusInterestForm'
 
 const weeklyDays = [
@@ -129,12 +130,41 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
   )
 }
 
+/**
+ * Formulář zájmu s městem propsaným do `source`, aby poptávky bez turnusu
+ * nepřišly nerozlišené — validace vybraného `?mesto=` je stejná jako
+ * v `TurnusList` (`filtrMest`/`platneMesto`), ať se do poptávky nedostane
+ * překlep z adresy. `useSearchParams` potřebuje vlastní `Suspense` hranici;
+ * fallback je rovnou plnohodnotný formulář s obecným zdrojem, ne kostra —
+ * než se hydratuje, pořád jde odeslat, jen bez rozlišení města.
+ */
+function TaborInterestFormContent({ turnusy }: { turnusy: Turnus[] }) {
+  const searchParams = useSearchParams()
+  const mesta = filtrMest(turnusy)
+  const platne = platneMesto(searchParams.get('mesto'), mesta)
+  return <TurnusInterestForm source={platne ? `tabor-${platne}` : 'tabor'} />
+}
+
+function TaborInterestForm({ turnusy }: { turnusy: Turnus[] }) {
+  return (
+    <Suspense fallback={<TurnusInterestForm source="tabor" />}>
+      <TaborInterestFormContent turnusy={turnusy} />
+    </Suspense>
+  )
+}
+
 export default function TaborPage() {
   const turnusy = getTurnusy()
   // Prodejní stav rozhoduje o hlavních výzvách na stránce: dokud nejde koupit
   // ani jeden turnus, nemá smysl tvrdit „přihlaste se" ani vyvolávat naléhavost
   // (nic takového by nebyla pravda) — hlavní výzva je nechat kontakt.
   const prodejny = turnusy.some(isBookable)
+  // Turnusy, které existují, ale nejdou koupit, mají dva různé důvody: buď
+  // ještě nejsou vypsané (chystáme), nebo jsou vypsané a plné. Řeč o „teprve
+  // budeme vypisovat" by u vyprodaného turnusu byla lež — proto se to musí
+  // rozlišit v textu, i když je dnes s daty typu „chystáme" tahle větev mrtvá.
+  const vyprodano = !prodejny && turnusy.some((t) => t.status === 'plno')
+  const ctaText = prodejny ? 'Přihlásit dítě' : vyprodano ? 'Chci vědět o volném místě' : 'Chci vědět o termínech'
   // Místo konání je vlastností turnusu, ne stránky. Vykreslí se každé odlišné
   // místo, které se mezi turnusy skutečně vyskytuje (dnes jedno) — ne jen
   // to první nalezené, aby to nebyla náhoda dané pořadím v datech.
@@ -209,7 +239,7 @@ export default function TaborPage() {
                   href="#turnusy"
                   className="btn-primary group px-8 py-4"
                 >
-                  {prodejny ? 'Přihlásit dítě' : 'Chci vědět o termínech'}
+                  {ctaText}
                   <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </a>
                 <a
@@ -433,7 +463,7 @@ export default function TaborPage() {
                   {
                     icon: Printer,
                     title: 'Vybavení',
-                    text: 'Vybavení, které program vyžaduje — 3D tiskárny, VR headsety, Arduino soupravy a počítače — je vždy připravené na místě konání. Děti nenosí nic technického.',
+                    text: 'Vybavení, které program vyžaduje — 3D tiskárny, VR headsety, Arduino soupravy a počítače — je vždy připravené na místě konání. Děti tvoří v profesionálně vybaveném prostoru, jaký by doma ani ve škole nenašly. Děti nenosí nic technického.',
                   },
                   {
                     icon: Users,
@@ -481,12 +511,14 @@ export default function TaborPage() {
               className="text-center mb-12"
             >
               <h2 className="heading-2 text-paper mb-4">
-                Turnusy a registrace
+                {prodejny ? 'Turnusy a registrace' : 'Turnusy'}
               </h2>
               <p className="text-xl text-paper/90 max-w-2xl mx-auto">
                 {prodejny
                   ? 'Cenu, obsazenost i přesné datum najdete u vybraného turnusu.'
-                  : 'Termíny na příští léto vypisujeme na podzim. Vyberte si město a nechte nám kontakt — ozveme se vám mezi prvními.'}
+                  : vyprodano
+                    ? 'Aktuální turnusy jsou obsazené. Nechte nám kontakt a ozveme se, jakmile se uvolní místo nebo vypíšeme další termín.'
+                    : 'Termíny na příští léto vypisujeme na podzim. Vyberte si město a nechte nám kontakt — ozveme se vám mezi prvními.'}
               </p>
             </motion.div>
 
@@ -504,7 +536,7 @@ export default function TaborPage() {
             )}
 
             <div className={prodejny ? 'mt-12' : 'mt-16'}>
-              <TurnusInterestForm source="tabor" />
+              <TaborInterestForm turnusy={turnusy} />
             </div>
           </div>
         </section>
@@ -547,7 +579,11 @@ export default function TaborPage() {
               className="max-w-3xl mx-auto text-center"
             >
               <h2 className="heading-2 text-paper mb-6">
-                {prodejny ? 'Na jeden turnus bereme jen 15 dětí' : 'Chcete být u toho, až turnusy otevřeme?'}
+                {prodejny
+                  ? 'Na jeden turnus bereme jen 15 dětí'
+                  : vyprodano
+                    ? 'Aktuální turnusy jsou obsazené'
+                    : 'Chcete být u toho, až turnusy otevřeme?'}
               </h2>
               <p className="text-xl text-paper/90 mb-8">
                 {prodejny ? (
@@ -555,6 +591,12 @@ export default function TaborPage() {
                     Letní příměstský tábor, ze kterého si vaše dítě odnese vlastní 3D výtisk
                     i sestavené zařízení — a vy máte celý týden jistotu, že je o něj dobře
                     postaráno. Termíny se plní, s přihláškou neváhejte.
+                  </>
+                ) : vyprodano ? (
+                  <>
+                    Letní příměstský tábor, ze kterého si vaše dítě odnese vlastní 3D výtisk
+                    i sestavené zařízení. Aktuální turnusy jsou plně obsazené — nechte nám
+                    kontakt a ozveme se, jakmile se uvolní místo nebo vypíšeme další termín.
                   </>
                 ) : (
                   <>
@@ -569,7 +611,7 @@ export default function TaborPage() {
                   href="#turnusy"
                   className="inline-flex items-center justify-center px-8 py-4 bg-white hover:bg-paper-soft text-primary-600 font-semibold rounded-xl transition-all duration-300"
                 >
-                  {prodejny ? 'Přihlásit dítě' : 'Chci vědět o termínech'}
+                  {ctaText}
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </a>
                 <Link

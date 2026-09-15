@@ -88,7 +88,7 @@ export const TURNUSY: Turnus[] = [
     focus: ['3d-tisk', 'iot', 'vr'],
     ageRange: '9-15',
     perex:
-      'Týdenní příměstský tábor ve FabLabu VARY&TE. Termíny na léto 2027 vypíšeme na jaře.',
+      'Týdenní příměstský tábor ve FabLabu VARY&TE. Termíny na léto 2027 vypíšeme na podzim.',
   },
   {
     id: 'praha-leto-2027',

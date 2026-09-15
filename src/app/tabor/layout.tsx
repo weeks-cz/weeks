@@ -13,8 +13,19 @@ export const metadata: Metadata = {
     title,
     description,
     url: `${SITE.url}/tabor`,
+    siteName: SITE.name,
     type: 'website',
     locale: 'cs_CZ',
+    // Next slučuje `openGraph` z layoutů jen mělce — vlastní blok tu proto musí
+    // nést i obrázek, jinak přebije kořenový a náhled zmizí (viz opravné kolo 2).
+    images: [
+      {
+        url: `${SITE.url}/og-image-v2.jpg`,
+        width: 1200,
+        height: 630,
+        alt: title,
+      },
+    ],
   },
 }
 
