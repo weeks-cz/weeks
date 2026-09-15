@@ -10,6 +10,7 @@ import { GoogleAnalyticsGated } from '@/components/analytics/GoogleAnalyticsGate
 import { QRTracker } from '@/components/analytics/QRTracker'
 import { MotionProvider } from '@/components/providers/MotionProvider'
 import { ShopProvider } from '@/components/shop/ShopProvider'
+import { SITE } from '@/lib/site'
 
 const GA_ID = (process.env.NEXT_PUBLIC_GA_ID || 'G-9955Q5FRRX').trim()
 
@@ -32,9 +33,15 @@ const plexMono = IBM_Plex_Mono({
   display: 'swap',
 })
 
-const siteUrl = 'https://weeks.cz'
-const siteTitle = 'Weeks - IT tábory pro děti'
-const siteDescription = 'IT tábory pro děti 10-15 let. 3D tisk, VR, programování, IoT a elektronika. Víkendové i jednodenní formáty v Praze a Karlových Varech.'
+// Výchozí metadata pro celý web — dědí je každá stránka, která si vlastní
+// nenastaví (homepage žádná nemá). Popisují jediný produkt, který Weeks s.r.o.
+// nabízí: týdenní letní příměstský tábor — stejným jazykem jako `/tabor`
+// a úvodní stránka, ne stránku, která zanikla (žádné víkendové/jednodenní
+// formáty, žádné DDM).
+const siteUrl = SITE.url
+const siteTitle = `${SITE.name} - IT tábory pro děti`
+const siteDescription =
+  'Týdenní příměstský tábor pro děti 9–15 let. 3D tisk, 3D modelování a IoT s Arduinem, jeden lektor na pět dětí, oběd i materiál v ceně.'
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -50,8 +57,8 @@ export const metadata: Metadata = {
   },
   description: siteDescription,
   authors: [{ name: 'Weeks Team', url: siteUrl }],
-  creator: 'Weeks',
-  publisher: 'Weeks',
+  creator: SITE.name,
+  publisher: SITE.legalName,
   alternates: {
     canonical: siteUrl,
   },
@@ -59,7 +66,7 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'cs_CZ',
     url: siteUrl,
-    siteName: 'Weeks',
+    siteName: SITE.name,
     title: siteTitle,
     description: siteDescription,
     images: [
@@ -67,7 +74,7 @@ export const metadata: Metadata = {
         url: `${siteUrl}/og-image-v2.jpg`,
         width: 1200,
         height: 630,
-        alt: 'Weeks - IT tábory pro děti',
+        alt: siteTitle,
       },
     ],
   },

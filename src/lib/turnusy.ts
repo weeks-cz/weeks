@@ -56,15 +56,12 @@ export interface Turnus {
  * Až termíny přijdou, doplní se `start`, `end`, `priceKc`, `venueId` a stav se
  * překlopí na `otevreno`.
  *
- * POZOR — dvojí zdroj ceny pořád existuje: `/tabor` a `/tabor/[turnus]` už
- * ceny čtou výhradně odtud (dřívější stránky `/tabor-chytrych-technologii`,
- * `/tabor-3d-tisk` a `/tabor-iot` byly smazány), ale `EventSchema`
- * (`src/components/seo/StructuredData.tsx`) na úvodce dál publikuje do
- * JSON-LD cenu z `locations.ts` (2 990 / 1 490 Kč), zatímco registrace věří
- * tomuto souboru. Dokud `EventSchema` (nebo cokoliv dalšího) čte cenu jinud
- * než odtud, NESMÍ se žádný z těchto turnusů překlopit na `otevreno` —
- * jinak se rozejde cena, kterou Google/rodič vidí, a cena, kterou registrace
- * naúčtuje.
+ * Dvojí zdroj ceny, kterým tenhle odstavec dřív varoval, je vyřešený:
+ * `/tabor`, `/tabor/[turnus]` i `EventSchema`
+ * (`src/components/seo/StructuredData.tsx`) čtou cenu výhradně odtud —
+ * `locations.ts` do strukturovaných dat ani do žádné stránky už nezasahuje.
+ * `EventSchema` navíc turnus ve stavu `chystame` do JSON-LD vůbec nepustí,
+ * takže sama o sobě žádnou cenu nedopočítá ani nedomyslí.
  *
  * POZOR — id zaměření místo id programu: `RegistrationForm` ukládá do pole
  * `program` `turnus.focus[0]` (např. `'3d-tisk'`), ale e-maily, faktura

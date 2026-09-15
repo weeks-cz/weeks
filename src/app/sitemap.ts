@@ -1,11 +1,16 @@
 import { MetadataRoute } from 'next'
+import { getTurnusy } from '@/lib/turnusy'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://weeks.cz'
   const currentDate = new Date()
 
-  // Katalog programů a jednodenní tábory splynuly do jedné stránky /tabor,
-  // Karlovy Vary přestaly být samostatnou větví webu — viz next.config.js redirects.
+  // Katalog programů, jednodenní tábory i karlovarská větev zanikly a trvale
+  // přesměrovávají na svůj protějšek (viz next.config.js redirects) — do
+  // sitemapy patří jen adresy, které skutečně vrací 200.
+  //
+  // /firmy do sitemapy nepatří — stránka zatím fyzicky neexistuje (odkaz na
+  // ni je jen rozcestník do budoucna, vzniká ve fázi 4).
   return [
     {
       url: baseUrl,
@@ -19,6 +24,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'weekly',
       priority: 0.95,
     },
+    ...getTurnusy().map((turnus) => ({
+      url: `${baseUrl}/tabor/${turnus.slug}`,
+      lastModified: currentDate,
+      changeFrequency: 'weekly' as const,
+      priority: 0.9,
+    })),
+    {
+      url: `${baseUrl}/eshop`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
     {
       url: `${baseUrl}/o-nas`,
       lastModified: currentDate,
@@ -29,18 +46,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${baseUrl}/kontakt`,
       lastModified: currentDate,
       changeFrequency: 'monthly',
-      priority: 0.8,
+      priority: 0.7,
     },
     {
       url: `${baseUrl}/gdpr`,
       lastModified: currentDate,
-      changeFrequency: 'yearly',
+      changeFrequency: 'monthly',
       priority: 0.3,
     },
     {
       url: `${baseUrl}/podminky`,
       lastModified: currentDate,
-      changeFrequency: 'yearly',
+      changeFrequency: 'monthly',
       priority: 0.3,
     },
   ]
