@@ -8,6 +8,7 @@ import { Footer } from '@/components/layout/Footer'
 import { getTurnus, getTurnusy, isBookable } from '@/lib/turnusy'
 import { getCity, getVenue } from '@/lib/cities'
 import { getFocusModules, type FocusId } from '@/lib/focus'
+import { SITE } from '@/lib/site'
 import { TurnusCard } from '@/components/turnusy/TurnusCard'
 import { turnusLabels } from '@/components/turnusy/turnus-labels'
 import { VenueShowcase } from '@/components/turnusy/VenueShowcase'
@@ -47,11 +48,34 @@ export async function generateMetadata({
 
   const mesto = getCity(turnus.city).name
   const l = turnusLabels(turnus)
+  const title = `Letní IT tábor ${mesto} — ${l.datum} | Weeks`
+  const url = `${SITE.url}/tabor/${turnus.slug}`
 
   return {
-    title: `Letní IT tábor ${mesto} — ${l.datum} | Weeks`,
+    title,
     description: turnus.perex,
-    alternates: { canonical: `https://weeks.cz/tabor/${turnus.slug}` },
+    alternates: { canonical: url },
+    openGraph: {
+      title,
+      description: turnus.perex,
+      url,
+      siteName: SITE.name,
+      type: 'website',
+      locale: 'cs_CZ',
+      // Next slučuje `openGraph` z různých úrovní jen mělce — vlastní blok tu
+      // proto musí nést i obrázek a siteName, jinak přebije kořenový/`/tabor`
+      // blok a náhled zmizí (stejný vzor jako `src/app/tabor/layout.tsx`).
+      // Bez vlastního `url` by se navíc sdílený odkaz na konkrétní turnus
+      // v náhledu tvářil jako obecná stránka `/tabor`.
+      images: [
+        {
+          url: `${SITE.url}/og-image-v2.jpg`,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
+    },
   }
 }
 
@@ -128,10 +152,12 @@ export default async function TurnusPage({
 
               {/* Prodejný turnus dostane tlačítko na registraci, chystaný rovnou formulář zájmu */}
               {prodejny ? (
-                <a href={l.ctaHref ?? '/tabor'} className="btn-primary group px-8 py-4 inline-flex items-center">
+                // `prodejny` je stejná podmínka (`isBookable`), ze které `turnusLabels`
+                // odvozuje `ctaHref` — v téhle větvi je vždycky vyplněné.
+                <Link href={l.ctaHref!} className="btn-primary group px-8 py-4 inline-flex items-center">
                   {l.ctaText}
                   <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
-                </a>
+                </Link>
               ) : (
                 <TurnusInterestForm turnus={turnus} source={`turnus-${turnus.slug}`} />
               )}

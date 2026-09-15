@@ -30,7 +30,15 @@ export function TurnusInterestForm({ turnus, source }: { turnus?: Turnus; source
   const [error, setError] = useState('')
 
   const mesto = turnus ? getCity(turnus.city).name : undefined
-  const heading = turnus ? 'Chcete vědět, až tenhle turnus otevřeme?' : 'Chcete vědět o termínech mezi prvními?'
+  // Turnus ve stavu `plno` je otevřený, jen vyprodaný — nadpis o „otevření"
+  // by u něj lhal. Jazyk drží stejný, jaký pro tenhle stav používá
+  // `turnusLabels`/`TurnusCard` ("Chci vědět o volném místě"), jen ve větě.
+  const obsazeno = turnus?.status === 'plno'
+  const heading = !turnus
+    ? 'Chcete vědět o termínech mezi prvními?'
+    : obsazeno
+      ? 'Chcete vědět o volném místě?'
+      : 'Chcete vědět, až tenhle turnus otevřeme?'
   const program = turnus ? `${mesto} — zájem o turnus ${turnus.id}` : 'Zájem o příští sezónu'
   const subject = turnus ? `Zájem o turnus ${turnus.id} – ${mesto}` : 'Zájem o příští sezónu'
 
@@ -97,7 +105,11 @@ export function TurnusInterestForm({ turnus, source }: { turnus?: Turnus; source
           <CheckCircle className="w-10 h-10 text-trust-500 mx-auto mb-3" aria-hidden="true" />
           <p className="font-semibold text-trust-800 mb-1">Máme to, děkujeme!</p>
           <p className="text-sm text-trust-700">
-            {turnus ? 'Jakmile tenhle turnus otevřeme' : 'Jakmile budou termíny jasné'}, ozveme se na{' '}
+            {!turnus
+              ? 'Jakmile budou termíny jasné'
+              : obsazeno
+                ? 'Jakmile se uvolní místo'
+                : 'Jakmile tenhle turnus otevřeme'}, ozveme se na{' '}
             <span className="font-medium">{email}</span>.
           </p>
         </div>
