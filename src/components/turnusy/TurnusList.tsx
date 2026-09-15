@@ -28,17 +28,29 @@ export function filtrMest(list: Turnus[]): Array<{ id: CityId; name: string; poc
   }))
 }
 
+/**
+ * Ověří hodnotu `?mesto=` z adresy proti tomu, co `filtrMest` skutečně
+ * nabízí. Starý nebo překlepnutý odkaz z kampaně (např. `?mesto=brno`) se
+ * tímhle jediným místem nikdy neprosadí dál — ani do filtrování seznamu, ani
+ * do dotazu na živou kapacitu, ani do `aria-current`. Typ návratové hodnoty
+ * plyne přímo z `mesta`, žádný přetyp na `CityId` není potřeba.
+ */
+export function platneMesto(
+  vybrane: string | null,
+  mesta: Array<{ id: CityId; name: string; pocet: number }>
+): CityId | undefined {
+  return mesta.find((m) => m.id === vybrane)?.id
+}
+
 function TurnusListContent({ turnusy }: { turnusy: Turnus[] }) {
   const searchParams = useSearchParams()
-  const vybrane = searchParams.get('mesto') as CityId | null
+  const vybrane = searchParams.get('mesto')
   const mesta = filtrMest(turnusy)
+  const platne = platneMesto(vybrane, mesta)
 
-  const zobrazene =
-    vybrane && mesta.some((m) => m.id === vybrane)
-      ? turnusy.filter((t) => t.city === vybrane)
-      : turnusy
+  const zobrazene = platne ? turnusy.filter((t) => t.city === platne) : turnusy
 
-  const capacity = useTermCapacity(vybrane ?? undefined)
+  const capacity = useTermCapacity(platne)
 
   if (turnusy.length === 0) {
     return (
@@ -55,9 +67,9 @@ function TurnusListContent({ turnusy }: { turnusy: Turnus[] }) {
           <Link
             href="/tabor"
             scroll={false}
-            aria-current={vybrane === null ? 'true' : undefined}
+            aria-current={platne === undefined ? 'true' : undefined}
             className={`font-mono text-xs uppercase tracking-wider px-4 py-2 border transition-colors ${
-              vybrane === null
+              platne === undefined
                 ? 'border-ink bg-ink text-paper'
                 : 'border-ink/15 text-ink-500 hover:border-ink/40'
             }`}
@@ -69,9 +81,9 @@ function TurnusListContent({ turnusy }: { turnusy: Turnus[] }) {
               key={m.id}
               href={`/tabor?mesto=${m.id}`}
               scroll={false}
-              aria-current={vybrane === m.id ? 'true' : undefined}
+              aria-current={platne === m.id ? 'true' : undefined}
               className={`font-mono text-xs uppercase tracking-wider px-4 py-2 border transition-colors ${
-                vybrane === m.id
+                platne === m.id
                   ? 'border-ink bg-ink text-paper'
                   : 'border-ink/15 text-ink-500 hover:border-ink/40'
               }`}

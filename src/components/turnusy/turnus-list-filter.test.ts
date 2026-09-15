@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { filtrMest } from './TurnusList'
+import { filtrMest, platneMesto } from './TurnusList'
 import type { Turnus } from '@/lib/turnusy'
 
 const kv: Turnus = {
@@ -32,5 +32,22 @@ describe('filtrMest', () => {
 
   it('u prázdného seznamu filtr nenabídne', () => {
     expect(filtrMest([])).toEqual([])
+  })
+})
+
+describe('platneMesto', () => {
+  it('starý nebo překlepnutý odkaz z kampaně (neznámé město) zamítne', () => {
+    const mesta = filtrMest([kv, praha])
+    expect(platneMesto('brno', mesta)).toBeUndefined()
+  })
+
+  it('chybějící parametr v adrese zamítne', () => {
+    const mesta = filtrMest([kv, praha])
+    expect(platneMesto(null, mesta)).toBeUndefined()
+  })
+
+  it('platné město ze seznamu přijme', () => {
+    const mesta = filtrMest([kv, praha])
+    expect(platneMesto('karlovy-vary', mesta)).toBe('karlovy-vary')
   })
 })
