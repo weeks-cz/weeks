@@ -15,7 +15,7 @@ export function useTermCapacity(locationId: string): CapacityMap | null {
   const [map, setMap] = useState<CapacityMap | null>(null)
   useEffect(() => {
     let cancelled = false
-    fetch(`/api/term-capacity?location=${encodeURIComponent(locationId)}`)
+    fetch(`/api/term-capacity?mesto=${encodeURIComponent(locationId)}`)
       .then((r) => (r.ok ? r.json() : null))
       .then((j) => {
         if (!cancelled && j && j.data) setMap(j.data as CapacityMap)

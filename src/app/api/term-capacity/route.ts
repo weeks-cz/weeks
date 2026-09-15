@@ -1,37 +1,45 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createServerClient } from '@/lib/supabase'
-import { getLocationById } from '@/lib/locations'
+import { getTurnusy, getTurnusyByCity } from '@/lib/turnusy'
+import type { CityId } from '@/lib/cities'
 import { reportError } from '@/lib/observability'
 
 export const dynamic = 'force-dynamic'
 
 /**
- * Public per-term remaining-spots for a location's internally-booked camps (KV).
+ * Veřejná obsazenost turnusů — kolik míst zbývá.
  *
- * A seat is held by ANY registration whose status <> 'cancelled' — the exact rule
- * create_registration() uses to enforce capacity (migration 011). Mirroring it here
- * means the "Zbývá X míst" badge never over-promises a spot that's actually taken.
+ * Místo drží JAKÁKOLIV registrace se stavem jiným než 'cancelled' — přesně to
+ * pravidlo, kterým kapacitu vynucuje create_registration() (migrace 011).
+ * Kdyby se tyhle dvě pravidla rozešla, odznak „zbývá X míst" by sliboval místo,
+ * které je fakticky pryč.
  *
- * Fail-open: on any error returns empty data (200) so the UI simply omits badges
- * rather than breaking the page. No PII is returned — only term_id counts.
+ * Bez parametru vrací všechny turnusy; `?mesto=` zúží na jedno město.
+ *
+ * Při chybě vrací prázdná data (200), takže stránka jen vynechá odznaky místo
+ * toho, aby se rozbila. Žádné osobní údaje — jen počty podle term_id.
  */
 export async function GET(request: NextRequest) {
-  const locationId = new URL(request.url).searchParams.get('location') ?? 'karlovy-vary'
-  try {
-    const location = getLocationById(locationId)
+  const mesto = new URL(request.url).searchParams.get('mesto') as CityId | null
 
-    // term_id -> max capacity (from the term's program config)
+  try {
+    const turnusy = mesto ? getTurnusyByCity(mesto) : getTurnusy()
+
+    // term_id -> kapacita turnusu
     const capacityByTerm: Record<string, number> = {}
-    for (const term of location.terms) {
-      const program = location.programs.find((p) => p.id === term.program)
-      if (program) capacityByTerm[term.id] = program.capacity
+    for (const turnus of turnusy) {
+      capacityByTerm[turnus.id] = turnus.capacity
+    }
+
+    if (Object.keys(capacityByTerm).length === 0) {
+      return NextResponse.json({ data: {} })
     }
 
     const supabase = createServerClient()
     const { data, error } = await supabase
       .from('registrations')
       .select('term_id')
-      .eq('location_id', locationId)
+      .in('term_id', Object.keys(capacityByTerm))
       .neq('status', 'cancelled')
     if (error) throw error
 
@@ -50,11 +58,11 @@ export async function GET(request: NextRequest) {
     }
 
     return NextResponse.json(
-      { location: locationId, data: result },
+      { data: result },
       { headers: { 'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=300' } }
     )
   } catch (e) {
-    reportError(e, { route: 'term-capacity', locationId })
-    return NextResponse.json({ location: locationId, data: {} })
+    reportError(e, { route: 'term-capacity', mesto })
+    return NextResponse.json({ data: {} })
   }
 }
