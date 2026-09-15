@@ -84,7 +84,7 @@ export async function POST(request: NextRequest) {
       const d = parsed.data
       after(async () => {
         try {
-          const location = getLocationById(d.location_id)
+          const location = getLocationById(trustedLocationId)
           const programCfg = location.programs.find((p) => p.id === d.program)
           const { subject, html } = buildRegistrationReceivedEmail({
             childName: d.child_name,
@@ -92,7 +92,7 @@ export async function POST(request: NextRequest) {
             termLabel: formatTermLabel(d.term_start, d.term_end),
             locationName: location.name,
             priceKc: trustedPrice,
-            paymentUrl: `${SITE_URL}/platba/${newId}?location=${d.location_id}`,
+            paymentUrl: `${SITE_URL}/platba/${newId}?location=${trustedLocationId}`,
           })
           await sendEmail({ to: d.parent_email, subject, html })
         } catch (e) {
@@ -116,7 +116,7 @@ export async function POST(request: NextRequest) {
       const userAgent = request.headers.get('user-agent') ?? undefined
       const referer = request.headers.get('referer') ?? undefined
       after(async () => {
-        const location = getLocationById(d.location_id)
+        const location = getLocationById(trustedLocationId)
         const programCfg = location.programs.find((p) => p.id === d.program)
         await sendMetaEvent({
           eventName: 'InitiateCheckout',
