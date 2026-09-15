@@ -9,10 +9,14 @@ export const dynamic = 'force-dynamic'
 /**
  * Veřejná obsazenost turnusů — kolik míst zbývá.
  *
- * Místo drží JAKÁKOLIV registrace se stavem jiným než 'cancelled' — přesně to
- * pravidlo, kterým kapacitu vynucuje create_registration() (migrace 011).
- * Kdyby se tyhle dvě pravidla rozešla, odznak „zbývá X míst" by sliboval místo,
- * které je fakticky pryč.
+ * Místo drží zaplacená registrace, nebo rozpracovaná platba mladší než hodina —
+ * přesně pravidlo, kterým kapacitu vynucuje create_registration() (migrace 016,
+ * dál ho nese 018). Migrace 011 počítala každou nezrušenou registraci, ale to
+ * nechávalo opuštěné nezaplacené registrace držet místo navždy; 016 to zpřesnila.
+ * Tohle pravidlo teď žije na dvou místech (tady a v create_registration) a musí
+ * se měnit obojí najednou — jinak by se odznak „zbývá X míst" rozešel se
+ * skutečnou kapacitou, ať už by sliboval místo, které je fakticky pryč, nebo
+ * naopak hlásil míň volných míst, než kolik jich databáze reálně pustí.
  *
  * Bez parametru vrací všechny turnusy; `?mesto=` zúží na jedno město.
  *
@@ -38,13 +42,21 @@ export async function GET(request: NextRequest) {
     const supabase = createServerClient()
     const { data, error } = await supabase
       .from('registrations')
-      .select('term_id')
+      .select('term_id, payment_status, created_at')
       .in('term_id', Object.keys(capacityByTerm))
       .neq('status', 'cancelled')
     if (error) throw error
 
+    // Zrcadlí pravidlo z migrace 016 (nese ho i 018): místo drží zaplacená
+    // registrace, nebo rozpracovaná platba mladší než hodina. Starší nezaplacené
+    // registrace databáze pouští, takže je nesmí držet ani odznak.
+    const cutoff = Date.now() - 60 * 60 * 1000
     const taken: Record<string, number> = {}
     for (const row of data ?? []) {
+      const drziMisto =
+        row.payment_status === 'completed' ||
+        new Date(row.created_at as string).getTime() > cutoff
+      if (!drziMisto) continue
       const t = row.term_id as string
       taken[t] = (taken[t] ?? 0) + 1
     }
