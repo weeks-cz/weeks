@@ -39,3 +39,14 @@ export function getTrustedCapacity(termId: string, list: Turnus[] = TURNUSY): nu
 export function getTrustedCity(termId: string, list: Turnus[] = TURNUSY): CityId {
   return resolveBookable(termId, list).city
 }
+
+/**
+ * Důvěryhodný termín turnusu. Ukládá se do `registrations.term_start` a
+ * `term_end` místo hodnot od klienta — uložené datum řídí popisek v e-mailu,
+ * nástupní list i okno upomínkového cronu.
+ */
+export function getTrustedTerm(termId: string, list: Turnus[] = TURNUSY): { start: string; end: string } {
+  const turnus = resolveBookable(termId, list)
+  // `isBookable` už zaručilo, že ani jedno není null.
+  return { start: turnus.start as string, end: turnus.end as string }
+}

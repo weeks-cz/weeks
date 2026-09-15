@@ -42,6 +42,8 @@ export interface Turnus {
   capacity: number
   status: TurnusStatus
   focus: FocusId[]
+  /** Věkové rozmezí účastníků ve tvaru `'9-15'`. */
+  ageRange: string
   /** Čím je tenhle turnus jiný — jedna až dvě věty na kartu. */
   perex: string
 }
@@ -53,6 +55,13 @@ export interface Turnus {
  * stojí ve stavu `chystame` — web o nich mluví v budoucím čase a sbírá kontakty.
  * Až termíny přijdou, doplní se `start`, `end`, `priceKc`, `venueId` a stav se
  * překlopí na `otevreno`.
+ *
+ * POZOR — dvojí zdroj ceny: `locations.ts` (2 990 / 1 490 Kč) dnes pořád
+ * pohání stránky `/tabor-chytrych-technologii`, `/tabor-3d-tisk` a
+ * `/tabor-iot`, zatímco registrace věří tomuto souboru. Dokud stránky
+ * nepřestanou číst ceny z `locations.ts`, NESMÍ se žádný z těchto turnusů
+ * překlopit na `otevreno` — jinak se rozejde cena, kterou rodič vidí na
+ * stránce, a cena, kterou registrace naúčtuje.
  */
 export const TURNUSY: Turnus[] = [
   {
@@ -66,6 +75,7 @@ export const TURNUSY: Turnus[] = [
     capacity: 15,
     status: 'chystame',
     focus: ['3d-tisk', 'iot', 'vr'],
+    ageRange: '9-15',
     perex:
       'Týdenní příměstský tábor ve FabLabu VARY&TE. Termíny na léto 2027 vypíšeme na jaře.',
   },
@@ -80,6 +90,7 @@ export const TURNUSY: Turnus[] = [
     capacity: 15,
     status: 'chystame',
     focus: ['3d-tisk', 'iot', 'vr'],
+    ageRange: '9-15',
     perex:
       'Týdenní příměstský tábor v Praze. Místo konání i termíny upřesníme.',
   },
@@ -186,6 +197,10 @@ export function validateTurnusy(list: Turnus[] = TURNUSY): string[] {
 
     if (turnus.priceKc !== null && turnus.priceKc <= 0) {
       problems.push(`Turnus "${turnus.id}": cena musí být kladná.`)
+    }
+
+    if (!/^\d{1,2}-\d{1,2}$/.test(turnus.ageRange)) {
+      problems.push(`Turnus "${turnus.id}": věkové rozmezí musí být ve tvaru "9-15".`)
     }
   }
 

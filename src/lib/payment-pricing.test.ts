@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { getTrustedPriceKc, getTrustedCapacity, getTrustedCity } from './payment-pricing'
+import { getTrustedPriceKc, getTrustedCapacity, getTrustedCity, getTrustedTerm } from './payment-pricing'
 import { TURNUSY, type Turnus } from './turnusy'
 
 const prodejny: Turnus = {
@@ -13,6 +13,7 @@ const prodejny: Turnus = {
   capacity: 15,
   status: 'otevreno',
   focus: ['3d-tisk'],
+  ageRange: '9-15',
   perex: 'Testovací turnus pro ověření důvěryhodné ceny.',
 }
 
@@ -56,6 +57,21 @@ describe('getTrustedCity', () => {
   it('vyhodí výjimku u turnusu, který není v prodeji', () => {
     expect(() =>
       getTrustedCity('test-prodejny', [{ ...prodejny, status: 'chystame' }])
+    ).toThrow()
+  })
+})
+
+describe('getTrustedTerm', () => {
+  it('vrátí termín turnusu, ne to, co poslal klient', () => {
+    expect(getTrustedTerm('test-prodejny', [prodejny])).toEqual({
+      start: '2027-07-12',
+      end: '2027-07-16',
+    })
+  })
+
+  it('vyhodí výjimku u turnusu, který není v prodeji', () => {
+    expect(() =>
+      getTrustedTerm('test-prodejny', [{ ...prodejny, status: 'chystame' }])
     ).toThrow()
   })
 })

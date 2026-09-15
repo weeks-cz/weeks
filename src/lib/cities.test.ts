@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { getCity, getAllCities, getVenue } from './cities'
+import { LOCATIONS } from '@/lib/locations'
 
 describe('getCity', () => {
   it('vrátí město podle id', () => {
@@ -21,6 +22,12 @@ describe('getCity', () => {
 describe('getAllCities', () => {
   it('vrátí obě města', () => {
     expect(getAllCities().map((c) => c.id).sort()).toEqual(['karlovy-vary', 'praha'])
+  })
+
+  it('každé město z číselníku má i záznam v LOCATIONS — jinak by rodič dostal adresu a kontakt jiného města', () => {
+    for (const city of getAllCities()) {
+      expect(LOCATIONS[city.id], `LOCATIONS["${city.id}"]`).not.toBeUndefined()
+    }
   })
 })
 

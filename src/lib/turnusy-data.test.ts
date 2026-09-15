@@ -2,6 +2,10 @@ import { describe, it, expect } from 'vitest'
 import { TURNUSY, validateTurnusy } from './turnusy'
 
 describe('ostrá data turnusů', () => {
+  it('seznam turnusů není prázdný — jinak by testy níže proběhly naprázdno, bez jediné kontroly', () => {
+    expect(TURNUSY.length).toBeGreaterThan(0)
+  })
+
   it('projdou kontrolou úplnosti', () => {
     expect(validateTurnusy(TURNUSY)).toEqual([])
   })

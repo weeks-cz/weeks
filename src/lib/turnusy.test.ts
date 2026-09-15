@@ -21,6 +21,7 @@ const otevreny: Turnus = {
   capacity: 15,
   status: 'otevreno',
   focus: ['3d-tisk', 'iot'],
+  ageRange: '9-15',
   perex: 'Týdenní příměstský tábor ve FabLabu.',
 }
 
@@ -35,6 +36,7 @@ const chystany: Turnus = {
   capacity: 15,
   status: 'chystame',
   focus: ['3d-tisk'],
+  ageRange: '9-15',
   perex: 'Místo konání i termíny upřesníme.',
 }
 
@@ -181,5 +183,10 @@ describe('validateTurnusy', () => {
   it('odhalí nekladnou kapacitu', () => {
     const problems = validateTurnusy([{ ...otevreny, capacity: 0 }])
     expect(problems.join(' ')).toContain('kapacita')
+  })
+
+  it('odhalí věkové rozmezí v nesprávném tvaru', () => {
+    const problems = validateTurnusy([{ ...otevreny, ageRange: '9 až 15 let' }])
+    expect(problems.join(' ')).toContain('věkové rozmezí musí být')
   })
 })
