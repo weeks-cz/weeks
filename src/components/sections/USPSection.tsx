@@ -23,7 +23,7 @@ const usps = [
   {
     icon: GraduationCap,
     title: 'Skuteční odborníci, ne hlídání',
-    description: 'Naši lektoři jsou aktivní programátoři, inženýři a designéři. Mají praxi z oboru a vědí, jak zaujmout teenagery i začátečníky od 10 let.',
+    description: 'Naši lektoři jsou aktivní programátoři, inženýři a designéři. Mají praxi z oboru a vědí, jak zaujmout teenagery i začátečníky od 9 do 15 let.',
   },
   {
     icon: Clock,

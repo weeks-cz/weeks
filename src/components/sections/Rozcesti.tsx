@@ -8,6 +8,9 @@ interface RozcestiKarta {
   nadpis: string
   veta: string
   href: string
+  /** Text tlačítka — musí pojmenovat cíl, jinak čtečka přečte čtyři
+   * odkazy se stejným „Zjistit víc" bez rozlišení, kam vedou. */
+  cta: string
   external?: boolean
 }
 
@@ -21,21 +24,25 @@ const KARTY: RozcestiKarta[] = [
     nadpis: 'Letní tábor',
     veta: 'Týdenní příměstský tábor pro děti 9–15 let.',
     href: '/tabor',
+    cta: 'Zobrazit tábor',
   },
   {
     nadpis: 'Pro firmy',
     veta: 'Dny pro děti zaměstnanců, workshopy pro týmy a partnerství.',
     href: '/firmy',
+    cta: 'Nabídka pro firmy',
   },
   {
     nadpis: 'E-shop',
     veta: 'Stavebnice a materiál, se kterým děti pracují na táboře.',
     href: '/eshop',
+    cta: 'Otevřít e-shop',
   },
   {
     nadpis: 'Učebna',
     veta: 'Online kurzy, ve kterých se dá pokračovat i po táboře.',
     href: 'https://iot.weeks.cz/',
+    cta: 'Otevřít učebnu',
     external: true,
   },
 ]
@@ -70,15 +77,15 @@ export function Rozcesti() {
                   href={karta.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label={`${karta.nadpis} — výuková platforma (otevře se v nové záložce)`}
+                  aria-label={`${karta.cta} — výuková platforma (otevře se v nové záložce)`}
                   className="btn-outline text-sm self-start"
                 >
-                  Otevřít
+                  {karta.cta}
                   <ExternalLink className="w-4 h-4 ml-1.5" aria-hidden="true" />
                 </a>
               ) : (
                 <Link href={karta.href} className="btn-outline text-sm self-start">
-                  Zjistit víc
+                  {karta.cta}
                   <ArrowRight className="w-4 h-4 ml-1.5" aria-hidden="true" />
                 </Link>
               )}

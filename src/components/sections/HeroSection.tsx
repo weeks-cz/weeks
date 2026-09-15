@@ -58,16 +58,23 @@ function RevealLine({ children, delay }: { children: React.ReactNode; delay: num
 
 export function HeroSection() {
   const reduced = useReducedMotion()
+  const turnusy = getTurnusy()
   // Věk bereme z prvního turnusu, ne natvrdo z jedné lokality — obě dnešní
   // turnusy mají shodně '9-15', ale zdroj pravdy je turnus, ne stránka.
-  const ageLabel = (getTurnusy()[0]?.ageRange ?? '9-15').replace('-', '–')
+  const ageLabel = (turnusy[0]?.ageRange ?? '9-15').replace('-', '–')
 
   // Úvodka je rozcestí, ne stránka tábora — neslibuje otevřenou registraci
   // přímo tady, jen posílá dál na /tabor. Text hlavního tlačítka ale musí
-  // odpovídat prodejnímu stavu: dokud nejde koupit ani jeden turnus, nemá
-  // smysl tvrdit „vybrat", jen sbírat zájem.
-  const nicKProdeji = getTurnusy().every((t) => !isBookable(t))
-  const heroCtaText = nicKProdeji ? 'Chci vědět o termínech' : 'Vybrat turnus'
+  // odpovídat témuž trojstavu jako /tabor (`prodejny` / `vyprodano` /
+  // nic k prodeji), jinak by u vyprodaných turnusů lhal, že se ještě
+  // nevypisují.
+  const prodejny = turnusy.some(isBookable)
+  const vyprodano = !prodejny && turnusy.some((t) => t.status === 'plno')
+  const heroCtaText = prodejny
+    ? 'Vybrat turnus'
+    : vyprodano
+      ? 'Chci vědět o volném místě'
+      : 'Chci vědět o termínech'
 
   const kota = 'Praha · Karlovy Vary'
   const typed = useTypewriter(kota)

@@ -152,7 +152,11 @@ export function ContactSection() {
               ) : (
                 <form onSubmit={handleEmailSubmit} className="space-y-3">
                   <div className="flex flex-col sm:flex-row gap-3">
+                    <label htmlFor="contact-email" className="sr-only">
+                      E-mail
+                    </label>
                     <input
+                      id="contact-email"
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}

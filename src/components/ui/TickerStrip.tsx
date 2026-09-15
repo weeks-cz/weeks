@@ -1,4 +1,6 @@
-const items = [
+import { getTurnusy } from '@/lib/turnusy'
+
+const BASE_ITEMS = [
   '3D tisk',
   'IoT & elektronika',
   'Virtuální realita',
@@ -6,11 +8,23 @@ const items = [
   '3D modelování',
   'Vývoj her',
   'Tvorba webu',
-  'Léto 2026',
-  'Praha & Karlovy Vary',
 ]
 
-function TickerRow() {
+/**
+ * Sezónní položka se bere z nejbližšího turnusu s potvrzeným termínem, ne
+ * natvrdo — jinak ticker dřív nebo později hlásí sezónu, která už proběhla.
+ * Dokud žádný turnus potvrzené datum nemá (dnešní stav — oba jsou
+ * „chystáme"), sezóna se v pásu vůbec nezmiňuje, aby web nesliboval rok,
+ * který není v datech.
+ */
+function sezonniPolozka(): string | null {
+  const turnus = getTurnusy().find((t) => t.start !== null)
+  if (!turnus?.start) return null
+  const rok = new Date(`${turnus.start}T12:00:00`).getFullYear()
+  return `Léto ${rok}`
+}
+
+function TickerRow({ items }: { items: string[] }) {
   return (
     <span className="flex shrink-0 items-center">
       {items.map((item) => (
@@ -26,11 +40,14 @@ function TickerRow() {
 // Dekorativní nekonečný pás — čistě CSS animace (viz .ticker-track v globals.css),
 // při prefers-reduced-motion stojí. Pro čtečky skrytý (obsah je jinde na stránce).
 export function TickerStrip() {
+  const sezona = sezonniPolozka()
+  const items = [...BASE_ITEMS, ...(sezona ? [sezona] : []), 'Praha & Karlovy Vary']
+
   return (
     <div className="bg-ink text-paper/80 overflow-hidden py-2.5 border-b border-ink" aria-hidden="true">
       <div className="ticker-track flex whitespace-nowrap font-mono text-xs uppercase tracking-[0.25em]">
-        <TickerRow />
-        <TickerRow />
+        <TickerRow items={items} />
+        <TickerRow items={items} />
       </div>
     </div>
   )

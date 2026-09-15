@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
-import { getTurnusy } from '@/lib/turnusy'
+import { getTurnusy, isBookable } from '@/lib/turnusy'
 import { TurnusCard } from '@/components/turnusy/TurnusCard'
 
 /**
@@ -10,10 +10,17 @@ import { TurnusCard } from '@/components/turnusy/TurnusCard'
  *
  * Úvodka ukazuje jen výřez (`slice(0, 3)`) a zbytek nechává na `/tabor`,
  * kde je celý seznam i filtr podle města — tahle sekce je rozcestí, ne
- * katalog.
+ * katalog. Trojstav (prodejny / vyprodáno / nic k prodeji) i formulace se
+ * ale počítají ze VŠECH turnusů, ne jen z výřezu — a musí znít stejně jako
+ * na `/tabor`, jinak si úvodka slibuje věci, které karta vedle ní hned
+ * popírá.
  */
 export function NejblizsiTurnusy() {
-  const turnusy = getTurnusy().slice(0, 3)
+  const vsechnyTurnusy = getTurnusy()
+  const turnusy = vsechnyTurnusy.slice(0, 3)
+
+  const prodejny = vsechnyTurnusy.some(isBookable)
+  const vyprodano = !prodejny && vsechnyTurnusy.some((t) => t.status === 'plno')
 
   return (
     <section className="section-padding bg-paper-soft border-y border-ink/15">
@@ -23,9 +30,15 @@ export function NejblizsiTurnusy() {
           <h2 className="heading-2 text-ink mb-4">
             Nejbližší <span className="text-primary-600">turnusy</span>
           </h2>
-          <p className="text-lg text-ink-500">
-            Cenu, obsazenost i přesné datum najdete u vybraného turnusu.
-          </p>
+          {turnusy.length > 0 && (
+            <p className="text-lg text-ink-500">
+              {prodejny
+                ? 'Cenu, obsazenost i přesné datum najdete u vybraného turnusu.'
+                : vyprodano
+                  ? 'Aktuální turnusy jsou obsazené. Nechte nám kontakt a ozveme se, jakmile se uvolní místo nebo vypíšeme další termín.'
+                  : 'Termíny na příští léto vypisujeme na podzim. Vyberte si město a nechte nám kontakt — ozveme se vám mezi prvními.'}
+            </p>
+          )}
         </div>
 
         {turnusy.length === 0 ? (
