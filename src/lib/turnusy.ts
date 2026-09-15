@@ -1,4 +1,4 @@
-import type { CityId, VenueId } from './cities'
+import { getVenue, type CityId, type VenueId } from './cities'
 import type { FocusId } from './focus'
 
 /**
@@ -136,4 +136,58 @@ export function getTurnusyByCity(city: CityId, list: Turnus[] = TURNUSY): Turnus
  */
 export function getCitiesWithTurnusy(list: Turnus[] = TURNUSY): CityId[] {
   return Array.from(new Set(getTurnusy(list).map((t) => t.city)))
+}
+
+/**
+ * Kontrola úplnosti seznamu turnusů.
+ *
+ * Hlídá to, co typový systém uhlídat nedokáže: jedinečnost klíčů, soulad místa
+ * s městem a úplnost turnusu, který je v prodeji. Běží v testech nad ostrými
+ * daty, takže se chyba v datech pozná při `npm test`, ne až u rodiče v košíku.
+ *
+ * Vrací seznam popsaných problémů. Prázdný seznam znamená v pořádku.
+ */
+export function validateTurnusy(list: Turnus[] = TURNUSY): string[] {
+  const problems: string[] = []
+
+  const seenIds = new Set<string>()
+  const seenSlugs = new Set<string>()
+
+  for (const turnus of list) {
+    if (seenIds.has(turnus.id)) {
+      problems.push(`Duplicitní id "${turnus.id}" — v databázi by obě registrace splynuly.`)
+    }
+    seenIds.add(turnus.id)
+
+    if (seenSlugs.has(turnus.slug)) {
+      problems.push(`Duplicitní slug "${turnus.slug}" — dvě turnusy by měly stejnou adresu.`)
+    }
+    seenSlugs.add(turnus.slug)
+
+    if (turnus.status === 'otevreno' && !isBookable(turnus)) {
+      problems.push(
+        `Turnus "${turnus.id}" je ve stavu otevreno, ale chybí mu termín, místo nebo cena.`
+      )
+    }
+
+    if (turnus.venueId !== null && getVenue(turnus.venueId).cityId !== turnus.city) {
+      problems.push(
+        `Turnus "${turnus.id}": místo konání leží v jiném městě, než turnus tvrdí.`
+      )
+    }
+
+    if (turnus.start !== null && turnus.end !== null && turnus.end < turnus.start) {
+      problems.push(`Turnus "${turnus.id}": konec je dřív než začátek.`)
+    }
+
+    if (turnus.capacity <= 0) {
+      problems.push(`Turnus "${turnus.id}": kapacita musí být kladná.`)
+    }
+
+    if (turnus.priceKc !== null && turnus.priceKc <= 0) {
+      problems.push(`Turnus "${turnus.id}": cena musí být kladná.`)
+    }
+  }
+
+  return problems
 }

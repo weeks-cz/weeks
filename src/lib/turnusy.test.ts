@@ -6,6 +6,7 @@ import {
   getTurnusyByCity,
   getCitiesWithTurnusy,
   isBookable,
+  validateTurnusy,
   type Turnus,
 } from './turnusy'
 
@@ -144,5 +145,41 @@ describe('isBookable', () => {
 
   it('otevřený turnus bez domluveného místa koupit nejde', () => {
     expect(isBookable({ ...otevreny, venueId: null })).toBe(false)
+  })
+})
+
+describe('validateTurnusy', () => {
+  it('u zdravého seznamu nenajde nic', () => {
+    expect(validateTurnusy([otevreny, chystany])).toEqual([])
+  })
+
+  it('odhalí dvě turnusy se stejným id — v databázi by splynuly', () => {
+    const problems = validateTurnusy([otevreny, { ...chystany, id: otevreny.id }])
+    expect(problems.join(' ')).toContain('id')
+  })
+
+  it('odhalí dvě turnusy se stejnou adresou', () => {
+    const problems = validateTurnusy([otevreny, { ...chystany, slug: otevreny.slug }])
+    expect(problems.join(' ')).toContain('slug')
+  })
+
+  it('odhalí otevřený turnus bez ceny', () => {
+    const problems = validateTurnusy([{ ...otevreny, priceKc: null }])
+    expect(problems.join(' ')).toContain('otevreno')
+  })
+
+  it('odhalí turnus, jehož místo konání leží v jiném městě', () => {
+    const problems = validateTurnusy([{ ...otevreny, city: 'praha' }])
+    expect(problems.join(' ')).toContain('jiném městě')
+  })
+
+  it('odhalí turnus, který končí dřív, než začíná', () => {
+    const problems = validateTurnusy([{ ...otevreny, end: '2027-07-01' }])
+    expect(problems.join(' ')).toContain('konec')
+  })
+
+  it('odhalí nekladnou kapacitu', () => {
+    const problems = validateTurnusy([{ ...otevreny, capacity: 0 }])
+    expect(problems.join(' ')).toContain('kapacita')
   })
 })
