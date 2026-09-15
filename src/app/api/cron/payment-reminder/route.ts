@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server'
 import { createServerClient } from '@/lib/supabase'
 import { buildPaymentReminderEmail, sendEmail, isEmailConfigured } from '@/lib/email'
 import { getLocationById } from '@/lib/locations'
-import { getTrustedPriceKc } from '@/lib/payment-pricing'
 import { formatTermLabel, isoDate } from '@/lib/dates'
 import { reportMessage } from '@/lib/observability'
 
@@ -37,7 +36,7 @@ export async function GET(request: Request) {
   // still in the future, not yet reminded.
   const { data: candidates, error } = await supabase
     .from('registrations')
-    .select('id, parent_email, child_name, program, location_id, term_start, term_end')
+    .select('id, parent_email, child_name, program, location_id, term_start, term_end, payment_amount')
     .eq('payment_status', 'pending')
     .eq('status', 'pending')
     .is('payment_reminder_sent_at', null)
@@ -66,7 +65,11 @@ export async function GET(request: Request) {
     try {
       const location = getLocationById(reg.location_id as string)
       const programCfg = location.programs.find((p) => p.id === reg.program)
-      const priceKc = getTrustedPriceKc(reg.location_id as string, reg.program as string)
+      // Stejně jako u vytvoření platby: platí uložená částka, ne aktuální ceník.
+      const priceKc = reg.payment_amount as number | null
+      if (!priceKc || priceKc <= 0) {
+        throw new Error(`Registrace ${reg.id} nemá uloženou částku k zaplacení`)
+      }
       const paymentUrl = `${SITE_URL}/platba/${reg.id}?location=${reg.location_id}`
       const { subject, html } = buildPaymentReminderEmail({
         childName: reg.child_name as string,

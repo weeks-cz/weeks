@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createServerClient } from '@/lib/supabase'
 import { createPayment } from '@/lib/comgate'
-import { getTrustedPriceKc } from '@/lib/payment-pricing'
 import { registrationToken } from '@/lib/registration-token'
 import { API_ERRORS } from '@/lib/api-messages'
 import { rateLimit, clientIp } from '@/lib/rate-limit'
@@ -26,7 +25,7 @@ export async function POST(request: NextRequest) {
     const supabase = createServerClient()
     const { data: reg, error } = await supabase
       .from('registrations')
-      .select('id, location_id, program, parent_email, child_name, payment_status')
+      .select('id, location_id, program, parent_email, child_name, payment_status, payment_amount')
       .eq('id', registrationId)
       .single()
 
@@ -43,7 +42,17 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: API_ERRORS.alreadyPaid }, { status: 409 })
     }
 
-    const priceKc = getTrustedPriceKc(reg.location_id as string, reg.program as string)
+    // Částku NEODVOZUJEME znovu — platí ta, kterou server zapsal při vzniku
+    // registrace a na kterou rodič kývl. Turnus mezitím mohl zmizet z nabídky,
+    // ale nezaplacená registrace musí jít doplatit.
+    const priceKc = reg.payment_amount as number | null
+    if (!priceKc || priceKc <= 0) {
+      reportError(new Error('Registrace nemá uloženou částku k zaplacení'), {
+        route: 'payment/comgate/create',
+        registrationId: reg.id,
+      })
+      return NextResponse.json({ error: API_ERRORS.invalidRequest }, { status: 400 })
+    }
 
     const origin = request.nextUrl.origin
     const { transId, redirect } = await createPayment({
