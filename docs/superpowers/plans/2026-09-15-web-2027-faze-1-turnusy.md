@@ -680,7 +680,7 @@ export function getCitiesWithTurnusy(list: Turnus[] = TURNUSY): CityId[] {
 - [ ] **Step 4: Pusť test a ověř, že prochází**
 
 Run: `npm test -- src/lib/turnusy.test.ts`
-Expected: PASS, 15 testů
+Expected: PASS, 16 testů
 
 - [ ] **Step 5: Commit**
 
@@ -754,7 +754,7 @@ describe('validateTurnusy', () => {
 
   it('odhalí turnus, jehož místo konání leží v jiném městě', () => {
     const problems = validateTurnusy([{ ...otevreny, city: 'praha' }])
-    expect(problems.join(' ')).toContain('město')
+    expect(problems.join(' ')).toContain('jiném městě')
   })
 
   it('odhalí turnus, který končí dřív, než začíná', () => {
@@ -870,7 +870,7 @@ export function validateTurnusy(list: Turnus[] = TURNUSY): string[] {
 - [ ] **Step 4: Pusť testy a ověř, že procházejí**
 
 Run: `npm test -- src/lib/turnusy.test.ts src/lib/turnusy-data.test.ts`
-Expected: PASS, 22 + 3 testy
+Expected: PASS, 23 testů v turnusy.test.ts a 3 v turnusy-data.test.ts
 
 - [ ] **Step 5: Commit**
 
