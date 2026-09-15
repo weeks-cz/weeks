@@ -33,14 +33,14 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Capacity AND price are resolved server-side from trusted config — never from
+    // Capacity AND price are resolved server-side from the turnus — never from
     // the client. The client-supplied payment_amount is ignored (anti-tampering):
     // the stored amount, the Comgate charge, and the Fakturoid invoice must all agree.
     let maxCapacity: number
     let trustedPrice: number
     try {
-      maxCapacity = getTrustedCapacity(parsed.data.location_id, parsed.data.program)
-      trustedPrice = getTrustedPriceKc(parsed.data.location_id, parsed.data.program)
+      maxCapacity = getTrustedCapacity(parsed.data.term_id)
+      trustedPrice = getTrustedPriceKc(parsed.data.term_id)
     } catch (e) {
       // Only non-PII identifiers in the monitoring context — never the parent/child data.
       reportError(e, {

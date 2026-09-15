@@ -1,27 +1,31 @@
-import { getLocationById } from './locations'
+import { getTurnusById, isBookable, TURNUSY, type Turnus } from './turnusy'
 
 /**
- * Trusted price source for payments. Resolves price from server-side location
- * config keyed by program id — NEVER from a client-supplied amount.
+ * Důvěryhodný zdroj ceny a kapacity pro registraci.
+ *
+ * Odvozuje se výhradně z turnusu na serveru — NIKDY z částky poslané klientem.
+ * Vstupem je `term_id`, protože cena a kapacita patří turnusu, ne programu:
+ * dva turnusy se stejným zaměřením se mohou lišit cenou.
+ *
+ * Turnus, který není v prodeji, vyhodí výjimku. Volající to překládá na
+ * chybu 400 — ať už jde o překlep v adrese, nebo o pokus obejít vyprodáno.
  */
-export function getTrustedPriceKc(locationId: string, program: string): number {
-  const location = getLocationById(locationId)
-  const cfg = location.programs.find((p) => p.id === program)
-  if (!cfg) {
-    throw new Error(`No trusted price for location=${locationId} program=${program}`)
+function resolveBookable(termId: string, list: Turnus[] = TURNUSY): Turnus {
+  const turnus = getTurnusById(termId, list)
+  if (!turnus) {
+    throw new Error(`Neznámý turnus: ${termId}`)
   }
-  return cfg.price
+  if (!isBookable(turnus)) {
+    throw new Error(`Turnus ${termId} není v prodeji (stav: ${turnus.status})`)
+  }
+  return turnus
 }
 
-/**
- * Trusted per-program capacity for anti-overbooking. Like the price, this is
- * resolved server-side from location config — never trusted from the client.
- */
-export function getTrustedCapacity(locationId: string, program: string): number {
-  const location = getLocationById(locationId)
-  const cfg = location.programs.find((p) => p.id === program)
-  if (!cfg) {
-    throw new Error(`No trusted capacity for location=${locationId} program=${program}`)
-  }
-  return cfg.capacity
+export function getTrustedPriceKc(termId: string, list: Turnus[] = TURNUSY): number {
+  // `isBookable` už zaručilo, že cena není null.
+  return resolveBookable(termId, list).priceKc as number
+}
+
+export function getTrustedCapacity(termId: string, list: Turnus[] = TURNUSY): number {
+  return resolveBookable(termId, list).capacity
 }

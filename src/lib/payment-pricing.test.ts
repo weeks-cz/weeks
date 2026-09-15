@@ -1,22 +1,58 @@
 import { describe, it, expect } from 'vitest'
 import { getTrustedPriceKc, getTrustedCapacity } from './payment-pricing'
+import { TURNUSY, type Turnus } from './turnusy'
+
+const prodejny: Turnus = {
+  id: 'test-prodejny',
+  slug: 'test-prodejny',
+  city: 'karlovy-vary',
+  venueId: 'fablab-varyte',
+  start: '2027-07-12',
+  end: '2027-07-16',
+  priceKc: 4990,
+  capacity: 15,
+  status: 'otevreno',
+  focus: ['3d-tisk'],
+  perex: 'Testovací turnus pro ověření důvěryhodné ceny.',
+}
 
 describe('getTrustedPriceKc', () => {
-  it('returns the configured price for a known KV program', () => {
-    expect(getTrustedPriceKc('karlovy-vary', 'mix')).toBe(2990)
-    expect(getTrustedPriceKc('karlovy-vary', 'letni-primestsky')).toBe(4990)
+  it('vrátí cenu turnusu', () => {
+    expect(getTrustedPriceKc('test-prodejny', [prodejny])).toBe(4990)
   })
-  it('throws for an unknown program (never trust client-supplied price)', () => {
-    expect(() => getTrustedPriceKc('karlovy-vary', 'nonexistent')).toThrow()
+
+  it('vyhodí výjimku u neznámého turnusu', () => {
+    expect(() => getTrustedPriceKc('neexistuje', [prodejny])).toThrow()
+  })
+
+  it('vyhodí výjimku u turnusu, který není v prodeji', () => {
+    expect(() =>
+      getTrustedPriceKc('test-prodejny', [{ ...prodejny, status: 'chystame' }])
+    ).toThrow()
+  })
+
+  it('vyhodí výjimku u plného turnusu — nesmí vzniknout nová platba', () => {
+    expect(() =>
+      getTrustedPriceKc('test-prodejny', [{ ...prodejny, status: 'plno' }])
+    ).toThrow()
   })
 })
 
 describe('getTrustedCapacity', () => {
-  it('returns the configured capacity for known KV programs', () => {
-    expect(getTrustedCapacity('karlovy-vary', 'mix')).toBe(15)
-    expect(getTrustedCapacity('karlovy-vary', 'letni-primestsky')).toBe(15)
+  it('vrátí kapacitu turnusu', () => {
+    expect(getTrustedCapacity('test-prodejny', [prodejny])).toBe(15)
   })
-  it('throws for an unknown program (never silently default capacity)', () => {
-    expect(() => getTrustedCapacity('karlovy-vary', 'nonexistent')).toThrow()
+
+  it('vyhodí výjimku u neznámého turnusu', () => {
+    expect(() => getTrustedCapacity('neexistuje', [prodejny])).toThrow()
+  })
+})
+
+describe('ostrá data', () => {
+  it('žádný turnus v prodeji nesmí mít nulovou nebo zápornou cenu', () => {
+    for (const turnus of TURNUSY) {
+      if (turnus.status !== 'otevreno') continue
+      expect(getTrustedPriceKc(turnus.id), `turnus ${turnus.id}`).toBeGreaterThan(0)
+    }
   })
 })
