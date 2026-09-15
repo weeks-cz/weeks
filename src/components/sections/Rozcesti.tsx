@@ -1,0 +1,91 @@
+'use client'
+
+import Link from 'next/link'
+import { motion, useReducedMotion } from 'framer-motion'
+import { ArrowRight, ExternalLink } from 'lucide-react'
+
+interface RozcestiKarta {
+  nadpis: string
+  veta: string
+  href: string
+  external?: boolean
+}
+
+/**
+ * Čtyři směry, kam Weeks dnes vede — tábor, firmy, e-shop, učebna.
+ * `/firmy` zatím neexistuje (vzniká ve fázi 4) a vede na 404; na neveřejné
+ * větvi je to v pořádku, viz task-8-brief.md.
+ */
+const KARTY: RozcestiKarta[] = [
+  {
+    nadpis: 'Letní tábor',
+    veta: 'Týdenní příměstský tábor pro děti 9–15 let.',
+    href: '/tabor',
+  },
+  {
+    nadpis: 'Pro firmy',
+    veta: 'Dny pro děti zaměstnanců, workshopy pro týmy a partnerství.',
+    href: '/firmy',
+  },
+  {
+    nadpis: 'E-shop',
+    veta: 'Stavebnice a materiál, se kterým děti pracují na táboře.',
+    href: '/eshop',
+  },
+  {
+    nadpis: 'Učebna',
+    veta: 'Online kurzy, ve kterých se dá pokračovat i po táboře.',
+    href: 'https://iot.weeks.cz/',
+    external: true,
+  },
+]
+
+export function Rozcesti() {
+  const reduced = useReducedMotion()
+
+  return (
+    <section className="section-padding bg-paper">
+      <div className="section-container">
+        <div className="max-w-3xl mb-12">
+          <p className="mono-label mb-4">Co Weeks dělá</p>
+          <h2 className="heading-2 text-ink mb-4">
+            Vyberte si, <span className="text-primary-600">co hledáte</span>
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {KARTY.map((karta, index) => (
+            <motion.div
+              key={karta.nadpis}
+              initial={reduced ? false : { opacity: 0, y: 16 }}
+              whileInView={reduced ? undefined : { opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.05 }}
+              className="card-maker flex flex-col p-6"
+            >
+              <h3 className="font-display text-lg font-semibold text-ink mb-2">{karta.nadpis}</h3>
+              <p className="text-sm text-ink-500 mb-6 flex-1">{karta.veta}</p>
+              {karta.external ? (
+                <a
+                  href={karta.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${karta.nadpis} — výuková platforma (otevře se v nové záložce)`}
+                  className="btn-outline text-sm self-start"
+                >
+                  Otevřít
+                  <ExternalLink className="w-4 h-4 ml-1.5" aria-hidden="true" />
+                </a>
+              ) : (
+                <Link href={karta.href} className="btn-outline text-sm self-start">
+                  Zjistit víc
+                  <ArrowRight className="w-4 h-4 ml-1.5" aria-hidden="true" />
+                </Link>
+              )}
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}

@@ -6,7 +6,8 @@ import { ArrowRight, Play } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { trackViewTerms } from '@/lib/analytics'
-import { useLocation } from '@/contexts/LocationContext'
+import { getTurnusy, isBookable } from '@/lib/turnusy'
+import { SITE } from '@/lib/site'
 
 const EASE_OUT = [0.16, 1, 0.3, 1] as const
 
@@ -56,19 +57,19 @@ function RevealLine({ children, delay }: { children: React.ReactNode; delay: num
 }
 
 export function HeroSection() {
-  const location = useLocation()
   const reduced = useReducedMotion()
-  // Věk bereme z configu lokace (Praha 10–15, KV 9–15), ne natvrdo.
-  const ageLabel = (location.programs[0]?.ageRange ?? '10-15').replace('-', '–')
-  const venue = location.venues[0]
+  // Věk bereme z prvního turnusu, ne natvrdo z jedné lokality — obě dnešní
+  // turnusy mají shodně '9-15', ale zdroj pravdy je turnus, ne stránka.
+  const ageLabel = (getTurnusy()[0]?.ageRange ?? '9-15').replace('-', '–')
 
-  // Po skončení sezóny hero neslibuje otevřenou registraci — kotva #prihlasit
-  // vede na off-season panel se sběrem kontaktů na další léto.
-  const seasonEnded = location.season?.status === 'ended'
+  // Úvodka je rozcestí, ne stránka tábora — neslibuje otevřenou registraci
+  // přímo tady, jen posílá dál na /tabor. Text hlavního tlačítka ale musí
+  // odpovídat prodejnímu stavu: dokud nejde koupit ani jeden turnus, nemá
+  // smysl tvrdit „vybrat", jen sbírat zájem.
+  const nicKProdeji = getTurnusy().every((t) => !isBookable(t))
+  const heroCtaText = nicKProdeji ? 'Chci vědět o termínech' : 'Vybrat turnus'
 
-  const kota = seasonEnded
-    ? `${location.hero.badge} · Připravujeme ${location.season?.nextSeasonLabel}`
-    : `${location.hero.badge} · Registrace otevřena`
+  const kota = 'Praha · Karlovy Vary'
   const typed = useTypewriter(kota)
 
   // Interaktivní mřížka: buňky blueprint gridu se za kurzorem rozsvítí a pohasnou
@@ -183,8 +184,10 @@ export function HeroSection() {
             transition={{ duration: 0.6, delay: 0.9, ease: EASE_OUT }}
             className="text-lg md:text-xl text-ink-500 mb-10 max-w-xl leading-relaxed"
           >
-            {location.hero.subtitle} Profesionální vybavení,
-            zkušení instruktoři a projekty, které si Vaše dítě odnese domů.
+            Týdenní příměstské tábory, kde si děti postaví vlastní věc — od 3D
+            modelu po zařízení, které samy naprogramují. Profesionální
+            vybavení, zkušení instruktoři a projekty, které si Vaše dítě
+            odnese domů.
             <span className="text-ink font-medium"> Pro děti {ageLabel} let.</span>
           </motion.p>
 
@@ -196,15 +199,15 @@ export function HeroSection() {
             className="flex flex-col sm:flex-row gap-4"
           >
             <Link
-              href="#prihlasit"
+              href="/tabor#turnusy"
               className="btn-primary group px-8 py-4"
               onClick={() => trackViewTerms('homepage_hero')}
             >
-              {seasonEnded ? 'Termíny na příští léto' : 'Vybrat termín'}
+              {heroCtaText}
               <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Link>
             <Link
-              href="#program"
+              href="/tabor#program"
               className="btn-outline group px-8 py-4"
             >
               <Play className="mr-2 w-5 h-5" />
@@ -222,25 +225,11 @@ export function HeroSection() {
             <dl className="flex flex-wrap gap-x-10 gap-y-4">
               <div>
                 <dt className="mono-label mb-1">Organizátor</dt>
-                <dd className="text-sm font-medium text-ink flex items-center gap-2">
-                  {location.organizer.logoUrl && (
-                    <Image
-                      src={location.organizer.logoUrl}
-                      alt=""
-                      width={20}
-                      height={20}
-                      className="object-contain w-5 h-5"
-                      aria-hidden="true"
-                    />
-                  )}
-                  {location.organizer.name}
-                </dd>
+                <dd className="text-sm font-medium text-ink">{SITE.name}</dd>
               </div>
               <div>
                 <dt className="mono-label mb-1">Místa konání</dt>
-                <dd className="text-sm font-medium text-ink">
-                  {location.venues.map(v => v.name).join(' & ')}
-                </dd>
+                <dd className="text-sm font-medium text-ink">Praha & Karlovy Vary</dd>
               </div>
               <div>
                 <dt className="mono-label mb-1">Věková skupina</dt>
@@ -265,10 +254,8 @@ export function HeroSection() {
               transition={{ duration: 0.9, delay: 0.5, ease: EASE_OUT }}
             >
               <Image
-                src={location.isDefault ? '/images/hwlab/hero-print-day.webp' : '/images/program-mix.webp'}
-                alt={location.isDefault
-                  ? 'Děti tisknou na 3D tiskárnách Prusa na táboře Weeks v HWLab'
-                  : `FabLab VARY&TE — IT tábor v ${location.name}`}
+                src="/images/hwlab/hero-print-day.webp"
+                alt="Děti tisknou na 3D tiskárně na táboře Weeks"
                 width={880}
                 height={660}
                 sizes="(min-width: 1024px) 40vw, 100vw"
@@ -278,15 +265,6 @@ export function HeroSection() {
               />
             </motion.div>
           </motion.div>
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.4, delay: 1.5 }}
-            className="mono-label mt-4 text-right"
-            aria-hidden="true"
-          >
-            {venue.name} — {venue.city}
-          </motion.p>
         </div>
       </div>
     </section>

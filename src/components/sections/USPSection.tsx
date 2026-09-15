@@ -2,21 +2,19 @@
 
 import { motion } from 'framer-motion'
 import { Building2, Package, GraduationCap, Shield, Clock, Train } from 'lucide-react'
-import { useLocation } from '@/contexts/LocationContext'
 
-const defaultTechnologyUsp = {
-  icon: Building2,
-  title: 'Exkluzivní technologie HWLab',
-  description: 'Vaše dítě pracuje se stejným vybavením jako profesionálové - průmyslové 3D tiskárny, VR headsety, CNC stroje a pokročilá IoT zařízení. Žádné hračky.',
-}
-
-const defaultScheduleUsp = {
-  icon: Clock,
-  title: 'Kompletní servis od 9 do 17',
-  description: 'Oběd, svačiny, přestávky na hřišti a střídání aktivit. Rodiče mají celý víkendový den pro sebe, děti mají postaráno o vše.',
-}
-
-const genericUsps = [
+/**
+ * Texty vychází z toho, co dřív mělo v `locations.ts` jen Karlovy Vary
+ * (Praha měla chudší sadu, vázanou na partnera HWLab) — zbavené zmínek
+ * o jednom konkrétním městě nebo prostoru, protože úvodka je teď společná
+ * pro obě.
+ */
+const usps = [
+  {
+    icon: Building2,
+    title: 'Profesionální vybavení',
+    description: 'Vaše dítě pracuje s profesionálním vybavením — průmyslové 3D tiskárny, VR headsety a pokročilá IoT zařízení. Profesionální zázemí kreativního centra, žádné hračky.',
+  },
   {
     icon: Package,
     title: 'Projekty, které si odnesou domů',
@@ -27,27 +25,24 @@ const genericUsps = [
     title: 'Skuteční odborníci, ne hlídání',
     description: 'Naši lektoři jsou aktivní programátoři, inženýři a designéři. Mají praxi z oboru a vědí, jak zaujmout teenagery i začátečníky od 10 let.',
   },
+  {
+    icon: Clock,
+    title: 'Kompletní servis od 8 do 17',
+    description: 'Celý týden oběd, přestávky a střídání aktivit. Rodiče mají klid, děti mají postaráno o vše.',
+  },
+  {
+    icon: Shield,
+    title: 'Organizováno Weeks',
+    description: 'Tábory organizuje tým Weeks s důrazem na kvalitu výuky, bezpečnost dětí a profesionální přístup.',
+  },
+  {
+    icon: Train,
+    title: 'Moderní kreativní centra',
+    description: 'Tábory probíhají v moderních kreativních centrech s dílnami a vybavenými prostory pro tvorbu.',
+  },
 ]
 
 export function USPSection() {
-  const location = useLocation()
-
-  const techUsp = location.usps.technology
-    ? { icon: Building2, ...location.usps.technology }
-    : defaultTechnologyUsp
-
-  const scheduleUsp = location.usps.schedule
-    ? { icon: Clock, ...location.usps.schedule }
-    : defaultScheduleUsp
-
-  const usps = [
-    techUsp,
-    ...genericUsps,
-    scheduleUsp,
-    { icon: Shield, title: location.usps.organizer.title, description: location.usps.organizer.description },
-    { icon: Train, title: location.usps.location.title, description: location.usps.location.description },
-  ]
-
   return (
     <section id="proc-weeks" className="section-padding bg-paper">
       <div className="section-container">

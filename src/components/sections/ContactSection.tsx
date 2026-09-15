@@ -2,14 +2,12 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Mail, Phone, MapPin, Clock } from 'lucide-react'
+import { Mail, Phone, MapPin, Building2 } from 'lucide-react'
 import Link from 'next/link'
 import { trackLead } from '@/lib/fbpixel'
-import { useLocation } from '@/contexts/LocationContext'
-import { buildPath } from '@/lib/locations'
+import { SITE } from '@/lib/site'
 
 export function ContactSection() {
-  const location = useLocation()
   const [email, setEmail] = useState('')
   const [gdprConsent, setGdprConsent] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -66,10 +64,10 @@ export function ContactSection() {
                 <div>
                   <h3 className="mono-label mb-1">E-mail</h3>
                   <a
-                    href={`mailto:${location.contact.email}`}
+                    href={`mailto:${SITE.email}`}
                     className="font-mono text-primary-600 hover:underline"
                   >
-                    {location.contact.email}
+                    {SITE.email}
                   </a>
                   <p className="text-sm text-ink-500 mt-1">
                     Odpovídáme do 24 hodin (pracovní dny)
@@ -84,10 +82,10 @@ export function ContactSection() {
                 <div>
                   <h3 className="mono-label mb-1">Telefon</h3>
                   <a
-                    href={`tel:${location.contact.phone.replace(/\s+/g, '')}`}
+                    href={`tel:${SITE.phone.replace(/\s+/g, '')}`}
                     className="font-mono text-primary-600 hover:underline"
                   >
-                    {location.contact.phone}
+                    {SITE.phone}
                   </a>
                   <p className="text-sm text-ink-500 mt-1">
                     Po-Pá 9:00-17:00
@@ -97,53 +95,37 @@ export function ContactSection() {
 
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 bg-white border border-ink/15 rounded-sm flex items-center justify-center flex-shrink-0">
-                  <Clock className="w-6 h-6 text-primary-600" aria-hidden="true" />
+                  <Building2 className="w-6 h-6 text-primary-600" aria-hidden="true" />
                 </div>
                 <div>
-                  <h3 className="mono-label mb-1">Organizátor</h3>
+                  <h3 className="mono-label mb-1">Provozovatel</h3>
                   <p className="text-ink">
-                    {location.organizer.name}<br />
+                    {SITE.legalName}<br />
                     <span className="text-sm text-ink-500">
-                      {location.organizer.fullName}
+                      IČO {SITE.ico} · {SITE.address}
                     </span>
                   </p>
                 </div>
               </div>
             </div>
 
-            {/* Venues */}
+            {/* Kde tábory probíhají — místo se liší podle turnusu, adresa proto
+                patří na /tabor, ne sem jako pevný text. */}
             <div className="space-y-6">
-              {/* Venue cards */}
-              <div className={`grid gap-4 ${location.venues.length === 1 ? 'grid-cols-1' : 'grid-cols-1 sm:grid-cols-2'}`}>
-                {location.venues.map((venue) => (
-                  <a
-                    key={venue.name}
-                    href={`https://maps.google.com/?q=${encodeURIComponent(venue.mapQuery || `${venue.fullName},+${venue.address},+${venue.city}`)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="card-maker group p-5"
-                  >
-                    <div className="flex items-center gap-3 mb-3">
-                      <div className="w-9 h-9 bg-primary-600 border border-ink rounded-sm flex items-center justify-center">
-                        <MapPin className="w-4 h-4 text-white" aria-hidden="true" />
-                      </div>
-                      <h3 className="font-display font-semibold text-ink text-sm">{venue.name}</h3>
-                    </div>
-                    <p className="text-sm text-ink-500 leading-relaxed">
-                      {venue.fullName}<br />
-                      {venue.address}, {venue.city}
-                    </p>
-                    {venue.transport && (
-                      <p className="font-mono text-xs text-ink-500 mt-2">
-                        {venue.transport}
-                      </p>
-                    )}
-                    <p className="text-xs text-primary-600 mt-2 group-hover:underline">
-                      Zobrazit na mapě →
-                    </p>
-                  </a>
-                ))}
-              </div>
+              <Link href="/tabor#turnusy" className="card-maker group p-5 block">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-9 h-9 bg-primary-600 border border-ink rounded-sm flex items-center justify-center">
+                    <MapPin className="w-4 h-4 text-white" aria-hidden="true" />
+                  </div>
+                  <h3 className="font-display font-semibold text-ink text-sm">Kde tábory probíhají</h3>
+                </div>
+                <p className="text-sm text-ink-500 leading-relaxed">
+                  Místo konání se liší podle turnusu a města. Přesnou adresu najdete u vybraného turnusu.
+                </p>
+                <p className="text-xs text-primary-600 mt-2 group-hover:underline">
+                  Zobrazit turnusy →
+                </p>
+              </Link>
             </div>
           </div>
 
@@ -197,7 +179,7 @@ export function ContactSection() {
                     />
                     <label htmlFor="contact-gdpr" className="text-xs text-ink-500 cursor-pointer text-left">
                       Souhlasím se zpracováním osobních údajů.{' '}
-                      <Link href={buildPath(location, 'gdpr')} className="underline hover:text-primary-600">
+                      <Link href="/gdpr" className="underline hover:text-primary-600">
                         Více informací
                       </Link>
                     </label>
