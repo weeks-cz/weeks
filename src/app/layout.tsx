@@ -118,7 +118,9 @@ export default function RootLayout({
           </MotionProvider>
         </ShopProvider>
         <CookieConsent />
-        <KVRegionNudge />
+        <Suspense fallback={null}>
+          <KVRegionNudge />
+        </Suspense>
         <Suspense fallback={null}>
           <QRTracker />
         </Suspense>

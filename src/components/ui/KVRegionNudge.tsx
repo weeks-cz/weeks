@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { usePathname } from 'next/navigation'
+import { usePathname, useSearchParams } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { MapPin, X, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
@@ -14,8 +14,7 @@ type Mode = 'hidden' | 'pill' | 'card'
 
 // Na kterých stránkách smí nudge vyskočit. NE na reklamních / checkout stránkách,
 // kde by rušil konverzi — jen na hlavních obsahových stránkách, kam zájemce
-// o tábor reálně přistane. (Karlovy Vary už nemají vlastní adresu — žijí pod
-// /tabor?mesto=karlovy-vary — takže samostatná výjimka pro ně není potřeba.)
+// o tábor reálně přistane.
 function isEligiblePath(pathname: string): boolean {
   const blocked = ['/kveten', '/duben', '/registrace', '/platba', '/studio', '/eshop', '/api']
   if (blocked.some((p) => pathname.startsWith(p))) return false
@@ -24,9 +23,13 @@ function isEligiblePath(pathname: string): boolean {
 
 export function KVRegionNudge() {
   const pathname = usePathname()
+  // Karlovy Vary žijí pod /tabor?mesto=karlovy-vary — bez tohohle by nudge
+  // nabízel „Zobrazit tábory v KV" i tomu, kdo přesně na téhle adrese už je.
+  const mesto = useSearchParams().get('mesto')
   const [mode, setMode] = useState<Mode>('hidden')
 
   useEffect(() => {
+    if (mesto === 'karlovy-vary') { setMode('hidden'); return }
     if (!pathname || !isEligiblePath(pathname)) return
     if (localStorage.getItem(DISMISS_KEY)) return
 
@@ -64,7 +67,7 @@ export function KVRegionNudge() {
       cancelled = true
       window.removeEventListener('cookie-consent-updated', onConsent)
     }
-  }, [pathname])
+  }, [pathname, mesto])
 
   const dismiss = () => {
     localStorage.setItem(DISMISS_KEY, '1')
