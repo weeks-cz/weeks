@@ -5,7 +5,10 @@ import { useSearchParams, useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { User, Baby, MapPin, FileCheck, ClipboardList, ArrowRight, ArrowLeft, Loader2 } from 'lucide-react'
 import { parentSchema, childSchema, consentsSchema, INSURANCE_OPTIONS, type ParentData, type ChildData, type ConsentsData } from '@/lib/registration'
-import { getLocationById } from '@/lib/locations'
+import { getTurnusById, isBookable } from '@/lib/turnusy'
+import { getCity } from '@/lib/cities'
+import { getFocusModules } from '@/lib/focus'
+import { turnusLabels } from '@/components/turnusy/TurnusCard'
 import { trackRegistrationSubmit, trackRegistrationStep } from '@/lib/analytics'
 import Link from 'next/link'
 
@@ -27,13 +30,8 @@ export function RegistrationForm() {
   const searchParams = useSearchParams()
   const router = useRouter()
 
-  const locationId = searchParams.get('location') || 'karlovy-vary'
-  const programId = searchParams.get('program') || ''
   const termId = searchParams.get('term') || ''
-
-  const location = getLocationById(locationId)
-  const program = location.programs.find(p => p.id === programId)
-  const term = location.terms.find(t => t.id === termId)
+  const turnus = getTurnusById(termId)
 
   const [step, setStep] = useState(1)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -70,12 +68,12 @@ export function RegistrationForm() {
 
   const [customerNote, setCustomerNote] = useState('')
 
-  const vopUrl = locationId === 'karlovy-vary' ? '/karlovy-vary/podminky' : '/podminky'
-  const gdprUrl = locationId === 'karlovy-vary' ? '/karlovy-vary/gdpr' : '/gdpr'
+  const vopUrl = '/podminky'
+  const gdprUrl = '/gdpr'
 
   // Měření trychtýře: zaznamenej otevření formuláře (krok 1) jednou při načtení.
   useEffect(() => {
-    trackRegistrationStep({ step: 1, locationId, program: programId, termId })
+    trackRegistrationStep({ step: 1, locationId: turnus?.city ?? '', program: turnus?.focus[0] ?? '', termId })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -129,7 +127,7 @@ export function RegistrationForm() {
     if (validateStep()) {
       const next = Math.min(step + 1, 5)
       setStep(next)
-      trackRegistrationStep({ step: next, locationId, program: programId, termId })
+      trackRegistrationStep({ step: next, locationId: turnus?.city ?? '', program: turnus?.focus[0] ?? '', termId })
       return
     }
     // Neúspěšná validace — posuň pohled na první chybu (čtečky ji oznámí přes role="alert").
@@ -159,12 +157,12 @@ export function RegistrationForm() {
           pickup_persons: pickup.pickup_persons,
           ...consents,
           customer_note: customerNote,
-          location_id: locationId,
-          program: programId,
-          term_id: termId,
-          term_start: term?.startDate || '',
-          term_end: term?.endDate || '',
-          payment_amount: program?.price || 0,
+          location_id: turnus?.city ?? '',
+          program: turnus?.focus[0] ?? '',
+          term_id: turnus?.id ?? '',
+          term_start: turnus?.start ?? '',
+          term_end: turnus?.end ?? '',
+          payment_amount: turnus?.priceKc ?? 0,
         }),
       })
 
@@ -175,14 +173,14 @@ export function RegistrationForm() {
       }
 
       trackRegistrationSubmit({
-        locationId,
-        program: programId,
+        locationId: turnus?.city ?? '',
+        program: turnus?.focus[0] ?? '',
         termId,
-        value: program?.price || 0,
+        value: turnus?.priceKc ?? 0,
         registrationId: data.registrationId,
       })
 
-      router.push(`${data.paymentUrl}?location=${locationId}`)
+      router.push(data.paymentUrl)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Něco se pokazilo')
     } finally {
@@ -223,24 +221,25 @@ export function RegistrationForm() {
   const inputClass = (name: string) =>
     `w-full px-4 py-3 rounded-md bg-white border ${fieldErrors[name] ? 'border-red-300 bg-red-50' : 'border-ink/20'} text-ink placeholder:text-ink/40 focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink`
 
-  if (!program || !term) {
-    // Odkazy z loňských reklam a e-mailů míří na termíny, které už v configu nejsou.
-    // Když je sezóna uzavřená, řekněme rovnou proč — „neplatný odkaz" by vypadalo jako chyba.
-    const seasonEnded = location.season?.status === 'ended'
+  if (!turnus || !isBookable(turnus)) {
+    // Odkazy z reklam, e-mailů i karet turnusů míří na term_id, které buď
+    // neexistuje, nebo turnus zatím (či už) není v prodeji.
     return (
       <div className="max-w-lg mx-auto text-center py-20">
-        <h1 className="heading-2 mb-4">{seasonEnded ? 'Registrace je uzavřená' : 'Registrace'}</h1>
+        <h1 className="heading-2 mb-4">Registrace není otevřená</h1>
         <p className="text-ink-500 mb-6">
-          {seasonEnded
-            ? `Letošní sezóna už skončila a tento termín se nekoná. Termíny na ${location.season?.nextSeasonLabel} vypíšeme na jaře — nechte nám kontakt a ozveme se vám mezi prvními.`
-            : 'Neplatný odkaz na registraci. Vyberte si tábor a termín.'}
+          Tenhle termín se právě nedá objednat. Vyberte si prosím jiný turnus.
         </p>
-        <Link href={`/${location.slug || ''}${seasonEnded ? '#prihlasit' : ''}`} className="btn-primary">
-          {seasonEnded ? 'Chci vědět o termínech' : 'Zpět na výběr táborů'}
+        <Link href="/tabor#turnusy" className="btn-primary">
+          Zpět na termíny
         </Link>
       </div>
     )
   }
+
+  const labels = turnusLabels(turnus)
+  const cityName = getCity(turnus.city).name
+  const focusNames = getFocusModules(turnus.focus).map(z => z.name).join(' · ')
 
   return (
     <div className="max-w-2xl mx-auto">
@@ -248,7 +247,7 @@ export function RegistrationForm() {
       <div className="text-center mb-8">
         <h1 className="heading-2 mb-2">Registrace na tábor</h1>
         <p className="text-ink-500">
-          {program.name} · {location.name} · {new Date(term.startDate).toLocaleDateString('cs-CZ', { day: 'numeric', month: 'long', year: 'numeric' })}
+          {focusNames} · {cityName} · {labels.datum}
         </p>
       </div>
 
@@ -489,9 +488,9 @@ export function RegistrationForm() {
               <div className="space-y-6">
                 <div className="border border-primary-300 rounded-md bg-white p-4">
                   <h3 className="font-medium text-ink mb-2">Tábor</h3>
-                  <p className="text-ink">{program.name}</p>
-                  <p className="text-sm text-ink-500">{location.name} · {new Date(term.startDate).toLocaleDateString('cs-CZ', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
-                  <p className="text-lg font-bold text-ink mt-2 font-mono">{program.price.toLocaleString('cs-CZ')} Kč</p>
+                  <p className="text-ink">{focusNames}</p>
+                  <p className="text-sm text-ink-500">{cityName} · {labels.datum}</p>
+                  <p className="text-lg font-bold text-ink mt-2 font-mono">{(turnus.priceKc ?? 0).toLocaleString('cs-CZ')} Kč</p>
                 </div>
 
                 <div className="grid sm:grid-cols-2 gap-4">

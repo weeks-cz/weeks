@@ -5,17 +5,13 @@ import { useSearchParams } from 'next/navigation'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { RegistrationConfirmation } from '@/components/registration/RegistrationConfirmation'
-import { LocationProvider } from '@/contexts/LocationContext'
-import { getLocationById, DEFAULT_LOCATION } from '@/lib/locations'
 
 function ConfirmationContent({ id }: { id: string }) {
   const searchParams = useSearchParams()
-  const locationId = searchParams.get('location') || ''
   const token = searchParams.get('t') || ''
-  const location = locationId ? getLocationById(locationId) : DEFAULT_LOCATION
 
   return (
-    <LocationProvider location={location}>
+    <>
       <Header />
       <main className="min-h-screen bg-paper pt-24 pb-16">
         <div className="section-container">
@@ -23,7 +19,7 @@ function ConfirmationContent({ id }: { id: string }) {
         </div>
       </main>
       <Footer />
-    </LocationProvider>
+    </>
   )
 }
 
