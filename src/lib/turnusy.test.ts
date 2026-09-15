@@ -72,6 +72,13 @@ describe('getTurnusy', () => {
   it('u prázdného seznamu vrátí prázdný seznam', () => {
     expect(getTurnusy([])).toEqual([])
   })
+
+  it('nemění vstupní pole — řadí nad kopií', () => {
+    const vstup = [pozdejsi, uzavreny, chystany, otevreny]
+    const poradiPred = vstup.map((t) => t.id)
+    getTurnusy(vstup)
+    expect(vstup.map((t) => t.id)).toEqual(poradiPred)
+  })
 })
 
 describe('getTurnus', () => {
@@ -133,5 +140,9 @@ describe('isBookable', () => {
 
   it('otevřený turnus bez termínu koupit nejde', () => {
     expect(isBookable({ ...otevreny, start: null, end: null })).toBe(false)
+  })
+
+  it('otevřený turnus bez domluveného místa koupit nejde', () => {
+    expect(isBookable({ ...otevreny, venueId: null })).toBe(false)
   })
 })
