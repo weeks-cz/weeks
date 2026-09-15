@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
         route: 'payment/comgate/create',
         registrationId: reg.id,
       })
-      return NextResponse.json({ error: API_ERRORS.invalidRequest }, { status: 400 })
+      return NextResponse.json({ error: API_ERRORS.paymentInitFailed }, { status: 400 })
     }
 
     const origin = request.nextUrl.origin
