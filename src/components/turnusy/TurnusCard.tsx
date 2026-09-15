@@ -41,12 +41,9 @@ export function turnusLabels(turnus: Turnus) {
 
   const misto = turnus.venueId ? getVenue(turnus.venueId).name : 'Místo upřesníme'
 
-  // toLocaleString vkládá mezi tisíce nezalomitelnou mezeru (U+00A0) — na
-  // kartě chceme obyčejnou, ať se řetězec dá porovnávat a zalamovat běžně.
-  const cena =
-    turnus.priceKc !== null
-      ? `${turnus.priceKc.toLocaleString('cs-CZ').replace(/ /g, ' ')} Kč`
-      : ''
+  // toLocaleString vkládá mezi tisíce nezalomitelnou mezeru (U+00A0) — necháváme
+  // ji záměrně, i před „Kč": cena se na úzké kartě nesmí zalomit uprostřed čísla.
+  const cena = turnus.priceKc !== null ? `${turnus.priceKc.toLocaleString('cs-CZ')} Kč` : ''
 
   const stav =
     turnus.status === 'plno'
@@ -57,13 +54,21 @@ export function turnusLabels(turnus: Turnus) {
           ? 'Proběhlo'
           : 'Přijímáme přihlášky'
 
+  const ctaText = prodejny
+    ? 'Přihlásit dítě'
+    : turnus.status === 'plno'
+      ? 'Chci vědět o volném místě'
+      : turnus.status === 'uzavreno'
+        ? 'Chci vědět o dalších termínech'
+        : 'Chci vědět, až otevřeme'
+
   return {
     datum,
     mesto: getCity(turnus.city).name,
     misto,
     cena,
     stav,
-    ctaText: prodejny ? 'Přihlásit dítě' : 'Chci vědět, až otevřeme',
+    ctaText,
     ctaHref: prodejny ? `/registrace?term=${turnus.id}` : null,
   }
 }
@@ -71,8 +76,17 @@ export function turnusLabels(turnus: Turnus) {
 export function TurnusCard({ turnus, spotsLeft }: { turnus: Turnus; spotsLeft?: number }) {
   const reduced = useReducedMotion()
   const l = turnusLabels(turnus)
-  const prodejny = l.ctaHref !== null
   const zamereni = getFocusModules(turnus.focus)
+
+  // Živá kapacita se může vyčerpat dřív, než se to projeví ve statickém
+  // `status` v datech — `turnusLabels` o `spotsLeft` neví (je to čistá funkce
+  // nad daty turnusu). Kartu proto tady dorovnáme, ať nenabízí registraci na
+  // turnus, který je podle živých dat vyprodaný: stejné popisky jako `plno`.
+  const vyprodano = spotsLeft === 0
+  const stav = vyprodano ? 'Obsazeno' : l.stav
+  const ctaText = vyprodano ? 'Chci vědět o volném místě' : l.ctaText
+  const ctaHref = vyprodano ? null : l.ctaHref
+  const prodejny = ctaHref !== null
 
   return (
     <motion.article
@@ -88,7 +102,7 @@ export function TurnusCard({ turnus, spotsLeft }: { turnus: Turnus; spotsLeft?: 
         {prodejny && spotsLeft !== undefined ? (
           <SpotsLeftBadge spotsLeft={spotsLeft} maxCapacity={turnus.capacity} />
         ) : (
-          <span className="font-mono text-xs uppercase tracking-wider text-ink/50">{l.stav}</span>
+          <span className="font-mono text-xs uppercase tracking-wider text-ink/50">{stav}</span>
         )}
       </div>
 
@@ -112,15 +126,17 @@ export function TurnusCard({ turnus, spotsLeft }: { turnus: Turnus; spotsLeft?: 
 
       <div className="flex items-center justify-between gap-3 pt-4 border-t border-ink/15">
         {l.cena ? (
-          <span className="font-mono text-sm font-semibold text-ink">{l.cena}</span>
+          <span className="font-mono text-sm font-semibold text-ink whitespace-nowrap">
+            {l.cena}
+          </span>
         ) : (
           <span className="font-mono text-xs text-ink/40">cenu upřesníme</span>
         )}
         <Link
-          href={l.ctaHref ?? `/tabor/${turnus.slug}`}
+          href={ctaHref ?? `/tabor/${turnus.slug}`}
           className={prodejny ? 'btn-primary text-sm' : 'btn-outline text-sm'}
         >
-          {l.ctaText}
+          {ctaText}
           <ArrowRight className="w-4 h-4 ml-1" aria-hidden="true" />
         </Link>
       </div>

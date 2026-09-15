@@ -44,8 +44,9 @@ describe('turnusLabels — otevřený turnus', () => {
     expect(l.misto).toBe('FabLab VARY&TE')
   })
 
-  it('uvede cenu s mezerou mezi tisíci a bez zmínky o DPH', () => {
-    expect(l.cena).toBe('4 990 Kč')
+  it('uvede cenu s nezalomitelnou mezerou mezi tisíci a bez zmínky o DPH', () => {
+    // U+00A0 je záměr: cena nesmí na úzké kartě zalomit uprostřed čísla.
+    expect(l.cena).toBe(`4 990 Kč`)
     expect(l.cena).not.toMatch(/DPH/i)
   })
 
