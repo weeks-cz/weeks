@@ -13,6 +13,7 @@ interface RegistrationData {
   payment_status: string
   location_id: string
   program: string
+  termId: string
   term_start: string
   term_end: string
   parent_name: string
@@ -52,7 +53,7 @@ export function RegistrationConfirmation({ registrationId, token }: Registration
           paidTracked.current = true
           trackPaymentCompleted({
             registrationId,
-            program: data.registration?.program ?? '',
+            termId: data.registration?.termId ?? '',
             value: data.registration?.payment_amount ?? 0,
           })
           // Sklik konverze (no-op bez NEXT_PUBLIC_SKLIK_CONVERSION_ID / marketing souhlasu)

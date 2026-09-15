@@ -10,8 +10,10 @@ export const dynamic = 'force-dynamic'
 // Minimal, non-sensitive field set the confirmation page needs. We deliberately
 // do NOT expose child_birthdate, child_insurance, child_health_notes,
 // parent_phone, parent_address, pickup details, consents or IP — returning those
-// to anyone holding the UUID would be a PII leak. `term_id` is selected only to
-// derive the trusted program name below — it never reaches the client raw.
+// to anyone holding the UUID would be a PII leak. `term_id` is not sensitive
+// (it already sits in the registration form's own URL) — it's both used below
+// to derive the trusted program name and returned to the client as `termId`,
+// a stable analytics key that doesn't drift when the display text changes.
 const CONFIRMATION_FIELDS =
   'id, status, payment_status, location_id, program, term_id, term_start, term_end, parent_name, parent_email, child_name, payment_amount'
 
@@ -46,7 +48,8 @@ export async function GET(
 
     // Název programu odvozujeme ze `term_id` stejně jako e-maily a faktura —
     // ne ze syrového pole `program`, které nese jen id zaměření. `term_id`
-    // samotné se klientovi neposílá, stačí mu čitelný název.
+    // navíc posíláme klientovi zvlášť jako `termId`, aby si ho stránka mohla
+    // předat do analytiky jako rozměr nezávislý na textaci názvu.
     const { term_id, program, ...rest } = data
     let programName: string
     try {
@@ -62,7 +65,7 @@ export async function GET(
       })
     }
 
-    return NextResponse.json({ registration: { ...rest, program: programName } })
+    return NextResponse.json({ registration: { ...rest, program: programName, termId: term_id } })
   } catch (e) {
     reportError(e, { route: 'registration/[id]', reason: 'fetch' })
     return NextResponse.json({ error: API_ERRORS.notFound }, { status: 404 })

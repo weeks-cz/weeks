@@ -229,21 +229,22 @@ export function trackPaymentInitiated(registrationId: string) {
 }
 
 // Step 3: payment confirmed (fired once when confirmation page sees 'paid')
+// Rozměr nese stabilní `term_id` turnusu, ne zobrazovaný název — schválně, aby analytika nezávisela na textaci.
 export function trackPaymentCompleted(params: {
   registrationId: string
-  program: string
+  termId: string
   value: number
 }) {
   sendGAEvent('event', 'payment_completed', {
     registration_id: params.registrationId,
-    program: params.program,
+    program: params.termId,
     value: params.value,
     currency: 'CZK',
   })
   fbqEvent(
     'Purchase',
     {
-      content_name: params.program,
+      content_name: params.termId,
       value: params.value,
       currency: 'CZK',
     },
