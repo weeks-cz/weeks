@@ -15,6 +15,14 @@ export interface FocusModule {
   short: string
   /** Co si dítě konkrétně vyzkouší — do odrážek na stránce. */
   tryOut: string[]
+  /** Konkrétní modely tiskáren, se kterými se pracuje. Jen u 3D tisku. */
+  printers?: string[]
+  /** Konkrétní hardware — desky, čidla. Jen u IoT. */
+  hardware?: string[]
+  /** Cesty k fotkám ve veřejné složce. */
+  gallery?: string[]
+  /** Otázky rodičů, které se týkají právě tohohle zaměření. */
+  faq?: Array<{ question: string; answer: string }>
 }
 
 export const FOCUS_IDS: FocusId[] = ['3d-tisk', 'iot', 'vr', 'herni-vyvoj']
@@ -31,6 +39,29 @@ const FOCUS: Record<FocusId, FocusModule> = {
       'Uvidí, proč tisk selže, a naučí se tomu předejít',
       'Odveze si vlastní výtisk',
     ],
+    printers: ['MK3S', 'MK4S', 'Mini+', 'CORE One', 'CORE One L', 'XL', 'SL1S'],
+    gallery: [
+      '/images/gallery/3d-prints-collection.jpg', // alt: Kolekce výtisků z tábora
+      '/images/gallery/3d-uv-curing.jpg', // alt: UV vytvrzování resinových výtisků
+      '/images/gallery/3d-dragon-hands.jpg', // alt: Liška z 3D tiskárny
+      '/images/gallery/3d-cat-lowpoly.jpg', // alt: Low-poly kočka
+      '/images/gallery/3d-dragon-desk.jpg', // alt: Oranžová liška na stole
+      '/images/gallery/3d-resin-figurines.jpg', // alt: Resinové figurky
+      '/images/gallery/3d-printer-slicer.jpg', // alt: Práce s 3D tiskárnou a slicerem
+      '/images/gallery/3d-printers-row.jpg', // alt: Řada Prusa tiskáren
+    ],
+    faq: [
+      {
+        question: 'Je potřeba nějaká předchozí zkušenost s 3D tiskem?',
+        answer:
+          'Ne, žádné předchozí zkušenosti nejsou potřeba. Program je navržený tak, aby zvládli i úplní začátečníci. Pokročilí dostanou složitější výzvy.',
+      },
+      {
+        question: 'Co si děti odnesou domů?',
+        answer:
+          'Každé dítě si odnese vlastní navržený a vytištěný 3D model – klíčenku, stojánek, hračku nebo jiný předmět podle vlastního návrhu.',
+      },
+    ],
   },
   'iot': {
     id: 'iot',
@@ -42,6 +73,36 @@ const FOCUS: Record<FocusId, FocusModule> = {
       'Naprogramuje Micro:bit i Arduino',
       'Připojí čidlo a nechá zařízení reagovat na teplotu nebo pohyb',
       'Sestaví vlastní malý projekt a předvede ho ostatním',
+    ],
+    hardware: [
+      'Micro:bit',
+      'Arduino',
+      'LED displej',
+      'tlačítka',
+      'teplotní senzor',
+      'senzor světla',
+      'akcelerometr',
+      'kompas',
+    ],
+    gallery: [
+      '/images/gallery/iot-arduino-breadboard.jpg', // alt: Práce s Arduino breadboardem
+      '/images/gallery/iot-plant-sensor.jpg', // alt: IoT senzor na květině
+      '/images/gallery/iot-arduino-programming.jpg', // alt: Programování Arduina
+      '/images/gallery/iot-breadboard-detail.jpg', // alt: Detail breadboardu s LEDkami
+      '/images/gallery/iot-plant-sensor-2.jpg', // alt: Chytré zavlažování květin
+      '/images/gallery/iot-circuit-design.jpg', // alt: Návrh IoT obvodu
+    ],
+    faq: [
+      {
+        question: 'Je potřeba nějaká předchozí zkušenost s elektronikou?',
+        answer:
+          'Ne, žádné předchozí zkušenosti nejsou potřeba. Program je navržený tak, aby zvládli i úplní začátečníci. Pokročilí dostanou složitější výzvy.',
+      },
+      {
+        question: 'Co si děti odnesou domů?',
+        answer:
+          'Děti si odnesou zkušenosti s programováním a elektronikou. Micro:bity a Arduina zůstávají v laboratoři, ale děti získají přístup k online prostředí, kde mohou pokračovat v programování doma.',
+      },
     ],
   },
   'vr': {

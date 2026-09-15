@@ -29,3 +29,34 @@ describe('getFocusModules', () => {
     expect(getFocusModules([])).toEqual([])
   })
 })
+
+describe('obsah přenesený ze zanikajících stránek', () => {
+  it('3D tisk jmenuje konkrétní modely tiskáren, se kterými děti pracují', () => {
+    const printers = getFocus('3d-tisk').printers ?? []
+    expect(printers.length).toBeGreaterThanOrEqual(4)
+    expect(printers.join(' ')).toContain('MK4S')
+  })
+
+  it('IoT jmenuje konkrétní hardware', () => {
+    const hardware = getFocus('iot').hardware ?? []
+    expect(hardware.length).toBeGreaterThanOrEqual(2)
+    expect(hardware.join(' ')).toContain('Arduino')
+  })
+
+  it('zaměření s vlastními otázkami rodičů mají u každé i odpověď', () => {
+    for (const id of FOCUS_IDS) {
+      for (const item of getFocus(id).faq ?? []) {
+        expect(item.question.length, `${id}: ${item.question}`).toBeGreaterThan(5)
+        expect(item.answer.length, `${id}: ${item.question}`).toBeGreaterThan(20)
+      }
+    }
+  })
+
+  it('každý odkaz na obrázek míří do veřejné složky, ne na cizí web', () => {
+    for (const id of FOCUS_IDS) {
+      for (const src of getFocus(id).gallery ?? []) {
+        expect(src, `${id}`).toMatch(/^\/images\//)
+      }
+    }
+  })
+})
