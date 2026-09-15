@@ -51,22 +51,6 @@ export function Footer() {
             <p className="text-paper/60 leading-relaxed mb-6">
               {description}
             </p>
-            <a
-              href="https://www.kudyznudy.cz/?utm_source=kzn&utm_medium=partneri_kzn&utm_campaign=banner"
-              title="Kudyznudy.cz – tipy na výlet"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Kudyznudy.cz – tipy na výlet (otevře se v nové záložce)"
-              className="inline-flex px-3 py-1.5 border border-paper/20 rounded-sm hover:border-paper/50 transition-colors items-center"
-            >
-              <Image
-                src="/images/kudy-z-nudy-white.png"
-                width={150}
-                height={33}
-                alt="Kudyznudy.cz – tipy na výlet"
-                className="opacity-80 hover:opacity-100 transition-opacity"
-              />
-            </a>
           </div>
 
           {/* Quick Links */}
