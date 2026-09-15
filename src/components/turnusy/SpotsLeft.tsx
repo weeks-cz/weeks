@@ -11,11 +11,12 @@ export type CapacityMap = Record<string, TermCapacity>
  * Returns null until loaded (callers should render nothing meanwhile — never a
  * fake number). Fail-quiet: stays null if the request fails.
  */
-export function useTermCapacity(locationId: string): CapacityMap | null {
+export function useTermCapacity(mesto?: string): CapacityMap | null {
   const [map, setMap] = useState<CapacityMap | null>(null)
   useEffect(() => {
     let cancelled = false
-    fetch(`/api/term-capacity?mesto=${encodeURIComponent(locationId)}`)
+    const url = mesto ? `/api/term-capacity?mesto=${encodeURIComponent(mesto)}` : '/api/term-capacity'
+    fetch(url)
       .then((r) => (r.ok ? r.json() : null))
       .then((j) => {
         if (!cancelled && j && j.data) setMap(j.data as CapacityMap)
@@ -24,7 +25,7 @@ export function useTermCapacity(locationId: string): CapacityMap | null {
     return () => {
       cancelled = true
     }
-  }, [locationId])
+  }, [mesto])
   return map
 }
 

@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 import { Mail, CalendarDays, Users, CheckCircle, ArrowRight, Sparkles, Calendar } from 'lucide-react'
 import Link from 'next/link'
 import { useLocation } from '@/contexts/LocationContext'
-import { useTermCapacity, SpotsLeftBadge } from './SpotsLeft'
+import { useTermCapacity, SpotsLeftBadge } from '@/components/turnusy/SpotsLeft'
 import { SeasonClosedPanel } from './SeasonClosed'
 
 const FORMSPREE_ID = process.env.NEXT_PUBLIC_FORMSPREE_ID ?? 'mrezolbj'

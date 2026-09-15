@@ -12,10 +12,11 @@ import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { useLocation } from '@/contexts/LocationContext'
 import { buildPath } from '@/lib/locations'
-import { ProjectGallery } from '../_components/ProjectGallery'
-import { VenueShowcase } from '../_components/VenueShowcase'
+import { getVenue } from '@/lib/cities'
+import { ProjectGallery } from '@/components/turnusy/ProjectGallery'
+import { VenueShowcase } from '@/components/turnusy/VenueShowcase'
 import { CampViewTracker } from '../_components/CampViewTracker'
-import { useTermCapacity, SpotsLeftBadge } from '../_components/SpotsLeft'
+import { useTermCapacity, SpotsLeftBadge } from '@/components/turnusy/SpotsLeft'
 import { SeasonClosedPanel } from '../_components/SeasonClosed'
 
 const weeklyDays = [
@@ -427,7 +428,7 @@ export default function LetniPrimestskyCampPage() {
         </section>
 
         {/* Kde to probíhá — VARY&TE FabLab */}
-        <VenueShowcase />
+        <VenueShowcase venue={getVenue('fablab-varyte')} />
 
         {/* Praktické informace */}
         <section className="section-padding bg-paper-soft border-y border-ink/15">

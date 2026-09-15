@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { MapPin, Cpu, Printer, ShieldCheck } from 'lucide-react'
-import { useLocation } from '@/contexts/LocationContext'
+import type { Venue } from '@/lib/cities'
 
 // Ukázka skutečného místa konání — FabLab Kreativního centra VARY&TE.
 // Fotky z varyete.cz (partner). Dělá z "místa" hmatatelný, důvěryhodný prostor.
@@ -13,10 +13,7 @@ const features = [
   { icon: ShieldCheck, text: 'Bezpečné, moderní prostředí pod dohledem lektorů' },
 ]
 
-export function VenueShowcase() {
-  const location = useLocation()
-  const venue = location.venues[0]
-
+export function VenueShowcase({ venue }: { venue: Venue }) {
   return (
     <section className="section-padding bg-ink text-paper blueprint-grid-dark border-y border-ink overflow-hidden">
       <div className="section-container">
@@ -51,7 +48,7 @@ export function VenueShowcase() {
             </ul>
             <p className="mt-8 font-mono text-sm text-paper/60 flex items-center gap-2">
               <MapPin className="w-4 h-4 flex-shrink-0" />
-              {venue.address}, {venue.city}
+              {venue.street}, {venue.city}
             </p>
           </motion.div>
 

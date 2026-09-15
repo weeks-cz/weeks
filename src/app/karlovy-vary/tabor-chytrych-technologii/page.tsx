@@ -3,13 +3,14 @@
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { useLocation } from '@/contexts/LocationContext'
+import { getVenue } from '@/lib/cities'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Sparkles, Clock, Users, MapPin, Calendar, ArrowRight, Utensils, Laptop, Cpu, Printer, ChevronDown } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useState } from 'react'
-import { ProjectGallery } from '../_components/ProjectGallery'
-import { VenueShowcase } from '../_components/VenueShowcase'
+import { ProjectGallery } from '@/components/turnusy/ProjectGallery'
+import { VenueShowcase } from '@/components/turnusy/VenueShowcase'
 import { CampViewTracker } from '../_components/CampViewTracker'
 import { SeasonClosedPanel } from '../_components/SeasonClosed'
 
@@ -351,7 +352,7 @@ export default function KVMix() {
         </section>
 
         {/* Kde to probíhá — VARY&TE FabLab */}
-        <VenueShowcase />
+        <VenueShowcase venue={getVenue('fablab-varyte')} />
 
         {/* Co si dítě odnese — galerie projektů */}
         <ProjectGallery />
