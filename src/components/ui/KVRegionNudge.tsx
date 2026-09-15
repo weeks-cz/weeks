@@ -12,14 +12,14 @@ const DISMISS_KEY = 'kv-nudge-dismissed'
 // 'pill' = nenápadný odkaz vlevo dole pro všechny ostatní (i VPN / když geo selže).
 type Mode = 'hidden' | 'pill' | 'card'
 
-// Na kterých (pražských) stránkách smí nudge vyskočit. NE na KV, NE na reklamních /
-// checkout stránkách, kde by rušil konverzi — jen na hlavních obsahových stránkách,
-// kam zájemce o tábor reálně přistane.
+// Na kterých stránkách smí nudge vyskočit. NE na reklamních / checkout stránkách,
+// kde by rušil konverzi — jen na hlavních obsahových stránkách, kam zájemce
+// o tábor reálně přistane. (Karlovy Vary už nemají vlastní adresu — žijí pod
+// /tabor?mesto=karlovy-vary — takže samostatná výjimka pro ně není potřeba.)
 function isEligiblePath(pathname: string): boolean {
-  if (pathname.startsWith('/karlovy-vary')) return false
   const blocked = ['/kveten', '/duben', '/registrace', '/platba', '/studio', '/eshop', '/api']
   if (blocked.some((p) => pathname.startsWith(p))) return false
-  return pathname === '/' || pathname.startsWith('/program') || pathname.startsWith('/tabor')
+  return pathname === '/' || pathname.startsWith('/tabor')
 }
 
 export function KVRegionNudge() {
@@ -97,7 +97,7 @@ export function KVRegionNudge() {
                   Pořádáme IT tábory i v Karlových Varech — letní příměstské i víkendové.
                 </p>
                 <Link
-                  href="/karlovy-vary"
+                  href="/tabor?mesto=karlovy-vary"
                   onClick={dismiss}
                   className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary-600 hover:text-primary-700 transition-colors"
                 >
@@ -128,7 +128,7 @@ export function KVRegionNudge() {
         >
           <div className="flex items-center gap-1 rounded-sm bg-white/95 backdrop-blur-sm border border-ink/20 shadow-hard-sm pl-3 pr-1.5 py-1.5">
             <Link
-              href="/karlovy-vary"
+              href="/tabor?mesto=karlovy-vary"
               onClick={dismiss}
               className="flex items-center gap-1.5 text-xs sm:text-sm font-medium text-ink-500 hover:text-primary-600 transition-colors min-w-0"
             >

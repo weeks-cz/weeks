@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Cookie, X, ChevronDown } from 'lucide-react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
 import { setConsent, isConsentDecided, getConsent, CONSENT_REOPEN_EVENT } from '@/lib/consent'
 
 function Toggle({
@@ -67,10 +66,6 @@ export function CookieConsent() {
   // Volitelné kategorie defaultně vypnuté — žádný předzaškrtnutý souhlas (EDPB).
   const [analytics, setAnalytics] = useState(false)
   const [marketing, setMarketing] = useState(false)
-  const pathname = usePathname()
-  // Karlovy Vary má vlastní GDPR (provozovatel Lukáš Kubík); Praha používá /gdpr.
-  const gdprHref = pathname?.startsWith('/karlovy-vary') ? '/karlovy-vary/gdpr' : '/gdpr'
-
   useEffect(() => {
     if (!isConsentDecided()) {
       const timer = setTimeout(() => setIsVisible(true), 1500)
@@ -124,7 +119,7 @@ export function CookieConsent() {
                     Nezbytné cookies web potřebuje k fungování. S vaším souhlasem využíváme
                     i analytické a marketingové cookies — pomáhají nám vylepšovat tábory
                     a ukazovat je rodičům, které by mohly zajímat. Více v{' '}
-                    <Link href={gdprHref} className="text-primary-600 hover:underline">
+                    <Link href="/gdpr" className="text-primary-600 hover:underline">
                       zásadách ochrany osobních údajů
                     </Link>.
                   </p>

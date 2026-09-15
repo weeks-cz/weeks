@@ -100,8 +100,8 @@ export default function GDPRPage() {
                   DDM Praha 6. Při této registraci se řídíte zásadami ochrany osobních údajů DDM Praha 6.
                 </p>
                 <p className="text-primary-800 text-base mt-3">
-                  Pro tábory v Karlových Varech (provozovatel Lukáš Kubík, IČ 24878511) platí samostatné{' '}
-                  <Link href="/karlovy-vary/gdpr" className="underline">zásady ochrany osobních údajů</Link>.
+                  Pro tábory v Karlových Varech se tyto zásady uplatní obdobně s tím rozdílem,
+                  že správcem osobních údajů je namísto DDM Praha 6 Lukáš Kubík (IČ 24878511).
                 </p>
               </div>
             </section>

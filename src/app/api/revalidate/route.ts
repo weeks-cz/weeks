@@ -22,9 +22,9 @@ export async function POST(request: NextRequest) {
   }
 
   revalidateTag('camps', 'default')
-  revalidatePath('/tabor-3d-tisk', 'page')
-  revalidatePath('/tabor-iot', 'page')
-  revalidatePath('/tabor-chytrych-technologii', 'page')
+  // Jednodenní a víkendové tábory dřív měly vlastní stránky; teď žijí pod
+  // /tabor a /tabor/[turnus] — 'layout' invalidaci strhne oba.
+  revalidatePath('/tabor', 'layout')
 
   return NextResponse.json({ ok: true, revalidated: ['camps'], at: new Date().toISOString() })
 }

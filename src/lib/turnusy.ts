@@ -56,12 +56,12 @@ export interface Turnus {
  * Až termíny přijdou, doplní se `start`, `end`, `priceKc`, `venueId` a stav se
  * překlopí na `otevreno`.
  *
- * POZOR — dvojí zdroj ceny: `locations.ts` (2 990 / 1 490 Kč) dnes pořád
- * pohání stránky `/tabor-chytrych-technologii`, `/tabor-3d-tisk` a
- * `/tabor-iot`, zatímco registrace věří tomuto souboru. Dokud stránky
- * nepřestanou číst ceny z `locations.ts`, NESMÍ se žádný z těchto turnusů
- * překlopit na `otevreno` — jinak se rozejde cena, kterou rodič vidí na
- * stránce, a cena, kterou registrace naúčtuje.
+ * (Vyřešeno) Dřívější riziko dvojího zdroje ceny — stránky
+ * `/tabor-chytrych-technologii`, `/tabor-3d-tisk` a `/tabor-iot` ukazovaly
+ * cenu z `locations.ts` (2 990 / 1 490 Kč), zatímco registrace věřila tomuto
+ * souboru — zmizelo spolu se smazáním těchto stránek: `/tabor` čte ceny
+ * výhradně odtud. `locations.ts` teď pohání jen server (cron, e-maily,
+ * registrace přes DDM), ne žádnou stránku, kterou by rodič viděl.
  *
  * POZOR — id zaměření místo id programu: `RegistrationForm` ukládá do pole
  * `program` `turnus.focus[0]` (např. `'3d-tisk'`), ale e-maily, faktura

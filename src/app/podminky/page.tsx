@@ -114,10 +114,10 @@ export default function PodminkyPage() {
                 <p className="text-primary-800 text-base">
                   Registrace a platby pro tábory v Praze probíhají výhradně přes registrační systém
                   DDM Praha 6. Online platby na tomto webu se týkají pouze táborů v Karlových Varech,
-                  pro které platí samostatné{' '}
-                  <Link href="/karlovy-vary/podminky" className="underline">obchodní podmínky</Link> a{' '}
-                  <Link href="/karlovy-vary/gdpr" className="underline">zásady ochrany osobních údajů</Link>,
-                  jejichž provozovatelem je Lukáš Kubík (IČ 24878511).
+                  pro které platí tyto podmínky a{' '}
+                  <Link href="/gdpr" className="underline">zásady ochrany osobních údajů</Link>{' '}
+                  obdobně, s tím rozdílem, že jejich provozovatelem je namísto DDM Praha 6
+                  Lukáš Kubík (IČ 24878511).
                 </p>
               </div>
             </section>
