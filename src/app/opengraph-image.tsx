@@ -1,3 +1,5 @@
+import { readFile } from 'node:fs/promises'
+import { join } from 'node:path'
 import { ImageResponse } from 'next/og'
 import { SITE } from '@/lib/site'
 
@@ -9,10 +11,18 @@ import { SITE } from '@/lib/site'
  * doslovně převzaté z `SITE` a z hlavních stránek (Hero, Rozcesti), ne
  * vymyšlené nanovo.
  *
- * Font se stahuje z Google Fonts s parametrem `text` — Google vrátí
- * podmnožinu, která obsahuje přesně tyhle znaky včetně diakritiky, takže
- * není potřeba řešit ruční ořez ani sázet na to, že vestavěný fallback font
- * (Noto Sans, jen základní latinka) diakritiku vůbec umí.
+ * Font (Bricolage Grotesque, SIL OFL) je uložený přímo v repozitáři a čte se
+ * z disku — dřív se při každém buildu stahoval z Google Fonts, takže
+ * nedostupnost cizí služby shodila `next build` a s ním nasazení čehokoliv
+ * jiného.
+ *
+ * Google distribuuje tenhle font jako jeden variabilní soubor (tři osy:
+ * opsz/wdth/wght), ale satori (parser, na kterém `next/og` staví) na jeho
+ * `fvar` tabulce padá — Google Fonts přiřazují názvům os vlastní ID ≥256 a
+ * satori je neumí dohledat. Proto jsou tu dvě staticky vyexportované váhy
+ * (`fonttools varLib.instancer`, opsz=14/wdth=100 podle výchozí pojmenované
+ * instance), přesně ty dvě, které web používá — ne znovu jeden sdílený
+ * soubor.
  */
 
 export const alt = `${SITE.name} — IT tábor pro děti`
@@ -26,18 +36,16 @@ const INK_06 = 'rgba(12, 14, 26, 0.06)'
 const PAPER = '#FAFAF7'
 const PRIMARY = '#4F46E5'
 
-async function nacistFont(text: string, weight: number): Promise<ArrayBuffer> {
-  const params = new URLSearchParams({ family: `Bricolage Grotesque:wght@${weight}`, text })
-  const css = await fetch(`https://fonts.googleapis.com/css2?${params}`).then((r) => r.text())
-  const zdroj = css.match(/src: url\(([^)]+)\) format\('(?:truetype|opentype)'\)/)?.[1]
-  if (!zdroj) {
-    throw new Error('Nepodařilo se najít zdroj fontu Bricolage Grotesque v odpovědi Google Fonts.')
+async function nacistFont(soubor: string): Promise<ArrayBuffer | null> {
+  try {
+    const cesta = join(process.cwd(), 'public', 'fonts', soubor)
+    const buffer = await readFile(cesta)
+    return buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength) as ArrayBuffer
+  } catch {
+    // Bez vlastního písma se náhled vykreslí systémovým — horší typografie je
+    // pořád lepší než spadlý build, který zablokuje nasazení čehokoliv jiného.
+    return null
   }
-  const res = await fetch(zdroj)
-  if (!res.ok) {
-    throw new Error(`Nepodařilo se stáhnout font Bricolage Grotesque (${res.status}).`)
-  }
-  return res.arrayBuffer()
 }
 
 export default async function OpengraphImage() {
@@ -48,12 +56,9 @@ export default async function OpengraphImage() {
   const domena = 'weeks.cz'
   const mesta = 'Praha · Karlovy Vary'
 
-  const tuceText = `${nadpis1}${nadpis2}W${domena}`
-  const bezneText = `${popisek}${podnadpis}${mesta}`
-
   const [tucne, bezne] = await Promise.all([
-    nacistFont(tuceText, 700),
-    nacistFont(bezneText, 500),
+    nacistFont('bricolage-grotesque-700.ttf'),
+    nacistFont('bricolage-grotesque-500.ttf'),
   ])
 
   return new ImageResponse(
@@ -125,10 +130,17 @@ export default async function OpengraphImage() {
     ),
     {
       ...size,
-      fonts: [
-        { name: 'Bricolage Grotesque', data: tucne, weight: 700, style: 'normal' },
-        { name: 'Bricolage Grotesque', data: bezne, weight: 500, style: 'normal' },
-      ],
+      // `fonts` buď dostane obě váhy, nebo se úplně vynechá — polovičaté
+      // pokrytí (jen tučně, nebo jen normálně) by vypadalo hůř než čistý
+      // systémový fallback.
+      ...(tucne && bezne
+        ? {
+            fonts: [
+              { name: 'Bricolage Grotesque', data: tucne, weight: 700 as const, style: 'normal' as const },
+              { name: 'Bricolage Grotesque', data: bezne, weight: 500 as const, style: 'normal' as const },
+            ],
+          }
+        : {}),
     }
   )
 }
