@@ -24,7 +24,7 @@ function isEligiblePath(pathname: string): boolean {
 export function KVRegionNudge() {
   const pathname = usePathname()
   // Karlovy Vary žijí pod /tabor?mesto=karlovy-vary — bez tohohle by nudge
-  // nabízel „Zobrazit tábory v KV" i tomu, kdo přesně na téhle adrese už je.
+  // nabízel „Zobrazit tábor v KV" i tomu, kdo přesně na téhle adrese už je.
   const mesto = useSearchParams().get('mesto')
   const [mode, setMode] = useState<Mode>('hidden')
 
@@ -97,14 +97,15 @@ export function KVRegionNudge() {
                   Vypadá to, že jste z Karlovarska
                 </p>
                 <p className="text-sm text-ink-500 mb-3">
-                  Pořádáme IT tábory i v Karlových Varech — letní příměstské i víkendové.
+                  Týdenní příměstský tábor chystáme i v Karlových Varech. Termíny na
+                  příští léto vypisujeme na podzim — nechte nám kontakt.
                 </p>
                 <Link
                   href="/tabor?mesto=karlovy-vary"
                   onClick={dismiss}
                   className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary-600 hover:text-primary-700 transition-colors"
                 >
-                  Zobrazit tábory v KV
+                  Zobrazit tábor v KV
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
@@ -136,7 +137,7 @@ export function KVRegionNudge() {
               className="flex items-center gap-1.5 text-xs sm:text-sm font-medium text-ink-500 hover:text-primary-600 transition-colors min-w-0"
             >
               <MapPin className="w-4 h-4 text-primary-500 shrink-0" />
-              <span className="truncate">Tábory i v Karlových Varech</span>
+              <span className="truncate">Tábor i v Karlových Varech</span>
               <ArrowRight className="w-3.5 h-3.5 shrink-0" />
             </Link>
             <button

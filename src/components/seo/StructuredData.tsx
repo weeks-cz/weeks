@@ -50,7 +50,7 @@ export function LocalBusinessSchema() {
     '@type': 'LocalBusiness',
     '@id': `${SITE.url}/#localbusiness`,
     name: `${SITE.name} – IT tábory pro děti`,
-    image: `${SITE.url}/og-image-v2.jpg`,
+    image: `${SITE.url}/opengraph-image`,
     url: SITE.url,
     telephone: SITE.phone,
     email: SITE.email,

@@ -41,6 +41,11 @@ describe('getVenuesSentence', () => {
     expect(getVenuesSentence()).toContain('FabLab VARY&TE')
   })
 
+  it('nesklouzne ke skloňování cizích názvů v šabloně ("probíhají v FabLab VARY&TE" je gramaticky špatně)', () => {
+    expect(getVenuesSentence()).not.toContain('probíhají v')
+    expect(getVenuesSentence()).toContain('Místa konání:')
+  })
+
   it('nekončí prázdnou větou, ani když má turnus místo nedomluvené', () => {
     expect(getVenuesSentence().length).toBeGreaterThan(20)
   })

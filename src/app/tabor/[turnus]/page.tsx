@@ -69,12 +69,20 @@ export async function generateMetadata({
       // v náhledu tvářil jako obecná stránka `/tabor`.
       images: [
         {
-          url: `${SITE.url}/og-image-v2.jpg`,
+          url: `${SITE.url}/opengraph-image`,
           width: 1200,
           height: 630,
           alt: title,
         },
       ],
+    },
+    // Twitter ze stejného důvodu potřebuje vlastní blok, ne jen dědit z kořene —
+    // viz komentář u `openGraph` výš i `src/app/tabor/layout.tsx`.
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description: turnus.perex,
+      images: [`${SITE.url}/opengraph-image`],
     },
   }
 }

@@ -3,7 +3,7 @@
 import { Suspense } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
-import type { Turnus } from '@/lib/turnusy'
+import { getCitiesWithTurnusy, type Turnus } from '@/lib/turnusy'
 import { getCity, type CityId } from '@/lib/cities'
 import { TurnusCard } from './TurnusCard'
 import { useTermCapacity } from './SpotsLeft'
@@ -14,17 +14,17 @@ import { useTermCapacity } from './SpotsLeft'
  * Při jednom městě vrací prázdné pole — přepínač nad seznamem, který se vejde
  * na obrazovku, je jen překážka. Přesně tím se web zbavuje překlikávání měst,
  * aniž by o tu možnost přišel při expanzi.
+ *
+ * Která města mají co nabídnout se počítá přes `getCitiesWithTurnusy`, aby
+ * tahle logika žila na jednom místě a ne dvakrát po svém.
  */
 export function filtrMest(list: Turnus[]): Array<{ id: CityId; name: string; pocet: number }> {
-  const pocty = new Map<CityId, number>()
-  for (const t of list) {
-    pocty.set(t.city, (pocty.get(t.city) ?? 0) + 1)
-  }
-  if (pocty.size < 2) return []
-  return Array.from(pocty.entries()).map(([id, pocet]) => ({
+  const mesta = getCitiesWithTurnusy(list)
+  if (mesta.length < 2) return []
+  return mesta.map((id) => ({
     id,
     name: getCity(id).name,
-    pocet,
+    pocet: list.filter((t) => t.city === id).length,
   }))
 }
 
@@ -64,14 +64,19 @@ function TurnusListContent({ turnusy }: { turnusy: Turnus[] }) {
     <div>
       {mesta.length > 0 && (
         <nav className="flex flex-wrap gap-2 mb-8" aria-label="Filtr podle města">
+          {/* Sekce je bg-ink text-paper (viz /tabor#turnusy) — tokeny `border-ink`/
+              `text-ink-500` tu byly navržené pro světlý podklad a na tmavém dávaly
+              kontrast kolem 2,4 : 1. Neaktivní odkaz proto stojí na `text-paper/70`
+              (~7 : 1 vůči bg-ink, nad WCAG AA 4,5 : 1 pro běžný text), stejně jako
+              ostatní tmavé sekce webu (Header mobilní nav, Footer). */}
           <Link
             href="/tabor"
             scroll={false}
             aria-current={platne === undefined ? 'true' : undefined}
             className={`font-mono text-xs uppercase tracking-wider px-4 py-2 border transition-colors ${
               platne === undefined
-                ? 'border-ink bg-ink text-paper'
-                : 'border-ink/15 text-ink-500 hover:border-ink/40'
+                ? 'border-paper bg-paper text-ink'
+                : 'border-paper/25 text-paper/70 hover:border-paper/50 hover:text-paper'
             }`}
           >
             Všechna města
@@ -84,8 +89,8 @@ function TurnusListContent({ turnusy }: { turnusy: Turnus[] }) {
               aria-current={platne === m.id ? 'true' : undefined}
               className={`font-mono text-xs uppercase tracking-wider px-4 py-2 border transition-colors ${
                 platne === m.id
-                  ? 'border-ink bg-ink text-paper'
-                  : 'border-ink/15 text-ink-500 hover:border-ink/40'
+                  ? 'border-paper bg-paper text-ink'
+                  : 'border-paper/25 text-paper/70 hover:border-paper/50 hover:text-paper'
               }`}
             >
               {m.name} ({m.pocet})

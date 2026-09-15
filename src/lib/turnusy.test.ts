@@ -7,6 +7,7 @@ import {
   getCitiesWithTurnusy,
   isBookable,
   validateTurnusy,
+  TURNUSY,
   type Turnus,
 } from './turnusy'
 
@@ -188,5 +189,30 @@ describe('validateTurnusy', () => {
   it('odhalí věkové rozmezí v nesprávném tvaru', () => {
     const problems = validateTurnusy([{ ...otevreny, ageRange: '9 až 15 let' }])
     expect(problems.join(' ')).toContain('věkové rozmezí musí být')
+  })
+})
+
+describe('TURNUSY — pojistka proti známé vadě s polem `program`', () => {
+  it('žádný ostrý turnus není otevřený, dokud registrace ukládá id zaměření místo id programu', () => {
+    // Komentář nad `TURNUSY` v src/lib/turnusy.ts vysvětluje vadu: registrace
+    // ukládá do pole `program` `turnus.focus[0]` (např. "3d-tisk"), ale
+    // e-maily, faktura z Fakturoidu, upomínka na platbu i nástupní list
+    // pořád hledají `program` jako id v `location.programs`. Server tohle
+    // pole na rozdíl od `location_id`, `payment_amount` a `term_start`/
+    // `term_end` neodvozuje — shoda nenastane a rodiči na faktuře i v
+    // e-mailu skončí holé "3d-tisk" místo názvu tábora.
+    //
+    // Tenhle test nekontroluje, jestli je vada opravená — jen hlídá, že se
+    // žádný turnus nepřepnul na "otevreno" dřív, než bude. Jakmile aparát
+    // (payment-pricing.ts a volající místa) přejde na turnusy, oprav to a
+    // teprve pak tenhle test uprav nebo smaž.
+    const otevrene = TURNUSY.filter((t) => t.status === 'otevreno')
+    expect(
+      otevrene.map((t) => t.id),
+      'Turnus je ve stavu "otevreno", ale pole `program` v registraci pořád ukládá ' +
+        'id zaměření (turnus.focus[0]), ne id programu, které čekají e-maily, faktura ' +
+        'a nástupní list. Než tenhle turnus půjde koupit, oprav to podle komentáře ' +
+        'nad TURNUSY v src/lib/turnusy.ts (payment-pricing.ts a šest volajících míst).'
+    ).toEqual([])
   })
 })

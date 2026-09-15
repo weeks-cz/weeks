@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 import { CalendarCheck, CheckCircle, Mail, Phone } from 'lucide-react'
+import Link from 'next/link'
 import type { Turnus } from '@/lib/turnusy'
 import { getCity } from '@/lib/cities'
 import { SITE } from '@/lib/site'
@@ -25,6 +26,7 @@ export function TurnusInterestForm({ turnus, source }: { turnus?: Turnus; source
 
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
+  const [gdprConsent, setGdprConsent] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -54,6 +56,7 @@ export function TurnusInterestForm({ turnus, source }: { turnus?: Turnus; source
           name,
           email,
           program,
+          gdprConsent,
           zdroj: source,
           _subject: subject,
         }),
@@ -146,13 +149,34 @@ export function TurnusInterestForm({ turnus, source }: { turnus?: Turnus; source
             </div>
           </div>
 
+          <div className="flex items-start gap-2 justify-center pt-1">
+            <input
+              type="checkbox"
+              id="turnus-interest-gdpr"
+              checked={gdprConsent}
+              onChange={(e) => setGdprConsent(e.target.checked)}
+              required
+              className="mt-0.5 w-4 h-4 rounded-sm border-ink/30 text-primary-600 focus:ring-primary-500"
+            />
+            <label htmlFor="turnus-interest-gdpr" className="text-xs text-ink-500 cursor-pointer text-left">
+              Souhlasím se zpracováním osobních údajů.{' '}
+              <Link href="/gdpr" className="underline hover:text-primary-600">
+                Více informací
+              </Link>
+            </label>
+          </div>
+
           {error && (
             <p role="alert" aria-live="assertive" className="text-sm text-red-600">
               {error}
             </p>
           )}
 
-          <button type="submit" disabled={loading} className="btn-primary w-full justify-center">
+          <button
+            type="submit"
+            disabled={loading || !gdprConsent}
+            className="btn-primary w-full justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+          >
             {loading ? 'Odesílám…' : 'Dejte mi vědět o termínech'}
             <Mail className="ml-2 w-4 h-4" aria-hidden="true" />
           </button>

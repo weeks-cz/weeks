@@ -33,10 +33,14 @@ export function getVenuesSentence(): string {
   if (nazvy.length === 0) {
     return 'Místa konání upřesníme u každého turnusu, jakmile je potvrdíme.'
   }
+  // Věta se schválně vyhýbá skloňování cizích názvů míst („probíhají v FabLabu
+  // VARY&TE" vs. „probíhají v Praze") — v šabloně by to znamenalo uhodnout i
+  // předložku (v/ve) i pád, a to se s libovolným názvem nedá spolehlivě
+  // vyřešit. Dvojtečkový výčet pád nepotřebuje.
   if (nazvy.length === 1) {
-    return `Tábory probíhají v ${nazvy[0]}. Přesné místo najdete u každého turnusu.`
+    return `Místa konání: ${nazvy[0]}. Přesné místo najdete u každého turnusu.`
   }
-  return `Tábory probíhají v ${nazvy.slice(0, -1).join(', ')} a ${nazvy[nazvy.length - 1]}. Přesné místo najdete u každého turnusu.`
+  return `Místa konání: ${nazvy.slice(0, -1).join(', ')} a ${nazvy[nazvy.length - 1]}. Přesné místo najdete u každého turnusu.`
 }
 
 export function getSiteFaq(): Array<{ question: string; answer: string }> {

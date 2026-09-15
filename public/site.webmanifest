@@ -1,7 +1,7 @@
 {
-  "name": "Weeks - Víkendové IT kempy pro děti",
+  "name": "Weeks - IT tábory pro děti",
   "short_name": "Weeks",
-  "description": "Víkendové IT kempy pro děti 10-15 let v Praze. 3D tisk, VR, programování a IoT.",
+  "description": "Týdenní příměstský tábor pro děti 9–15 let. 3D tisk, 3D modelování a IoT s Arduinem, jeden lektor na pět dětí, oběd i materiál v ceně.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
@@ -26,7 +26,7 @@
       "name": "Program",
       "short_name": "Program",
       "description": "Co děti čeká",
-      "url": "/#program"
+      "url": "/tabor#program"
     },
     {
       "name": "Kontakt",
