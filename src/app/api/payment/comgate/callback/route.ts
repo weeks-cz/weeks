@@ -8,6 +8,7 @@ import { buildConfirmationEmail, sendEmail, isEmailConfigured } from '@/lib/emai
 import { getLocationById } from '@/lib/locations'
 import { formatTermLabel } from '@/lib/dates'
 import { sendMetaEvent, isMetaCapiConfigured } from '@/lib/meta-capi'
+import { getTrustedProgramName } from '@/lib/payment-pricing'
 
 export const dynamic = 'force-dynamic'
 
@@ -28,20 +29,26 @@ async function ensurePaidInvoice(supabase: SupabaseClient, registrationId: strin
     .update({ fakturoid_invoice_id: 'pending' })
     .eq('id', registrationId)
     .is('fakturoid_invoice_id', null)
-    .select('id, parent_name, parent_email, parent_address, program, location_id, term_start, term_end, payment_amount')
+    .select('id, parent_name, parent_email, parent_address, program, location_id, term_id, term_start, term_end, payment_amount')
 
   if (!claimed || claimed.length === 0) return // already issued or in progress
   const reg = claimed[0]
 
   try {
-    const location = getLocationById(reg.location_id as string)
-    const programCfg = location.programs.find((p) => p.id === reg.program)
+    let programName: string
+    try {
+      programName = getTrustedProgramName(reg.term_id as string)
+    } catch {
+      // Stará registrace na turnus, který už v konfiguraci není — uložená
+      // hodnota je to jediné, co o ní víme.
+      programName = reg.program as string
+    }
     const invoiceId = await issuePaidInvoice({
       parentName: reg.parent_name as string,
       parentEmail: reg.parent_email as string,
       parentAddress: reg.parent_address as string,
       registrationId: reg.id as string,
-      programName: programCfg?.name ?? (reg.program as string),
+      programName,
       termLabel: formatTermLabel(reg.term_start as string, reg.term_end as string),
       priceKc: reg.payment_amount as number,
       // Fakturoid email is a paid-plan feature; only send for real (live) payments.
@@ -77,17 +84,24 @@ async function ensureConfirmationEmail(supabase: SupabaseClient, registrationId:
     .update({ confirmation_sent_at: new Date().toISOString() })
     .eq('id', registrationId)
     .is('confirmation_sent_at', null)
-    .select('id, parent_email, child_name, program, location_id, term_start, term_end, payment_amount')
+    .select('id, parent_email, child_name, program, location_id, term_id, term_start, term_end, payment_amount')
 
   if (!claimed || claimed.length === 0) return
   const reg = claimed[0]
 
   try {
     const location = getLocationById(reg.location_id as string)
-    const programCfg = location.programs.find((p) => p.id === reg.program)
+    let programName: string
+    try {
+      programName = getTrustedProgramName(reg.term_id as string)
+    } catch {
+      // Stará registrace na turnus, který už v konfiguraci není — uložená
+      // hodnota je to jediné, co o ní víme.
+      programName = reg.program as string
+    }
     const { subject, html } = buildConfirmationEmail({
       childName: reg.child_name as string,
-      programName: programCfg?.name ?? (reg.program as string),
+      programName,
       termLabel: formatTermLabel(reg.term_start as string, reg.term_end as string),
       locationName: location.name,
       priceKc: reg.payment_amount as number,
@@ -118,13 +132,19 @@ async function ensurePurchaseConversion(supabase: SupabaseClient, registrationId
 
   const { data: reg } = await supabase
     .from('registrations')
-    .select('parent_name, parent_email, parent_phone, parent_address, program, location_id, payment_amount')
+    .select('parent_name, parent_email, parent_phone, parent_address, program, location_id, term_id, payment_amount')
     .eq('id', registrationId)
     .single()
   if (!reg) return
 
-  const location = getLocationById(reg.location_id as string)
-  const programCfg = location.programs.find((p) => p.id === reg.program)
+  let programName: string
+  try {
+    programName = getTrustedProgramName(reg.term_id as string)
+  } catch {
+    // Stará registrace na turnus, který už v konfiguraci není — uložená
+    // hodnota je to jediné, co o ní víme.
+    programName = reg.program as string
+  }
 
   await sendMetaEvent({
     eventName: 'Purchase',
@@ -138,7 +158,7 @@ async function ensurePurchaseConversion(supabase: SupabaseClient, registrationId
     customData: {
       value: reg.payment_amount as number,
       currency: 'CZK',
-      contentName: programCfg?.name ?? (reg.program as string),
+      contentName: programName,
     },
   })
 }

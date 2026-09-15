@@ -1,5 +1,6 @@
 import { getTurnusById, isBookable, TURNUSY, type Turnus } from './turnusy'
 import type { CityId } from './cities'
+import { getFocusModules } from './focus'
 
 /**
  * Důvěryhodný zdroj ceny a kapacity pro registraci.
@@ -49,4 +50,17 @@ export function getTrustedTerm(termId: string, list: Turnus[] = TURNUSY): { star
   const turnus = resolveBookable(termId, list)
   // `isBookable` už zaručilo, že ani jedno není null.
   return { start: turnus.start as string, end: turnus.end as string }
+}
+
+/**
+ * Název tábora, jak se má objevit na faktuře a v e-mailu rodiči.
+ * Skládá se z turnusu, ne z toho, co poslal klient — stejně jako cena,
+ * kapacita, město i termín.
+ */
+export function getTrustedProgramName(termId: string, list: Turnus[] = TURNUSY): string {
+  const turnus = resolveBookable(termId, list)
+  const zamereni = getFocusModules(turnus.focus).map((m) => m.name)
+  return zamereni.length > 0
+    ? `Letní příměstský tábor — ${zamereni.join(', ')}`
+    : 'Letní příměstský tábor'
 }

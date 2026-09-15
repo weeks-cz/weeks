@@ -4,6 +4,7 @@ import { buildPaymentReminderEmail, sendEmail, isEmailConfigured } from '@/lib/e
 import { getLocationById } from '@/lib/locations'
 import { formatTermLabel, isoDate } from '@/lib/dates'
 import { reportMessage } from '@/lib/observability'
+import { getTrustedProgramName } from '@/lib/payment-pricing'
 
 export const dynamic = 'force-dynamic'
 
@@ -36,7 +37,7 @@ export async function GET(request: Request) {
   // still in the future, not yet reminded.
   const { data: candidates, error } = await supabase
     .from('registrations')
-    .select('id, parent_email, child_name, program, location_id, term_start, term_end, payment_amount')
+    .select('id, parent_email, child_name, program, location_id, term_id, term_start, term_end, payment_amount')
     .eq('payment_status', 'pending')
     .eq('status', 'pending')
     .is('payment_reminder_sent_at', null)
@@ -64,7 +65,14 @@ export async function GET(request: Request) {
 
     try {
       const location = getLocationById(reg.location_id as string)
-      const programCfg = location.programs.find((p) => p.id === reg.program)
+      let programName: string
+      try {
+        programName = getTrustedProgramName(reg.term_id as string)
+      } catch {
+        // Stará registrace na turnus, který už v konfiguraci není — uložená
+        // hodnota je to jediné, co o ní víme.
+        programName = reg.program as string
+      }
       // Stejně jako u vytvoření platby: platí uložená částka, ne aktuální ceník.
       const priceKc = reg.payment_amount as number | null
       if (!priceKc || priceKc <= 0) {
@@ -73,7 +81,7 @@ export async function GET(request: Request) {
       const paymentUrl = `${SITE_URL}/platba/${reg.id}?location=${reg.location_id}`
       const { subject, html } = buildPaymentReminderEmail({
         childName: reg.child_name as string,
-        programName: programCfg?.name ?? (reg.program as string),
+        programName,
         locationName: location.name,
         termLabel: formatTermLabel(reg.term_start as string, reg.term_end as string),
         priceKc,

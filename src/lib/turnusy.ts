@@ -63,16 +63,13 @@ export interface Turnus {
  * `EventSchema` navíc turnus ve stavu `chystame` do JSON-LD vůbec nepustí,
  * takže sama o sobě žádnou cenu nedopočítá ani nedomyslí.
  *
- * POZOR — id zaměření místo id programu: `RegistrationForm` ukládá do pole
- * `program` `turnus.focus[0]` (např. `'3d-tisk'`), ale e-maily, faktura
- * z Fakturoidu, upomínka na platbu i nástupní list pořád hledají `program`
- * jako id v `location.programs` (`payment-pricing.ts` a šest volajících
- * míst) — server tohle pole na rozdíl od `location_id`, `payment_amount`
- * a `term_start`/`term_end` NEODVOZUJE. Shoda nenastane a rodiči na faktuře
- * i v e-mailu skončí holé `3d-tisk` místo názvu tábora. Dokud se tenhle
- * aparát nepřepíše na turnusy (plán na to počítá až ve fázi 3, spolu
- * s odchodem od DDM), NESMÍ se žádný z těchto turnusů překlopit na
- * `otevreno` — narovnat je to potřeba dřív, než první turnus půjde koupit.
+ * POZOR — název programu na faktuře: `RegistrationForm` dál ukládá do pole
+ * `program` id zaměření (`turnus.focus[0]`, např. `'3d-tisk'`), ale e-maily,
+ * faktura z Fakturoidu, upomínka na platbu i nástupní list už tohle pole
+ * nečtou — název tábora odvozuje server přes `getTrustedProgramName`
+ * (`payment-pricing.ts`) ze `term_id`, stejně jako cenu, kapacitu, město
+ * i termín. Uložená hodnota `program` slouží už jen jako záloha pro staré
+ * registrace, jejichž turnus mezi aktuálními už není.
  */
 export const TURNUSY: Turnus[] = [
   {

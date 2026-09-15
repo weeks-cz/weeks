@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse, after } from 'next/server'
 import { registrationSchema } from '@/lib/registration'
 import { createServerClient } from '@/lib/supabase'
-import { getTrustedCapacity, getTrustedPriceKc, getTrustedCity, getTrustedTerm } from '@/lib/payment-pricing'
+import { getTrustedCapacity, getTrustedPriceKc, getTrustedCity, getTrustedTerm, getTrustedProgramName } from '@/lib/payment-pricing'
 import { API_ERRORS } from '@/lib/api-messages'
 import { rateLimit, clientIp } from '@/lib/rate-limit'
 import { reportError, reportMessage } from '@/lib/observability'
@@ -97,10 +97,9 @@ export async function POST(request: NextRequest) {
       after(async () => {
         try {
           const location = getLocationById(trustedLocationId)
-          const programCfg = location.programs.find((p) => p.id === d.program)
           const { subject, html } = buildRegistrationReceivedEmail({
             childName: d.child_name,
-            programName: programCfg?.name ?? d.program,
+            programName: getTrustedProgramName(d.term_id),
             termLabel: formatTermLabel(trustedTerm.start, trustedTerm.end),
             locationName: location.name,
             priceKc: trustedPrice,
@@ -128,8 +127,6 @@ export async function POST(request: NextRequest) {
       const userAgent = request.headers.get('user-agent') ?? undefined
       const referer = request.headers.get('referer') ?? undefined
       after(async () => {
-        const location = getLocationById(trustedLocationId)
-        const programCfg = location.programs.find((p) => p.id === d.program)
         await sendMetaEvent({
           eventName: 'InitiateCheckout',
           eventId: newId as string,
@@ -147,7 +144,7 @@ export async function POST(request: NextRequest) {
           customData: {
             value: trustedPrice,
             currency: 'CZK',
-            contentName: programCfg?.name ?? d.program,
+            contentName: getTrustedProgramName(d.term_id),
           },
         })
       })

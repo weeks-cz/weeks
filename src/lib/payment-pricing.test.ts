@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { getTrustedPriceKc, getTrustedCapacity, getTrustedCity, getTrustedTerm } from './payment-pricing'
+import { getTrustedPriceKc, getTrustedCapacity, getTrustedCity, getTrustedTerm, getTrustedProgramName } from './payment-pricing'
 import { TURNUSY, type Turnus } from './turnusy'
 
 const prodejny: Turnus = {
@@ -82,5 +82,23 @@ describe('ostrá data', () => {
       if (turnus.status !== 'otevreno') continue
       expect(getTrustedPriceKc(turnus.id), `turnus ${turnus.id}`).toBeGreaterThan(0)
     }
+  })
+})
+
+describe('getTrustedProgramName', () => {
+  it('vrátí čitelný název tábora, ne id zaměření', () => {
+    const nazev = getTrustedProgramName('test-prodejny', [prodejny])
+    expect(nazev).not.toMatch(/^[a-z0-9-]+$/)
+    expect(nazev.length).toBeGreaterThan(10)
+  })
+
+  it('jmenuje zaměření turnusu jeho čitelným názvem', () => {
+    const nazev = getTrustedProgramName('test-prodejny', [prodejny])
+    expect(nazev).toContain('3D tisk')
+  })
+
+  it('odmítne turnus, který není v prodeji', () => {
+    const chystame: Turnus = { ...prodejny, id: 'test-chystame', status: 'chystame' }
+    expect(() => getTrustedProgramName('test-chystame', [chystame])).toThrow()
   })
 })

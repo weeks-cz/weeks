@@ -4,6 +4,7 @@ import { buildNastupniListEmail, sendEmail, isEmailConfigured } from '@/lib/emai
 import { getLocationById } from '@/lib/locations'
 import { formatTermLabel, isoDate, isoDatePlusDays } from '@/lib/dates'
 import { reportMessage } from '@/lib/observability'
+import { getTrustedProgramName } from '@/lib/payment-pricing'
 
 export const dynamic = 'force-dynamic'
 
@@ -30,7 +31,7 @@ export async function GET(request: Request) {
   // Candidates: paid, starting within the window, not yet sent.
   const { data: candidates, error } = await supabase
     .from('registrations')
-    .select('id, parent_email, child_name, program, location_id, term_start, term_end')
+    .select('id, parent_email, child_name, program, location_id, term_id, term_start, term_end')
     .eq('payment_status', 'completed')
     .is('nastupni_sent_at', null)
     .gte('term_start', today)
@@ -56,11 +57,18 @@ export async function GET(request: Request) {
 
     try {
       const location = getLocationById(reg.location_id as string)
-      const programCfg = location.programs.find((p) => p.id === reg.program)
+      let programName: string
+      try {
+        programName = getTrustedProgramName(reg.term_id as string)
+      } catch {
+        // Stará registrace na turnus, který už v konfiguraci není — uložená
+        // hodnota je to jediné, co o ní víme.
+        programName = reg.program as string
+      }
       const venue = location.venues[0]
       const { subject, html } = buildNastupniListEmail({
         childName: reg.child_name as string,
-        programName: programCfg?.name ?? (reg.program as string),
+        programName,
         termLabel: formatTermLabel(reg.term_start as string, reg.term_end as string),
         venueName: venue?.fullName ?? venue?.name ?? location.name,
         venueAddress: venue ? `${venue.address}, ${venue.postalCode} ${venue.city}` : '',
