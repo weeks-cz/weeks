@@ -6,36 +6,33 @@ import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, ChevronRight, ExternalLink } from 'lucide-react'
 import { trackNavCTA, trackUcebnaClick } from '@/lib/analytics'
-import { CitySwitcher } from '@/components/ui/CitySwitcher'
-import { useLocation } from '@/contexts/LocationContext'
-import { buildPath } from '@/lib/locations'
+import { getTurnusy, isBookable } from '@/lib/turnusy'
+
+const navItems = [
+  { name: 'Tábor', href: '/tabor' },
+  { name: 'Pro firmy', href: '/firmy' },
+  { name: 'E-shop', href: '/eshop' },
+  { name: 'O nás', href: '/o-nas' },
+  { name: 'Kontakt', href: '/kontakt' },
+]
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-  const location = useLocation()
 
-  const navigation = location.isDefault
-    ? [
-        { name: 'Program', href: '/program' },
-        { name: 'E-shop', href: '/eshop' },
-        { name: 'Proč Weeks', href: '/#proc-weeks' },
-        { name: 'O nás', href: '/o-nas' },
-        { name: 'Kontakt', href: '/kontakt' },
-      ]
-    : [
-        { name: 'Program', href: `/${location.slug}#program` },
-        { name: 'Proč Weeks', href: `/${location.slug}#proc-weeks` },
-        { name: 'O nás', href: buildPath(location, 'o-nas') },
-        { name: 'Kontakt', href: buildPath(location, 'kontakt') },
-      ]
+  const logoHref = '/'
+  const ctaHref = '/tabor#turnusy'
 
-  const logoHref = buildPath(location, '')
-  // Absolutní cesta, ne holá kotva — na podstránkách lokace (např. /karlovy-vary/letni-primestsky)
-  // žádné #prihlasit není a tlačítko by neudělalo nic.
-  const ctaHref = location.isDefault ? '/#prihlasit' : `${buildPath(location, '')}#prihlasit`
-  const seasonEnded = location.season?.status === 'ended'
-  const ctaLabel = seasonEnded ? 'Léto 2027' : 'Vybrat termín'
+  // Stejný trojstav jako na /tabor a v HeroSection — hlavní tlačítko nesmí
+  // slibovat výběr termínu, když se zrovna nedá koupit nic.
+  const turnusy = getTurnusy()
+  const prodejny = turnusy.some(isBookable)
+  const vyprodano = !prodejny && turnusy.some((t) => t.status === 'plno')
+  const ctaLabel = prodejny
+    ? 'Vybrat turnus'
+    : vyprodano
+      ? 'Chci vědět o volném místě'
+      : 'Chci vědět o termínech'
 
   useEffect(() => {
     const handleScroll = () => {
@@ -96,7 +93,7 @@ export function Header() {
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-1">
-          {navigation.map((item) => (
+          {navItems.map((item) => (
             <Link
               key={item.name}
               href={item.href}
@@ -117,9 +114,6 @@ export function Header() {
             Učebna
             <ExternalLink className="w-3 h-3 ml-1" aria-hidden="true" />
           </a>
-          <div className="ml-3">
-            <CitySwitcher />
-          </div>
           <Link
             href={ctaHref}
             className="ml-4 btn-primary group"
@@ -130,9 +124,8 @@ export function Header() {
           </Link>
         </div>
 
-        {/* Mobile: city switcher (always visible) + menu button */}
-        <div className="flex items-center gap-2 md:hidden">
-          <CitySwitcher compact />
+        {/* Mobile: menu button */}
+        <div className="flex items-center md:hidden">
           <motion.button
             type="button"
             whileTap={{ scale: 0.9 }}
@@ -166,7 +159,7 @@ export function Header() {
           >
             <div className="section-container flex min-h-full flex-col justify-between pt-28 pb-10">
               <div className="space-y-2">
-                {navigation.map((item, index) => (
+                {navItems.map((item, index) => (
                   <motion.div
                     key={item.name}
                     initial={{ opacity: 0, y: 12 }}
@@ -185,7 +178,7 @@ export function Header() {
                 <motion.div
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: navigation.length * 0.05 }}
+                  transition={{ delay: navItems.length * 0.05 }}
                   className="border-t border-paper/20 pt-4 mt-6"
                 >
                   <a
@@ -205,7 +198,7 @@ export function Header() {
               <motion.div
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: (navigation.length + 1) * 0.05 }}
+                transition={{ delay: (navItems.length + 1) * 0.05 }}
                 className="space-y-6"
               >
                 <Link
@@ -217,7 +210,7 @@ export function Header() {
                   <ChevronRight className="ml-1 w-4 h-4" />
                 </Link>
                 <p className="mono-label-dark">
-                  WEEKS — IT TÁBORY · PRAHA &amp; KARLOVY VARY
+                  WEEKS — IT TÁBORY
                 </p>
               </motion.div>
             </div>
