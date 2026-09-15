@@ -1,4 +1,5 @@
 import { getTurnusById, isBookable, TURNUSY, type Turnus } from './turnusy'
+import type { CityId } from './cities'
 
 /**
  * Důvěryhodný zdroj ceny a kapacity pro registraci.
@@ -28,4 +29,13 @@ export function getTrustedPriceKc(termId: string, list: Turnus[] = TURNUSY): num
 
 export function getTrustedCapacity(termId: string, list: Turnus[] = TURNUSY): number {
   return resolveBookable(termId, list).capacity
+}
+
+/**
+ * Důvěryhodné město turnusu. Ukládá se do `registrations.location_id` místo
+ * hodnoty od klienta — město určuje, jakou adresu a jaký kontakt rodič dostane
+ * v nástupním listu, takže se nesmí rozejít s turnusem.
+ */
+export function getTrustedCity(termId: string, list: Turnus[] = TURNUSY): CityId {
+  return resolveBookable(termId, list).city
 }

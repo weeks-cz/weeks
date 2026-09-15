@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { getTrustedPriceKc, getTrustedCapacity } from './payment-pricing'
+import { getTrustedPriceKc, getTrustedCapacity, getTrustedCity } from './payment-pricing'
 import { TURNUSY, type Turnus } from './turnusy'
 
 const prodejny: Turnus = {
@@ -45,6 +45,18 @@ describe('getTrustedCapacity', () => {
 
   it('vyhodí výjimku u neznámého turnusu', () => {
     expect(() => getTrustedCapacity('neexistuje', [prodejny])).toThrow()
+  })
+})
+
+describe('getTrustedCity', () => {
+  it('vrátí město turnusu, ne to, co poslal klient', () => {
+    expect(getTrustedCity('test-prodejny', [prodejny])).toBe('karlovy-vary')
+  })
+
+  it('vyhodí výjimku u turnusu, který není v prodeji', () => {
+    expect(() =>
+      getTrustedCity('test-prodejny', [{ ...prodejny, status: 'chystame' }])
+    ).toThrow()
   })
 })
 

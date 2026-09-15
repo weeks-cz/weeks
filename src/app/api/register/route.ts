@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse, after } from 'next/server'
 import { registrationSchema } from '@/lib/registration'
 import { createServerClient } from '@/lib/supabase'
-import { getTrustedCapacity, getTrustedPriceKc } from '@/lib/payment-pricing'
+import { getTrustedCapacity, getTrustedPriceKc, getTrustedCity } from '@/lib/payment-pricing'
 import { API_ERRORS } from '@/lib/api-messages'
 import { rateLimit, clientIp } from '@/lib/rate-limit'
 import { reportError, reportMessage } from '@/lib/observability'
@@ -33,14 +33,19 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Capacity AND price are resolved server-side from the turnus — never from
-    // the client. The client-supplied payment_amount is ignored (anti-tampering):
-    // the stored amount, the Comgate charge, and the Fakturoid invoice must all agree.
+    // Capacity, price AND city are resolved server-side from the turnus — never
+    // from the client. The client-supplied payment_amount is ignored
+    // (anti-tampering): the stored amount, the Comgate charge, and the
+    // Fakturoid invoice must all agree. The client-supplied location_id is
+    // ignored too — a mismatched location_id would send the parent's welcome
+    // pack a wrong address and contact for the actual venue.
     let maxCapacity: number
     let trustedPrice: number
+    let trustedLocationId: string
     try {
       maxCapacity = getTrustedCapacity(parsed.data.term_id)
       trustedPrice = getTrustedPriceKc(parsed.data.term_id)
+      trustedLocationId = getTrustedCity(parsed.data.term_id)
     } catch (e) {
       // Only non-PII identifiers in the monitoring context — never the parent/child data.
       reportError(e, {
@@ -58,7 +63,7 @@ export async function POST(request: NextRequest) {
     // Atomic, race-safe insert: the DB function takes a per-term advisory lock,
     // re-counts active registrations, and inserts only if there is room.
     const { data: newId, error } = await supabase.rpc('create_registration', {
-      payload: { ...parsed.data, payment_amount: trustedPrice, vop_accepted_ip: ip },
+      payload: { ...parsed.data, location_id: trustedLocationId, payment_amount: trustedPrice, vop_accepted_ip: ip },
       max_capacity: maxCapacity,
     })
 
