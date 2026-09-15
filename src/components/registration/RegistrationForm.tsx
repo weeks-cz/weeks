@@ -71,9 +71,13 @@ export function RegistrationForm() {
   const vopUrl = '/podminky'
   const gdprUrl = '/gdpr'
 
-  // Měření trychtýře: zaznamenej otevření formuláře (krok 1) jednou při načtení.
+  // Měření trychtýře: zaznamenej otevření formuláře (krok 1) jednou při načtení —
+  // ale jen když se opravdu vykreslí formulář. Adresu bez prodejného turnusu
+  // vidí i lidé ze starých odkazů, kteří žádný formulář neuvidí; kdyby se krok 1
+  // odpálil i pro ně, trychtýř v GA4 by byl trvale podhodnocený.
   useEffect(() => {
-    trackRegistrationStep({ step: 1, locationId: turnus?.city ?? '', program: turnus?.focus[0] ?? '', termId })
+    if (!turnus || !isBookable(turnus)) return
+    trackRegistrationStep({ step: 1, locationId: turnus.city, program: turnus.focus[0] ?? '', termId })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -490,7 +494,7 @@ export function RegistrationForm() {
                   <h3 className="font-medium text-ink mb-2">Tábor</h3>
                   <p className="text-ink">{focusNames}</p>
                   <p className="text-sm text-ink-500">{cityName} · {labels.datum}</p>
-                  <p className="text-lg font-bold text-ink mt-2 font-mono">{(turnus.priceKc ?? 0).toLocaleString('cs-CZ')} Kč</p>
+                  <p className="text-lg font-bold text-ink mt-2 font-mono">{(turnus.priceKc ?? 0).toLocaleString('cs-CZ')}&nbsp;Kč</p>
                 </div>
 
                 <div className="grid sm:grid-cols-2 gap-4">
