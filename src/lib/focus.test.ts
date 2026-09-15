@@ -54,8 +54,16 @@ describe('obsah přenesený ze zanikajících stránek', () => {
 
   it('každý odkaz na obrázek míří do veřejné složky, ne na cizí web', () => {
     for (const id of FOCUS_IDS) {
-      for (const src of getFocus(id).gallery ?? []) {
-        expect(src, `${id}`).toMatch(/^\/images\//)
+      for (const g of getFocus(id).gallery ?? []) {
+        expect(g.src, `${id}`).toMatch(/^\/images\//)
+      }
+    }
+  })
+
+  it('každý obrázek v galerii má neprázdný alt popisek', () => {
+    for (const id of FOCUS_IDS) {
+      for (const g of getFocus(id).gallery ?? []) {
+        expect(g.alt.length, `${id}: ${g.src}`).toBeGreaterThan(0)
       }
     }
   })

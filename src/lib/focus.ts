@@ -19,8 +19,8 @@ export interface FocusModule {
   printers?: string[]
   /** Konkrétní hardware — desky, čidla. Jen u IoT. */
   hardware?: string[]
-  /** Cesty k fotkám ve veřejné složce. */
-  gallery?: string[]
+  /** Fotky ve veřejné složce — stejný tvar jako `GalleryImage` v GallerySection. */
+  gallery?: Array<{ src: string; alt: string }>
   /** Otázky rodičů, které se týkají právě tohohle zaměření. */
   faq?: Array<{ question: string; answer: string }>
 }
@@ -41,14 +41,14 @@ const FOCUS: Record<FocusId, FocusModule> = {
     ],
     printers: ['MK3S', 'MK4S', 'Mini+', 'CORE One', 'CORE One L', 'XL', 'SL1S'],
     gallery: [
-      '/images/gallery/3d-prints-collection.jpg', // alt: Kolekce výtisků z tábora
-      '/images/gallery/3d-uv-curing.jpg', // alt: UV vytvrzování resinových výtisků
-      '/images/gallery/3d-dragon-hands.jpg', // alt: Liška z 3D tiskárny
-      '/images/gallery/3d-cat-lowpoly.jpg', // alt: Low-poly kočka
-      '/images/gallery/3d-dragon-desk.jpg', // alt: Oranžová liška na stole
-      '/images/gallery/3d-resin-figurines.jpg', // alt: Resinové figurky
-      '/images/gallery/3d-printer-slicer.jpg', // alt: Práce s 3D tiskárnou a slicerem
-      '/images/gallery/3d-printers-row.jpg', // alt: Řada Prusa tiskáren
+      { src: '/images/gallery/3d-prints-collection.jpg', alt: 'Kolekce výtisků z tábora' },
+      { src: '/images/gallery/3d-uv-curing.jpg', alt: 'UV vytvrzování resinových výtisků' },
+      { src: '/images/gallery/3d-dragon-hands.jpg', alt: 'Liška z 3D tiskárny' },
+      { src: '/images/gallery/3d-cat-lowpoly.jpg', alt: 'Low-poly kočka' },
+      { src: '/images/gallery/3d-dragon-desk.jpg', alt: 'Oranžová liška na stole' },
+      { src: '/images/gallery/3d-resin-figurines.jpg', alt: 'Resinové figurky' },
+      { src: '/images/gallery/3d-printer-slicer.jpg', alt: 'Práce s 3D tiskárnou a slicerem' },
+      { src: '/images/gallery/3d-printers-row.jpg', alt: 'Řada Prusa tiskáren' },
     ],
     faq: [
       {
@@ -85,12 +85,12 @@ const FOCUS: Record<FocusId, FocusModule> = {
       'kompas',
     ],
     gallery: [
-      '/images/gallery/iot-arduino-breadboard.jpg', // alt: Práce s Arduino breadboardem
-      '/images/gallery/iot-plant-sensor.jpg', // alt: IoT senzor na květině
-      '/images/gallery/iot-arduino-programming.jpg', // alt: Programování Arduina
-      '/images/gallery/iot-breadboard-detail.jpg', // alt: Detail breadboardu s LEDkami
-      '/images/gallery/iot-plant-sensor-2.jpg', // alt: Chytré zavlažování květin
-      '/images/gallery/iot-circuit-design.jpg', // alt: Návrh IoT obvodu
+      { src: '/images/gallery/iot-arduino-breadboard.jpg', alt: 'Práce s Arduino breadboardem' },
+      { src: '/images/gallery/iot-plant-sensor.jpg', alt: 'IoT senzor na květině' },
+      { src: '/images/gallery/iot-arduino-programming.jpg', alt: 'Programování Arduina' },
+      { src: '/images/gallery/iot-breadboard-detail.jpg', alt: 'Detail breadboardu s LEDkami' },
+      { src: '/images/gallery/iot-plant-sensor-2.jpg', alt: 'Chytré zavlažování květin' },
+      { src: '/images/gallery/iot-circuit-design.jpg', alt: 'Návrh IoT obvodu' },
     ],
     faq: [
       {
