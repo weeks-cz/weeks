@@ -52,6 +52,11 @@ export function getSiteFaq(): Array<{ question: string; answer: string }> {
         'Ne. Začínáme od nuly a všechno si děti vyzkouší pod vedením lektora. Kdo už něco umí, dostane náročnější zadání.',
     },
     {
+      question: 'Co má dítě mít s sebou?',
+      answer:
+        'Jen dobrou náladu a svačinu na dopoledne a odpoledne. Oběd zajišťujeme my každý den. Veškeré technické vybavení, tiskárny, Arduina, VR headsety i materiály jsou na místě.',
+    },
+    {
       question: 'Kde tábory probíhají?',
       answer: getVenuesSentence(),
     },
@@ -66,9 +71,19 @@ export function getSiteFaq(): Array<{ question: string; answer: string }> {
         'Ano. V ceně je oběd, pitný režim i veškerý materiál, který dítě během týdne spotřebuje. Nic dalšího se nedoplácí.',
     },
     {
+      question: 'Je zajištěn oběd pro děti s alergiemi?',
+      answer:
+        'Ano, při registraci se ptáme na stravovací omezení a alergie. Spolupracujeme s dodavatelem, který dokáže připravit alternativní varianty.',
+    },
+    {
       question: 'Co si dítě odveze domů?',
       answer:
         'Vlastní výtisk z 3D tiskárny a sestavené zařízení, které si samo naprogramovalo. Obojí si odváží domů.',
+    },
+    {
+      question: 'Jak probíhá platba?',
+      answer:
+        'Platba probíhá bezpečně zrychleným bankovním převodem přes platební bránu Comgate přímo při registraci. Daňový doklad obdržíte po zaplacení.',
     },
     {
       question: 'Kdo tábory pořádá?',

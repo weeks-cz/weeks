@@ -107,10 +107,38 @@ function TurnusListContent({ turnusy }: { turnusy: Turnus[] }) {
   )
 }
 
+/**
+ * Kostra karet pro dobu, než se hydratuje `TurnusListContent` (i to, co se
+ * pošle jako statické HTML při prerenderu — prázdný `<div>` by tu chvíli
+ * nechal zet dírou pod nadpisem sekce).
+ */
+function TurnusListSkeleton() {
+  return (
+    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3" aria-busy="true" aria-label="Načítáme turnusy">
+      {[0, 1, 2].map((i) => (
+        <div key={i} className="flex flex-col bg-paper border border-ink/15 rounded-md p-6 animate-pulse">
+          <div className="flex items-start justify-between gap-3 mb-4">
+            <div className="h-3 w-24 rounded-sm bg-ink/10" />
+            <div className="h-3 w-16 rounded-sm bg-ink/10" />
+          </div>
+          <div className="h-5 w-3/4 rounded-sm bg-ink/10 mb-3" />
+          <div className="h-3 w-1/2 rounded-sm bg-ink/10 mb-6" />
+          <div className="h-3 w-full rounded-sm bg-ink/10 mb-2" />
+          <div className="h-3 w-5/6 rounded-sm bg-ink/10 mb-6" />
+          <div className="mt-auto pt-4 border-t border-ink/15 flex items-center justify-between">
+            <div className="h-4 w-16 rounded-sm bg-ink/10" />
+            <div className="h-9 w-32 rounded-sm bg-ink/10" />
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 export function TurnusList({ turnusy }: { turnusy: Turnus[] }) {
   // useSearchParams vyžaduje Suspense hranici, jinak Next 16 odmítne prerender.
   return (
-    <Suspense fallback={<div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3" />}>
+    <Suspense fallback={<TurnusListSkeleton />}>
       <TurnusListContent turnusy={turnusy} />
     </Suspense>
   )

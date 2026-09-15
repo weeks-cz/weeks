@@ -9,8 +9,8 @@ import {
 import Link from 'next/link'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
-import { getVenue } from '@/lib/cities'
-import { getTurnusy } from '@/lib/turnusy'
+import { getVenue, type VenueId } from '@/lib/cities'
+import { getTurnusy, isBookable } from '@/lib/turnusy'
 import { SITE, getSiteFaq } from '@/lib/site'
 import { ProjectGallery } from '@/components/turnusy/ProjectGallery'
 import { VenueShowcase } from '@/components/turnusy/VenueShowcase'
@@ -131,9 +131,16 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
 
 export default function TaborPage() {
   const turnusy = getTurnusy()
-  // Místo konání je vlastností turnusu, ne stránky. Sekce o místě se ukáže,
-  // jen když aspoň jeden turnus místo skutečně má — jinak by ukazovala prázdný slib.
-  const venueId = turnusy.find((t) => t.venueId !== null)?.venueId ?? null
+  // Prodejní stav rozhoduje o hlavních výzvách na stránce: dokud nejde koupit
+  // ani jeden turnus, nemá smysl tvrdit „přihlaste se" ani vyvolávat naléhavost
+  // (nic takového by nebyla pravda) — hlavní výzva je nechat kontakt.
+  const prodejny = turnusy.some(isBookable)
+  // Místo konání je vlastností turnusu, ne stránky. Vykreslí se každé odlišné
+  // místo, které se mezi turnusy skutečně vyskytuje (dnes jedno) — ne jen
+  // to první nalezené, aby to nebyla náhoda dané pořadím v datech.
+  const venueIds = Array.from(
+    new Set(turnusy.map((t) => t.venueId).filter((id): id is VenueId => id !== null))
+  )
   const faq = getSiteFaq()
 
   return (
@@ -202,7 +209,7 @@ export default function TaborPage() {
                   href="#turnusy"
                   className="btn-primary group px-8 py-4"
                 >
-                  Přihlásit dítě
+                  {prodejny ? 'Přihlásit dítě' : 'Chci vědět o termínech'}
                   <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </a>
                 <a
@@ -398,8 +405,10 @@ export default function TaborPage() {
           </div>
         </section>
 
-        {/* Kde to probíhá — jen když má aspoň jeden turnus určené místo konání */}
-        {venueId !== null && <VenueShowcase venue={getVenue(venueId)} />}
+        {/* Kde to probíhá — jedna sekce za každé odlišné místo, které turnusy mají */}
+        {venueIds.map((id) => (
+          <VenueShowcase key={id} venue={getVenue(id)} />
+        ))}
 
         {/* Praktické informace */}
         <section className="section-padding bg-paper-soft border-y border-ink/15">
@@ -424,7 +433,7 @@ export default function TaborPage() {
                   {
                     icon: Printer,
                     title: 'Vybavení',
-                    text: 'Profesionální FabLab vybavení — průmyslové 3D tiskárny, VR headsety, Arduino soupravy a počítače. Děti nenosí nic technického.',
+                    text: 'Vybavení, které program vyžaduje — 3D tiskárny, VR headsety, Arduino soupravy a počítače — je vždy připravené na místě konání. Děti nenosí nic technického.',
                   },
                   {
                     icon: Users,
@@ -434,7 +443,7 @@ export default function TaborPage() {
                   {
                     icon: MapPin,
                     title: 'Místo',
-                    text: 'Přesnou adresu najdete u vybraného turnusu níže. Každé město má vlastní, profesionálně vybavený prostor pro tvoření.',
+                    text: 'Přesnou adresu najdete u vybraného turnusu níže — místo konání se liší podle města a termínu.',
                   },
                 ].map((info, i) => (
                   <motion.div
@@ -475,22 +484,28 @@ export default function TaborPage() {
                 Turnusy a registrace
               </h2>
               <p className="text-xl text-paper/90 max-w-2xl mx-auto">
-                Cenu, obsazenost i přesné datum najdete u každého turnusu — liší se podle města a termínu.
+                {prodejny
+                  ? 'Cenu, obsazenost i přesné datum najdete u vybraného turnusu.'
+                  : 'Termíny na příští léto vypisujeme na podzim. Vyberte si město a nechte nám kontakt — ozveme se vám mezi prvními.'}
               </p>
             </motion.div>
 
             <TurnusList turnusy={turnusy} />
 
-            <motion.p
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              className="text-center text-paper/60 mt-8 mb-12 text-sm"
-            >
-              Registrace probíhá přímo přes systém {SITE.name}. Po přihlášení vám přijde potvrzení e-mailem.
-            </motion.p>
+            {prodejny && (
+              <motion.p
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                className="text-center text-paper/60 mt-8 text-sm"
+              >
+                Registrace probíhá přímo přes systém {SITE.name}. Po přihlášení vám přijde potvrzení e-mailem.
+              </motion.p>
+            )}
 
-            <TurnusInterestForm source="tabor" />
+            <div className={prodejny ? 'mt-12' : 'mt-16'}>
+              <TurnusInterestForm source="tabor" />
+            </div>
           </div>
         </section>
 
@@ -532,19 +547,29 @@ export default function TaborPage() {
               className="max-w-3xl mx-auto text-center"
             >
               <h2 className="heading-2 text-paper mb-6">
-                Na jeden turnus bereme jen 15 dětí
+                {prodejny ? 'Na jeden turnus bereme jen 15 dětí' : 'Chcete být u toho, až turnusy otevřeme?'}
               </h2>
               <p className="text-xl text-paper/90 mb-8">
-                Letní příměstský tábor, ze kterého si vaše dítě odnese vlastní 3D výtisk
-                i sestavené zařízení — a vy máte celý týden jistotu, že je o něj dobře
-                postaráno. Termíny se plní, s přihláškou neváhejte.
+                {prodejny ? (
+                  <>
+                    Letní příměstský tábor, ze kterého si vaše dítě odnese vlastní 3D výtisk
+                    i sestavené zařízení — a vy máte celý týden jistotu, že je o něj dobře
+                    postaráno. Termíny se plní, s přihláškou neváhejte.
+                  </>
+                ) : (
+                  <>
+                    Letní příměstský tábor, ze kterého si vaše dítě odnese vlastní 3D výtisk
+                    i sestavené zařízení. Termíny na příští léto vypisujeme na podzim —
+                    nechte nám kontakt a ozveme se vám mezi prvními.
+                  </>
+                )}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <a
                   href="#turnusy"
                   className="inline-flex items-center justify-center px-8 py-4 bg-white hover:bg-paper-soft text-primary-600 font-semibold rounded-xl transition-all duration-300"
                 >
-                  Přihlásit dítě
+                  {prodejny ? 'Přihlásit dítě' : 'Chci vědět o termínech'}
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </a>
                 <Link

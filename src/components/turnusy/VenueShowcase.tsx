@@ -5,19 +5,27 @@ import { motion } from 'framer-motion'
 import { MapPin, Cpu, Printer, ShieldCheck } from 'lucide-react'
 import type { Venue } from '@/lib/cities'
 
-// Ukázka skutečného místa konání — FabLab Kreativního centra VARY&TE.
-// Fotky z varyete.cz (partner). Dělá z "místa" hmatatelný, důvěryhodný prostor.
+// Obecné vlastnosti, které platí pro každé místo konání bez ohledu na to,
+// kde zrovna je — konkrétní popis místa (název, text, fotky) dodává `venue`.
 const features = [
   { icon: Printer, text: 'Profesionální 3D tiskárny, VR a Arduino soupravy' },
-  { icon: Cpu, text: 'Plně vybavený FabLab — vše potřebné na místě' },
+  { icon: Cpu, text: 'Plně vybavený prostor — vše potřebné na místě' },
   { icon: ShieldCheck, text: 'Bezpečné, moderní prostředí pod dohledem lektorů' },
 ]
 
 export function VenueShowcase({ venue }: { venue: Venue }) {
+  const hasPhotos = (venue.photos?.length ?? 0) > 0
+
+  // Poslední slovo plného názvu se v nadpisu zvýrazní barvou — funguje pro
+  // libovolné místo, ne jen pro VARY&TE (viz `fullName` v `@/lib/cities`).
+  const nadpisSlova = venue.fullName.split(' ')
+  const zvyrazneneSlovo = nadpisSlova.pop()
+  const zbytekNadpisu = nadpisSlova.join(' ')
+
   return (
     <section className="section-padding bg-ink text-paper blueprint-grid-dark border-y border-ink overflow-hidden">
       <div className="section-container">
-        <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
+        <div className={`grid gap-10 lg:gap-14 items-center ${hasPhotos ? 'lg:grid-cols-2' : ''}`}>
           {/* Text */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -26,15 +34,11 @@ export function VenueShowcase({ venue }: { venue: Venue }) {
           >
             <p className="mono-label-dark mb-4">Místo konání</p>
             <h2 className="font-display text-3xl md:text-4xl font-bold text-paper mb-5 leading-tight">
-              FabLab Kreativního centra{' '}
-              <span className="text-accent-400">
-                VARY&amp;TE
-              </span>
+              {zbytekNadpisu}{' '}
+              <span className="text-accent-400">{zvyrazneneSlovo}</span>
             </h2>
             <p className="text-lg text-paper/80 mb-8 leading-relaxed">
-              Tábory probíhají v{' '}{venue.name} — největším kreativním centru
-              v{' '}Karlovarském kraji. Děti tvoří v{' '}profesionálně vybaveném
-              prostoru, jaký by doma ani ve škole nenašly.
+              {venue.description}
             </p>
             <ul className="space-y-4">
               {features.map((f) => (
@@ -52,23 +56,32 @@ export function VenueShowcase({ venue }: { venue: Venue }) {
             </p>
           </motion.div>
 
-          {/* Photos */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="grid grid-cols-2 gap-3 sm:gap-4"
-          >
-            <div className="relative col-span-2 aspect-[16/9] border border-ink rounded-md overflow-hidden shadow-hard">
-              <Image src="/images/varyete/fablab-1.avif" alt="FabLab VARY&TE — práce s 3D tiskem" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
-            </div>
-            <div className="relative aspect-square border border-ink rounded-md overflow-hidden shadow-hard">
-              <Image src="/images/varyete/fablab-5.avif" alt="Pracoviště ve FabLabu VARY&TE" fill sizes="(max-width: 1024px) 50vw, 25vw" className="object-cover" />
-            </div>
-            <div className="relative aspect-square border border-ink rounded-md overflow-hidden shadow-hard">
-              <Image src="/images/varyete/fablab-6.avif" alt="Tvoření ve FabLabu VARY&TE" fill sizes="(max-width: 1024px) 50vw, 25vw" className="object-cover" />
-            </div>
-          </motion.div>
+          {/* Photos — jen když je má místo doopravdy k dispozici */}
+          {hasPhotos && (
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="grid grid-cols-2 gap-3 sm:gap-4"
+            >
+              {venue.photos!.map((src, i) => (
+                <div
+                  key={src}
+                  className={`relative border border-ink rounded-md overflow-hidden shadow-hard ${
+                    i === 0 ? 'col-span-2 aspect-[16/9]' : 'aspect-square'
+                  }`}
+                >
+                  <Image
+                    src={src}
+                    alt={`${venue.name} — fotografie prostoru ${i + 1}`}
+                    fill
+                    sizes={i === 0 ? '(max-width: 1024px) 100vw, 50vw' : '(max-width: 1024px) 50vw, 25vw'}
+                    className="object-cover"
+                  />
+                </div>
+              ))}
+            </motion.div>
+          )}
         </div>
       </div>
     </section>

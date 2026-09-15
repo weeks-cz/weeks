@@ -30,6 +30,8 @@ export interface Venue {
   url?: string
   /** Dotaz pro odkaz do map. */
   mapQuery: string
+  /** Fotky prostoru pro `VenueShowcase`. Bez fotek se galerie nevykresluje. */
+  photos?: string[]
 }
 
 const CITIES: Record<CityId, City> = {
@@ -61,6 +63,11 @@ const VENUES: Record<VenueId, Venue> = {
       'Největší kreativní centrum v Karlovarském kraji s FabLabem, GameDev arenou a profesionálními vzdělávacími prostory.',
     url: 'https://varyete.cz',
     mapQuery: 'Kreativní+centrum+Vary%26Te+Karlovy+Vary',
+    photos: [
+      '/images/varyete/fablab-1.avif',
+      '/images/varyete/fablab-5.avif',
+      '/images/varyete/fablab-6.avif',
+    ],
   },
 }
 
