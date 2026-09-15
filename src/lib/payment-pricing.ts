@@ -54,13 +54,21 @@ export function getTrustedTerm(termId: string, list: Turnus[] = TURNUSY): { star
 
 /**
  * Název tábora, jak se má objevit na faktuře a v e-mailu rodiči.
- * Skládá se z turnusu, ne z toho, co poslal klient — stejně jako cena,
- * kapacita, město i termín.
+ *
+ * Skládá se z turnusu, ne z toho, co poslal klient — ale na rozdíl od ceny,
+ * kapacity, města a termínu NEKONTROLUJE stav prodeje: jméno tábora platí
+ * i pro turnus, který mezitím doprodal (`plno`) nebo skončil (`uzavreno`) —
+ * přesně v těchhle stavech běží nástupní list, upomínka platby i callback
+ * z Comgate, který vystavuje fakturu z Fakturoidu. Vyhodí výjimku jen
+ * u turnusu, který v `list` vůbec není.
  */
 export function getTrustedProgramName(termId: string, list: Turnus[] = TURNUSY): string {
-  const turnus = resolveBookable(termId, list)
+  const turnus = getTurnusById(termId, list)
+  if (!turnus) {
+    throw new Error(`Neznámý turnus: ${termId}`)
+  }
   const zamereni = getFocusModules(turnus.focus).map((m) => m.name)
   return zamereni.length > 0
-    ? `Letní příměstský tábor — ${zamereni.join(', ')}`
+    ? `Letní příměstský tábor (${zamereni.join(', ')})`
     : 'Letní příměstský tábor'
 }

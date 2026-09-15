@@ -42,6 +42,11 @@ async function ensurePaidInvoice(supabase: SupabaseClient, registrationId: strin
       // Stará registrace na turnus, který už v konfiguraci není — uložená
       // hodnota je to jediné, co o ní víme.
       programName = reg.program as string
+      reportMessage('Fakturoid invoice: term_id not found in turnusy, falling back to stored program', {
+        registrationId,
+        term_id: reg.term_id,
+        fallbackProgram: reg.program,
+      })
     }
     const invoiceId = await issuePaidInvoice({
       parentName: reg.parent_name as string,
@@ -98,6 +103,11 @@ async function ensureConfirmationEmail(supabase: SupabaseClient, registrationId:
       // Stará registrace na turnus, který už v konfiguraci není — uložená
       // hodnota je to jediné, co o ní víme.
       programName = reg.program as string
+      reportMessage('Confirmation email: term_id not found in turnusy, falling back to stored program', {
+        registrationId,
+        term_id: reg.term_id,
+        fallbackProgram: reg.program,
+      })
     }
     const { subject, html } = buildConfirmationEmail({
       childName: reg.child_name as string,
@@ -144,6 +154,11 @@ async function ensurePurchaseConversion(supabase: SupabaseClient, registrationId
     // Stará registrace na turnus, který už v konfiguraci není — uložená
     // hodnota je to jediné, co o ní víme.
     programName = reg.program as string
+    reportMessage('Meta Purchase event: term_id not found in turnusy, falling back to stored program', {
+      registrationId,
+      term_id: reg.term_id,
+      fallbackProgram: reg.program,
+    })
   }
 
   await sendMetaEvent({

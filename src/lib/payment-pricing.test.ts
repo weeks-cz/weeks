@@ -86,19 +86,17 @@ describe('ostrá data', () => {
 })
 
 describe('getTrustedProgramName', () => {
-  it('vrátí čitelný název tábora, ne id zaměření', () => {
+  it('vrátí čitelný název tábora se zaměřením v závorce', () => {
     const nazev = getTrustedProgramName('test-prodejny', [prodejny])
-    expect(nazev).not.toMatch(/^[a-z0-9-]+$/)
-    expect(nazev.length).toBeGreaterThan(10)
+    expect(nazev).toBe('Letní příměstský tábor (3D tisk)')
   })
 
-  it('jmenuje zaměření turnusu jeho čitelným názvem', () => {
-    const nazev = getTrustedProgramName('test-prodejny', [prodejny])
-    expect(nazev).toContain('3D tisk')
+  it('vrátí název i u turnusu, který je vyprodaný — nástupní list a upomínka běží právě tehdy', () => {
+    const plno: Turnus = { ...prodejny, id: 'test-plno', status: 'plno' }
+    expect(getTrustedProgramName('test-plno', [plno])).toBe('Letní příměstský tábor (3D tisk)')
   })
 
-  it('odmítne turnus, který není v prodeji', () => {
-    const chystame: Turnus = { ...prodejny, id: 'test-chystame', status: 'chystame' }
-    expect(() => getTrustedProgramName('test-chystame', [chystame])).toThrow()
+  it('odmítne neznámý turnus', () => {
+    expect(() => getTrustedProgramName('neexistuje', [prodejny])).toThrow()
   })
 })

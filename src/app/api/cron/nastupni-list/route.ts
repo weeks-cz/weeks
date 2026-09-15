@@ -64,6 +64,11 @@ export async function GET(request: Request) {
         // Stará registrace na turnus, který už v konfiguraci není — uložená
         // hodnota je to jediné, co o ní víme.
         programName = reg.program as string
+        reportMessage('Nástupní list: term_id not found in turnusy, falling back to stored program', {
+          registrationId: reg.id,
+          term_id: reg.term_id,
+          fallbackProgram: reg.program,
+        })
       }
       const venue = location.venues[0]
       const { subject, html } = buildNastupniListEmail({

@@ -1,17 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createServerClient } from '@/lib/supabase'
 import { API_ERRORS } from '@/lib/api-messages'
-import { reportError } from '@/lib/observability'
+import { reportError, reportMessage } from '@/lib/observability'
 import { verifyRegistrationToken } from '@/lib/registration-token'
+import { getTrustedProgramName } from '@/lib/payment-pricing'
 
 export const dynamic = 'force-dynamic'
 
 // Minimal, non-sensitive field set the confirmation page needs. We deliberately
 // do NOT expose child_birthdate, child_insurance, child_health_notes,
 // parent_phone, parent_address, pickup details, consents or IP — returning those
-// to anyone holding the UUID would be a PII leak.
+// to anyone holding the UUID would be a PII leak. `term_id` is selected only to
+// derive the trusted program name below — it never reaches the client raw.
 const CONFIRMATION_FIELDS =
-  'id, status, payment_status, location_id, program, term_start, term_end, parent_name, parent_email, child_name, payment_amount'
+  'id, status, payment_status, location_id, program, term_id, term_start, term_end, parent_name, parent_email, child_name, payment_amount'
 
 export async function GET(
   request: NextRequest,
@@ -42,7 +44,25 @@ export async function GET(
       return NextResponse.json({ error: API_ERRORS.notFound }, { status: 404 })
     }
 
-    return NextResponse.json({ registration: data })
+    // Název programu odvozujeme ze `term_id` stejně jako e-maily a faktura —
+    // ne ze syrového pole `program`, které nese jen id zaměření. `term_id`
+    // samotné se klientovi neposílá, stačí mu čitelný název.
+    const { term_id, program, ...rest } = data
+    let programName: string
+    try {
+      programName = getTrustedProgramName(term_id as string)
+    } catch {
+      // Stará registrace na turnus, který už v konfiguraci není — uložená
+      // hodnota je to jediné, co o ní víme.
+      programName = program as string
+      reportMessage('Registration confirmation: term_id not found in turnusy, falling back to stored program', {
+        registrationId: id,
+        term_id,
+        fallbackProgram: program,
+      })
+    }
+
+    return NextResponse.json({ registration: { ...rest, program: programName } })
   } catch (e) {
     reportError(e, { route: 'registration/[id]', reason: 'fetch' })
     return NextResponse.json({ error: API_ERRORS.notFound }, { status: 404 })
