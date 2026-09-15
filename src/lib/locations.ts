@@ -187,7 +187,7 @@ export const LOCATIONS: Record<string, Location> = {
     venues: [
       {
         name: 'FabLab VARY&TE',
-        fullName: 'FabLab v Kreativní Centrum VARY&TE',
+        fullName: 'FabLab v Kreativním centru VARY&TE',
         address: 'Dykova',
         city: 'Stará Role',
         postalCode: '360 17',
