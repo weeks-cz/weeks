@@ -889,6 +889,11 @@ Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>"
 
 ### Task 5: Cena a kapacita se odvozují z turnusu
 
+> **Pořadí: tenhle úkol se provádí AŽ PO úkolu 6.** Změna signatury rozbije
+> volající v `comgate/create` a v upomínkovém cronu — úkol 6 je z nich
+> odstraňuje a na úkolu 5 nezávisí. Opačné pořadí nechá `tsc` mezi commity
+> padat.
+
 Dnes se odvozují z dvojice `location_id` + `program` přes `locations.ts`. To znamená tři vyhledání ve třech konfiguracích a možnost, že stránka ukazuje jinou cenu, než jakou naúčtuje registrace. Nově stačí `term_id`.
 
 Zúžení vstupu je zároveň bezpečnostní zlepšení: klient posílá jeden neuhodnutelný identifikátor a server si dohledá všechno ostatní sám.
@@ -1065,7 +1070,12 @@ Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>"
 
 ### Task 6: Platba a upomínka čtou uloženou částku
 
-Tenhle úkol opravuje chybu, kterou by Task 5 jinak zavedl. `/api/payment/comgate/create` a upomínkový cron dnes cenu **znovu odvozují** z konfigurace pro registraci, která už dávno existuje. Jakmile se zdrojem stane turnus, přestane to fungovat pro registrace na turnus, který se mezitím uzavřel — rodič s nezaplacenou registrací z loňska by na platební odkaz dostal chybu.
+> **Pořadí: tenhle úkol se provádí PŘED úkolem 5.** Nezávisí na něm a musí
+> mu předcházet, aby `tsc` neupadl mezi commity. `payment-pricing.ts` má
+> v tuhle chvíli ještě starou signaturu `(locationId, program)` — tenhle
+> úkol se jí nedotýká, jen ji přestává volat.
+
+Tenhle úkol odstraňuje chybu, kterou by úkol 5 jinak zavedl. `/api/payment/comgate/create` a upomínkový cron dnes cenu **znovu odvozují** z konfigurace pro registraci, která už dávno existuje. Jakmile se zdrojem stane turnus, přestane to fungovat pro registrace na turnus, který se mezitím uzavřel — rodič s nezaplacenou registrací z loňska by na platební odkaz dostal chybu.
 
 Správné je částku neodvozovat vůbec. `registrations.payment_amount` byla zapsána serverem při vzniku registrace, takže je stejně důvěryhodná — a navíc je to ta částka, na kterou rodič kývl.
 
