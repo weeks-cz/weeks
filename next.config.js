@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
+    // Next 16 defaults to [75] and rejects other q values — 90 is opt-in for
+    // the above-the-fold hero photo.
+    qualities: [75, 90],
     remotePatterns: [
       {
         protocol: 'https',

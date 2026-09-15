@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { ArrowRight, Calendar, Mail, Sparkles, Printer, Cpu } from 'lucide-react'
+import { ArrowRight, Mail, Sparkles, Printer, Cpu } from 'lucide-react'
 import Link from 'next/link'
 import { useState } from 'react'
 import { trackLead } from '@/lib/fbpixel'
@@ -19,10 +19,43 @@ function shortLabel(t: TermDisplay | null | undefined): string | null {
   return dayShort ? `${dayShort} ${t.dateShortLabel}` : t.dateShortLabel
 }
 
+const camps = [
+  {
+    id: 'tech',
+    icon: Sparkles,
+    accentStrip: 'bg-accent-400',
+    iconBg: 'bg-accent-500',
+    dot: 'bg-accent-400',
+    badge: 'Víkendový',
+    title: 'Tábor chytrých technologií',
+    description: '3D tisk, IoT a virtuální realita v jednom víkendu. So + Ne, 2 990 Kč.',
+    href: '/tabor-chytrych-technologii',
+  },
+  {
+    id: '3d-tisk',
+    icon: Printer,
+    accentStrip: 'bg-primary-400',
+    iconBg: 'bg-primary-500',
+    dot: 'bg-primary-400',
+    badge: '1 den',
+    title: '3D tisk',
+    description: 'Od návrhu po hotový výtisk na profesionální tiskárně za jeden den. 1 490 Kč.',
+    href: '/tabor-3d-tisk',
+  },
+  {
+    id: 'iot',
+    icon: Cpu,
+    accentStrip: 'bg-trust-400',
+    iconBg: 'bg-trust-500',
+    dot: 'bg-trust-400',
+    badge: '1 den',
+    title: 'IoT & elektronika',
+    description: 'Micro:bit/Arduino, senzory a vlastní chytré zařízení za jeden den. 1 490 Kč.',
+    href: '/tabor-iot',
+  },
+]
+
 export function CTASection({ nextTerms }: CTASectionProps) {
-  const techNext = shortLabel(nextTerms['tech'])
-  const tisk3dNext = shortLabel(nextTerms['3d-tisk'])
-  const iotNext = shortLabel(nextTerms['iot'])
   const [email, setEmail] = useState('')
   const [gdprConsent, setGdprConsent] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -65,140 +98,64 @@ export function CTASection({ nextTerms }: CTASectionProps) {
   }
 
   return (
-    <section id="prihlasit" className="section-padding bg-gradient-to-br from-primary-600 to-primary-800">
+    <section id="prihlasit" className="section-padding bg-ink text-paper blueprint-grid-dark border-y border-ink">
       <div className="section-container">
         {/* Camp cards - all 3 options */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-          {/* MIX - weekend camp */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <div className="h-full bg-gradient-to-br from-accent-500/30 to-primary-500/30 backdrop-blur rounded-2xl p-6 border border-white/20 flex flex-col">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-10 h-10 rounded-xl bg-accent-500 flex items-center justify-center">
-                  <Sparkles className="w-5 h-5 text-white" />
-                </div>
-                <span className="px-2.5 py-1 bg-accent-500/20 rounded-full text-xs font-semibold text-accent-300">
-                  Víkendový
-                </span>
-              </div>
-
-              <h3 className="text-xl font-display font-bold text-white mb-2">
-                Tábor chytrých technologií
-              </h3>
-
-              <p className="text-white/70 text-sm mb-4 flex-1">
-                3D tisk, IoT a virtuální realita v jednom víkendu. So + Ne, 2 990 Kč.
-              </p>
-
-              <div className="space-y-2 mb-6 min-h-[24px]">
-                {techNext && (
-                  <div className="flex items-center gap-2 text-xs text-white/80">
-                    <div className="w-1.5 h-1.5 rounded-full bg-accent-400 flex-shrink-0" />
-                    Nejbližší: {techNext}
-                  </div>
-                )}
-              </div>
-
-              <Link
-                href="/tabor-chytrych-technologii"
-                className="group inline-flex items-center justify-center px-6 py-3 bg-accent-500 hover:bg-accent-400 text-white font-semibold rounded-xl transition-all duration-300 hover:shadow-xl hover:shadow-accent-500/30 text-sm"
+          {camps.map((camp, index) => {
+            const next = shortLabel(nextTerms[camp.id])
+            return (
+              <motion.div
+                key={camp.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="h-full"
               >
-                Zobrazit termíny
-                <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </div>
-          </motion.div>
+                <div className="h-full bg-ink-700/50 border border-paper/20 hover:border-paper/60 rounded-md overflow-hidden flex flex-col transition-colors duration-200">
+                  {/* Barevný akcent tábora — horní proužek */}
+                  <div className={`h-1 ${camp.accentStrip}`} aria-hidden="true" />
 
-          {/* 3D tisk - one-day */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-          >
-            <div className="h-full bg-gradient-to-br from-primary-500/30 to-primary-400/20 backdrop-blur rounded-2xl p-6 border border-white/20 flex flex-col">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-10 h-10 rounded-xl bg-primary-500 flex items-center justify-center">
-                  <Printer className="w-5 h-5 text-white" />
-                </div>
-                <span className="px-2.5 py-1 bg-primary-500/20 rounded-full text-xs font-semibold text-primary-300">
-                  1 den
-                </span>
-              </div>
+                  <div className="p-6 flex flex-col flex-1">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className={`w-10 h-10 rounded-sm ${camp.iconBg} flex items-center justify-center`}>
+                        <camp.icon className="w-5 h-5 text-white" aria-hidden="true" />
+                      </div>
+                      <span className="px-2.5 py-1 border border-paper/30 rounded-sm font-mono text-xs text-paper/80">
+                        {camp.badge}
+                      </span>
+                    </div>
 
-              <h3 className="text-xl font-display font-bold text-white mb-2">
-                3D tisk
-              </h3>
+                    <h3 className="text-xl font-display font-bold text-paper mb-2">
+                      {camp.title}
+                    </h3>
 
-              <p className="text-white/70 text-sm mb-4 flex-1">
-                Od návrhu po hotový výtisk na profesionální tiskárně za jeden den. 1 490 Kč.
-              </p>
+                    <p className="text-paper/70 text-sm mb-4 flex-1">
+                      {camp.description}
+                    </p>
 
-              <div className="space-y-2 mb-6 min-h-[24px]">
-                {tisk3dNext && (
-                  <div className="flex items-center gap-2 text-xs text-white/80">
-                    <div className="w-1.5 h-1.5 rounded-full bg-primary-400 flex-shrink-0" />
-                    Nejbližší: {tisk3dNext}
+                    <div className="space-y-2 mb-6 min-h-[24px]">
+                      {next && (
+                        <div className="flex items-center gap-2 font-mono text-xs text-paper/80">
+                          <div className={`w-1.5 h-1.5 ${camp.dot} flex-shrink-0`} />
+                          Nejbližší: {next}
+                        </div>
+                      )}
+                    </div>
+
+                    <Link
+                      href={camp.href}
+                      className="btn-primary group text-sm"
+                    >
+                      Zobrazit termíny
+                      <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </Link>
                   </div>
-                )}
-              </div>
-
-              <Link
-                href="/tabor-3d-tisk"
-                className="group inline-flex items-center justify-center px-6 py-3 bg-primary-500 hover:bg-primary-400 text-white font-semibold rounded-xl transition-all duration-300 hover:shadow-xl hover:shadow-primary-500/30 text-sm"
-              >
-                Zobrazit termíny
-                <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </div>
-          </motion.div>
-
-          {/* IoT - one-day */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-          >
-            <div className="h-full bg-gradient-to-br from-trust-500/30 to-trust-400/20 backdrop-blur rounded-2xl p-6 border border-white/20 flex flex-col">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-10 h-10 rounded-xl bg-trust-500 flex items-center justify-center">
-                  <Cpu className="w-5 h-5 text-white" />
                 </div>
-                <span className="px-2.5 py-1 bg-trust-500/20 rounded-full text-xs font-semibold text-trust-300">
-                  1 den
-                </span>
-              </div>
-
-              <h3 className="text-xl font-display font-bold text-white mb-2">
-                IoT & elektronika
-              </h3>
-
-              <p className="text-white/70 text-sm mb-4 flex-1">
-                Micro:bit/Arduino, senzory a vlastní chytré zařízení za jeden den. 1 490 Kč.
-              </p>
-
-              <div className="space-y-2 mb-6 min-h-[24px]">
-                {iotNext && (
-                  <div className="flex items-center gap-2 text-xs text-white/80">
-                    <div className="w-1.5 h-1.5 rounded-full bg-trust-400 flex-shrink-0" />
-                    Nejbližší: {iotNext}
-                  </div>
-                )}
-              </div>
-
-              <Link
-                href="/tabor-iot"
-                className="group inline-flex items-center justify-center px-6 py-3 bg-trust-500 hover:bg-trust-400 text-white font-semibold rounded-xl transition-all duration-300 hover:shadow-xl hover:shadow-trust-500/30 text-sm"
-              >
-                Zobrazit termíny
-                <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </div>
-          </motion.div>
+              </motion.div>
+            )
+          })}
         </div>
 
         {/* Email signup row */}
@@ -209,7 +166,7 @@ export function CTASection({ nextTerms }: CTASectionProps) {
           transition={{ delay: 0.3 }}
           className="max-w-2xl mx-auto mt-10"
         >
-          <div className="bg-white/10 backdrop-blur rounded-2xl p-6 border border-white/10">
+          <div className="border border-paper/20 rounded-md p-6 bg-ink-700/30">
             {isSubmitted ? (
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
@@ -218,18 +175,18 @@ export function CTASection({ nextTerms }: CTASectionProps) {
                 role="status"
                 aria-live="polite"
               >
-                <div className="w-12 h-12 bg-trust-500 rounded-full flex items-center justify-center mx-auto mb-3">
+                <div className="w-12 h-12 bg-trust-500 rounded-sm flex items-center justify-center mx-auto mb-3">
                   <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
-                <p className="text-white font-semibold">Děkujeme! O novinkách se dozvíte jako první.</p>
+                <p className="text-paper font-semibold">Děkujeme! O novinkách se dozvíte jako první.</p>
               </motion.div>
             ) : (
               <form onSubmit={handleSubmit}>
                 <div className="flex items-center gap-2 mb-4">
-                  <Mail className="w-5 h-5 text-primary-300" />
-                  <p className="text-white font-medium text-sm">Nechte nám email — dáme vám vědět o nových termínech</p>
+                  <Mail className="w-5 h-5 text-accent-400" aria-hidden="true" />
+                  <p className="text-paper font-medium text-sm">Nechte nám email — dáme vám vědět o nových termínech</p>
                 </div>
                 <div className="flex flex-col sm:flex-row gap-3">
                   <input
@@ -238,7 +195,7 @@ export function CTASection({ nextTerms }: CTASectionProps) {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="váš@email.cz"
-                    className="flex-1 px-4 py-3 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cta-500"
+                    className="flex-1 px-4 py-3 rounded-md bg-transparent border border-paper/30 font-mono text-sm text-paper placeholder:text-paper/40 focus:outline-none focus:border-paper focus:ring-1 focus:ring-paper"
                     required
                   />
                   <button
@@ -255,12 +212,12 @@ export function CTASection({ nextTerms }: CTASectionProps) {
                     id="cta-gdpr-consent"
                     checked={gdprConsent}
                     onChange={(e) => setGdprConsent(e.target.checked)}
-                    className="mt-0.5 w-4 h-4 rounded border-white/30 bg-white/10 text-cta-500 focus:ring-cta-500 focus:ring-offset-0"
+                    className="mt-0.5 w-4 h-4 rounded-sm border-paper/30 bg-transparent text-cta-500 focus:ring-cta-500 focus:ring-offset-0"
                     required
                   />
-                  <label htmlFor="cta-gdpr-consent" className="text-xs text-white/60 cursor-pointer">
+                  <label htmlFor="cta-gdpr-consent" className="text-xs text-paper/60 cursor-pointer">
                     Souhlasím se zpracováním osobních údajů.{' '}
-                    <Link href="/gdpr" className="underline hover:text-white">
+                    <Link href="/gdpr" className="underline hover:text-paper">
                       Více informací
                     </Link>
                   </label>
@@ -269,10 +226,10 @@ export function CTASection({ nextTerms }: CTASectionProps) {
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="mt-3 p-3 bg-red-500/20 border border-red-400 rounded-lg"
+                    className="mt-3 p-3 bg-red-500/20 border border-red-400 rounded-md"
                     role="alert"
                   >
-                    <p className="text-sm text-white">{error}</p>
+                    <p className="text-sm text-paper">{error}</p>
                   </motion.div>
                 )}
               </form>

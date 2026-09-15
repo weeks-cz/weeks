@@ -122,74 +122,56 @@ export default function TaborChytrychTechnologiiClient({
       <Header />
       <main>
         {/* Hero Section */}
-        <section className="relative pt-32 pb-20 overflow-hidden">
-          <div className="absolute inset-0">
-            <Image
-              src="/images/hwlab/hwlab-7972.webp"
-              alt="Tábor chytrých technologií - děti pracují s 3D tiskárnami a VR"
-              fill
-              sizes="100vw"
-              className="object-cover"
-              priority
-              quality={75}
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-gray-900/95 via-gray-900/85 to-gray-900/60" />
-            <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-gray-900/30" />
-          </div>
-
-          <div className="section-container relative z-10">
-            <div className="max-w-3xl">
+        <section className="relative bg-paper blueprint-grid border-b border-ink/15 overflow-hidden">
+          <div className="section-container grid lg:grid-cols-12 gap-12 lg:gap-10 items-start pt-32 pb-16 md:pt-40 md:pb-20">
+            <div className="lg:col-span-7">
               {/* Breadcrumb */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="mb-8"
+                className="mb-8 font-mono text-xs uppercase tracking-[0.2em]"
               >
-                <Link href="/" className="text-gray-400 hover:text-primary-400 transition-colors">
+                <Link href="/" className="text-ink/50 hover:text-primary-600 transition-colors">
                   Domů
                 </Link>
-                <span className="text-gray-500 mx-2">/</span>
-                <Link href="/program" className="text-gray-400 hover:text-primary-400 transition-colors">
+                <span className="text-ink/30 mx-2">/</span>
+                <Link href="/program" className="text-ink/50 hover:text-primary-600 transition-colors">
                   Programy
                 </Link>
-                <span className="text-gray-500 mx-2">/</span>
-                <span className="text-white font-medium">Tábor chytrých technologií</span>
+                <span className="text-ink/30 mx-2">/</span>
+                <span className="text-ink font-medium">Tábor chytrých technologií</span>
               </motion.div>
 
-              {/* Badge */}
-              <motion.div
+              {/* Mono kóta */}
+              <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm text-white/90 rounded-full text-sm font-medium mb-6 border border-white/20"
+                className="mono-label mb-6 flex items-center gap-2"
               >
-                <Sparkles className="w-4 h-4 text-cta-400" />
-                <span>Sobota + Neděle</span>
-                <span className="w-px h-4 bg-white/30" />
-                <span className="text-cta-400">9:00 – 17:00</span>
-              </motion.div>
+                <Sparkles className="w-4 h-4 text-primary-600" aria-hidden="true" />
+                Sobota + Neděle · 9:00 – 17:00
+              </motion.p>
 
               <motion.h1
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.15 }}
-                className="font-display text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white mb-6 leading-[1.1]"
+                className="heading-1 text-ink mb-6"
               >
                 Tábor chytrých{' '}
-                <span className="bg-gradient-to-r from-primary-400 via-accent-400 to-primary-400 bg-clip-text text-transparent">
-                  technologií
-                </span>
+                <span className="text-primary-600">technologií</span>
               </motion.h1>
 
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl leading-relaxed"
+                className="text-lg md:text-xl text-ink-500 mb-8 max-w-2xl leading-relaxed"
               >
                 Za jeden víkend si vaše dítě vyzkouší 3D tisk, naprogramuje IoT projekt
                 na Micro:bitu a prozkoumá virtuální realitu.
-                <span className="text-white font-medium"> Pro děti 10–15 let.</span>
+                <span className="text-ink font-medium"> Pro děti 10–15 let.</span>
               </motion.p>
 
               <motion.div
@@ -200,25 +182,25 @@ export default function TaborChytrychTechnologiiClient({
               >
                 <a
                   href="#terminy"
-                  className="group inline-flex items-center justify-center px-8 py-4 bg-cta-500 hover:bg-cta-400 text-gray-900 font-semibold rounded-xl transition-all duration-300 hover:shadow-xl hover:shadow-cta-500/30 hover:-translate-y-0.5"
+                  className="btn-primary group px-8 py-4"
                 >
                   Vybrat termín a přihlásit se
                   <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </a>
                 <a
                   href="#program"
-                  className="group inline-flex items-center justify-center px-8 py-4 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white font-semibold rounded-xl border border-white/20 transition-all duration-300"
+                  className="btn-outline px-8 py-4"
                 >
                   Co děti čeká
                 </a>
               </motion.div>
 
-              {/* Quick facts */}
-              <motion.div
+              {/* Spec sheet — technický štítek tábora */}
+              <motion.dl
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}
-                className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-3"
+                className="mt-12 grid grid-cols-2 sm:grid-cols-4 border border-ink rounded-md overflow-hidden bg-white"
               >
                 {[
                   { icon: Calendar, label: '2 dny', sublabel: 'So + Ne' },
@@ -226,38 +208,64 @@ export default function TaborChytrychTechnologiiClient({
                   { icon: Users, label: 'Max 15', sublabel: 'dětí' },
                   { icon: Utensils, label: 'Obědy', sublabel: 'v ceně' },
                 ].map((fact, i) => (
-                  <div key={i} className="flex items-center gap-3 p-3 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10">
-                    <fact.icon className="w-5 h-5 text-primary-400 flex-shrink-0" />
-                    <div>
-                      <p className="text-sm font-semibold text-white">{fact.label}</p>
-                      <p className="text-xs text-gray-400">{fact.sublabel}</p>
-                    </div>
+                  <div
+                    key={i}
+                    className={`p-4 border-ink/15 ${i % 2 === 1 ? 'border-l' : ''} ${i >= 2 ? 'border-t sm:border-t-0' : ''} ${i > 0 ? 'sm:border-l' : ''}`}
+                  >
+                    <fact.icon className="w-4 h-4 text-primary-600 mb-2" aria-hidden="true" />
+                    <dd className="font-display text-sm font-semibold text-ink">{fact.label}</dd>
+                    <dt className="font-mono text-xs text-ink/50 uppercase tracking-wider mt-0.5">{fact.sublabel}</dt>
                   </div>
                 ))}
-              </motion.div>
+              </motion.dl>
             </div>
+
+            {/* Photo column */}
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.2 }}
+              className="lg:col-span-5 relative lg:mt-16"
+            >
+              <div className="relative border border-ink rounded-md overflow-hidden shadow-hard bg-white">
+                <Image
+                  src="/images/hwlab/hwlab-7972.webp"
+                  alt="Tábor chytrých technologií - děti pracují s 3D tiskárnami a VR"
+                  width={880}
+                  height={660}
+                  sizes="(min-width: 1024px) 40vw, 100vw"
+                  className="object-cover w-full aspect-[4/3]"
+                  priority
+                  quality={75}
+                />
+              </div>
+              <p className="mono-label mt-4 text-right" aria-hidden="true">
+                HWLab, Praha 6
+              </p>
+            </motion.div>
           </div>
         </section>
 
         {/* O programu */}
-        <section id="program" className="section-padding bg-white scroll-mt-24">
+        <section id="program" className="section-padding bg-paper scroll-mt-24">
           <div className="section-container">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="max-w-3xl mx-auto text-center mb-16"
+              className="max-w-3xl mb-16"
             >
-              <h2 className="heading-2 text-gray-900 mb-4">
-                3 technologie, <span className="text-gradient">jeden víkend</span>
+              <p className="mono-label mb-4">Program</p>
+              <h2 className="heading-2 text-ink mb-4">
+                3 technologie, <span className="text-primary-600">jeden víkend</span>
               </h2>
-              <p className="text-lg text-gray-600">
+              <p className="text-lg text-ink-500">
                 Program je navržený tak, aby si děti vyzkoušely tři odlišné oblasti
                 a zjistily, co je baví nejvíc.
               </p>
             </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {[
                 {
                   icon: Printer,
@@ -285,9 +293,9 @@ export default function TaborChytrychTechnologiiClient({
                 },
               ].map((tech, index) => {
                 const colorMap = {
-                  primary: { bg: 'bg-primary-50', icon: 'text-primary-600', badge: 'bg-primary-100 text-primary-700' },
-                  trust: { bg: 'bg-trust-50', icon: 'text-trust-600', badge: 'bg-trust-100 text-trust-700' },
-                  accent: { bg: 'bg-accent-50', icon: 'text-accent-600', badge: 'bg-accent-100 text-accent-700' },
+                  primary: { bg: 'bg-primary-600', text: 'text-primary-600' },
+                  trust: { bg: 'bg-trust-600', text: 'text-trust-600' },
+                  accent: { bg: 'bg-accent-500', text: 'text-accent-600' },
                 }
                 const colors = colorMap[tech.color as keyof typeof colorMap]
 
@@ -298,24 +306,24 @@ export default function TaborChytrychTechnologiiClient({
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: index * 0.1 }}
-                    className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-lg transition-shadow"
+                    className="card-maker p-6"
                   >
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className={`w-12 h-12 rounded-xl ${colors.bg} flex items-center justify-center`}>
-                        <tech.icon className={`w-6 h-6 ${colors.icon}`} />
+                    <div className="flex items-center justify-between mb-4">
+                      <div className={`w-12 h-12 rounded-sm ${colors.bg} border border-ink flex items-center justify-center`}>
+                        <tech.icon className="w-6 h-6 text-white" aria-hidden="true" />
                       </div>
-                      <div className={`px-3 py-1 rounded-full ${colors.badge} text-xs font-semibold`}>
+                      <span className="font-mono text-xs uppercase tracking-[0.2em] text-ink/40">
                         {tech.day}
-                      </div>
+                      </span>
                     </div>
 
-                    <h3 className="text-xl font-bold text-gray-900 mb-3">{tech.title}</h3>
-                    <p className="text-gray-600 mb-4">{tech.description}</p>
+                    <h3 className="font-display text-xl font-bold text-ink mb-3">{tech.title}</h3>
+                    <p className="text-ink-500 mb-4">{tech.description}</p>
 
-                    <ul className="space-y-2">
+                    <ul className="space-y-2 border-t border-ink/15 pt-4">
                       {tech.highlights.map((h, i) => (
-                        <li key={i} className="flex items-center gap-2 text-sm text-gray-700">
-                          <Check className={`w-4 h-4 ${colors.icon} flex-shrink-0`} />
+                        <li key={i} className="flex items-center gap-2 text-sm text-ink">
+                          <Check className={`w-4 h-4 ${colors.text} flex-shrink-0`} aria-hidden="true" />
                           {h}
                         </li>
                       ))}
@@ -328,18 +336,19 @@ export default function TaborChytrychTechnologiiClient({
         </section>
 
         {/* Harmonogram */}
-        <section id="harmonogram" className="section-padding bg-gray-50 scroll-mt-24">
+        <section id="harmonogram" className="section-padding bg-paper-soft border-y border-ink/15 scroll-mt-24">
           <div className="section-container">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-center mb-12"
+              className="max-w-2xl mx-auto mb-12"
             >
-              <h2 className="heading-2 text-gray-900 mb-4">
-                Harmonogram <span className="text-gradient">víkendu</span>
+              <p className="mono-label mb-4">Harmonogram</p>
+              <h2 className="heading-2 text-ink mb-4">
+                Harmonogram <span className="text-primary-600">víkendu</span>
               </h2>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              <p className="text-lg text-ink-500">
                 Dva dny plné tvoření. Příchod od 8:30, program 9:00–16:30. Střídáme tvoření, přestávky i venkovní aktivity.
               </p>
             </motion.div>
@@ -351,25 +360,23 @@ export default function TaborChytrychTechnologiiClient({
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
               >
-                <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
-                  <div className="bg-gradient-to-r from-primary-600 to-primary-500 p-5">
-                    <div className="flex items-center gap-3">
-                      <Printer className="w-6 h-6 text-white" />
-                      <div>
-                        <h3 className="text-lg font-bold text-white">Sobota – 3D tisk</h3>
-                        <p className="text-sm text-white/80">První kroky a vlastní 3D model</p>
-                      </div>
+                <div className="border border-ink rounded-md bg-white overflow-hidden">
+                  <div className="flex items-center gap-3 pb-5 px-6 pt-6 mb-2 border-b border-ink/15">
+                    <Printer className="w-6 h-6 text-primary-600" aria-hidden="true" />
+                    <div>
+                      <h3 className="font-display text-lg font-bold text-ink">Sobota – 3D tisk</h3>
+                      <p className="font-mono text-xs text-ink/50 uppercase tracking-wider">První kroky a vlastní 3D model</p>
                     </div>
                   </div>
-                  <div className="p-5">
+                  <div className="p-6">
                     <div className="space-y-0">
                       {sobotaProgram.map((item, i) => (
-                        <div key={i} className={`flex gap-4 py-3 ${i < sobotaProgram.length - 1 ? 'border-b border-gray-100' : ''}`}>
-                          <span className="text-sm font-mono font-semibold text-primary-600 w-12 flex-shrink-0">{item.time}</span>
+                        <div key={i} className={`flex gap-4 py-3 ${i < sobotaProgram.length - 1 ? 'border-b border-ink/15' : ''}`}>
+                          <span className="text-sm font-mono font-semibold text-ink w-12 flex-shrink-0">{item.time}</span>
                           <div>
-                            <p className="font-medium text-gray-900 text-sm">{item.title}</p>
+                            <p className="font-display font-semibold text-ink text-sm leading-tight">{item.title}</p>
                             {item.description && (
-                              <p className="text-xs text-gray-500 mt-0.5">{item.description}</p>
+                              <p className="text-xs text-ink-500 mt-0.5">{item.description}</p>
                             )}
                           </div>
                         </div>
@@ -385,25 +392,23 @@ export default function TaborChytrychTechnologiiClient({
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
               >
-                <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
-                  <div className="bg-gradient-to-r from-accent-600 to-trust-500 p-5">
-                    <div className="flex items-center gap-3">
-                      <Cpu className="w-6 h-6 text-white" />
-                      <div>
-                        <h3 className="text-lg font-bold text-white">Neděle – IoT & VR</h3>
-                        <p className="text-sm text-white/80">Programování a virtuální světy</p>
-                      </div>
+                <div className="border border-ink rounded-md bg-white overflow-hidden">
+                  <div className="flex items-center gap-3 pb-5 px-6 pt-6 mb-2 border-b border-ink/15">
+                    <Cpu className="w-6 h-6 text-accent-600" aria-hidden="true" />
+                    <div>
+                      <h3 className="font-display text-lg font-bold text-ink">Neděle – IoT & VR</h3>
+                      <p className="font-mono text-xs text-ink/50 uppercase tracking-wider">Programování a virtuální světy</p>
                     </div>
                   </div>
-                  <div className="p-5">
+                  <div className="p-6">
                     <div className="space-y-0">
                       {nedeleProgram.map((item, i) => (
-                        <div key={i} className={`flex gap-4 py-3 ${i < nedeleProgram.length - 1 ? 'border-b border-gray-100' : ''}`}>
-                          <span className="text-sm font-mono font-semibold text-accent-600 w-12 flex-shrink-0">{item.time}</span>
+                        <div key={i} className={`flex gap-4 py-3 ${i < nedeleProgram.length - 1 ? 'border-b border-ink/15' : ''}`}>
+                          <span className="text-sm font-mono font-semibold text-ink w-12 flex-shrink-0">{item.time}</span>
                           <div>
-                            <p className="font-medium text-gray-900 text-sm">{item.title}</p>
+                            <p className="font-display font-semibold text-ink text-sm leading-tight">{item.title}</p>
                             {item.description && (
-                              <p className="text-xs text-gray-500 mt-0.5">{item.description}</p>
+                              <p className="text-xs text-ink-500 mt-0.5">{item.description}</p>
                             )}
                           </div>
                         </div>
@@ -417,7 +422,7 @@ export default function TaborChytrychTechnologiiClient({
         </section>
 
         {/* Praktické informace */}
-        <section className="section-padding bg-white">
+        <section className="section-padding bg-paper">
           <div className="section-container">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -425,8 +430,9 @@ export default function TaborChytrychTechnologiiClient({
               viewport={{ once: true }}
               className="max-w-4xl mx-auto"
             >
-              <h2 className="heading-2 text-gray-900 mb-8 text-center">
-                Praktické <span className="text-gradient">informace</span>
+              <p className="mono-label mb-4">Praktické informace</p>
+              <h2 className="heading-2 text-ink mb-8">
+                Praktické <span className="text-primary-600">informace</span>
               </h2>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -458,14 +464,14 @@ export default function TaborChytrychTechnologiiClient({
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.1 }}
-                    className="flex gap-4 p-5 rounded-xl bg-gray-50 border border-gray-100"
+                    className="card-maker flex gap-4 p-5"
                   >
-                    <div className="w-10 h-10 rounded-lg bg-primary-100 flex items-center justify-center flex-shrink-0">
-                      <info.icon className="w-5 h-5 text-primary-600" />
+                    <div className="w-10 h-10 rounded-sm bg-white border border-ink/15 flex items-center justify-center flex-shrink-0">
+                      <info.icon className="w-5 h-5 text-primary-600" aria-hidden="true" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-900 mb-1">{info.title}</h3>
-                      <p className="text-sm text-gray-600">{info.text}</p>
+                      <h3 className="font-display font-semibold text-ink mb-1">{info.title}</h3>
+                      <p className="text-sm text-ink-500">{info.text}</p>
                     </div>
                   </motion.div>
                 ))}
@@ -483,7 +489,7 @@ export default function TaborChytrychTechnologiiClient({
         />
 
         {/* Termíny a registrace */}
-        <section id="terminy" className="section-padding bg-gradient-to-br from-primary-600 to-primary-800 scroll-mt-24">
+        <section id="terminy" className="section-padding bg-ink text-paper blueprint-grid-dark border-y border-ink scroll-mt-24">
           <div className="section-container">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -491,16 +497,17 @@ export default function TaborChytrychTechnologiiClient({
               viewport={{ once: true }}
               className="text-center mb-12"
             >
-              <h2 className="heading-2 text-white mb-4">
+              <p className="mono-label-dark mb-4">Termíny</p>
+              <h2 className="heading-2 text-paper mb-4">
                 {confirmedMixTerms.length > 0 ? 'Potvrzené termíny' : 'Jarní termíny proběhly'}
               </h2>
-              <p className="text-xl text-white/90 max-w-2xl mx-auto">
+              <p className="text-xl text-paper/90 max-w-2xl mx-auto">
                 {confirmedMixTerms.length > 0
                   ? 'Víkendový tábor So+Ne, 9:00–17:00. Registrace přes DDM Praha 6.'
                   : 'Nové termíny právě chystáme. Ozvěte se nám a dáme vám včas vědět.'}
               </p>
-              <p className="text-lg text-white/70 mt-2">
-                Cena: <span className="font-bold text-white">2 990 Kč</span> za víkend (vč. obědů a materiálů)
+              <p className="text-lg text-paper/70 mt-2">
+                Cena: <span className="font-bold text-paper font-mono">2 990 Kč</span> za víkend (vč. obědů a materiálů)
               </p>
             </motion.div>
 
@@ -518,16 +525,16 @@ export default function TaborChytrychTechnologiiClient({
                     <div className="p-6">
                       <div className="flex items-center gap-2 mb-4">
                         <Calendar className="w-5 h-5 text-primary-600" />
-                        <h3 className="text-lg font-bold text-gray-900">{termin.weekendDateLabel}</h3>
+                        <h3 className="text-lg font-bold text-ink">{termin.weekendDateLabel}</h3>
                       </div>
 
                       <div className="space-y-2 mb-4">
-                        <div className="flex items-center gap-2 text-sm text-gray-600">
-                          <MapPin className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                        <div className="flex items-center gap-2 text-sm text-ink-500">
+                          <MapPin className="w-4 h-4 text-ink/50 flex-shrink-0" />
                           <span className="font-medium">{termin.location || 'HWLab Praha'}</span>
                         </div>
                         {termin.locationDetail && (
-                          <p className="text-xs text-gray-500 ml-6">{termin.locationDetail}</p>
+                          <p className="text-xs text-ink-500 ml-6">{termin.locationDetail}</p>
                         )}
                       </div>
 
@@ -588,7 +595,7 @@ export default function TaborChytrychTechnologiiClient({
         </section>
 
         {/* FAQ */}
-        <section className="section-padding bg-gray-50">
+        <section className="section-padding bg-paper-soft border-b border-ink/15">
           <div className="section-container">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -596,10 +603,11 @@ export default function TaborChytrychTechnologiiClient({
               viewport={{ once: true }}
               className="max-w-3xl mx-auto"
             >
-              <h2 className="heading-2 text-gray-900 mb-4 text-center">
-                Časté dotazy <span className="text-gradient">k táboru</span>
+              <p className="mono-label mb-4">FAQ</p>
+              <h2 className="heading-2 text-ink mb-4">
+                Časté dotazy <span className="text-primary-600">k táboru</span>
               </h2>
-              <p className="text-lg text-gray-600 mb-10 text-center">
+              <p className="text-lg text-ink-500 mb-10">
                 Nenašli jste odpověď?{' '}
                 <Link href="/kontakt" className="text-primary-600 hover:underline font-medium">
                   Kontaktujte nás
@@ -612,7 +620,7 @@ export default function TaborChytrychTechnologiiClient({
         </section>
 
         {/* Bottom CTA */}
-        <section className="section-padding bg-gradient-to-br from-primary-600 via-accent-600 to-trust-600">
+        <section className="section-padding bg-paper blueprint-grid">
           <div className="section-container">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -620,24 +628,24 @@ export default function TaborChytrychTechnologiiClient({
               viewport={{ once: true }}
               className="max-w-3xl mx-auto text-center"
             >
-              <h2 className="heading-2 text-white mb-6">
+              <h2 className="heading-2 text-ink mb-6">
                 Připravte své dítě na budoucnost
               </h2>
-              <p className="text-xl text-white/90 mb-8">
+              <p className="text-xl text-ink-500 mb-8">
                 3D tisk, programování a virtuální realita – technologie, které budou formovat svět.
                 Ať je vaše dítě součástí.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <a
                   href="#terminy"
-                  className="inline-flex items-center justify-center px-8 py-4 bg-white hover:bg-gray-100 text-primary-600 font-semibold rounded-xl transition-all duration-300"
+                  className="btn-primary px-8 py-4"
                 >
                   Vybrat termín
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </a>
                 <Link
                   href="/kontakt"
-                  className="inline-flex items-center justify-center px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl border border-white/20 transition-all duration-300"
+                  className="btn-outline px-8 py-4"
                 >
                   Máte dotazy?
                 </Link>

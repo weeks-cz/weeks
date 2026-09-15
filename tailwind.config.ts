@@ -9,6 +9,17 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        // Maker lab neutrals
+        paper: {
+          DEFAULT: '#FAFAF7',
+          soft: '#F4F4EE',
+        },
+        ink: {
+          DEFAULT: '#0C0E1A',
+          700: '#232741',
+          500: '#4A4F6A',
+          300: '#9DA2BC',
+        },
         // Primary - Tech/Energy
         primary: {
           50: '#EEF2FF',
@@ -63,8 +74,14 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: ['var(--font-dm-sans)', 'system-ui', 'sans-serif'],
-        display: ['var(--font-outfit)', 'var(--font-dm-sans)', 'system-ui', 'sans-serif'],
+        sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
+        display: ['var(--font-display)', 'var(--font-sans)', 'system-ui', 'sans-serif'],
+        mono: ['var(--font-mono)', 'ui-monospace', 'monospace'],
+      },
+      boxShadow: {
+        'hard': '4px 4px 0 0 #0C0E1A',
+        'hard-sm': '2px 2px 0 0 #0C0E1A',
+        'hard-amber': '4px 4px 0 0 #D97706',
       },
       animation: {
         'fade-in': 'fadeIn 0.5s ease-in-out',

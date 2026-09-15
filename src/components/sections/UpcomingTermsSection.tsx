@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { ArrowRight, Calendar, Clock } from 'lucide-react'
+import { ArrowRight, Calendar } from 'lucide-react'
 import Link from 'next/link'
 import { useEffect } from 'react'
 import { sendGAEvent } from '@next/third-parties/google'
@@ -9,9 +9,9 @@ import { trackRegistrationClick } from '@/lib/analytics'
 import type { TermDisplay } from '@/lib/camps'
 
 const campMeta: Record<string, { label: string; href: string; campLabel: string; colors: { bg: string; text: string }; campType: 'weekend' | 'oneday' }> = {
-  'tech':    { label: 'Tábor chytrých technologií', href: '/tabor-chytrych-technologii', campLabel: 'Tábor chytrých technologií', colors: { bg: 'bg-accent-500/20', text: 'text-accent-300' }, campType: 'weekend' },
-  '3d-tisk': { label: '3D tisk',                    href: '/tabor-3d-tisk',              campLabel: '3D tisk',                   colors: { bg: 'bg-primary-400/20', text: 'text-primary-300' }, campType: 'oneday' },
-  'iot':     { label: 'IoT & elektronika',          href: '/tabor-iot',                  campLabel: 'IoT & elektronika',         colors: { bg: 'bg-trust-400/20', text: 'text-trust-300' }, campType: 'oneday' },
+  'tech':    { label: 'Tábor chytrých technologií', href: '/tabor-chytrych-technologii', campLabel: 'Tábor chytrých technologií', colors: { bg: 'bg-accent-50', text: 'text-accent-700' }, campType: 'weekend' },
+  '3d-tisk': { label: '3D tisk',                    href: '/tabor-3d-tisk',              campLabel: '3D tisk',                   colors: { bg: 'bg-primary-50', text: 'text-primary-700' }, campType: 'oneday' },
+  'iot':     { label: 'IoT & elektronika',          href: '/tabor-iot',                  campLabel: 'IoT & elektronika',         colors: { bg: 'bg-trust-50', text: 'text-trust-700' }, campType: 'oneday' },
 }
 
 function shortDateLabel(termin: TermDisplay): string {
@@ -47,9 +47,9 @@ function getUrgency(dateStr: string): { label: string; className: string } | nul
   const diffDays = Math.round((target.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
 
   if (diffDays < 0) return null
-  if (diffDays === 0) return { label: 'Dnes!', className: 'bg-cta-500 text-gray-900' }
-  if (diffDays <= 6) return { label: 'Poslední dny!', className: 'bg-red-500 text-white animate-pulse' }
-  if (diffDays <= 21) return { label: `za ${diffDays} dní`, className: 'bg-cta-500/20 text-cta-300' }
+  if (diffDays === 0) return { label: 'Dnes!', className: 'bg-cta-500 text-ink border border-ink' }
+  if (diffDays <= 6) return { label: 'Poslední dny!', className: 'bg-red-500 text-white border border-ink animate-pulse' }
+  if (diffDays <= 21) return { label: `za ${diffDays} dní`, className: 'bg-cta-100 text-cta-700 border border-cta-600/30' }
   return null
 }
 
@@ -96,40 +96,37 @@ export function UpcomingTermsSection({ terms }: { terms: TermDisplay[] }) {
   }
 
   return (
-    <section id="prihlasit" className="section-padding bg-gradient-to-br from-primary-600 to-primary-800">
+    <section id="prihlasit" className="section-padding bg-paper blueprint-grid">
       <div className="section-container">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           onViewportEnter={() => sendGAEvent('event', 'view_homepage_terminy', {})}
-          className="text-center mb-10"
+          className="max-w-3xl mb-10"
         >
           {usable.length > 0 && (
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full text-sm font-medium text-white/80 mb-6">
-              <Calendar className="w-4 h-4" />
+            <p className="mono-label mb-4 flex items-center gap-2">
+              <Calendar className="w-4 h-4" aria-hidden="true" />
               {usable.length} {usable.length === 1 ? 'termín' : usable.length < 5 ? 'termíny' : 'termínů'} s otevřenou registrací
-            </div>
+            </p>
           )}
-          <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
-            Nejbližší{' '}
-            <span className="bg-gradient-to-r from-cta-400 to-cta-300 bg-clip-text text-transparent">
-              termíny
-            </span>
+          <h2 className="heading-2 text-ink mb-4">
+            Nejbližší <span className="text-primary-600">termíny</span>
           </h2>
-          <p className="text-lg text-white/70 max-w-2xl mx-auto">
+          <p className="text-lg text-ink-500">
             Vyberte si a přihlaste se — registrace přes DDM Praha 6
           </p>
         </motion.div>
 
-        <div className="max-w-4xl mx-auto space-y-3">
+        <div className="max-w-4xl space-y-3">
           {shown.map((term, index) => {
             const meta = campMeta[term.program] ?? campMeta['3d-tisk']
             const colors = meta.colors
             const hasLink = !!term.registrationUrl && term.status === 'open_with_link'
             const marker = hasLink
               ? getUrgency(term.startDate)
-              : { label: 'Nově', className: 'bg-cta-400 text-gray-900' }
+              : { label: 'Nově', className: 'bg-cta-400 text-ink border border-ink' }
             const badgeLabel = `${term.dayCount} ${daysWord(term.dayCount)}`
             const dateLabel = shortDateLabel(term)
 
@@ -142,7 +139,7 @@ export function UpcomingTermsSection({ terms }: { terms: TermDisplay[] }) {
                 data-fb-lead-name={fb?.name}
                 data-fb-lead-category={fb?.category}
                 onClick={() => handleClick(term)}
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-cta-500 hover:bg-cta-400 text-gray-900 font-semibold rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-cta-500/30 text-sm flex-shrink-0"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-cta-500 hover:bg-cta-400 text-ink font-semibold border border-ink rounded-md shadow-hard-sm hover:shadow-hard hover:-translate-y-0.5 hover:-translate-x-0.5 transition-all duration-200 text-sm flex-shrink-0"
               >
                 Přihlásit se
                 <ArrowRight className="w-4 h-4" />
@@ -150,7 +147,7 @@ export function UpcomingTermsSection({ terms }: { terms: TermDisplay[] }) {
             ) : (
               <Link
                 href={`${meta.href}#terminy`}
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/15 hover:bg-white/25 text-white font-semibold rounded-xl transition-colors text-sm flex-shrink-0"
+                className="inline-flex items-center gap-2 px-5 py-2.5 border border-ink text-ink hover:bg-ink hover:text-paper font-semibold rounded-md transition-colors text-sm flex-shrink-0"
               >
                 Zjistit víc
                 <ArrowRight className="w-4 h-4" />
@@ -164,29 +161,28 @@ export function UpcomingTermsSection({ terms }: { terms: TermDisplay[] }) {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.05 }}
-                className="bg-white/10 backdrop-blur-sm rounded-2xl border border-white/10 hover:border-white/20 transition-colors"
+                className="card-maker"
               >
                 {/* Desktop layout */}
                 <div className="hidden md:flex items-center gap-4 p-4">
-                  <div className="flex items-center gap-3 w-52 flex-shrink-0">
-                    <Clock className="w-4 h-4 text-white/50 flex-shrink-0" />
-                    <span className="text-white font-medium text-sm">{dateLabel}</span>
+                  <div className="w-44 flex-shrink-0 border-r border-ink/15 pr-4">
+                    <span className="font-mono text-sm font-medium text-ink">{dateLabel}</span>
                   </div>
 
                   <Link href={meta.href} className="flex items-center gap-3 flex-1 min-w-0 group">
-                    <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${colors.bg} ${colors.text} flex-shrink-0`}>
+                    <span className={`px-2.5 py-1 rounded-sm font-mono text-xs font-medium ${colors.bg} ${colors.text} flex-shrink-0`}>
                       {badgeLabel}
                     </span>
-                    <span className="text-white font-semibold truncate group-hover:text-cta-300 transition-colors">
+                    <span className="font-display text-ink font-semibold truncate group-hover:text-primary-600 transition-colors">
                       {meta.campLabel}
                     </span>
                   </Link>
 
-                  <span className="text-white/70 text-sm font-medium flex-shrink-0">{priceLabel(term.price)}</span>
+                  <span className="font-mono text-ink-500 text-sm flex-shrink-0">{priceLabel(term.price)}</span>
 
                   {marker && (
                     <span
-                      className={`px-2.5 py-1 rounded-full text-xs font-bold ${marker.className} flex-shrink-0`}
+                      className={`px-2.5 py-1 rounded-sm font-mono text-xs font-bold ${marker.className} flex-shrink-0`}
                       role="status"
                     >
                       {marker.label}
@@ -199,13 +195,10 @@ export function UpcomingTermsSection({ terms }: { terms: TermDisplay[] }) {
                 {/* Mobile layout */}
                 <div className="md:hidden p-4 space-y-3">
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <Clock className="w-4 h-4 text-white/50" />
-                      <span className="text-white font-medium text-sm">{dateLabel}</span>
-                    </div>
+                    <span className="font-mono text-sm font-medium text-ink">{dateLabel}</span>
                     {marker && (
                       <span
-                        className={`px-2.5 py-1 rounded-full text-xs font-bold ${marker.className}`}
+                        className={`px-2.5 py-1 rounded-sm font-mono text-xs font-bold ${marker.className}`}
                         role="status"
                       >
                         {marker.label}
@@ -214,16 +207,16 @@ export function UpcomingTermsSection({ terms }: { terms: TermDisplay[] }) {
                   </div>
 
                   <div className="flex items-center gap-2">
-                    <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${colors.bg} ${colors.text}`}>
+                    <span className={`px-2.5 py-1 rounded-sm font-mono text-xs font-medium ${colors.bg} ${colors.text}`}>
                       {badgeLabel}
                     </span>
-                    <Link href={meta.href} className="text-white font-semibold text-sm hover:text-cta-300 transition-colors truncate">
+                    <Link href={meta.href} className="font-display text-ink font-semibold text-sm hover:text-primary-600 transition-colors truncate">
                       {meta.campLabel}
                     </Link>
                   </div>
 
                   <div className="flex items-center justify-between">
-                    <span className="text-white/70 text-sm font-medium">{priceLabel(term.price)}</span>
+                    <span className="font-mono text-ink-500 text-sm">{priceLabel(term.price)}</span>
                     {cta}
                   </div>
                 </div>

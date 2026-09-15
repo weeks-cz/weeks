@@ -88,7 +88,7 @@ export function RegistrationConfirmation({ registrationId, token }: Registration
       <div className="max-w-lg mx-auto text-center py-20">
         <XCircle className="w-16 h-16 text-red-400 mx-auto mb-4" />
         <h1 className="heading-2 mb-2">Registrace nenalezena</h1>
-        <p className="text-gray-600 mb-6">{error || 'Neplatný odkaz na registraci.'}</p>
+        <p className="text-ink-500 mb-6">{error || 'Neplatný odkaz na registraci.'}</p>
         <Link href="/" className="btn-primary">Zpět na hlavní stránku</Link>
       </div>
     )
@@ -118,7 +118,7 @@ export function RegistrationConfirmation({ registrationId, token }: Registration
         <h1 className="heading-2 mb-2">
           {isPaid ? 'Děkujeme za registraci!' : isPending ? 'Čeká na platbu' : 'Registrace zrušena'}
         </h1>
-        <p className="text-gray-600">
+        <p className="text-ink-500">
           {isPaid
             ? 'Registraci i platbu jsme zaznamenali. Potvrzení a daňový doklad jsme vám poslali e-mailem — zkontrolujte prosím i složku se spamem. S dotazy se ozvěte na info@weeks.cz.'
             : isPending
@@ -128,37 +128,37 @@ export function RegistrationConfirmation({ registrationId, token }: Registration
       </div>
 
       {/* Details */}
-      <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm space-y-4">
-        <div className="flex justify-between items-center pb-4 border-b border-gray-100">
-          <span className="text-sm text-gray-500">Stav</span>
-          <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-            isPaid ? 'bg-trust-50 text-trust-700' : isPending ? 'bg-amber-50 text-amber-700' : 'bg-red-50 text-red-700'
+      <div className="bg-paper rounded-md border border-ink p-6 space-y-4">
+        <div className="flex justify-between items-center pb-4 border-b border-ink/15">
+          <span className="text-sm text-ink-500">Stav</span>
+          <span className={`px-3 py-1 rounded-sm text-sm font-medium border ${
+            isPaid ? 'border-trust-300 bg-trust-50 text-trust-600' : isPending ? 'border-amber-300 bg-amber-50 text-amber-600' : 'border-red-300 bg-red-50 text-red-600'
           }`}>
             {isPaid ? 'Zaplaceno' : isPending ? 'Čeká na platbu' : 'Zrušeno'}
           </span>
         </div>
         <div className="grid grid-cols-2 gap-4 text-sm">
           <div>
-            <p className="text-gray-500">Dítě</p>
-            <p className="font-medium text-gray-900">{registration.child_name}</p>
+            <p className="text-ink-500">Dítě</p>
+            <p className="font-medium text-ink">{registration.child_name}</p>
           </div>
           <div>
-            <p className="text-gray-500">Program</p>
-            <p className="font-medium text-gray-900">{registration.program}</p>
+            <p className="text-ink-500">Program</p>
+            <p className="font-medium text-ink">{registration.program}</p>
           </div>
           <div>
-            <p className="text-gray-500">Termín</p>
-            <p className="font-medium text-gray-900">{new Date(registration.term_start).toLocaleDateString('cs-CZ', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+            <p className="text-ink-500">Termín</p>
+            <p className="font-medium text-ink">{new Date(registration.term_start).toLocaleDateString('cs-CZ', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
           </div>
           <div>
-            <p className="text-gray-500">Částka</p>
-            <p className="font-medium text-gray-900">{registration.payment_amount?.toLocaleString('cs-CZ')} Kč</p>
+            <p className="text-ink-500">Částka</p>
+            <p className="font-medium text-ink font-mono">{registration.payment_amount?.toLocaleString('cs-CZ')} Kč</p>
           </div>
         </div>
-        <div className="pt-4 border-t border-gray-100 text-sm">
-          <p className="text-gray-500">Zákonný zástupce</p>
-          <p className="font-medium text-gray-900">{registration.parent_name}</p>
-          <p className="text-gray-600">{registration.parent_email}</p>
+        <div className="pt-4 border-t border-ink/15 text-sm">
+          <p className="text-ink-500">Zákonný zástupce</p>
+          <p className="font-medium text-ink">{registration.parent_name}</p>
+          <p className="text-ink-500">{registration.parent_email}</p>
         </div>
       </div>
 

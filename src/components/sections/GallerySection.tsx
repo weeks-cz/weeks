@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useCallback, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, ChevronLeft, ChevronRight } from 'lucide-react'
@@ -25,6 +26,10 @@ export function GallerySection({
   subtitle = 'Podívejte se na ukázky projektů z našich táborů',
 }: GallerySectionProps) {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
+  // Portal až po mountu (SSR nemá document); zároveň lightbox unikne stacking
+  // contextům framer-motion sekcí, kvůli kterým se překrýval s headerem.
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
 
   const openLightbox = useCallback((index: number) => {
     setLightboxIndex(index)
@@ -56,12 +61,6 @@ export function GallerySection({
     return () => window.removeEventListener('keydown', handleKey)
   }, [lightboxIndex, closeLightbox, goNext, goPrev])
 
-  const gradientMap = {
-    primary: 'from-primary-500 to-primary-600',
-    trust: 'from-trust-500 to-trust-600',
-    accent: 'from-accent-500 to-accent-600',
-  }
-
   const textColorMap = {
     primary: 'text-primary-600',
     trust: 'text-trust-600',
@@ -70,21 +69,22 @@ export function GallerySection({
 
   return (
     <>
-      <section className="section-padding bg-gray-50">
+      <section className="section-padding bg-paper">
         <div className="section-container">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-10"
+            className="mb-10"
           >
-            <h2 className="heading-2 text-gray-900 mb-4">
+            <p className="mono-label mb-4">{title.split(' ').slice(0, -1).join(' ')}</p>
+            <h2 className="heading-2 text-ink mb-4">
               {title.split(' ').slice(0, -1).join(' ')}{' '}
               <span className={textColorMap[accentColor]}>
                 {title.split(' ').slice(-1)}
               </span>
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-lg text-ink-500 max-w-2xl">
               {subtitle}
             </p>
           </motion.div>
@@ -101,8 +101,8 @@ export function GallerySection({
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.05 }}
                   onClick={() => openLightbox(index)}
-                  className={`relative overflow-hidden rounded-2xl group cursor-pointer focus:outline-none focus:ring-2 focus:ring-${accentColor}-500 focus:ring-offset-2 ${
-                    isFeatured ? 'col-span-2 row-span-2' : ''
+                  className={`relative overflow-hidden rounded-md group cursor-pointer focus:outline-none focus:ring-2 focus:ring-${accentColor}-500 focus:ring-offset-2 border border-ink/15 ${
+                    isFeatured ? 'col-span-2 row-span-2 shadow-hard' : ''
                   }`}
                   aria-label={`Zobrazit: ${image.alt}`}
                 >
@@ -115,9 +115,6 @@ export function GallerySection({
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
-                    <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <p className="text-white text-sm font-medium">{image.alt}</p>
-                    </div>
                   </div>
                 </motion.button>
               )
@@ -126,14 +123,15 @@ export function GallerySection({
         </div>
       </section>
 
-      {/* Lightbox */}
+      {/* Lightbox — portál na body: nad headerem/nudge, mimo stacking contexty sekce */}
+      {mounted && createPortal(
       <AnimatePresence>
         {lightboxIndex !== null && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4"
+            className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-ink/95 backdrop-blur-sm p-4 pb-6"
             onClick={closeLightbox}
             role="dialog"
             aria-modal="true"
@@ -173,7 +171,7 @@ export function GallerySection({
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.2 }}
-              className="relative max-w-5xl max-h-[85vh] w-full h-full"
+              className="relative max-w-5xl w-full flex-1 min-h-0"
               onClick={(e) => e.stopPropagation()}
             >
               <Image
@@ -186,14 +184,16 @@ export function GallerySection({
               />
             </motion.div>
 
-            {/* Caption + counter */}
-            <div className="absolute bottom-4 left-0 right-0 text-center">
-              <p className="text-white/90 font-medium mb-1">{images[lightboxIndex].alt}</p>
-              <p className="text-white/50 text-sm">{lightboxIndex + 1} / {images.length}</p>
+            {/* Caption + counter — pod fotkou, ne přes ni */}
+            <div className="shrink-0 mt-4 text-center" onClick={(e) => e.stopPropagation()}>
+              <p className="text-paper font-medium mb-1">{images[lightboxIndex].alt}</p>
+              <p className="font-mono text-paper/50 text-sm">{lightboxIndex + 1} / {images.length}</p>
             </div>
           </motion.div>
         )}
-      </AnimatePresence>
+      </AnimatePresence>,
+      document.body
+      )}
     </>
   )
 }

@@ -99,41 +99,44 @@ export default function ContactPage() {
       <Header />
       <main>
         {/* Hero Section */}
-        <section className="relative pt-32 pb-16 overflow-hidden bg-gradient-to-br from-gray-50 via-primary-50/30 to-accent-50/20">
-          <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary-200/30 rounded-full blur-3xl" />
-            <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-accent-200/30 rounded-full blur-3xl" />
-          </div>
-
-          <div className="section-container relative z-10">
+        <section className="bg-paper blueprint-grid border-b border-ink/15 pt-32 pb-16">
+          <div className="section-container">
             <div className="max-w-4xl mx-auto text-center">
               {/* Breadcrumb */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="mb-8"
+                className="mb-8 font-mono text-xs uppercase tracking-[0.2em]"
               >
-                <Link href="/" className="text-gray-500 hover:text-primary-600 transition-colors">
+                <Link href="/" className="text-ink/50 hover:text-primary-600 transition-colors">
                   Domů
                 </Link>
-                <span className="text-gray-400 mx-2">/</span>
-                <span className="text-gray-900 font-medium">Kontakt</span>
+                <span className="text-ink/30 mx-2">/</span>
+                <span className="text-ink font-medium">Kontakt</span>
               </motion.div>
+
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mono-label mb-4"
+              >
+                Kontakt
+              </motion.p>
 
               <motion.h1
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="heading-1 text-gray-900 mb-6"
+                className="heading-1 text-ink mb-6"
               >
-                Kontaktujte <span className="text-gradient">nás</span>
+                Kontaktujte nás
               </motion.h1>
 
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="text-xl text-gray-600 max-w-2xl mx-auto"
+                className="text-xl text-ink-500 max-w-2xl mx-auto"
               >
                 Máte dotaz, který není v FAQ? Nebo chcete jen pozdravit?
                 Rádi vám pomůžeme!
@@ -143,7 +146,7 @@ export default function ContactPage() {
         </section>
 
         {/* Contact Info Cards */}
-        <section className="section-padding bg-white">
+        <section className="section-padding bg-paper">
           <div className="section-container">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto mb-16">
               {contactInfo.map((info, index) => (
@@ -153,12 +156,12 @@ export default function ContactPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
-                  className="p-6 bg-gray-50 rounded-2xl text-center"
+                  className="card-maker p-6 text-center"
                 >
-                  <div className="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+                  <div className="w-12 h-12 bg-white border border-ink/15 rounded-sm flex items-center justify-center mx-auto mb-4">
                     <info.icon className="w-6 h-6 text-primary-600" />
                   </div>
-                  <h3 className="font-semibold text-gray-900 mb-2">
+                  <h3 className="mono-label mb-2">
                     {info.title}
                   </h3>
                   {info.link ? (
@@ -166,14 +169,14 @@ export default function ContactPage() {
                       href={info.link}
                       target={info.link.startsWith('http') ? '_blank' : undefined}
                       rel={info.link.startsWith('http') ? 'noopener noreferrer' : undefined}
-                      className="text-primary-600 hover:underline font-medium block mb-1"
+                      className="font-mono text-primary-600 hover:underline block mb-1"
                     >
                       {info.value}
                     </a>
                   ) : (
-                    <p className="text-gray-900 font-medium mb-1">{info.value}</p>
+                    <p className="text-ink font-medium mb-1">{info.value}</p>
                   )}
-                  <p className="text-sm text-gray-500">{info.description}</p>
+                  <p className="text-sm text-ink-500">{info.description}</p>
                 </motion.div>
               ))}
             </div>
@@ -181,7 +184,7 @@ export default function ContactPage() {
         </section>
 
         {/* Main Contact Section - Form & Map */}
-        <section className="section-padding bg-gray-50">
+        <section className="section-padding bg-paper-soft border-y border-ink/15">
           <div className="section-container">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
               {/* Contact Form */}
@@ -190,62 +193,54 @@ export default function ContactPage() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
               >
-                <h2 className="heading-3 text-gray-900 mb-6">
+                <p className="mono-label mb-4">Formulář</p>
+                <h2 className="heading-2 text-ink mb-6">
                   Napište nám
                 </h2>
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label htmlFor="name" className="block text-sm font-medium text-ink mb-2">
                       Vaše jméno
                     </label>
-                    <div className="relative">
-                      <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                      <input
-                        type="text"
-                        id="name"
-                        required
-                        value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                        placeholder="Jan Novák"
-                      />
-                    </div>
+                    <input
+                      type="text"
+                      id="name"
+                      required
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      className="w-full px-4 py-3 rounded-md bg-white border border-ink/20 text-ink placeholder:text-ink/40 focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink"
+                      placeholder="Jan Novák"
+                    />
                   </div>
 
                   <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label htmlFor="email" className="block text-sm font-medium text-ink mb-2">
                       E-mail
                     </label>
-                    <div className="relative">
-                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                      <input
-                        type="email"
-                        id="email"
-                        required
-                        value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                        placeholder="jan.novak@email.cz"
-                      />
-                    </div>
+                    <input
+                      type="email"
+                      id="email"
+                      required
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      className="w-full px-4 py-3 rounded-md bg-white border border-ink/20 text-ink placeholder:text-ink/40 font-mono text-sm focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink"
+                      placeholder="jan.novak@email.cz"
+                    />
                   </div>
 
                   <div>
-                    <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label htmlFor="message" className="block text-sm font-medium text-ink mb-2">
                       Zpráva
                     </label>
-                    <div className="relative">
-                      <MessageSquare className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
-                      <textarea
-                        id="message"
-                        required
-                        value={formData.message}
-                        onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                        rows={6}
-                        className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
-                        placeholder="Vaše zpráva..."
-                      />
-                    </div>
+                    <textarea
+                      id="message"
+                      required
+                      value={formData.message}
+                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                      rows={6}
+                      className="w-full px-4 py-3 rounded-md bg-white border border-ink/20 text-ink placeholder:text-ink/40 focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink resize-none"
+                      placeholder="Vaše zpráva..."
+                    />
                   </div>
 
                   <div className="flex items-start gap-2">
@@ -255,11 +250,11 @@ export default function ContactPage() {
                       required
                       checked={formData.gdprConsent}
                       onChange={(e) => setFormData({ ...formData, gdprConsent: e.target.checked })}
-                      className="mt-1 w-4 h-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                      className="mt-0.5 w-4 h-4 rounded-sm border-ink/30"
                     />
-                    <label htmlFor="gdpr-contact" className="text-sm text-gray-600 cursor-pointer">
+                    <label htmlFor="gdpr-contact" className="text-sm text-ink-500 cursor-pointer">
                       Souhlasím se{' '}
-                      <Link href="/gdpr" className="underline hover:text-gray-900">
+                      <Link href="/gdpr" className="underline hover:text-ink">
                         zpracováním osobních údajů
                       </Link>{' '}
                       za účelem zpracování mého dotazu.
@@ -285,23 +280,23 @@ export default function ContactPage() {
                   </button>
 
                   {submitStatus === 'success' && (
-                    <div className="flex items-center gap-2 p-4 bg-green-50 text-green-700 rounded-lg" role="alert">
+                    <div className="flex items-center gap-2 p-4 bg-trust-50 text-trust-700 rounded-md border border-trust-200" role="alert">
                       <CheckCircle className="w-5 h-5 shrink-0" />
                       <p>Děkujeme za zprávu! Odpovíme vám co nejdříve.</p>
                     </div>
                   )}
 
                   {submitStatus === 'error' && (
-                    <div className="flex items-center gap-2 p-4 bg-red-50 text-red-700 rounded-lg" role="alert">
+                    <div className="flex items-center gap-2 p-4 bg-red-50 text-red-700 rounded-md border border-red-200" role="alert">
                       <AlertCircle className="w-5 h-5 shrink-0" />
                       <p>Něco se pokazilo. Zkuste to prosím znovu nebo nám napište na info@weeks.cz</p>
                     </div>
                   )}
 
                   {submitStatus === 'idle' && (
-                    <p className="text-sm text-gray-500 text-center">
+                    <p className="text-sm text-ink-500 text-center">
                       Odpovíme vám do 24 hodin v pracovních dnech.{' '}
-                      <Link href="/gdpr" className="underline hover:text-gray-700">
+                      <Link href="/gdpr" className="underline hover:text-ink">
                         Informace o zpracování údajů
                       </Link>
                     </p>
@@ -317,14 +312,14 @@ export default function ContactPage() {
                 className="space-y-8"
               >
                 {/* Venue Tabs + Map */}
-                <div className="bg-white rounded-2xl overflow-hidden">
-                  <div className="flex border-b border-gray-200">
+                <div className="card-maker overflow-hidden">
+                  <div className="flex border-b border-ink/15">
                     <button
                       onClick={() => setActiveVenue('hwlab')}
                       className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
                         activeVenue === 'hwlab'
-                          ? 'text-primary-600 border-b-2 border-primary-600 bg-primary-50/50'
-                          : 'text-gray-500 hover:text-gray-700'
+                          ? 'text-ink font-semibold border-b-2 border-ink'
+                          : 'text-ink-500 hover:text-ink'
                       }`}
                     >
                       HWLab Praha
@@ -333,8 +328,8 @@ export default function ContactPage() {
                       onClick={() => setActiveVenue('ddm')}
                       className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
                         activeVenue === 'ddm'
-                          ? 'text-primary-600 border-b-2 border-primary-600 bg-primary-50/50'
-                          : 'text-gray-500 hover:text-gray-700'
+                          ? 'text-ink font-semibold border-b-2 border-ink'
+                          : 'text-ink-500 hover:text-ink'
                       }`}
                     >
                       DDM Praha 6
@@ -367,12 +362,12 @@ export default function ContactPage() {
                       />
                     )}
                   </div>
-                  <div className="p-4 border-t border-gray-100">
+                  <div className="p-4 border-t border-ink/15 bg-white">
                     {activeVenue === 'hwlab' ? (
                       <div className="flex items-center justify-between">
                         <div>
-                          <p className="text-sm font-medium text-gray-900">Kongresové centrum Praha</p>
-                          <p className="text-xs text-gray-500">5. května 11, Praha 4 · Metro C – Vyšehrad</p>
+                          <p className="text-sm font-medium text-ink">Kongresové centrum Praha</p>
+                          <p className="text-xs text-ink-500">5. května 11, Praha 4 · Metro C – Vyšehrad</p>
                         </div>
                         <a
                           href="https://maps.google.com/?q=Kongresové+centrum+Praha,+5.+května+11"
@@ -387,8 +382,8 @@ export default function ContactPage() {
                     ) : (
                       <div className="flex items-center justify-between">
                         <div>
-                          <p className="text-sm font-medium text-gray-900">DDM Praha 6 – Bílá hora</p>
-                          <p className="text-xs text-gray-500">U Boroviček 5, Praha 6</p>
+                          <p className="text-sm font-medium text-ink">DDM Praha 6 – Bílá hora</p>
+                          <p className="text-xs text-ink-500">U Boroviček 5, Praha 6</p>
                         </div>
                         <a
                           href="https://maps.google.com/?q=DDM+Praha+6,+U+Boroviček+5,+Praha+6"
@@ -405,36 +400,36 @@ export default function ContactPage() {
                 </div>
 
                 {/* Provozní doba */}
-                <div className="bg-white rounded-2xl p-6">
-                  <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                <div className="card-maker p-6">
+                  <h3 className="font-display text-lg font-semibold text-ink mb-4 flex items-center gap-2">
                     <Clock className="w-5 h-5 text-primary-600" />
                     Provozní doba
                   </h3>
                   <div className="space-y-3">
                     {operatingHours.map((item, index) => (
-                      <div key={index} className="flex justify-between items-start pb-3 border-b border-gray-100 last:border-0">
+                      <div key={index} className="flex justify-between items-start pb-3 border-b border-ink/15 last:border-0">
                         <div>
-                          <p className="font-medium text-gray-900">{item.day}</p>
-                          <p className="text-sm text-gray-500">{item.note}</p>
+                          <p className="font-medium text-ink">{item.day}</p>
+                          <p className="text-sm text-ink-500">{item.note}</p>
                         </div>
-                        <p className="font-semibold text-primary-600">{item.hours}</p>
+                        <p className="font-semibold font-mono text-primary-600">{item.hours}</p>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                {/* Provozovatel */}
-                <div className="bg-primary-50 rounded-2xl p-6">
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                {/* Organizátor */}
+                <div className="card-maker p-6 border-ink bg-primary-50">
+                  <h3 className="font-display text-lg font-semibold text-ink mb-2">
                     Organizátor
                   </h3>
-                  <p className="text-gray-700 mb-1 font-medium">
+                  <p className="text-ink mb-1 font-medium">
                     DDM Praha 6
                   </p>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-ink-500">
                     Dům dětí a mládeže Praha 6
                   </p>
-                  <p className="text-sm text-gray-500 mt-3">
+                  <p className="text-sm text-ink-500 mt-3">
                     Weeks je projekt organizovaný DDM Praha 6,
                     institucí s více než 70letou tradicí v oblasti
                     volnočasových aktivit pro děti.
@@ -446,7 +441,7 @@ export default function ContactPage() {
         </section>
 
         {/* FAQ Preview */}
-        <section className="section-padding bg-white">
+        <section className="section-padding bg-paper">
           <div className="section-container">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -454,10 +449,11 @@ export default function ContactPage() {
               viewport={{ once: true }}
               className="max-w-4xl mx-auto"
             >
-              <h2 className="heading-2 text-gray-900 mb-4 text-center">
-                Často kladené <span className="text-gradient">otázky</span>
+              <p className="mono-label text-center mb-4">FAQ</p>
+              <h2 className="heading-2 text-ink mb-4 text-center">
+                Často kladené otázky
               </h2>
-              <p className="text-lg text-gray-600 mb-12 text-center">
+              <p className="text-lg text-ink-500 mb-12 text-center">
                 Odpovědi na nejčastější dotazy najdete v naší FAQ sekci
               </p>
 
@@ -469,12 +465,12 @@ export default function ContactPage() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: index * 0.1 }}
-                    className="bg-gray-50 rounded-2xl p-6"
+                    className="card-maker rounded-md p-6"
                   >
-                    <h3 className="font-semibold text-gray-900 mb-2">
+                    <h3 className="font-semibold text-ink mb-2">
                       {item.question}
                     </h3>
-                    <p className="text-gray-600">
+                    <p className="text-ink-500">
                       {item.answer}
                     </p>
                   </motion.div>
@@ -491,7 +487,7 @@ export default function ContactPage() {
         </section>
 
         {/* CTA Section */}
-        <section className="section-padding bg-gradient-to-br from-primary-600 to-accent-600">
+        <section className="section-padding bg-ink text-paper blueprint-grid-dark border-y border-ink">
           <div className="section-container">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -499,19 +495,19 @@ export default function ContactPage() {
               viewport={{ once: true }}
               className="max-w-3xl mx-auto text-center"
             >
-              <h2 className="heading-2 text-white mb-6">
+              <h2 className="heading-2 text-paper mb-6">
                 Stále máte dotazy?
               </h2>
-              <p className="text-xl text-white/90 mb-8">
+              <p className="text-xl text-paper/90 mb-8">
                 Neváhejte nás kontaktovat! Rádi vám poradíme a zodpovíme
                 jakékoliv otázky ohledně našich kempů.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="mailto:info@weeks.cz" className="btn-primary bg-white text-primary-600 hover:bg-gray-100">
+                <a href="mailto:info@weeks.cz" className="btn-primary">
                   <Mail className="w-5 h-5 mr-2" />
                   info@weeks.cz
                 </a>
-                <a href="tel:+420703046440" className="btn-outline border-white text-white hover:bg-white/10">
+                <a href="tel:+420703046440" className="border border-paper/30 text-paper hover:border-paper rounded-md px-6 py-3 font-semibold transition-all duration-200 inline-flex items-center justify-center">
                   <Phone className="w-5 h-5 mr-2" />
                   +420 703 046 440
                 </a>

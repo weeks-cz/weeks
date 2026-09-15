@@ -170,50 +170,55 @@ export default function ProgramPage() {
       <Header />
       <main>
         {/* Hero Section */}
-        <section className="relative pt-32 pb-16 overflow-hidden bg-gradient-to-br from-gray-50 via-primary-50/30 to-accent-50/20">
-          <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary-200/30 rounded-full blur-3xl" />
-            <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-accent-200/30 rounded-full blur-3xl" />
-          </div>
-
-          <div className="section-container relative z-10">
+        <section className="bg-paper blueprint-grid border-b border-ink/15 pt-32 pb-16">
+          <div className="section-container">
             <div className="max-w-4xl mx-auto text-center">
               {/* Breadcrumb */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="mb-8"
+                className="mb-8 font-mono text-xs uppercase tracking-[0.2em]"
               >
-                <Link href="/" className="text-gray-500 hover:text-primary-600 transition-colors">
+                <Link href="/" className="text-ink/50 hover:text-primary-600 transition-colors">
                   Domů
                 </Link>
-                <span className="text-gray-400 mx-2">/</span>
-                <span className="text-gray-900 font-medium">Programy</span>
+                <span className="text-ink/30 mx-2">/</span>
+                <span className="text-ink font-medium">Programy</span>
               </motion.div>
+
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mono-label mb-4"
+              >
+                7 programů
+              </motion.p>
 
               <motion.h1
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="heading-1 text-gray-900 mb-6"
+                className="heading-1 text-ink mb-6"
               >
-                Naše <span className="text-gradient">programy</span>
+                Vyberte si podle toho,
+                <br />
+                <span className="text-primary-600">co vaše dítě baví</span>
               </motion.h1>
 
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="text-xl text-gray-600 max-w-2xl mx-auto"
+                className="text-xl text-ink-500 max-w-2xl mx-auto"
               >
-                Víkendové i jednodenní tábory, 7 různých oblastí. Vyberte si podle toho, co vaše dítě baví – nebo zkuste Tábor chytrých technologií a objevte to společně.
+                Nebo zkuste Tábor chytrých technologií a objevte to společně.
               </motion.p>
             </div>
           </div>
         </section>
 
         {/* Programs Detail Section */}
-        <section className="section-padding bg-white">
+        <section className="section-padding bg-paper">
           <div className="section-container">
             <div className="space-y-24">
               {programs.map((program, index) => {
@@ -234,45 +239,45 @@ export default function ProgramPage() {
                       {/* Content */}
                       <div className={isEven ? '' : 'lg:col-start-2'}>
                         <div className="flex items-center gap-4 mb-6">
-                          <div className={`inline-flex items-center justify-center w-12 h-12 ${colors.bg} rounded-xl`}>
+                          <div className={`w-12 h-12 rounded-sm border border-ink flex items-center justify-center`}>
                             <program.icon className={`w-6 h-6 ${colors.icon}`} />
                           </div>
-                          <div className={`inline-flex items-center px-3 py-1 ${colors.badge} rounded-full text-sm font-medium`}>
+                          <span className="border border-ink rounded-sm font-mono text-xs font-medium px-2.5 py-1 text-ink">
                             {program.subtitle}
-                          </div>
+                          </span>
                         </div>
 
-                        <h2 className="heading-2 text-gray-900 mb-4">
+                        <h2 className="heading-2 text-ink mb-4">
                           {program.title}
                         </h2>
 
-                        <p className="text-lg text-gray-600 mb-4">
+                        <p className="text-lg text-ink-500 mb-4">
                           {program.description}
                         </p>
 
-                        <p className="text-gray-600 mb-8">
+                        <p className="text-ink-500 mb-8">
                           {program.extendedDescription}
                         </p>
 
                         {/* Co si odnesou */}
                         <div className="mb-8">
-                          <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                          <h3 className="font-display text-lg font-semibold text-ink mb-4">
                             Co si děti odnesou
                           </h3>
                           <ul className="space-y-3">
                             {program.learnings.map((learning, i) => (
                               <li key={i} className="flex items-start gap-3">
                                 <Check className={`w-5 h-5 ${colors.icon} flex-shrink-0 mt-0.5`} />
-                                <span className="text-gray-700">{learning}</span>
+                                <span className="text-ink">{learning}</span>
                               </li>
                             ))}
                           </ul>
                         </div>
 
                         {/* Cíl programu */}
-                        <div className="p-4 bg-gray-50 rounded-xl border border-gray-100 mb-6">
-                          <p className="text-sm font-semibold text-gray-900 mb-1">Cíl programu:</p>
-                          <p className="text-gray-600 text-sm">{program.ultimateGoal}</p>
+                        <div className="p-4 border border-ink/15 rounded-md bg-white mb-6">
+                          <p className="text-sm font-semibold text-ink mb-1">Cíl programu:</p>
+                          <p className="text-ink-500 text-sm">{program.ultimateGoal}</p>
                         </div>
 
                         {/* CTA Button */}
@@ -317,7 +322,7 @@ export default function ProgramPage() {
 
                       {/* Image Card */}
                       <div className={isEven ? '' : 'lg:col-start-1 lg:row-start-1'}>
-                        <div className="sticky top-24 rounded-2xl overflow-hidden shadow-xl">
+                        <div className="sticky top-24 rounded-md overflow-hidden border border-ink">
                           <div className="relative h-80 lg:h-96">
                             <Image
                               src={program.image}
@@ -326,27 +331,26 @@ export default function ProgramPage() {
                               sizes="(max-width: 1024px) 100vw, 50vw"
                               className="object-cover"
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-gray-900/40 to-transparent" />
                           </div>
-                          <div className={`p-6 bg-gradient-to-br ${colors.gradient} text-white`}>
+                          <div className="p-6 bg-white border-t border-ink">
                             {program.id === '3d-tisk' || program.id === 'iot' ? (
                               <>
-                                <p className="font-semibold mb-2">Jednodenní tábor</p>
-                                <p className="text-sm text-white/80">
+                                <p className="font-display font-semibold text-ink mb-2">Jednodenní tábor</p>
+                                <p className="text-sm text-ink-500">
                                   Sobota nebo neděle, 9:00–17:00. Vše potřebné zajistíme, stačí přijít s chutí tvořit.
                                 </p>
                               </>
                             ) : program.id === 'mix' ? (
                               <>
-                                <p className="font-semibold mb-2">Víkendový tábor</p>
-                                <p className="text-sm text-white/80">
+                                <p className="font-display font-semibold text-ink mb-2">Víkendový tábor</p>
+                                <p className="text-sm text-ink-500">
                                   Sobota + neděle, 9:00–17:00. 3D tisk, IoT a VR v jednom víkendu.
                                 </p>
                               </>
                             ) : (
                               <>
-                                <p className="font-semibold mb-2">Víkendový formát</p>
-                                <p className="text-sm text-white/80">
+                                <p className="font-display font-semibold text-ink mb-2">Víkendový formát</p>
+                                <p className="text-sm text-ink-500">
                                   Sobota + neděle, 9:00–17:00. Vše potřebné zajistíme, stačí přijít s chutí tvořit.
                                 </p>
                               </>
@@ -363,7 +367,7 @@ export default function ProgramPage() {
         </section>
 
         {/* CTA Section */}
-        <section className="section-padding bg-gradient-to-br from-primary-600 to-accent-600">
+        <section className="section-padding bg-ink text-paper blueprint-grid-dark border-y border-ink">
           <div className="section-container">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -371,19 +375,19 @@ export default function ProgramPage() {
               viewport={{ once: true }}
               className="max-w-3xl mx-auto text-center"
             >
-              <h2 className="heading-2 text-white mb-6">
+              <h2 className="heading-2 text-paper mb-6">
                 Nevíte si rady?
               </h2>
-              <p className="text-xl text-white/90 mb-8">
+              <p className="text-xl text-paper/90 mb-8">
                 Pokud si nejste jistí, který program je pro vaše dítě nejlepší,
                 doporučujeme začít s <strong>Táborem chytrých technologií</strong> - ochutná 3D tisk, IoT i VR a pak se může rozhodnout.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link href="/tabor-chytrych-technologii#terminy" className="btn-primary bg-white text-primary-600 hover:bg-gray-100" onClick={() => trackViewTerms('program_bottom_cta')}>
+                <Link href="/tabor-chytrych-technologii#terminy" className="btn-primary" onClick={() => trackViewTerms('program_bottom_cta')}>
                   Zobrazit termíny
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </Link>
-                <Link href="/kontakt" className="btn-outline border-white text-white hover:bg-white/10">
+                <Link href="/kontakt" className="border border-paper/30 text-paper hover:border-paper rounded-md px-6 py-3 font-semibold transition-all duration-200 inline-flex items-center justify-center">
                   Máte dotazy? Kontaktujte nás
                 </Link>
               </div>
