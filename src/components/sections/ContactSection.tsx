@@ -88,7 +88,7 @@ export function ContactSection() {
                     {SITE.phone}
                   </a>
                   <p className="text-sm text-ink-500 mt-1">
-                    Po-Pá 9:00-17:00
+                    Ozveme se co nejdříve
                   </p>
                 </div>
               </div>
