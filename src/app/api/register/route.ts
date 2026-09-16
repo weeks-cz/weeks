@@ -144,7 +144,11 @@ export async function POST(request: NextRequest) {
           customData: {
             value: trustedPrice,
             currency: 'CZK',
-            contentName: getTrustedProgramName(d.term_id),
+            // Turnus id, ne čitelný název tábora. Prohlížeč posílá stejnou
+            // událost se stejným `event_id`, takže Meta jednu z nich zahodí —
+            // když každá strana posílá jinou hodnotu, je výsledek závod. Sjednoceno
+            // na stabilním identifikátoru, který nezávisí na textaci názvu.
+            contentName: d.term_id,
           },
         })
       })

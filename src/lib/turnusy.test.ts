@@ -192,27 +192,39 @@ describe('validateTurnusy', () => {
   })
 })
 
-describe('TURNUSY — pojistka proti známé vadě s polem `program`', () => {
-  it('žádný ostrý turnus není otevřený, dokud registrace ukládá id zaměření místo id programu', () => {
-    // Komentář nad `TURNUSY` v src/lib/turnusy.ts vysvětluje vadu: registrace
-    // ukládá do pole `program` `turnus.focus[0]` (např. "3d-tisk"), ale
-    // e-maily, faktura z Fakturoidu, upomínka na platbu i nástupní list
-    // pořád hledají `program` jako id v `location.programs`. Server tohle
-    // pole na rozdíl od `location_id`, `payment_amount` a `term_start`/
-    // `term_end` neodvozuje — shoda nenastane a rodiči na faktuře i v
-    // e-mailu skončí holé "3d-tisk" místo názvu tábora.
+describe('TURNUSY — brzda před otevřením prodeje', () => {
+  it('žádný ostrý turnus není ve stavu "otevreno"', () => {
+    // POZOR — tenhle test už NEHLÍDÁ žádnou znalou vadu v kódu. Obě původní
+    // odůvodnění, kvůli kterým vznikl, jsou vyřešená (viz komentář nad
+    // `TURNUSY` v src/lib/turnusy.ts):
     //
-    // Tenhle test nekontroluje, jestli je vada opravená — jen hlídá, že se
-    // žádný turnus nepřepnul na "otevreno" dřív, než bude. Jakmile aparát
-    // (payment-pricing.ts a volající místa) přejde na turnusy, oprav to a
-    // teprve pak tenhle test uprav nebo smaž.
+    //  1. Dvojí zdroj ceny. /tabor, /tabor/[turnus] i `EventSchema` čtou cenu
+    //     výhradně z turnusů; `locations.ts` už do stránek ani do
+    //     strukturovaných dat nezasahuje.
+    //  2. Pole `program` v registraci. Název tábora na faktuře, v potvrzení,
+    //     v upomínce i v nástupním listu odvozuje server ze `term_id` přes
+    //     `getTrustedProgramName` (payment-pricing.ts). Uložená hodnota
+    //     `program` je už jen záloha pro staré registrace.
+    //
+    // Co tedy tenhle test je: záměrná brzda. Oba turnusy jsou `chystame`, bez
+    // termínu, ceny a (v Praze) i bez místa — přepnutí na `otevreno` je
+    // obchodní rozhodnutí, ne technický krok, a nemá se stát omylem.
+    //
+    // Skutečný další krok, až budou termíny jisté: doplň `start`, `end`,
+    // `priceKc` a `venueId`, projdi otevřené otázky pro majitele v reportu
+    // .superpowers/sdd/2026-09-15-web-2027-faze-3-ddm/zaverecna-vlna-report.md
+    // (mimo jiné chybějící výslovný souhlas se zdravotními údaji, který /gdpr
+    // slibuje, ale `consentsSchema` v src/lib/registration.ts nesbírá) — a
+    // teprve pak tenhle test vědomě smaž. Údaje, které musí mít otevřený
+    // turnus úplné, hlídá `validateTurnusy` výš a `isBookable` — ty zůstávají.
     const otevrene = TURNUSY.filter((t) => t.status === 'otevreno')
     expect(
       otevrene.map((t) => t.id),
-      'Turnus je ve stavu "otevreno", ale pole `program` v registraci pořád ukládá ' +
-        'id zaměření (turnus.focus[0]), ne id programu, které čekají e-maily, faktura ' +
-        'a nástupní list. Než tenhle turnus půjde koupit, oprav to podle komentáře ' +
-        'nad TURNUSY v src/lib/turnusy.ts (payment-pricing.ts a šest volajících míst).'
+      'Turnus je ve stavu "otevreno". Tenhle test nehlásí vadu v kódu — je to ' +
+        'záměrná brzda před otevřením prodeje. Pokud turnus opravdu má jít koupit, ' +
+        'zkontroluj otevřené otázky pro majitele (cena, výslovný souhlas se ' +
+        'zdravotními údaji podle čl. 9 GDPR, adresa místa konání) a pak tenhle ' +
+        'test vědomě smaž. Neopravuj pole `program` — to je už vyřešené.'
     ).toEqual([])
   })
 })

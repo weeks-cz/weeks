@@ -20,17 +20,21 @@ export const metadata: Metadata = {
     siteName: 'Weeks',
     images: [
       {
-        url: 'https://weeks.cz/opengraph-image',
+        url: `${SITE.url}/opengraph-image`,
         width: 1200,
         height: 630,
         alt: pageTitle,
       },
     ],
   },
+  // Twitter dědí ze stejného důvodu, z jakého potřebuje vlastní obrázek
+  // `openGraph` — vlastní blok na téhle úrovni jen mělce přebíjí kořenový.
+  // Dřívější oprava spravila jen `openGraph` a na tenhle blok zapomněla.
   twitter: {
     card: 'summary',
     title: pageTitle,
     description: pageDescription,
+    images: [`${SITE.url}/opengraph-image`],
   },
 }
 

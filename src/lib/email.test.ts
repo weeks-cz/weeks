@@ -44,7 +44,7 @@ describe('buildNastupniListEmail', () => {
     expect(r.html).toContain('+420 703 046 440')
   })
   // §27 VOP (/podminky) slibuje rodiči právě v nástupním listu, které dokumenty
-  // má přinést, a dodvá, že bez nich dítě nemůže nastoupit. Když to šablona
+  // má přinést, a dodává, že bez nich dítě nemůže nastoupit. Když to šablona
   // zamlčí, rodič se to dozví až u dveří.
   it('lists the mandatory documents §27 VOP promises in this e-mail', () => {
     expect(r.html).toContain('Prohlášení o bezinfekčnosti')

@@ -142,24 +142,10 @@ async function ensurePurchaseConversion(supabase: SupabaseClient, registrationId
 
   const { data: reg } = await supabase
     .from('registrations')
-    .select('parent_name, parent_email, parent_phone, parent_address, program, location_id, term_id, payment_amount')
+    .select('parent_name, parent_email, parent_phone, parent_address, location_id, term_id, payment_amount')
     .eq('id', registrationId)
     .single()
   if (!reg) return
-
-  let programName: string
-  try {
-    programName = getTrustedProgramName(reg.term_id as string)
-  } catch {
-    // Stará registrace na turnus, který už v konfiguraci není — uložená
-    // hodnota je to jediné, co o ní víme.
-    programName = reg.program as string
-    reportMessage('Meta Purchase event: term_id not found in turnusy, falling back to stored program', {
-      registrationId,
-      term_id: reg.term_id,
-      fallbackProgram: reg.program,
-    })
-  }
 
   await sendMetaEvent({
     eventName: 'Purchase',
@@ -173,7 +159,11 @@ async function ensurePurchaseConversion(supabase: SupabaseClient, registrationId
     customData: {
       value: reg.payment_amount as number,
       currency: 'CZK',
-      contentName: programName,
+      // Turnus id, ne čitelný název tábora — prohlížečový Purchase
+      // (`trackPaymentCompleted`) posílá pod stejným `event_id` totéž. Dokud
+      // se stránky lišily, rozhodoval o uložené hodnotě závod, kdo dorazil
+      // první. Identifikátor navíc nezávisí na textaci názvu tábora.
+      contentName: reg.term_id as string,
     },
   })
 }

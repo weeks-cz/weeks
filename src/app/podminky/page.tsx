@@ -23,11 +23,25 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'cs_CZ',
     siteName: 'Weeks',
+    // Next slučuje `openGraph` z metadat jen mělce — vlastní blok tu proto musí
+    // nést i obrázek, jinak přebije kořenový a náhled při sdílení zmizí.
+    images: [
+      {
+        url: `${SITE.url}/opengraph-image`,
+        width: 1200,
+        height: 630,
+        alt: pageTitle,
+      },
+    ],
   },
+  // Twitter dědí ze stejného důvodu jako `openGraph` — vlastní blok na téhle
+  // úrovni jen mělce přebíjí kořenový, takže bez obrázku se stránka sdílí
+  // bez náhledu.
   twitter: {
     card: 'summary',
     title: pageTitle,
     description: pageDescription,
+    images: [`${SITE.url}/opengraph-image`],
   },
   robots: {
     index: true,

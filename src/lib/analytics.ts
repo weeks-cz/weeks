@@ -214,7 +214,12 @@ export function trackRegistrationSubmit(params: {
   fbqEvent(
     'InitiateCheckout',
     {
-      content_name: `${params.program} ${params.termId}`,
+      // Samé `term_id`, stejně jako u Purchase níž a stejně jako serverová
+      // strana (/api/register). Předsazené `program` bylo id zaměření
+      // (`turnus.focus[0]`) — hodnota, kterou už nic dalšího nepovažuje za
+      // důvěryhodnou, a rozcházela se se serverem, který pod stejným
+      // `event_id` poslá svou verzi. GA4 výš `program` dostává dál zvlášť.
+      content_name: params.termId,
       value: params.value,
       currency: 'CZK',
     },
