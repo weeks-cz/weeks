@@ -40,7 +40,6 @@ export interface TermConfig {
   day: string
   status: 'confirmed' | 'preparing' | 'cancelled'
   registrationUrl?: string
-  ddmId?: string
   venue?: string
 }
 
@@ -67,7 +66,6 @@ export interface Location {
   isDefault: boolean
   organizer: Organizer
   venues: Venue[]
-  registrationType: 'ddm' | 'internal'
   contact: {
     phone: string
     email: string
@@ -145,7 +143,6 @@ export const LOCATIONS: Record<string, Location> = {
         mapQuery: 'DDM+Praha+6,+U+Boroviček+5,+Praha+6',
       },
     ],
-    registrationType: 'ddm',
     contact: { phone: '+420 703 046 440', email: 'info@weeks.cz' },
     seo: {
       titleSuffix: 'Praha',
@@ -197,7 +194,6 @@ export const LOCATIONS: Record<string, Location> = {
         mapQuery: 'Kreativní+centrum+Vary%26Te+Karlovy+Vary',
       },
     ],
-    registrationType: 'internal',
     contact: { phone: '+420 703 046 440', email: 'info@weeks.cz' },
     seo: {
       titleSuffix: 'Karlovy Vary',
