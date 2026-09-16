@@ -289,13 +289,18 @@ export default function TaborPage() {
                   { icon: Users, label: 'Max 15', sublabel: 'dětí' },
                   { icon: Utensils, label: 'Obědy', sublabel: 'v ceně' },
                 ].map((fact, i) => (
+                  // V `<dl>` musí `<dt>` (název údaje, tady drobný popisek)
+                  // stát v kódu před svým `<dd>`. Vizuálně patří pod hodnotu,
+                  // což řeší `flex flex-col` + `order-last` na `<dt>` — pořadí
+                  // na obrazovce se tím nemění, jen pořadí ve zdroji. Stejně
+                  // jako v přehledové tabulce na stránce turnusu.
                   <div
                     key={i}
-                    className={`p-4 border-ink/15 ${i % 2 === 1 ? 'border-l' : ''} ${i >= 2 ? 'border-t sm:border-t-0' : ''} ${i > 0 ? 'sm:border-l' : ''}`}
+                    className={`flex flex-col p-4 border-ink/15 ${i % 2 === 1 ? 'border-l' : ''} ${i >= 2 ? 'border-t sm:border-t-0' : ''} ${i > 0 ? 'sm:border-l' : ''}`}
                   >
                     <fact.icon className="w-4 h-4 text-primary-600 mb-2" aria-hidden="true" />
+                    <dt className="order-last font-mono text-xs text-ink/50 uppercase tracking-wider mt-0.5">{fact.sublabel}</dt>
                     <dd className="font-display text-sm font-semibold text-ink">{fact.label}</dd>
-                    <dt className="font-mono text-xs text-ink/50 uppercase tracking-wider mt-0.5">{fact.sublabel}</dt>
                   </div>
                 ))}
               </motion.dl>
