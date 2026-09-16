@@ -113,8 +113,11 @@ no more per-city pages, no more 7-program catalog.
 
 - **Data model**: `src/lib/turnusy.ts` exports `TURNUSY` (the source of truth
   for price, date, capacity, venue and status) plus `getTurnusy`, `getTurnus`,
-  `isBookable`. **Never** read price or date from `src/lib/locations.ts` —
-  that file is legacy and still only backs the registration/payment backend.
+  `isBookable`. `src/lib/locations.ts` is no longer a parallel content source:
+  after the cleanup it is a 45-line city→contact map (name, slug, and phone /
+  e-mail taken from `SITE`) used by the registration and e-mail flow. There is
+  no price, date, capacity, venue or program in it to read — those belong to
+  the turnus.
 - **Focus**: reusable content modules per turnus. `FocusId` in `src/lib/focus.ts`
   is `3d-tisk | iot | vr | herni-vyvoj` (3D tisk / IoT a elektronika /
   Virtuální realita / Herní vývoj). Both current turnusy use
@@ -176,7 +179,7 @@ Defined in `next.config.js` `redirects()` — permanent 301s, not app routes:
 ### Target Audience
 1. **Primary**: Parents - trust quality, safety, educational value
 2. **Secondary**: Teenagers (13-15) - find it cool/engaging
-3. **Tertiary**: venue partners (e.g. FabLab VARY&TE in Karlovy Vary, see `src/lib/cities.ts`) - professional representation
+3. **Tertiary**: the venues a turnus runs in (e.g. FabLab VARY&TE in Karlovy Vary, see `src/lib/cities.ts`) - professional representation. They are venues, not partners: no partnership with FabLab VARY&TE is signed, and this repo is public, so don't write one into it.
 
 ### Language
 All user-facing content is in Czech. Code/docs can be in English.
@@ -222,7 +225,7 @@ Real team members with specialized icons (`teamMembers` in `src/app/o-nas/page.t
 ## Contact Info
 
 Phone: +420 703 046 440 (confirmed April 2026)
-Source of truth: `SITE.phone` in `src/lib/site.ts`; also duplicated per-city in `src/lib/locations.ts` for the registration/e-mail flow.
+Source of truth: `SITE.phone` in `src/lib/site.ts`. `src/lib/locations.ts` reads it from there for the registration/e-mail flow — the number is written down once.
 
 ## DNS Configuration
 
@@ -246,6 +249,8 @@ TXT   @     google-site-verification=5epLUIbGFT0mcISr7rJZPFLcNlcAIFkQXe5cBY9nSdY
 
 ## Key Decisions Made (March 2026)
 
+_Historical record. Every decision below is about the product that no longer exists — weekend and one-day formats, `/program`, DDM registration links, the 2 990 Kč / 1 490 Kč prices. Kept to explain why things once looked the way they did; for what is live now see "Product: turnus-based summer camp" above._
+
 1. **One-day camps**: 3D tisk + IoT as standalone one-day format, 1 490 Kč
 2. **Visual balance**: Homepage presents all 3 camp formats equally (not MIX-dominant)
 3. **Hero headline**: "IT tábory" (not "Víkendové IT kempy") — covers both formats
@@ -268,6 +273,8 @@ TXT   @     google-site-verification=5epLUIbGFT0mcISr7rJZPFLcNlcAIFkQXe5cBY9nSdY
 20. **One-day schedules derived from MIX**: 3D tisk = MIX Saturday minus VR/overnight prints; IoT = MIX Sunday minus overnight prints
 
 ## Key Decisions Made (April 2026)
+
+_Historical record, same as the list above: the `/duben` ad landing page and the DDM registration flow it fed are both gone (`/kveten`, its successor, now 301s to `/tabor`)._
 
 1. **Ad landing page `/duben`**: Minimal conversion page for IG ads — no Header/Footer, just logo + 2 camp cards + DDM CTAs
 2. **Landing page URL**: `/duben` — short, reusable, memorable for IG bio/ads
