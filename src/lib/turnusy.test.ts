@@ -211,11 +211,12 @@ describe('TURNUSY — brzda před otevřením prodeje', () => {
     // obchodní rozhodnutí, ne technický krok, a nemá se stát omylem.
     //
     // Skutečný další krok, až budou termíny jisté: doplň `start`, `end`,
-    // `priceKc` a `venueId`, projdi otevřené otázky pro majitele v reportu
-    // .superpowers/sdd/2026-09-15-web-2027-faze-3-ddm/zaverecna-vlna-report.md
-    // (mimo jiné chybějící výslovný souhlas se zdravotními údaji, který /gdpr
-    // slibuje, ale `consentsSchema` v src/lib/registration.ts nesbírá) — a
-    // teprve pak tenhle test vědomě smaž. Údaje, které musí mít otevřený
+    // `priceKc` a `venueId` a projdi, co ještě otevření prodeje blokuje. Jeden
+    // takový blokátor je vidět přímo v repozitáři: /gdpr slibuje výslovný
+    // souhlas se zvláštní kategorií údajů (čl. 9 odst. 2 písm. a) GDPR) pro
+    // zdravotní omezení dítěte, ale `consentsSchema` v src/lib/registration.ts
+    // sbírá jen čtyři obecné souhlasy a `child_health_notes` žádný vlastní
+    // nemá. Teprve až bude jasno, smaž tenhle test vědomě. Údaje, které musí mít otevřený
     // turnus úplné, hlídá `validateTurnusy` výš a `isBookable` — ty zůstávají.
     const otevrene = TURNUSY.filter((t) => t.status === 'otevreno')
     expect(
