@@ -1,7 +1,8 @@
 import type { Metadata } from 'next'
+import { SITE } from '@/lib/site'
 
 const pageTitle = 'O nás'
-const pageDescription = 'Poznejte lektorský tým Weeks - zkušené lektory víkendových IT kempů pro děti. VR, programování, 3D tisk, grafika. Organizátor: DDM Praha 6. Místo konání: HWLab Praha.'
+const pageDescription = `Poznejte lektorský tým Weeks - týdenní příměstský IT tábor pro děti 9-15 let. VR, programování, 3D tisk, IoT s Arduinem. Pořádá ${SITE.legalName}, IČO ${SITE.ico}.`
 const pageUrl = 'https://weeks.cz/o-nas'
 
 export const metadata: Metadata = {
@@ -17,6 +18,14 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'cs_CZ',
     siteName: 'Weeks',
+    images: [
+      {
+        url: 'https://weeks.cz/opengraph-image',
+        width: 1200,
+        height: 630,
+        alt: pageTitle,
+      },
+    ],
   },
   twitter: {
     card: 'summary',

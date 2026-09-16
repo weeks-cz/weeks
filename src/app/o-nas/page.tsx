@@ -1,10 +1,14 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Target, Heart, Lightbulb, Users, ShieldCheck, Award, Building2, MapPin, Gamepad2, Code, Box, type LucideIcon } from 'lucide-react'
+import { Target, Heart, Lightbulb, Users, ShieldCheck, Award, MapPin, Gamepad2, Code, Box, type LucideIcon } from 'lucide-react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
+import { getTurnusy } from '@/lib/turnusy'
+import { getVenue, type VenueId } from '@/lib/cities'
+import { SITE } from '@/lib/site'
 
 const values = [
   {
@@ -29,41 +33,6 @@ const values = [
   },
 ]
 
-const partners = [
-  {
-    name: 'DDM Praha 6',
-    shortName: 'DDM',
-    color: 'primary',
-    role: 'Organizátor & místo konání',
-    description: 'Dům dětí a mládeže Praha 6 je organizátorem víkendových kempů Weeks a zároveň jedním ze dvou míst konání. Poskytuje osvětovou činnost již od roku 1953 a za více než 70 let působení se stal jednou z největších a nejrespektovanějších institucí pro volnočasové aktivity dětí a mládeže v České republice.',
-    details: [
-      'Více než 70 let zkušeností s prací s dětmi',
-      'Certifikovaní a proškolení instruktoři',
-      'Tisíce spokojených dětí a rodičů každý rok',
-      'Akreditované vzdělávací programy',
-      'Pojištění účastníků a bezpečnostní protokoly',
-    ],
-    location: 'U Boroviček 5, Praha 6',
-    established: '1953',
-  },
-  {
-    name: 'HWLab Praha',
-    shortName: 'HW',
-    color: 'accent',
-    role: 'Místo konání',
-    description: 'HWLab je moderní technologické centrum v Kongresovém centru Praha zaměřené na digitální výrobu, prototypování a vzdělávání. Disponuje profesionálním vybavením a prostory navrženými pro komfortní a bezpečnou práci.',
-    details: [
-      'Profesionální 3D tiskárny Prusa i3 MK3S+',
-      'VR headsety Meta Quest a HTC Vive',
-      'Vybavená elektronická dílna s Arduino a ESP32',
-      'Klimatizované prostory s kuchyňkou a odpočinkovými zónami',
-      'Výborná dostupnost MHD (metro C - Vyšehrad)',
-    ],
-    location: '5. května 11, Praha 4 - Nusle',
-    established: '2018',
-  },
-]
-
 const teamMembers = [
   {
     name: 'Kryštof Ježdík',
@@ -81,22 +50,19 @@ const teamMembers = [
     name: 'Štěpán Jurenka',
     role: '3D modelování & Tisk',
     icon: Box,
-    description: 'Expert na 3D technologie s pedagogickými zkušenostmi z DDM. Kombinuje kreativitu s technikou.',
+    description: 'Expert na 3D technologie. Kombinuje kreativitu s technikou.',
   },
 ]
 
-const colorClasses = {
-  primary: {
-    bg: 'bg-primary-100',
-    text: 'text-primary-600',
-  },
-  accent: {
-    bg: 'bg-accent-100',
-    text: 'text-accent-600',
-  },
-}
-
 export default function AboutPage() {
+  // Místa konání — jen ta, která nějaký turnus doopravdy má. Dnes vyjde jedna
+  // karta (FabLab VARY&TE u karlovarského turnusu), pražský turnus místo
+  // ještě nemá. Kód počítá s tím, že se to může časem změnit.
+  const venueIds = Array.from(
+    new Set(getTurnusy().map((t) => t.venueId).filter((id): id is VenueId => id !== null))
+  )
+  const venues = venueIds.map((id) => getVenue(id))
+
   return (
     <>
       <Header />
@@ -141,7 +107,7 @@ export default function AboutPage() {
                 transition={{ delay: 0.2 }}
                 className="text-xl text-ink-500 max-w-2xl mx-auto"
               >
-                Víkendové IT kempy, kde děti získávají praktické dovednosti
+                IT tábory, kde děti získávají praktické dovednosti
                 s nejmodernějšími technologiemi pod vedením zkušených lektorů.
               </motion.p>
             </div>
@@ -200,31 +166,30 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* Partners Section */}
-        <section className="section-padding bg-paper-soft border-y border-ink/15">
-          <div className="section-container">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-center mb-16"
-            >
-              <p className="mono-label mb-4">Partneři</p>
-              <h2 className="heading-2 text-ink mb-4">
-                Organizátor a zázemí
-              </h2>
-              <p className="text-xl text-ink-500 max-w-2xl mx-auto">
-                Weeks je projekt organizovaný DDM Praha 6, který probíhá
-                ve dvou lokalitách – HWLab Praha a DDM Praha 6 – Bílá hora.
-              </p>
-            </motion.div>
+        {/* Venue Section — dřív ukazovala cizí instituce (DDM, HWLab), dnes
+            reálná místa konání odvozená z turnusů, viz `venues` výše. */}
+        {venues.length > 0 && (
+          <section className="section-padding bg-paper-soft border-y border-ink/15">
+            <div className="section-container">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="text-center mb-16"
+              >
+                <p className="mono-label mb-4">Zázemí</p>
+                <h2 className="heading-2 text-ink mb-4">
+                  Kde tábory probíhají
+                </h2>
+                <p className="text-xl text-ink-500 max-w-2xl mx-auto">
+                  Tábory pořádá {SITE.legalName}, IČO {SITE.ico}.
+                </p>
+              </motion.div>
 
-            <div className="space-y-12 max-w-5xl mx-auto">
-              {partners.map((partner, index) => {
-                const colors = colorClasses[partner.color as keyof typeof colorClasses]
-                return (
+              <div className="space-y-12 max-w-5xl mx-auto">
+                {venues.map((venue, index) => (
                   <motion.div
-                    key={partner.name}
+                    key={venue.id}
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
@@ -232,58 +197,66 @@ export default function AboutPage() {
                     className="card-maker p-8 md:p-12"
                   >
                     <div className="flex flex-col md:flex-row gap-8">
-                      {/* Logo/Icon */}
+                      {/* Icon */}
                       <div className="flex-shrink-0">
-                        {'role' in partner && (
-                          <span className="border border-ink rounded-sm font-mono text-xs font-medium px-2.5 py-1 text-ink block mb-3 w-fit">
-                            {partner.role}
-                          </span>
-                        )}
-                        <div className={`w-24 h-24 border border-ink rounded-sm flex items-center justify-center bg-white`}>
-                          <span className={`text-3xl font-bold ${colors.text}`}>
-                            {partner.shortName}
-                          </span>
+                        <div className="w-24 h-24 border border-ink rounded-sm flex items-center justify-center bg-white">
+                          <MapPin className="w-10 h-10 text-primary-600" aria-hidden="true" />
                         </div>
                       </div>
 
                       {/* Content */}
                       <div className="flex-1">
-                        <div className="flex flex-col md:flex-row md:items-center justify-between mb-4">
+                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-4">
                           <h3 className="font-display text-2xl font-bold text-ink">
-                            {partner.name}
+                            {venue.fullName}
                           </h3>
-                          <div className="flex gap-4 text-sm text-ink-500 mt-2 md:mt-0">
-                            <div className="flex items-center gap-1">
-                              <MapPin className="w-4 h-4" />
-                              <span>{partner.location}</span>
-                            </div>
-                            <div className="flex items-center gap-1">
-                              <Building2 className="w-4 h-4" />
-                              <span>Od {partner.established}</span>
-                            </div>
+                          <div className="flex items-center gap-1 text-sm text-ink-500">
+                            <MapPin className="w-4 h-4" aria-hidden="true" />
+                            <span>{venue.street}, {venue.city} {venue.postalCode}</span>
                           </div>
                         </div>
 
                         <p className="text-ink-500 mb-6">
-                          {partner.description}
+                          {venue.description}
                         </p>
 
-                        <ul className="space-y-2">
-                          {partner.details.map((detail, i) => (
-                            <li key={i} className="flex items-start gap-2">
-                              <Award className={`w-5 h-5 ${colors.text} flex-shrink-0 mt-0.5`} />
-                              <span className="text-ink">{detail}</span>
-                            </li>
-                          ))}
-                        </ul>
+                        {venue.url && (
+                          <a
+                            href={venue.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 font-mono text-sm text-primary-600 hover:underline"
+                          >
+                            {venue.name} na webu
+                          </a>
+                        )}
                       </div>
                     </div>
+
+                    {venue.photos && venue.photos.length > 0 && (
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mt-8">
+                        {venue.photos.map((src, i) => (
+                          <div
+                            key={src}
+                            className="relative aspect-square border border-ink rounded-sm overflow-hidden"
+                          >
+                            <Image
+                              src={src}
+                              alt={`${venue.name} — fotografie prostoru ${i + 1}`}
+                              fill
+                              sizes="(max-width: 640px) 100vw, 33vw"
+                              className="object-cover"
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </motion.div>
-                )
-              })}
+                ))}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
 
         {/* Team Section */}
         <section className="section-padding bg-paper">
@@ -299,8 +272,8 @@ export default function AboutPage() {
                 Lektorský tým
               </h2>
               <p className="text-xl text-ink-500 max-w-2xl mx-auto">
-                Naši lektoři jsou odborníci z praxe s vášní pro výuku. Každý z nich prošel
-                školením DDM Praha 6, má ověřené reference a individuální přístup k dětem.
+                Naši lektoři jsou odborníci z praxe s vášní pro výuku. Jsou proškolení
+                v první pomoci a s dětmi pracují dlouhodobě.
               </p>
             </motion.div>
 
@@ -349,8 +322,8 @@ export default function AboutPage() {
 
               <div className="card-maker p-8 md:p-12">
                 <p className="text-lg text-ink-500 mb-8 text-center">
-                  Bezpečnost dětí je naší absolutní prioritou. Dodržujeme přísné protokoly
-                  a standardy stanovené DDM Praha 6.
+                  Bezpečnost dětí je naší absolutní prioritou. Lektoři jsou proškolení
+                  v první pomoci a s dětmi pracují dlouhodobě.
                 </p>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
