@@ -8,9 +8,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // Katalog programů, jednodenní tábory i karlovarská větev zanikly a trvale
   // přesměrovávají na svůj protějšek (viz next.config.js redirects) — do
   // sitemapy patří jen adresy, které skutečně vrací 200.
-  //
-  // /firmy do sitemapy nepatří — stránka zatím fyzicky neexistuje (odkaz na
-  // ni je jen rozcestník do budoucna, vzniká ve fázi 4).
   return [
     {
       url: baseUrl,
@@ -30,6 +27,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'weekly' as const,
       priority: 0.9,
     })),
+    {
+      url: `${baseUrl}/firmy`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
     {
       url: `${baseUrl}/eshop`,
       lastModified: currentDate,

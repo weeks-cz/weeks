@@ -48,6 +48,7 @@ npm run lint         # Currently broken — Next 16 removed `next lint`; needs a
       ...                    # registration, Comgate payment, cron (nástupní list, payment reminder — see vercel.json), shop and admin routes — predate this phase, see /src/app/api
     /tabor                  # THE product page: turnus grid, city filter, FAQ, interest form
     /tabor/[turnus]         # One page per turnus — slug carries the city, e.g. /tabor/karlovy-vary-leto-2027
+    /firmy                  # B2B page — three offers (kids' days for employees, workshops, partnerships) + one inquiry form, see "/firmy (phase 4)" below
     /o-nas                  # About page (team with real names) — organizer is Weeks s.r.o., see Project Overview
     /kontakt                # Contact page — same
     /gdpr                   # GDPR page — same
@@ -63,7 +64,7 @@ npm run lint         # Currently broken — Next 16 removed `next lint`; needs a
       NejblizsiTurnusy.tsx  # Homepage preview of nearest turnusy (slice of /tabor's list)
       USPSection.tsx        # Unique selling points
       KdeASKym.tsx          # Homepage "kde a s kým" — venues turnusy actually have + the 3-person team, no partner logos (replaces a deleted TrustSection that borrowed trust from DDM/HWLab)
-      Rozcesti.tsx          # Homepage "co Weeks dělá" — tábor / firmy (dead link, `/firmy` is phase 4) / e-shop / učebna
+      Rozcesti.tsx          # Homepage "co Weeks dělá" — tábor / firmy / e-shop / učebna
       FAQSection.tsx        # Accordion FAQ — reads `getSiteFaq()` from `@/lib/site`
       ContactSection.tsx    # Contact info + email signup (GDPR consent checkbox)
     /turnusy
@@ -71,6 +72,8 @@ npm run lint         # Currently broken — Next 16 removed `next lint`; needs a
       TurnusCard.tsx         # One turnus card — labels/CTA text come from `turnus-labels.ts`
       TurnusInterestForm.tsx # Non-binding "notify me" form for turnusy that aren't bookable yet (GDPR checkbox)
       VenueShowcase.tsx, ProjectGallery.tsx, SpotsLeft.tsx  # Venue photos, project gallery, live capacity badge
+    /firmy
+      FirmyPoptavka.tsx      # `/firmy` inquiry form — one form, three modes via `?typ=`, posts to `/api/contact`
     /providers
       MotionProvider.tsx    # Framer Motion reduced-motion support
     /seo
@@ -83,6 +86,7 @@ npm run lint         # Currently broken — Next 16 removed `next lint`; needs a
     turnusy.ts               # Turnus data + `getTurnusy`/`getTurnus`/`isBookable` — source of truth for price/date/capacity
     cities.ts                # City + venue registry — `getCity`/`getVenue`
     focus.ts                 # Focus modules (3d-tisk, iot, vr, ...) shown per turnus
+    firmy.ts                 # `/firmy` offer content (three B2B offers) — `getNabidky`/`getNabidka`, `reference` fields intentionally empty, see "/firmy (phase 4)" below
     site.ts                  # `SITE` (Weeks s.r.o., contact, legal) + shared FAQ
     locations.ts             # City → contact map (phone/e-mail) for the registration/e-mail flow only — price, date, capacity and venue belong to the turnus, not here (see the warning above `TURNUSY` in turnusy.ts)
     utils.ts                # cn() classnames utility
@@ -186,8 +190,33 @@ All user-facing content is in Czech. Code/docs can be in English.
 
 ## Current Status
 
-**Structural rebuild (single turnus-based product, Weeks s.r.o. as operator)**: Complete across the whole site — the product/marketing pages (`/`, `/tabor`, `/tabor/[turnus]`) as well as `/o-nas`, `/kontakt`, `/gdpr` and `/podminky` all describe Weeks s.r.o. as organizer; DDM Praha 6 and HWLab remain only as historical code comments explaining what was removed. `/firmy` (linked from the header, footer and the homepage's Rozcesti section) is a deliberately dead link — that's phase 4, not built yet.
+**Structural rebuild (single turnus-based product, Weeks s.r.o. as operator)**: Complete across the whole site — the product/marketing pages (`/`, `/tabor`, `/tabor/[turnus]`) as well as `/o-nas`, `/kontakt`, `/gdpr` and `/podminky` all describe Weeks s.r.o. as organizer; DDM Praha 6 and HWLab remain only as historical code comments explaining what was removed. `/firmy` (linked from the header, footer and the homepage's Rozcesti section) is built — see "`/firmy` (phase 4)" below.
 **Status**: No turnus is bookable yet — both turnusy are `chystame`, with no confirmed date/price/venue. Summer 2027 terms are expected around October 2026; until then the site's job is collecting contacts, not selling.
+
+### `/firmy` (phase 4)
+
+Phase 4 is done. `/firmy` is a real, statically-generated page: three B2B offers
+(`src/lib/firmy.ts` — days for employees' kids, workshops for teams, partnerships),
+each stating what Weeks provides vs. what the company needs to provide, plus one
+shared inquiry form (`FirmyPoptavka`) that posts to `/api/contact` with a `typ`
+field. The route turns a valid `typ` into `form_type: 'firmy'` for weeks-hub
+(`src/app/api/contact/contact-payload.ts`) — **weeks-hub must recognize that value
+or it silently drops the inquiry; that's a pre-deploy check, not a repo task.**
+
+**Weeks has not fulfilled a single corporate booking yet.** There is no price
+list, and the `reference` field on every offer in `src/lib/firmy.ts` is
+intentionally empty — the page says so outright (`PARTNERSTVI_ZATIM`) instead of a
+fabricated case study. Do not fill in a reference, a price, or a count of
+companies served anywhere in this repo without the founder supplying the real
+number.
+
+Phase 5 (not started) picks up what phase 4 deliberately left out: reviewing the
+off-season state, structured data (`EventSchema`/`BreadcrumbSchema` in
+`src/components/seo/StructuredData.tsx`) on `/tabor/[turnus]` and `/firmy` (today
+there's none), rendering the "rescued" `FocusModule` content (`printers`,
+`hardware`, `gallery`, `faq` in `src/lib/focus.ts` — pulled out of the deleted
+one-day pages in phase 2 but nothing reads them yet), and analytics events for
+`/firmy` (it currently has none).
 
 ### Social Media (December 2024)
 - [x] Instagram: @weeks.cz (bio complete)
