@@ -2,20 +2,20 @@
 
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { Sparkles } from 'lucide-react'
 
-// Reálné fotky toho, co si děti na táboře vyrobí a odnesou domů.
-// Nejsilnější přesvědčovací prvek pro rodiče — hmatatelný výsledek.
-const projects = [
-  { src: '/images/gallery/3d-dragon-desk.jpg', label: 'Vlastní 3D model', tag: '3D tisk' },
-  { src: '/images/gallery/3d-resin-figurines.jpg', label: 'Detailní figurky', tag: '3D tisk' },
-  { src: '/images/gallery/iot-plant-sensor.jpg', label: 'Chytrý senzor rostliny', tag: 'IoT' },
-  { src: '/images/gallery/3d-prints-collection.jpg', label: 'Hotové výtisky', tag: '3D tisk' },
-  { src: '/images/gallery/iot-arduino-breadboard.jpg', label: 'Vlastní Arduino obvod', tag: 'IoT' },
-  { src: '/images/gallery/3d-cat-lowpoly.jpg', label: 'Navržené modely', tag: '3D modelování' },
-]
+// Reálné fotky toho, co si děti na táboře vyrobí a odnesou domů. Položky
+// dodává volající stránka z modulů zaměření (`@/lib/focus`) — jediný zdroj
+// pravdy pro to, jaké fotky existují a ke kterému zaměření patří, ať se
+// nerozjedou dva seznamy stejných obrázků.
+export function ProjectGallery({
+  polozky,
+}: {
+  polozky?: Array<{ src: string; alt: string; tag?: string }>
+}) {
+  if (!polozky || polozky.length === 0) {
+    return null
+  }
 
-export function ProjectGallery() {
   return (
     <section className="section-padding bg-paper">
       <div className="section-container">
@@ -36,7 +36,7 @@ export function ProjectGallery() {
         </motion.div>
 
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 max-w-5xl mx-auto">
-          {projects.map((p, i) => (
+          {polozky.map((p, i) => (
             <motion.figure
               key={p.src}
               initial={{ opacity: 0, scale: 0.96 }}
@@ -47,17 +47,20 @@ export function ProjectGallery() {
             >
               <Image
                 src={p.src}
-                alt={p.label}
+                alt={p.alt}
                 fill
+                loading="lazy"
                 sizes="(max-width: 1024px) 50vw, 33vw"
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/10 to-transparent" />
               <figcaption className="absolute bottom-0 left-0 right-0 p-3 sm:p-4">
-                <span className="inline-block px-2 py-0.5 rounded-sm bg-white/20 backdrop-blur-sm border border-white/30 text-white/90 font-mono text-[10px] sm:text-xs font-medium mb-1">
-                  {p.tag}
-                </span>
-                <p className="text-white font-display font-semibold text-sm sm:text-base leading-tight">{p.label}</p>
+                {p.tag && (
+                  <span className="inline-block px-2 py-0.5 rounded-sm bg-white/20 backdrop-blur-sm border border-white/30 text-white/90 font-mono text-[10px] sm:text-xs font-medium mb-1">
+                    {p.tag}
+                  </span>
+                )}
+                <p className="text-white font-display font-semibold text-sm sm:text-base leading-tight">{p.alt}</p>
               </figcaption>
             </motion.figure>
           ))}

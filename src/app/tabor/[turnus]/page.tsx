@@ -13,6 +13,7 @@ import { TurnusCard } from '@/components/turnusy/TurnusCard'
 import { turnusLabels } from '@/components/turnusy/turnus-labels'
 import { VenueShowcase } from '@/components/turnusy/VenueShowcase'
 import { TurnusInterestForm } from '@/components/turnusy/TurnusInterestForm'
+import { ProjectGallery } from '@/components/turnusy/ProjectGallery'
 import { EventSchema, BreadcrumbSchema } from '@/components/seo/StructuredData'
 
 /**
@@ -105,6 +106,15 @@ export default async function TurnusPage({
   const venue = turnus.venueId ? getVenue(turnus.venueId) : null
   const dalsiTurnusy = getTurnusy().filter((t) => t.id !== turnus.id)
   const prodejny = isBookable(turnus)
+  // Otázky posbírané ze všech modulů zaměření, které tenhle turnus má —
+  // modul bez `faq` (vr, herni-vyvoj) prostě nepřidá nic.
+  const zamereniFaq = zamereni.flatMap((z) =>
+    (z.faq ?? []).map((item) => ({ ...item, modulId: z.id }))
+  )
+  // Fotky projektů ze stejných modulů, štítek u obrázku je název modulu.
+  const galerie = zamereni.flatMap((z) =>
+    (z.gallery ?? []).map((img) => ({ ...img, tag: z.name }))
+  )
 
   return (
     <>
@@ -215,6 +225,38 @@ export default async function TurnusPage({
                           </li>
                         ))}
                       </ul>
+
+                      {/* Vybavení — jen tiskárny (3D tisk) nebo hardware (IoT), moduly bez něj nic nepřidají */}
+                      {z.printers && z.printers.length > 0 && (
+                        <div className="mt-4 pt-4 border-t border-ink/15">
+                          <p className="mono-label mb-2">Tiskárny, na kterých děti pracují</p>
+                          <div className="flex flex-wrap gap-1.5">
+                            {z.printers.map((printer) => (
+                              <span
+                                key={printer}
+                                className="font-mono text-xs px-2 py-0.5 rounded-sm border border-ink/20 bg-white text-ink/60"
+                              >
+                                {printer}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      {z.hardware && z.hardware.length > 0 && (
+                        <div className="mt-4 pt-4 border-t border-ink/15">
+                          <p className="mono-label mb-2">Hardware</p>
+                          <div className="flex flex-wrap gap-1.5">
+                            {z.hardware.map((item) => (
+                              <span
+                                key={item}
+                                className="font-mono text-xs px-2 py-0.5 rounded-sm border border-ink/20 bg-white text-ink/60"
+                              >
+                                {item}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   )
                 })}
@@ -222,6 +264,34 @@ export default async function TurnusPage({
             </div>
           </section>
         )}
+
+        {/* FAQ k zaměření — otázky, které nesou moduly tohohle turnusu; prostý
+            seznam, ne akordeon (ten je vyhrazený pro `FAQSection`/`getSiteFaq()`) */}
+        {zamereniFaq.length > 0 && (
+          <section className="section-padding bg-paper-soft border-y border-ink/15">
+            <div className="section-container">
+              <div className="max-w-3xl mx-auto">
+                <div className="mb-10 text-center">
+                  <p className="mono-label mb-4">Časté dotazy k zaměření</p>
+                  <h2 className="heading-2 text-ink">
+                    Co rodiče <span className="text-primary-600">nejčastěji řeší</span>
+                  </h2>
+                </div>
+                <div className="space-y-4">
+                  {zamereniFaq.map((item) => (
+                    <div key={`${item.modulId}-${item.question}`} className="card-maker p-6">
+                      <h3 className="font-display font-semibold text-ink mb-2">{item.question}</h3>
+                      <p className="text-ink-500 text-sm leading-relaxed">{item.answer}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* Co si dítě odnese — galerie projektů ze zaměření tohohle turnusu */}
+        {galerie.length > 0 && <ProjectGallery polozky={galerie} />}
 
         {/* Místo konání — jen když ho turnus má */}
         {venue && <VenueShowcase venue={venue} />}

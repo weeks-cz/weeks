@@ -12,6 +12,7 @@ import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { getVenue, type VenueId } from '@/lib/cities'
 import { getTurnusy, isBookable, type Turnus } from '@/lib/turnusy'
+import { getFocusModules } from '@/lib/focus'
 import { SITE, getSiteFaq } from '@/lib/site'
 import { ProjectGallery } from '@/components/turnusy/ProjectGallery'
 import { VenueShowcase } from '@/components/turnusy/VenueShowcase'
@@ -170,6 +171,12 @@ export default function TaborPage() {
   // to první nalezené, aby to nebyla náhoda dané pořadím v datech.
   const venueIds = Array.from(
     new Set(turnusy.map((t) => t.venueId).filter((id): id is VenueId => id !== null))
+  )
+  // Galerie sbírá fotky ze všech zaměření, která má aspoň jeden turnus —
+  // ne ze všech čtyř `FOCUS_IDS`, dnešní `vr` žádné fotky nemá.
+  const zamereniIds = Array.from(new Set(turnusy.flatMap((t) => t.focus)))
+  const galerie = getFocusModules(zamereniIds).flatMap((z) =>
+    (z.gallery ?? []).map((img) => ({ ...img, tag: z.name }))
   )
   const faq = getSiteFaq()
 
@@ -498,8 +505,8 @@ export default function TaborPage() {
           </div>
         </section>
 
-        {/* Co si dítě odnese — galerie projektů */}
-        <ProjectGallery />
+        {/* Co si dítě odnese — galerie projektů ze všech zaměření na webu */}
+        <ProjectGallery polozky={galerie} />
 
         {/* Turnusy a registrace */}
         <section id="turnusy" className="section-padding bg-ink text-paper blueprint-grid-dark border-y border-ink scroll-mt-24">
