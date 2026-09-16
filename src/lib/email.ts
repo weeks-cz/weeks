@@ -145,14 +145,14 @@ export interface NastupniListParams {
  * Nástupní list.
  *
  * Provozní doba tábora je 8:00 – 17:00 — stejně jako na /kontakt, /tabor,
- * v `USPSection` a v §19 VOP. Dřív tu stálo 8:00 – 16:00, jenže VOP
- * opravňují pořadatele účtovat 150 Kč za každých započatých 30 minut po
+ * v `USPSection` a v §18 VOP. Dřív tu stálo 8:00 – 16:00, jenže VOP
+ * (§24) opravňují pořadatele účtovat 150 Kč za každých započatých 30 minut po
  * skončení programu: rodič se řídil e-mailem, pořadatel VOP a rozcházeli se
  * o hodinu, za kterou padala pokuta.
  *
  * Seznam povinných dokumentů je doslovně převzatý z §27 VOP
  * (`src/app/podminky/page.tsx`) — VOP je slibují rodiči právě v nástupním
- * listu, takže se tyhle dvě místa nesmí rozejít. Formulace se tu nevymýšlí
+ * listu, takže se tahle dvě místa nesmí rozejít. Formulace se tu nevymýšlí
  * nová; když se změní §27, musí se změnit i tahle šablona.
  */
 export function buildNastupniListEmail(p: NastupniListParams): { subject: string; html: string } {

@@ -506,9 +506,9 @@ export default function PodminkyPage() {
                     </p>
                   </div>
                   {/*
-                    Čl. 21.2 („Bankovní převod") je pryč celý. Uváděl číslo účtu
-                    2267467012/3030 včetně IBAN — účet, který nepatří pořadateli, jak
-                    ho identifikuje čl. 2 a čl. 17 tohoto dokumentu. Navíc si odporoval
+                    Čl. 21.2 („Bankovní převod") je pryč celý. Uváděl číslo cizího
+                    účtu včetně IBAN — účet, který nepatří pořadateli, jak ho
+                    identifikuje čl. 2 a čl. 17 tohoto dokumentu. Navíc si odporoval
                     s čl. 21.1 přímo nad ním: platba probíhá výhradně přes platební bránu
                     Comgate, žádný převod na účet pořadatele se nezadává ručně. Nové
                     číslo účtu se sem záměrně nedopisuje — to je údaj, který musí potvrdit
