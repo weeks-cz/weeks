@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { getTurnusy, isBookable, nejblizsiTurnusy } from '@/lib/turnusy'
+import { EventSchema } from '@/components/seo/StructuredData'
 import { TurnusCard } from '@/components/turnusy/TurnusCard'
 
 /**
@@ -26,6 +27,14 @@ export function NejblizsiTurnusy() {
   const vyprodano = !prodejny && vsechnyTurnusy.some((t) => t.status === 'plno')
 
   return (
+    <>
+      {/* Strukturovaná data úvodky vykresluje tatáž komponenta, která vykresluje
+          karty, a ze stejné proměnné. Dřív stála na úvodce samostatně a braly
+          se do nich VŠECHNY prodejné turnusy, zatímco vidět byly tři — dokud
+          jsou turnusy dva, nepozná se to, ale při vypsání termínů by Google
+          našel událost, která na stránce nestojí. Takhle se ty dva seznamy
+          nemají jak rozejít. */}
+      <EventSchema turnusy={turnusy} />
     <section className="section-padding bg-paper-soft border-y border-ink/15">
       <div className="section-container">
         <div className="max-w-3xl mb-12">
@@ -70,5 +79,6 @@ export function NejblizsiTurnusy() {
         )}
       </div>
     </section>
+    </>
   )
 }

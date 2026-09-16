@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
 import { describe, it, expect } from 'vitest'
 import { turnusyProSchema } from './schema-turnusy'
 import { nejblizsiTurnusy, type Turnus } from '@/lib/turnusy'
@@ -60,32 +62,40 @@ describe('turnusyProSchema', () => {
 /**
  * Vazba mezi tím, co úvodka ukazuje, a tím, co o sobě tvrdí vyhledávači.
  *
- * Úvodka vykresluje jen `nejblizsiTurnusy()` a ze stejného výřezu musí čerpat
- * i `EventSchema`. Dokud jsou turnusy dva, rozdíl není vidět — zlomí se to, až
- * jich bude víc než výřez, proto test pracuje s pěti vymyšlenými turnusy.
+ * Úvodka smí ve strukturovaných datech vypsat jen turnusy, které jsou na ní
+ * vidět. Dřív to hlídala dvě tvrzení nad jednou proměnnou — jenže
+ * `turnusyProSchema` je čistý `filter().map()` nad vstupem, takže „schema není
+ * delší než vstup" platí pro libovolný vstup a nemohlo spadnout nikdy. Revize
+ * to doložila mutací: vrácení chyby zpátky do `page.tsx` nechalo bránu zelenou.
+ *
+ * Vazba se proto nedrží testem, ale stavbou: schema vykresluje tatáž
+ * komponenta, která vykresluje karty, ze stejné proměnné. Test níž hlídá, že
+ * to tak zůstane — čte zdroj, protože komponentu v prostředí `node` (bez jsdom)
+ * vykreslit nejde.
  */
 describe('výřez turnusů pro úvodku', () => {
-  const petTurnusu: Turnus[] = [1, 2, 3, 4, 5].map((n) => ({
-    ...uplny,
-    id: `test-${n}`,
-    slug: `test-${n}`,
-    start: `2027-07-0${n}`,
-    end: `2027-07-0${n + 1}`,
-  }))
+  const zdroj = (cesta: string) =>
+    readFileSync(resolve(process.cwd(), cesta), 'utf8')
 
-  it('schema nevypíše víc turnusů, než kolik jich je na úvodce vidět', () => {
-    const videt = nejblizsiTurnusy(3, petTurnusu)
-    expect(videt).toHaveLength(3)
-    expect(turnusyProSchema(videt).length).toBeLessThanOrEqual(videt.length)
+  it('výřez opravdu ořezává', () => {
+    const petTurnusu: Turnus[] = [1, 2, 3, 4, 5].map((n) => ({
+      ...uplny,
+      id: `test-${n}`,
+      slug: `test-${n}`,
+      start: `2027-07-0${n}`,
+      end: `2027-07-0${n + 1}`,
+    }))
+    expect(nejblizsiTurnusy(3, petTurnusu)).toHaveLength(3)
   })
 
-  it('každý turnus ve schematu úvodky je na ní i vidět', () => {
-    const videt = nejblizsiTurnusy(3, petTurnusu)
-    const veSchematu = turnusyProSchema(videt)
-    // Pojistka, aby smyčka níž neprošla jen proto, že schema nic nevrátilo.
-    expect(veSchematu.length).toBeGreaterThan(0)
-    for (const { turnus } of veSchematu) {
-      expect(videt).toContain(turnus)
-    }
+  it('schema úvodky vykresluje komponenta s kartami, ze stejné proměnné', () => {
+    const komponenta = zdroj('src/components/sections/NejblizsiTurnusy.tsx')
+    expect(komponenta).toContain('const turnusy = nejblizsiTurnusy()')
+    expect(komponenta).toContain('<EventSchema turnusy={turnusy} />')
+  })
+
+  it('úvodka nevykresluje EventSchema samostatně', () => {
+    // Samostatné volání by bralo všechny prodejné turnusy, ne jen ty vidět.
+    expect(zdroj('src/app/page.tsx')).not.toContain('EventSchema')
   })
 })

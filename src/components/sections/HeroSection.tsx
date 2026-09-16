@@ -193,8 +193,7 @@ export function HeroSection() {
           >
             Týdenní příměstské tábory, kde si děti postaví vlastní věc — od 3D
             modelu po zařízení, které samy naprogramují. Profesionální
-            vybavení, zkušení instruktoři a projekty, které si Vaše dítě
-            odnese domů.
+            vybavení a zkušení instruktoři.
             <span className="text-ink font-medium"> Pro děti {ageLabel} let.</span>
           </motion.p>
 

@@ -17,8 +17,8 @@ const usps = [
   },
   {
     icon: Package,
-    title: 'Projekty, které si odnesou domů',
-    description: 'Učíme tvorbou, ne teorií. Každý tábor znamená dokončený projekt - vytištěný model, funkční elektroniku nebo nahrané aplikace.',
+    title: 'Hotové projekty, ne teorie',
+    description: 'Učíme tvorbou. Každý tábor znamená dokončený projekt — vytištěný model, funkční elektroniku nebo nahranou aplikaci. Co si dítě odváží domů a co zůstává v laboratoři, píšeme u každého zaměření.',
   },
   {
     icon: GraduationCap,
