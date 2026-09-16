@@ -51,7 +51,11 @@ export const metadata: Metadata = {
   bylo zadané, ale **účely, které jsou u jednotlivých údajů uvedené, jsou nově
   formulované** (identifikace smluvní strany, daňový doklad, ošetření dítěte,
   přizpůsobení zadání, celý blok vyzvedávání, popis souhlasů, poznámka
-  k objednávce, vyřízení dotazu z kontaktního formuláře). Účel zpracování je
+  k objednávce, vyřízení dotazu z kontaktního formuláře — a devátý: původní
+  „Stravovací omezení a alergie – pro zajištění bezpečnosti dítěte" a „Zdravotní
+  omezení – pouze pokud jsou relevantní pro bezpečnou účast" jsou sloučené do
+  jedné položky s účelem „bezpečnost **a stravování**"; u zvláštní kategorie
+  údajů váží rozšíření účelu víc než u jména nebo adresy). Účel zpracování je
   podle čl. 13 odst. 1 písm. c) GDPR údaj, kterým se správce váže — tyhle věty
   tedy nejsou přepis, ale nový závazek a čekají na kontrolu (otázka č. 11
   v reportu úkolu 8). Mimo oddíl 2 pocházejí všechny věty z předchozího znění
