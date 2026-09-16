@@ -6,7 +6,7 @@ This file provides guidance to Claude Code when working with this repository.
 
 **Weeks** is a website for a weekly summer příměstský (day) IT camp for children (ages 9-15) in Prague and Karlovy Vary, operated by **Weeks s.r.o.** — not DDM Praha 6. The old catalog of weekend/one-day camp formats and per-city pages is gone: there's now a single product (Monday–Friday, 8:00–17:00) sold as **turnusy** (terms), one per city, see `src/lib/turnusy.ts`. It appeals to two audiences: parents (who pay) and teenagers (who decide if they want to attend).
 
-The move off DDM Praha 6 only covers the product itself (site copy, structured data, the `SITE` object) — `/o-nas`, `/kontakt`, `/gdpr` and `/podminky` still describe DDM Praha 6 and HWLab as organizer/venue, and the registration backend (`src/lib/locations.ts`, `src/lib/ddm-scraper.ts`, confirmation e-mails) still assumes DDM. That migration is scoped for a later phase — don't read those pages/files as reflecting the current operator.
+The move off DDM Praha 6 now covers the whole site: `/o-nas`, `/kontakt`, `/gdpr` and `/podminky` all name **Weeks s.r.o.** (IČO 29984360) as organizer — DDM Praha 6 and HWLab survive only in code comments documenting what was removed and why. The registration backend no longer assumes DDM either: `src/lib/locations.ts` is now a 45-line city→contact map for the registration/e-mail flow (price, date, capacity and venue all belong to the turnus, not to a location), and the camp name on invoices and confirmation e-mails is derived server-side from the turnus (`getTrustedProgramName` in `src/lib/payment-pricing.ts`), not read from a DDM program catalog.
 
 **Live URL:** https://weeks.cz
 **GitHub:** https://github.com/weeks-cz/weeks (public; transferred from lxkask/weeks on 2026-05-09)
@@ -28,7 +28,7 @@ The move off DDM Praha 6 only covers the product itself (site copy, structured d
 npm run dev          # Start dev server at localhost:3000
 npm run build        # Create production build
 npm run start        # Start production server
-npm run lint         # Run ESLint
+npm run lint         # Currently broken — Next 16 removed `next lint`; needs a direct ESLint/Biome invocation instead
 ```
 
 ## Project Structure
@@ -45,14 +45,13 @@ npm run lint         # Run ESLint
     /api
       /waitlist/route.ts    # Interest/waitlist form API (Formspree)
       /contact/route.ts     # Contact form API
-      /cron/capacity-notify/route.ts  # Daily capacity check cron (Vercel)
-      ...                    # registration, Comgate payment, shop and admin routes — predate this phase, see /src/app/api
+      ...                    # registration, Comgate payment, cron (nástupní list, payment reminder — see vercel.json), shop and admin routes — predate this phase, see /src/app/api
     /tabor                  # THE product page: turnus grid, city filter, FAQ, interest form
     /tabor/[turnus]         # One page per turnus — slug carries the city, e.g. /tabor/karlovy-vary-leto-2027
-    /o-nas                  # About page (team with real names) — still describes DDM Praha 6/HWLab, see Project Overview
-    /kontakt                # Contact page — same DDM/HWLab caveat
-    /gdpr                   # GDPR page — same DDM/HWLab caveat
-    /podminky               # Terms page — same DDM/HWLab caveat
+    /o-nas                  # About page (team with real names) — organizer is Weeks s.r.o., see Project Overview
+    /kontakt                # Contact page — same
+    /gdpr                   # GDPR page — same
+    /podminky               # Terms page — same
     /eshop, /registrace, /platba, /go  # Shop, registration + Comgate payment flow, QR redirects — predate this phase
     /studio                 # Sanity Studio
   /components
@@ -62,8 +61,9 @@ npm run lint         # Run ESLint
     /sections
       HeroSection.tsx       # Homepage hero ("IT tábory, kde děti tvoří budoucnost")
       NejblizsiTurnusy.tsx  # Homepage preview of nearest turnusy (slice of /tabor's list)
-      Rozcesti.tsx          # Homepage "co Weeks dělá" — tábor / firmy / e-shop / učebna
       USPSection.tsx        # Unique selling points
+      KdeASKym.tsx          # Homepage "kde a s kým" — venues turnusy actually have + the 3-person team, no partner logos (replaces a deleted TrustSection that borrowed trust from DDM/HWLab)
+      Rozcesti.tsx          # Homepage "co Weeks dělá" — tábor / firmy (dead link, `/firmy` is phase 4) / e-shop / učebna
       FAQSection.tsx        # Accordion FAQ — reads `getSiteFaq()` from `@/lib/site`
       ContactSection.tsx    # Contact info + email signup (GDPR consent checkbox)
     /turnusy
@@ -78,12 +78,13 @@ npm run lint         # Run ESLint
     /ui
       CookieConsent.tsx     # GDPR cookie banner
       KVRegionNudge.tsx     # Geo-nudge for Karlovarsko visitors → /tabor?mesto=karlovy-vary
+      TickerStrip.tsx       # Scrolling topic strip on the homepage, right under the hero
   /lib
     turnusy.ts               # Turnus data + `getTurnusy`/`getTurnus`/`isBookable` — source of truth for price/date/capacity
     cities.ts                # City + venue registry — `getCity`/`getVenue`
     focus.ts                 # Focus modules (3d-tisk, iot, vr, ...) shown per turnus
     site.ts                  # `SITE` (Weeks s.r.o., contact, legal) + shared FAQ
-    locations.ts             # Legacy per-city/DDM content, still backing the registration/payment flow — see the warning above `TURNUSY` in turnusy.ts
+    locations.ts             # City → contact map (phone/e-mail) for the registration/e-mail flow only — price, date, capacity and venue belong to the turnus, not here (see the warning above `TURNUSY` in turnusy.ts)
     utils.ts                # cn() classnames utility
     analytics.ts            # GA4 + FB Pixel tracking
     ...                      # registration, Comgate payment, Fakturoid, e-mail — predate this phase, out of scope here
@@ -92,13 +93,12 @@ npm run lint         # Run ESLint
     /schemas                # CMS content schemas
 
 /docs
-  ROADMAP.md                # Project roadmap
-  UI_UX_SPEC.md             # UI/UX specification
-  CONTENT_CS.md             # Czech content reference
+  /superpowers              # Plans, specs and runbooks for work done in this repo. ROADMAP, UI/UX spec and content reference used to live here too — moved to the private weeks-internal repo, see "Repo & team workflow" below
 
 /public
-  /images/hwlab             # HWLab photos (still used by /o-nas, /kontakt — see Project Overview)
+  /images/hwlab             # Camp photos from the HWLab space, used by HeroSection on the homepage — the folder name is a leftover, HWLab itself is no longer organizer or venue (see Project Overview)
   /images/weeks-logo.png    # Logo
+  /fonts                    # Two static Bricolage Grotesque weights + OFL.txt license, vendored for opengraph-image.tsx (satori can't parse the variable Google Fonts file) — see public/fonts/README.md; the rest of the site loads fonts via next/font/google instead
   og-image-v2.jpg           # Superseded by `src/app/opengraph-image.tsx` — kept only for comparison, nothing links to it anymore
   favicon.ico               # Favicon (multi-size)
   apple-touch-icon.png      # Apple touch icon
@@ -116,7 +116,10 @@ no more per-city pages, no more 7-program catalog.
   for price, date, capacity, venue and status) plus `getTurnusy`, `getTurnus`,
   `isBookable`. **Never** read price or date from `src/lib/locations.ts` —
   that file is legacy and still only backs the registration/payment backend.
-- **Focus**: 3D tisk, 3D modelování, IoT s Arduinem per turnus (`src/lib/focus.ts`).
+- **Focus**: reusable content modules per turnus. `FocusId` in `src/lib/focus.ts`
+  is `3d-tisk | iot | vr | herni-vyvoj` (3D tisk / IoT a elektronika /
+  Virtuální realita / Herní vývoj). Both current turnusy use
+  `['3d-tisk', 'iot', 'vr']`.
 - **Age**: 9–15 (`turnus.ageRange`, currently `'9-15'` for both turnusy).
 - **Cities**: Praha and Karlovy Vary (`src/lib/cities.ts`). City is a
   *property* of a turnus, not a branch of the site — filter with
@@ -128,11 +131,15 @@ no more per-city pages, no more 7-program catalog.
   the site's main job is collecting contacts (`TurnusInterestForm`), not
   selling — `isBookable(turnus)` is what flips a turnus card from a "notify
   me" form to a real "Přihlásit dítě" registration CTA.
-- **Known data bug**: registration currently saves `turnus.focus[0]` (a focus
-  id like `'3d-tisk'`) into the `program` field, but invoices/e-mails expect
-  a program id from `locations.ts`. See the warning comment above `TURNUSY`
-  in `src/lib/turnusy.ts` and the guard test in `src/lib/turnusy.test.ts` —
-  no turnus may go `otevreno` until that's fixed.
+- **Camp name on invoices/e-mails**: `RegistrationForm` still writes
+  `turnus.focus[0]` (a focus id like `'3d-tisk'`) into the registration's
+  `program` field, but nothing downstream trusts that field anymore —
+  invoices, confirmation e-mails, the payment reminder and the nástupní list
+  all derive the camp name server-side from `term_id` via
+  `getTrustedProgramName` (`src/lib/payment-pricing.ts`). The stored
+  `program` value survives only as a fallback for old registrations whose
+  turnus is no longer in `TURNUSY`. See the comment above `TURNUSY` in
+  `src/lib/turnusy.ts`.
 
 ### Redirects (old structure → `/tabor`)
 
@@ -177,41 +184,8 @@ All user-facing content is in Czech. Code/docs can be in English.
 
 ## Current Status
 
-**Structural rebuild (single turnus-based product, Weeks s.r.o. as operator)**: Complete for the product/marketing pages (`/`, `/tabor`, `/tabor/[turnus]`).
+**Structural rebuild (single turnus-based product, Weeks s.r.o. as operator)**: Complete across the whole site — the product/marketing pages (`/`, `/tabor`, `/tabor/[turnus]`) as well as `/o-nas`, `/kontakt`, `/gdpr` and `/podminky` all describe Weeks s.r.o. as organizer; DDM Praha 6 and HWLab remain only as historical code comments explaining what was removed. `/firmy` (linked from the header, footer and the homepage's Rozcesti section) is a deliberately dead link — that's phase 4, not built yet.
 **Status**: No turnus is bookable yet — both turnusy are `chystame`, with no confirmed date/price/venue. Summer 2027 terms are expected around October 2026; until then the site's job is collecting contacts, not selling.
-
-### Implemented
-
-_The checklist below predates the restructure and describes the old site (weekend/one-day formats, `/program`, `/tabor-3d-tisk`, `/tabor-iot`, DDM registration links). It's kept as a historical record — for what's actually live now, see "Product: turnus-based summer camp" and "Project Structure" above._
-
-- [x] All pages: Homepage, /program, /o-nas, /kontakt, /gdpr, /podminky
-- [x] Weekend camp page: /tabor-chytrych-technologii (confirmed terms, DDM registration)
-- [x] One-day camp pages: /tabor-3d-tisk, /tabor-iot with confirmed + připravujeme terms
-- [x] 7 camp programs with marketing-friendly descriptions
-- [x] Waitlist form with program selection + optional termin field (Formspree on admin@weeks.cz)
-- [x] Contact form with Formspree
-- [x] One-day camps prominent on homepage: "Jednodenní" + "Nově" badges, gradient cards
-- [x] ProgramSection: all 3 camps in equal 3-col grid + 4-col specializations grid
-- [x] SummerBanner: amber gradient banner after hero → summer MIX terms
-- [x] Summer 2026 MIX interest form: multi-select checkboxes at #leto section
-- [x] "Nezávazná registrace" CTA with 14-day notice explanation (replaces "Mám zájem")
-- [x] Confirmed one-day terms (11-12.4, 18-19.4) with DDM registration links
-- [x] Alternating So/Ne schedule for one-day camps (April–May)
-- [x] IoT: Micro:bit + Arduino throughout (descriptions, steps, practical info)
-- [x] 3D tisk: printer models showcase (MK3S, MK4S, Mini+, CORE One, etc.)
-- [x] One-day camp capacity: 15 kids (same as MIX)
-- [x] Other program cards clickable → link to /program#[id]
-- [x] Production domain: weeks.cz
-- [x] SEO: OG image, favicons, sitemap, structured data
-- [x] Accessibility: ARIA labels, aria-live, prefers-reduced-motion
-- [x] Cookie consent banner (GDPR)
-- [x] Responsive design (mobile-first)
-- [x] Framer Motion animations
-- [x] Sanity CMS schemas + Studio
-- [x] Google Analytics 4 (G-9955Q5FRRX)
-- [x] Google Search Console verified
-- [x] Vercel cron: daily capacity check at 8:00 UTC
-- [x] Team review feedback implemented (December 2024)
 
 ### Social Media (December 2024)
 - [x] Instagram: @weeks.cz (bio complete)
@@ -222,7 +196,7 @@ _The checklist below predates the restructure and describes the old site (weeken
 ### Pending (blocked or future)
 - [ ] Facebook Pixel - when ready for ads
 - [x] Real phone number: +420 703 046 440 (confirmed April 2026)
-- [ ] DDM confirmation - before marketing launch
+- [ ] Summer 2027 turnusy confirmed (date, price, venue) — before marketing launch, see "Current term status" below
 
 ## Environment Variables
 
@@ -241,16 +215,15 @@ NEXT_PUBLIC_FB_PIXEL_ID=                 # Facebook Pixel (after ads setup)
 
 ## Team (O nás page)
 
-Real team members with specialized icons:
+Real team members with specialized icons (`teamMembers` in `src/app/o-nas/page.tsx`):
 1. **Kryštof Ježdík** - VR & Herní vývoj (Gamepad2 icon)
 2. **Lukáš Kubík** - Web & Programování (Code icon)
 3. **Štěpán Jurenka** - 3D modelování & Tisk (Box icon)
-4. **Lukáš Kautský** - Grafika & Design (Palette icon)
 
 ## Contact Info
 
 Phone: +420 703 046 440 (confirmed April 2026)
-Used in: kontakt page, ContactSection, StructuredData, /kveten landing page
+Source of truth: `SITE.phone` in `src/lib/site.ts`; also duplicated per-city in `src/lib/locations.ts` for the registration/e-mail flow.
 
 ## DNS Configuration
 
@@ -308,7 +281,7 @@ TXT   @     google-site-verification=5epLUIbGFT0mcISr7rJZPFLcNlcAIFkQXe5cBY9nSdY
 ## Key Decisions Made (September 2026)
 
 1. **Single product**: weekend/one-day formats and per-city pages replaced by one weekly příměstský tábor sold as turnusy (`/tabor`, `/tabor/[turnus]`) — see "Product: turnus-based summer camp" above
-2. **Operator on the product**: `SITE.legalName` (Weeks s.r.o.) replaces DDM Praha 6 on the homepage, `/tabor` and structured data — `/o-nas`, `/kontakt`, `/gdpr`, `/podminky` and the registration backend still say DDM Praha 6, deferred to a later phase
+2. **Operator on the product**: `SITE.legalName` (Weeks s.r.o.) replaces DDM Praha 6 on the homepage, `/tabor` and structured data — `/o-nas`, `/kontakt`, `/gdpr`, `/podminky` and the registration backend followed within the same phase and now say Weeks s.r.o. too (see Project Overview)
 3. **Age range**: 9–15 (was 10–15)
 4. **Cities**: Praha and Karlovy Vary as a property of a turnus, not a branch of the site — old `/karlovy-vary/*` pages are gone
 5. **Redirects**: old routes (`/program`, `/tabor-*`, `/kveten`, `/karlovy-vary*`) permanently redirect to `/tabor` (see `next.config.js`)
@@ -323,32 +296,30 @@ TXT   @     google-site-verification=5epLUIbGFT0mcISr7rJZPFLcNlcAIFkQXe5cBY9nSdY
 - Social media accounts (FB + IG) are created
 
 ### Current term status
-- **MIX spring**: 28-29.3 confirmed with DDM registration link (14-15.3 removed — passed)
-- **MIX summer**: 7 weekends (Jul–Aug) — non-binding interest form only
-- **One-day confirmed**: 11-12.4, 18-19.4, and 16-17.5 — DDM registration links active
-  - 3D tisk 11.4. → ddmp6.cz/tabory/?id=774
-  - IoT 12.4. → ddmp6.cz/tabory/?id=776
-  - IoT 18.4. → ddmp6.cz/tabory/?id=773
-  - 3D tisk 19.4. → ddmp6.cz/tabory/?id=775
-  - 3D tisk 16.5. → ddmp6.cz/tabory/?id=786
-  - IoT 17.5. → ddmp6.cz/tabory/?id=787
-- **One-day připravujeme**: 25-26.4 through 9-10.5 — non-binding registration form
+Both turnusy — `praha-leto-2027` and `kv-leto-2027` (`src/lib/turnusy.ts`) —
+are `chystame`: no confirmed date, price or venue yet. The site collects
+non-binding interest (`TurnusInterestForm`, Formspree) instead of selling.
+Summer 2027 terms are expected to be announced around October 2026.
 
-### When next terms are confirmed by DDM
-- Move připravujeme terms to confirmed as DDM approves them
-- Add DDM registration URLs (same pattern as confirmed one-day terms)
+The old weekend/one-day formats (MIX, one-day 3D tisk/IoT camps) and their
+DDM Praha 6 registration links are gone, along with `/program`,
+`/tabor-3d-tisk`, `/tabor-iot` and `/tabor-chytrych-technologii` — see
+"Redirects" above.
+
+### When Summer 2027 turnusy are confirmed
+- Fill in `start`, `end`, `priceKc` and `venueId` on the turnus in
+  `src/lib/turnusy.ts` and flip `status` to `otevreno`.
+- `isBookable()` then switches the turnus card from the interest form to a
+  real "Přihlásit dítě" registration CTA — no DDM link, no manual step.
 
 ### Ad landing pages
-- **`/kveten`** — live at weeks.cz/kveten, promoting 3D tisk 16.5 + IoT 17.5
-  - Minimal layout (noindex, no nav/footer), 2 camp cards with direct DDM registration
-  - Lead capture (záchranná síť) + personal assistance (phone/WhatsApp)
-  - GA4 virtual pageviews: `/ad/kveten`, `/registrace-kveten-3d-tisk`, `/registrace-kveten-iot`, `/lead-kveten-*`
-  - Predecessor: `/duben` (April 18-19 campaign, removed after terms passed) — spec at `docs/superpowers/specs/2026-04-08-ad-landing-duben.md`
+None exist right now. `/kveten` (May 2026, 3D tisk/IoT one-day terms)
+permanently redirects to `/tabor` (`next.config.js` `redirects()`). Its
+predecessor `/duben` (April 2026 campaign) was removed before this phase and
+has no redirect configured — the route no longer exists and 404s.
 
 ### Other pending items
 - Facebook Pixel — when ready for advertising
-- DDM confirmation for remaining one-day camp terms (25.4+)
-- Summer MIX terms: currently interest-only, will need DDM registration when confirmed
 - Consider listing on detske-tabory.info (free) and cesketabory.cz for visibility
 
 ## Repo & team workflow
