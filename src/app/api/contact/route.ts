@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { rateLimit, clientIp } from '@/lib/rate-limit'
+import { parseContactBody } from './contact-payload'
 
 export async function POST(request: Request) {
   try {
@@ -13,24 +14,12 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json()
-    const { name, email, message } = body
-
-    // Validate required fields
-    if (!name || !email || !message) {
-      return NextResponse.json(
-        { error: 'Všechna pole jsou povinná' },
-        { status: 400 }
-      )
+    const parsed = parseContactBody(body)
+    if (!parsed.ok) {
+      return NextResponse.json({ error: parsed.error }, { status: 400 })
     }
-
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!emailRegex.test(email)) {
-      return NextResponse.json(
-        { error: 'Neplatný formát emailu' },
-        { status: 400 }
-      )
-    }
+    const { data } = parsed
+    const { name, email, message, firma, telefon, typ, subject } = data
 
     // Send to Formspree (uses same ID as waitlist)
     const formspreeId = process.env.NEXT_PUBLIC_FORMSPREE_ID
@@ -46,7 +35,10 @@ export async function POST(request: Request) {
           name,
           email,
           message,
-          _subject: `Kontaktní formulář Weeks - zpráva od ${name}`,
+          ...(firma ? { firma } : {}),
+          ...(telefon ? { telefon } : {}),
+          ...(typ ? { typ } : {}),
+          _subject: subject,
         }),
       })
 
@@ -60,10 +52,12 @@ export async function POST(request: Request) {
     } else {
       // Fallback: Log to console if no Formspree ID configured
       console.log('Contact form submission (Formspree not configured):')
-      console.log({ name, email, message, timestamp: new Date().toISOString() })
+      console.log({ name, email, message, formType: data.formType, timestamp: new Date().toISOString() })
     }
 
     // Sync to Weeks Hub (must be awaited — serverless kills pending fetches after response)
+    // weeks-hub musí hodnotu form_type 'firmy' znát, jinak firemní poptávku
+    // zahodí — Formspree ji dostane tak jako tak, takže se neztratí.
     const hubUrl = process.env.WEEKS_HUB_API_URL
     const hubKey = process.env.WEEKS_HUB_API_KEY
     if (hubUrl && hubKey) {
@@ -75,10 +69,13 @@ export async function POST(request: Request) {
             'x-api-key': hubKey,
           },
           body: JSON.stringify({
-            form_type: 'contact',
+            form_type: data.formType,
             email,
             sender_name: name,
             message,
+            ...(firma ? { firma } : {}),
+            ...(telefon ? { telefon } : {}),
+            ...(typ ? { typ } : {}),
           }),
         })
       } catch (err) {
