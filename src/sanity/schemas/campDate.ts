@@ -30,12 +30,6 @@ export const campDate = defineType({
       validation: (Rule) => Rule.required().min(1),
     }),
     defineField({
-      name: 'registrationUrl',
-      title: 'URL přihlášky (DDM)',
-      type: 'url',
-      description: 'Odkaz na přihlašovací formulář v systému DDM',
-    }),
-    defineField({
       name: 'status',
       title: 'Stav',
       type: 'string',

@@ -1,4 +1,4 @@
-# robots.txt pro Weeks - Víkendové IT kempy pro děti
+# robots.txt pro Weeks - týdenní příměstský IT tábor pro děti
 # https://weeks.cz
 
 # Povolit všem robotům přístup

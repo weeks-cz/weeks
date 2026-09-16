@@ -34,17 +34,6 @@ export const siteSettings = defineType({
       type: 'string',
     }),
     defineField({
-      name: 'hwlabAddress',
-      title: 'Adresa HWLabu',
-      type: 'text',
-      rows: 3,
-    }),
-    defineField({
-      name: 'hwlabMapUrl',
-      title: 'URL mapy HWLabu',
-      type: 'url',
-    }),
-    defineField({
       name: 'socialFacebook',
       title: 'Facebook URL',
       type: 'url',
@@ -53,12 +42,6 @@ export const siteSettings = defineType({
       name: 'socialInstagram',
       title: 'Instagram URL',
       type: 'url',
-    }),
-    defineField({
-      name: 'ddmUrl',
-      title: 'DDM Praha 6 URL',
-      type: 'url',
-      initialValue: 'https://ddmpraha6.cz',
     }),
   ],
   preview: {

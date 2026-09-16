@@ -1,8 +1,14 @@
+import { SITE } from './site'
+
 /**
  * Mapa měst na kontaktní údaje pro registrační a e-mailovou cestu — nic víc.
  * Cena, termín, kapacita i místo konání jsou vlastnost turnusu (`turnusy.ts`,
  * `cities.ts`), ne lokality; sem nepatří (viz varování nad `TURNUSY` a nad
  * voláním `getTurnusById` v `nastupni-list/route.ts`).
+ *
+ * Telefon a e-mail se sem nepíší natvrdo — jediným zdrojem identity Weeks je
+ * `SITE` v `site.ts`. Obojí bylo v obou městech stejné a dvojí zápis znamenal,
+ * že změna čísla na jednom místě se do e-mailů rodičům nemusí dostat.
  */
 export interface Location {
   id: string
@@ -21,7 +27,7 @@ export const LOCATIONS: Record<string, Location> = {
     name: 'Praha',
     slug: '',
     isDefault: true,
-    contact: { phone: '+420 703 046 440', email: 'info@weeks.cz' },
+    contact: { phone: SITE.phone, email: SITE.email },
   },
 
   'karlovy-vary': {
@@ -29,7 +35,7 @@ export const LOCATIONS: Record<string, Location> = {
     name: 'Karlovy Vary',
     slug: 'karlovy-vary',
     isDefault: false,
-    contact: { phone: '+420 703 046 440', email: 'info@weeks.cz' },
+    contact: { phone: SITE.phone, email: SITE.email },
   },
 }
 

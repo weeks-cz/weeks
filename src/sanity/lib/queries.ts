@@ -45,7 +45,6 @@ export const campDatesQuery = groq`
     startDate,
     endDate,
     capacity,
-    registrationUrl,
     status,
     price,
     program->{title, slug}
@@ -59,7 +58,6 @@ export const upcomingCampDatesQuery = groq`
     startDate,
     endDate,
     capacity,
-    registrationUrl,
     status,
     price,
     program->{title, slug}
@@ -95,10 +93,7 @@ export const siteSettingsQuery = groq`
     waitlistMode,
     contactEmail,
     contactPhone,
-    hwlabAddress,
-    hwlabMapUrl,
     socialFacebook,
-    socialInstagram,
-    ddmUrl
+    socialInstagram
   }
 `
