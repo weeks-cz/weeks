@@ -2,6 +2,7 @@ import { SITE } from '@/lib/site'
 import { getCity, getVenue } from '@/lib/cities'
 import type { Turnus } from '@/lib/turnusy'
 import { turnusLabels } from '@/components/turnusy/turnus-labels'
+import { serializeJsonLd } from './json-ld'
 import { turnusyProSchema } from './schema-turnusy'
 
 // Schema.org JSON-LD. Identita provozovatele (Organization, LocalBusiness) čte
@@ -9,8 +10,11 @@ import { turnusyProSchema } from './schema-turnusy'
 // čte výhradně z turnusů, ne z `locations.ts`: viz varování nad `TURNUSY`
 // v `src/lib/turnusy.ts`.
 
+// Obsah se skládá `serializeJsonLd`, ne holým `JSON.stringify` — ten neescapuje
+// `<`, takže název produktu v drobečkách e-shopu (chodí z weeks-hubu, tedy
+// zvenčí) by uměl ukončit skriptovou značku. Viz `json-ld.ts`.
 function jsonLd(schema: unknown, key?: string) {
-  return <script key={key} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
+  return <script key={key} type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(schema) }} />
 }
 
 /** Rozloží `SITE.address` („Arbesovo náměstí 70/4, Smíchov, 150 00 Praha 5") na ulici, PSČ a město. */
