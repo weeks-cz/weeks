@@ -1,8 +1,11 @@
 import type { Metadata } from 'next'
+import { SITE } from '@/lib/site'
 
 const pageTitle = 'Kontakt'
-const pageDescription = 'Kontaktujte nás ohledně víkendových IT kempů Weeks pro děti. E-mail, telefon, adresa místa konání v Kongresovém centru Praha.'
-const pageUrl = 'https://weeks.cz/kontakt'
+// Popisek dřív mluvil o víkendových kempech a adrese HWLab (Kongresové
+// centrum Praha) — obojí je pryč, viz Project Overview v CLAUDE.md.
+const pageDescription = `Kontaktujte ${SITE.legalName}. E-mail, telefon i místa konání turnusů týdenního IT tábora pro děti najdete na této stránce.`
+const pageUrl = `${SITE.url}/kontakt`
 
 export const metadata: Metadata = {
   title: pageTitle,

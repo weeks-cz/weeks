@@ -7,39 +7,16 @@ import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { useState } from 'react'
 import { trackLead } from '@/lib/fbpixel'
+import { getTurnusy } from '@/lib/turnusy'
+import { getVenue, type VenueId } from '@/lib/cities'
+import { SITE } from '@/lib/site'
 
-const contactInfo = [
-  {
-    icon: Mail,
-    title: 'E-mail',
-    value: 'info@weeks.cz',
-    link: 'mailto:info@weeks.cz',
-    description: 'Odpovídáme do 24 hodin (pracovní dny)',
-  },
-  {
-    icon: Phone,
-    title: 'Telefon',
-    value: '+420 703 046 440',
-    link: 'tel:+420703046440',
-    description: 'Po-Pá 9:00-17:00',
-  },
-  {
-    icon: MapPin,
-    title: 'Místa konání',
-    value: 'Praha 4 & Praha 6',
-    description: 'HWLab Praha · DDM Praha 6',
-  },
-  {
-    icon: Clock,
-    title: 'Provozní doba kempů',
-    value: 'Sobota & Neděle',
-    description: '9:00 - 17:00',
-  },
-]
-
+// Provozní doba je vlastnost produktu (turnusu), ne dne v týdnu podle starého
+// víkendového formátu — viz `Provozní doba táborů` na /podminky a rozvrh na
+// /tabor. Administrativní hodiny (telefon, e-mail) jsou samostatný údaj.
 const operatingHours = [
-  { day: 'Pondělí - Pátek', hours: '9:00 - 17:00', note: 'Administrativní hodiny' },
-  { day: 'Sobota & Neděle', hours: '9:00 - 17:00', note: 'Průběh kempů' },
+  { day: 'Pondělí – Pátek', hours: '9:00 – 17:00', note: 'Administrativní hodiny' },
+  { day: 'Pondělí – Pátek', hours: '8:00 – 17:00', note: 'Průběh tábora' },
 ]
 
 const faqPreview = [
@@ -49,7 +26,7 @@ const faqPreview = [
   },
   {
     question: 'Co si dítě odnese domů?',
-    answer: 'Všechny projekty, které během kempu vytvoří - 3D tisky, kód a další výtvory.',
+    answer: 'Všechny projekty, které během tábora vytvoří - 3D tisky, kód a další výtvory.',
   },
   {
     question: 'Je zajištěno stravování?',
@@ -58,7 +35,48 @@ const faqPreview = [
 ]
 
 export default function ContactPage() {
-  const [activeVenue, setActiveVenue] = useState<'hwlab' | 'ddm'>('hwlab')
+  // Místa konání — jen ta, která nějaký turnus doopravdy má. Dnes vyjde jedna
+  // karta (FabLab VARY&TE u karlovarského turnusu), pražský turnus místo
+  // ještě nemá. Kód počítá s tím, že se to může časem změnit (viz `KdeASKym.tsx`).
+  const turnusy = getTurnusy()
+  const venueIds = Array.from(
+    new Set(turnusy.map((t) => t.venueId).filter((id): id is VenueId => id !== null))
+  )
+  const venues = venueIds.map((id) => getVenue(id))
+  const chybiMisto = turnusy.some((t) => t.venueId === null)
+
+  const contactInfo = [
+    {
+      icon: Mail,
+      title: 'E-mail',
+      value: SITE.email,
+      link: `mailto:${SITE.email}`,
+      description: 'Odpovíme co nejdříve.',
+    },
+    {
+      icon: Phone,
+      title: 'Telefon',
+      value: SITE.phone,
+      link: `tel:${SITE.phone.replace(/\s+/g, '')}`,
+      description: 'Po-Pá 9:00-17:00',
+    },
+    {
+      icon: MapPin,
+      title: 'Místa konání',
+      value: venues.length > 0 ? venues.map((v) => v.name).join(' · ') : 'Upřesníme',
+      description:
+        venues.length > 0
+          ? `${venues.map((v) => v.city).join(', ')}${chybiMisto ? ' · další upřesníme' : ''}`
+          : 'U každého turnusu upřesníme před otevřením termínu.',
+    },
+    {
+      icon: Clock,
+      title: 'Provozní doba táborů',
+      value: 'Pondělí – Pátek',
+      description: '8:00 – 17:00',
+    },
+  ]
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -289,13 +307,13 @@ export default function ContactPage() {
                   {submitStatus === 'error' && (
                     <div className="flex items-center gap-2 p-4 bg-red-50 text-red-700 rounded-md border border-red-200" role="alert">
                       <AlertCircle className="w-5 h-5 shrink-0" />
-                      <p>Něco se pokazilo. Zkuste to prosím znovu nebo nám napište na info@weeks.cz</p>
+                      <p>Něco se pokazilo. Zkuste to prosím znovu nebo nám napište na {SITE.email}</p>
                     </div>
                   )}
 
                   {submitStatus === 'idle' && (
                     <p className="text-sm text-ink-500 text-center">
-                      Odpovíme vám do 24 hodin v pracovních dnech.{' '}
+                      Odpovíme vám co nejdříve.{' '}
                       <Link href="/gdpr" className="underline hover:text-ink">
                         Informace o zpracování údajů
                       </Link>
@@ -311,66 +329,35 @@ export default function ContactPage() {
                 viewport={{ once: true }}
                 className="space-y-8"
               >
-                {/* Venue Tabs + Map */}
-                <div className="card-maker overflow-hidden">
-                  <div className="flex border-b border-ink/15">
-                    <button
-                      onClick={() => setActiveVenue('hwlab')}
-                      className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
-                        activeVenue === 'hwlab'
-                          ? 'text-ink font-semibold border-b-2 border-ink'
-                          : 'text-ink-500 hover:text-ink'
-                      }`}
-                    >
-                      HWLab Praha
-                    </button>
-                    <button
-                      onClick={() => setActiveVenue('ddm')}
-                      className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
-                        activeVenue === 'ddm'
-                          ? 'text-ink font-semibold border-b-2 border-ink'
-                          : 'text-ink-500 hover:text-ink'
-                      }`}
-                    >
-                      DDM Praha 6
-                    </button>
-                  </div>
-                  <div className="h-64">
-                    {activeVenue === 'hwlab' ? (
+                {/* Místa konání — karta na turnus, který má domluvené místo.
+                    Dnes vyjde jedna (FabLab VARY&TE), pražský turnus místo
+                    ještě nemá — viz `KdeASKym.tsx` pro stejný vzor. */}
+                {venues.map((venue) => (
+                  <div key={venue.id} className="card-maker overflow-hidden">
+                    <div className="h-64">
                       <iframe
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2561.5!2d14.4285!3d50.0621!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x470b9390e8c4a4a7%3A0x400af0f6614d810!2sKongresov%C3%A9%20centrum%20Praha!5e0!3m2!1scs!2scz!4v1703196000000"
+                        src={`https://www.google.com/maps?q=${venue.mapQuery}&output=embed`}
                         width="100%"
                         height="100%"
                         style={{ border: 0 }}
                         allowFullScreen
                         loading="lazy"
                         referrerPolicy="no-referrer-when-downgrade"
-                        title="HWLab Praha - Kongresové centrum Praha"
+                        title={venue.fullName}
+                        aria-label={`Mapa: ${venue.fullName}`}
                         className="w-full h-full"
                       />
-                    ) : (
-                      <iframe
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2559.0!2d14.3350!3d50.0830!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x470b951a0e1c4b1d%3A0x1e4b5a6e3a7b8c9d!2sU+Borovi%C4%8Dek+5%2C+Praha+6!5e0!3m2!1scs!2scz!4v1703196000000"
-                        width="100%"
-                        height="100%"
-                        style={{ border: 0 }}
-                        allowFullScreen
-                        loading="lazy"
-                        referrerPolicy="no-referrer-when-downgrade"
-                        title="DDM Praha 6 - U Boroviček 5"
-                        className="w-full h-full"
-                      />
-                    )}
-                  </div>
-                  <div className="p-4 border-t border-ink/15 bg-white">
-                    {activeVenue === 'hwlab' ? (
-                      <div className="flex items-center justify-between">
+                    </div>
+                    <div className="p-4 border-t border-ink/15 bg-white">
+                      <div className="flex items-center justify-between gap-3">
                         <div>
-                          <p className="text-sm font-medium text-ink">Kongresové centrum Praha</p>
-                          <p className="text-xs text-ink-500">5. května 11, Praha 4 · Metro C – Vyšehrad</p>
+                          <p className="text-sm font-medium text-ink">{venue.fullName}</p>
+                          <p className="text-xs text-ink-500">
+                            {venue.street}, {venue.postalCode} {venue.city}
+                          </p>
                         </div>
                         <a
-                          href="https://maps.google.com/?q=Kongresové+centrum+Praha,+5.+května+11"
+                          href={`https://maps.google.com/?q=${venue.mapQuery}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="flex items-center gap-1 text-xs text-primary-600 hover:underline shrink-0"
@@ -379,25 +366,22 @@ export default function ContactPage() {
                           Navigovat
                         </a>
                       </div>
-                    ) : (
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="text-sm font-medium text-ink">DDM Praha 6 – Bílá hora</p>
-                          <p className="text-xs text-ink-500">U Boroviček 5, Praha 6</p>
-                        </div>
-                        <a
-                          href="https://maps.google.com/?q=DDM+Praha+6,+U+Boroviček+5,+Praha+6"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-1 text-xs text-primary-600 hover:underline shrink-0"
-                        >
-                          <Navigation className="w-3.5 h-3.5" />
-                          Navigovat
-                        </a>
-                      </div>
-                    )}
+                    </div>
                   </div>
-                </div>
+                ))}
+
+                {/* Turnusy bez domluveného místa — dnes pražský. Když nemá
+                    místo žádný turnus, zůstane na stránce jen tahle věta. */}
+                {chybiMisto && (
+                  <p className="text-sm text-ink-500">
+                    U turnusů bez uvedeného místa ho upřesníme před otevřením
+                    termínu. Přehled najdete na stránce{' '}
+                    <Link href="/tabor#turnusy" className="underline hover:text-ink">
+                      turnusů
+                    </Link>
+                    .
+                  </p>
+                )}
 
                 {/* Provozní doba */}
                 <div className="card-maker p-6">
@@ -418,23 +402,15 @@ export default function ContactPage() {
                   </div>
                 </div>
 
-                {/* Organizátor */}
-                <div className="card-maker p-6 border-ink bg-primary-50">
-                  <h3 className="font-display text-lg font-semibold text-ink mb-2">
-                    Organizátor
-                  </h3>
-                  <p className="text-ink mb-1 font-medium">
-                    DDM Praha 6
-                  </p>
-                  <p className="text-sm text-ink-500">
-                    Dům dětí a mládeže Praha 6
-                  </p>
-                  <p className="text-sm text-ink-500 mt-3">
-                    Weeks je projekt organizovaný DDM Praha 6,
-                    institucí s více než 70letou tradicí v oblasti
-                    volnočasových aktivit pro děti.
-                  </p>
-                </div>
+                {/* Identifikace provozovatele — drobně, ať nepřebíjí kontaktní
+                    údaje (stejný vzor jako v patičce, `Footer.tsx`). */}
+                <p className="font-mono text-xs text-ink-500">
+                  {SITE.legalName}, IČO {SITE.ico}
+                  <br />
+                  {SITE.address}
+                  <br />
+                  {SITE.court}
+                </p>
               </motion.div>
             </div>
           </div>
@@ -500,16 +476,16 @@ export default function ContactPage() {
               </h2>
               <p className="text-xl text-paper/90 mb-8">
                 Neváhejte nás kontaktovat! Rádi vám poradíme a zodpovíme
-                jakékoliv otázky ohledně našich kempů.
+                jakékoliv otázky ohledně našich táborů.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="mailto:info@weeks.cz" className="btn-primary">
+                <a href={`mailto:${SITE.email}`} className="btn-primary">
                   <Mail className="w-5 h-5 mr-2" />
-                  info@weeks.cz
+                  {SITE.email}
                 </a>
-                <a href="tel:+420703046440" className="border border-paper/30 text-paper hover:border-paper rounded-md px-6 py-3 font-semibold transition-all duration-200 inline-flex items-center justify-center">
+                <a href={`tel:${SITE.phone.replace(/\s+/g, '')}`} className="border border-paper/30 text-paper hover:border-paper rounded-md px-6 py-3 font-semibold transition-all duration-200 inline-flex items-center justify-center">
                   <Phone className="w-5 h-5 mr-2" />
-                  +420 703 046 440
+                  {SITE.phone}
                 </a>
               </div>
             </motion.div>
