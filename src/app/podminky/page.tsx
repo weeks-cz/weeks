@@ -4,9 +4,10 @@ import { ArrowLeft } from 'lucide-react'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { BreadcrumbSchema } from '@/components/seo/StructuredData'
+import { SITE } from '@/lib/site'
 
 const pageTitle = 'Podmínky užití'
-const pageDescription = 'Podmínky užití webu pro víkendové IT kempy Weeks. Obchodní podmínky a pravidla pro užívání webu.'
+const pageDescription = 'Podmínky užití webu a všeobecné obchodní podmínky IT táborů Weeks.'
 const pageUrl = 'https://weeks.cz/podminky'
 
 export const metadata: Metadata = {
@@ -33,6 +34,23 @@ export const metadata: Metadata = {
     follow: true,
   },
 }
+
+/*
+  Jeden pořadatel pro obě části dokumentu.
+
+  Část A (podmínky užití webu) dřív uváděla jako provozovatele a organizátora
+  DDM Praha 6 a tvrdila, že registrace i platby běží přes systém DDM. Část B
+  (VOP přenesené z bývalé /karlovy-vary/podminky) uváděla jako pořadatele
+  Lukáše Kubíka a vztahovala se jen na Karlovy Vary, ačkoliv `RegistrationForm`
+  na ni posílá všechny. Identifikace pořadatele teď v obou částech pochází ze
+  `SITE`, tvrzení o registraci přes DDM jsou pryč a působnost VOP je celý
+  produkt, ne jedno město.
+
+  Nedotčeno záměrně (čeká na rozhodnutí majitele, viz report úkolu 8):
+  čl. 20 Cena tábora (částky zrušených formátů) a číslo účtu v čl. 21.2.
+
+  Text čeká na kontrolu týmu.
+*/
 
 export default function PodminkyPage() {
   const breadcrumbItems = [
@@ -62,21 +80,23 @@ export default function PodminkyPage() {
               Podmínky užití
             </h1>
             <p className="text-ink-500 text-lg">
-              Obchodní podmínky a pravidla pro užívání webu Weeks
+              Podmínky užití webu a všeobecné obchodní podmínky táborů Weeks
             </p>
             <p className="text-ink/50 text-sm mt-4">
-              Účinnost od: 1. prosince 2024
+              Účinnost od: 16. září 2026
             </p>
           </header>
 
           {/* Content */}
           <div className="max-w-none">
+            <p className="mono-label mb-8">Část A — Podmínky užití webu</p>
+
             <section className="mb-12">
               <h2 className="font-display text-2xl font-bold text-ink mb-4">1. Úvodní ustanovení</h2>
               <p className="text-ink mb-4">
-                Tyto podmínky užití (dále jen "Podmínky") upravují přístup a užívání webových
-                stránek <strong>weeks.cz</strong> (dále jen "Web"), které slouží jako
-                informační a prezentační platforma pro víkendové IT kempy Weeks.
+                Tyto podmínky užití (dále jen „Podmínky") upravují přístup a užívání webových
+                stránek <strong>weeks.cz</strong> (dále jen „Web"), které provozuje {SITE.legalName}{' '}
+                a které slouží k prezentaci a prodeji IT táborů Weeks.
               </p>
               <p className="text-ink">
                 Používáním tohoto webu vyjadřujete souhlas s těmito Podmínkami. Pokud s nimi
@@ -87,13 +107,16 @@ export default function PodminkyPage() {
             <section className="mb-12">
               <h2 className="font-display text-2xl font-bold text-ink mb-4">2. Provozovatel webu</h2>
               <div className="bg-white p-6 rounded-md border border-ink/15">
-                <p className="text-ink font-semibold mb-4">Provozovatelem webu a organizátorem kempů je:</p>
-                <p className="text-ink font-medium mb-2">DDM Praha 6 (Dům dětí a mládeže Praha 6)</p>
-                <p className="text-ink text-base mb-1">Projekt: Weeks - Víkendové IT kempy pro děti</p>
-                <p className="text-ink text-base mb-1">Email: info@weeks.cz</p>
-                <p className="text-ink text-base mb-1">Web: weeks.cz</p>
+                <p className="text-ink font-semibold mb-4">Provozovatelem webu a pořadatelem táborů je:</p>
+                <p className="text-ink font-medium mb-2">{SITE.legalName}</p>
+                <p className="text-ink text-base mb-1">IČO: {SITE.ico}</p>
+                <p className="text-ink text-base mb-1">Sídlo: {SITE.address}</p>
+                <p className="text-ink text-base mb-1">Zapsaná v obchodním rejstříku vedeném u {SITE.court}</p>
+                <p className="text-ink text-base mb-1">E-mail: {SITE.email}</p>
+                <p className="text-ink text-base mb-1">Telefon: {SITE.phone}</p>
+                <p className="text-ink text-base">Web: weeks.cz</p>
                 <p className="text-ink text-base mt-4">
-                  <strong>Místo konání kempů:</strong> Kongresové centrum Praha, 5. května 11, 140 00 Praha 4 - Nusle
+                  <strong>Místo konání táborů:</strong> je uvedené u konkrétního turnusu na weeks.cz
                 </p>
               </div>
             </section>
@@ -101,48 +124,35 @@ export default function PodminkyPage() {
             <section className="mb-12">
               <h2 className="font-display text-2xl font-bold text-ink mb-4">3. Účel a charakter webu</h2>
               <p className="text-ink mb-4">
-                Tento Web slouží výhradně k informačním a prezentačním účelům:
+                Tento Web slouží k těmto účelům:
               </p>
               <ul className="list-disc pl-6 space-y-2 text-ink-500">
-                <li>Prezentace víkendových IT kempů Weeks pro děti 10-15 let</li>
+                <li>Prezentace IT táborů Weeks pro děti 9–15 let</li>
                 <li>Informace o programu, termínech a podmínkách účasti</li>
-                <li>Sběr kontaktních údajů (emailů) pro informování o nových termínech</li>
+                <li>Přihlášení dítěte na turnus a úhrada ceny tábora (čl. 19 až 21 níže)</li>
+                <li>Sběr kontaktních údajů pro informování o nových termínech</li>
                 <li>Poskytování obecných informací o aktivitách</li>
               </ul>
-              <div className="bg-primary-50 p-6 rounded-lg border border-primary-200 mt-6">
-                <p className="text-primary-900 font-medium mb-2">Důležité upozornění</p>
-                <p className="text-primary-800 text-base">
-                  Registrace a platby pro tábory v Praze probíhají výhradně přes registrační systém
-                  DDM Praha 6.
-                </p>
-              </div>
             </section>
 
             <section className="mb-12">
-              <h2 className="font-display text-2xl font-bold text-ink mb-4">4. Registrace na kempy</h2>
+              <h2 className="font-display text-2xl font-bold text-ink mb-4">4. Přihlášení na tábor</h2>
               <p className="text-ink mb-4">
-                Přihlašování účastníků na víkendové kempy probíhá následovně:
+                Přihlašování účastníků na tábory probíhá následovně:
               </p>
               <div className="bg-white p-6 rounded-lg border border-ink/15 space-y-4">
                 <div>
-                  <h3 className="font-display text-lg font-semibold text-ink mb-2">4.1 Waitlist formulář</h3>
+                  <h3 className="font-display text-lg font-semibold text-ink mb-2">4.1 Formulář zájmu</h3>
                   <p className="text-ink text-base">
-                    Na tomto webu můžete zanechat svůj email pro informování o nových termínech
-                    a spuštění registrace.
+                    U turnusů, které zatím nejsou otevřené k registraci, můžete na tomto webu
+                    zanechat kontakt pro informování o termínech a spuštění registrace.
                   </p>
                 </div>
                 <div>
-                  <h3 className="font-display text-lg font-semibold text-ink mb-2">4.2 Registrační systém DDM</h3>
+                  <h3 className="font-display text-lg font-semibold text-ink mb-2">4.2 Závazná přihláška a platba</h3>
                   <p className="text-ink text-base">
-                    Samotná registrace dětí probíhá přes externí registrační systém DDM Praha 6.
-                    Podmínky registrace, platby a účasti se řídí pravidly DDM Praha 6.
-                  </p>
-                </div>
-                <div>
-                  <h3 className="font-display text-lg font-semibold text-ink mb-2">4.3 Odpovědnost</h3>
-                  <p className="text-ink text-base">
-                    Provozovatel tohoto webu neodpovídá za proces registrace, platby ani průběh
-                    kempů. Tyto aktivity zajišťuje DDM Praha 6.
+                    Závaznou přihlášku na otevřený turnus, uzavření smlouvy, cenu, platbu a storno
+                    upravují všeobecné obchodní podmínky v části B těchto Podmínek (čl. 16 a následující).
                   </p>
                 </div>
               </div>
@@ -167,7 +177,7 @@ export default function PodminkyPage() {
               <h2 className="font-display text-2xl font-bold text-ink mb-4">6. Autorská práva a duševní vlastnictví</h2>
               <p className="text-ink mb-4">
                 Veškerý obsah tohoto webu, včetně textů, grafiky, log, fotografií, designu a dalších
-                prvků, je chráněn autorským právem a je majetkem projektu Weeks nebo třetích stran,
+                prvků, je chráněn autorským právem a je majetkem {SITE.legalName} nebo třetích stran,
                 které poskytly souhlas k jejich použití.
               </p>
               <div className="space-y-4">
@@ -239,11 +249,11 @@ export default function PodminkyPage() {
                 </li>
               </ul>
               <div className="bg-accent-50 p-6 rounded-lg border border-accent-200 mt-6">
-                <p className="text-accent-900 font-medium mb-2">Odpovědnost za kempy</p>
+                <p className="text-accent-900 font-medium mb-2">Odpovědnost za tábory</p>
                 <p className="text-accent-800 text-base">
-                  Za průběh, bezpečnost a kvalitu víkendových kempů odpovídá výhradně
-                  DDM Praha 6 a HWLab Praha jako místo konání. Podmínky účasti a pravidla
-                  odpovědnosti najdete v dokumentech DDM Praha 6.
+                  Toto omezení se týká užívání webu. Průběh tábora, podmínky účasti a práva
+                  a povinnosti pořadatele upravují všeobecné obchodní podmínky v části B
+                  (zejména čl. 23 a 24).
                 </p>
               </div>
             </section>
@@ -342,48 +352,41 @@ export default function PodminkyPage() {
                 můžete kontaktovat:
               </p>
               <div className="bg-white p-6 rounded-md border border-ink/15">
-                <p className="text-primary-900 font-semibold mb-2">Weeks - projekt DDM Praha 6</p>
+                <p className="text-primary-900 font-semibold mb-2">{SITE.legalName}</p>
                 <p className="text-primary-800 text-base mb-1">
-                  <strong>Organizátor:</strong> DDM Praha 6 (Dům dětí a mládeže Praha 6)
+                  <strong>IČO:</strong> {SITE.ico}
                 </p>
                 <p className="text-primary-800 text-base mb-1">
-                  <strong>Email:</strong> info@weeks.cz
+                  <strong>Sídlo:</strong> {SITE.address}
                 </p>
                 <p className="text-primary-800 text-base mb-1">
-                  <strong>Web:</strong> weeks.cz
+                  <strong>E-mail:</strong> {SITE.email}
+                </p>
+                <p className="text-primary-800 text-base mb-1">
+                  <strong>Telefon:</strong> {SITE.phone}
                 </p>
                 <p className="text-primary-800 text-base">
-                  <strong>Místo konání:</strong> Kongresové centrum Praha, 5. května 11, 140 00 Praha 4 - Nusle
+                  <strong>Web:</strong> weeks.cz
                 </p>
               </div>
             </section>
 
-            <div className="border-t border-ink/15 pt-8 mt-12">
-              <p className="text-ink-500 text-sm">
-                Tyto podmínky užití jsou platné a účinné od 1. prosince 2024.
-              </p>
-              <p className="text-ink-500 text-sm mt-2">
-                Poslední aktualizace: 4. února 2026
-              </p>
-            </div>
-
             {/*
-              Přeneseno doslova z bývalé samostatné stránky /karlovy-vary/podminky (smazána spolu
-              s adresou karlovy-vary v přestavbě struktury webu) — jde o jediné znění VOP, které
-              upravuje skutečný prodej (platba, storno, místo konání) přes tento web (Comgate).
-              Text ani identifikační údaje nejsou nově formulovány.
+              Část B — VOP přenesené z bývalé samostatné stránky /karlovy-vary/podminky
+              (smazána spolu s adresou karlovy-vary v přestavbě struktury webu). Jde
+              o jediné znění VOP, které upravuje skutečný prodej (platba, storno, místo
+              konání) přes tento web (Comgate). Oproti přenesenému znění je jiný jen
+              pořadatel (`SITE` místo fyzické osoby), působnost (všechny tábory Weeks
+              místo Karlových Varů) a místo konání (odkaz na turnus místo jedné adresy).
             */}
-            <div className="border-t border-ink/15 pt-12 mt-12" id="karlovy-vary">
-              <p className="mono-label mb-4">Karlovy Vary</p>
-              <p className="text-ink/50 text-sm mb-8">
-                Účinnost od: 1. května 2026
-              </p>
+            <div className="border-t border-ink/15 pt-12 mt-12" id="vop">
+              <p className="mono-label mb-8">Část B — Všeobecné obchodní podmínky (přihláška na tábor)</p>
 
               <section className="mb-10">
                 <h2 className="font-display text-2xl font-bold text-ink mb-4">16. Úvodní ustanovení</h2>
                 <p className="text-ink mb-4">
                   Tyto všeobecné obchodní podmínky (dále jen „VOP") upravují smluvní vztah mezi pořadatelem
-                  IT táborů Weeks v Karlových Varech a zákonným zástupcem přihlašovaného dítěte (dále jen „zákonný zástupce").
+                  IT táborů Weeks a zákonným zástupcem přihlašovaného dítěte (dále jen „zákonný zástupce").
                 </p>
                 <p className="text-ink">
                   Odesláním závazné přihlášky zákonný zástupce potvrzuje, že se s těmito VOP
@@ -395,15 +398,15 @@ export default function PodminkyPage() {
                 <h2 className="font-display text-2xl font-bold text-ink mb-4">17. Pořadatel</h2>
                 <div className="bg-white p-6 rounded-md border border-ink/15">
                   <p className="text-ink font-semibold mb-3">Pořadatelem táborů je:</p>
-                  <p className="text-ink font-medium">Lukáš Kubík</p>
-                  <p className="text-ink-500 mt-1">IČO: 24878511</p>
-                  <p className="text-ink-500">Sídlo: Kováříkova 1145/11, Hlubočepy, 152 00 Praha 5</p>
+                  <p className="text-ink font-medium">{SITE.legalName}</p>
+                  <p className="text-ink-500 mt-1">IČO: {SITE.ico}</p>
+                  <p className="text-ink-500">Sídlo: {SITE.address}</p>
                   <p className="text-ink-500 mt-3">
-                    Fyzická osoba podnikající na základě živnostenského oprávnění.
+                    Společnost zapsaná v obchodním rejstříku vedeném u {SITE.court}.
                   </p>
                   <p className="text-ink-500 mt-3">
-                    <strong>E-mail:</strong> info@weeks.cz<br />
-                    <strong>Telefon:</strong> +420 703 046 440<br />
+                    <strong>E-mail:</strong> {SITE.email}<br />
+                    <strong>Telefon:</strong> {SITE.phone}<br />
                     <strong>Web:</strong> weeks.cz
                   </p>
                 </div>
@@ -412,8 +415,10 @@ export default function PodminkyPage() {
               <section className="mb-10">
                 <h2 className="font-display text-2xl font-bold text-ink mb-4">18. Místo konání</h2>
                 <div className="bg-white p-6 rounded-md border border-ink/15">
-                  <p className="text-ink font-medium mb-1">FabLab v Kreativní Centrum VARY&amp;TE</p>
-                  <p className="text-ink-500">Dykova, Stará Role, 360 17 Karlovy Vary</p>
+                  <p className="text-ink">
+                    Místo konání je uvedené u konkrétního turnusu na weeks.cz a přesnou adresu
+                    obdrží zákonný zástupce v nástupním listu (čl. 27).
+                  </p>
                   <p className="text-ink-500 mt-3 text-sm">
                     Provozní doba táborů: <strong>8:00–17:00</strong>
                   </p>
@@ -447,6 +452,17 @@ export default function PodminkyPage() {
                 </div>
               </section>
 
+              {/*
+                POZOR — čl. 20 je záměrně ponechaný beze změny.
+
+                Uvádí ceny formátů, které se už nekonají (víkendový MIX 2 990 Kč,
+                letní příměstský 4 990 Kč), zatímco oba dnešní turnusy mají v
+                `turnusy.ts` `priceKc: null`. Cena je podstatná náležitost podmínek —
+                její přepsání ani smazání není úkol pro přestavbu webu, ale rozhodnutí
+                majitele (otázka č. 1 v reportu úkolu 8). Návrh k rozhodnutí: cena
+                patří k turnusu, v podmínkách stačí odkaz na cenu uvedenou u
+                konkrétního termínu.
+              */}
               <section className="mb-10">
                 <h2 className="font-display text-2xl font-bold text-ink mb-4">20. Cena tábora</h2>
                 <div className="grid sm:grid-cols-2 gap-4">
@@ -480,6 +496,10 @@ export default function PodminkyPage() {
                       <a href="https://help.comgate.cz/docs/bankovni-prevody" target="_blank" rel="noopener noreferrer" className="text-primary-600 underline hover:text-primary-700">nápověda Comgate</a>.
                     </p>
                   </div>
+                  {/*
+                    Číslo účtu ponecháno beze změny — po změně pořadatele je to údaj,
+                    který musí potvrdit majitel (otázka č. 2 v reportu úkolu 8).
+                  */}
                   <div className="bg-white p-5 rounded-md border border-ink/15">
                     <h3 className="text-base font-semibold text-ink mb-2">21.2 Bankovní převod</h3>
                     <p className="text-ink-500 text-base mb-2">
@@ -573,7 +593,7 @@ export default function PodminkyPage() {
                 </div>
 
                 <p className="text-ink-500 text-sm mt-4">
-                  Storno musí být oznámeno písemně e-mailem na adresu info@weeks.cz.
+                  Storno musí být oznámeno písemně e-mailem na adresu {SITE.email}.
                   Vrácení platby proběhne na účet, ze kterého byla platba přijata, do 10 pracovních dní.
                 </p>
               </section>
@@ -631,7 +651,7 @@ export default function PodminkyPage() {
                 </p>
                 <p className="text-ink">
                   Podrobné informace o zpracování osobních údajů jsou dostupné na stránce{' '}
-                  <Link href="/gdpr#karlovy-vary" className="text-primary-600 underline hover:text-primary-700">Ochrana osobních údajů (GDPR)</Link>.
+                  <Link href="/gdpr" className="text-primary-600 underline hover:text-primary-700">Ochrana osobních údajů (GDPR)</Link>.
                 </p>
               </section>
 
@@ -643,7 +663,7 @@ export default function PodminkyPage() {
                   je nepovinný a zákonný zástupce jej uděluje (nebo neuděluje) při vyplnění přihlášky.
                 </p>
                 <p className="text-ink">
-                  Souhlas lze kdykoli odvolat písemně na adrese info@weeks.cz.
+                  Souhlas lze kdykoli odvolat písemně na adrese {SITE.email}.
                   Odvolání souhlasu nemá vliv na zákonnost zpracování před jeho odvoláním.
                 </p>
               </section>
@@ -653,7 +673,7 @@ export default function PodminkyPage() {
                 <p className="text-ink">
                   Přibližně 7 dní před zahájením tábora obdrží zákonný zástupce na uvedený e-mail
                   nástupní list s praktickými informacemi (přesná adresa, čas nástupu, co přinést,
-                  kontakt na lektora). V případě, že e-mail neobdržíte, kontaktujte nás na info@weeks.cz.
+                  kontakt na lektora). V případě, že e-mail neobdržíte, kontaktujte nás na {SITE.email}.
                 </p>
                 <p className="text-ink mt-4">
                   <strong>Povinné dokumenty při nástupu.</strong> Zákonný zástupce je povinen v den nástupu
@@ -667,7 +687,7 @@ export default function PodminkyPage() {
               <section className="mb-10">
                 <h2 className="font-display text-2xl font-bold text-ink mb-4">28. Reklamace a stížnosti</h2>
                 <p className="text-ink mb-4">
-                  Reklamace nebo stížnosti uplatňujte písemně na e-mailové adrese info@weeks.cz.
+                  Reklamace nebo stížnosti uplatňujte písemně na e-mailové adrese {SITE.email}.
                   Pořadatel se zavazuje reagovat do 5 pracovních dní.
                 </p>
                 <p className="text-ink mb-4">
@@ -696,19 +716,23 @@ export default function PodminkyPage() {
               <section className="mb-10">
                 <h2 className="font-display text-2xl font-bold text-ink mb-4">30. Kontakt</h2>
                 <div className="bg-primary-50 p-6 rounded-md border border-primary-200">
-                  <p className="text-primary-900 font-semibold mb-3">Weeks – IT tábory Karlovy Vary</p>
-                  <p className="text-primary-800 mb-1"><strong>Pořadatel:</strong> Lukáš Kubík, IČO: 24878511 (úplná adresa sídla v čl. 16)</p>
-                  <p className="text-primary-800 mb-1"><strong>Místo konání:</strong> FabLab v Kreativní Centrum VARY&amp;TE, Dykova, Stará Role, 360 17 Karlovy Vary</p>
-                  <p className="text-primary-800 mb-1"><strong>E-mail:</strong> info@weeks.cz</p>
-                  <p className="text-primary-800"><strong>Telefon:</strong> +420 703 046 440</p>
+                  <p className="text-primary-900 font-semibold mb-3">{SITE.legalName}</p>
+                  <p className="text-primary-800 mb-1"><strong>IČO:</strong> {SITE.ico}</p>
+                  <p className="text-primary-800 mb-1"><strong>Sídlo:</strong> {SITE.address}</p>
+                  <p className="text-primary-800 mb-1"><strong>Místo konání:</strong> uvedené u konkrétního turnusu na weeks.cz</p>
+                  <p className="text-primary-800 mb-1"><strong>E-mail:</strong> {SITE.email}</p>
+                  <p className="text-primary-800"><strong>Telefon:</strong> {SITE.phone}</p>
                 </div>
               </section>
+            </div>
 
-              <div className="pt-8">
-                <p className="text-ink-500 text-sm">
-                  Tyto VOP jsou platné a účinné od 1. května 2026.
-                </p>
-              </div>
+            <div className="border-t border-ink/15 pt-8 mt-12">
+              <p className="text-ink-500 text-sm">
+                Tyto podmínky užití a všeobecné obchodní podmínky jsou platné a účinné od 16. září 2026.
+              </p>
+              <p className="text-ink-500 text-sm mt-2">
+                Poslední aktualizace: 16. září 2026
+              </p>
             </div>
           </div>
         </article>
