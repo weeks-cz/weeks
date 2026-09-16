@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Target, Heart, Lightbulb, Users, ShieldCheck, Award, MapPin, Gamepad2, Code, Box, type LucideIcon } from 'lucide-react'
+import { Target, Heart, Lightbulb, Users, ShieldCheck, MapPin, Gamepad2, Code, Box, type LucideIcon } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Header } from '@/components/layout/Header'
@@ -55,13 +55,19 @@ const teamMembers = [
 ]
 
 export default function AboutPage() {
+  const turnusy = getTurnusy()
+
   // Místa konání — jen ta, která nějaký turnus doopravdy má. Dnes vyjde jedna
   // karta (FabLab VARY&TE u karlovarského turnusu), pražský turnus místo
   // ještě nemá. Kód počítá s tím, že se to může časem změnit.
   const venueIds = Array.from(
-    new Set(getTurnusy().map((t) => t.venueId).filter((id): id is VenueId => id !== null))
+    new Set(turnusy.map((t) => t.venueId).filter((id): id is VenueId => id !== null))
   )
   const venues = venueIds.map((id) => getVenue(id))
+
+  // Nejvyšší kapacita napříč turnusy — dnes vyjde 15 u obou, číslo se ale
+  // nepíše natvrdo, aby se stránka sama nerozešla s daty (viz `KdeASKym.tsx`).
+  const kapacita = turnusy.reduce((max, t) => Math.max(max, t.capacity), 0)
 
   return (
     <>
@@ -306,7 +312,8 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* Safety & Certification Section */}
+        {/* Safety Section — karty „Pojištění účastníků" a „Certifikovaní lektoři"
+            odstraněny v opravném kole 1 (nedoložitelná tvrzení, viz report). */}
         <section className="section-padding bg-paper-soft border-y border-ink/15">
           <div className="section-container">
             <motion.div
@@ -317,7 +324,7 @@ export default function AboutPage() {
             >
               <p className="mono-label text-center mb-4">Bezpečnost</p>
               <h2 className="heading-2 text-ink mb-8 text-center">
-                Bezpečnost a certifikace
+                Bezpečnost
               </h2>
 
               <div className="card-maker p-8 md:p-12">
@@ -326,19 +333,7 @@ export default function AboutPage() {
                   v první pomoci a s dětmi pracují dlouhodobě.
                 </p>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="flex items-start gap-4 p-4">
-                    <ShieldCheck className="w-8 h-8 text-trust-600 flex-shrink-0" />
-                    <div>
-                      <h3 className="font-semibold text-ink mb-1">
-                        Pojištění účastníků
-                      </h3>
-                      <p className="text-sm text-ink-500">
-                        Každé dítě je pojištěno po celou dobu konání kempu
-                      </p>
-                    </div>
-                  </div>
-
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div className="flex items-start gap-4 p-4">
                     <Users className="w-8 h-8 text-trust-600 flex-shrink-0" />
                     <div>
@@ -352,13 +347,13 @@ export default function AboutPage() {
                   </div>
 
                   <div className="flex items-start gap-4 p-4">
-                    <Award className="w-8 h-8 text-trust-600 flex-shrink-0" />
+                    <ShieldCheck className="w-8 h-8 text-trust-600 flex-shrink-0" />
                     <div>
                       <h3 className="font-semibold text-ink mb-1">
-                        Certifikovaní lektoři
+                        Nejvýše {kapacita} dětí v turnusu
                       </h3>
                       <p className="text-sm text-ink-500">
-                        Všichni instruktoři prošli školením a mají ověřené reference
+                        Kapacitu držíme malou schválně.
                       </p>
                     </div>
                   </div>
@@ -367,10 +362,21 @@ export default function AboutPage() {
                     <Heart className="w-8 h-8 text-trust-600 flex-shrink-0" />
                     <div>
                       <h3 className="font-semibold text-ink mb-1">
-                        Okamžitý kontakt
+                        Kontakt na Weeks
                       </h3>
                       <p className="text-sm text-ink-500">
-                        Rodiče mají vždy k dispozici kontakt na lektory
+                        Telefon{' '}
+                        <a
+                          href={`tel:${SITE.phone.replace(/\s+/g, '')}`}
+                          className="text-primary-600 hover:underline"
+                        >
+                          {SITE.phone}
+                        </a>{' '}
+                        i e-mail{' '}
+                        <a href={`mailto:${SITE.email}`} className="text-primary-600 hover:underline">
+                          {SITE.email}
+                        </a>{' '}
+                        máte vždy k dispozici.
                       </p>
                     </div>
                   </div>
@@ -393,7 +399,7 @@ export default function AboutPage() {
                 Máte dotazy?
               </h2>
               <p className="text-xl text-ink-500 mb-8">
-                Rádi vám zodpovíme jakékoliv otázky ohledně našich kempů,
+                Rádi vám zodpovíme jakékoliv otázky ohledně našich táborů,
                 bezpečnosti nebo programu.
               </p>
               <Link href="/kontakt" className="btn-primary">
