@@ -1,7 +1,8 @@
 import { SITE } from '@/lib/site'
 import { getCity, getVenue } from '@/lib/cities'
-import { getTurnusy, isBookable } from '@/lib/turnusy'
+import type { Turnus } from '@/lib/turnusy'
 import { turnusLabels } from '@/components/turnusy/turnus-labels'
+import { turnusyProSchema } from './schema-turnusy'
 
 // Schema.org JSON-LD. Identita provozovatele (Organization, LocalBusiness) čte
 // výhradně ze `SITE` — jeden produkt, jeden provozovatel, žádná lokace. Event
@@ -74,21 +75,27 @@ export function LocalBusinessSchema() {
 }
 
 /**
- * Jedna položka Event za každý turnus, který je opravdu v prodeji.
+ * Jedna položka Event za každý turnus, který má co slíbit — v prodeji nebo
+ * vyprodaný (`turnusyProSchema`, viz `./schema-turnusy`).
  *
- * Nic se nedopočítává záložní hodnotou — `isBookable` zaručuje, že turnus má
- * termín, místo i cenu, takže schema čte přímo z něj. Když v prodeji není
- * žádný turnus (dnešní stav), nevykreslí se nic: prázdná nebo vymyšlená
- * nabídka by Googlu i rodiči ukázala něco, co neexistuje.
+ * Nic se nedopočítává záložní hodnotou — `turnusyProSchema` zaručuje, že
+ * turnus má termín, místo i cenu, takže schema čte přímo z něj. Když takový
+ * turnus není žádný (dnešní stav — oba turnusy jsou `chystame`), nevykreslí
+ * se nic: prázdná nebo vymyšlená nabídka by Googlu i rodiči ukázala něco,
+ * co neexistuje.
+ *
+ * Vlastnost `turnusy` je nepovinná schválně: úvodka chce schema za všechny
+ * turnusy v nabídce (volá se bez argumentu), zatímco stránka jednoho turnusu
+ * chce jen ten svůj (`<EventSchema turnusy={[turnus]} />`).
  */
-export function EventSchema() {
-  const prodejneTurnusy = getTurnusy().filter(isBookable)
-  if (prodejneTurnusy.length === 0) return null
+export function EventSchema({ turnusy }: { turnusy?: Turnus[] } = {}) {
+  const polozky = turnusyProSchema(turnusy)
+  if (polozky.length === 0) return null
 
   return (
     <>
-      {prodejneTurnusy.map((turnus) => {
-        // `isBookable` zaručuje start, end, priceKc i venueId — non-null assert je bezpečný.
+      {polozky.map(({ turnus, dostupnost }) => {
+        // `turnusyProSchema` zaručuje start, end, priceKc i venueId — non-null assert je bezpečný.
         const venue = getVenue(turnus.venueId!)
         const mesto = getCity(turnus.city).name
         const url = `${SITE.url}/tabor/${turnus.slug}`
@@ -127,7 +134,7 @@ export function EventSchema() {
           offers: {
             '@type': 'Offer',
             url,
-            availability: 'https://schema.org/InStock',
+            availability: dostupnost,
             price: String(turnus.priceKc),
             priceCurrency: 'CZK',
           },

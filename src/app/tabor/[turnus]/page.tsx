@@ -13,6 +13,7 @@ import { TurnusCard } from '@/components/turnusy/TurnusCard'
 import { turnusLabels } from '@/components/turnusy/turnus-labels'
 import { VenueShowcase } from '@/components/turnusy/VenueShowcase'
 import { TurnusInterestForm } from '@/components/turnusy/TurnusInterestForm'
+import { EventSchema, BreadcrumbSchema } from '@/components/seo/StructuredData'
 
 /**
  * Vizuál zaměření pro tuhle stránku — `@/lib/focus` schválně nese jen obsah
@@ -108,6 +109,17 @@ export default async function TurnusPage({
   return (
     <>
       <Header />
+      {/* Poslední položka drobečků musí textem odpovídat tomu, co stránka
+          níž doopravdy ukazuje ({l.mesto} — {l.datum}), ne jen datu — jinak
+          strukturovaná data tvrdí něco jiného, než je vidět. */}
+      <EventSchema turnusy={[turnus]} />
+      <BreadcrumbSchema
+        items={[
+          { name: 'Domů', url: SITE.url },
+          { name: 'Tábor', url: `${SITE.url}/tabor` },
+          { name: `${l.mesto} — ${l.datum}`, url: `${SITE.url}/tabor/${turnus.slug}` },
+        ]}
+      />
       <main>
         {/* Hlavička — datum, cena a tlačítko, nic navíc */}
         <section className="relative bg-paper blueprint-grid border-b border-ink/15 overflow-hidden pt-32 pb-16">
