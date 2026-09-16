@@ -99,7 +99,6 @@ npm run lint         # Currently broken — Next 16 removed `next lint`; needs a
   /images/hwlab             # Camp photos from the HWLab space, used by HeroSection on the homepage — the folder name is a leftover, HWLab itself is no longer organizer or venue (see Project Overview)
   /images/weeks-logo.png    # Logo
   /fonts                    # Two static Bricolage Grotesque weights + OFL.txt license, vendored for opengraph-image.tsx (satori can't parse the variable Google Fonts file) — see public/fonts/README.md; the rest of the site loads fonts via next/font/google instead
-  og-image-v2.jpg           # Superseded by `src/app/opengraph-image.tsx` — kept only for comparison, nothing links to it anymore
   favicon.ico               # Favicon (multi-size)
   apple-touch-icon.png      # Apple touch icon
   robots.txt                # Robots rules
@@ -286,7 +285,7 @@ TXT   @     google-site-verification=5epLUIbGFT0mcISr7rJZPFLcNlcAIFkQXe5cBY9nSdY
 4. **Cities**: Praha and Karlovy Vary as a property of a turnus, not a branch of the site — old `/karlovy-vary/*` pages are gone
 5. **Redirects**: old routes (`/program`, `/tabor-*`, `/kveten`, `/karlovy-vary*`) permanently redirect to `/tabor` (see `next.config.js`)
 6. **Price/date source of truth**: `src/lib/turnusy.ts` only — see the warning above `TURNUSY` and the guard test in `src/lib/turnusy.test.ts`
-7. **Share image**: `src/app/opengraph-image.tsx` generates the OG/Twitter preview with `next/og` — the old static `public/og-image-v2.jpg` is unused and kept only for comparison
+7. **Share image**: `src/app/opengraph-image.tsx` generates the OG/Twitter preview with `next/og`. The old static `public/og-image-v2.jpg` was deleted — it was publicly reachable at `weeks.cz/og-image-v2.jpg` and still rendered the dead offer („Praha · 10–15 let · Víkendové i jednodenní formáty“, „pořádá DDM Praha 6 ve spolupráci s HWLab“)
 
 ## Notes for Future Sessions
 

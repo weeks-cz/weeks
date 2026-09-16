@@ -7,7 +7,9 @@ import { SITE } from '@/lib/site'
  * Náhled pro sdílení (Open Graph / Twitter), vygenerovaný kódem místo
  * statického obrázku — `public/og-image-v2.jpg` inzeroval nabídku, kterou
  * web už nemá (víkendové/jednodenní formáty, DDM Praha 6 ve spolupráci
- * s HWLab). Tady smí být jen tvrzení, která dnes platí, a texty jsou
+ * s HWLab), a protože ležel v `public/`, chodil dál veřejně na adrese
+ * weeks.cz/og-image-v2.jpg, i když už na něj nikdo neodkazoval. Proto je
+ * smazaný. Tady smí být jen tvrzení, která dnes platí, a texty jsou
  * doslovně převzaté z `SITE` a z hlavních stránek (Hero, Rozcesti), ne
  * vymyšlené nanovo.
  *
