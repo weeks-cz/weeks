@@ -4,6 +4,7 @@ import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { KdeASKym } from '@/components/sections/KdeASKym'
 import { FirmyPoptavka } from '@/components/firmy/FirmyPoptavka'
+import { BreadcrumbSchema } from '@/components/seo/StructuredData'
 import { getNabidky, PARTNERSTVI_ZATIM, type NabidkaId } from '@/lib/firmy'
 import { SITE } from '@/lib/site'
 
@@ -28,8 +29,16 @@ const NABIDKA_META: Record<NabidkaId, { icon: typeof Users; poptatLabel: string 
 export default function FirmyPage() {
   const nabidky = getNabidky()
 
+  // Stránka nemá vlastní viditelný drobečkový řádek (jen odkaz zpět), proto
+  // se název přebírá z hlavičky (`Header.tsx`) — „Pro firmy" je tam i tady.
+  const breadcrumbItems = [
+    { name: 'Domů', url: SITE.url },
+    { name: 'Pro firmy', url: `${SITE.url}/firmy` },
+  ]
+
   return (
     <>
+      <BreadcrumbSchema items={breadcrumbItems} />
       <Header />
       <main>
         {/* Hero */}

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { SITE } from '@/lib/site'
+import { BreadcrumbSchema } from '@/components/seo/StructuredData'
 
 const title = 'Letní příměstský tábor chytrých technologií | Weeks'
 const description =
@@ -38,5 +39,23 @@ export const metadata: Metadata = {
 }
 
 export default function TaborLayout({ children }: { children: React.ReactNode }) {
-  return children
+  return (
+    <>
+      {/* `/tabor/page.tsx` je klientská komponenta ('use client') — JSON-LD
+          se do ní nedá vložit přímo, skončilo by v klientském balíku místo
+          v HTML vykresleném serverem. Layout je serverový a nad `children`
+          jinak nic nevykresluje, takže je to pro tuhle jedinou stránku
+          jediné místo, kam drobečky patří (na ostatních stránkách stojí
+          přímo u `<Header />`). Poslední položka zní „Letní příměstský
+          tábor", ne „Tábor" jako v hlavičce — na to, jak se stránka sama
+          nazývá ve viditelném drobečku v `page.tsx`, přednost dává zadání. */}
+      <BreadcrumbSchema
+        items={[
+          { name: 'Domů', url: SITE.url },
+          { name: 'Letní příměstský tábor', url: `${SITE.url}/tabor` },
+        ]}
+      />
+      {children}
+    </>
+  )
 }
