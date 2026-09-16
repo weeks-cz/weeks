@@ -73,7 +73,9 @@ export function parseContactBody(body: unknown): ParseContactResult {
   }
 
   // typ je nepovinný, ale pokud přijde, musí být z whitelistu — nevěříme
-  // klientovi, že jde o platné id nabídky (viz "Proč zvlášť soubor" v briefu).
+  // klientovi, že jde o platné id nabídky. Ověření musí přijít dřív než
+  // `getNabidka`: ta u neznámého id vyhazuje výjimku, takže obrácené pořadí
+  // by z překlepu v těle požadavku udělalo pád routy místo čisté chyby 400.
   let overenyTyp: NabidkaId | undefined
   if (typ !== undefined) {
     if (!isNabidkaId(typ)) {
