@@ -65,9 +65,13 @@ sobě. Úkoly 3, 4 a 5 jsou na sobě nezávislé.
 | `src/components/seo/schema-turnusy.test.ts` | Hlídá, že se do schematu nedostane turnus bez termínu, místa nebo ceny |
 
 **Mění se:** `src/components/seo/StructuredData.tsx`, `src/app/tabor/[turnus]/page.tsx`,
-`src/app/tabor/layout.tsx`, `src/app/o-nas/page.tsx`, `src/app/kontakt/page.tsx`,
-`src/app/firmy/page.tsx`, `src/components/turnusy/ProjectGallery.tsx`,
-`src/lib/analytics.ts`, `src/components/firmy/FirmyPoptavka.tsx`, `CLAUDE.md`.
+`src/app/tabor/page.tsx`, `src/app/tabor/layout.tsx`, `src/app/o-nas/page.tsx`,
+`src/app/kontakt/page.tsx`, `src/app/firmy/page.tsx`,
+`src/components/turnusy/ProjectGallery.tsx`, `src/lib/analytics.ts`,
+`src/components/firmy/FirmyPoptavka.tsx`, `CLAUDE.md`.
+
+**Sdílené soubory:** `src/app/tabor/[turnus]/page.tsx` mění úkoly 1 a 3 (v tomhle
+pořadí), `src/app/tabor/` mění úkol 2 (jen `layout.tsx`) a úkol 3 (jen `page.tsx`).
 
 ---
 
@@ -103,11 +107,13 @@ import type { Turnus } from '@/lib/turnusy'
 const uplny: Turnus = {
   id: 'test-uplny',
   slug: 'test-uplny',
-  city: 'praha',
+  // `VenueId` je dnes jediné: 'fablab-varyte', a je v Karlových Varech.
+  // Město turnusu s městem místa musí souhlasit (viz kontrola v `turnusy.ts`).
+  city: 'karlovy-vary',
   start: '2027-07-05',
   end: '2027-07-09',
   priceKc: 7900,
-  venueId: 'hwlab',
+  venueId: 'fablab-varyte',
   capacity: 15,
   status: 'otevreno',
   focus: ['3d-tisk'],
@@ -357,11 +363,15 @@ psaný seznam šesti obrázků vedle `focus.gallery` — dva zdroje pravdy pro t
 přičemž jeden z nich nikdo nečte.
 
 **Files:**
-- Modify: `src/app/tabor/[turnus]/page.tsx`, `src/components/turnusy/ProjectGallery.tsx`
+- Modify: `src/app/tabor/[turnus]/page.tsx`, `src/app/tabor/page.tsx`,
+  `src/components/turnusy/ProjectGallery.tsx`
 
 **Interfaces:**
 - Consumes: `getFocusModules`, `type FocusModule` z `@/lib/focus`
 - Produces: `ProjectGallery({ polozky? })`
+
+> **Pozor na pořadí:** úkol 1 už do `src/app/tabor/[turnus]/page.tsx` přidal
+> strukturovaná data hned za `<Header />`. Nesahej na ně.
 
 - [ ] **Step 1: Vykresli vybavení u zaměření**
 
@@ -387,18 +397,34 @@ Když žádný modul turnusu FAQ nemá, sekce se nevykreslí vůbec.
 
 - [ ] **Step 3: Propoj galerii s daty zaměření**
 
-`ProjectGallery.tsx` dostane nepovinnou vlastnost:
+Pozor, `ProjectGallery` **dnes na stránce turnusu vůbec není** — vykresluje se
+na `/tabor` (`src/app/tabor/page.tsx:502`). Úkol má dvě části:
+
+1. Komponenta dostane nepovinnou vlastnost:
 
 ```tsx
-export function ProjectGallery({ polozky }: { polozky?: Array<{ src: string; alt: string }> })
+export function ProjectGallery({
+  polozky,
+}: {
+  polozky?: Array<{ src: string; alt: string; tag?: string }>
+})
 ```
 
-Když vlastnost přijde, vykreslí ji; když ne, chová se jako dnes. Na stránce
-turnusu ji volej s obrázky z modulů zaměření daného turnusu.
+Když vlastnost přijde, vykreslí ji; když ne, chová se jako dnes.
 
-**Nevymazávej dnešní natvrdo psaný seznam, dokud neověříš, že obrázky z
-`focus.gallery` existují na disku** (`ls public/images/...` u každé cesty).
-Když některý chybí, je to nález do reportu, ne důvod si cestu domyslet.
+2. Natvrdo psaný seznam šesti obrázků (`ProjectGallery.tsx:10-15`) zmiz. Obě
+   volající stránky si položky složí z modulů zaměření:
+   - `/tabor` ze **všech** modulů, které má aspoň jeden turnus,
+   - stránka turnusu jen z modulů **toho svého** turnusu (a rovnou tam
+     `ProjectGallery` přidej — dnes ji nemá).
+
+   `tag` ber z `modul.name` (tedy „3D tisk", „IoT a elektronika") — dnešní
+   štítky jsou psané ručně a jde je odvodit. Popisek pod obrázkem ber z `alt`.
+
+Všech 14 obrázků z `focus.gallery` na disku existuje (ověřeno v `public/images/gallery/`)
+a dnešních šest natvrdo psaných je jejich podmnožina — proto se seznam maže,
+ne doplňuje. **Přesto si existenci ověř sám** (`ls public/images/gallery/`);
+kdyby některý chyběl, je to nález do reportu, ne důvod si cestu domyslet.
 
 - [ ] **Step 4: Ověř a commitni**
 
