@@ -7,6 +7,7 @@ import { Briefcase, CheckCircle, Mail, Phone } from 'lucide-react'
 import Link from 'next/link'
 import { getNabidky, isNabidkaId, NABIDKA_IDS, type NabidkaId } from '@/lib/firmy'
 import { SITE } from '@/lib/site'
+import { trackFirmyPoptavka } from '@/lib/analytics'
 
 /**
  * Samotný formulář. Odděleně od `FirmyPoptavka`, protože ho potřebují dvě
@@ -63,6 +64,7 @@ function FirmyPoptavkaForm({ zvolenyTyp }: { zvolenyTyp: NabidkaId }) {
       const data = await res.json().catch(() => null)
       if (res.ok) {
         setSubmitted(true)
+        trackFirmyPoptavka({ typ })
       } else {
         // Chybovou hlášku bere formulář z odpovědi API (`data.error`) — tu
         // sestavuje `parseContactBody`/route handler a je to česká věta pro

@@ -26,65 +26,13 @@ export function trackViewTerms(source: string) {
   fbqEvent('ViewContent', { content_name: 'camp_terms', content_category: source })
 }
 
-// Funnel Step 2: "Mám zájem" click on /program page
-export function trackProgramInterest(programId: string, programTitle: string) {
-  sendGAEvent('event', 'program_interest', {
-    program_id: programId,
-    program_title: programTitle,
-  })
-  fbqEvent('AddToWishlist', { content_name: programTitle })
-}
-
 // Funnel Step 3: Navigation "Přihlásit se" button
 export function trackNavCTA(source: 'desktop' | 'mobile') {
   sendGAEvent('event', 'nav_cta_click', { source })
 }
 
-// Funnel Step 4: Final "Přihlásit se" → DDM registration (key conversion)
-export function trackRegistrationClick(params: {
-  termId: string
-  termDates: string
-  termLocation: string
-  spotsAvailable: number
-  outboundUrl: string
-  campType?: 'weekend' | 'oneday'
-}) {
-  sendGAEvent('event', 'registration_click', {
-    term_id: params.termId,
-    term_dates: params.termDates,
-    term_location: params.termLocation,
-    spots_available: params.spotsAvailable,
-    outbound_url: params.outboundUrl,
-    camp_type: params.campType || 'weekend',
-  })
-  fbqEvent('InitiateCheckout', {
-    content_name: `${params.termDates} - ${params.termLocation}`,
-    value: params.campType === 'oneday' ? 1490 : 2990,
-    currency: 'CZK',
-  })
-}
-
-// One-day camp: "Mám zájem" inline form submit
-export function trackInterestSubmit(params: {
-  programId: string
-  programTitle: string
-  termin: string
-  campType: 'oneday' | 'weekend'
-}) {
-  sendGAEvent('event', 'interest_submit', {
-    program_id: params.programId,
-    program_title: params.programTitle,
-    termin: params.termin,
-    camp_type: params.campType,
-  })
-  fbqEvent('Lead', {
-    content_name: `${params.programTitle} - ${params.termin}`,
-    value: 1490,
-    currency: 'CZK',
-  })
-}
-
-// Off-season: kontakt zanechaný na příští sezónu (KV po létě 2026).
+// Mimosezónní kontakt: web zatím nic neprodává (žádný turnus není bookable),
+// takže tohle je výchozí způsob sběru poptávky, ne výjimka pro jedno město.
 // Jen GA — do Meta se to jako Lead neposílá, žádná kampaň na to teď necílí
 // a falešná hodnota konverze by zbytečně zašuměla optimalizaci.
 export function trackSeasonInterest(params: {
@@ -99,38 +47,14 @@ export function trackSeasonInterest(params: {
   })
 }
 
-// One-day camp page view tracking
-export function trackViewOneDayCamp(programId: string, source: string) {
-  sendGAEvent('event', 'view_oneday_camp', {
-    program_id: programId,
-    source,
-  })
-  fbqEvent('ViewContent', {
-    content_name: `oneday_${programId}`,
-    content_category: source,
-  })
-}
-
-// Camp detail page viewed. Fires on load of a KV camp page (weekly/weekend) —
-// the page paid ads land on directly. Without this the camp pages emitted NO
-// Pixel/GA event on view, so Meta got no "product viewed" signal to optimise on
-// and we couldn't measure landing→detail. content_name keys location+program.
-export function trackViewCampDetail(params: {
-  location: string
-  program: string
-  value: number
-}) {
-  sendGAEvent('event', 'view_camp_detail', {
-    location: params.location,
-    program: params.program,
-    value: params.value,
-    currency: 'CZK',
-  })
-  fbqEvent('ViewContent', {
-    content_name: `${params.location}_${params.program}`,
-    content_category: 'camp_detail',
-    value: params.value,
-    currency: 'CZK',
+// Firemní poptávka odeslaná z /firmy. Rozměr nese id nabídky, ne její nadpis —
+// ať analytika nezávisí na textaci, kterou tým může kdykoliv přepsat. Jen GA,
+// stejně jako u `trackSeasonInterest` výš — na firemní poptávky necílí žádná
+// kampaň a falešná hodnota konverze by zašuměla optimalizaci.
+export function trackFirmyPoptavka(params: { typ: string }) {
+  sendGAEvent('event', 'firmy_poptavka_submit', {
+    event_category: 'firmy',
+    typ: params.typ,
   })
 }
 
@@ -148,22 +72,6 @@ export function trackQRScan(params: {
   fbqEvent('ViewContent', {
     content_name: `qr_${params.content}`,
     content_category: 'qr_scan',
-  })
-}
-
-// Registration form opened (clicked button, but hasn't submitted yet)
-// Compare with interest_submit to measure drop-off
-export function trackRegistrationFormOpen(params: {
-  programId: string
-  programTitle: string
-  termin: string
-  campType: 'oneday' | 'weekend'
-}) {
-  sendGAEvent('event', 'registration_form_open', {
-    program_id: params.programId,
-    program_title: params.programTitle,
-    termin: params.termin,
-    camp_type: params.campType,
   })
 }
 
