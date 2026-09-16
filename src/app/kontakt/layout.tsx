@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { SITE } from '@/lib/site'
+import { BreadcrumbSchema } from '@/components/seo/StructuredData'
 
 const pageTitle = 'Kontakt'
 // Popisek dřív mluvil o víkendových kempech a adrese HWLab (Kongresové
@@ -43,10 +44,25 @@ export const metadata: Metadata = {
   },
 }
 
+
+// Drobečky patří do layoutu, ne do stránky: `page.tsx` je klientská komponenta
+// (`'use client'`), takže by se JSON-LD zbytečně vezlo i do klientského balíku.
+// Layout je serverový, schema se vykreslí na serveru a do balíku nespadne.
+// Text položek souhlasí s viditelným drobečkem na stránce i s hlavičkou.
+const breadcrumbItems = [
+  { name: 'Domů', url: SITE.url },
+  { name: 'Kontakt', url: `${SITE.url}/kontakt` },
+]
+
 export default function KontaktLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  return children
+  return (
+    <>
+      <BreadcrumbSchema items={breadcrumbItems} />
+      {children}
+    </>
+  )
 }

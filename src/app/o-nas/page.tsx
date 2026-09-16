@@ -6,7 +6,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
-import { BreadcrumbSchema } from '@/components/seo/StructuredData'
 import { getTurnusy } from '@/lib/turnusy'
 import { getVenue, type VenueId } from '@/lib/cities'
 import { SITE } from '@/lib/site'
@@ -70,16 +69,8 @@ export default function AboutPage() {
   // nepíše natvrdo, aby se stránka sama nerozešla s daty (viz `KdeASKym.tsx`).
   const kapacita = turnusy.reduce((max, t) => Math.max(max, t.capacity), 0)
 
-  // Text souhlasí s viditelným drobečkem níž na stránce („Domů / O nás") i
-  // s tím, jak na stránku odkazuje hlavička (`Header.tsx`).
-  const breadcrumbItems = [
-    { name: 'Domů', url: SITE.url },
-    { name: 'O nás', url: `${SITE.url}/o-nas` },
-  ]
-
   return (
     <>
-      <BreadcrumbSchema items={breadcrumbItems} />
       <Header />
       <main>
         {/* Hero Section */}

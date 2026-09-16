@@ -5,7 +5,6 @@ import { Mail, Phone, MapPin, Clock, Send, User, MessageSquare, Loader2, CheckCi
 import Link from 'next/link'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
-import { BreadcrumbSchema } from '@/components/seo/StructuredData'
 import { useState } from 'react'
 import { trackLead } from '@/lib/fbpixel'
 import { getTurnusy } from '@/lib/turnusy'
@@ -105,16 +104,8 @@ export default function ContactPage() {
     }
   }
 
-  // Text souhlasí s viditelným drobečkem níž na stránce („Domů / Kontakt") i
-  // s tím, jak na stránku odkazuje hlavička (`Header.tsx`).
-  const breadcrumbItems = [
-    { name: 'Domů', url: SITE.url },
-    { name: 'Kontakt', url: `${SITE.url}/kontakt` },
-  ]
-
   return (
     <>
-      <BreadcrumbSchema items={breadcrumbItems} />
       <Header />
       <main>
         {/* Hero Section */}
