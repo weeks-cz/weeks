@@ -20,13 +20,16 @@ function fbqEvent(
   }
 }
 
-// Funnel Step 1: "Zobrazit termíny" click (homepage hero, program page)
+// Klik na hlavní výzvu v heru úvodky. Popisek tlačítka je dynamický
+// (`heroCtaText` v `HeroSection.tsx`) podle toho, jestli je co prodávat,
+// takže se na něj v analytice nespoléhej — událost rozlišuje `source`.
 export function trackViewTerms(source: string) {
   sendGAEvent('event', 'view_terms', { source })
   fbqEvent('ViewContent', { content_name: 'camp_terms', content_category: source })
 }
 
-// Funnel Step 3: Navigation "Přihlásit se" button
+// Klik na výzvu v navigaci (`Header.tsx`). Popisek i cíl jsou dynamické,
+// rozlišuje se jen plocha, ze které klik přišel.
 export function trackNavCTA(source: 'desktop' | 'mobile') {
   sendGAEvent('event', 'nav_cta_click', { source })
 }
@@ -82,13 +85,14 @@ export function trackUcebnaClick(source: 'desktop' | 'mobile') {
   sendGAEvent('event', 'ucebna_click', { source })
 }
 
-// ── KV internal registration → payment funnel ───────────────────────────────
-// Three steps measure drop-off between submitting the form, starting the payment,
-// and the payment actually completing.
+// ── Vlastní registrace → platba ─────────────────────────────────────────────
+// Kroky měří odpad mezi odesláním formuláře, zahájením platby a jejím
+// dokončením. Trychtýř je dnes jediný pro celý web — registrace přes DDM
+// skončila, sem míří všechna města.
 
-// Step 0: per-step progress through the multi-step KV form (1 = opened … 5 =
-// summary). Comparing counts of registration_step[1..5] vs registration_submit
-// pinpoints WHERE the ~2/3 form→payment drop-off happens, instead of guessing.
+// Krok 0: postup vícekrokovým registračním formulářem (1 = otevřen … 5 =
+// shrnutí). Porovnání počtů registration_step[1..5] proti registration_submit
+// ukáže, ve kterém kroku lidé odpadají, místo aby se to odhadovalo.
 export function trackRegistrationStep(params: {
   step: number
   locationId: string
@@ -103,7 +107,7 @@ export function trackRegistrationStep(params: {
   })
 }
 
-// Step 1: registration row created (form submitted successfully)
+// Krok 1: v databázi vznikl záznam registrace (formulář úspěšně odeslán)
 export function trackRegistrationSubmit(params: {
   locationId: string
   program: string
@@ -135,13 +139,13 @@ export function trackRegistrationSubmit(params: {
   )
 }
 
-// Step 2: user pushed through to the Comgate gateway
+// Krok 2: návštěvník se dostal až na platební bránu Comgate
 export function trackPaymentInitiated(registrationId: string) {
   sendGAEvent('event', 'payment_initiated', { registration_id: registrationId })
   fbqEvent('AddPaymentInfo')
 }
 
-// Step 3: payment confirmed (fired once when confirmation page sees 'paid')
+// Krok 3: platba potvrzena (jednou, když potvrzovací stránka uvidí 'paid')
 // Rozměr nese stabilní `term_id` turnusu, ne zobrazovaný název — schválně, aby analytika nezávisela na textaci.
 export function trackPaymentCompleted(params: {
   registrationId: string
