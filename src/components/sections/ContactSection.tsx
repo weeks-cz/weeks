@@ -70,7 +70,7 @@ export function ContactSection() {
                     {SITE.email}
                   </a>
                   <p className="text-sm text-ink-500 mt-1">
-                    Odpovídáme do 24 hodin (pracovní dny)
+                    Ozveme se co nejdříve
                   </p>
                 </div>
               </div>

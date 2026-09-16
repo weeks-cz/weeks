@@ -13,9 +13,9 @@ import { SITE } from '@/lib/site'
 
 // Provozní doba je vlastnost produktu (turnusu), ne dne v týdnu podle starého
 // víkendového formátu — viz `Provozní doba táborů` na /podminky a rozvrh na
-// /tabor. Administrativní hodiny (telefon, e-mail) jsou samostatný údaj.
+// /tabor. Žádné jiné hodiny (např. administrativní obsluhu telefonu) web
+// nedokládá, proto tu nejsou — viz opravné kolo 1 v reportu.
 const operatingHours = [
-  { day: 'Pondělí – Pátek', hours: '9:00 – 17:00', note: 'Administrativní hodiny' },
   { day: 'Pondělí – Pátek', hours: '8:00 – 17:00', note: 'Průběh tábora' },
 ]
 
@@ -58,7 +58,7 @@ export default function ContactPage() {
       title: 'Telefon',
       value: SITE.phone,
       link: `tel:${SITE.phone.replace(/\s+/g, '')}`,
-      description: 'Po-Pá 9:00-17:00',
+      description: 'Ozveme se co nejdříve.',
     },
     {
       icon: MapPin,
