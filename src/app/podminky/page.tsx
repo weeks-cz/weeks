@@ -46,8 +46,11 @@ export const metadata: Metadata = {
   `SITE`, tvrzení o registraci přes DDM jsou pryč a působnost VOP je celý
   produkt, ne jedno město.
 
-  Nedotčeno záměrně (čeká na rozhodnutí majitele, viz report úkolu 8):
-  čl. 20 Cena tábora (částky zrušených formátů) a číslo účtu v čl. 21.2.
+  Závěrečná opravná vlna dorovnala i dvě místa, která dřív čekala na majitele:
+  čl. 20 už neinzeruje ceny zrušených formátů (2 990 Kč / 4 990 Kč), ale odkazuje
+  na cenu u konkrétního turnusu, a čl. 21.2 s cizím číslem účtu je pryč celý.
+  Ani cena, ani číslo účtu se sem nedopisují — to jsou rozhodnutí majitele,
+  ne opravy textu. Podrobnosti u obou míst v komentáři přímo nad nimi.
 
   Text čeká na kontrolu týmu.
 */
@@ -452,31 +455,24 @@ export default function PodminkyPage() {
               </section>
 
               {/*
-                POZOR — čl. 20 je záměrně ponechaný beze změny.
+                Čl. 20 dřív inzeroval cenové karty dvou formátů, které se nečají:
+                „MIX – Víkendový tábor 2 990 Kč / So + Ne" a „Letní příměstský tábor
+                4 990 Kč / Po–Pá". Dnešní produkt je jeden a oba turnusy mají
+                v `turnusy.ts` `priceKc: null`, takže oblástky inzerovaly částky, za
+                které se nic prodat nedá.
 
-                Uvádí ceny formátů, které se už nekonají (víkendový MIX 2 990 Kč,
-                letní příměstský 4 990 Kč), zatímco oba dnešní turnusy mají v
-                `turnusy.ts` `priceKc: null`. Cena je podstatná náležitost podmínek —
-                její přepsání ani smazání není úkol pro přestavbu webu, ale rozhodnutí
-                majitele (otázka č. 1 v reportu úkolu 8). Návrh k rozhodnutí: cena
-                patří k turnusu, v podmínkách stačí odkaz na cenu uvedenou u
-                konkrétního termínu.
+                Karty jsou pryč a zbyl odkaz na cenu u konkrétního turnusu — tam je
+                jediný zdroj pravdy. Částka se sem záměrně žádná nedopisuje: stanovit
+                cenu je rozhodnutí majitele, ne oprava textu.
               */}
               <section className="mb-10">
                 <h2 className="font-display text-2xl font-bold text-ink mb-4">20. Cena tábora</h2>
-                <div className="grid sm:grid-cols-2 gap-4">
-                  <div className="bg-primary-50 p-5 rounded-lg border border-primary-200">
-                    <p className="font-semibold text-primary-900 mb-1">MIX – Víkendový tábor</p>
-                    <p className="text-2xl font-bold text-primary-900">2 990 Kč</p>
-                    <p className="text-sm text-primary-700 mt-1">So + Ne, oběd v ceně</p>
-                  </div>
-                  <div className="bg-primary-50 p-5 rounded-lg border border-primary-200">
-                    <p className="font-semibold text-primary-900 mb-1">Letní příměstský tábor</p>
-                    <p className="text-2xl font-bold text-primary-900">4 990 Kč</p>
-                    <p className="text-sm text-primary-700 mt-1">Po–Pá (celý týden), oběd v ceně</p>
-                  </div>
-                </div>
-                <p className="text-ink-500 text-sm mt-4">
+                <p className="text-ink mb-4">
+                  Cena tábora je uvedená u konkrétního turnusu v{' '}
+                  <Link href="/tabor#turnusy" className="text-primary-600 underline hover:text-primary-700">nabídce turnusů</Link>{' '}
+                  a platí ve výši, kterou zobrazuje přihláška v okamžiku jejího odeslání.
+                </p>
+                <p className="text-ink-500 text-sm">
                   V ceně tábora jsou zahrnuty: odborné vedení, materiál a pomůcky, oběd.
                   Doprava na místo konání a zpět není součástí ceny.
                 </p>
@@ -496,30 +492,23 @@ export default function PodminkyPage() {
                     </p>
                   </div>
                   {/*
-                    Číslo účtu ponecháno beze změny — po změně pořadatele je to údaj,
-                    který musí potvrdit majitel (otázka č. 2 v reportu úkolu 8).
+                    Čl. 21.2 („Bankovní převod") je pryč celý. Uváděl číslo účtu
+                    2267467012/3030 včetně IBAN — účet, který nepatří pořadateli, jak
+                    ho identifikuje čl. 2 a čl. 17 tohoto dokumentu. Navíc si odporoval
+                    s čl. 21.1 přímo nad ním: platba probíhá výhradně přes platební bránu
+                    Comgate, žádný převod na účet pořadatele se nezadává ručně. Nové
+                    číslo účtu se sem záměrně nedopisuje — to je údaj, který musí potvrdit
+                    majitel. Čl. 21.1 popisuje skutečný stav a stačí sám.
                   */}
                   <div className="bg-white p-5 rounded-md border border-ink/15">
-                    <h3 className="text-base font-semibold text-ink mb-2">21.2 Bankovní převod</h3>
-                    <p className="text-ink-500 text-base mb-2">
-                      Při platbě bankovním převodem je zákonný zástupce povinen uhradit platbu
-                      do <strong>3 pracovních dnů</strong> od odeslání přihlášky.
-                      Po uplynutí této lhůty bez přijetí platby rezervace automaticky zaniká.
-                    </p>
-                    <p className="text-ink-500 text-base">
-                      Číslo účtu pro bankovní převod:{' '}
-                      <strong className="font-mono">2267467012/3030</strong> (Air Bank, IBAN: CZ29 3030 0000 0022 6746 7012)
-                    </p>
-                  </div>
-                  <div className="bg-white p-5 rounded-md border border-ink/15">
-                    <h3 className="text-base font-semibold text-ink mb-2">21.3 Faktura</h3>
+                    <h3 className="text-base font-semibold text-ink mb-2">21.2 Faktura</h3>
                     <p className="text-ink-500 text-base">
                       Daňový doklad bude zákonném zástupci zaslán e-mailem po přijetí platby.
                       Pořadatel není plátcem DPH.
                     </p>
                   </div>
                   <div className="bg-white p-5 rounded-md border border-ink/15">
-                    <h3 className="text-base font-semibold text-ink mb-2">21.4 Provozovatel platební brány</h3>
+                    <h3 className="text-base font-semibold text-ink mb-2">21.3 Provozovatel platební brány</h3>
                     <p className="text-ink-500 text-base mb-2">
                       Platební služby zajišťuje společnost{' '}
                       <a href="https://www.comgate.eu/cs/platebni-brana" target="_blank" rel="noopener noreferrer" className="text-primary-600 underline hover:text-primary-700"><strong>Comgate a.s.</strong></a>, IČ: 27924505,

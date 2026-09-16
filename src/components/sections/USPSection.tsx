@@ -22,8 +22,15 @@ const usps = [
   },
   {
     icon: GraduationCap,
-    title: 'Skuteční odborníci, ne hlídání',
-    description: 'Naši lektoři jsou aktivní programátoři, inženýři a designéři. Mají praxi z oboru a vědí, jak zaujmout teenagery i začátečníky od 9 do 15 let.',
+    // Dřív tu stálo, že lektoři jsou „aktivní programátoři, inženýři
+    // a designéři" s „praxí z oboru". To je stejná kategorie tvrzení jako
+    // „mají ověřené reference", které tahle fáze smazala z /o-nas — dá se na
+    // ně zeptat „kde to je" a web na to nemá odpověď. Dlaždice se navíc
+    // vykresluje přímo nad `KdeASKym`, která slibuje jen doložitelná fakta.
+    // Znění o první pomoci je doslovně převzaté z `getSiteFaq()`
+    // (`src/lib/site.ts`), aby se FAQ a úvodka nerozešly.
+    title: 'Lektoři, ne hlídání',
+    description: 'Lektoři sami pracují s technologiemi, které na táboře učí. Jsou proškolení v první pomoci a s dětmi pracují dlouhodobě.',
   },
   {
     icon: Clock,
