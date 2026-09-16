@@ -71,13 +71,14 @@ npm run lint         # Currently broken — Next 16 removed `next lint`; needs a
       TurnusList.tsx         # /tabor grid + city filter (`filtrMest`, built on `getCitiesWithTurnusy`)
       TurnusCard.tsx         # One turnus card — labels/CTA text come from `turnus-labels.ts`
       TurnusInterestForm.tsx # Non-binding "notify me" form for turnusy that aren't bookable yet (GDPR checkbox)
-      VenueShowcase.tsx, ProjectGallery.tsx, SpotsLeft.tsx  # Venue photos, project gallery, live capacity badge
+      VenueShowcase.tsx, ProjectGallery.tsx, SpotsLeft.tsx  # Venue photos, project gallery (no hardcoded image list — items come from the calling page's focus modules), live capacity badge
     /firmy
       FirmyPoptavka.tsx      # `/firmy` inquiry form — one form, three modes via `?typ=`, posts to `/api/contact`
     /providers
       MotionProvider.tsx    # Framer Motion reduced-motion support
     /seo
-      StructuredData.tsx    # Schema.org markup — price/date read only from turnusy, never from locations.ts
+      StructuredData.tsx    # Schema.org markup — `OrganizationSchema`, `LocalBusinessSchema`, `EventSchema`, `BreadcrumbSchema`; price/date read only from turnusy, never from locations.ts
+      schema-turnusy.ts     # `turnusyProSchema()` — which turnusy may appear in `EventSchema` and with what `Offer.availability` (InStock/SoldOut); a turnus missing date, price or venue never renders, at any status (+ `schema-turnusy.test.ts`)
     /ui
       CookieConsent.tsx     # GDPR cookie banner
       KVRegionNudge.tsx     # Geo-nudge for Karlovarsko visitors → /tabor?mesto=karlovy-vary
@@ -146,6 +147,21 @@ no more per-city pages, no more 7-program catalog.
   `program` value survives only as a fallback for old registrations whose
   turnus is no longer in `TURNUSY`. See the comment above `TURNUSY` in
   `src/lib/turnusy.ts`.
+- **Structured data**: `/tabor/[turnus]` carries `EventSchema` — but only for
+  a turnus `turnusyProSchema()` (`src/components/seo/schema-turnusy.ts`)
+  clears: date, price and venue all set, status `otevreno` or `plno`. A sold-out
+  turnus (`plno`) still renders, as `Offer.availability: SoldOut` — it doesn't
+  just disappear like a `chystame` turnus does. Both current turnusy are
+  `chystame`, so neither page emits an `Event` today. `/tabor`,
+  `/tabor/[turnus]`, `/o-nas`, `/kontakt` and `/firmy` all carry
+  `BreadcrumbSchema` matching the visible breadcrumb trail (`/firmy` has none
+  on-page, so it matches the header link's name instead).
+  **Where the JSON-LD lives**: a server layout, but only when that layout has
+  no child routes. `/o-nas` and `/kontakt` render it from `layout.tsx`.
+  `/tabor` renders it from `page.tsx` instead, because `/tabor/layout.tsx`
+  also wraps `/tabor/[turnus]` — putting the breadcrumb there produced two
+  conflicting `BreadcrumbList` blocks on every turnus page until this phase
+  moved it back down into `/tabor/page.tsx`.
 
 ### Redirects (old structure → `/tabor`)
 
@@ -192,6 +208,7 @@ All user-facing content is in Czech. Code/docs can be in English.
 
 **Structural rebuild (single turnus-based product, Weeks s.r.o. as operator)**: Complete across the whole site — the product/marketing pages (`/`, `/tabor`, `/tabor/[turnus]`) as well as `/o-nas`, `/kontakt`, `/gdpr` and `/podminky` all describe Weeks s.r.o. as organizer; DDM Praha 6 and HWLab remain only as historical code comments explaining what was removed. `/firmy` (linked from the header, footer and the homepage's Rozcesti section) is built — see "`/firmy` (phase 4)" below.
 **Status**: No turnus is bookable yet — both turnusy are `chystame`, with no confirmed date/price/venue. Summer 2027 terms are expected around October 2026; until then the site's job is collecting contacts, not selling.
+**Phase 5 (structured data, rescued focus-module content, dead analytics) is done** — see "Phase 5" below.
 
 ### `/firmy` (phase 4)
 
@@ -213,13 +230,27 @@ fabricated case study. Do not fill in a reference, a price, or a count of
 companies served anywhere in this repo without the founder supplying the real
 number.
 
-Phase 5 (not started) picks up what phase 4 deliberately left out: reviewing the
-off-season state, structured data (`EventSchema`/`BreadcrumbSchema` in
-`src/components/seo/StructuredData.tsx`) on `/tabor/[turnus]` and `/firmy` (today
-there's none), rendering the "rescued" `FocusModule` content (`printers`,
-`hardware`, `gallery`, `faq` in `src/lib/focus.ts` — pulled out of the deleted
-one-day pages in phase 2 but nothing reads them yet), and analytics events for
-`/firmy` (it currently has none).
+### Phase 5 (structured data, rescued content, analytics cleanup)
+
+Phase 5 is done. It picked up what phase 4 deliberately left out:
+
+- **Structured data**: `EventSchema` and `BreadcrumbSchema`
+  (`src/components/seo/StructuredData.tsx`) now render on `/tabor/[turnus]`;
+  `BreadcrumbSchema` also on `/tabor`, `/o-nas`, `/kontakt` and `/firmy`. See
+  "Structured data" under "Product: turnus-based summer camp" above for what
+  gates a turnus into `EventSchema` and where each page's JSON-LD lives.
+- **Rescued focus-module content finally renders**: `printers`, `hardware`,
+  `gallery` and `faq` (`src/lib/focus.ts`, pulled out of the deleted one-day
+  pages back in phase 2) are now shown on `/tabor/[turnus]`. `ProjectGallery`
+  no longer carries its own hardcoded list of six images — both `/tabor` and
+  the turnus page build its items from the turnus's own focus modules.
+- **`analytics.ts` cleanup**: six functions from the deleted weekend/one-day
+  formats — dead since that catalog was removed, called from nowhere — are
+  gone, including two that sent the old, now-wrong prices as GA/Meta
+  conversion `value`. `/firmy` inquiries are now measured:
+  `trackFirmyPoptavka` fires `firmy_poptavka_submit` (GA only, no conversion
+  value) with the submitted offer's id as a dimension, not its heading text,
+  so the event survives future copy changes.
 
 ### Social Media (December 2024)
 - [x] Instagram: @weeks.cz (bio complete)
