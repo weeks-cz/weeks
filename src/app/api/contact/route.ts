@@ -19,7 +19,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: parsed.error }, { status: 400 })
     }
     const { data } = parsed
-    const { name, email, message, firma, telefon, typ, subject } = data
+    const { name, email, message, firma, telefon, typ, gdprConsent, subject } = data
 
     // Send to Formspree (uses same ID as waitlist)
     const formspreeId = process.env.NEXT_PUBLIC_FORMSPREE_ID
@@ -38,6 +38,10 @@ export async function POST(request: Request) {
           ...(firma ? { firma } : {}),
           ...(telefon ? { telefon } : {}),
           ...(typ ? { typ } : {}),
+          // Souhlas se posílá dál jen proto, aby po něm zůstal doklad u odeslané
+          // zprávy. Nic se podle něj nerozhoduje — povinnost zaškrtnout hlídá
+          // formulář, server hodnotu jen přenese.
+          gdprConsent,
           _subject: subject,
         }),
       })
@@ -52,7 +56,20 @@ export async function POST(request: Request) {
     } else {
       // Fallback: Log to console if no Formspree ID configured
       console.log('Contact form submission (Formspree not configured):')
-      console.log({ name, email, message, formType: data.formType, timestamp: new Date().toISOString() })
+      // Bez Formspree je konzole jediným záznamem, takže musí nést i pole,
+      // která přidal poptávkový formulář — jinak není poznat, čí poptávka to
+      // byla a o co šlo.
+      console.log({
+        name,
+        email,
+        message,
+        firma,
+        telefon,
+        typ,
+        gdprConsent,
+        formType: data.formType,
+        timestamp: new Date().toISOString(),
+      })
     }
 
     // Sync to Weeks Hub (must be awaited — serverless kills pending fetches after response)
@@ -62,7 +79,7 @@ export async function POST(request: Request) {
     const hubKey = process.env.WEEKS_HUB_API_KEY
     if (hubUrl && hubKey) {
       try {
-        await fetch(`${hubUrl}/api/form-submissions`, {
+        const hubResponse = await fetch(`${hubUrl}/api/form-submissions`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -76,8 +93,23 @@ export async function POST(request: Request) {
             ...(firma ? { firma } : {}),
             ...(telefon ? { telefon } : {}),
             ...(typ ? { typ } : {}),
+            // Doklad o uděleném souhlasu, ne podmínka — viz komentář u odeslání
+            // do Formspree výš.
+            gdpr_consent: gdprConsent,
           }),
         })
+
+        // `await fetch` vyhodí jen u síťové chyby. Odmítnutí hubem (typicky 400
+        // „neznám form_type 'firmy'") by jinak prošlo tiše a předdeployové
+        // ověření by se o něm nedozvědělo. Poptávku tím ale neshazujeme:
+        // Formspree ji dostal, návštěvník za výpadek hubu nemůže.
+        if (!hubResponse.ok) {
+          console.error(
+            'Weeks Hub sync failed:',
+            hubResponse.status,
+            await hubResponse.text().catch(() => '<tělo odpovědi se nepodařilo přečíst>')
+          )
+        }
       } catch (err) {
         console.error('Weeks Hub sync error:', err)
       }

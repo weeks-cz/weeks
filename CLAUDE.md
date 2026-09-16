@@ -199,9 +199,12 @@ Phase 4 is done. `/firmy` is a real, statically-generated page: three B2B offers
 (`src/lib/firmy.ts` — days for employees' kids, workshops for teams, partnerships),
 each stating what Weeks provides vs. what the company needs to provide, plus one
 shared inquiry form (`FirmyPoptavka`) that posts to `/api/contact` with a `typ`
-field. The route turns a valid `typ` into `form_type: 'firmy'` for weeks-hub
-(`src/app/api/contact/contact-payload.ts`) — **weeks-hub must recognize that value
-or it silently drops the inquiry; that's a pre-deploy check, not a repo task.**
+field. A valid `typ` makes the parser set `formType: 'firmy'`
+(`src/app/api/contact/contact-payload.ts`); the route then sends that to weeks-hub
+as `form_type` (`src/app/api/contact/route.ts`) — **weeks-hub must recognize that
+value or it silently drops the inquiry; that's a pre-deploy check, not a repo
+task.** The route logs a non-OK hub response instead of failing the inquiry, so
+that check has something to look at.
 
 **Weeks has not fulfilled a single corporate booking yet.** There is no price
 list, and the `reference` field on every offer in `src/lib/firmy.ts` is

@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { ArrowRight, Check, Handshake, Users, Wrench } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Check, Handshake, Users, Wrench } from 'lucide-react'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { KdeASKym } from '@/components/sections/KdeASKym'
@@ -36,6 +36,15 @@ export default function FirmyPage() {
         <section className="relative bg-paper blueprint-grid border-b border-ink/15 overflow-hidden pt-32 pb-20">
           <div className="section-container relative z-10">
             <div className="max-w-3xl">
+              {/* Breadcrumb */}
+              <Link
+                href="/"
+                className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 mb-8 transition-colors"
+              >
+                <ArrowLeft className="w-4 h-4" aria-hidden="true" />
+                Zpět na hlavní stránku
+              </Link>
+
               <p className="mono-label mb-6">Pro firmy</p>
               <h1 className="heading-1 text-ink mb-6">Weeks pro firmy</h1>
               <p className="text-lg md:text-xl text-ink-500 mb-10 max-w-2xl leading-relaxed">

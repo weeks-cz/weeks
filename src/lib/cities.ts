@@ -26,6 +26,12 @@ export interface Venue {
   city: string
   postalCode: string
   geo: { lat: number; lng: number }
+  /**
+   * Popis místa — vykresluje se na `/`, `/firmy` (obojí přes `KdeASKym`),
+   * `/o-nas` a `/tabor` i `/tabor/[turnus]` (přes `VenueShowcase`). Je to
+   * tvrzení o cizí firmě, které Weeks nijak nedokládá, takže bez superlativů
+   * a bez údajů, které nemáme odkud ověřit.
+   */
   description: string
   url?: string
   /** Dotaz pro odkaz do map. */
@@ -60,7 +66,7 @@ const VENUES: Record<VenueId, Venue> = {
     postalCode: '360 17',
     geo: { lat: 50.2318, lng: 12.8714 },
     description:
-      'Největší kreativní centrum v Karlovarském kraji s FabLabem, GameDev arenou a profesionálními vzdělávacími prostory.',
+      'Kreativní centrum v Karlovarském kraji s FabLabem, GameDev arenou a vzdělávacími prostory.',
     url: 'https://varyete.cz',
     mapQuery: 'Kreativní+centrum+Vary%26Te+Karlovy+Vary',
     photos: [

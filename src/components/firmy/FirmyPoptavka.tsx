@@ -5,13 +5,8 @@ import { useSearchParams } from 'next/navigation'
 import { motion, useReducedMotion } from 'framer-motion'
 import { Briefcase, CheckCircle, Mail, Phone } from 'lucide-react'
 import Link from 'next/link'
-import { getNabidky, NABIDKA_IDS, type NabidkaId } from '@/lib/firmy'
+import { getNabidky, isNabidkaId, NABIDKA_IDS, type NabidkaId } from '@/lib/firmy'
 import { SITE } from '@/lib/site'
-
-/** Ověří `?typ=` proti číselníku — překlep nebo stará hodnota z adresy se zahodí, ne aby formulář spadl. */
-function isNabidkaId(value: string | null): value is NabidkaId {
-  return value !== null && (NABIDKA_IDS as string[]).includes(value)
-}
 
 /**
  * Samotný formulář. Odděleně od `FirmyPoptavka`, protože ho potřebují dvě
@@ -59,6 +54,10 @@ function FirmyPoptavkaForm({ zvolenyTyp }: { zvolenyTyp: NabidkaId }) {
           firma,
           ...(telefon ? { telefon } : {}),
           typ,
+          // Souhlas posíláme jen jako doklad, že ho odesílatel udělil — server
+          // se podle něj nerozhoduje. Že je zaškrtnutý, hlídá `required` na
+          // zaškrtávátku a vypnuté tlačítko níž.
+          gdprConsent,
         }),
       })
       const data = await res.json().catch(() => null)
@@ -235,8 +234,12 @@ function FirmyPoptavkaForm({ zvolenyTyp }: { zvolenyTyp: NabidkaId }) {
             </label>
           </div>
 
+          {/* `role="alert"` schválně: prvek vzniká až se svou hláškou a samotné
+              `aria-live` na nově vloženém uzlu většina odečítačů neoznámí.
+              Stejný tvar jako `TurnusInterestForm`; `ContactSection` používá
+              `role="alert"` ze stejného důvodu. */}
           {error && (
-            <p aria-live="polite" className="text-sm text-red-600">
+            <p role="alert" aria-live="assertive" className="text-sm text-red-600">
               {error}
             </p>
           )}

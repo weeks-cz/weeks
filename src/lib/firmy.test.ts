@@ -1,5 +1,25 @@
 import { describe, it, expect } from 'vitest'
-import { NABIDKY, getNabidky, getNabidka } from './firmy'
+import { NABIDKY, PARTNERSTVI_ZATIM, getNabidky, getNabidka, type B2BNabidka } from './firmy'
+
+/**
+ * Všechna próza, kterou pojistky hlídají. Nadpis a `proKoho` v ní musí být —
+ * jsou to nejvolnější věty na stránce a bez nich by šlo do `proKoho` napsat
+ * cenu i počet odbavených firem, aniž by cokoliv spadlo.
+ */
+function hlidanyText(n: B2BNabidka): string {
+  return [n.nadpis, n.proKoho, n.perex, ...n.jakToProbiha, ...n.zajistimeMy, ...n.zajistiteVy].join(
+    ' '
+  )
+}
+
+/**
+ * Nabídky plus `PARTNERSTVI_ZATIM` — ta věta se vykresluje na stejné stránce
+ * jako nabídky, takže se na ni vztahují stejná pravidla.
+ */
+const HLIDANE_TEXTY: Array<{ jmeno: string; text: string }> = [
+  ...NABIDKY.map((n) => ({ jmeno: n.id, text: hlidanyText(n) })),
+  { jmeno: 'PARTNERSTVI_ZATIM', text: PARTNERSTVI_ZATIM },
+]
 
 describe('nabídky pro firmy', () => {
   it('má tři nabídky se stabilními id', () => {
@@ -17,21 +37,18 @@ describe('nabídky pro firmy', () => {
     }
   })
 
-  it('žádná nabídka neslibuje cenu — ceník zatím neexistuje', () => {
-    for (const n of NABIDKY) {
-      const text = [n.perex, ...n.jakToProbiha, ...n.zajistimeMy, ...n.zajistiteVy].join(' ')
-      expect(text, `${n.id}`).not.toMatch(/\d+\s*(Kč|,-|CZK)/)
+  it('žádný text pro firmy neslibuje cenu — ceník zatím neexistuje', () => {
+    for (const { jmeno, text } of HLIDANE_TEXTY) {
+      expect(text, jmeno).not.toMatch(/\d+\s*(Kč|,-|CZK)/)
     }
   })
 
-  it('žádná nabídka se neodvolává na nedoložitelné', () => {
+  it('žádný text pro firmy se neodvolává na nedoložitelné', () => {
     const zakazane = ['pojištěn', 'certifik', 'akredit', 'reference', 'garantujeme']
-    for (const n of NABIDKY) {
-      const text = [n.perex, ...n.jakToProbiha, ...n.zajistimeMy, ...n.zajistiteVy]
-        .join(' ')
-        .toLowerCase()
+    for (const { jmeno, text } of HLIDANE_TEXTY) {
+      const male = text.toLowerCase()
       for (const z of zakazane) {
-        expect(text, `${n.id} obsahuje „${z}"`).not.toContain(z)
+        expect(male, `${jmeno} obsahuje „${z}"`).not.toContain(z)
       }
     }
   })

@@ -192,7 +192,13 @@ export default function GDPRPage() {
                   <p className="text-ink font-semibold mb-3">Kontaktní formulář</p>
                   <ul className="list-disc pl-6 space-y-2 text-ink-500">
                     <li><strong>Jméno, e-mailová adresa a text zprávy</strong> – pro vyřízení Vašeho dotazu</li>
+                    <li><strong>Název firmy</strong> (povinný) a <strong>telefonní číslo</strong> (nepovinné) – pro vyřízení poptávky od firmy</li>
                   </ul>
+                  <p className="text-ink-500 text-base mt-3">
+                    Název firmy a telefonní číslo zadáváte pouze v poptávkovém formuláři na
+                    stránce <Link href="/firmy" className="underline">Pro firmy</Link>; běžný
+                    kontaktní formulář je nevyžaduje.
+                  </p>
                 </div>
               </div>
 

@@ -15,9 +15,10 @@ interface RozcestiKarta {
 }
 
 /**
- * Čtyři směry, kam Weeks dnes vede — tábor, firmy, e-shop, učebna.
- * `/firmy` zatím neexistuje (vzniká ve fázi 4) a vede na 404; na neveřejné
- * větvi je to v pořádku, viz task-8-brief.md.
+ * Čtyři směry, kam Weeks dnes vede — tábor, firmy, e-shop a učebna.
+ * První dva jsou stránky tohohle webu (`/tabor`, `/firmy`), e-shop je jeho
+ * sekce (`/eshop`) a učebna běží na vlastní doméně, proto se otevírá
+ * v novém okně (`external`).
  */
 const KARTY: RozcestiKarta[] = [
   {

@@ -1,4 +1,4 @@
-import { NABIDKA_IDS, getNabidka, type NabidkaId } from '@/lib/firmy'
+import { getNabidka, isNabidkaId, type NabidkaId } from '@/lib/firmy'
 
 /**
  * Ověření a sestavení dat kontaktního formuláře jako čistá funkce.
@@ -10,9 +10,9 @@ import { NABIDKA_IDS, getNabidka, type NabidkaId } from '@/lib/firmy'
  *
  * Jeden formulář, dva režimy: bez `typ` jde o běžný rodičovský dotaz
  * (`formType: 'contact'`), s platným `typ` o firemní poptávku
- * (`formType: 'firmy'`). `typ` se ověřuje proti `NABIDKA_IDS` — stejnému
- * číselníku, ze kterého žije stránka `/firmy` — takže nevzniká druhý zdroj
- * pravdy a neplatná hodnota od klienta route nespadne, jen se odmítne.
+ * (`formType: 'firmy'`). `typ` se ověřuje přes `isNabidkaId` ze `src/lib/firmy.ts`,
+ * tedy proti témuž číselníku, ze kterého žije stránka `/firmy` — takže nevzniká
+ * druhý zdroj pravdy a neplatná hodnota od klienta route nespadne, jen se odmítne.
  */
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -32,15 +32,18 @@ export interface ParsedContact {
   firma?: string
   telefon?: string
   typ?: NabidkaId
+  /**
+   * Zaškrtnutý souhlas se zpracováním údajů. Ukládá se jen jako doklad, že ho
+   * odesílatel udělil — nic se podle něj nerozhoduje. Povinnost zaškrtnout
+   * hlídá formulář; kdyby ho server vyžadoval, začal by odmítat požadavky,
+   * které dosud přijímal, a rozbil by starší kontaktní formulář.
+   */
+  gdprConsent: boolean
   formType: 'contact' | 'firmy'
   subject: string
 }
 
 export type ParseContactResult = { ok: true; data: ParsedContact } | { ok: false; error: string }
-
-function isNabidkaId(value: unknown): value is NabidkaId {
-  return typeof value === 'string' && (NABIDKA_IDS as string[]).includes(value)
-}
 
 /** Ořízne na maximální délku a odstraní okrajové bílé znaky. Přepálený vstup se zkrátí, ne odmítne. */
 function orizni(value: string, maxDelka: number): string {
@@ -52,7 +55,7 @@ export function parseContactBody(body: unknown): ParseContactResult {
     return { ok: false, error: 'Všechna pole jsou povinná' }
   }
 
-  const { name, email, message, firma, telefon, typ } = body as Record<string, unknown>
+  const { name, email, message, firma, telefon, typ, gdprConsent } = body as Record<string, unknown>
 
   if (typeof name !== 'string' || !name.trim()) {
     return { ok: false, error: 'Všechna pole jsou povinná' }
@@ -101,6 +104,7 @@ export function parseContactBody(body: unknown): ParseContactResult {
       ...(orizlaFirma ? { firma: orizlaFirma } : {}),
       ...(orizlyTelefon ? { telefon: orizlyTelefon } : {}),
       ...(overenyTyp ? { typ: overenyTyp } : {}),
+      gdprConsent: gdprConsent === true,
       formType,
       subject,
     },

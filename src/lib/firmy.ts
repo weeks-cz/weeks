@@ -11,6 +11,16 @@ export type NabidkaId = 'deti-zamestnancu' | 'workshopy' | 'partnerstvi'
 /** Číselník pro ověření vstupu z formuláře. Jediný zdroj pravdy pro typ poptávky. */
 export const NABIDKA_IDS: NabidkaId[] = ['deti-zamestnancu', 'workshopy', 'partnerstvi']
 
+/**
+ * Ověří, že hodnota je platné id nabídky. Bere `unknown`, aby posloužila obojímu
+ * volajícímu: parseru `/api/contact` (hodnota z těla požadavku, tedy `unknown`)
+ * i formuláři na `/firmy` (`?typ=` z adresy, tedy `string | null`). Stráž patří
+ * vedle číselníku, o který se opírá — jinak vznikne pokaždé znovu.
+ */
+export function isNabidkaId(value: unknown): value is NabidkaId {
+  return typeof value === 'string' && (NABIDKA_IDS as string[]).includes(value)
+}
+
 export interface B2BNabidka {
   id: NabidkaId
   /** Nadpis sekce na stránce. */
@@ -65,7 +75,7 @@ const NABIDKY_MAP: Record<NabidkaId, B2BNabidka> = {
     nadpis: 'Workshopy a teambuilding',
     proKoho: 'Pro office managery a vedoucí týmů, kteří chtějí zážitek s hmatatelným výstupem.',
     perex:
-      'Technologie, které učíme děti, fungují na dospělých stejně dobře — hlavně proto, že výsledek si každý odnese v ruce. Žádné motivační hry, žádné padání do náruče. Tým něco postaví.',
+      'Teambuilding, ze kterého si každý něco odnese v ruce. Žádné motivační hry, žádné padání do náruče — tým si sedne k technologii, kterou učíme děti, a do konce dne z ní něco postaví.',
     jakToProbiha: [
       'Na výběr 3D tisk, elektronika s Arduinem nebo virtuální realita.',
       'Půldenní nebo celodenní formát podle toho, kolik času tým má.',
