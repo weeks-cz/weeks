@@ -141,6 +141,20 @@ export interface NastupniListParams {
   contactEmail: string
 }
 
+/**
+ * Nástupní list.
+ *
+ * Provozní doba tábora je 8:00 – 17:00 — stejně jako na /kontakt, /tabor,
+ * v `USPSection` a v §19 VOP. Dřív tu stálo 8:00 – 16:00, jenže VOP
+ * opravňují pořadatele účtovat 150 Kč za každých započatých 30 minut po
+ * skončení programu: rodič se řídil e-mailem, pořadatel VOP a rozcházeli se
+ * o hodinu, za kterou padala pokuta.
+ *
+ * Seznam povinných dokumentů je doslovně převzatý z §27 VOP
+ * (`src/app/podminky/page.tsx`) — VOP je slibují rodiči právě v nástupním
+ * listu, takže se tyhle dvě místa nesmí rozejít. Formulace se tu nevymýšlí
+ * nová; když se změní §27, musí se změnit i tahle šablona.
+ */
 export function buildNastupniListEmail(p: NastupniListParams): { subject: string; html: string } {
   const body = `
     <p>Dobrý den,</p>
@@ -148,7 +162,7 @@ export function buildNastupniListEmail(p: NastupniListParams): { subject: string
     <table style="width:100%;border-collapse:collapse;margin:16px 0;font-size:14px;">
       <tr><td style="padding:6px 0;color:#64748b;">Tábor</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.programName}</td></tr>
       <tr><td style="padding:6px 0;color:#64748b;">Termín</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.termLabel}</td></tr>
-      <tr><td style="padding:6px 0;color:#64748b;">Čas</td><td style="padding:6px 0;text-align:right;font-weight:600;">8:00 – 16:00</td></tr>
+      <tr><td style="padding:6px 0;color:#64748b;">Čas</td><td style="padding:6px 0;text-align:right;font-weight:600;">8:00 – 17:00</td></tr>
       <tr><td style="padding:6px 0;color:#64748b;">Místo</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.venueName}<br>${p.venueAddress}</td></tr>
     </table>
     <p style="font-weight:600;margin-bottom:4px;">Co s sebou:</p>
@@ -157,6 +171,15 @@ export function buildNastupniListEmail(p: NastupniListParams): { subject: string
       <li>svačinu a pití (oběd zajištěn)</li>
       <li>pohodlné oblečení</li>
     </ul>
+    <p style="font-weight:600;margin-bottom:4px;">Povinné dokumenty při nástupu:</p>
+    <ul style="margin:0 0 8px;padding-left:20px;font-size:14px;line-height:1.6;">
+      <li>vlastnoručně podepsané <strong>Prohlášení o bezinfekčnosti</strong> (ne starší než 1 den)</li>
+      <li><strong>kopii průkazu zdravotní pojišťovny</strong> dítěte</li>
+    </ul>
+    <p style="font-size:14px;color:#475569;margin:0 0 16px;">
+      Oba dokumenty předá zákonný zástupce v den nástupu vedoucímu tábora. Bez jejich
+      předání nemůže být dítěti umožněna účast na táboře.
+    </p>
     <p>V případě nemoci nebo dotazů nám dejte vědět na ${p.contactEmail} nebo ${p.contactPhone}.</p>
     <p>Těšíme se na vaše dítě!<br>tým Weeks</p>`
   return {
@@ -174,15 +197,25 @@ export interface PaymentReminderParams {
   paymentUrl: string
 }
 
+/**
+ * Upomínka na nedokončenou platbu.
+ *
+ * Město se schválně neskloňuje. Dřív tu stálo „v ${'${p.locationName}'}", což
+ * u nominativu z `LOCATIONS` vyrobilo „v Praha" — past, kterou popisuje
+ * komentář u `getVenuesSentence` v `src/lib/site.ts`. Řešením není
+ * skloňovací tabulka, ale věta, která pád nepotřebuje: město je proto
+ * v tabulce jako samostatný řádek, stejně jako v potvrzení registrace.
+ */
 export function buildPaymentReminderEmail(p: PaymentReminderParams): { subject: string; html: string } {
   const body = `
     <p>Dobrý den,</p>
-    <p>děkujeme za zájem o náš <strong>${p.programName}</strong> v ${p.locationName}. Registraci pro <strong>${p.childName}</strong> máme rozepsanou, ale zatím u ní nevidíme dokončenou platbu. Místo se rezervuje až po zaplacení (volná místa se obsazují průběžně).</p>
+    <p>děkujeme za zájem o náš <strong>${p.programName}</strong>. Registraci pro <strong>${p.childName}</strong> máme rozepsanou, ale zatím u ní nevidíme dokončenou platbu. Místo se rezervuje až po zaplacení (volná místa se obsazují průběžně).</p>
     <p>Dokončit ji můžete jedním kliknutím:</p>
     <p style="text-align:center;margin:24px 0;">
       <a href="${p.paymentUrl}" style="display:inline-block;background:#4f46e5;color:#fff;text-decoration:none;font-weight:600;padding:12px 28px;border-radius:10px;">Dokončit platbu</a>
     </p>
     <table style="width:100%;border-collapse:collapse;margin:16px 0;font-size:14px;">
+      <tr><td style="padding:6px 0;color:#64748b;">Místo</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.locationName}</td></tr>
       <tr><td style="padding:6px 0;color:#64748b;">Termín</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.termLabel}</td></tr>
       <tr><td style="padding:6px 0;color:#64748b;">Cena</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.priceKc.toLocaleString('cs-CZ')} Kč</td></tr>
     </table>
