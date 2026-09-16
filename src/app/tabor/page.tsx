@@ -14,6 +14,7 @@ import { getVenue, type VenueId } from '@/lib/cities'
 import { getTurnusy, isBookable, type Turnus } from '@/lib/turnusy'
 import { getFocusModules } from '@/lib/focus'
 import { SITE, getSiteFaq } from '@/lib/site'
+import { BreadcrumbSchema } from '@/components/seo/StructuredData'
 import { ProjectGallery } from '@/components/turnusy/ProjectGallery'
 import { VenueShowcase } from '@/components/turnusy/VenueShowcase'
 import { TurnusList, filtrMest, platneMesto } from '@/components/turnusy/TurnusList'
@@ -182,6 +183,21 @@ export default function TaborPage() {
 
   return (
     <>
+      {/* Drobečky stojí tady, ne v `layout.tsx`, přestože je tahle stránka
+          klientská a JSON-LD se tím veze i do klientského balíku. Layout
+          `/tabor` totiž obaluje i `/tabor/[turnus]`, takže by se jeho
+          drobečky vykreslily i na stránkách turnusů — vedle jejich vlastních.
+          Dvě protichůdné drobečkové cesty na jedné stránce jsou pro vyhledávač
+          horší než pár set bajtů v balíku. Pravidlo „schema do layoutu" tedy
+          platí jen pro layout, který nemá podřízené cesty (viz `/o-nas`,
+          `/kontakt`). Text poslední položky souhlasí s viditelným drobečkem
+          níž na stránce. */}
+      <BreadcrumbSchema
+        items={[
+          { name: 'Domů', url: SITE.url },
+          { name: 'Letní příměstský tábor', url: `${SITE.url}/tabor` },
+        ]}
+      />
       <Header />
       <main>
         {/* Hero */}

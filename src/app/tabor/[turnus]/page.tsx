@@ -272,9 +272,9 @@ export default async function TurnusPage({
             <div className="section-container">
               <div className="max-w-3xl mx-auto">
                 <div className="mb-10 text-center">
-                  <p className="mono-label mb-4">Časté dotazy k zaměření</p>
+                  <p className="mono-label mb-4">FAQ</p>
                   <h2 className="heading-2 text-ink">
-                    Co rodiče <span className="text-primary-600">nejčastěji řeší</span>
+                    Časté dotazy <span className="text-primary-600">k zaměření</span>
                   </h2>
                 </div>
                 <div className="space-y-4">
