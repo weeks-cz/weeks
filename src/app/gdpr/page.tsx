@@ -45,8 +45,17 @@ export const metadata: Metadata = {
   Zůstalo jedno znění: identifikace pořadatele ze `SITE`, rozsah údajů podle
   toho, co formuláře skutečně sbírají (`src/lib/registration.ts`), a u každého
   tématu ta z obou formulací, která popisuje skutečný provoz webu (registrace
-  v Supabase, platba přes Comgate). Žádná právní věta tu není nově vymyšlená —
-  všechny pocházejí z předchozího znění téhle stránky.
+  v Supabase, platba přes Comgate).
+
+  POZOR — jedna výjimka: oddíl 2. Vypsat rozsah údajů podle `registration.ts`
+  bylo zadané, ale **účely, které jsou u jednotlivých údajů uvedené, jsou nově
+  formulované** (identifikace smluvní strany, daňový doklad, ošetření dítěte,
+  přizpůsobení zadání, celý blok vyzvedávání, popis souhlasů, poznámka
+  k objednávce, vyřízení dotazu z kontaktního formuláře). Účel zpracování je
+  podle čl. 13 odst. 1 písm. c) GDPR údaj, kterým se správce váže — tyhle věty
+  tedy nejsou přepis, ale nový závazek a čekají na kontrolu (otázka č. 11
+  v reportu úkolu 8). Mimo oddíl 2 pocházejí všechny věty z předchozího znění
+  téhle stránky.
 
   Text čeká na kontrolu týmu.
 */
@@ -121,7 +130,7 @@ export default function GDPRPage() {
                     <li><strong>Jméno a příjmení</strong> – pro identifikaci smluvní strany</li>
                     <li><strong>E-mailová adresa</strong> – pro komunikaci a potvrzení registrace</li>
                     <li><strong>Telefonní číslo</strong> – pro urgentní kontakt v průběhu tábora</li>
-                    <li><strong>Adresa</strong> – pro vystavení daňového dokladu</li>
+                    <li><strong>Fakturační adresa</strong> – pro vystavení daňového dokladu</li>
                   </ul>
                   <p className="text-ink-500 text-base mb-3">Údaje o dítěti:</p>
                   <ul className="list-disc pl-6 space-y-2 text-ink-500 mb-4">
@@ -220,8 +229,9 @@ export default function GDPRPage() {
                     Souhlas subjektu údajů (čl. 6 odst. 1 písm. a) GDPR)
                   </p>
                   <p className="text-ink text-base">
-                    Zpracování e-mailové adresy pro zasílání novinek a marketingové komunikace
-                    je podmíněno Vaším dobrovolným souhlasem. Souhlas můžete kdykoli odvolat.
+                    Zpracování jména a e-mailové adresy pro zasílání novinek a marketingové
+                    komunikace je podmíněno Vaším dobrovolným souhlasem. Souhlas můžete
+                    kdykoli odvolat.
                   </p>
                 </div>
                 <div className="bg-white p-6 rounded-md border border-ink/15">
@@ -295,6 +305,12 @@ export default function GDPRPage() {
                   </p>
                 </div>
                 <div className="bg-white p-6 rounded-lg border border-ink/15">
+                  <h3 className="font-display text-lg font-semibold text-ink mb-2">Právo na omezení zpracování</h3>
+                  <p className="text-ink text-base">
+                    Máte právo požadovat omezení zpracování svých osobních údajů.
+                  </p>
+                </div>
+                <div className="bg-white p-6 rounded-lg border border-ink/15">
                   <h3 className="font-display text-lg font-semibold text-ink mb-2">Právo na přenositelnost</h3>
                   <p className="text-ink text-base">
                     Máte právo získat kopii Vašich údajů ve strukturovaném, běžně používaném formátu.
@@ -346,10 +362,12 @@ export default function GDPRPage() {
                 <li><strong>Fakturoid</strong> – vystavení a evidence daňových dokladů (faktur)</li>
                 <li><strong>Comgate a.s.</strong> – provozovatel platební brány (zpracování platby), IČ 27924505</li>
                 <li><strong>Vercel</strong> – hosting a technický provoz webu</li>
+                <li><strong>Upstash</strong> – dočasné uložení IP adresy pro ochranu formulářů před zneužitím (odesílání zpráv, registrace, platba)</li>
                 <li><strong>Sentry</strong> – monitoring chyb serverové části aplikace (pomáhá nám rychle odhalit a opravit závady)</li>
                 <li><strong>Sanity</strong> – správa obsahu webu</li>
                 <li><strong>Google (Google Analytics)</strong> – měření návštěvnosti, pouze s Vaším souhlasem</li>
                 <li><strong>Meta Platforms (Facebook Pixel)</strong> – měření účinnosti reklam, pouze s Vaším souhlasem</li>
+                <li><strong>Seznam.cz (Sklik)</strong> – měření účinnosti reklam, pouze s Vaším souhlasem</li>
               </ul>
               <p className="text-ink mt-4">
                 Všichni zpracovatelé jsou pečlivě vybráni a zavázáni k ochraně osobních údajů v souladu
@@ -367,7 +385,7 @@ export default function GDPRPage() {
               <ul className="list-disc pl-6 space-y-2 text-ink-500">
                 <li>Šifrované připojení (HTTPS)</li>
                 <li>Data v databázi chráněna pomocí Row Level Security (Supabase)</li>
-                <li>Přístup k registračním datům pouze pro oprávněné osoby</li>
+                <li>Přístup k údajům pouze pro oprávněné osoby</li>
                 <li>Pravidelné bezpečnostní aktualizace</li>
                 <li>Pravidelné zálohy dat</li>
               </ul>
@@ -395,7 +413,7 @@ export default function GDPRPage() {
                 <div className="bg-white p-6 rounded-lg border border-ink/15">
                   <h3 className="font-display text-lg font-semibold text-ink mb-2">Marketingové cookies</h3>
                   <p className="text-ink text-base">
-                    Slouží k měření účinnosti reklam a cílení (Facebook Pixel / Meta).
+                    Slouží k měření účinnosti reklam a cílení (Facebook Pixel / Meta, Sklik / Seznam.cz).
                     Aktivujeme je pouze s Vaším souhlasem.
                   </p>
                 </div>

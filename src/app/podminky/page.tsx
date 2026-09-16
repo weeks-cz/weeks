@@ -251,9 +251,8 @@ export default function PodminkyPage() {
               <div className="bg-accent-50 p-6 rounded-lg border border-accent-200 mt-6">
                 <p className="text-accent-900 font-medium mb-2">Odpovědnost za tábory</p>
                 <p className="text-accent-800 text-base">
-                  Toto omezení se týká užívání webu. Průběh tábora, podmínky účasti a práva
-                  a povinnosti pořadatele upravují všeobecné obchodní podmínky v části B
-                  (zejména čl. 23 a 24).
+                  Průběh tábora, podmínky účasti a práva a povinnosti pořadatele upravují
+                  všeobecné obchodní podmínky v části B (zejména čl. 23 a 24).
                 </p>
               </div>
             </section>
