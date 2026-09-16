@@ -9,7 +9,7 @@ import { useState } from 'react'
 import { trackLead } from '@/lib/fbpixel'
 import { getTurnusy } from '@/lib/turnusy'
 import { getVenue, type VenueId } from '@/lib/cities'
-import { SITE } from '@/lib/site'
+import { SITE, getSiteFaq } from '@/lib/site'
 
 // Provozní doba je vlastnost produktu (turnusu), ne dne v týdnu podle starého
 // víkendového formátu — viz `Provozní doba táborů` na /podminky a rozvrh na
@@ -19,20 +19,12 @@ const operatingHours = [
   { day: 'Pondělí – Pátek', hours: '8:00 – 17:00', note: 'Průběh tábora' },
 ]
 
-const faqPreview = [
-  {
-    question: 'Jakou úroveň znalostí dítě potřebuje?',
-    answer: 'Žádnou! Programy přizpůsobujeme věku a zkušenostem dětí.',
-  },
-  {
-    question: 'Co si dítě odnese domů?',
-    answer: 'Všechny projekty, které během tábora vytvoří - 3D tisky, kód a další výtvory.',
-  },
-  {
-    question: 'Je zajištěno stravování?',
-    answer: 'Ano, oběd zajišťujeme my. Děti si nosí pouze svačinu na dopoledne.',
-  },
-]
+// Výtah ze sdíleného FAQ (`getSiteFaq()`), ne vlastní kopie. /kontakt bylo
+// jediná stránka s vlastními odpovědmi a rozcházelo se s nimi: tvrdilo, že si
+// děti nosí „pouze svačinu na dopoledne", zatímco FAQ na úvodce i na /tabor
+// mluví o svačině na dopoledne i odpoledne. Dokud se preview bere shora ze
+// sdíleného zdroje, nemá se s čím rozejít — a tlačítko pod ním vede na celé FAQ.
+const faqPreview = getSiteFaq().slice(0, 3)
 
 export default function ContactPage() {
   // Místa konání — jen ta, která nějaký turnus doopravdy má. Dnes vyjde jedna
