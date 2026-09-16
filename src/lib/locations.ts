@@ -1,25 +1,9 @@
-// Central location configuration for multi-city support
-// All location-specific content is defined here — components read from this config
-
-export interface Venue {
-  name: string
-  fullName: string
-  address: string
-  city: string
-  postalCode: string
-  geo: { lat: number; lng: number }
-  description: string
-  transport?: string
-  url?: string
-  mapQuery?: string
-}
-
-export interface Organizer {
-  name: string
-  fullName: string
-  url?: string
-  logoUrl?: string
-}
+// Central location configuration — dnes už jen jméno lokality a kontakt pro
+// registraci, platby a e-maily (viz `getLocationById` v nich). `programs`,
+// `terms` a `season` jsou nečtený zbytek staré struktury webu, ponechané pro
+// jistotu. Místo konání, cena a datum turnusu jsou vlastnost turnusu — žijí
+// v `turnusy.ts` a `cities.ts`, ne tady (viz varování nad `TURNUSY` a nad
+// voláním `getTurnusById` v `nastupni-list/route.ts`).
 
 export interface ProgramConfig {
   id: string
@@ -64,15 +48,9 @@ export interface Location {
   name: string
   slug: string
   isDefault: boolean
-  organizer: Organizer
-  venues: Venue[]
   contact: {
     phone: string
     email: string
-  }
-  seo: {
-    titleSuffix: string
-    description: string
   }
   programs: ProgramConfig[]
   terms: TermConfig[]
@@ -81,17 +59,7 @@ export interface Location {
     badge: string
     subtitle: string
   }
-  usps: {
-    organizer: { title: string; description: string }
-    location: { title: string; description: string }
-    technology?: { title: string; description: string }
-    schedule?: { title: string; description: string }
-  }
   safetyFeatures?: Array<{ title: string; description: string }>
-  faq: {
-    locationAnswer: string
-    organizerAnswer: string
-  }
   availablePages: string[]
 }
 
@@ -115,58 +83,12 @@ export const LOCATIONS: Record<string, Location> = {
     name: 'Praha',
     slug: '',
     isDefault: true,
-    organizer: {
-      name: 'DDM Praha 6',
-      fullName: 'Dům dětí a mládeže Praha 6',
-      url: 'https://ddmp6.cz',
-    },
-    venues: [
-      {
-        name: 'HWLab Praha',
-        fullName: 'Kongresové centrum Praha',
-        address: '5. května 11',
-        city: 'Praha 4 - Nusle',
-        postalCode: '140 00',
-        geo: { lat: 50.0621, lng: 14.4285 },
-        description: 'Moderní technologické centrum v Kongresovém centru Praha s profesionálním vybavením pro 3D tisk, VR a programování.',
-        transport: 'Metro C - Vyšehrad (5 min pěšky)',
-        mapQuery: 'HWLab+Praha,+5.+května+11,+Praha+4',
-      },
-      {
-        name: 'DDM Praha 6',
-        fullName: 'DDM Praha 6 – Bílá hora',
-        address: 'U Boroviček 5',
-        city: 'Praha 6',
-        postalCode: '163 00',
-        geo: { lat: 50.0830, lng: 14.3350 },
-        description: 'Dům dětí a mládeže Praha 6 s více než 70 lety zkušeností v práci s dětmi a mládeží.',
-        mapQuery: 'DDM+Praha+6,+U+Boroviček+5,+Praha+6',
-      },
-    ],
     contact: { phone: '+420 703 046 440', email: 'info@weeks.cz' },
-    seo: {
-      titleSuffix: 'Praha',
-      description: 'Víkendové a jednodenní IT kempy pro děti 10-15 let v Praze. 3D tisk, IoT, programování a virtuální realita v profesionálním prostředí HWLab.',
-    },
     programs: SHARED_PROGRAMS,
     terms: [],
     hero: {
       badge: 'Nově v Praze!',
       subtitle: 'Víkendové i jednodenní formáty v Praze — 3D tisk, IoT, programování a virtuální realita pro děti 10–15 let.',
-    },
-    usps: {
-      organizer: {
-        title: 'Organizováno DDM Praha 6',
-        description: 'Záštitu nad kempy drží DDM Praha 6. Garantujeme bezpečnost a kvalitu s více než 70 lety zkušeností v práci s dětmi.',
-      },
-      location: {
-        title: 'Metro až ke dveřím',
-        description: 'Kongresové centrum Praha — 5 minut pěšky od metra Vyšehrad. Snadný přístup z celé Prahy.',
-      },
-    },
-    faq: {
-      locationAnswer: 'Kempy probíhají v HWLab Praha (Kongresové centrum Praha, 5. května 11, Praha 4) a DDM Praha 6 (U Boroviček 5, Praha 6). HWLab je 5 minut pěšky od metra Vyšehrad.',
-      organizerAnswer: 'Kempy organizuje DDM Praha 6 (Dům dětí a mládeže Praha 6), pod jehož záštitou projekt Weeks funguje.',
     },
     availablePages: AVAILABLE_PAGES,
   },
@@ -176,29 +98,7 @@ export const LOCATIONS: Record<string, Location> = {
     name: 'Karlovy Vary',
     slug: 'karlovy-vary',
     isDefault: false,
-    organizer: {
-      name: 'Weeks',
-      fullName: 'Lukáš Kubík, IČO 24878511',
-      logoUrl: '/images/weeks-logo.png',
-    },
-    venues: [
-      {
-        name: 'FabLab VARY&TE',
-        fullName: 'FabLab v Kreativním centru VARY&TE',
-        address: 'Dykova',
-        city: 'Stará Role',
-        postalCode: '360 17',
-        geo: { lat: 50.2318, lng: 12.8714 },
-        description: 'Největší kreativní centrum v Karlovarském kraji s FabLabem, GameDev arenou a profesionálními vzdělávacími prostory.',
-        url: 'https://varyete.cz',
-        mapQuery: 'Kreativní+centrum+Vary%26Te+Karlovy+Vary',
-      },
-    ],
     contact: { phone: '+420 703 046 440', email: 'info@weeks.cz' },
-    seo: {
-      titleSuffix: 'Karlovy Vary',
-      description: 'IT kempy pro děti 9-15 let v Karlových Varech. 3D tisk, IoT, programování a virtuální realita ve VARY&TE Creative Center.',
-    },
     programs: [
       { id: 'letni-primestsky', name: 'Letní příměstský tábor chytrých technologií', slug: 'letni-primestsky', campType: 'week' as const, price: 4990, capacity: 15, ageRange: '9-15', color: 'accent' },
       { id: 'mix', name: 'Víkendový tábor chytrých technologií', slug: 'tabor-chytrych-technologii', campType: 'weekend' as const, price: 2990, capacity: 15, ageRange: '9-15', color: 'primary' },
@@ -219,34 +119,12 @@ export const LOCATIONS: Record<string, Location> = {
       badge: 'Nově v Karlových Varech!',
       subtitle: 'Letní příměstský tábor (Po–Pá) i víkendový MIX (So–Ne) v Karlových Varech — 3D tisk, modelování, IoT, VR a základy programování.',
     },
-    usps: {
-      organizer: {
-        title: 'Organizováno Weeks',
-        description: 'Tábory organizuje tým Weeks s důrazem na kvalitu výuky, bezpečnost dětí a profesionální přístup.',
-      },
-      location: {
-        title: 'VARY&TE Creative Center',
-        description: 'Největší kreativní centrum v Karlovarském kraji — FabLab, GameDev arena a moderní vzdělávací prostory.',
-      },
-      technology: {
-        title: 'Vybavení FabLab VARY&TE',
-        description: 'Vaše dítě pracuje ve FabLabu — průmyslové 3D tiskárny, VR headsety a pokročilá IoT zařízení. Profesionální zázemí největšího kreativního centra v kraji.',
-      },
-      schedule: {
-        title: 'Kompletní servis od 8 do 17',
-        description: 'Celý týden oběd, přestávky a střídání aktivit. Rodiče mají klid, děti mají postaráno o vše.',
-      },
-    },
     safetyFeatures: [
       { title: 'Bezpečné prostředí', description: 'Stálý dohled lektorů' },
       { title: 'Malé skupiny', description: '1 lektor na 5 dětí' },
       { title: 'Okamžitý kontakt', description: 'Rodič vždy informován' },
       { title: 'Proškolení lektoři', description: 'Kurz první pomoci' },
     ],
-    faq: {
-      locationAnswer: 'Tábor probíhá ve FabLab v Kreativním centru VARY&TE, Dykova, Stará Role, Karlovy Vary — největším kreativním centru v Karlovarském kraji s profesionálním FabLabem a GameDev arenou.',
-      organizerAnswer: 'Tábory v Karlových Varech organizuje Weeks ve spolupráci s Kreativním centrem VARY&TE.',
-    },
     availablePages: ['', 'letni-primestsky', 'tabor-chytrych-technologii', 'o-nas', 'gdpr', 'podminky', 'kontakt'],
   },
 }

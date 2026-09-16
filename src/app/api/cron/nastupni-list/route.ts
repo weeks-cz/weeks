@@ -5,6 +5,8 @@ import { getLocationById } from '@/lib/locations'
 import { formatTermLabel, isoDate, isoDatePlusDays } from '@/lib/dates'
 import { reportMessage } from '@/lib/observability'
 import { getTrustedProgramName } from '@/lib/payment-pricing'
+import { getTurnusById } from '@/lib/turnusy'
+import { getVenue } from '@/lib/cities'
 
 export const dynamic = 'force-dynamic'
 
@@ -70,13 +72,38 @@ export async function GET(request: Request) {
           fallbackProgram: reg.program,
         })
       }
-      const venue = location.venues[0]
+      // Místo konání je vlastnost turnusu, ne konfigurace lokalit — ta by pro
+      // Prahu vrátila adresu HWLabu, se kterým Weeks nemá nic společného.
+      let venueName: string
+      let venueAddress: string
+      try {
+        const turnus = getTurnusById(reg.term_id as string)
+        if (!turnus) {
+          throw new Error(`Neznámý turnus: ${reg.term_id}`)
+        }
+        if (!turnus.venueId) {
+          throw new Error(`Turnus ${reg.term_id} zatím nemá určené místo konání`)
+        }
+        const venue = getVenue(turnus.venueId)
+        venueName = venue.fullName
+        venueAddress = `${venue.street}, ${venue.postalCode} ${venue.city}`
+      } catch (e) {
+        // Neznámý turnus i turnus bez místa řešíme stejně: raději nejasná
+        // věta než vymyšlená nebo tiše prázdná adresa.
+        venueName = 'Místo konání upřesníme samostatně e-mailem.'
+        venueAddress = ''
+        reportMessage('Nástupní list: venue unknown for term_id, sending placeholder', {
+          registrationId: reg.id,
+          term_id: reg.term_id,
+          error: e instanceof Error ? e.message : String(e),
+        })
+      }
       const { subject, html } = buildNastupniListEmail({
         childName: reg.child_name as string,
         programName,
         termLabel: formatTermLabel(reg.term_start as string, reg.term_end as string),
-        venueName: venue?.fullName ?? venue?.name ?? location.name,
-        venueAddress: venue ? `${venue.address}, ${venue.postalCode} ${venue.city}` : '',
+        venueName,
+        venueAddress,
         contactPhone: location.contact.phone,
         contactEmail: location.contact.email,
       })
