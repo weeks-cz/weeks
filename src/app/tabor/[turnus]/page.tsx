@@ -106,11 +106,14 @@ export default async function TurnusPage({
   const venue = turnus.venueId ? getVenue(turnus.venueId) : null
   const dalsiTurnusy = getTurnusy().filter((t) => t.id !== turnus.id)
   const prodejny = isBookable(turnus)
-  // Otázky posbírané ze všech modulů zaměření, které tenhle turnus má —
-  // modul bez `faq` (vr, herni-vyvoj) prostě nepřidá nic.
-  const zamereniFaq = zamereni.flatMap((z) =>
-    (z.faq ?? []).map((item) => ({ ...item, modulId: z.id }))
-  )
+  // Otázky ze všech modulů zaměření, které tenhle turnus má — po skupinách,
+  // ne v jednom seznamu. Moduly kladou doslova stejnou otázku („Co si děti
+  // odnesou domů?") s různou odpovědí, a bez názvu modulu nad skupinou nemá
+  // čtenář jak poznat, která odpověď patří k čemu. Modul bez `faq`
+  // (vr, herni-vyvoj) nepřidá skupinu žádnou.
+  const faqSkupiny = zamereni
+    .map((z) => ({ id: z.id, name: z.name, otazky: z.faq ?? [] }))
+    .filter((skupina) => skupina.otazky.length > 0)
   // Fotky projektů ze stejných modulů, štítek u obrázku je název modulu.
   const galerie = zamereni.flatMap((z) =>
     (z.gallery ?? []).map((img) => ({ ...img, tag: z.name }))
@@ -126,7 +129,9 @@ export default async function TurnusPage({
       <BreadcrumbSchema
         items={[
           { name: 'Domů', url: SITE.url },
-          { name: 'Tábor', url: `${SITE.url}/tabor` },
+          // Stejný název, jakým se `/tabor` označuje sama (viditelný drobeček
+          // i schema tam): jedna adresa nesmí mít v drobečkách dva názvy.
+          { name: 'Letní příměstský tábor', url: `${SITE.url}/tabor` },
           { name: `${l.mesto} — ${l.datum}`, url: `${SITE.url}/tabor/${turnus.slug}` },
         ]}
       />
@@ -142,7 +147,7 @@ export default async function TurnusPage({
                 </Link>
                 <span className="text-ink/30 mx-2">/</span>
                 <Link href="/tabor" className="text-ink/50 hover:text-primary-600 transition-colors">
-                  Tábor
+                  Letní příměstský tábor
                 </Link>
                 <span className="text-ink/30 mx-2">/</span>
                 <span className="text-ink font-medium">
@@ -169,13 +174,17 @@ export default async function TurnusPage({
                   { icon: Users, label: `Max ${turnus.capacity}`, sublabel: 'dětí' },
                   { icon: Wallet, label: l.cena || 'Upřesníme', sublabel: 'cena' },
                 ].map((fact, i) => (
+                  // V `<dl>` musí `<dt>` (název údaje, tady drobný popisek)
+                  // stát v kódu před svým `<dd>`. Vizuálně patří pod hodnotu,
+                  // což řeší `flex flex-col` + `order-last` na `<dt>` — pořadí
+                  // na obrazovce se tím nemění, jen pořadí ve zdroji.
                   <div
                     key={fact.sublabel}
-                    className={`p-4 border-ink/15 ${i % 2 === 1 ? 'border-l' : ''} ${i >= 2 ? 'border-t sm:border-t-0' : ''} ${i > 0 ? 'sm:border-l' : ''}`}
+                    className={`flex flex-col p-4 border-ink/15 ${i % 2 === 1 ? 'border-l' : ''} ${i >= 2 ? 'border-t sm:border-t-0' : ''} ${i > 0 ? 'sm:border-l' : ''}`}
                   >
                     <fact.icon className="w-4 h-4 text-primary-600 mb-2" aria-hidden="true" />
+                    <dt className="order-last font-mono text-xs text-ink/50 uppercase tracking-wider mt-0.5">{fact.sublabel}</dt>
                     <dd className="font-display text-sm font-semibold text-ink">{fact.label}</dd>
-                    <dt className="font-mono text-xs text-ink/50 uppercase tracking-wider mt-0.5">{fact.sublabel}</dt>
                   </div>
                 ))}
               </dl>
@@ -226,22 +235,10 @@ export default async function TurnusPage({
                         ))}
                       </ul>
 
-                      {/* Vybavení — jen tiskárny (3D tisk) nebo hardware (IoT), moduly bez něj nic nepřidají */}
-                      {z.printers && z.printers.length > 0 && (
-                        <div className="mt-4 pt-4 border-t border-ink/15">
-                          <p className="mono-label mb-2">Tiskárny, na kterých děti pracují</p>
-                          <div className="flex flex-wrap gap-1.5">
-                            {z.printers.map((printer) => (
-                              <span
-                                key={printer}
-                                className="font-mono text-xs px-2 py-0.5 rounded-sm border border-ink/20 bg-white text-ink/60"
-                              >
-                                {printer}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      )}
+                      {/* Vybavení — jen přenosný hardware (IoT). Modely tiskáren
+                          (`focus.printers`) se schválně nevykreslují: je to inventář
+                          prostoru, který pro 2027 není domluvený, viz komentář
+                          u těch dat v `src/lib/focus.ts`. */}
                       {z.hardware && z.hardware.length > 0 && (
                         <div className="mt-4 pt-4 border-t border-ink/15">
                           <p className="mono-label mb-2">Hardware</p>
@@ -267,7 +264,7 @@ export default async function TurnusPage({
 
         {/* FAQ k zaměření — otázky, které nesou moduly tohohle turnusu; prostý
             seznam, ne akordeon (ten je vyhrazený pro `FAQSection`/`getSiteFaq()`) */}
-        {zamereniFaq.length > 0 && (
+        {faqSkupiny.length > 0 && (
           <section className="section-padding bg-paper-soft border-y border-ink/15">
             <div className="section-container">
               <div className="max-w-3xl mx-auto">
@@ -277,11 +274,21 @@ export default async function TurnusPage({
                     Časté dotazy <span className="text-primary-600">k zaměření</span>
                   </h2>
                 </div>
-                <div className="space-y-4">
-                  {zamereniFaq.map((item) => (
-                    <div key={`${item.modulId}-${item.question}`} className="card-maker p-6">
-                      <h3 className="font-display font-semibold text-ink mb-2">{item.question}</h3>
-                      <p className="text-ink-500 text-sm leading-relaxed">{item.answer}</p>
+                {/* Popisek skupiny se vykreslí i u jediného modulu — zobrazení,
+                    které se mění podle počtu skupin, je horší než jeden nadpis
+                    navíc. */}
+                <div className="space-y-10">
+                  {faqSkupiny.map((skupina) => (
+                    <div key={skupina.id}>
+                      <p className="mono-label mb-4">{skupina.name}</p>
+                      <div className="space-y-4">
+                        {skupina.otazky.map((item) => (
+                          <div key={item.question} className="card-maker p-6">
+                            <h3 className="font-display font-semibold text-ink mb-2">{item.question}</h3>
+                            <p className="text-ink-500 text-sm leading-relaxed">{item.answer}</p>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   ))}
                 </div>

@@ -37,10 +37,9 @@ export const metadata: Metadata = {
   },
 }
 
+// Layout tu existuje jen kvůli metadatům výš — drobečky si `/tabor`
+// i `/tabor/[turnus]` vykreslují samy (každá stránka svoje), takže vracet
+// `children` je všechno, co má dělat.
 export default function TaborLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <>
-      {children}
-    </>
-  )
+  return children
 }

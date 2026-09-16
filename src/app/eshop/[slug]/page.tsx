@@ -5,8 +5,10 @@ import { ArrowLeft, BookOpen, CheckCircle2, ExternalLink } from 'lucide-react'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { ProductInterestButton } from '@/components/shop/ProductInterestButton'
+import { BreadcrumbSchema } from '@/components/seo/StructuredData'
 import { formatPrice, getShopProductBySlug, productConceptNotice } from '@/lib/shop'
 import { ProductTracking } from '@/components/shop/ProductTracking'
+import { SITE } from '@/lib/site'
 
 export const dynamic = 'force-dynamic'
 
@@ -44,8 +46,19 @@ export default async function ShopProductPage({
     notFound()
   }
 
+  // Název produktu se bere z dat, ne natvrdo — je to zároveň nadpis `h1`
+  // stránky, takže schema tvrdí přesně to, co je vidět. Prostřední článek
+  // pojmenovává `/eshop` stejně jako hlavička (`Header.tsx`) a jako drobeček
+  // na samotném `/eshop`.
+  const breadcrumbItems = [
+    { name: 'Domů', url: SITE.url },
+    { name: 'E-shop', url: `${SITE.url}/eshop` },
+    { name: product.name, url: `${SITE.url}/eshop/${product.slug}` },
+  ]
+
   return (
     <>
+      <BreadcrumbSchema items={breadcrumbItems} />
       <Header />
       <main className="bg-paper">
         <ProductTracking productSlug={product.slug} productName={product.name} />

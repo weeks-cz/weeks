@@ -1,14 +1,18 @@
-// Analytics utility for GA4 + Facebook Pixel event tracking
-// GA4: uses sendGAEvent from @next/third-parties (official Next.js method)
-// FB Pixel: uses window.fbq loaded via MetaPixel component
+// Měření událostí pro GA4 a Facebook Pixel.
+// GA4: přes `sendGAEvent` z @next/third-parties (oficiální cesta v Next.js).
+// FB Pixel: přes `window.fbq`, které načítá komponenta MetaPixel.
+//
+// Názvy funkcí, událostí i parametrů zůstávají anglické schválně — jsou to
+// klíče, na kterých závisí sestavy v GA4 a v Meta. Česky jsou komentáře.
 
 import { sendGAEvent } from '@next/third-parties/google'
 
 function fbqEvent(
   eventName: string,
   params?: Record<string, string | number>,
-  // When set, fbq sends `{ eventID }` so Meta can deduplicate this browser event
-  // against the matching server-side Conversions API event (same id on both).
+  // Když je vyplněné, pošle fbq `{ eventID }` a Meta si tuhle událost
+  // z prohlížeče spáruje s odpovídající serverovou událostí z Conversions API
+  // (obě nesou stejné id), takže ji nezapočítá dvakrát.
   eventId?: string
 ) {
   if (typeof window !== 'undefined' && typeof window.fbq === 'function') {
@@ -61,11 +65,12 @@ export function trackFirmyPoptavka(params: { typ: string }) {
   })
 }
 
-// QR code scan: fires when visitor arrives via /go/[slug] redirect (utm_medium=qr)
+// Načtení QR kódu: spustí se, když návštěvník přijde přes přesměrování
+// /go/[slug] (utm_medium=qr).
 export function trackQRScan(params: {
-  source: string   // utm_source (e.g. 'plakat')
-  campaign: string // utm_campaign (e.g. 'jaro2026')
-  content: string  // utm_content (e.g. 'skola1', 'ddm')
+  source: string   // utm_source (např. 'plakat')
+  campaign: string // utm_campaign (např. 'jaro2026')
+  content: string  // utm_content (např. 'skola1', 'ddm')
 }) {
   sendGAEvent('event', 'qr_scan', {
     qr_source: params.source,
@@ -78,9 +83,10 @@ export function trackQRScan(params: {
   })
 }
 
-// Učebna nav link click — tracks how often visitors discover the IoT learning platform
-// from weeks.cz nav. Expected to be low (campers + lecturers only); high values would
-// suggest the link is mis-styled and pulling casual visitors away from the funnel.
+// Klik na odkaz Učebna v navigaci — měří, jak často se návštěvník dostane
+// z weeks.cz na výukovou platformu pro IoT. Čeká se nízké číslo (účastníci
+// tábora a lektoři); vysoké by znamenalo, že je odkaz vysázený příliš nápadně
+// a odvádí běžné návštěvníky z trychtýře pryč.
 export function trackUcebnaClick(source: 'desktop' | 'mobile') {
   sendGAEvent('event', 'ucebna_click', { source })
 }
@@ -113,7 +119,8 @@ export function trackRegistrationSubmit(params: {
   program: string
   termId: string
   value: number
-  // Registration id — dedupes against the server-side InitiateCheckout (/api/register).
+  // Id registrace — podle něj se tahle událost spáruje se serverovou
+  // InitiateCheckout (/api/register), aby se nezapočítala dvakrát.
   registrationId?: string
 }) {
   sendGAEvent('event', 'registration_submit', {
@@ -165,8 +172,9 @@ export function trackPaymentCompleted(params: {
       value: params.value,
       currency: 'CZK',
     },
-    // Dedupes against the server-side Purchase (Comgate callback), which uses the
-    // registration id as its event_id.
+    // Páruje se se serverovou událostí Purchase (callback z Comgate), která
+    // jako event_id používá stejné id registrace — Meta ji tak nezapočítá
+    // dvakrát.
     params.registrationId
   )
 }

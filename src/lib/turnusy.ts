@@ -132,6 +132,20 @@ export function getTurnusy(list: Turnus[] = TURNUSY): Turnus[] {
 }
 
 /**
+ * Výřez turnusů pro úvodku — ta je rozcestí, ne katalog, a ukazuje jen
+ * několik nejbližších. Zbytek nechává na `/tabor`.
+ *
+ * POZOR: strukturovaná data na úvodce MUSÍ čerpat ze stejného výřezu jako to,
+ * co je na ní vidět (`NejblizsiTurnusy`). Kdyby `EventSchema` na úvodce bralo
+ * celý seznam, našel by tam vyhledávač po vypsání dalších termínů událost
+ * s datem a cenou, které na stránce nikde nestojí — a to je přesně to, čemu
+ * `turnusyProSchema` brání u jednotlivých turnusů.
+ */
+export function nejblizsiTurnusy(pocet = 3, list: Turnus[] = TURNUSY): Turnus[] {
+  return getTurnusy(list).slice(0, pocet)
+}
+
+/**
  * Turnus podle adresy. Hledá i mezi uzavřenými — adresa proběhlého turnusu
  * má dál něco ukázat, ne spadnout na 404.
  */

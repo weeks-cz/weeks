@@ -81,8 +81,12 @@ export function getSiteFaq(): Array<{ question: string; answer: string }> {
     },
     {
       question: 'Co si dítě odveze domů?',
+      // Obecný slib o „sestaveném zařízení" tu stál proti konkrétní odpovědi
+      // modulu `iot` v `focus.ts` („Micro:bity a Arduina zůstávají
+      // v laboratoři"). Web nesmí tvrdit obojí — obecný slib proto mizí
+      // a odpověď posílá čtenáře k zaměření, kde platí provozní pravda.
       answer:
-        'Vlastní výtisk z 3D tiskárny a sestavené zařízení, které si samo naprogramovalo. Obojí si odváží domů.',
+        'Vlastní výtisk z 3D tiskárny a vlastní 3D model, který si navrhlo. U elektroniky záleží na zaměření turnusu — co si děti odvážejí a co zůstává v laboratoři, píšeme u každého zaměření zvlášť.',
     },
     {
       question: 'Jak probíhá platba?',

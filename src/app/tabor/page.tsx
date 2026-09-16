@@ -58,8 +58,11 @@ const weeklyDays = [
     icon: Cpu,
     color: 'trust',
     title: 'IoT projekt + výstava',
-    description: 'Dokončení vlastního IoT zařízení a malá výstava pro rodiče. Děti prezentují, co za týden vytvořily, a odnesou si svůj projekt domů.',
-    highlights: ['Vlastní IoT zařízení', 'Prezentace pro rodiče', 'Projekt domů'],
+    // Bez slibu, že si dítě elektroniku odveze domů: modul `iot` v `focus.ts`
+    // říká, že Micro:bity a Arduina zůstávají v laboratoři, a web nesmí
+    // tvrdit obojí. Dokud to není rozhodnuté, nedosazuje se sem nic.
+    description: 'Dokončení vlastního IoT zařízení a malá výstava pro rodiče. Děti prezentují, co za týden vytvořily.',
+    highlights: ['Vlastní IoT zařízení', 'Prezentace pro rodiče', 'Dokončený projekt'],
   },
 ]
 
@@ -323,7 +326,9 @@ export default function TaborPage() {
               {[
                 { icon: Printer, color: 'primary', title: '3D tisk', day: 'Po + St', description: 'Od stažených modelů přes vlastní návrhy až po hotové výtisky. Děti pracují na profesionálních tiskárnách.', highlights: ['FDM tisk', 'Profi tiskárny', 'Výtisky domů'] },
                 { icon: Box, color: 'accent', title: '3D modelování', day: 'Úterý', description: 'Z hotových modelů k vlastním kreacím. Děti navrhnou vlastní objekt, který si druhý den vytisknou.', highlights: ['Základy 3D softwaru', 'Vlastní návrh', 'Příprava pro tisk'] },
-                { icon: Cpu, color: 'trust', title: 'IoT & Arduino', day: 'Čt + Pá', description: 'Práce se senzory, LED a mikropočítači. Každé dítě postaví vlastní chytré zařízení a odnese si ho domů.', highlights: ['Arduino & Micro:bit', 'Senzory a LED', 'IoT projekt domů'] },
+                // U elektroniky žádný slib o odvezení domů — viz komentář
+                // u pátečního dne v `weeklyDays` výš.
+                { icon: Cpu, color: 'trust', title: 'IoT & Arduino', day: 'Čt + Pá', description: 'Práce se senzory, LED a mikropočítači. Každé dítě postaví vlastní chytré zařízení.', highlights: ['Arduino & Micro:bit', 'Senzory a LED', 'Vlastní IoT projekt'] },
               ].map((tech, index) => {
                 const colors = colorMap[tech.color as keyof typeof colorMap]
                 return (
@@ -612,20 +617,20 @@ export default function TaborPage() {
                 {prodejny ? (
                   <>
                     Letní příměstský tábor, ze kterého si vaše dítě odnese vlastní 3D výtisk
-                    i sestavené zařízení — a vy máte celý týden jistotu, že je o něj dobře
-                    postaráno. Termíny se plní, s přihláškou neváhejte.
+                    — a vy máte celý týden jistotu, že je o něj dobře postaráno. Termíny se
+                    plní, s přihláškou neváhejte.
                   </>
                 ) : vyprodano ? (
                   <>
-                    Letní příměstský tábor, ze kterého si vaše dítě odnese vlastní 3D výtisk
-                    i sestavené zařízení. Aktuální turnusy jsou plně obsazené — nechte nám
-                    kontakt a ozveme se, jakmile se uvolní místo nebo vypíšeme další termín.
+                    Letní příměstský tábor, ze kterého si vaše dítě odnese vlastní 3D výtisk.
+                    Aktuální turnusy jsou plně obsazené — nechte nám kontakt a ozveme se,
+                    jakmile se uvolní místo nebo vypíšeme další termín.
                   </>
                 ) : (
                   <>
-                    Letní příměstský tábor, ze kterého si vaše dítě odnese vlastní 3D výtisk
-                    i sestavené zařízení. Termíny na příští léto vypisujeme na podzim —
-                    nechte nám kontakt a ozveme se vám mezi prvními.
+                    Letní příměstský tábor, ze kterého si vaše dítě odnese vlastní 3D výtisk.
+                    Termíny na příští léto vypisujeme na podzim — nechte nám kontakt a ozveme
+                    se vám mezi prvními.
                   </>
                 )}
               </p>

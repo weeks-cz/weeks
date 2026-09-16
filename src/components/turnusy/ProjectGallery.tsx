@@ -31,7 +31,7 @@ export function ProjectGallery({
           </h2>
           <p className="text-lg text-ink-500">
             Žádné pracovní listy do šuplíku. Každé dítě si odnáší vlastnoručně navržené
-            a vytisknuté 3D modely i sestavené chytré zařízení — a hlavně zkušenost, že to dokáže.
+            a vytisknuté 3D modely — a hlavně zkušenost, že to dokáže.
           </p>
         </motion.div>
 
@@ -47,7 +47,10 @@ export function ProjectGallery({
             >
               <Image
                 src={p.src}
-                alt={p.alt}
+                // Popisek pod obrázkem (`figcaption` níž) nese doslova stejný
+                // text, takže vyplněné `alt` by ho odečítači přečetlo dvakrát.
+                // Pro odečítač je obrázek v téhle dvojici dekorativní.
+                alt=""
                 fill
                 loading="lazy"
                 sizes="(max-width: 1024px) 50vw, 33vw"

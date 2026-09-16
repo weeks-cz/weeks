@@ -171,9 +171,11 @@ export default function ContactPage() {
                   <div className="w-12 h-12 bg-white border border-ink/15 rounded-sm flex items-center justify-center mx-auto mb-4">
                     <info.icon className="w-6 h-6 text-primary-600" />
                   </div>
-                  <h3 className="mono-label mb-2">
+                  {/* `h2`, ne `h3`: karty jsou první nadpisy pod `h1` stránky
+                      a úroveň by přeskakovala. Vzhled drží třída `mono-label`. */}
+                  <h2 className="mono-label mb-2">
                     {info.title}
-                  </h3>
+                  </h2>
                   {info.link ? (
                     <a
                       href={info.link}

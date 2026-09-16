@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
-import { getTurnusy, isBookable } from '@/lib/turnusy'
+import { getTurnusy, isBookable, nejblizsiTurnusy } from '@/lib/turnusy'
 import { TurnusCard } from '@/components/turnusy/TurnusCard'
 
 /**
@@ -8,16 +8,19 @@ import { TurnusCard } from '@/components/turnusy/TurnusCard'
  * navíc tu není potřeba (karty samotné jsou klientské kvůli Framer Motion,
  * to řeší `TurnusCard`).
  *
- * Úvodka ukazuje jen výřez (`slice(0, 3)`) a zbytek nechává na `/tabor`,
- * kde je celý seznam i filtr podle města — tahle sekce je rozcestí, ne
- * katalog. Trojstav (prodejny / vyprodáno / nic k prodeji) i formulace se
- * ale počítají ze VŠECH turnusů, ne jen z výřezu — a musí znít stejně jako
- * na `/tabor`, jinak si úvodka slibuje věci, které karta vedle ní hned
- * popírá.
+ * Úvodka ukazuje jen výřez (`nejblizsiTurnusy()`) a zbytek nechává na
+ * `/tabor`, kde je celý seznam i filtr podle města — tahle sekce je rozcestí,
+ * ne katalog. Výřez je schválně sdílená funkce v `@/lib/turnusy`: ze stejného
+ * výřezu čerpá `EventSchema` na úvodce (`src/app/page.tsx`), aby strukturovaná
+ * data nevypsala turnus, který na stránce není vidět.
+ *
+ * Trojstav (prodejny / vyprodáno / nic k prodeji) i formulace se ale počítají
+ * ze VŠECH turnusů, ne jen z výřezu — a musí znít stejně jako na `/tabor`,
+ * jinak si úvodka slibuje věci, které karta vedle ní hned popírá.
  */
 export function NejblizsiTurnusy() {
   const vsechnyTurnusy = getTurnusy()
-  const turnusy = vsechnyTurnusy.slice(0, 3)
+  const turnusy = nejblizsiTurnusy()
 
   const prodejny = vsechnyTurnusy.some(isBookable)
   const vyprodano = !prodejny && vsechnyTurnusy.some((t) => t.status === 'plno')

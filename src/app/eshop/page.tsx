@@ -4,7 +4,9 @@ import { ArrowRight, Cpu, ExternalLink, Layers3, PackagePlus, ShieldCheck, Spark
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { ProductCatalog } from '@/components/shop/ProductCatalog'
+import { BreadcrumbSchema } from '@/components/seo/StructuredData'
 import { getShopProducts } from '@/lib/shop'
+import { SITE } from '@/lib/site'
 
 export const dynamic = 'force-dynamic'
 
@@ -48,8 +50,19 @@ export default async function ShopPage() {
     'Chytrý knob',
   ]
 
+  // Drobečky patří do stránky, ne do layoutu: `/eshop` má podřízenou cestu
+  // (`/eshop/[slug]`), a layout by ji svými drobečky přebil — jedna stránka
+  // by pak měla dvě protichůdné cesty (stejný důvod jako u `/tabor`).
+  // Stránka nemá viditelný drobečkový řádek, takže název bere z hlavičky
+  // (`Header.tsx`) — „E-shop" je tam i tady (stejně to řeší `/firmy`).
+  const breadcrumbItems = [
+    { name: 'Domů', url: SITE.url },
+    { name: 'E-shop', url: `${SITE.url}/eshop` },
+  ]
+
   return (
     <>
+      <BreadcrumbSchema items={breadcrumbItems} />
       <Header />
       <main className="bg-paper">
         <section className="relative overflow-hidden bg-paper-soft border-y border-ink/15 pt-32 pb-16">

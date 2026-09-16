@@ -15,11 +15,14 @@ export interface FocusModule {
   short: string
   /** Co si dítě konkrétně vyzkouší — do odrážek na stránce. */
   tryOut: string[]
-  /** Konkrétní modely tiskáren, se kterými se pracuje. Jen u 3D tisku. */
+  /**
+   * Konkrétní modely tiskáren. Jen u 3D tisku. Dnes se nevykresluje —
+   * proč, stojí v komentáři u dat níž.
+   */
   printers?: string[]
   /** Konkrétní hardware — desky, čidla. Jen u IoT. */
   hardware?: string[]
-  /** Fotky ve veřejné složce — stejný tvar jako `GalleryImage` v GallerySection. */
+  /** Fotky ve veřejné složce. Vykresluje je `ProjectGallery` — na `/tabor` i na stránce turnusu. */
   gallery?: Array<{ src: string; alt: string }>
   /** Otázky rodičů, které se týkají právě tohohle zaměření. */
   faq?: Array<{ question: string; answer: string }>
@@ -35,10 +38,19 @@ const FOCUS: Record<FocusId, FocusModule> = {
       'Od vlastního modelu k hotovému výtisku, který si dítě odveze domů.',
     tryOut: [
       'Navrhne si vlastní model a připraví ho k tisku',
-      'Osahá si několik typů tiskáren — MK3S, MK4S, Mini+ i CORE One',
+      // Bez jmenného seznamu modelů — ze stejného důvodu, z jakého se
+      // nevykresluje pole `printers` níž.
+      'Osahá si několik různých typů tiskáren',
       'Uvidí, proč tisk selže, a naučí se tomu předejít',
       'Odveze si vlastní výtisk',
     ],
+    // POZOR — tenhle seznam se schválně nikde nevykresluje. Je to inventář
+    // konkrétního prostoru (HWLab), který pro rok 2027 není domluvený, a
+    // jediné potvrzené místo (FabLab VARY&TE) svoje modely v datech nemá.
+    // Vypsat ho u turnusu, který o dvě obrazovky výš přiznává „Místo
+    // upřesníme", by slibovalo vybavení, o kterém nikdo neví, jestli tam
+    // bude. Vykreslit se smí, až bude jasné, na čem se na konkrétním místě
+    // opravdu pracuje — a pak podle toho místa, ne podle tohohle pole.
     printers: ['MK3S', 'MK4S', 'Mini+', 'CORE One', 'CORE One L', 'XL', 'SL1S'],
     gallery: [
       { src: '/images/gallery/3d-prints-collection.jpg', alt: 'Kolekce výtisků z tábora' },

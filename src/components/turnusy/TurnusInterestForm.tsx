@@ -89,7 +89,9 @@ export function TurnusInterestForm({ turnus, source }: { turnus?: Turnus; source
         <div className="w-14 h-14 rounded-md bg-ink/5 border border-ink/15 flex items-center justify-center mx-auto mb-5">
           <CalendarCheck className="w-7 h-7 text-ink" aria-hidden="true" />
         </div>
-        <h3 className="font-display text-xl sm:text-2xl font-bold text-ink mb-2">{heading}</h3>
+        {/* `h2`, ne `h3`: na stránce turnusu stojí tenhle formulář rovnou pod
+            `h1` a úroveň by přeskakovala. Velikost drží třídy, ne úroveň. */}
+        <h2 className="font-display text-xl sm:text-2xl font-bold text-ink mb-2">{heading}</h2>
         {mesto ? (
           <p className="mono-label">{mesto}</p>
         ) : (
