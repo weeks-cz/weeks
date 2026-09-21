@@ -161,7 +161,7 @@ export default function FirmyPage() {
                 <div className="mt-10">
                   <Link href={`/firmy?typ=${nabidka.id}#poptavka`} className="btn-secondary group">
                     {meta.poptatLabel}
-                    <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
                   </Link>
                 </div>
               </div>

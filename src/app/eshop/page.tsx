@@ -84,7 +84,7 @@ export default async function ShopPage() {
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
                 <Link href="#nabidka" className="btn-primary">
                   Projít nabídku
-                  <ArrowRight className="ml-1 h-4 w-4" />
+                  <ArrowRight className="h-4 w-4" />
                 </Link>
                 <a
                   href="https://iot.weeks.cz"
@@ -93,7 +93,7 @@ export default async function ShopPage() {
                   className="btn-outline"
                 >
                   Podívat se do Učebny
-                  <ExternalLink className="ml-2 h-4 w-4" />
+                  <ExternalLink className="h-4 w-4" />
                 </a>
               </div>
             </div>

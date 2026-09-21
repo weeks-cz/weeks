@@ -577,19 +577,19 @@ export function RegistrationForm() {
           {step < 5 ? (
             <button onClick={nextStep} className="btn-primary">
               Další
-              <ArrowRight className="ml-2 w-4 h-4" />
+              <ArrowRight className="w-4 h-4" />
             </button>
           ) : (
             <button onClick={handleSubmit} disabled={isSubmitting} className="btn-primary disabled:opacity-50">
               {isSubmitting ? (
                 <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  <Loader2 className="w-4 h-4 animate-spin" />
                   Odesílám...
                 </>
               ) : (
                 <>
                   Přejít k platbě
-                  <ArrowRight className="ml-2 w-4 h-4" />
+                  <ArrowRight className="w-4 h-4" />
                 </>
               )}
             </button>

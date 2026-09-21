@@ -3,7 +3,6 @@ import { Suspense } from 'react'
 import { Bricolage_Grotesque, Instrument_Sans, IBM_Plex_Mono } from 'next/font/google'
 import './globals.css'
 import { CookieConsent } from '@/components/ui/CookieConsent'
-import { KVRegionNudge } from '@/components/ui/KVRegionNudge'
 import { MetaPixel } from '@/components/analytics/MetaPixel'
 import { SklikTracking } from '@/components/analytics/SklikTracking'
 import { GoogleAnalyticsGated } from '@/components/analytics/GoogleAnalyticsGated'
@@ -126,7 +125,6 @@ export default function RootLayout({
         </ShopProvider>
         <CookieConsent />
         <Suspense fallback={null}>
-          <KVRegionNudge />
         </Suspense>
         <Suspense fallback={null}>
           <QRTracker />

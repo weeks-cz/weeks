@@ -145,7 +145,7 @@ export interface NastupniListParams {
  * Nástupní list.
  *
  * Provozní doba tábora je 8:00 – 17:00 — stejně jako na /kontakt, /tabor,
- * v `USPSection` a v §18 VOP. Dřív tu stálo 8:00 – 16:00, jenže VOP
+ * v sekci „Co máte jisté“ na úvodce a v §18 VOP. Dřív tu stálo 8:00 – 16:00, jenže VOP
  * (§24) opravňují pořadatele účtovat 150 Kč za každých započatých 30 minut po
  * skončení programu: rodič se řídil e-mailem, pořadatel VOP a rozcházeli se
  * o hodinu, za kterou padala pokuta.

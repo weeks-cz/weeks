@@ -173,7 +173,7 @@ export default async function TerminPage({ params }: { params: Promise<{ slug: s
                 <Link href={l.ctaHref!} className="btn-primary group inline-flex px-8 py-4">
                   {l.ctaText}
                   <ArrowRight
-                    className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1"
+                    className="h-5 w-5 transition-transform group-hover:translate-x-1"
                     aria-hidden="true"
                   />
                 </Link>

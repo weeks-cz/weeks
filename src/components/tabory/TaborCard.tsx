@@ -98,7 +98,7 @@ export function TaborCard({
         <Link href={`/tabory/${tabor.id}`} className="btn-primary group mt-auto w-full">
           {chystame ? 'Chci vědět víc' : 'Zobrazit tábor'}
           <ArrowRight
-            className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1"
+            className="h-4 w-4 transition-transform group-hover:translate-x-1"
             aria-hidden="true"
           />
         </Link>

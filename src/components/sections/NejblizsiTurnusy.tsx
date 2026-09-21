@@ -72,7 +72,7 @@ export function NejblizsiTurnusy() {
               <div className="mt-10">
                 <Link href="/tabory" className="btn-outline group">
                   Všechny turnusy
-                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
                 </Link>
               </div>
             </>

@@ -29,7 +29,7 @@ const faqPreview = getSiteFaq().slice(0, 3)
 export default function ContactPage() {
   // Místa konání — jen ta, která nějaký turnus doopravdy má. Dnes vyjde jedna
   // karta (FabLab VARY&TE u karlovarského turnusu), pražský turnus místo
-  // ještě nemá. Kód počítá s tím, že se to může časem změnit (viz `KdeASKym.tsx`).
+  // ještě nemá. Kód počítá s tím, že se to může časem změnit.
   const turnusy = getTurnusy()
   const venueIds = Array.from(
     new Set(turnusy.map((t) => t.venueId).filter((id): id is VenueId => id !== null))
@@ -280,7 +280,7 @@ export default function ContactPage() {
                   >
                     {isSubmitting ? (
                       <>
-                        <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                        <Loader2 className="w-5 h-5 animate-spin" />
                         Odesílám...
                       </>
                     ) : (
@@ -325,7 +325,7 @@ export default function ContactPage() {
               >
                 {/* Místa konání — karta na turnus, který má domluvené místo.
                     Dnes vyjde jedna (FabLab VARY&TE), pražský turnus místo
-                    ještě nemá — viz `KdeASKym.tsx` pro stejný vzor. */}
+                    ještě nemá — stejný vzor jako sekce měst na `/tabory`. */}
                 {venues.map((venue) => (
                   <div key={venue.id} className="card-maker overflow-hidden">
                     <div className="h-64">
@@ -474,7 +474,7 @@ export default function ContactPage() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <a href={`mailto:${SITE.email}`} className="btn-primary">
-                  <Mail className="w-5 h-5 mr-2" />
+                  <Mail className="w-5 h-5" />
                   {SITE.email}
                 </a>
                 <a href={`tel:${SITE.phone.replace(/\s+/g, '')}`} className="border border-paper/30 text-paper hover:border-paper rounded-md px-6 py-3 font-semibold transition-all duration-200 inline-flex items-center justify-center">

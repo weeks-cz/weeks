@@ -79,7 +79,7 @@ export function TurnusCard({ turnus, spotsLeft }: { turnus: Turnus; spotsLeft?: 
           className={prodejny ? 'btn-primary text-sm' : 'btn-outline text-sm'}
         >
           {ctaText}
-          <ArrowRight className="w-4 h-4 ml-1" aria-hidden="true" />
+          <ArrowRight className="w-4 h-4" aria-hidden="true" />
         </Link>
       </div>
     </motion.article>

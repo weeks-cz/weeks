@@ -66,7 +66,7 @@ export default function AboutPage() {
   const venues = venueIds.map((id) => getVenue(id))
 
   // Nejvyšší kapacita napříč turnusy — dnes vyjde 15 u obou, číslo se ale
-  // nepíše natvrdo, aby se stránka sama nerozešla s daty (viz `KdeASKym.tsx`).
+  // nepíše natvrdo, aby se stránka sama nerozešla s daty (stejně jako `ProRodice`).
   const kapacita = turnusy.reduce((max, t) => Math.max(max, t.capacity), 0)
 
   return (

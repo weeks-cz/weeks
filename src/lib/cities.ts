@@ -27,8 +27,8 @@ export interface Venue {
   postalCode: string
   geo: { lat: number; lng: number }
   /**
-   * Popis místa — vykresluje se na `/`, `/firmy` (obojí přes `KdeASKym`),
-   * `/o-nas`, `/tabory` i stránky tématu a termínu (přes `VenueShowcase`). Je to
+   * Popis místa — vykresluje se na `/o-nas`, na `/tabory` u svého města
+   * a na stránkách tématu a termínu (přes `VenueShowcase`). Je to
    * tvrzení o cizí firmě, které Weeks nijak nedokládá, takže bez superlativů
    * a bez údajů, které nemáme odkud ověřit.
    */

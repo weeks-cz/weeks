@@ -166,13 +166,13 @@ export function HeroSection() {
               onClick={() => trackViewTerms('homepage_hero')}
             >
               {heroCtaText}
-              <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+              <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
             </Link>
             <Link
               href="/tabory/chytre-technologie#program"
               className="group inline-flex items-center justify-center rounded-md border border-paper/30 px-8 py-4 font-semibold text-paper transition-colors hover:border-paper hover:bg-paper hover:text-ink"
             >
-              <Play className="mr-2 h-5 w-5" />
+              <Play className="h-5 w-5" />
               Co děti čeká
             </Link>
           </motion.div>

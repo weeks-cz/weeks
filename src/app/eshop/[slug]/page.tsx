@@ -137,7 +137,7 @@ export default async function ShopProductPage({
                     className="btn-outline"
                   >
                     Učebna
-                    <ExternalLink className="ml-2 h-4 w-4" />
+                    <ExternalLink className="h-4 w-4" />
                   </a>
                 </div>
 

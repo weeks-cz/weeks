@@ -120,7 +120,7 @@ export function Header() {
             onClick={() => trackNavCTA('desktop')}
           >
             {ctaLabel}
-            <ChevronRight className="ml-1 w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+            <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
           </Link>
         </div>
 
@@ -207,7 +207,7 @@ export function Header() {
                   onClick={() => { trackNavCTA('mobile'); setMobileMenuOpen(false) }}
                 >
                   {ctaLabel}
-                  <ChevronRight className="ml-1 w-4 h-4" />
+                  <ChevronRight className="w-4 h-4" />
                 </Link>
                 <p className="mono-label-dark">
                   WEEKS — IT TÁBORY

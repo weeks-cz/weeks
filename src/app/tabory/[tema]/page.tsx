@@ -250,7 +250,7 @@ function AktivniTabor({ tabor }: { tabor: Tabor }) {
               <a href="#turnusy" className="btn-primary group px-8 py-4">
                 {prodejny ? 'Přihlásit dítě' : 'Chci vědět o termínech'}
                 <ArrowRight
-                  className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1"
+                  className="h-5 w-5 transition-transform group-hover:translate-x-1"
                   aria-hidden="true"
                 />
               </a>
@@ -536,7 +536,7 @@ function AktivniTabor({ tabor }: { tabor: Tabor }) {
               <a href="#turnusy" className="btn-secondary group">
                 {prodejny ? 'Přihlásit dítě' : 'Nechat kontakt'}
                 <ArrowRight
-                  className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1"
+                  className="h-4 w-4 transition-transform group-hover:translate-x-1"
                   aria-hidden="true"
                 />
               </a>

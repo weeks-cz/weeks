@@ -252,7 +252,7 @@ function FirmyPoptavkaForm({ zvolenyTyp }: { zvolenyTyp: NabidkaId }) {
             className="btn-primary w-full justify-center disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? 'Odesílám…' : 'Odeslat poptávku'}
-            <Mail className="ml-2 w-4 h-4" aria-hidden="true" />
+            <Mail className="w-4 h-4" aria-hidden="true" />
           </button>
         </form>
       )}

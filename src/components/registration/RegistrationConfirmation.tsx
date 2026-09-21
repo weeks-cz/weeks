@@ -169,7 +169,7 @@ export function RegistrationConfirmation({ registrationId, token }: Registration
             href={`/platba/${registration.id}?location=${registration.location_id}`}
             className="btn-primary w-full sm:w-auto justify-center"
           >
-            <CreditCard className="w-4 h-4 mr-2" />
+            <CreditCard className="w-4 h-4" />
             {isPending ? 'Dokončit platbu' : 'Zkusit platbu znovu'}
           </Link>
         )}

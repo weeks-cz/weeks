@@ -82,12 +82,12 @@ export function Rozcesti() {
                   className="btn-outline text-sm self-start"
                 >
                   {karta.cta}
-                  <ExternalLink className="w-4 h-4 ml-1.5" aria-hidden="true" />
+                  <ExternalLink className="w-4 h-4" aria-hidden="true" />
                 </a>
               ) : (
                 <Link href={karta.href} className="btn-outline text-sm self-start">
                   {karta.cta}
-                  <ArrowRight className="w-4 h-4 ml-1.5" aria-hidden="true" />
+                  <ArrowRight className="w-4 h-4" aria-hidden="true" />
                 </Link>
               )}
             </motion.div>

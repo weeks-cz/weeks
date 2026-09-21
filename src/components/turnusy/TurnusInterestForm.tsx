@@ -180,7 +180,7 @@ export function TurnusInterestForm({ turnus, source }: { turnus?: Turnus; source
             className="btn-primary w-full justify-center disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? 'Odesílám…' : 'Dejte mi vědět o termínech'}
-            <Mail className="ml-2 w-4 h-4" aria-hidden="true" />
+            <Mail className="w-4 h-4" aria-hidden="true" />
           </button>
 
           <p className="text-xs text-ink-500 text-center">
