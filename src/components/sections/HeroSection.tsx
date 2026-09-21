@@ -64,8 +64,8 @@ export function HeroSection() {
   const ageLabel = (turnusy[0]?.ageRange ?? '9-15').replace('-', '–')
 
   // Úvodka je rozcestí, ne stránka tábora — neslibuje otevřenou registraci
-  // přímo tady, jen posílá dál na /tabor. Text hlavního tlačítka ale musí
-  // odpovídat témuž trojstavu jako /tabor (`prodejny` / `vyprodano` /
+  // přímo tady, jen posílá dál na /tabory. Text hlavního tlačítka ale musí
+  // odpovídat témuž trojstavu jako /tabory (`prodejny` / `vyprodano` /
   // nic k prodeji), jinak by u vyprodaných turnusů lhal, že se ještě
   // nevypisují.
   const prodejny = turnusy.some(isBookable)
@@ -205,7 +205,7 @@ export function HeroSection() {
             className="flex flex-col sm:flex-row gap-4"
           >
             <Link
-              href="/tabor#turnusy"
+              href="/tabory"
               className="btn-primary group px-8 py-4"
               onClick={() => trackViewTerms('homepage_hero')}
             >
@@ -213,7 +213,7 @@ export function HeroSection() {
               <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Link>
             <Link
-              href="/tabor#program"
+              href="/tabory/chytre-technologie#program"
               className="btn-outline group px-8 py-4"
             >
               <Play className="mr-2 w-5 h-5" />

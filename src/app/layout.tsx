@@ -35,7 +35,7 @@ const plexMono = IBM_Plex_Mono({
 
 // Výchozí metadata pro celý web — dědí je každá stránka, která si vlastní
 // nenastaví (homepage žádná nemá). Popisují jediný produkt, který Weeks s.r.o.
-// nabízí: týdenní letní příměstský tábor — stejným jazykem jako `/tabor`
+// nabízí: týdenní letní příměstský tábor — stejným jazykem jako `/tabory`
 // a úvodní stránka, ne stránku, která zanikla (žádné víkendové/jednodenní
 // formáty, žádné DDM).
 const siteUrl = SITE.url

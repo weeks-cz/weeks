@@ -1,4 +1,5 @@
 import { MetadataRoute } from 'next'
+import { getTabory } from '@/lib/tabory'
 import { getTurnusy } from '@/lib/turnusy'
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -16,16 +17,24 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     {
-      url: `${baseUrl}/tabor`,
+      url: `${baseUrl}/tabory`,
       lastModified: currentDate,
       changeFrequency: 'weekly',
       priority: 0.95,
     },
-    ...getTurnusy().map((turnus) => ({
-      url: `${baseUrl}/tabor/${turnus.slug}`,
+    // Téma nese popis tábora, termín jen datum a cenu. Chystané téma dostává
+    // nižší prioritu — je to zatím záměr, ne nabídka.
+    ...getTabory().map((tabor) => ({
+      url: `${baseUrl}/tabory/${tabor.id}`,
       lastModified: currentDate,
       changeFrequency: 'weekly' as const,
-      priority: 0.9,
+      priority: tabor.status === 'aktivni' ? 0.9 : 0.6,
+    })),
+    ...getTurnusy().map((turnus) => ({
+      url: `${baseUrl}/tabory/termin/${turnus.slug}`,
+      lastModified: currentDate,
+      changeFrequency: 'weekly' as const,
+      priority: 0.85,
     })),
     {
       url: `${baseUrl}/firmy`,

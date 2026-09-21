@@ -16,7 +16,7 @@ interface RozcestiKarta {
 
 /**
  * Čtyři směry, kam Weeks dnes vede — tábor, firmy, e-shop a učebna.
- * První dva jsou stránky tohohle webu (`/tabor`, `/firmy`), e-shop je jeho
+ * První dva jsou stránky tohohle webu (`/tabory`, `/firmy`), e-shop je jeho
  * sekce (`/eshop`) a učebna běží na vlastní doméně, proto se otevírá
  * v novém okně (`external`).
  */
@@ -24,7 +24,7 @@ const KARTY: RozcestiKarta[] = [
   {
     nadpis: 'Letní tábor',
     veta: 'Týdenní příměstský tábor pro děti 9–15 let.',
-    href: '/tabor',
+    href: '/tabory',
     cta: 'Zobrazit tábor',
   },
   {

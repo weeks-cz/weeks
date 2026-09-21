@@ -52,7 +52,7 @@ export default async function ShopPage() {
 
   // Drobečky patří do stránky, ne do layoutu: `/eshop` má podřízenou cestu
   // (`/eshop/[slug]`), a layout by ji svými drobečky přebil — jedna stránka
-  // by pak měla dvě protichůdné cesty (stejný důvod jako u `/tabor`).
+  // by pak měla dvě protichůdné cesty (stejný důvod jako u `/tabory`).
   // Stránka nemá viditelný drobečkový řádek, takže název bere z hlavičky
   // (`Header.tsx`) — „E-shop" je tam i tady (stejně to řeší `/firmy`).
   const breadcrumbItems = [

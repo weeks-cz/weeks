@@ -483,7 +483,7 @@ export default function PodminkyPage() {
                 <h2 className="font-display text-2xl font-bold text-ink mb-4">20. Cena tábora</h2>
                 <p className="text-ink mb-4">
                   Cena tábora je uvedená u konkrétního turnusu v{' '}
-                  <Link href="/tabor#turnusy" className="text-primary-600 underline hover:text-primary-700">nabídce turnusů</Link>{' '}
+                  <Link href="/tabory" className="text-primary-600 underline hover:text-primary-700">nabídce turnusů</Link>{' '}
                   a platí ve výši, kterou zobrazuje přihláška v okamžiku jejího odeslání.
                 </p>
                 <p className="text-ink-500 text-sm">

@@ -8,7 +8,7 @@ import { getCity, getVenue } from '@/lib/cities'
  * Framer Motion, a React server komponenty nesmí volat funkci exportovanou
  * z klientského modulu (smí ji jen vykreslit jako komponentu). `turnusLabels`
  * ale žádné klientské API nepoužívá, takže když bydlí tady, může ji zavolat
- * jak `TurnusCard`, tak i čistě serverová stránka `/tabor/[turnus]`.
+ * jak `TurnusCard`, tak i čistě serverová stránka `/tabory/termin/[slug]`.
  */
 
 const MESICE_2P = [

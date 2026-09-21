@@ -110,9 +110,9 @@ export function ContactSection() {
             </div>
 
             {/* Kde tábory probíhají — místo se liší podle turnusu, adresa proto
-                patří na /tabor, ne sem jako pevný text. */}
+                patří na /tabory, ne sem jako pevný text. */}
             <div className="space-y-6">
-              <Link href="/tabor#turnusy" className="card-maker group p-5 block">
+              <Link href="/tabory" className="card-maker group p-5 block">
                 <div className="flex items-center gap-3 mb-3">
                   <div className="w-9 h-9 bg-primary-600 border border-ink rounded-sm flex items-center justify-center">
                     <MapPin className="w-4 h-4 text-white" aria-hidden="true" />

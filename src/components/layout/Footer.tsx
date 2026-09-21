@@ -7,7 +7,7 @@ import { SITE } from '@/lib/site'
 import { openCookieSettings } from '@/lib/consent'
 
 const navLinks = [
-  { name: 'Tábor', href: '/tabor' },
+  { name: 'Tábory', href: '/tabory' },
   { name: 'Pro firmy', href: '/firmy' },
   { name: 'E-shop', href: '/eshop' },
   { name: 'O nás', href: '/o-nas' },

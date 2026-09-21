@@ -234,7 +234,7 @@ export function RegistrationForm() {
         <p className="text-ink-500 mb-6">
           Tenhle termín se právě nedá objednat. Vyberte si prosím jiný turnus.
         </p>
-        <Link href="/tabor#turnusy" className="btn-primary">
+        <Link href="/tabory" className="btn-primary">
           Zpět na termíny
         </Link>
       </div>

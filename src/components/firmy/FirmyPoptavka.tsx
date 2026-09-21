@@ -301,7 +301,7 @@ function FirmyPoptavkaContent({ vychoziTyp }: { vychoziTyp?: NabidkaId }) {
  * `searchParams` četla ona, Next by ji kvůli tomu překlopil na dynamické
  * vykreslování. Adresu proto čte až tahle klientská komponenta, a protože
  * `useSearchParams` vyžaduje vlastní hranici `Suspense`, je tu (stejný vzor
- * jako `TaborInterestForm`/`TaborInterestFormContent` v `src/app/tabor/page.tsx:141-154`).
+ * jako filtr měst ve `src/app/tabory/page.tsx`).
  * `fallback` je rovnou plnohodnotný formulář s výchozí (nebo první) nabídkou,
  * ne kostra — než se hydratuje, pořád jde odeslat, jen bez rozlišení podle adresy.
  */

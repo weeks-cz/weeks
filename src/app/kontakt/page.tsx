@@ -13,7 +13,7 @@ import { SITE, getSiteFaq } from '@/lib/site'
 
 // Provozní doba je vlastnost produktu (turnusu), ne dne v týdnu podle starého
 // víkendového formátu — viz `Provozní doba táborů` na /podminky a rozvrh na
-// /tabor. Žádné jiné hodiny (např. administrativní obsluhu telefonu) web
+// /tabory. Žádné jiné hodiny (např. administrativní obsluhu telefonu) web
 // nedokládá, proto tu nejsou — viz opravné kolo 1 v reportu.
 const operatingHours = [
   { day: 'Pondělí – Pátek', hours: '8:00 – 17:00', note: 'Průběh tábora' },
@@ -21,7 +21,7 @@ const operatingHours = [
 
 // Výtah ze sdíleného FAQ (`getSiteFaq()`), ne vlastní kopie. /kontakt bylo
 // jediná stránka s vlastními odpovědmi a rozcházelo se s nimi: tvrdilo, že si
-// děti nosí „pouze svačinu na dopoledne", zatímco FAQ na úvodce i na /tabor
+// děti nosí „pouze svačinu na dopoledne", zatímco FAQ na úvodce i na /tabory
 // mluví o svačině na dopoledne i odpoledne. Dokud se preview bere shora ze
 // sdíleného zdroje, nemá se s čím rozejít — a tlačítko pod ním vede na celé FAQ.
 const faqPreview = getSiteFaq().slice(0, 3)
@@ -370,7 +370,7 @@ export default function ContactPage() {
                   <p className="text-sm text-ink-500">
                     U turnusů bez uvedeného místa ho upřesníme před otevřením
                     termínu. Přehled najdete na stránce{' '}
-                    <Link href="/tabor#turnusy" className="underline hover:text-ink">
+                    <Link href="/tabory" className="underline hover:text-ink">
                       turnusů
                     </Link>
                     .

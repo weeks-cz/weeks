@@ -102,7 +102,7 @@ export function EventSchema({ turnusy }: { turnusy?: Turnus[] } = {}) {
         // `turnusyProSchema` zaručuje start, end, priceKc i venueId — non-null assert je bezpečný.
         const venue = getVenue(turnus.venueId!)
         const mesto = getCity(turnus.city).name
-        const url = `${SITE.url}/tabor/${turnus.slug}`
+        const url = `${SITE.url}/tabory/termin/${turnus.slug}`
         const { datum } = turnusLabels(turnus)
 
         const schema = {

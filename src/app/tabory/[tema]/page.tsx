@@ -12,7 +12,7 @@ import { Footer } from '@/components/layout/Footer'
 import { BreadcrumbSchema } from '@/components/seo/StructuredData'
 import { FAQSection } from '@/components/sections/FAQSection'
 import { ProjectGallery } from '@/components/turnusy/ProjectGallery'
-import { TurnusCard } from '@/components/turnusy/TurnusCard'
+import { TurnusList } from '@/components/turnusy/TurnusList'
 import { TurnusInterestForm } from '@/components/turnusy/TurnusInterestForm'
 import { VenueShowcase } from '@/components/turnusy/VenueShowcase'
 import { getVenue, type VenueId } from '@/lib/cities'
@@ -498,17 +498,11 @@ function AktivniTabor({ tabor }: { tabor: Tabor }) {
             </p>
           </div>
 
-          {turnusy.length > 0 ? (
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {turnusy.map((turnus) => (
-                <TurnusCard key={turnus.id} turnus={turnus} />
-              ))}
-            </div>
-          ) : (
-            <p className="text-paper/70">
-              Pro tenhle tábor zatím nemáme vypsaný žádný termín.
-            </p>
-          )}
+          {/* `TurnusList` sem patří i kvůli živé kapacitě: sama si dotáhne
+              obsazenost z /api/term-capacity, takže karta neslibuje místo,
+              které je mezitím pryč. Filtr měst si zapne sama, až bude téma
+              běžet ve víc městech. */}
+          <TurnusList turnusy={turnusy} />
 
           <div className="mt-16">
             <TurnusInterestForm source={`tabor-${tabor.id}`} />

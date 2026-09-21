@@ -202,7 +202,7 @@ describe('TURNUSY — brzda před otevřením prodeje', () => {
     // odůvodnění, kvůli kterým vznikl, jsou vyřešená (viz komentář nad
     // `TURNUSY` v src/lib/turnusy.ts):
     //
-    //  1. Dvojí zdroj ceny. /tabor, /tabor/[turnus] i `EventSchema` čtou cenu
+    //  1. Dvojí zdroj ceny. /tabory, stránka termínu i `EventSchema` čtou cenu
     //     výhradně z turnusů; `locations.ts` už do stránek ani do
     //     strukturovaných dat nezasahuje.
     //  2. Pole `program` v registraci. Název tábora na faktuře, v potvrzení,

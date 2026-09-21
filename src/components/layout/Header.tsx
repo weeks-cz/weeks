@@ -9,7 +9,7 @@ import { trackNavCTA, trackUcebnaClick } from '@/lib/analytics'
 import { getTurnusy, isBookable } from '@/lib/turnusy'
 
 const navItems = [
-  { name: 'Tábor', href: '/tabor' },
+  { name: 'Tábory', href: '/tabory' },
   { name: 'Pro firmy', href: '/firmy' },
   { name: 'E-shop', href: '/eshop' },
   { name: 'O nás', href: '/o-nas' },
@@ -21,9 +21,9 @@ export function Header() {
   const [scrolled, setScrolled] = useState(false)
 
   const logoHref = '/'
-  const ctaHref = '/tabor#turnusy'
+  const ctaHref = '/tabory'
 
-  // Stejný trojstav jako na /tabor a v HeroSection — hlavní tlačítko nesmí
+  // Stejný trojstav jako na /tabory a v HeroSection — hlavní tlačítko nesmí
   // slibovat výběr termínu, když se zrovna nedá koupit nic.
   const turnusy = getTurnusy()
   const prodejny = turnusy.some(isBookable)

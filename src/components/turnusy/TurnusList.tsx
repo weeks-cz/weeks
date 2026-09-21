@@ -64,13 +64,13 @@ function TurnusListContent({ turnusy }: { turnusy: Turnus[] }) {
     <div>
       {mesta.length > 0 && (
         <nav className="flex flex-wrap gap-2 mb-8" aria-label="Filtr podle města">
-          {/* Sekce je bg-ink text-paper (viz /tabor#turnusy) — tokeny `border-ink`/
+          {/* Sekce je bg-ink text-paper (viz tmavá sekce termínů na stránce tématu) — tokeny `border-ink`/
               `text-ink-500` tu byly navržené pro světlý podklad a na tmavém dávaly
               kontrast kolem 2,4 : 1. Neaktivní odkaz proto stojí na `text-paper/70`
               (~7 : 1 vůči bg-ink, nad WCAG AA 4,5 : 1 pro běžný text), stejně jako
               ostatní tmavé sekce webu (Header mobilní nav, Footer). */}
           <Link
-            href="/tabor"
+            href="/tabory"
             scroll={false}
             aria-current={platne === undefined ? 'true' : undefined}
             className={`font-mono text-xs uppercase tracking-wider px-4 py-2 border transition-colors ${
@@ -84,7 +84,7 @@ function TurnusListContent({ turnusy }: { turnusy: Turnus[] }) {
           {mesta.map((m) => (
             <Link
               key={m.id}
-              href={`/tabor?mesto=${m.id}`}
+              href={`/tabory?mesto=${m.id}`}
               scroll={false}
               aria-current={platne === m.id ? 'true' : undefined}
               className={`font-mono text-xs uppercase tracking-wider px-4 py-2 border transition-colors ${

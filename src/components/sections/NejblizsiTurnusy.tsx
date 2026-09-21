@@ -10,13 +10,13 @@ import { TurnusCard } from '@/components/turnusy/TurnusCard'
  * to řeší `TurnusCard`).
  *
  * Úvodka ukazuje jen výřez (`nejblizsiTurnusy()`) a zbytek nechává na
- * `/tabor`, kde je celý seznam i filtr podle města — tahle sekce je rozcestí,
+ * `/tabory`, kde je celý seznam i filtr podle města — tahle sekce je rozcestí,
  * ne katalog. Výřez je schválně sdílená funkce v `@/lib/turnusy`: ze stejného
  * výřezu čerpá `EventSchema` na úvodce (`src/app/page.tsx`), aby strukturovaná
  * data nevypsala turnus, který na stránce není vidět.
  *
  * Trojstav (prodejny / vyprodáno / nic k prodeji) i formulace se ale počítají
- * ze VŠECH turnusů, ne jen z výřezu — a musí znít stejně jako na `/tabor`,
+ * ze VŠECH turnusů, ne jen z výřezu — a musí znít stejně jako na `/tabory`,
  * jinak si úvodka slibuje věci, které karta vedle ní hned popírá.
  */
 export function NejblizsiTurnusy() {
@@ -56,7 +56,7 @@ export function NejblizsiTurnusy() {
           {turnusy.length === 0 ? (
             <p className="text-lg text-ink-500 max-w-xl">
               Termíny na příští léto vypíšeme na podzim.{' '}
-              <Link href="/tabor#turnusy" className="text-primary-600 hover:underline font-medium">
+              <Link href="/tabory" className="text-primary-600 hover:underline font-medium">
                 Nechte nám kontakt
               </Link>{' '}
               a ozveme se vám mezi prvními.
@@ -70,7 +70,7 @@ export function NejblizsiTurnusy() {
               </div>
 
               <div className="mt-10">
-                <Link href="/tabor" className="btn-outline group">
+                <Link href="/tabory" className="btn-outline group">
                   Všechny turnusy
                   <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
                 </Link>

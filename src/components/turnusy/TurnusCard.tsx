@@ -9,7 +9,7 @@ import { SpotsLeftBadge } from './SpotsLeft'
 import { turnusLabels } from './turnus-labels'
 
 // `turnusLabels` bydlí v samostatném souboru bez `'use client'`, aby ji šlo
-// volat i ze serverové stránky `/tabor/[turnus]` — server nesmí zavolat
+// volat i ze serverové stránky `/tabory/termin/[slug]` — server nesmí zavolat
 // funkci exportovanou z klientského modulu, smí ji jen vykreslit jako
 // komponentu. Re-export tady drží stávající importy (`RegistrationForm`,
 // testy) beze změny.
@@ -75,7 +75,7 @@ export function TurnusCard({ turnus, spotsLeft }: { turnus: Turnus; spotsLeft?: 
           <span className="font-mono text-xs text-ink/40">cenu upřesníme</span>
         )}
         <Link
-          href={ctaHref ?? `/tabor/${turnus.slug}`}
+          href={ctaHref ?? `/tabory/termin/${turnus.slug}`}
           className={prodejny ? 'btn-primary text-sm' : 'btn-outline text-sm'}
         >
           {ctaText}

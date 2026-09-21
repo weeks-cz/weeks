@@ -26,17 +26,23 @@ const nextConfig = {
   },
   async redirects() {
     return [
-      // Katalog programů a jednodenní tábory splývají do jedné stránky tábora.
-      { source: '/program', destination: '/tabor', permanent: true },
-      { source: '/tabor-chytrych-technologii', destination: '/tabor', permanent: true },
-      { source: '/tabor-3d-tisk', destination: '/tabor', permanent: true },
-      { source: '/tabor-iot', destination: '/tabor', permanent: true },
-      { source: '/kveten', destination: '/tabor', permanent: true },
+      // Katalog programů a jednodenní tábory splývají do výpisu táborů.
+      // Cíl je rovnou `/tabory`, ne `/tabor` — jinak by vznikl řetěz 301 → 301.
+      { source: '/program', destination: '/tabory', permanent: true },
+      { source: '/tabor-chytrych-technologii', destination: '/tabory', permanent: true },
+      { source: '/tabor-3d-tisk', destination: '/tabory', permanent: true },
+      { source: '/tabor-iot', destination: '/tabory', permanent: true },
+      { source: '/kveten', destination: '/tabory', permanent: true },
+      // Jednostránkový detail `/tabor` ustoupil třem úrovním pod `/tabory`.
+      // Adresa nikdy nebyla v indexu (žila jen na větvi feat/web-2027), takže
+      // se tu nic nerozbíjí — pravidlo je tu pro odkazy z náhledů a záložek.
+      { source: '/tabor', destination: '/tabory', permanent: true },
+      { source: '/tabor/:slug', destination: '/tabory/termin/:slug', permanent: true },
       // Město přestává být větví webu — karlovarské adresy míří na svůj protějšek,
       // ne plošně na úvodku, ať se neztratí zpětné odkazy ani cíle reklam.
-      { source: '/karlovy-vary', destination: '/tabor?mesto=karlovy-vary', permanent: true },
-      { source: '/karlovy-vary/letni-primestsky', destination: '/tabor?mesto=karlovy-vary', permanent: true },
-      { source: '/karlovy-vary/tabor-chytrych-technologii', destination: '/tabor?mesto=karlovy-vary', permanent: true },
+      { source: '/karlovy-vary', destination: '/tabory?mesto=karlovy-vary', permanent: true },
+      { source: '/karlovy-vary/letni-primestsky', destination: '/tabory?mesto=karlovy-vary', permanent: true },
+      { source: '/karlovy-vary/tabor-chytrych-technologii', destination: '/tabory?mesto=karlovy-vary', permanent: true },
       { source: '/karlovy-vary/o-nas', destination: '/o-nas', permanent: true },
       { source: '/karlovy-vary/kontakt', destination: '/kontakt', permanent: true },
       { source: '/karlovy-vary/gdpr', destination: '/gdpr', permanent: true },

@@ -30,7 +30,7 @@ export interface Turnus {
    * faktura — jednou vydané id se NIKDY nemění.
    */
   id: string
-  /** Adresa stránky turnusu: /tabor/[slug]. Město v slugu kvůli vyhledávačům. */
+  /** Adresa stránky termínu: /tabory/termin/[slug]. Město v slugu kvůli vyhledávačům. */
   slug: string
   city: CityId
   /** `null`, dokud není místo domluvené. */
@@ -65,7 +65,7 @@ export interface Turnus {
  * překlopí na `otevreno`.
  *
  * Dvojí zdroj ceny, kterým tenhle odstavec dřív varoval, je vyřešený:
- * `/tabor`, `/tabor/[turnus]` i `EventSchema`
+ * `/tabory`, stránky tématu i termínu a `EventSchema`
  * (`src/components/seo/StructuredData.tsx`) čtou cenu výhradně odtud —
  * `locations.ts` do strukturovaných dat ani do žádné stránky už nezasahuje.
  * `EventSchema` navíc turnus ve stavu `chystame` do JSON-LD vůbec nepustí,

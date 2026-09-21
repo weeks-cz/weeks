@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { revalidatePath } from 'next/cache'
 
-// Revalidates the camp pages (/tabor and every /tabor/[turnus] under it).
+// Revalidates the camp pages (/tabory and everything under it).
 // Called by weeks-hub when camp data changes.
 // The route used to also invalidate a `camps` cache tag, but the tag belonged
 // to the deleted src/lib/camps.ts and the camps table it read — nothing tags
@@ -25,10 +25,10 @@ export async function POST(request: NextRequest) {
   }
 
   // Jednodenní a víkendové tábory dřív měly vlastní stránky; teď žijí pod
-  // /tabor a /tabor/[turnus] — 'layout' invalidaci strhne oba.
-  revalidatePath('/tabor', 'layout')
+  // /tabory, /tabory/[tema] i /tabory/termin/[slug] — 'layout' strhne všechny.
+  revalidatePath('/tabory', 'layout')
 
-  return NextResponse.json({ ok: true, revalidated: ['/tabor'], at: new Date().toISOString() })
+  return NextResponse.json({ ok: true, revalidated: ['/tabory'], at: new Date().toISOString() })
 }
 
 // Allow GET for quick manual testing / health check (still requires secret)
