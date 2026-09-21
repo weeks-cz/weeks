@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 import { ArrowRight, Play } from 'lucide-react'
 import Link from 'next/link'
@@ -40,19 +40,26 @@ function useTypewriter(text: string, startDelayMs = 250, speedMs = 26) {
   return { shown: text.slice(0, count), done: count >= text.length }
 }
 
-// Řádek titulku najíždí zespodu v masce (clip reveal).
+/**
+ * Řádek titulku najíždí zespodu.
+ *
+ * Dřív to byl clip reveal (`y: '110%'` v masce `overflow-hidden`). Vypadal
+ * líp, ale měl vadu, kterou je vidět jen když se něco pokazí: než se animace
+ * spustí, je řádek odsunutý mimo masku, takže při zamrzlé záložce, chybě JS
+ * nebo pomalé hydrataci zůstal hlavní nadpis webu prázdný. Posun o 24 px
+ * dopadne v nejhorším případě tak, že nadpis stojí o kousek níž.
+ */
 function RevealLine({ children, delay }: { children: React.ReactNode; delay: number }) {
+  const reduced = useReducedMotion()
   return (
-    <span className="block overflow-hidden pb-[0.08em] -mb-[0.08em]">
-      <motion.span
-        className="block"
-        initial={{ y: '110%' }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.8, delay, ease: EASE_OUT }}
-      >
-        {children}
-      </motion.span>
-    </span>
+    <motion.span
+      className="block"
+      initial={reduced ? false : { y: 24 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.7, delay, ease: EASE_OUT }}
+    >
+      {children}
+    </motion.span>
   )
 }
 
@@ -79,198 +86,136 @@ export function HeroSection() {
   const kota = 'Praha · Karlovy Vary'
   const typed = useTypewriter(kota)
 
-  // Interaktivní mřížka: buňky blueprint gridu se za kurzorem rozsvítí a pohasnou
-  // (fading trail) + měkká záře pod kurzorem. Jen na zařízeních s přesným
-  // kurzorem a bez reduced-motion.
-  const sectionRef = useRef<HTMLElement>(null)
-  const [cursorEnabled, setCursorEnabled] = useState(false)
-  const [cursor, setCursor] = useState<{ x: number; y: number } | null>(null)
-  const [trail, setTrail] = useState<{ key: number; cx: number; cy: number }[]>([])
-  const lastCell = useRef('')
-  const trailKey = useRef(0)
-
-  useEffect(() => {
-    setCursorEnabled(window.matchMedia('(pointer: fine)').matches && !reduced)
-  }, [reduced])
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!cursorEnabled || !sectionRef.current) return
-    const rect = sectionRef.current.getBoundingClientRect()
-    const x = e.clientX - rect.left
-    const y = e.clientY - rect.top
-    setCursor({ x, y })
-
-    const cx = Math.floor(x / 32) * 32
-    const cy = Math.floor(y / 32) * 32
-    const cellId = `${cx},${cy}`
-    if (cellId === lastCell.current) return
-    lastCell.current = cellId
-    const key = ++trailKey.current
-    setTrail(t => [...t.slice(-24), { key, cx, cy }])
-    // Buňku odstraníme až po doběhnutí fade animace (0.9 s)
-    setTimeout(() => {
-      setTrail(t => t.filter(c => c.key !== key))
-    }, 950)
-  }
+  // Nosný text animuje jen posun, ne viditelnost — viz `RevealLine` výš.
+  const anim = (delay: number) =>
+    reduced
+      ? {}
+      : {
+          initial: { y: 18 },
+          animate: { y: 0 },
+          transition: { duration: 0.6, delay, ease: EASE_OUT },
+        }
 
   return (
-    <section
-      ref={sectionRef}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={() => setCursor(null)}
-      className="relative bg-paper blueprint-grid border-b border-ink/15 overflow-hidden"
-    >
-      {/* Interaktivní mřížka — fading trail buněk + měkká záře pod kurzorem */}
-      {cursorEnabled && (
-        <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
-          {trail.map(c => (
-            <div
-              key={c.key}
-              className="cell-fade absolute w-8 h-8 bg-primary-500/[0.13]"
-              style={{ left: c.cx, top: c.cy }}
-            />
-          ))}
-          {cursor && (
-            <div
-              className="absolute w-56 h-56 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary-500/[0.07] blur-3xl transition-[left,top] duration-150 ease-out"
-              style={{ left: cursor.x, top: cursor.y }}
-            />
-          )}
-        </div>
-      )}
+    // Interaktivní mřížka tu schválně NENÍ: přestěhovala se do sekce „Co si
+    // postaví" (`ProDeti`). Je to jediná sekce psaná dětem, hravost tam patří,
+    // a v druhé polovině stránky odměňuje toho, kdo si se stránkou hraje,
+    // místo aby rozptylovala u hlavního sdělení.
+    <section className="relative overflow-hidden border-b border-ink bg-ink blueprint-grid-dark">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-20 -top-24 select-none font-display text-[26rem] font-bold leading-none text-paper/[0.04]"
+      >
+        W
+      </div>
 
-      <div className="section-container grid lg:grid-cols-12 gap-12 lg:gap-10 items-center pt-32 pb-16 md:pt-40 md:pb-24">
-        {/* Text column */}
+      <div className="section-container relative z-10 grid items-center gap-12 pb-16 pt-32 md:pb-24 md:pt-40 lg:grid-cols-12 lg:gap-10">
+        {/* Text */}
         <div className="lg:col-span-7">
-          {/* Mono kóta — typewriter */}
-          <p className="mono-label mb-6 min-h-[1.25em]">
+          <p className="mono-label-dark mb-6 min-h-[1.25em] text-accent-300">
             {typed.shown}
             <span
               aria-hidden="true"
-              className={`inline-block w-[0.6em] -mb-px border-b-2 border-cta-500 transition-opacity duration-300 ${
+              className={`-mb-px inline-block w-[0.6em] border-b-2 border-cta-400 transition-opacity duration-300 ${
                 typed.done ? 'opacity-0' : 'animate-pulse opacity-100'
               }`}
             />
           </p>
 
-          {/* Headline — clip reveal po řádcích */}
-          <h1 className="heading-1 text-ink mb-6">
-            <RevealLine delay={0.45}>IT tábory,</RevealLine>
-            <RevealLine delay={0.6}>
-              <span className="text-primary-600">
-                kde děti tvoří{' '}
-                <span className="relative inline-block">
-                  budoucnost
-                  {/* Plotter podtržení */}
-                  <svg
-                    aria-hidden="true"
-                    className="absolute left-0 -bottom-[0.12em] w-full h-[0.14em] overflow-visible"
-                    viewBox="0 0 200 10"
-                    preserveAspectRatio="none"
-                    fill="none"
-                  >
-                    <motion.path
-                      d="M3 7 C 45 3.5, 95 9, 197 4.5"
-                      stroke="#F59E0B"
-                      strokeWidth={5}
-                      strokeLinecap="round"
-                      initial={{ pathLength: reduced ? 1 : 0 }}
-                      animate={{ pathLength: 1 }}
-                      transition={{ duration: 0.7, delay: 1.5, ease: 'easeInOut' }}
-                    />
-                  </svg>
-                </span>
+          <h1 className="heading-1 mb-6 text-paper">
+            <RevealLine delay={0.1}>IT tábory,</RevealLine>
+            <RevealLine delay={0.2}>
+              kde děti tvoří{' '}
+              <span className="relative inline-block text-accent-400">
+                budoucnost
+                {/* Plotter podtržení */}
+                <svg
+                  aria-hidden="true"
+                  className="absolute -bottom-[0.12em] left-0 h-[0.14em] w-full overflow-visible"
+                  viewBox="0 0 200 10"
+                  preserveAspectRatio="none"
+                  fill="none"
+                >
+                  <motion.path
+                    d="M3 7 C 45 3.5, 95 9, 197 4.5"
+                    stroke="#F59E0B"
+                    strokeWidth={5}
+                    strokeLinecap="round"
+                    initial={{ pathLength: reduced ? 1 : 0 }}
+                    animate={{ pathLength: 1 }}
+                    transition={{ duration: 0.7, delay: 0.9, ease: 'easeInOut' }}
+                  />
+                </svg>
               </span>
             </RevealLine>
           </h1>
 
-          {/* Subheadline */}
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.9, ease: EASE_OUT }}
-            className="text-lg md:text-xl text-ink-500 mb-10 max-w-xl leading-relaxed"
+            {...anim(0.3)}
+            className="mb-10 max-w-xl text-lg leading-relaxed text-paper/70 md:text-xl"
           >
             Týdenní příměstské tábory, kde si děti postaví vlastní věc — od 3D
-            modelu po zařízení, které samy naprogramují. Profesionální
-            vybavení a zkušení instruktoři.
-            <span className="text-ink font-medium"> Pro děti {ageLabel} let.</span>
+            modelu po zařízení, které samy naprogramují.
+            <span className="font-medium text-paper"> Pro děti {ageLabel} let.</span>
           </motion.p>
 
-          {/* CTAs */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 1.05, ease: EASE_OUT }}
-            className="flex flex-col sm:flex-row gap-4"
-          >
+          <motion.div {...anim(0.4)} className="flex flex-col gap-4 sm:flex-row">
             <Link
               href="/tabory"
               className="btn-primary group px-8 py-4"
               onClick={() => trackViewTerms('homepage_hero')}
             >
               {heroCtaText}
-              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
             </Link>
             <Link
               href="/tabory/chytre-technologie#program"
-              className="btn-outline group px-8 py-4"
+              className="group inline-flex items-center justify-center rounded-md border border-paper/30 px-8 py-4 font-semibold text-paper transition-colors hover:border-paper hover:bg-paper hover:text-ink"
             >
-              <Play className="mr-2 w-5 h-5" />
+              <Play className="mr-2 h-5 w-5" />
               Co děti čeká
             </Link>
           </motion.div>
 
-          {/* Trust row — mono spec line */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 1.35 }}
-            className="mt-14 pt-6 border-t border-ink/15"
-          >
+          <motion.div {...anim(0.5)} className="mt-14 border-t border-paper/15 pt-6">
             <dl className="flex flex-wrap gap-x-10 gap-y-4">
               <div>
-                <dt className="mono-label mb-1">Organizátor</dt>
-                <dd className="text-sm font-medium text-ink">{SITE.name}</dd>
+                <dt className="mono-label-dark mb-1">Organizátor</dt>
+                <dd className="text-sm font-medium text-paper">{SITE.name}</dd>
               </div>
               <div>
-                <dt className="mono-label mb-1">Místa konání</dt>
-                <dd className="text-sm font-medium text-ink">Praha & Karlovy Vary</dd>
+                <dt className="mono-label-dark mb-1">Místa konání</dt>
+                <dd className="text-sm font-medium text-paper">Praha &amp; Karlovy Vary</dd>
               </div>
               <div>
-                <dt className="mono-label mb-1">Věková skupina</dt>
-                <dd className="text-sm font-medium text-ink font-mono">{ageLabel} let</dd>
+                <dt className="mono-label-dark mb-1">Věková skupina</dt>
+                <dd className="font-mono text-sm font-medium text-paper">{ageLabel} let</dd>
               </div>
             </dl>
           </motion.div>
         </div>
 
-        {/* Photo column — "print sweep" odhalení + cvaknutí hard-shadow */}
-        <div className="lg:col-span-5 relative">
-          <motion.div
-            className="relative border border-ink rounded-md bg-white"
-            initial={reduced ? false : { boxShadow: '0px 0px 0 0 rgba(12,14,26,0)' }}
-            animate={{ boxShadow: '4px 4px 0 0 rgba(12,14,26,1)' }}
-            transition={{ duration: 0.25, delay: 1.4, ease: 'easeOut' }}
-          >
-            <motion.div
-              className="overflow-hidden rounded-[5px]"
-              initial={reduced ? false : { clipPath: 'inset(0 100% 0 0)' }}
-              animate={{ clipPath: 'inset(0 0% 0 0)' }}
-              transition={{ duration: 0.9, delay: 0.5, ease: EASE_OUT }}
-            >
-              <Image
-                src="/images/hwlab/hero-print-day.webp"
-                alt="Děti tisknou na 3D tiskárně na táboře Weeks"
-                width={880}
-                height={660}
-                sizes="(min-width: 1024px) 40vw, 100vw"
-                className="object-cover w-full aspect-[4/3]"
-                priority
-                quality={90}
-              />
-            </motion.div>
-          </motion.div>
+        {/* Fotka v posunutém amber rámu — nosný grafický prvek varianty B.
+            Záběr na celou dílnu, ne na jedno dítě: skupina s lektory říká
+            „tohle je tábor", zatímco portrét jednoho dítěte z něj dělá maskota
+            a rodič v něm nevidí lidi, kterým dítě svěřuje. */}
+        <div className="relative lg:col-span-5">
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 translate-x-4 translate-y-4 rounded-md bg-cta-400"
+          />
+          <div className="relative overflow-hidden rounded-md border border-paper/20">
+            <Image
+              src="/images/hwlab/hero-print-day.webp"
+              alt="Děti a lektoři v dílně u 3D tiskáren, na plátně promítnuté logo Weeks"
+              width={880}
+              height={660}
+              sizes="(min-width: 1024px) 40vw, 100vw"
+              className="aspect-[4/3] w-full object-cover"
+              priority
+              quality={90}
+            />
+          </div>
         </div>
       </div>
     </section>

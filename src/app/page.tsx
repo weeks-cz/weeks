@@ -1,15 +1,34 @@
 import { HeroSection } from '@/components/sections/HeroSection'
 import { TickerStrip } from '@/components/ui/TickerStrip'
-import { USPSection } from '@/components/sections/USPSection'
+import { NejblizsiTurnusy } from '@/components/sections/NejblizsiTurnusy'
+import { ProRodice } from '@/components/sections/ProRodice'
+import { FotoPas } from '@/components/sections/FotoPas'
+import { ProDeti } from '@/components/sections/ProDeti'
+import { Rozcesti } from '@/components/sections/Rozcesti'
 import { FAQSection } from '@/components/sections/FAQSection'
 import { ContactSection } from '@/components/sections/ContactSection'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { OrganizationSchema, LocalBusinessSchema } from '@/components/seo/StructuredData'
-import { NejblizsiTurnusy } from '@/components/sections/NejblizsiTurnusy'
-import { KdeASKym } from '@/components/sections/KdeASKym'
-import { Rozcesti } from '@/components/sections/Rozcesti'
 
+/**
+ * Úvodka — rozcestí, ne katalog.
+ *
+ * Pořadí sekcí drží pravidlo rytmu: mezi dvěma sousedními sekcemi musí být
+ * předěl, buď změnou pozadí, nebo linkou. Dřív šly `USPSection`, `KdeASKym`
+ * a `Rozcesti` po sobě se stejným pozadím a bez linky, takže mezi nimi zela
+ * skoro dvoustovka pixelů prázdného krému bez záchytného bodu.
+ *
+ *   hero          ink        + mřížka
+ *   ticker        amber      + border-y
+ *   turnusy       paper-soft + border-y
+ *   pro rodiče    trust-50   + border-y
+ *   fotopás       fotka
+ *   pro děti      ink        + interaktivní mřížka
+ *   rozcestí      paper
+ *   FAQ           paper-soft + border-b
+ *   kontakt       amber      + border-y
+ */
 export default function Home() {
   return (
     <>
@@ -20,8 +39,9 @@ export default function Home() {
         <HeroSection />
         <TickerStrip />
         <NejblizsiTurnusy />
-        <USPSection />
-        <KdeASKym />
+        <ProRodice />
+        <FotoPas />
+        <ProDeti />
         <Rozcesti />
         <FAQSection />
         <ContactSection />

@@ -2,7 +2,6 @@ import Link from 'next/link'
 import { ArrowLeft, ArrowRight, Check, Handshake, Users, Wrench } from 'lucide-react'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
-import { KdeASKym } from '@/components/sections/KdeASKym'
 import { FirmyPoptavka } from '@/components/firmy/FirmyPoptavka'
 import { BreadcrumbSchema } from '@/components/seo/StructuredData'
 import { getNabidky, PARTNERSTVI_ZATIM, type NabidkaId } from '@/lib/firmy'
@@ -171,7 +170,6 @@ export default function FirmyPage() {
         })}
 
         {/* Kde a s kým — stejná sekce jako na úvodce */}
-        <KdeASKym />
 
         {/* Poptávka */}
         <section id="poptavka" className="section-padding bg-paper-soft border-t border-ink/15 scroll-mt-24">
