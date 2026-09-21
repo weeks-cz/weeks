@@ -7,9 +7,13 @@ import {
   getCitiesWithTurnusy,
   isBookable,
   validateTurnusy,
+  getTaboryTurnusu,
+  getFocusTurnusu,
+  getTurnusyByTabor,
   TURNUSY,
   type Turnus,
 } from './turnusy'
+import type { TaborId } from './tabory'
 
 const otevreny: Turnus = {
   id: 'test-kv-cervenec',
@@ -21,7 +25,7 @@ const otevreny: Turnus = {
   priceKc: 4990,
   capacity: 15,
   status: 'otevreno',
-  focus: ['3d-tisk', 'iot'],
+  taborIds: ['chytre-technologie'],
   ageRange: '9-15',
   perex: 'Týdenní příměstský tábor ve FabLabu.',
 }
@@ -36,7 +40,7 @@ const chystany: Turnus = {
   priceKc: null,
   capacity: 15,
   status: 'chystame',
-  focus: ['3d-tisk'],
+  taborIds: ['chytre-technologie'],
   ageRange: '9-15',
   perex: 'Místo konání i termíny upřesníme.',
 }
@@ -227,5 +231,34 @@ describe('TURNUSY — brzda před otevřením prodeje', () => {
         'zdravotními údaji podle čl. 9 GDPR, adresa místa konání) a pak tenhle ' +
         'test vědomě smaž. Neopravuj pole `program` — to je už vyřešené.'
     ).toEqual([])
+  })
+})
+
+describe('vazba turnusu na tábor', () => {
+  it('getTaboryTurnusu vrátí tábory, na které turnus ukazuje', () => {
+    expect(getTaboryTurnusu(otevreny).map((t) => t.id)).toEqual(['chytre-technologie'])
+  })
+
+  it('getFocusTurnusu poskládá zaměření z táborů, bez duplicit', () => {
+    const focus = getFocusTurnusu(otevreny)
+    expect(focus).toContain('3d-tisk')
+    expect(new Set(focus).size).toBe(focus.length)
+  })
+
+  it('getTurnusyByTabor vybere jen turnusy daného tématu', () => {
+    const jiny: Turnus = { ...otevreny, id: 'test-jiny', slug: 'jiny', taborIds: ['game-dev'] }
+    expect(getTurnusyByTabor('chytre-technologie', [otevreny, jiny]).map((t) => t.id)).toEqual([
+      'test-kv-cervenec',
+    ])
+  })
+
+  it('validateTurnusy odhalí turnus bez tábora — karta by neměla co ukázat', () => {
+    const problems = validateTurnusy([{ ...otevreny, taborIds: [] }])
+    expect(problems.join(' ')).toContain('test-kv-cervenec')
+  })
+
+  it('validateTurnusy odhalí odkaz na neexistující tábor', () => {
+    const problems = validateTurnusy([{ ...otevreny, taborIds: ['neexistuje' as TaborId] }])
+    expect(problems.join(' ')).toContain('neexistuje')
   })
 })

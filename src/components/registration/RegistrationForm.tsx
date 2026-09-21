@@ -5,7 +5,7 @@ import { useSearchParams, useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { User, Baby, MapPin, FileCheck, ClipboardList, ArrowRight, ArrowLeft, Loader2 } from 'lucide-react'
 import { parentSchema, childSchema, consentsSchema, INSURANCE_OPTIONS, type ParentData, type ChildData, type ConsentsData } from '@/lib/registration'
-import { getTurnusById, isBookable } from '@/lib/turnusy'
+import { getTurnusById, getFocusTurnusu, isBookable } from '@/lib/turnusy'
 import { getCity } from '@/lib/cities'
 import { getFocusModules } from '@/lib/focus'
 import { turnusLabels } from '@/components/turnusy/TurnusCard'
@@ -77,7 +77,7 @@ export function RegistrationForm() {
   // odpálil i pro ně, trychtýř v GA4 by byl trvale podhodnocený.
   useEffect(() => {
     if (!turnus || !isBookable(turnus)) return
-    trackRegistrationStep({ step: 1, locationId: turnus.city, program: turnus.focus[0] ?? '', termId })
+    trackRegistrationStep({ step: 1, locationId: turnus.city, program: turnus.taborIds[0] ?? '', termId })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -131,7 +131,7 @@ export function RegistrationForm() {
     if (validateStep()) {
       const next = Math.min(step + 1, 5)
       setStep(next)
-      trackRegistrationStep({ step: next, locationId: turnus?.city ?? '', program: turnus?.focus[0] ?? '', termId })
+      trackRegistrationStep({ step: next, locationId: turnus?.city ?? '', program: turnus?.taborIds[0] ?? '', termId })
       return
     }
     // Neúspěšná validace — posuň pohled na první chybu (čtečky ji oznámí přes role="alert").
@@ -162,7 +162,7 @@ export function RegistrationForm() {
           ...consents,
           customer_note: customerNote,
           location_id: turnus?.city ?? '',
-          program: turnus?.focus[0] ?? '',
+          program: turnus?.taborIds[0] ?? '',
           term_id: turnus?.id ?? '',
           term_start: turnus?.start ?? '',
           term_end: turnus?.end ?? '',
@@ -178,7 +178,7 @@ export function RegistrationForm() {
 
       trackRegistrationSubmit({
         locationId: turnus?.city ?? '',
-        program: turnus?.focus[0] ?? '',
+        program: turnus?.taborIds[0] ?? '',
         termId,
         value: turnus?.priceKc ?? 0,
         registrationId: data.registrationId,
@@ -243,7 +243,7 @@ export function RegistrationForm() {
 
   const labels = turnusLabels(turnus)
   const cityName = getCity(turnus.city).name
-  const focusNames = getFocusModules(turnus.focus).map(z => z.name).join(' · ')
+  const focusNames = getFocusModules(getFocusTurnusu(turnus)).map(z => z.name).join(' · ')
 
   return (
     <div className="max-w-2xl mx-auto">

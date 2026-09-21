@@ -16,9 +16,9 @@ describe('ostrá data turnusů', () => {
     }
   })
 
-  it('každý turnus má aspoň jedno zaměření', () => {
+  it('každý turnus ukazuje aspoň na jeden tábor', () => {
     for (const turnus of TURNUSY) {
-      expect(turnus.focus.length, `turnus ${turnus.id}`).toBeGreaterThan(0)
+      expect(turnus.taborIds.length, `turnus ${turnus.id}`).toBeGreaterThan(0)
     }
   })
 })

@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation'
 import { ArrowRight, Calendar, Check, Clock, Cpu, Gamepad2, Glasses, Printer, Users, Wallet } from 'lucide-react'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
-import { getTurnus, getTurnusy, isBookable } from '@/lib/turnusy'
+import { getTurnus, getTurnusy, getFocusTurnusu, isBookable } from '@/lib/turnusy'
 import { getCity, getVenue } from '@/lib/cities'
 import { getFocusModules, type FocusId } from '@/lib/focus'
 import { SITE } from '@/lib/site'
@@ -102,7 +102,7 @@ export default async function TurnusPage({
   }
 
   const l = turnusLabels(turnus)
-  const zamereni = getFocusModules(turnus.focus)
+  const zamereni = getFocusModules(getFocusTurnusu(turnus))
   const venue = turnus.venueId ? getVenue(turnus.venueId) : null
   const dalsiTurnusy = getTurnusy().filter((t) => t.id !== turnus.id)
   const prodejny = isBookable(turnus)

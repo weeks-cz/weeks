@@ -11,7 +11,7 @@ import Link from 'next/link'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { getVenue, type VenueId } from '@/lib/cities'
-import { getTurnusy, isBookable, type Turnus } from '@/lib/turnusy'
+import { getTurnusy, getFocusTurnusu, isBookable, type Turnus } from '@/lib/turnusy'
 import { getFocusModules } from '@/lib/focus'
 import { SITE, getSiteFaq } from '@/lib/site'
 import { BreadcrumbSchema } from '@/components/seo/StructuredData'
@@ -178,7 +178,7 @@ export default function TaborPage() {
   )
   // Galerie sbírá fotky ze všech zaměření, která má aspoň jeden turnus —
   // ne ze všech čtyř `FOCUS_IDS`, dnešní `vr` žádné fotky nemá.
-  const zamereniIds = Array.from(new Set(turnusy.flatMap((t) => t.focus)))
+  const zamereniIds = Array.from(new Set(turnusy.flatMap((t) => getFocusTurnusu(t))))
   const galerie = getFocusModules(zamereniIds).flatMap((z) =>
     (z.gallery ?? []).map((img) => ({ ...img, tag: z.name }))
   )

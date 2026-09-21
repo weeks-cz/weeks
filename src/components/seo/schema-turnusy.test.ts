@@ -16,7 +16,7 @@ const uplny: Turnus = {
   venueId: 'fablab-varyte',
   capacity: 15,
   status: 'otevreno',
-  focus: ['3d-tisk'],
+  taborIds: ['chytre-technologie'],
   ageRange: '9-15',
   perex: 'Testovací turnus.',
 }

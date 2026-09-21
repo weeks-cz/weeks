@@ -5,7 +5,7 @@ import type { Turnus } from '@/lib/turnusy'
 const kv: Turnus = {
   id: 'kv-1', slug: 'kv-1', city: 'karlovy-vary', venueId: 'fablab-varyte',
   start: '2027-07-12', end: '2027-07-16', priceKc: 4990, capacity: 15,
-  status: 'otevreno', focus: ['3d-tisk'], ageRange: '9-15', perex: 'Turnus ve Varech.',
+  status: 'otevreno', taborIds: ['chytre-technologie'], ageRange: '9-15', perex: 'Turnus ve Varech.',
 }
 const kv2: Turnus = { ...kv, id: 'kv-2', slug: 'kv-2', start: '2027-08-02', end: '2027-08-06' }
 const praha: Turnus = {

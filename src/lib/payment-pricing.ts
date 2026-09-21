@@ -1,6 +1,5 @@
-import { getTurnusById, isBookable, TURNUSY, type Turnus } from './turnusy'
+import { getTurnusById, getTaboryTurnusu, isBookable, TURNUSY, type Turnus } from './turnusy'
 import type { CityId } from './cities'
-import { getFocusModules } from './focus'
 
 /**
  * Důvěryhodný zdroj ceny a kapacity pro registraci.
@@ -67,8 +66,11 @@ export function getTrustedProgramName(termId: string, list: Turnus[] = TURNUSY):
   if (!turnus) {
     throw new Error(`Neznámý turnus: ${termId}`)
   }
-  const zamereni = getFocusModules(turnus.focus).map((m) => m.name)
-  return zamereni.length > 0
-    ? `Letní příměstský tábor (${zamereni.join(', ')})`
+  // Název skládá tábor, ne výčet jeho zaměření: faktura má tábor pojmenovat,
+  // ne vyjmenovat jeho obsah. Proto „(Chytré technologie)“, ne
+  // „(3D tisk, IoT a elektronika, Virtuální realita)“.
+  const temata = getTaboryTurnusu(turnus).map((t) => t.shortName)
+  return temata.length > 0
+    ? `Letní příměstský tábor (${temata.join(', ')})`
     : 'Letní příměstský tábor'
 }

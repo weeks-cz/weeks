@@ -1,5 +1,6 @@
 import { getVenue, type CityId, type VenueId } from './cities'
 import type { FocusId } from './focus'
+import { getTabor, type Tabor, type TaborId } from './tabory'
 
 /**
  * Turnus — jediná prodejní jednotka webu.
@@ -41,7 +42,14 @@ export interface Turnus {
   priceKc: number | null
   capacity: number
   status: TurnusStatus
-  focus: FocusId[]
+  /**
+   * Témata, kterým se na turnusu děti věnují (`src/lib/tabory.ts`).
+   *
+   * Pole, i když je v něm dnes vždy jeden prvek. Je to levná pojistka: až
+   * poběží v jednom týdnu dvě paralelní skupiny s různými tématy, nevynutí si
+   * to migraci `term_id` ani změnu adresy, která už je na faktuře.
+   */
+  taborIds: TaborId[]
   /** Věkové rozmezí účastníků ve tvaru `'9-15'`. */
   ageRange: string
   /** Čím je tenhle turnus jiný — jedna až dvě věty na kartu. */
@@ -64,11 +72,12 @@ export interface Turnus {
  * takže sama o sobě žádnou cenu nedopočítá ani nedomyslí.
  *
  * POZOR — název programu na faktuře: `RegistrationForm` dál ukládá do pole
- * `program` id zaměření (`turnus.focus[0]`, např. `'3d-tisk'`), ale e-maily,
+ * `program` id tábora (`turnus.taborIds[0]`, např. `'chytre-technologie'`),
+ * ale e-maily,
  * faktura z Fakturoidu, upomínka na platbu i nástupní list už tohle pole
  * nečtou — název tábora odvozuje server přes `getTrustedProgramName`
- * (`payment-pricing.ts`) ze `term_id`, stejně jako cenu, kapacitu, město
- * i termín. Uložená hodnota `program` slouží už jen jako záloha pro staré
+ * (`payment-pricing.ts`) ze `term_id` a z entity tábor, stejně jako cenu,
+ * kapacitu, město i termín. Uložená hodnota `program` slouží už jen jako záloha pro staré
  * registrace, jejichž turnus mezi aktuálními už není.
  */
 export const TURNUSY: Turnus[] = [
@@ -82,7 +91,7 @@ export const TURNUSY: Turnus[] = [
     priceKc: null,
     capacity: 15,
     status: 'chystame',
-    focus: ['3d-tisk', 'iot', 'vr'],
+    taborIds: ['chytre-technologie'],
     ageRange: '9-15',
     perex:
       'Týdenní příměstský tábor ve FabLabu VARY&TE. Termíny na léto 2027 vypíšeme na podzim.',
@@ -97,7 +106,7 @@ export const TURNUSY: Turnus[] = [
     priceKc: null,
     capacity: 15,
     status: 'chystame',
-    focus: ['3d-tisk', 'iot', 'vr'],
+    taborIds: ['chytre-technologie'],
     ageRange: '9-15',
     perex:
       'Týdenní příměstský tábor v Praze. Místo konání i termíny upřesníme.',
@@ -163,6 +172,28 @@ export function getTurnusyByCity(city: CityId, list: Turnus[] = TURNUSY): Turnus
 }
 
 /**
+ * Tábory (témata), kterým se turnus věnuje.
+ *
+ * Neznámé id se tiše přeskočí — na nesmysl v datech upozorní `validateTurnusy`
+ * při `npm test`, ne rozbitá stránka u rodiče.
+ */
+export function getTaboryTurnusu(turnus: Turnus): Tabor[] {
+  return turnus.taborIds
+    .map((id) => getTabor(id))
+    .filter((t): t is Tabor => t !== undefined)
+}
+
+/** Zaměření turnusu — sjednocení zaměření jeho táborů, bez duplicit. */
+export function getFocusTurnusu(turnus: Turnus): FocusId[] {
+  return Array.from(new Set(getTaboryTurnusu(turnus).flatMap((t) => t.focus)))
+}
+
+/** Turnusy jednoho tématu — pro stránku tábora i pro výpis seskupený podle města. */
+export function getTurnusyByTabor(taborId: TaborId, list: Turnus[] = TURNUSY): Turnus[] {
+  return getTurnusy(list).filter((t) => t.taborIds.includes(taborId))
+}
+
+/**
  * Města, která mají co nabídnout. Podle délky tohohle seznamu se rozhoduje,
  * jestli se na /tabor vůbec ukáže filtr měst — při jednom městě je přepínání
  * jen překážka.
@@ -219,6 +250,18 @@ export function validateTurnusy(list: Turnus[] = TURNUSY): string[] {
 
     if (turnus.priceKc !== null && turnus.priceKc <= 0) {
       problems.push(`Turnus "${turnus.id}": cena musí být kladná.`)
+    }
+
+    if (turnus.taborIds.length === 0) {
+      problems.push(`Turnus "${turnus.id}": chybí tábor — karta by neměla co ukázat.`)
+    }
+
+    for (const taborId of turnus.taborIds) {
+      if (getTabor(taborId) === undefined) {
+        problems.push(
+          `Turnus "${turnus.id}": odkazuje na neexistující tábor "${taborId}".`
+        )
+      }
     }
 
     if (!/^\d{1,2}-\d{1,2}$/.test(turnus.ageRange)) {

@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { motion, useReducedMotion } from 'framer-motion'
 import { ArrowRight, Calendar, MapPin } from 'lucide-react'
-import { type Turnus } from '@/lib/turnusy'
+import { getFocusTurnusu, type Turnus } from '@/lib/turnusy'
 import { getFocusModules } from '@/lib/focus'
 import { SpotsLeftBadge } from './SpotsLeft'
 import { turnusLabels } from './turnus-labels'
@@ -18,7 +18,7 @@ export { turnusLabels }
 export function TurnusCard({ turnus, spotsLeft }: { turnus: Turnus; spotsLeft?: number }) {
   const reduced = useReducedMotion()
   const l = turnusLabels(turnus)
-  const zamereni = getFocusModules(turnus.focus)
+  const zamereni = getFocusModules(getFocusTurnusu(turnus))
 
   // Živá kapacita se může vyčerpat dřív, než se to projeví ve statickém
   // `status` v datech — `turnusLabels` o `spotsLeft` neví (je to čistá funkce
