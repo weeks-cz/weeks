@@ -2,7 +2,8 @@
 
 **Datum:** 2026-09-21
 **Větev:** `feat/web-2027`
-**Stav:** schválený návrh, implementace nezačala
+**Stav:** implementováno 2026-09-21 na větvi `feat/web-2027`
+**Plán:** `docs/superpowers/plans/2026-09-21-web-2027-faze-6-tabory-a-vizual.md`
 
 ## Proč
 

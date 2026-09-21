@@ -40,14 +40,15 @@ npm run lint         # Currently broken — Next 16 removed `next lint`; needs a
     page.tsx                # Homepage — rozcestí (hero, nearest turnusy, USP, FAQ, contact), not a program catalog
     opengraph-image.tsx     # Generated OG/Twitter share image (next/og `ImageResponse`, no static file)
     globals.css             # Global styles + Tailwind (maker-lab design tokens)
-    sitemap.ts              # Dynamic sitemap (weeks.cz URLs, one entry per turnus)
+    sitemap.ts              # Dynamic sitemap (weeks.cz URLs, one entry per tábor and per turnus)
     not-found.tsx           # 404 page
     /api
       /waitlist/route.ts    # Interest/waitlist form API (Formspree)
       /contact/route.ts     # Contact form API
       ...                    # registration, Comgate payment, cron (nástupní list, payment reminder — see vercel.json), shop and admin routes — predate this phase, see /src/app/api
-    /tabor                  # THE product page: turnus grid, city filter, FAQ, interest form
-    /tabor/[turnus]         # One page per turnus — slug carries the city, e.g. /tabor/karlovy-vary-leto-2027
+    /tabory                 # Camp listing — grouped by city, then theme, then term
+    /tabory/[tema]          # One page per theme; the camp description lives HERE and nowhere else
+    /tabory/termin/[slug]   # One page per turnus — date, price, venue, registration
     /firmy                  # B2B page — three offers (kids' days for employees, workshops, partnerships) + one inquiry form, see "/firmy (phase 4)" below
     /o-nas                  # About page (team with real names) — organizer is Weeks s.r.o., see Project Overview
     /kontakt                # Contact page — same
@@ -61,14 +62,17 @@ npm run lint         # Currently broken — Next 16 removed `next lint`; needs a
       Footer.tsx            # Footer with links
     /sections
       HeroSection.tsx       # Homepage hero ("IT tábory, kde děti tvoří budoucnost")
-      NejblizsiTurnusy.tsx  # Homepage preview of nearest turnusy (slice of /tabor's list)
-      USPSection.tsx        # Unique selling points
-      KdeASKym.tsx          # Homepage "kde a s kým" — venues turnusy actually have + the 3-person team, no partner logos (replaces a deleted TrustSection that borrowed trust from DDM/HWLab)
+      NejblizsiTurnusy.tsx  # Homepage preview of nearest turnusy (slice of /tabory's list)
+      ProRodice.tsx         # Emerald strip "Co máte jisté" — only claims the site can back (1:5, first aid, capacity from data, 8–17)
+      ProDeti.tsx           # Dark cyan block "Co si postavíš" + the interactive grid; content read from the running tábor's focus modules
+      FotoPas.tsx           # Full-width camp photo carrying one claim `DENNI_HARMONOGRAM` backs (outdoors at 13:00)
       Rozcesti.tsx          # Homepage "co Weeks dělá" — tábor / firmy / e-shop / učebna
       FAQSection.tsx        # Accordion FAQ — reads `getSiteFaq()` from `@/lib/site`
       ContactSection.tsx    # Contact info + email signup (GDPR consent checkbox)
+    /tabory
+      TaborCard.tsx          # Theme tile on /tabory — theme, technologies, its terms in that city
     /turnusy
-      TurnusList.tsx         # /tabor grid + city filter (`filtrMest`, built on `getCitiesWithTurnusy`)
+      TurnusList.tsx         # Turnus grid + city filter (`filtrMest`) + live capacity; used by the dark terms section on /tabory/[tema]
       TurnusCard.tsx         # One turnus card — labels/CTA text come from `turnus-labels.ts`
       TurnusInterestForm.tsx # Non-binding "notify me" form for turnusy that aren't bookable yet (GDPR checkbox)
       VenueShowcase.tsx, ProjectGallery.tsx, SpotsLeft.tsx  # Venue photos, project gallery (no hardcoded image list — items come from the calling page's focus modules), live capacity badge
@@ -81,12 +85,13 @@ npm run lint         # Currently broken — Next 16 removed `next lint`; needs a
       schema-turnusy.ts     # `turnusyProSchema()` — which turnusy may appear in `EventSchema` and with what `Offer.availability` (InStock/SoldOut); a turnus missing date, price or venue never renders, at any status (+ `schema-turnusy.test.ts`)
     /ui
       CookieConsent.tsx     # GDPR cookie banner
-      KVRegionNudge.tsx     # Geo-nudge for Karlovarsko visitors → /tabor?mesto=karlovy-vary
-      TickerStrip.tsx       # Scrolling topic strip on the homepage, right under the hero
+      MrizkaSekce.tsx       # Interactive blueprint grid (cells light up behind the cursor); hangs on any section, cleans up its timers
+      TickerStrip.tsx       # Scrolling topic strip on the homepage, right under the hero (amber — role "akce a stav")
   /lib
-    turnusy.ts               # Turnus data + `getTurnusy`/`getTurnus`/`isBookable` — source of truth for price/date/capacity
+    tabory.ts                # Tábor (theme) data + `getTabor`/`getAktivniTabory`/`zkusiSiTabora` + `DENNI_HARMONOGRAM` — source of truth for theme, focus and weekly program
+    turnusy.ts               # Turnus data + `getTurnusy`/`getTurnus`/`isBookable` + `getTaboryTurnusu`/`getFocusTurnusu`/`getTurnusyByTabor` — source of truth for price/date/capacity
     cities.ts                # City + venue registry — `getCity`/`getVenue`
-    focus.ts                 # Focus modules (3d-tisk, iot, vr, ...) shown per turnus
+    focus.ts                 # Focus modules (3d-tisk, iot, vr, ...) — owned by the tábor, read by a turnus through it
     firmy.ts                 # `/firmy` offer content (three B2B offers) — `getNabidky`/`getNabidka`, `reference` fields intentionally empty, see "/firmy (phase 4)" below
     site.ts                  # `SITE` (Weeks s.r.o., contact, legal) + shared FAQ
     locations.ts             # City → contact map (phone/e-mail) for the registration/e-mail flow only — price, date, capacity and venue belong to the turnus, not here (see the warning above `TURNUSY` in turnusy.ts)
@@ -110,73 +115,129 @@ npm run lint         # Currently broken — Next 16 removed `next lint`; needs a
   site.webmanifest          # PWA manifest
 ```
 
-## Product: turnus-based summer camp
+## Product: camps (themes) and their terms
 
-There is exactly **one product** now — a Monday–Friday weekly příměstský (day)
-camp, 8:00–17:00, sold per term ("turnus"). No more weekend vs. one-day split,
-no more per-city pages, no more 7-program catalog.
+The camp is a Monday–Friday weekly příměstský (day) camp, 8:00–17:00. Since
+phase 6 it is described by **two entities, not one**:
+
+| | **Tábor** (`src/lib/tabory.ts`) | **Turnus** (`src/lib/turnusy.ts`) |
+|---|---|---|
+| What it is | the theme — "what they do there" | the term — "when and where" |
+| Owns | name, perex, description, `focus[]`, weekly program, FAQ | city, venue, date, price, capacity, `status` |
+| Status | `aktivni` \| `chystame` | `TurnusStatus` (chystame/otevreno/plno/uzavreno) |
+| Link | — | `taborIds: TaborId[]` |
+
+`taborIds` is an **array even though it always holds one id today**: a turnus id
+is written into `registrations.term_id` and onto issued invoices, so a week that
+later runs two parallel groups must not force a data migration or a redirect of
+an address that is already on an invoice.
+
+Camps at deploy: `chytre-technologie` (`aktivni`, the whole former `/tabor`
+content) plus `game-dev`, `ai` and `webovy-tabor` (`chystame` — intent only:
+perex and "co si dítě zkusí", never a program, price, date or equipment;
+`validateTabory` rejects a `chystame` tábor that carries a program).
 
 - **Data model**: `src/lib/turnusy.ts` exports `TURNUSY` (the source of truth
   for price, date, capacity, venue and status) plus `getTurnusy`, `getTurnus`,
-  `isBookable`. `src/lib/locations.ts` is no longer a parallel content source:
+  `isBookable`, and — for the link to the theme — `getTaboryTurnusu`,
+  `getFocusTurnusu`, `getTurnusyByTabor`. **`turnus.focus` no longer exists**;
+  focus modules describe the theme, so they are read through the tábor. `src/lib/locations.ts` is no longer a parallel content source:
   after the cleanup it is a 45-line city→contact map (name, slug, and phone /
   e-mail taken from `SITE`) used by the registration and e-mail flow. There is
   no price, date, capacity, venue or program in it to read — those belong to
   the turnus.
-- **Focus**: reusable content modules per turnus. `FocusId` in `src/lib/focus.ts`
-  is `3d-tisk | iot | vr | herni-vyvoj` (3D tisk / IoT a elektronika /
-  Virtuální realita / Herní vývoj). Both current turnusy use
-  `['3d-tisk', 'iot', 'vr']`.
+- **Focus**: reusable content modules per **tábor**. `FocusId` in
+  `src/lib/focus.ts` is `3d-tisk | iot | vr | herni-vyvoj` (3D tisk / IoT
+  a elektronika / Virtuální realita / Herní vývoj). `chytre-technologie` uses
+  `['3d-tisk', 'iot', 'vr']`; both current turnusy point at that tábor.
 - **Age**: 9–15 (`turnus.ageRange`, currently `'9-15'` for both turnusy).
 - **Cities**: Praha and Karlovy Vary (`src/lib/cities.ts`). City is a
   *property* of a turnus, not a branch of the site — filter with
-  `/tabor?mesto=<city>`, and a turnus's own URL embeds the city in the slug
-  (e.g. `/tabor/karlovy-vary-leto-2027`).
+  `/tabory?mesto=<city>`, and a turnus's own URL embeds the city in the slug
+  (e.g. `/tabory/termin/karlovy-vary-leto-2027`).
+- **URLs** (three levels, the funnel a parent actually walks: city → theme → term):
+  `/tabory` (listing grouped by city), `/tabory/[tema]` (the description, which
+  lives here and **only** here), `/tabory/termin/[slug]` (date, price, venue,
+  registration). The term is **not** nested under the theme: with `taborIds`
+  being a list, a two-theme turnus would have nowhere to live, and changing a
+  theme would force a 301 on an address that is already on an invoice.
 - **Current data (this phase)**: both turnusy (`praha-leto-2027`,
   `kv-leto-2027`) are `chystame` — no confirmed date, price or venue yet.
   Summer 2027 terms are expected to go live around October 2026. Until then
   the site's main job is collecting contacts (`TurnusInterestForm`), not
   selling — `isBookable(turnus)` is what flips a turnus card from a "notify
   me" form to a real "Přihlásit dítě" registration CTA.
-- **Camp name on invoices/e-mails**: `RegistrationForm` still writes
-  `turnus.focus[0]` (a focus id like `'3d-tisk'`) into the registration's
-  `program` field, but nothing downstream trusts that field anymore —
+- **Camp name on invoices/e-mails**: `RegistrationForm` writes
+  `turnus.taborIds[0]` (a tábor id like `'chytre-technologie'`) into the
+  registration's `program` field, but nothing downstream trusts that field —
   invoices, confirmation e-mails, the payment reminder and the nástupní list
   all derive the camp name server-side from `term_id` via
-  `getTrustedProgramName` (`src/lib/payment-pricing.ts`). The stored
+  `getTrustedProgramName` (`src/lib/payment-pricing.ts`), which names it after
+  the tábor ("Letní příměstský tábor (Chytré technologie)"), not after a list
+  of its focus modules. The stored
   `program` value survives only as a fallback for old registrations whose
   turnus is no longer in `TURNUSY`. See the comment above `TURNUSY` in
   `src/lib/turnusy.ts`.
-- **Structured data**: `/tabor/[turnus]` carries `EventSchema` — but only for
+- **Structured data**: `/tabory/termin/[slug]` carries `EventSchema` — but only for
   a turnus `turnusyProSchema()` (`src/components/seo/schema-turnusy.ts`)
   clears: date, price and venue all set, status `otevreno` or `plno`. A sold-out
   turnus (`plno`) still renders, as `Offer.availability: SoldOut` — it doesn't
   just disappear like a `chystame` turnus does. Both current turnusy are
-  `chystame`, so neither page emits an `Event` today. `/tabor`,
-  `/tabor/[turnus]`, `/o-nas`, `/kontakt` and `/firmy` all carry
-  `BreadcrumbSchema` matching the visible breadcrumb trail (`/firmy` has none
-  on-page, so it matches the header link's name instead).
+  `chystame`, so neither page emits an `Event` today. `/tabory`,
+  `/tabory/[tema]`, `/tabory/termin/[slug]`, `/o-nas`, `/kontakt` and `/firmy`
+  all carry `BreadcrumbSchema` matching the visible breadcrumb trail (`/firmy`
+  has none on-page, so it matches the header link's name instead).
   **Where the JSON-LD lives**: a server layout, but only when that layout has
   no child routes. `/o-nas` and `/kontakt` render it from `layout.tsx`.
-  `/tabor` renders it from `page.tsx` instead, because `/tabor/layout.tsx`
-  also wraps `/tabor/[turnus]` — putting the breadcrumb there produced two
-  conflicting `BreadcrumbList` blocks on every turnus page until this phase
-  moved it back down into `/tabor/page.tsx`.
+  Everything under `/tabory` renders it from its own `page.tsx`, because
+  `/tabory/layout.tsx` wraps all three levels — putting a breadcrumb there
+  would emit two conflicting `BreadcrumbList` blocks on every theme and term
+  page. `/tabory/layout.tsx` therefore carries metadata only.
 
-### Redirects (old structure → `/tabor`)
+### Redirects (old structure → `/tabory`)
 
-Defined in `next.config.js` `redirects()` — permanent 301s, not app routes:
-- `/program`, `/tabor-chytrych-technologii`, `/tabor-3d-tisk`, `/tabor-iot`, `/kveten` → `/tabor`
-- `/karlovy-vary`, `/karlovy-vary/letni-primestsky`, `/karlovy-vary/tabor-chytrych-technologii` → `/tabor?mesto=karlovy-vary`
+Defined in `next.config.js` `redirects()` — permanent, not app routes (Next
+emits 308 for `permanent: true`):
+- `/program`, `/tabor-chytrych-technologii`, `/tabor-3d-tisk`, `/tabor-iot`, `/kveten` → `/tabory`
+- `/tabor` → `/tabory`, `/tabor/:slug` → `/tabory/termin/:slug` (the one-page
+  detail that phase 6 replaced; it was never in the index, it lived only on
+  `feat/web-2027`)
+- `/karlovy-vary`, `/karlovy-vary/letni-primestsky`, `/karlovy-vary/tabor-chytrych-technologii` → `/tabory?mesto=karlovy-vary`
 - `/karlovy-vary/o-nas`, `/karlovy-vary/kontakt`, `/karlovy-vary/gdpr`, `/karlovy-vary/podminky` → their Prague equivalents
+
+Every rule points straight at its final address — no rule may target one that
+redirects again.
 
 ## Design System
 
-### Colors (Tailwind)
-- **Primary** (`primary-*`): Indigo - tech/energy
-- **Accent** (`accent-*`): Cyan - engagement
-- **Trust** (`trust-*`): Emerald - professional/safe
-- **CTA** (`cta-*`): Amber - call to action
+### Colors (Tailwind) — each carries a role, not a mood
+
+A colour may only be used **in its role**. Before phase 6 the palette had no
+rule: four fifths of the site were two neutrals and amber appeared eleven times
+in total, while `accent` and `trust` showed up at random, so a reader could not
+read them as a system. If a colour does not fit the role, it is not used.
+
+| Colour | Role | Where |
+|---|---|---|
+| `cta-*` (amber) | action and state | primary buttons, `CHYSTÁME` badge, "zbývá X míst", ticker strip, closing CTA |
+| `accent-*` (cyan) | technology | camp themes, the bar on a theme card, icons in the kids' section, grid cells on dark |
+| `trust-*` (emerald) | a parent's peace of mind | the "Co máte jisté" strip — instructor ratio, first aid, 8–17 |
+| `primary-*` (indigo) | the brand's base | grid, links, grid cells on light |
+| `ink` / `paper` | surface and text | everywhere else |
+
+### Section rhythm
+
+Two adjacent sections must be separated — **either by a change of background
+or by `border-y`**. Two sections sharing a background with no line between them
+is a bug: that is how `section-padding` twice over produced ~192 px of empty
+cream with nothing to hold on to.
+
+**Every page carries at least one dark (`bg-ink`) block** as an anchor.
+
+**Load-bearing text never hides behind an animation.** Animate `y`, not
+`opacity` (and never a clip mask), for an H1, perex or CTA — otherwise the page
+is blank whenever the animation does not run: a frozen background tab, a JS
+error, slow hydration.
 
 ### Component Classes
 - `btn-primary` - Main CTA button (amber)
@@ -206,9 +267,10 @@ All user-facing content is in Czech. Code/docs can be in English.
 
 ## Current Status
 
-**Structural rebuild (single turnus-based product, Weeks s.r.o. as operator)**: Complete across the whole site — the product/marketing pages (`/`, `/tabor`, `/tabor/[turnus]`) as well as `/o-nas`, `/kontakt`, `/gdpr` and `/podminky` all describe Weeks s.r.o. as organizer; DDM Praha 6 and HWLab remain only as historical code comments explaining what was removed. `/firmy` (linked from the header, footer and the homepage's Rozcesti section) is built — see "`/firmy` (phase 4)" below.
+**Structural rebuild (Weeks s.r.o. as operator)**: Complete across the whole site — the product/marketing pages (`/`, `/tabory`, `/tabory/[tema]`, `/tabory/termin/[slug]`) as well as `/o-nas`, `/kontakt`, `/gdpr` and `/podminky` all describe Weeks s.r.o. as organizer; DDM Praha 6 and HWLab remain only as historical code comments explaining what was removed. `/firmy` (linked from the header, footer and the homepage's Rozcesti section) is built — see "`/firmy` (phase 4)" below.
 **Status**: No turnus is bookable yet — both turnusy are `chystame`, with no confirmed date/price/venue. Summer 2027 terms are expected around October 2026; until then the site's job is collecting contacts, not selling.
 **Phase 5 (structured data, rescued focus-module content, dead analytics) is done** — see "Phase 5" below.
+**Phase 6 (camps as a category, visual system) is done** — see "Phase 6" below.
 
 ### `/firmy` (phase 4)
 
@@ -235,15 +297,16 @@ number.
 Phase 5 is done. It picked up what phase 4 deliberately left out:
 
 - **Structured data**: `EventSchema` and `BreadcrumbSchema`
-  (`src/components/seo/StructuredData.tsx`) now render on `/tabor/[turnus]`;
-  `BreadcrumbSchema` also on `/tabor`, `/o-nas`, `/kontakt` and `/firmy`. See
+  (`src/components/seo/StructuredData.tsx`) now render on the turnus page
+  (`/tabory/termin/[slug]` since phase 6); `BreadcrumbSchema` also on
+  `/tabory`, `/o-nas`, `/kontakt` and `/firmy`. See
   "Structured data" under "Product: turnus-based summer camp" above for what
   gates a turnus into `EventSchema` and where each page's JSON-LD lives.
 - **Rescued focus-module content finally renders**: `printers`, `hardware`,
   `gallery` and `faq` (`src/lib/focus.ts`, pulled out of the deleted one-day
-  pages back in phase 2) are now shown on `/tabor/[turnus]`. `ProjectGallery`
-  no longer carries its own hardcoded list of six images — both `/tabor` and
-  the turnus page build its items from the turnus's own focus modules.
+  pages back in phase 2) are now shown on the camp page (`/tabory/[tema]`
+  since phase 6). `ProjectGallery` no longer carries its own hardcoded list of
+  six images — the page builds its items from the tábor's focus modules.
 - **`analytics.ts` cleanup**: six functions from the deleted weekend/one-day
   formats — dead since that catalog was removed, called from nowhere — are
   gone, including two that sent the old, now-wrong prices as GA/Meta
@@ -251,6 +314,38 @@ Phase 5 is done. It picked up what phase 4 deliberately left out:
   `trackFirmyPoptavka` fires `firmy_poptavka_submit` (GA only, no conversion
   value) with the submitted offer's id as a dimension, not its heading text,
   so the event survives future copy changes.
+
+### Phase 6 (camps as a category, visual system)
+
+Phase 6 is done. Spec:
+`docs/superpowers/specs/2026-09-21-web-2027-faze-6-tabory-a-vizual-design.md`,
+plan: `docs/superpowers/plans/2026-09-21-web-2027-faze-6-tabory-a-vizual.md`.
+
+- **Two entities instead of one.** `src/lib/tabory.ts` holds the theme; the
+  turnus points at it through `taborIds`. `turnus.focus` is gone. See "Product"
+  above.
+- **Three levels of URLs** replace the one-page `/tabor`: `/tabory`,
+  `/tabory/[tema]`, `/tabory/termin/[slug]`. The description lives on the
+  theme and **is not repeated on a term page** — otherwise several nearly
+  identical pages would compete and a search engine would pick one itself.
+- **Visual system from variant B** (built and approved on the throwaway route
+  `/nahled/b`, deleted at the end of the phase): colour roles and section
+  rhythm, now recorded under "Design System" above.
+- **Homepage**: dark hero with a group photo in an offset amber frame; the
+  interactive grid moved out of the hero into the kids' section (`ProDeti`,
+  `src/components/ui/MrizkaSekce.tsx`); the six-tile `USPSection` split into
+  `ProRodice` (emerald, verifiable facts) and `ProDeti` (dark cyan, content
+  read from the running tábor's focus modules); a full-width camp photo
+  between them; `ContactSection` became the amber closing block and **kept**
+  its e-mail form — it is the only contact capture on the homepage.
+- **Removed**: `KdeASKym` (dissolved — venues → `/tabory` next to their city,
+  team → `/o-nas` where it was a duplicate, 1:5 / first aid / capacity →
+  `ProRodice`, phone + e-mail → already in `ContactSection` and the footer),
+  `KVRegionNudge` and `/api/geo` (city is a filter now, both turnusy are
+  equally `chystame`), `USPSection`, `src/app/nahled/**`.
+- **Buttons**: `btn-primary`, `btn-secondary` and `btn-outline` carry `gap-2`;
+  24 hand-written `ml-*`/`mr-*` margins on icons inside buttons are gone. Do
+  not add one back — the gap belongs to the button.
 
 ### Social Media (December 2024)
 - [x] Instagram: @weeks.cz (bio complete)
@@ -337,7 +432,7 @@ _Historical record. Every decision below is about the product that no longer exi
 
 ## Key Decisions Made (April 2026)
 
-_Historical record, same as the list above: the `/duben` ad landing page and the DDM registration flow it fed are both gone (`/kveten`, its successor, now 301s to `/tabor`)._
+_Historical record, same as the list above: the `/duben` ad landing page and the DDM registration flow it fed are both gone (`/kveten`, its successor, now redirects to `/tabory`)._
 
 1. **Ad landing page `/duben`**: Minimal conversion page for IG ads — no Header/Footer, just logo + 2 camp cards + DDM CTAs
 2. **Landing page URL**: `/duben` — short, reusable, memorable for IG bio/ads
@@ -353,8 +448,10 @@ _Historical record, same as the list above: the `/duben` ad landing page and the
 2. **Operator on the product**: `SITE.legalName` (Weeks s.r.o.) replaces DDM Praha 6 on the homepage, `/tabor` and structured data — `/o-nas`, `/kontakt`, `/gdpr`, `/podminky` and the registration backend followed within the same phase and now say Weeks s.r.o. too (see Project Overview)
 3. **Age range**: 9–15 (was 10–15)
 4. **Cities**: Praha and Karlovy Vary as a property of a turnus, not a branch of the site — old `/karlovy-vary/*` pages are gone
-5. **Redirects**: old routes (`/program`, `/tabor-*`, `/kveten`, `/karlovy-vary*`) permanently redirect to `/tabor` (see `next.config.js`)
-6. **Price/date source of truth**: `src/lib/turnusy.ts` only — see the warning above `TURNUSY` and the guard test in `src/lib/turnusy.test.ts`
+5. **Redirects**: old routes (`/program`, `/tabor-*`, `/kveten`, `/karlovy-vary*`) permanently redirect to the camp listing — retargeted from `/tabor` to `/tabory` in phase 6 (see `next.config.js`)
+6. **Price/date source of truth**: `src/lib/turnusy.ts` only — see the warning above `TURNUSY` and the guard test in `src/lib/turnusy.test.ts`; the theme's source of truth is `src/lib/tabory.ts` (phase 6)
+7. **Camp above turnus (phase 6)**: a theme is its own entity, a turnus points at it through `taborIds` (a list, so a future two-group week needs no migration of `term_id`); the description lives on the theme and only there
+8. **Colour carries a role (phase 6)**: amber = action/state, cyan = technology, emerald = a parent's peace of mind, indigo = brand base — see "Design System" above
 7. **Share image**: `src/app/opengraph-image.tsx` generates the OG/Twitter preview with `next/og`. The old static `public/og-image-v2.jpg` was deleted — it was publicly reachable at `weeks.cz/og-image-v2.jpg` and still rendered the dead offer („Praha · 10–15 let · Víkendové i jednodenní formáty“, „pořádá DDM Praha 6 ve spolupráci s HWLab“)
 
 ## Notes for Future Sessions
@@ -372,18 +469,19 @@ Summer 2027 terms are expected to be announced around October 2026.
 
 The old weekend/one-day formats (MIX, one-day 3D tisk/IoT camps) and their
 DDM Praha 6 registration links are gone, along with `/program`,
-`/tabor-3d-tisk`, `/tabor-iot` and `/tabor-chytrych-technologii` — see
-"Redirects" above.
+`/tabor-3d-tisk`, `/tabor-iot`, `/tabor-chytrych-technologii` and — since
+phase 6 — the one-page `/tabor` itself. See "Redirects" above.
 
 ### When Summer 2027 turnusy are confirmed
 - Fill in `start`, `end`, `priceKc` and `venueId` on the turnus in
   `src/lib/turnusy.ts` and flip `status` to `otevreno`.
 - `isBookable()` then switches the turnus card from the interest form to a
   real "Přihlásit dítě" registration CTA — no DDM link, no manual step.
+- Nothing about the theme changes: `tabory.ts` does not carry dates or prices.
 
 ### Ad landing pages
 None exist right now. `/kveten` (May 2026, 3D tisk/IoT one-day terms)
-permanently redirects to `/tabor` (`next.config.js` `redirects()`). Its
+permanently redirects to `/tabory` (`next.config.js` `redirects()`). Its
 predecessor `/duben` (April 2026 campaign) was removed before this phase and
 has no redirect configured — the route no longer exists and 404s.
 
