@@ -47,8 +47,15 @@ function FAQItem({ question, answer, index }: { question: string; answer: string
   )
 }
 
-export function FAQSection() {
-  const faqs = getSiteFaq()
+/**
+ * Harmonika s dotazy rodičů.
+ *
+ * Bez parametru ukáže obecné otázky ze `site.ts` (úvodka). Stránka tématu jí
+ * předá vlastní seznam — obecné otázky plus ty, které se týkají zrovna jejího
+ * zaměření. Druhá harmonika kvůli tomu vznikat nemusí.
+ */
+export function FAQSection({ polozky }: { polozky?: Array<{ question: string; answer: string }> }) {
+  const faqs = polozky ?? getSiteFaq()
 
   return (
     <section id="faq" className="section-padding bg-paper-soft border-b border-ink/15">
