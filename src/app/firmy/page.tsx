@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { ArrowLeft, ArrowRight, Check, Handshake, Users, Wrench } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Building2, Check, Handshake, MapPin, Users, Wrench } from 'lucide-react'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { FirmyPoptavka } from '@/components/firmy/FirmyPoptavka'
@@ -7,14 +7,40 @@ import { BreadcrumbSchema } from '@/components/seo/StructuredData'
 import { getNabidky, PARTNERSTVI_ZATIM, type NabidkaId } from '@/lib/firmy'
 import { SITE } from '@/lib/site'
 
-// Ikona a popisek „poptat" tlačítka se k nabídce nedají odvodit z dat
+// Ikona, barva a popisek „poptat" tlačítka se k nabídce nedají odvodit z dat
 // (nadpisy v `src/lib/firmy.ts` jako „Dny pro děti zaměstnanců" se nedají
 // bezpečně sklonit do tvaru „Poptat …"), proto jsou tady jako malá UI mapa
 // vedle datového zdroje, ne jako duplicitní zdroj obsahu.
-const NABIDKA_META: Record<NabidkaId, { icon: typeof Users; poptatLabel: string }> = {
-  'deti-zamestnancu': { icon: Users, poptatLabel: 'Poptat den pro děti zaměstnanců' },
-  workshopy: { icon: Wrench, poptatLabel: 'Poptat workshop' },
-  partnerstvi: { icon: Handshake, poptatLabel: 'Poptat partnerství' },
+//
+// Barva drží roli z palety, ne náladu: den pro děti zaměstnanců je o klidu
+// rodičů (emerald), workshop o technologiích (cyan), partnerství o značce
+// samotné (indigo). Tři stejné indigo ikony vedle sebe nedávaly čtenáři
+// žádné vodítko, čím se nabídky liší.
+const NABIDKA_META: Record<
+  NabidkaId,
+  { icon: typeof Users; poptatLabel: string; ikona: string; ram: string; odrazka: string }
+> = {
+  'deti-zamestnancu': {
+    icon: Users,
+    poptatLabel: 'Poptat den pro děti zaměstnanců',
+    ikona: 'text-trust-600',
+    ram: 'border-trust-600',
+    odrazka: 'text-trust-600',
+  },
+  workshopy: {
+    icon: Wrench,
+    poptatLabel: 'Poptat workshop',
+    ikona: 'text-accent-600',
+    ram: 'border-accent-500',
+    odrazka: 'text-accent-600',
+  },
+  partnerstvi: {
+    icon: Handshake,
+    poptatLabel: 'Poptat partnerství',
+    ikona: 'text-primary-600',
+    ram: 'border-primary-500',
+    odrazka: 'text-primary-600',
+  },
 }
 
 /**
@@ -85,12 +111,15 @@ export default function FirmyPage() {
             >
               <div className="section-container">
                 <div className="max-w-3xl mb-10">
+                  <p className="mono-label mb-4" aria-hidden="true">
+                    {String(index + 1).padStart(2, '0')} / {String(nabidky.length).padStart(2, '0')}
+                  </p>
                   <div className="flex items-center gap-4 mb-4">
                     <div
-                      className="w-12 h-12 bg-white border border-ink/15 rounded-sm flex items-center justify-center flex-shrink-0"
+                      className={`w-12 h-12 bg-white border rounded-sm flex items-center justify-center flex-shrink-0 ${meta.ram}`}
                       aria-hidden="true"
                     >
-                      <Icon className="w-6 h-6 text-primary-600" />
+                      <Icon className={`w-6 h-6 ${meta.ikona}`} />
                     </div>
                     <h2 className="heading-2 text-ink">{nabidka.nadpis}</h2>
                   </div>
@@ -103,7 +132,7 @@ export default function FirmyPage() {
                   <ul className="space-y-2.5">
                     {nabidka.jakToProbiha.map((item) => (
                       <li key={item} className="flex gap-3 text-ink-500">
-                        <Check className="w-4 h-4 mt-1 text-primary-600 flex-shrink-0" aria-hidden="true" />
+                        <Check className={`w-4 h-4 mt-1 flex-shrink-0 ${meta.odrazka}`} aria-hidden="true" />
                         <span>{item}</span>
                       </li>
                     ))}
@@ -116,7 +145,7 @@ export default function FirmyPage() {
                     <ul className="space-y-2.5">
                       {nabidka.zajistimeMy.map((item) => (
                         <li key={item} className="flex gap-3 text-ink-500 text-sm">
-                          <Check className="w-4 h-4 mt-0.5 text-primary-600 flex-shrink-0" aria-hidden="true" />
+                          <Check className={`w-4 h-4 mt-0.5 flex-shrink-0 ${meta.odrazka}`} aria-hidden="true" />
                           <span>{item}</span>
                         </li>
                       ))}
@@ -127,7 +156,7 @@ export default function FirmyPage() {
                     <ul className="space-y-2.5">
                       {nabidka.zajistiteVy.map((item) => (
                         <li key={item} className="flex gap-3 text-ink-500 text-sm">
-                          <Check className="w-4 h-4 mt-0.5 text-primary-600 flex-shrink-0" aria-hidden="true" />
+                          <Check className={`w-4 h-4 mt-0.5 flex-shrink-0 ${meta.odrazka}`} aria-hidden="true" />
                           <span>{item}</span>
                         </li>
                       ))}
@@ -169,7 +198,57 @@ export default function FirmyPage() {
           )
         })}
 
-        {/* Kde a s kým — stejná sekce jako na úvodce */}
+        {/* Kde to proběhne — tmavá kotva stránky.
+            Nahrazuje rušenou sekci „Kde a s kým", která tvrdila pevné místo
+            konání. U firem se místo domlouvá případ od případu a FabLab
+            VARY&TE je jedna z možností, ne dané místo — partnerství s ním
+            podepsané není a tenhle repozitář je veřejný. */}
+        <section className="section-padding relative overflow-hidden border-y border-ink bg-ink blueprint-grid-dark">
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -right-16 -top-20 select-none font-display text-[22rem] font-bold leading-none text-paper/[0.04]"
+          >
+            W
+          </div>
+          <div className="section-container relative z-10">
+            <div className="max-w-3xl mb-10">
+              <p className="mono-label-dark mb-4 text-accent-300">Kde to proběhne</p>
+              <h2 className="heading-2 text-paper mb-4">
+                Místo <span className="text-accent-400">domluvíme</span>
+              </h2>
+              <p className="text-lg text-paper/70">
+                Nemáme pro firmy jedno pevné místo. Vybíráme podle toho, kolik
+                lidí přijde a co je potřeba k programu.
+              </p>
+            </div>
+
+            <div className="grid gap-6 md:grid-cols-3">
+              {[
+                {
+                  icon: Building2,
+                  title: 'U vás ve firmě',
+                  text: 'Přivezeme vybavení i lektory. Potřebujeme místnost, stoly a elektřinu.',
+                },
+                {
+                  icon: Wrench,
+                  title: 'V našem prostoru',
+                  text: 'Tam, kde běží tábory — dílna s tiskárnami a elektronikou připravená.',
+                },
+                {
+                  icon: MapPin,
+                  title: 'V partnerském prostoru',
+                  text: 'Například ve FabLabu VARY&TE v Karlových Varech, kde tábory pořádáme.',
+                },
+              ].map((m) => (
+                <div key={m.title} className="rounded-md border border-paper/15 bg-paper/[0.03] p-6">
+                  <m.icon className="mb-4 h-7 w-7 text-accent-400" aria-hidden="true" />
+                  <h3 className="mb-2 font-display text-lg font-semibold text-paper">{m.title}</h3>
+                  <p className="text-paper/70">{m.text}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
 
         {/* Poptávka */}
         <section id="poptavka" className="section-padding bg-paper-soft border-t border-ink/15 scroll-mt-24">

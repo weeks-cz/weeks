@@ -120,6 +120,46 @@ export default function AboutPage() {
           </div>
         </section>
 
+        {/* Fotka z tábora hned pod herem.
+            Stránka dřív ukazovala jen tři fotky prostoru FabLabu z `cities.ts`,
+            zatímco reálné fotky z táborů používalo jediné místo — hero úvodky.
+            Vybírají se schválně jen záběry s dětmi při činnosti: zbytek složky
+            `public/images/hwlab/` jsou fotky prázdného pražského prostoru,
+            který dnes není místem konání, a vypadaly by jako slib, že tam
+            tábor poběží. Název složky je historický zbytek, HWLab pořadatel
+            ani místo konání není. */}
+        <section className="relative isolate overflow-hidden">
+          <Image
+            src="/images/tabor/skupina-terasa.webp"
+            alt="Skupina dětí s lektory na sluncem zalité terase, mávají do objektivu"
+            width={2000}
+            height={1500}
+            loading="lazy"
+            sizes="100vw"
+            className="h-[360px] w-full object-cover md:h-[520px]"
+          />
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 bg-gradient-to-r from-ink/90 via-ink/50 to-transparent"
+          />
+          <div className="absolute inset-0 flex items-center">
+            <div className="section-container w-full">
+              {/* Popisek říká jen to, co web dokládá jinde: strop kapacity je
+                  z dat turnusu, poměr 1:5 stojí v sekci „Co máte jisté“ i ve
+                  FAQ. Místo ani rok se sem nepíšou — u téhle fotky je nemáme
+                  z čeho doložit. */}
+              <p className="mono-label-dark mb-4 text-cta-300">Z tábora</p>
+              <h2 className="heading-2 max-w-xl text-paper">
+                Tohle je <span className="text-cta-400">celý turnus</span>
+              </h2>
+              <p className="mt-4 max-w-md text-lg text-paper/80">
+                Nejvýše {kapacita} dětí a jeden lektor na pět z nich. Ne zástup,
+                ve kterém se dítě ztratí.
+              </p>
+            </div>
+          </div>
+        </section>
+
         {/* Mission Section */}
         <section className="section-padding bg-paper">
           <div className="section-container">
@@ -265,7 +305,9 @@ export default function AboutPage() {
         )}
 
         {/* Team Section */}
-        <section className="section-padding bg-paper">
+        {/* Tým je srdce stránky, proto dostává tmavý blok — kotvu, bez které
+            se `/o-nas` četla jako dlouhý krémový svitek. */}
+        <section className="section-padding border-y border-ink bg-ink blueprint-grid-dark">
           <div className="section-container">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -273,11 +315,11 @@ export default function AboutPage() {
               viewport={{ once: true }}
               className="text-center mb-16"
             >
-              <p className="mono-label mb-4">Tým</p>
-              <h2 className="heading-2 text-ink mb-4">
+              <p className="mono-label-dark mb-4 text-accent-300">Tým</p>
+              <h2 className="heading-2 text-paper mb-4">
                 Lektorský tým
               </h2>
-              <p className="text-xl text-ink-500 max-w-2xl mx-auto">
+              <p className="text-xl text-paper/70 max-w-2xl mx-auto">
                 Naši lektoři jsou odborníci z praxe s vášní pro výuku. Jsou proškolení
                 v první pomoci a s dětmi pracují dlouhodobě.
               </p>
@@ -291,19 +333,19 @@ export default function AboutPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
-                  className="card-maker p-6 text-center flex flex-col"
+                  className="rounded-md border border-paper/15 bg-paper/[0.03] p-6 text-center flex flex-col"
                 >
                   {/* Icon */}
-                  <div className="w-24 h-24 bg-primary-600 border border-ink rounded-sm mx-auto mb-4 flex items-center justify-center">
-                    <member.icon className="w-12 h-12 text-white" />
+                  <div className="w-24 h-24 border border-paper/25 rounded-sm mx-auto mb-4 flex items-center justify-center">
+                    <member.icon className="w-12 h-12 text-accent-400" />
                   </div>
-                  <h3 className="font-display font-semibold text-ink mb-1">
+                  <h3 className="font-display font-semibold text-paper mb-1">
                     {member.name}
                   </h3>
-                  <p className="mono-label mb-2">
+                  <p className="mono-label-dark mb-2">
                     {member.role}
                   </p>
-                  <p className="text-sm text-ink-500">
+                  <p className="text-sm text-paper/70">
                     {member.description}
                   </p>
                 </motion.div>
