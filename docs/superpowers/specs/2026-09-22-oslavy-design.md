@@ -254,14 +254,14 @@ Kontrolní seznam před nasazením:
   spolupráci nepotvrdil — „v pronajatém prostoru" je horní hranice toho, co
   se dá tvrdit.
 
-## Otevřené vstupy od zakladatele
+## Otevřené vstupy od zakladatele — vyřešeno 2026-09-22
 
-Nic z toho neblokuje implementaci — stránka půjde postavit a tyhle věci se
-doplní nebo opraví v textu:
+1. **Znění příkladů.** Tři návrhy odvozené z toho, co Weeks prokazatelně dělá
+   na táboře, zakladatel schválil jako dostatečné („zatím nějaké namyšlené od
+   AI v pohodě"). Zůstávají tedy tak, jak jsou, dokud je nebude čím nahradit.
+2. **Dojezdová vzdálenost** a **3. nejmenší rozumný počet dětí** — obojí
+   „záleží na nabídce". Na stránku se tedy nepíše ani jedno a řeší se
+   v poptávce, což je přesně to, co dělá dnešní znění. **Žádná změna.**
 
-1. **Znění příkladů.** Tři výše jsou návrh odvozený z toho, co Weeks
-   prokazatelně dělá na táboře. Zakladatel je má přepsat do svého jazyka.
-2. **Dojezdová vzdálenost.** Jezdí se i mimo Prahu a Karlovy Vary? Dnes
-   stránka mlčí, což znamená „zeptejte se".
-3. **Nejmenší rozumný počet dětí.** Neuvádí se, ale hodí se to vědět dřív, než
-   přijde poptávka na tři děti.
+Až první oslavy proběhnou a ukáže se, kde je hranice rozumného dojezdu a počtu,
+je to kandidát na doplnění — ale až podle skutečnosti, ne podle odhadu.
