@@ -15,10 +15,11 @@ interface RozcestiKarta {
 }
 
 /**
- * Čtyři směry, kam Weeks dnes vede — tábor, firmy, e-shop a učebna.
- * První dva jsou stránky tohohle webu (`/tabory`, `/firmy`), e-shop je jeho
- * sekce (`/eshop`) a učebna běží na vlastní doméně, proto se otevírá
- * v novém okně (`external`).
+ * Směry, kam Weeks dnes vede — tábor, firmy a učebna. První dva jsou stránky
+ * tohohle webu (`/tabory`, `/firmy`), učebna běží na vlastní doméně, proto se
+ * otevírá v novém okně (`external`).
+ *
+ * E-shop je zakomentovaný, ne smazaný — viz stejná poznámka v `Header.tsx`.
  */
 const KARTY: RozcestiKarta[] = [
   {
@@ -33,12 +34,12 @@ const KARTY: RozcestiKarta[] = [
     href: '/firmy',
     cta: 'Nabídka pro firmy',
   },
-  {
-    nadpis: 'E-shop',
-    veta: 'Stavebnice a materiál, se kterým děti pracují na táboře.',
-    href: '/eshop',
-    cta: 'Otevřít e-shop',
-  },
+  // {
+  //   nadpis: 'E-shop',
+  //   veta: 'Stavebnice a materiál, se kterým děti pracují na táboře.',
+  //   href: '/eshop',
+  //   cta: 'Otevřít e-shop',
+  // },
   {
     nadpis: 'Učebna',
     veta: 'Online kurzy, ve kterých se dá pokračovat i po táboře.',
@@ -61,12 +62,18 @@ export function Rozcesti() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* Počet sloupců se řídí počtem karet, ne pevnou čtyřkou: po schování
+            e-shopu jsou tři a ve čtyřsloupcové mřížce by zbyla prázdná díra. */}
+        <div
+          className={`grid grid-cols-1 gap-6 sm:grid-cols-2 ${
+            KARTY.length % 3 === 0 ? 'lg:grid-cols-3' : 'lg:grid-cols-4'
+          }`}
+        >
           {KARTY.map((karta, index) => (
             <motion.div
               key={karta.nadpis}
-              initial={reduced ? false : { opacity: 0, y: 16 }}
-              whileInView={reduced ? undefined : { opacity: 1, y: 0 }}
+              initial={reduced ? false : { y: 16 }}
+              whileInView={reduced ? undefined : { y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.05 }}
               className="card-maker flex flex-col p-6"

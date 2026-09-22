@@ -20,8 +20,8 @@ export function ProjectGallery({
     <section className="section-padding bg-paper">
       <div className="section-container">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ y: 20 }}
+          whileInView={{ y: 0 }}
           viewport={{ once: true }}
           className="max-w-2xl mx-auto text-center mb-12"
         >
@@ -39,8 +39,8 @@ export function ProjectGallery({
           {polozky.map((p, i) => (
             <motion.figure
               key={p.src}
-              initial={{ opacity: 0, scale: 0.96 }}
-              whileInView={{ opacity: 1, scale: 1 }}
+              initial={{ scale: 0.96 }}
+              whileInView={{ scale: 1 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.06 }}
               className="group relative aspect-[4/3] border border-ink/15 rounded-md overflow-hidden"

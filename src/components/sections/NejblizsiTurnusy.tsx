@@ -65,7 +65,9 @@ export function NejblizsiTurnusy() {
             <>
               <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                 {turnusy.map((turnus) => (
-                  <TurnusCard key={turnus.id} turnus={turnus} />
+                  // Úvodka nemá formulář zájmu u turnusů — sbírá kontakty
+                  // závěrečným blokem `ContactSection` (`#kontakt`).
+                  <TurnusCard key={turnus.id} turnus={turnus} zajemHref="#kontakt" />
                 ))}
               </div>
 

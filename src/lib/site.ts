@@ -1,5 +1,5 @@
 import { getVenue } from './cities'
-import { getTurnusy } from './turnusy'
+import { getTurnusy, TURNUSY, type Turnus } from './turnusy'
 
 /**
  * Globální konfigurace webu — to, co se po sjednocení měst nijak neliší.
@@ -20,11 +20,17 @@ export const SITE = {
   url: 'https://weeks.cz',
 } as const
 
-/** Věta o místech konání — složená z turnusů, ne natvrdo. */
-export function getVenuesSentence(): string {
+/**
+ * Věta o místech konání — složená z turnusů, ne natvrdo.
+ *
+ * `list` je kvůli testům: chování „turnus bez místa" i „turnus s místem" se
+ * musí dát ověřit bez ohledu na to, co je zrovna v ostrých datech. Dnes tam
+ * není ani jedno potvrzené místo, takže věta vrací variantu s upřesněním.
+ */
+export function getVenuesSentence(list: Turnus[] = TURNUSY): string {
   const nazvy = Array.from(
     new Set(
-      getTurnusy()
+      getTurnusy(list)
         .map((t) => (t.venueId ? getVenue(t.venueId).name : null))
         .filter((n): n is string => n !== null)
     )
@@ -58,7 +64,7 @@ export function getSiteFaq(): Array<{ question: string; answer: string }> {
     {
       question: 'Co má dítě mít s sebou?',
       answer:
-        'Jen dobrou náladu a svačinu na dopoledne a odpoledne. Oběd zajišťujeme my každý den. Veškeré technické vybavení, tiskárny, Arduina, VR headsety i materiály jsou na místě.',
+        'Jen dobrou náladu a svačinu na dopoledne a odpoledne. Oběd zajišťujeme my každý den. Veškeré technické vybavení, tiskárny, Arduina i materiály jsou na místě.',
     },
     {
       question: 'Kde tábory probíhají?',

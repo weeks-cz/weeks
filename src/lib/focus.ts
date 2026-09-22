@@ -53,6 +53,12 @@ const FOCUS: Record<FocusId, FocusModule> = {
     // opravdu pracuje — a pak podle toho místa, ne podle tohohle pole.
     printers: ['MK3S', 'MK4S', 'Mini+', 'CORE One', 'CORE One L', 'XL', 'SL1S'],
     gallery: [
+      // Dítě s vlastním výtiskem v ruce jde záměrně první: galerie má ukázat,
+      // co si dítě odveze, ne jen co tiskárna umí.
+      {
+        src: '/images/tabor/vytisk-v-ruce.webp',
+        alt: 'Chlapec drží vytištěný díl, který si sám navrhl',
+      },
       { src: '/images/gallery/3d-prints-collection.jpg', alt: 'Kolekce výtisků z tábora' },
       { src: '/images/gallery/3d-uv-curing.jpg', alt: 'UV vytvrzování resinových výtisků' },
       { src: '/images/gallery/3d-dragon-hands.jpg', alt: 'Liška z 3D tiskárny' },

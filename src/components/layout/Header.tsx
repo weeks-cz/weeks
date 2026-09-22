@@ -8,10 +8,13 @@ import { Menu, X, ChevronRight, ExternalLink } from 'lucide-react'
 import { trackNavCTA, trackUcebnaClick } from '@/lib/analytics'
 import { getTurnusy, isBookable } from '@/lib/turnusy'
 
+// E-shop je z navigace dočasně schovaný — tým se zatím nerozhodl, jestli ho
+// chce mít veřejně. Není smazaný: route `/eshop` dál funguje, takže staré
+// odkazy a QR kódy nepadají. Návrat = odkomentovat řádek.
 const navItems = [
   { name: 'Tábory', href: '/tabory' },
   { name: 'Pro firmy', href: '/firmy' },
-  { name: 'E-shop', href: '/eshop' },
+  // { name: 'E-shop', href: '/eshop' },
   { name: 'O nás', href: '/o-nas' },
   { name: 'Kontakt', href: '/kontakt' },
 ]

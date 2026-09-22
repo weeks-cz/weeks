@@ -3,7 +3,6 @@ import { getTurnusy } from '@/lib/turnusy'
 const BASE_ITEMS = [
   '3D tisk',
   'IoT & elektronika',
-  'Virtuální realita',
   'Programování',
   '3D modelování',
   'Vývoj her',

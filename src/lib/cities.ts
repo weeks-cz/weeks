@@ -85,6 +85,15 @@ export function getAllCities(): City[] {
   return Object.values(CITIES)
 }
 
+/**
+ * Pořadí města ve výpisech. Jediné místo, kde se rozhoduje, že Praha stojí
+ * nad Karlovými Vary — pořadí se tím drží pořadím v `CITIES` a nevzniká
+ * podruhé v datech turnusů, kde by se rozešlo.
+ */
+export function getCityPoradi(id: CityId): number {
+  return Object.keys(CITIES).indexOf(id)
+}
+
 export function getVenue(id: VenueId): Venue {
   return VENUES[id]
 }

@@ -128,34 +128,46 @@ export default function AboutPage() {
             který dnes není místem konání, a vypadaly by jako slib, že tam
             tábor poběží. Název složky je historický zbytek, HWLab pořadatel
             ani místo konání není. */}
-        <section className="relative isolate overflow-hidden">
-          <Image
-            src="/images/tabor/skupina-terasa.webp"
-            alt="Skupina dětí s lektory na sluncem zalité terase, mávají do objektivu"
-            width={2000}
-            height={1500}
-            loading="lazy"
-            sizes="100vw"
-            className="h-[360px] w-full object-cover md:h-[520px]"
-          />
-          <div
-            aria-hidden="true"
-            className="absolute inset-0 bg-gradient-to-r from-ink/90 via-ink/50 to-transparent"
-          />
-          <div className="absolute inset-0 flex items-center">
-            <div className="section-container w-full">
-              {/* Popisek říká jen to, co web dokládá jinde: strop kapacity je
-                  z dat turnusu, poměr 1:5 stojí v sekci „Co máte jisté“ i ve
-                  FAQ. Místo ani rok se sem nepíšou — u téhle fotky je nemáme
-                  z čeho doložit. */}
-              <p className="mono-label-dark mb-4 text-cta-300">Z tábora</p>
-              <h2 className="heading-2 max-w-xl text-paper">
-                Tohle je <span className="text-cta-400">celý turnus</span>
-              </h2>
-              <p className="mt-4 max-w-md text-lg text-paper/80">
-                Nejvýše {kapacita} dětí a jeden lektor na pět z nich. Ne zástup,
-                ve kterém se dítě ztratí.
-              </p>
+        {/* Fotka stojí v rámečku, ne přes celou šířku.
+
+            Roztažená na `100vw` se na širokém displeji zvětšovala zhruba
+            dvaapůlkrát nad svoje rozlišení (1195 px) a měkla; v bloku širokém
+            nanejvýš 960 px se zobrazuje blízko své skutečné velikosti. Tmavý
+            podklad kolem zároveň drží sekci jako kotvu stránky, což dřív
+            obstarával gradient přes fotku. */}
+        <section className="section-padding border-y border-ink bg-ink blueprint-grid-dark">
+          <div className="section-container">
+            <div className="mx-auto grid max-w-5xl items-center gap-10 lg:grid-cols-[1.2fr_1fr]">
+              <div className="relative">
+                <div
+                  aria-hidden="true"
+                  className="absolute -bottom-4 -left-4 hidden h-full w-full rounded-md border-2 border-cta-400 sm:block"
+                />
+                <Image
+                  src="/images/tabor/skupina-terasa-retus.webp"
+                  alt="Skupina dětí s lektory na sluncem zalité terase, mávají do objektivu"
+                  width={1195}
+                  height={896}
+                  loading="lazy"
+                  sizes="(min-width: 1024px) 34rem, (min-width: 640px) 90vw, 100vw"
+                  className="relative w-full rounded-md border border-paper/20"
+                />
+              </div>
+
+              <div>
+                {/* Popisek říká jen to, co web dokládá jinde: strop kapacity je
+                    z dat turnusu, poměr 1:5 stojí v sekci „Co máte jisté“ i ve
+                    FAQ. Místo ani rok se sem nepíšou — u téhle fotky je nemáme
+                    z čeho doložit. */}
+                <p className="mono-label-dark mb-4 text-cta-300">Z tábora</p>
+                <h2 className="heading-2 text-paper">
+                  Tohle je <span className="text-cta-400">celý turnus</span>
+                </h2>
+                <p className="mt-4 text-lg text-paper/80">
+                  Nejvýše {kapacita} dětí a jeden lektor na pět z nich. Ne zástup,
+                  ve kterém se dítě ztratí.
+                </p>
+              </div>
             </div>
           </div>
         </section>
@@ -165,8 +177,8 @@ export default function AboutPage() {
           <div className="section-container">
             <div className="max-w-4xl mx-auto">
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ y: 20 }}
+                whileInView={{ y: 0 }}
                 viewport={{ once: true }}
                 className="text-center mb-16"
               >
@@ -190,8 +202,8 @@ export default function AboutPage() {
                 {values.map((value, index) => (
                   <motion.div
                     key={value.title}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
+                    initial={{ y: 20 }}
+                    whileInView={{ y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: index * 0.1 }}
                     className="p-6 bg-paper-soft rounded-md border border-ink/15"
@@ -212,14 +224,19 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* Venue Section — dřív ukazovala cizí instituce (DDM, HWLab), dnes
-            reálná místa konání odvozená z turnusů, viz `venues` výše. */}
+        {/* Venue Section — dřív ukazovala cizí instituce (DDM, HWLab), pak
+            místa konání odvozená z turnusů (viz `venues` výše).
+
+            Dnes žádný turnus potvrzené místo nemá, takže sekce mlčí o tom, kde
+            tábor poběží, a místo toho stojí pod ní reference: kde tábor
+            doopravdy proběhl. Jakmile turnus místo dostane, karta se vrátí
+            sama. */}
         {venues.length > 0 && (
           <section className="section-padding bg-paper-soft border-y border-ink/15">
             <div className="section-container">
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ y: 20 }}
+                whileInView={{ y: 0 }}
                 viewport={{ once: true }}
                 className="text-center mb-16"
               >
@@ -236,8 +253,8 @@ export default function AboutPage() {
                 {venues.map((venue, index) => (
                   <motion.div
                     key={venue.id}
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
+                    initial={{ y: 30 }}
+                    whileInView={{ y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: index * 0.2 }}
                     className="card-maker p-8 md:p-12"
@@ -304,14 +321,33 @@ export default function AboutPage() {
           </section>
         )}
 
+        {/* Reference, ne slib. FabLab VARY&TE stával v datech jako místo
+            konání karlovarského turnusu na léto 2027, jenže spolupráci na
+            příští ročník nepotvrdil — vyjádřil jen zájem. Rok 2026 je ale
+            doložitelný, takže tady stojí v minulém čase a nikde jinde. */}
+        <section className="section-padding bg-paper-soft border-y border-ink/15">
+          <div className="section-container">
+            <div className="mx-auto max-w-3xl text-center">
+              <p className="mono-label mb-4">Za sebou</p>
+              <h2 className="heading-2 text-ink mb-4">Kde už tábor proběhl</h2>
+              <p className="text-lg text-ink-500">
+                V létě 2026 jsme tábor pořádali ve FabLabu VARY&amp;TE v Karlových
+                Varech. Prostory pro léto 2027 v Praze i v Karlových Varech
+                domlouváme — jakmile budou jisté, najdete je u konkrétního
+                termínu.
+              </p>
+            </div>
+          </div>
+        </section>
+
         {/* Team Section */}
         {/* Tým je srdce stránky, proto dostává tmavý blok — kotvu, bez které
             se `/o-nas` četla jako dlouhý krémový svitek. */}
         <section className="section-padding border-y border-ink bg-ink blueprint-grid-dark">
           <div className="section-container">
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ y: 20 }}
+              whileInView={{ y: 0 }}
               viewport={{ once: true }}
               className="text-center mb-16"
             >
@@ -329,8 +365,8 @@ export default function AboutPage() {
               {teamMembers.map((member, index) => (
                 <motion.div
                   key={member.name}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
+                  initial={{ y: 20 }}
+                  whileInView={{ y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
                   className="rounded-md border border-paper/15 bg-paper/[0.03] p-6 text-center flex flex-col"
@@ -359,8 +395,8 @@ export default function AboutPage() {
         <section className="section-padding bg-paper-soft border-y border-ink/15">
           <div className="section-container">
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ y: 20 }}
+              whileInView={{ y: 0 }}
               viewport={{ once: true }}
               className="max-w-4xl mx-auto"
             >
@@ -432,8 +468,8 @@ export default function AboutPage() {
         <section className="section-padding bg-paper">
           <div className="section-container">
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ y: 20 }}
+              whileInView={{ y: 0 }}
               viewport={{ once: true }}
               className="max-w-3xl mx-auto text-center"
             >

@@ -1,10 +1,10 @@
 import Link from 'next/link'
-import { ArrowLeft, ArrowRight, Building2, Check, Handshake, MapPin, Users, Wrench } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Building2, Check, Handshake, Users, Wrench } from 'lucide-react'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { FirmyPoptavka } from '@/components/firmy/FirmyPoptavka'
 import { BreadcrumbSchema } from '@/components/seo/StructuredData'
-import { getNabidky, PARTNERSTVI_ZATIM, type NabidkaId } from '@/lib/firmy'
+import { getNabidky, type NabidkaId } from '@/lib/firmy'
 import { SITE } from '@/lib/site'
 
 // Ikona, barva a popisek „poptat" tlačítka se k nabídce nedají odvodit z dat
@@ -82,7 +82,7 @@ export default function FirmyPage() {
               <p className="mono-label mb-6">Pro firmy</p>
               <h1 className="heading-1 text-ink mb-6">Weeks pro firmy</h1>
               <p className="text-lg md:text-xl text-ink-500 mb-10 max-w-2xl leading-relaxed">
-                O prázdninách pracujeme s dětmi na 3D tisku, elektronice a virtuální realitě.
+                O prázdninách pracujeme s dětmi na 3D tisku a elektronice s Arduinem.
                 Stejné technologie a lektory nabízíme i firmám — jako den pro děti
                 zaměstnanců, workshop pro tým nebo podpora tábora.
               </p>
@@ -180,13 +180,6 @@ export default function FirmyPage() {
                   </div>
                 )}
 
-                {/* Přiznání, ne součást nabídky — proto odlišeně: drobněji, v rámečku. */}
-                {nabidka.id === 'partnerstvi' && (
-                  <div className="max-w-3xl mt-10 border border-ink/15 rounded-md bg-white p-4">
-                    <p className="text-sm text-ink-500">{PARTNERSTVI_ZATIM}</p>
-                  </div>
-                )}
-
                 <div className="mt-10">
                   <Link href={`/firmy?typ=${nabidka.id}#poptavka`} className="btn-secondary group">
                     {meta.poptatLabel}
@@ -222,7 +215,10 @@ export default function FirmyPage() {
               </p>
             </div>
 
-            <div className="grid gap-6 md:grid-cols-3">
+            {/* Dvě možnosti, ne tři. "V našem prostoru" tu stávalo neprávem —
+                Weeks vlastní dílnu nemá — a "v partnerském prostoru" odkazovalo
+                na FabLab VARY&TE, se kterým partnerství podepsané není. */}
+            <div className="grid gap-6 md:grid-cols-2">
               {[
                 {
                   icon: Building2,
@@ -231,13 +227,8 @@ export default function FirmyPage() {
                 },
                 {
                   icon: Wrench,
-                  title: 'V našem prostoru',
-                  text: 'Tam, kde běží tábory — dílna s tiskárnami a elektronikou připravená.',
-                },
-                {
-                  icon: MapPin,
-                  title: 'V partnerském prostoru',
-                  text: 'Například ve FabLabu VARY&TE v Karlových Varech, kde tábory pořádáme.',
+                  title: 'V pronajatém prostoru',
+                  text: 'Dílnu nebo sál najdeme a zařídíme podle počtu lidí a programu.',
                 },
               ].map((m) => (
                 <div key={m.title} className="rounded-md border border-paper/15 bg-paper/[0.03] p-6">

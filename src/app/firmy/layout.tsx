@@ -3,8 +3,8 @@ import { SITE } from '@/lib/site'
 
 const pageTitle = 'Weeks pro firmy'
 // Popis pro vyhledávače pojmenovává tři nabídky a pořadatele, ale schválně
-// nezmiňuje cenu ani reference — ceník neexistuje a reference jsou zatím
-// prázdné pole v `src/lib/firmy.ts` (viz `PARTNERSTVI_ZATIM`).
+// nezmiňuje cenu ani reference — ceník neexistuje a `reference` je zatím
+// prázdné pole v `src/lib/firmy.ts`.
 const pageDescription = `${SITE.legalName} nabízí firmám dny pro děti zaměstnanců, workshopy pro tým a partnerství s letním IT táborem pro děti.`
 const pageUrl = `${SITE.url}/firmy`
 

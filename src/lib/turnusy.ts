@@ -1,4 +1,4 @@
-import { getVenue, type CityId, type VenueId } from './cities'
+import { getCityPoradi, getVenue, type CityId, type VenueId } from './cities'
 import type { FocusId } from './focus'
 import { getTabor, type Tabor, type TaborId } from './tabory'
 
@@ -85,7 +85,11 @@ export const TURNUSY: Turnus[] = [
     id: 'kv-leto-2027',
     slug: 'karlovy-vary-leto-2027',
     city: 'karlovy-vary',
-    venueId: 'fablab-varyte',
+    // FabLab VARY&TE tu stával jako místo konání. Spolupráci na léto 2027
+    // ale nepotvrdil — vyjádřil jen zájem — takže by web sliboval prostor,
+    // který domluvený není. Na `/o-nas` zůstává jako reference z roku 2026,
+    // kde je to doložitelné. Až bude místo jisté, doplní se sem zpátky.
+    venueId: null,
     start: null,
     end: null,
     priceKc: null,
@@ -94,7 +98,7 @@ export const TURNUSY: Turnus[] = [
     taborIds: ['chytre-technologie'],
     ageRange: '9-15',
     perex:
-      'Týdenní příměstský tábor ve FabLabu VARY&TE. Termíny na léto 2027 vypíšeme na podzim.',
+      'Týdenní příměstský tábor v Karlových Varech. Místo konání i termíny upřesníme.',
   },
   {
     id: 'praha-leto-2027',
@@ -127,13 +131,20 @@ export function isBookable(turnus: Turnus): boolean {
 /**
  * Turnusy v nabídce — bez uzavřených, seřazené podle termínu.
  * Turnusy bez data jdou nakonec: „chystáme" nemá co přeskakovat jistý termín.
+ *
+ * Když termín nemá ani jeden — což je dnešní stav, oba turnusy jsou `chystame`
+ * — rozhoduje pořadí města z `cities.ts`, ne pořadí zápisu v `TURNUSY`.
+ * Jinak by o tom, jestli je nahoře Praha nebo Karlovy Vary, rozhodovalo to,
+ * který řádek kdo dřív napsal.
  */
 export function getTurnusy(list: Turnus[] = TURNUSY): Turnus[] {
   return list
     .filter((t) => t.status !== 'uzavreno')
     .slice()
     .sort((a, b) => {
-      if (a.start === null && b.start === null) return 0
+      if (a.start === null && b.start === null) {
+        return getCityPoradi(a.city) - getCityPoradi(b.city)
+      }
       if (a.start === null) return 1
       if (b.start === null) return -1
       return a.start.localeCompare(b.start)

@@ -102,7 +102,11 @@ export const TABORY: Tabor[] = [
       'Celý týden 3D tisk, 3D modelování a IoT s Arduinem. Hotový výrobek, který si dítě odveze domů.',
     popis:
       'Týden je rozdělený na dva tematické bloky — první tři dny věnujeme 3D tisku a modelování, ve čtvrtek a v pátek se vrhneme na IoT s Arduinem.',
-    focus: ['3d-tisk', 'iot', 'vr'],
+    // VR je ze zaměření pryč: vybavení na něj není jisté a v Karlových Varech
+    // se loni nekonalo, takže by ho web sliboval na základě ničeho. Týdenní
+    // program to jen potvrzuje — žádný den VR neobsahuje. Modul `vr` zůstává
+    // ve `focus.ts` i s obsahem; vrátí se dopsáním do tohohle pole.
+    focus: ['3d-tisk', 'iot'],
     program: [
       {
         den: 'Pondělí',

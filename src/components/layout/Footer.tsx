@@ -6,10 +6,13 @@ import { Mail, Phone } from 'lucide-react'
 import { SITE } from '@/lib/site'
 import { openCookieSettings } from '@/lib/consent'
 
+// E-shop je z navigace dočasně schovaný — tým se zatím nerozhodl, jestli ho
+// chce mít veřejně. Není smazaný: route `/eshop` dál funguje, takže staré
+// odkazy a QR kódy nepadají. Návrat = odkomentovat řádek.
 const navLinks = [
   { name: 'Tábory', href: '/tabory' },
   { name: 'Pro firmy', href: '/firmy' },
-  { name: 'E-shop', href: '/eshop' },
+  // { name: 'E-shop', href: '/eshop' },
   { name: 'O nás', href: '/o-nas' },
   { name: 'Kontakt', href: '/kontakt' },
 ]
@@ -20,7 +23,7 @@ const legalLinks = [
 ]
 
 const description =
-  'Týdenní příměstské IT tábory pro děti 9 až 15 let. 3D tisk, VR, IoT a programování se zkušenými instruktory.'
+  'Týdenní příměstské IT tábory pro děti 9 až 15 let. 3D tisk, IoT a programování se zkušenými instruktory.'
 
 export function Footer() {
   return (

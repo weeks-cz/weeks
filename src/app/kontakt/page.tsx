@@ -162,8 +162,8 @@ export default function ContactPage() {
               {contactInfo.map((info, index) => (
                 <motion.div
                   key={info.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
+                  initial={{ y: 20 }}
+                  whileInView={{ y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
                   className="card-maker p-6 text-center"
@@ -201,8 +201,8 @@ export default function ContactPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
               {/* Contact Form */}
               <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
+                initial={{ x: -20 }}
+                whileInView={{ x: 0 }}
                 viewport={{ once: true }}
               >
                 <p className="mono-label mb-4">Formulář</p>
@@ -318,8 +318,8 @@ export default function ContactPage() {
 
               {/* Map & Info */}
               <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
+                initial={{ x: 20 }}
+                whileInView={{ x: 0 }}
                 viewport={{ once: true }}
                 className="space-y-8"
               >
@@ -414,8 +414,8 @@ export default function ContactPage() {
         <section className="section-padding bg-paper">
           <div className="section-container">
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ y: 20 }}
+              whileInView={{ y: 0 }}
               viewport={{ once: true }}
               className="max-w-4xl mx-auto"
             >
@@ -431,8 +431,8 @@ export default function ContactPage() {
                 {faqPreview.map((item, index) => (
                   <motion.div
                     key={index}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
+                    initial={{ y: 20 }}
+                    whileInView={{ y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: index * 0.1 }}
                     className="card-maker rounded-md p-6"
@@ -460,8 +460,8 @@ export default function ContactPage() {
         <section className="section-padding bg-ink text-paper blueprint-grid-dark border-y border-ink">
           <div className="section-container">
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ y: 20 }}
+              whileInView={{ y: 0 }}
               viewport={{ once: true }}
               className="max-w-3xl mx-auto text-center"
             >

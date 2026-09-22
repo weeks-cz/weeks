@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { NABIDKY, PARTNERSTVI_ZATIM, getNabidky, getNabidka, type B2BNabidka } from './firmy'
+import { NABIDKY, getNabidky, getNabidka, type B2BNabidka } from './firmy'
 
 /**
  * Všechna próza, kterou pojistky hlídají. Nadpis a `proKoho` v ní musí být —
@@ -12,14 +12,10 @@ function hlidanyText(n: B2BNabidka): string {
   )
 }
 
-/**
- * Nabídky plus `PARTNERSTVI_ZATIM` — ta věta se vykresluje na stejné stránce
- * jako nabídky, takže se na ni vztahují stejná pravidla.
- */
-const HLIDANE_TEXTY: Array<{ jmeno: string; text: string }> = [
-  ...NABIDKY.map((n) => ({ jmeno: n.id, text: hlidanyText(n) })),
-  { jmeno: 'PARTNERSTVI_ZATIM', text: PARTNERSTVI_ZATIM },
-]
+const HLIDANE_TEXTY: Array<{ jmeno: string; text: string }> = NABIDKY.map((n) => ({
+  jmeno: n.id,
+  text: hlidanyText(n),
+}))
 
 describe('nabídky pro firmy', () => {
   it('má tři nabídky se stabilními id', () => {

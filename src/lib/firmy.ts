@@ -53,7 +53,7 @@ const NABIDKY_MAP: Record<NabidkaId, B2BNabidka> = {
       'O prázdninách a ve dnech ředitelského volna řeší rodiče ve vaší firmě stejnou otázku: kam s dítětem. Postavíme program, který dítě baví a rodičům uvolní ruce — a vy ho můžete nabídnout jako benefit, který se dá obhájit.',
     jakToProbiha: [
       'Celý den od 8:00 do 17:00, stejný režim jako na našem letním táboře.',
-      'Děti od 9 do 15 let, ve skupině nejvýše patnáct.',
+      'Děti od 9 do 15 let; velikost skupiny domluvíme podle toho, kolik dětí přijde.',
       'Jeden lektor na pět dětí.',
       'Každé dítě si odnese vlastní výsledek — vytištěný model, zapojený obvod nebo hotovou hru.',
     ],
@@ -77,7 +77,7 @@ const NABIDKY_MAP: Record<NabidkaId, B2BNabidka> = {
     perex:
       'Teambuilding, ze kterého si každý něco odnese v ruce. Žádné motivační hry, žádné padání do náruče — tým si sedne k technologii, kterou učíme děti, a do konce dne z ní něco postaví.',
     jakToProbiha: [
-      'Na výběr 3D tisk, elektronika s Arduinem nebo virtuální realita.',
+      'Na výběr 3D tisk nebo elektronika s Arduinem.',
       'Půldenní nebo celodenní formát podle toho, kolik času tým má.',
       'Skupina od osmi do dvaceti lidí; u větších týmů se dělíme na skupiny.',
       'Bez potřeby předchozích znalostí — začínáme od nuly.',
@@ -112,14 +112,6 @@ const NABIDKY_MAP: Record<NabidkaId, B2BNabidka> = {
 }
 
 export const NABIDKY: B2BNabidka[] = NABIDKA_IDS.map((id) => NABIDKY_MAP[id])
-
-/**
- * Poctivé přiznání místo vymyšlené case study. Až vznikne první spolupráce,
- * tahle věta se nahradí jejím popisem — do té doby je lepším argumentem
- * než mlčení, protože firma stejně zjistí, že reference nikde nejsou.
- */
-export const PARTNERSTVI_ZATIM =
-  'Zatím jsme žádné partnerství neuzavřeli. Nechceme předstírat opak — první spolupráci postavíme s vámi od začátku a podle toho, co vám dává smysl.'
 
 export function getNabidky(): B2BNabidka[] {
   return NABIDKY

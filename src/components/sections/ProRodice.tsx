@@ -50,8 +50,8 @@ export function ProRodice() {
     reduced
       ? {}
       : {
-          initial: { opacity: 0, y: 18 },
-          whileInView: { opacity: 1, y: 0 },
+          initial: { y: 18 },
+          whileInView: { y: 0 },
           viewport: { once: true, margin: '-80px' },
           transition: { duration: 0.45, delay: i * 0.06 },
         }

@@ -165,7 +165,10 @@ function ChystanyTabor({ tabor }: { tabor: Tabor }) {
           blok — zároveň je to kotva stránky, která jinak žádnou nemá. */}
       <section className="section-padding border-y border-ink bg-ink blueprint-grid-dark">
         <div className="section-container">
-          <div className="max-w-3xl">
+          {/* Formulář si centruje vlastní obsah (`max-w-2xl mx-auto`), ale stál
+              v levém sloupci o šířce `max-w-3xl`, takže na stránce seděl vlevo
+              a vypadal jako nedokončený blok. */}
+          <div className="mx-auto max-w-3xl">
             <TurnusInterestForm source={`tabor-${tabor.id}`} />
           </div>
         </div>

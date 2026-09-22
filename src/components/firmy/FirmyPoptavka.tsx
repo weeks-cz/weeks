@@ -81,8 +81,8 @@ function FirmyPoptavkaForm({ zvolenyTyp }: { zvolenyTyp: NabidkaId }) {
 
   return (
     <motion.div
-      initial={reduced ? false : { opacity: 0, y: 16 }}
-      whileInView={reduced ? undefined : { opacity: 1, y: 0 }}
+      initial={reduced ? false : { y: 16 }}
+      whileInView={reduced ? undefined : { y: 0 }}
       viewport={{ once: true }}
       className="max-w-2xl mx-auto bg-paper rounded-md border border-ink/15 p-6 sm:p-8"
     >

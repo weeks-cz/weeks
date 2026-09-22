@@ -1,6 +1,7 @@
 'use client'
 
 import { Suspense } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { motion, useReducedMotion } from 'framer-motion'
@@ -210,27 +211,62 @@ export default function TaboryPage() {
               <span className="font-medium text-paper">Tábory</span>
             </nav>
 
-            <motion.h1 {...anim()} className="heading-1 mb-6 max-w-3xl text-paper">
-              Letní příměstské tábory,
-              <br />
-              kde děti <span className="text-accent-400">něco postaví</span>
-            </motion.h1>
+            <div className="grid items-center gap-12 lg:grid-cols-[1fr_auto]">
+              <div>
+                <motion.h1 {...anim()} className="heading-1 mb-6 max-w-3xl text-paper">
+                  Letní příměstské tábory,
+                  <br />
+                  kde děti <span className="text-accent-400">něco postaví</span>
+                </motion.h1>
 
-            <motion.p {...anim(0.05)} className="mb-8 max-w-2xl text-lg leading-relaxed text-paper/70">
-              Týden od pondělí do pátku, malá skupina a hotová věc, kterou si dítě
-              odveze domů. Vyberte si město a téma — u každého tématu najdete jeho
-              termíny.
-            </motion.p>
+                <motion.p {...anim(0.05)} className="mb-8 max-w-2xl text-lg leading-relaxed text-paper/70">
+                  Týden od pondělí do pátku, malá skupina a hotová věc, kterou si dítě
+                  odveze domů. Vyberte si město a téma — u každého tématu najdete jeho
+                  termíny.
+                </motion.p>
 
-            <motion.div {...anim(0.1)}>
-              <a href="#mesta" className="btn-primary group">
-                Vybrat tábor
-                <ArrowRight
-                  className="h-4 w-4 transition-transform group-hover:translate-x-1"
+                <motion.div {...anim(0.1)}>
+                  <a href="#mesta" className="btn-primary group">
+                    Vybrat tábor
+                    <ArrowRight
+                      className="h-4 w-4 transition-transform group-hover:translate-x-1"
+                      aria-hidden="true"
+                    />
+                  </a>
+                </motion.div>
+              </div>
+
+              {/* Dvojice fotek místo prázdné tmavé plochy. Amber rámeček za nimi je
+                  stejný motiv jako v heru úvodky, aby se obě tmavé kotvy četly
+                  jako jedna stránka. Fotky jsou z tábora a ukazují práci, ne
+                  prostor — prázdný prostor by sliboval místo konání, které u léta
+                  2027 domluvené není. */}
+              <motion.div {...anim(0.15)} className="relative mx-auto w-full max-w-md lg:mx-0 lg:w-[26rem]">
+                <div
                   aria-hidden="true"
+                  className="absolute -bottom-4 -right-4 hidden h-full w-full rounded-md border-2 border-cta-400 sm:block"
                 />
-              </a>
-            </motion.div>
+                <div className="relative grid grid-cols-2 gap-3">
+                  <Image
+                    src="/images/tabor/slicer-model.webp"
+                    alt="Děti u monitoru s modelem připraveným k tisku v PrusaSliceru"
+                    width={2000}
+                    height={2667}
+                    priority
+                    sizes="(min-width: 1024px) 13rem, 45vw"
+                    className="h-full w-full rounded-md border border-paper/20 object-cover"
+                  />
+                  <Image
+                    src="/images/tabor/microbit-editor.webp"
+                    alt="Chlapec skládá program pro micro:bit z barevných bloků"
+                    width={2000}
+                    height={2667}
+                    sizes="(min-width: 1024px) 13rem, 45vw"
+                    className="mt-8 h-full w-full rounded-md border border-paper/20 object-cover"
+                  />
+                </div>
+              </motion.div>
+            </div>
           </div>
         </section>
 

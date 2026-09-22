@@ -1,5 +1,22 @@
 import { describe, it, expect } from 'vitest'
 import { SITE, getSiteFaq, getVenuesSentence } from './site'
+import type { Turnus } from './turnusy'
+
+/** Turnus s potvrzeným místem — v ostrých datech dnes žádný takový není. */
+const sMistem: Turnus = {
+  id: 'test-s-mistem',
+  slug: 'test-s-mistem',
+  city: 'karlovy-vary',
+  venueId: 'fablab-varyte',
+  start: '2027-07-26',
+  end: '2027-07-30',
+  priceKc: 4990,
+  capacity: 15,
+  status: 'otevreno',
+  taborIds: ['chytre-technologie'],
+  ageRange: '9-15',
+  perex: 'Testovací turnus.',
+}
 
 describe('SITE', () => {
   it('nese údaje Weeks s.r.o. potřebné do patičky a právních textů', () => {
@@ -38,12 +55,17 @@ describe('getSiteFaq', () => {
 
 describe('getVenuesSentence', () => {
   it('jmenuje místa konání, která turnusy skutečně mají', () => {
-    expect(getVenuesSentence()).toContain('FabLab VARY&TE')
+    expect(getVenuesSentence([sMistem])).toContain('FabLab VARY&TE')
   })
 
   it('nesklouzne ke skloňování cizích názvů v šabloně ("probíhají v FabLab VARY&TE" je gramaticky špatně)', () => {
-    expect(getVenuesSentence()).not.toContain('probíhají v')
-    expect(getVenuesSentence()).toContain('Místa konání:')
+    expect(getVenuesSentence([sMistem])).not.toContain('probíhají v')
+    expect(getVenuesSentence([sMistem])).toContain('Místa konání:')
+  })
+
+  it('nic neslibuje, když žádný turnus potvrzené místo nemá — dnešní stav', () => {
+    expect(getVenuesSentence([{ ...sMistem, venueId: null }])).toContain('upřesníme')
+    expect(getVenuesSentence()).toContain('upřesníme')
   })
 
   it('nekončí prázdnou větou, ani když má turnus místo nedomluvené', () => {

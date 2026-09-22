@@ -61,8 +61,8 @@ export function FAQSection({ polozky }: { polozky?: Array<{ question: string; an
     <section id="faq" className="section-padding bg-paper-soft border-b border-ink/15">
       <div className="section-container">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ y: 20 }}
+          whileInView={{ y: 0 }}
           viewport={{ once: true }}
           className="max-w-3xl mx-auto"
         >

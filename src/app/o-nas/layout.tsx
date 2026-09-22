@@ -3,7 +3,7 @@ import { SITE } from '@/lib/site'
 import { BreadcrumbSchema } from '@/components/seo/StructuredData'
 
 const pageTitle = 'O nás'
-const pageDescription = `Poznejte lektorský tým Weeks - týdenní příměstský IT tábor pro děti 9-15 let. VR, programování, 3D tisk, IoT s Arduinem. Pořádá ${SITE.legalName}, IČO ${SITE.ico}.`
+const pageDescription = `Poznejte lektorský tým Weeks - týdenní příměstský IT tábor pro děti 9-15 let. Programování, 3D tisk, IoT s Arduinem. Pořádá ${SITE.legalName}, IČO ${SITE.ico}.`
 const pageUrl = 'https://weeks.cz/o-nas'
 
 export const metadata: Metadata = {

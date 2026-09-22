@@ -21,7 +21,20 @@ const FORMSPREE_ID = process.env.NEXT_PUBLIC_FORMSPREE_ID ?? 'mrezolbj'
  *
  * `source` rozlišuje v GA, ze které stránky kontakt přišel.
  */
-export function TurnusInterestForm({ turnus, source }: { turnus?: Turnus; source: string }) {
+/**
+ * `id` je kotva, na kterou míří tlačítko „Chci vědět, až otevřeme" z karty
+ * turnusu (`TurnusCard`). Každá stránka, která kartu vykresluje, vykresluje
+ * i jeden tenhle formulář, takže odkaz `#zajem` má vždycky kam vést.
+ */
+export function TurnusInterestForm({
+  turnus,
+  source,
+  id = 'zajem',
+}: {
+  turnus?: Turnus
+  source: string
+  id?: string
+}) {
   const reduced = useReducedMotion()
 
   const [name, setName] = useState('')
@@ -80,10 +93,11 @@ export function TurnusInterestForm({ turnus, source }: { turnus?: Turnus; source
 
   return (
     <motion.div
-      initial={reduced ? false : { opacity: 0, y: 16 }}
-      whileInView={reduced ? undefined : { opacity: 1, y: 0 }}
+      initial={reduced ? false : { y: 16 }}
+      whileInView={reduced ? undefined : { y: 0 }}
       viewport={{ once: true }}
-      className="max-w-2xl mx-auto bg-paper rounded-md border border-ink/15 p-6 sm:p-8"
+      id={id}
+      className="max-w-2xl mx-auto scroll-mt-24 bg-paper rounded-md border border-ink/15 p-6 sm:p-8"
     >
       <div className="text-center">
         <div className="w-14 h-14 rounded-md bg-ink/5 border border-ink/15 flex items-center justify-center mx-auto mb-5">

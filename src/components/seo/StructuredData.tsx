@@ -71,7 +71,6 @@ export function LocalBusinessSchema() {
       'IT tábory pro děti',
       'programování pro děti',
       '3D tisk pro děti',
-      'VR tábory pro děti',
       'IoT a elektronika pro děti',
     ],
   }

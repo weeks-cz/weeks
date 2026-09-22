@@ -8,7 +8,7 @@ import type { Venue } from '@/lib/cities'
 // Obecné vlastnosti, které platí pro každé místo konání bez ohledu na to,
 // kde zrovna je — konkrétní popis místa (název, text, fotky) dodává `venue`.
 const features = [
-  { icon: Printer, text: 'Profesionální 3D tiskárny, VR a Arduino soupravy' },
+  { icon: Printer, text: 'Profesionální 3D tiskárny a Arduino soupravy' },
   { icon: Cpu, text: 'Plně vybavený prostor — vše potřebné na místě' },
   { icon: ShieldCheck, text: 'Bezpečné, moderní prostředí pod dohledem lektorů' },
 ]
@@ -28,8 +28,8 @@ export function VenueShowcase({ venue }: { venue: Venue }) {
         <div className={`grid gap-10 lg:gap-14 items-center ${hasPhotos ? 'lg:grid-cols-2' : ''}`}>
           {/* Text */}
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ x: -20 }}
+            whileInView={{ x: 0 }}
             viewport={{ once: true }}
           >
             <p className="mono-label-dark mb-4">Místo konání</p>
@@ -59,8 +59,8 @@ export function VenueShowcase({ venue }: { venue: Venue }) {
           {/* Photos — jen když je má místo doopravdy k dispozici */}
           {hasPhotos && (
             <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ x: 20 }}
+              whileInView={{ x: 0 }}
               viewport={{ once: true }}
               className="grid grid-cols-2 gap-3 sm:gap-4"
             >
