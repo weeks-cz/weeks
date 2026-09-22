@@ -13,6 +13,7 @@ import { getTurnusy, isBookable } from '@/lib/turnusy'
 // odkazy a QR kódy nepadají. Návrat = odkomentovat řádek.
 const navItems = [
   { name: 'Tábory', href: '/tabory' },
+  { name: 'Oslavy', href: '/oslavy' },
   { name: 'Pro firmy', href: '/firmy' },
   // { name: 'E-shop', href: '/eshop' },
   { name: 'O nás', href: '/o-nas' },

@@ -15,8 +15,8 @@ interface RozcestiKarta {
 }
 
 /**
- * Směry, kam Weeks dnes vede — tábor, firmy a učebna. První dva jsou stránky
- * tohohle webu (`/tabory`, `/firmy`), učebna běží na vlastní doméně, proto se
+ * Směry, kam Weeks dnes vede — tábor, oslavy, firmy a učebna. První tři jsou stránky
+ * tohohle webu (`/tabory`, `/oslavy`, `/firmy`), učebna běží na vlastní doméně, proto se
  * otevírá v novém okně (`external`).
  *
  * E-shop je zakomentovaný, ne smazaný — viz stejná poznámka v `Header.tsx`.
@@ -27,6 +27,12 @@ const KARTY: RozcestiKarta[] = [
     veta: 'Týdenní příměstský tábor pro děti 9–15 let.',
     href: '/tabory',
     cta: 'Zobrazit tábor',
+  },
+  {
+    nadpis: 'Oslavy',
+    veta: 'Technologie na dětskou oslavu — přijedeme i s tiskárnou.',
+    href: '/oslavy',
+    cta: 'Oslavy pro děti',
   },
   {
     nadpis: 'Pro firmy',

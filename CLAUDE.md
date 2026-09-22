@@ -49,12 +49,13 @@ npm run lint         # Currently broken — Next 16 removed `next lint`; needs a
     /tabory                 # Camp listing — grouped by city, then theme, then term
     /tabory/[tema]          # One page per theme; the camp description lives HERE and nowhere else
     /tabory/termin/[slug]   # One page per turnus — date, price, venue, registration
+    /oslavy                 # Kids' parties — one open offer with examples, not packages; own inquiry form, see "/oslavy" below
     /firmy                  # B2B page — three offers (kids' days for employees, workshops, partnerships) + one inquiry form, see "/firmy (phase 4)" below
     /o-nas                  # About page (team with real names) — organizer is Weeks s.r.o., see Project Overview
     /kontakt                # Contact page — same
     /gdpr                   # GDPR page — same
     /podminky               # Terms page — same
-    /eshop, /registrace, /platba, /go  # Shop, registration + Comgate payment flow, QR redirects — predate this phase
+    /eshop, /registrace, /platba, /go  # Shop, registration + Comgate payment flow, QR redirects — predate this phase. `/eshop` still works but is commented out of the header, footer and Rozcesti (team has not decided whether to run it)
     /studio                 # Sanity Studio
   /components
     /layout
@@ -93,6 +94,7 @@ npm run lint         # Currently broken — Next 16 removed `next lint`; needs a
     cities.ts                # City + venue registry — `getCity`/`getVenue`
     focus.ts                 # Focus modules (3d-tisk, iot, vr, ...) — owned by the tábor, read by a turnus through it
     firmy.ts                 # `/firmy` offer content (three B2B offers) — `getNabidky`/`getNabidka`, `reference` fields intentionally empty, see "/firmy (phase 4)" below
+    oslavy.ts                # `/oslavy` content — flat lists (`PRIKLADY`, `ZAJISTIME`, `POTREBUJEME`, `MISTA`), deliberately no id catalogue and no `reference` field, see "/oslavy" below
     site.ts                  # `SITE` (Weeks s.r.o., contact, legal) + shared FAQ
     locations.ts             # City → contact map (phone/e-mail) for the registration/e-mail flow only — price, date, capacity and venue belong to the turnus, not here (see the warning above `TURNUSY` in turnusy.ts)
     utils.ts                # cn() classnames utility
@@ -149,7 +151,11 @@ perex and "co si dítě zkusí", never a program, price, date or equipment;
 - **Focus**: reusable content modules per **tábor**. `FocusId` in
   `src/lib/focus.ts` is `3d-tisk | iot | vr | herni-vyvoj` (3D tisk / IoT
   a elektronika / Virtuální realita / Herní vývoj). `chytre-technologie` uses
-  `['3d-tisk', 'iot', 'vr']`; both current turnusy point at that tábor.
+  `['3d-tisk', 'iot']`; both current turnusy point at that tábor. **VR is
+  deliberately not in that list**: the equipment is not certain and Karlovy Vary
+  never ran it, so the site would be promising it on the strength of nothing —
+  the weekly programme confirms it, no day contains VR. The `vr` module keeps its
+  content in `focus.ts` and returns by adding the id back to `focus`.
 - **Age**: 9–15 (`turnus.ageRange`, currently `'9-15'` for both turnusy).
 - **Cities**: Praha and Karlovy Vary (`src/lib/cities.ts`). City is a
   *property* of a turnus, not a branch of the site — filter with
@@ -239,6 +245,15 @@ cream with nothing to hold on to.
 is blank whenever the animation does not run: a frozen background tab, a JS
 error, slow hydration.
 
+**This applies to every `whileInView` reveal, not just headings** (tightened
+2026-09-22). `initial={{ opacity: 0 }}` is written into the HTML the server
+sends, so the content is genuinely invisible — not merely un-animated — until
+hydration finishes and the IntersectionObserver fires. Scrolling fast was enough
+to catch camp cards and the "Další témata" section rendering blank.
+`src/components/scroll-animace.test.ts` reads the source files and fails on any
+line where `whileInView` meets `opacity`; a single component cannot police a
+rule that spans components.
+
 ### Component Classes
 - `btn-primary` - Main CTA button (amber)
 - `btn-secondary` - Secondary button (indigo)
@@ -260,7 +275,7 @@ error, slow hydration.
 ### Target Audience
 1. **Primary**: Parents - trust quality, safety, educational value
 2. **Secondary**: Teenagers (13-15) - find it cool/engaging
-3. **Tertiary**: the venues a turnus runs in (e.g. FabLab VARY&TE in Karlovy Vary, see `src/lib/cities.ts`) - professional representation. They are venues, not partners: no partnership with FabLab VARY&TE is signed, and this repo is public, so don't write one into it.
+3. **Tertiary**: the venues a turnus runs in (`src/lib/cities.ts`) - professional representation. They are venues, not partners. **No turnus currently has a venue** (`venueId: null` on both): FabLab VARY&TE ran the 2026 camp but has not confirmed summer 2027, only expressed interest, so it survives on the site only as a past reference on `/o-nas` — never as a venue, a partner, or a promise. This repo is public; don't write a partnership into it.
 
 ### Language
 All user-facing content is in Czech. Code/docs can be in English.
@@ -271,6 +286,38 @@ All user-facing content is in Czech. Code/docs can be in English.
 **Status**: No turnus is bookable yet — both turnusy are `chystame`, with no confirmed date/price/venue. Summer 2027 terms are expected around October 2026; until then the site's job is collecting contacts, not selling.
 **Phase 5 (structured data, rescued focus-module content, dead analytics) is done** — see "Phase 5" below.
 **Phase 6 (camps as a category, visual system) is done** — see "Phase 6" below.
+**Founder feedback on phase 6 is worked in (2026-09-22)**: scroll reveals animate
+`y` only (see "Design System" below), the homepage's kids' section shows planned
+camps too and every tile links to its own camp, VR left the running camp's focus,
+FabLab dropped to a past reference, the e-shop is hidden from navigation and
+`/oslavy` was added — see "`/oslavy`" below.
+
+### `/oslavy`
+
+Kids' parties and events, live since 2026-09-22. Spec:
+`docs/superpowers/specs/2026-09-22-oslavy-design.md`.
+
+Parents asked for this on their own before the site offered it anywhere; the
+nearest page, `/firmy`, addresses HR departments about employee benefits, so a
+parent shopping for a tenth birthday did not recognise themselves in it.
+
+- **One open offer, not a catalogue.** `src/lib/oslavy.ts` exports flat lists
+  (`PRIKLADY`, `ZAJISTIME`, `POTREBUJEME`, `MISTA`) — deliberately **not** a
+  `Record<Id, …>` like `firmy.ts`. Fixed packages would have to state how they
+  differ (length, number of children, price) and none of those is confirmed;
+  an example promises nothing.
+- **Nothing is claimed that cannot be shown.** No price (there is no price
+  list), no references or counts (**no party has taken place yet**, confirmed
+  2026-09-22), no age range (the programme adapts; age is settled in the
+  inquiry), no named venue. `oslavy.test.ts` enforces all of it.
+- **Own `form_type`.** `OslavaPoptavka` posts to `/api/contact` with
+  `typ: 'oslava'`, which the parser turns into `formType: 'oslavy'`
+  (`contact-payload.ts`). Same pre-deploy dependency as `/firmy` — see below.
+- **The date field is free text, not `<input type="date">`**: a parent often
+  knows "sometime mid-June", and a datepicker would force them to name a day
+  that is not settled yet.
+- Navigation order is `Tábory · Oslavy · Pro firmy · O nás · Kontakt`, plus a
+  tile in the homepage's Rozcesti (where it took the hidden e-shop's place).
 
 ### `/firmy` (phase 4)
 
@@ -282,15 +329,32 @@ field. A valid `typ` makes the parser set `formType: 'firmy'`
 (`src/app/api/contact/contact-payload.ts`); the route then sends that to weeks-hub
 as `form_type` (`src/app/api/contact/route.ts`) — **weeks-hub must recognize that
 value or it silently drops the inquiry; that's a pre-deploy check, not a repo
-task.** The route logs a non-OK hub response instead of failing the inquiry, so
-that check has something to look at.
+task.** The same now applies to `oslavy`. The route logs a non-OK hub response
+instead of failing the inquiry, so that check has something to look at.
+
+What that failure looks like matters: the inquiry goes to **Formspree first**
+and is synced to the hub second, so an unknown `form_type` loses no data — the
+e-mail still arrives at admin@weeks.cz. What it loses is the record in the hub,
+silently, because the parent sees a confirmation either way. Hence a deploy-time
+check rather than a test.
 
 **Weeks has not fulfilled a single corporate booking yet.** There is no price
 list, and the `reference` field on every offer in `src/lib/firmy.ts` is
-intentionally empty — the page says so outright (`PARTNERSTVI_ZATIM`) instead of a
-fabricated case study. Do not fill in a reference, a price, or a count of
+intentionally empty. Do not fill in a reference, a price, or a count of
 companies served anywhere in this repo without the founder supplying the real
 number.
+
+The page used to *say* so, in a paragraph called `PARTNERSTVI_ZATIM` ("we have
+not closed a single partnership yet"). **It was removed on 2026-09-22** — the
+founder judged that it weakened the offer more than the silence it replaced.
+The lesson is recorded because it recurs: an empty `reference` field reads as a
+gap waiting to be filled, and what filled it was an apology. Missing references
+are handled by saying nothing, which is why `src/lib/oslavy.ts` has no
+`reference` field at all.
+
+The three venue tiles under "Kde to proběhne" are now **two**: "in our own
+space" claimed a workshop Weeks does not own, and "in a partner space" named
+FabLab VARY&TE, which has signed nothing.
 
 ### Phase 5 (structured data, rescued content, analytics cleanup)
 

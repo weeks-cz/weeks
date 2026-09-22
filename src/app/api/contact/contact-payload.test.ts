@@ -20,6 +20,21 @@ describe('parseContactBody', () => {
     }
   })
 
+  it('poptávka oslavy má vlastní form_type, ať nesplyne s firmami ani s dotazy', () => {
+    const r = parseContactBody({ ...zaklad, typ: 'oslava' })
+    expect(r.ok).toBe(true)
+    if (r.ok) {
+      expect(r.data.formType).toBe('oslavy')
+      expect(r.data.typ).toBe('oslava')
+    }
+  })
+
+  it('předmět e-mailu pozná oslavu na první pohled', () => {
+    const r = parseContactBody({ ...zaklad, typ: 'oslava' })
+    expect(r.ok).toBe(true)
+    if (r.ok) expect(r.data.subject).toContain('Poptávka oslavy')
+  })
+
   it('odmítne neznámý typ poptávky', () => {
     const r = parseContactBody({ ...zaklad, typ: 'cokoliv' })
     expect(r.ok).toBe(false)

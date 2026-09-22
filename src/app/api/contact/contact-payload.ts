@@ -8,12 +8,28 @@ import { getNabidka, isNabidkaId, type NabidkaId } from '@/lib/firmy'
  * Čistá funkce jde otestovat přímo; handler ji jen zavolá. Stejný vzor jako
  * `turnus-labels.ts` v `src/components/turnusy/`.
  *
- * Jeden formulář, dva režimy: bez `typ` jde o běžný rodičovský dotaz
- * (`formType: 'contact'`), s platným `typ` o firemní poptávku
- * (`formType: 'firmy'`). `typ` se ověřuje přes `isNabidkaId` ze `src/lib/firmy.ts`,
- * tedy proti témuž číselníku, ze kterého žije stránka `/firmy` — takže nevzniká
- * druhý zdroj pravdy a neplatná hodnota od klienta route nespadne, jen se odmítne.
+ * Jeden endpoint, tři režimy podle `typ`:
+ *
+ * | `typ`              | `formType` | odkud                |
+ * |--------------------|------------|----------------------|
+ * | chybí              | `contact`  | `/kontakt`           |
+ * | id nabídky z firmy | `firmy`    | `/firmy`             |
+ * | `'oslava'`         | `oslavy`   | `/oslavy`            |
+ *
+ * Oslava má vlastní `formType`, přestože ji objednává rodič jako každý jiný
+ * dotaz: v hubu se na ni musí dát podívat zvlášť. Pod `firmy` by se míchala
+ * s poptávkami HR oddělení, pod `contact` by se utopila mezi běžnými dotazy.
+ *
+ * Firemní `typ` se ověřuje přes `isNabidkaId` ze `src/lib/firmy.ts`, tedy proti
+ * témuž číselníku, ze kterého žije stránka `/firmy` — takže nevzniká druhý
+ * zdroj pravdy a neplatná hodnota od klienta route nespadne, jen se odmítne.
  */
+
+/** Hodnota `typ` pro poptávku oslavy. Není to id nabídky, oslavy číselník nemají. */
+export const TYP_OSLAVA = 'oslava'
+
+export type PoptavkaTyp = NabidkaId | typeof TYP_OSLAVA
+export type FormType = 'contact' | 'firmy' | 'oslavy'
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
@@ -31,7 +47,7 @@ export interface ParsedContact {
   message: string
   firma?: string
   telefon?: string
-  typ?: NabidkaId
+  typ?: PoptavkaTyp
   /**
    * Zaškrtnutý souhlas se zpracováním údajů. Ukládá se jen jako doklad, že ho
    * odesílatel udělil — nic se podle něj nerozhoduje. Povinnost zaškrtnout
@@ -39,7 +55,7 @@ export interface ParsedContact {
    * které dosud přijímal, a rozbil by starší kontaktní formulář.
    */
   gdprConsent: boolean
-  formType: 'contact' | 'firmy'
+  formType: FormType
   subject: string
 }
 
@@ -73,12 +89,12 @@ export function parseContactBody(body: unknown): ParseContactResult {
   }
 
   // typ je nepovinný, ale pokud přijde, musí být z whitelistu — nevěříme
-  // klientovi, že jde o platné id nabídky. Ověření musí přijít dřív než
+  // klientovi, že jde o platnou hodnotu. Ověření musí přijít dřív než
   // `getNabidka`: ta u neznámého id vyhazuje výjimku, takže obrácené pořadí
   // by z překlepu v těle požadavku udělalo pád routy místo čisté chyby 400.
-  let overenyTyp: NabidkaId | undefined
+  let overenyTyp: PoptavkaTyp | undefined
   if (typ !== undefined) {
-    if (!isNabidkaId(typ)) {
+    if (typ !== TYP_OSLAVA && !isNabidkaId(typ)) {
       return { ok: false, error: 'Neznámý typ poptávky' }
     }
     overenyTyp = typ
@@ -92,10 +108,18 @@ export function parseContactBody(body: unknown): ParseContactResult {
   const orizlyTelefon =
     typeof telefon === 'string' && telefon.trim() ? orizni(telefon, MAX_DELKY.telefon) : undefined
 
-  const formType: 'contact' | 'firmy' = overenyTyp ? 'firmy' : 'contact'
-  const subject = overenyTyp
-    ? `Poptávka od firmy — ${getNabidka(overenyTyp).nadpis} (${orizlyName})`
-    : `Kontaktní formulář Weeks - zpráva od ${orizlyName}`
+  // Rozvětveno přes `if`, ne vnořeným ternárem: `getNabidka` přijímá jen
+  // `NabidkaId` a TypeScript zúží `overenyTyp` na tenhle typ až uvnitř větve,
+  // kde je vyloučená hodnota `'oslava'`.
+  let formType: FormType = 'contact'
+  let subject = `Kontaktní formulář Weeks - zpráva od ${orizlyName}`
+  if (overenyTyp === TYP_OSLAVA) {
+    formType = 'oslavy'
+    subject = `Poptávka oslavy — ${orizlyName}`
+  } else if (overenyTyp !== undefined) {
+    formType = 'firmy'
+    subject = `Poptávka od firmy — ${getNabidka(overenyTyp).nadpis} (${orizlyName})`
+  }
 
   return {
     ok: true,

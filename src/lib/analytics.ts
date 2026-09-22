@@ -65,6 +65,16 @@ export function trackFirmyPoptavka(params: { typ: string }) {
   })
 }
 
+// Odeslaná poptávka oslavy. Bez konverzní hodnoty — ceník oslav neexistuje,
+// takže není co poslat, a vymyšlené číslo by znehodnotilo všechna ostatní
+// měření. Stejné rozhodnutí jako u `trackFirmyPoptavka`. Bez parametrů:
+// oslavy nemají varianty, které by šlo rozlišit.
+export function trackOslavaPoptavka() {
+  sendGAEvent('event', 'oslava_poptavka_submit', {
+    event_category: 'oslavy',
+  })
+}
+
 // Načtení QR kódu: spustí se, když návštěvník přijde přes přesměrování
 // /go/[slug] (utm_medium=qr).
 export function trackQRScan(params: {
