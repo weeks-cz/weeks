@@ -137,37 +137,30 @@ export default function AboutPage() {
             obstarával gradient přes fotku. */}
         <section className="section-padding border-y border-ink bg-ink blueprint-grid-dark">
           <div className="section-container">
-            <div className="mx-auto grid max-w-5xl items-center gap-10 lg:grid-cols-[1.2fr_1fr]">
-              <div className="relative">
-                <div
-                  aria-hidden="true"
-                  className="absolute -bottom-4 -left-4 hidden h-full w-full rounded-md border-2 border-cta-400 sm:block"
-                />
-                <Image
-                  src="/images/tabor/skupina-terasa-retus.webp"
-                  alt="Skupina dětí s lektory na sluncem zalité terase, mávají do objektivu"
-                  width={1195}
-                  height={896}
-                  loading="lazy"
-                  sizes="(min-width: 1024px) 34rem, (min-width: 640px) 90vw, 100vw"
-                  className="relative w-full rounded-md border border-paper/20"
-                />
-              </div>
+            {/* Fotka bez popisku, schválně.
 
-              <div>
-                {/* Popisek říká jen to, co web dokládá jinde: strop kapacity je
-                    z dat turnusu, poměr 1:5 stojí v sekci „Co máte jisté“ i ve
-                    FAQ. Místo ani rok se sem nepíšou — u téhle fotky je nemáme
-                    z čeho doložit. */}
-                <p className="mono-label-dark mb-4 text-cta-300">Z tábora</p>
-                <h2 className="heading-2 text-paper">
-                  Tohle je <span className="text-cta-400">celý turnus</span>
-                </h2>
-                <p className="mt-4 text-lg text-paper/80">
-                  Nejvýše {kapacita} dětí a jeden lektor na pět z nich. Ne zástup,
-                  ve kterém se dítě ztratí.
-                </p>
-              </div>
+                Stál tu nadpis „Tohle je celý turnus" a pod ním strop kapacity
+                s poměrem 1:5. Dvě chyby najednou: na „O nás" nikdo neřeší, kolik
+                se vejde dětí do turnusu — to je otázka pro `/tabory` a pro
+                „Co máte jisté" na úvodce, kde obojí stojí — a věta „Ne zástup,
+                ve kterém se dítě ztratí" byla obrat, ne informace.
+
+                Fotka mezi herem a misí funguje sama. Kdyby sem měl přijít text,
+                patří mu něco o lidech za Weeks, ne prodejní údaj. */}
+            <div className="relative mx-auto max-w-3xl">
+              <div
+                aria-hidden="true"
+                className="absolute -bottom-4 -left-4 hidden h-full w-full rounded-md border-2 border-cta-400 sm:block"
+              />
+              <Image
+                src="/images/tabor/skupina-terasa-retus.webp"
+                alt="Skupina dětí s lektory na sluncem zalité terase, mávají do objektivu"
+                width={1195}
+                height={896}
+                loading="lazy"
+                sizes="(min-width: 768px) 48rem, 100vw"
+                className="relative w-full rounded-md border border-paper/20"
+              />
             </div>
           </div>
         </section>
