@@ -48,12 +48,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.8,
     },
-    {
-      url: `${baseUrl}/eshop`,
-      lastModified: currentDate,
-      changeFrequency: 'monthly',
-      priority: 0.7,
-    },
+    // `/eshop` tu schválně není: je schovaný z navigace, dokud se tým
+    // nerozhodne, jestli ho provozovat (viz `Footer.tsx`). Route žije dál kvůli
+    // starým odkazům a QR kódům, ale Googlu ho sami nenabízíme. Návrat = vrátit
+    // položku sem spolu s odkazem v navigaci.
     {
       url: `${baseUrl}/o-nas`,
       lastModified: currentDate,
