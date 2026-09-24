@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { Mail, Phone } from 'lucide-react'
 import { SITE } from '@/lib/site'
 import { openCookieSettings } from '@/lib/consent'
+import { SocialniSite } from '@/components/ui/SocialniSite'
 
 // E-shop je z navigace dočasně schovaný — tým se zatím nerozhodl, jestli ho
 // chce mít veřejně. Není smazaný: route `/eshop` dál funguje, takže staré
@@ -55,6 +56,7 @@ export function Footer() {
             <p className="text-paper/60 leading-relaxed mb-6">
               {description}
             </p>
+            <SocialniSite tmave />
           </div>
 
           {/* Quick Links */}
@@ -136,11 +138,46 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Copyright */}
-        <div className="mt-12 pt-8 border-t border-paper/15">
+        {/* Copyright + odznaky. Logo Comgate je podmínka provozu platební
+            brány (viz commit bd4adfd), při přestavbě z patičky nechtěně
+            vypadlo. Kudyznudy.cz se 2026-09-15 stáhlo jako „neověřené“,
+            zakladatel zápis 2026-09-24 potvrdil a chce ho zpátky. */}
+        <div className="mt-12 pt-8 border-t border-paper/15 flex flex-col-reverse gap-6 md:flex-row md:items-center md:justify-between">
           <p className="font-mono text-xs text-paper/50">
             {new Date().getFullYear()} Weeks. Všechna práva vyhrazena.
           </p>
+          <div className="flex flex-wrap items-center gap-4">
+            <a
+              href="https://www.kudyznudy.cz/?utm_source=kzn&utm_medium=partneri_kzn&utm_campaign=banner"
+              title="Kudyznudy.cz – tipy na výlet"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center rounded-sm border border-paper/20 px-3 py-2 transition-colors hover:border-paper/50"
+            >
+              <Image
+                src="/images/kudy-z-nudy-white.png"
+                width={150}
+                height={33}
+                alt="Kudyznudy.cz – tipy na výlet"
+                className="h-7 w-auto opacity-80 transition-opacity hover:opacity-100"
+              />
+            </a>
+            <a
+              href="https://www.comgate.eu/cs/platebni-brana"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-3 rounded-sm bg-white px-3 py-2 transition-opacity hover:opacity-90"
+            >
+              <span className="font-mono text-[11px] text-ink-500">Platby zajišťuje</span>
+              <Image
+                src="/images/comgate-logo.png"
+                width={119}
+                height={28}
+                alt="Comgate"
+                className="h-6 w-auto"
+              />
+            </a>
+          </div>
         </div>
       </div>
     </footer>

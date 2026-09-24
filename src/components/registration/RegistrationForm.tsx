@@ -416,8 +416,8 @@ export function RegistrationForm() {
                       value={pickup.pickup_time}
                       onChange={e => setPickup({ ...pickup, pickup_time: e.target.value })}
                       className={inputClass('pickup_time')}
-                      min="08:00"
-                      max="17:00"
+                      min="08:30"
+                      max="16:30"
                     />
                     <p className="text-xs text-ink-500 mt-1">Standardně dítě odchází po skončení programu. Čas vyberte, jen pokud má odejít dříve.</p>
                     <FieldError name="pickup_time" />

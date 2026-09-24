@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { buildConfirmationEmail, buildNastupniListEmail, buildPaymentReminderEmail } from './email'
+import { PROVOZNI_DOBA } from './site'
 
 describe('buildConfirmationEmail', () => {
   const r = buildConfirmationEmail({
@@ -40,7 +41,7 @@ describe('buildNastupniListEmail', () => {
   it('includes venue, time window and contact', () => {
     expect(r.html).toContain('FabLab VARY&TE')
     expect(r.html).toContain('Dykova, 360 17 Stará Role')
-    expect(r.html).toContain('8:00 – 17:00')
+    expect(r.html).toContain(`${PROVOZNI_DOBA.od} – ${PROVOZNI_DOBA.do}`)
     expect(r.html).toContain('+420 703 046 440')
   })
   // §27 VOP (/podminky) slibuje rodiči právě v nástupním listu, které dokumenty

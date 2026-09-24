@@ -21,6 +21,44 @@ export const SITE = {
 } as const
 
 /**
+ * Sociální sítě. Ikony na webu se kreslí z tohohle seznamu, takže nová síť
+ * = jeden řádek tady.
+ */
+export const SOCIALNI_SITE: Array<{
+  id: 'instagram' | 'facebook'
+  /** Šestý pád pro čtečky: „Weeks na Instagramu“. */
+  naSiti: string
+  url: string
+}> = [
+  { id: 'instagram', naSiti: 'na Instagramu', url: 'https://www.instagram.com/weeks.cz/' },
+  {
+    id: 'facebook',
+    naSiti: 'na Facebooku',
+    url: 'https://www.facebook.com/people/Weeks-It-kempy-pro-d%C4%9Bti/61585731803335/',
+  },
+]
+
+/**
+ * Provozní doba tábora — jediné místo, kde je napsaná.
+ *
+ * Dřív byla opsaná natvrdo na jedenácti místech (dlaždice, harmonogram,
+ * /kontakt, nástupní list, VOP) a jednou se už rozešla: e-mail říkal 16:00,
+ * VOP 17:00 a VOP podle konce provozní doby počítají poplatek za pozdní
+ * vyzvednutí (§24). Kdo čas mění, mění ho tady.
+ *
+ * Příchod i odchod jsou okna, ne okamžik: program začíná v 9:00 a končí
+ * v 16:00, půlhodina před a po je na postupný příchod a vyzvednutí.
+ */
+export const PROVOZNI_DOBA = {
+  od: '8:30',
+  do: '16:30',
+  /** `od`–`do` s pomlčkou bez mezer — do dlaždic a štítků. */
+  rozsah: '8:30–16:30',
+  prichod: '8:30–9:00',
+  odchod: '16:00–16:30',
+} as const
+
+/**
  * Věta o místech konání — složená z turnusů, ne natvrdo.
  *
  * `list` je kvůli testům: chování „turnus bez místa" i „turnus s místem" se
@@ -71,9 +109,12 @@ export function getSiteFaq(): Array<{ question: string; answer: string }> {
       answer: getVenuesSentence(),
     },
     {
-      question: 'Kolik dětí je na jednoho lektora?',
+      // Dřív tu stál pevný poměr „jeden lektor na pět dětí“. Ten ale záleží na
+      // tom, kolik dětí se přihlásí a kolik lektorů na turnus bude — web ho
+      // proto neslibuje. Slibuje jen to, co drží kapacita turnusu.
+      question: 'Jak velké jsou skupiny?',
       answer:
-        'Na jednoho lektora připadá pět dětí. Na turnus bereme nejvýše patnáct dětí, aby se na každé dostalo.',
+        'Malé. Na turnus bereme nejvýše patnáct dětí a při práci je dělíme do menších skupinek, aby se lektor dostal ke každému.',
     },
     {
       question: 'Je v ceně oběd?',

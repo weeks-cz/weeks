@@ -6,6 +6,8 @@
  * zůstane čitelná — stejný princip jako u `src/lib/focus.ts`.
  */
 
+import { PROVOZNI_DOBA } from './site'
+
 export type NabidkaId = 'deti-zamestnancu' | 'workshopy' | 'partnerstvi'
 
 /** Číselník pro ověření vstupu z formuláře. Jediný zdroj pravdy pro typ poptávky. */
@@ -52,9 +54,9 @@ const NABIDKY_MAP: Record<NabidkaId, B2BNabidka> = {
     perex:
       'O prázdninách a ve dnech ředitelského volna řeší rodiče ve vaší firmě stejnou otázku: kam s dítětem. Postavíme program, který dítě baví a rodičům uvolní ruce — a vy ho můžete nabídnout jako benefit, který se dá obhájit.',
     jakToProbiha: [
-      'Celý den od 8:00 do 17:00, stejný režim jako na našem letním táboře.',
+      `Celý den od ${PROVOZNI_DOBA.od} do ${PROVOZNI_DOBA.do}, stejný režim jako na našem letním táboře.`,
       'Děti od 9 do 15 let; velikost skupiny domluvíme podle toho, kolik dětí přijde.',
-      'Jeden lektor na pět dětí.',
+      'Při práci děti dělíme do malých skupinek, aby se lektor dostal ke každému.',
       'Každé dítě si odnese vlastní výsledek — vytištěný model, zapojený obvod nebo hotovou hru.',
     ],
     zajistimeMy: [

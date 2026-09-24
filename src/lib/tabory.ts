@@ -69,9 +69,9 @@ export interface Tabor {
  * na stránce aktivního tábora.
  */
 export const DENNI_HARMONOGRAM = [
-  { time: '8:00', title: 'Příchod dětí', description: '' },
-  { time: '8:30', title: 'Ranní rozcvička', description: 'Krátká hra nebo výzva na rozehřátí před hlavním programem.' },
-  { time: '9:00', title: 'Výukový blok I', description: 'Hlavní téma dne — výuka s lektorem, ukázky, diskuze.' },
+  { time: '8:30', title: 'Příchod dětí', description: 'Postupně do 9:00.' },
+  { time: '9:00', title: 'Ranní rozcvička', description: 'Krátká hra nebo výzva na rozehřátí před hlavním programem.' },
+  { time: '9:15', title: 'Výukový blok I', description: 'Hlavní téma dne — výuka s lektorem, ukázky, diskuze.' },
   { time: '10:30', title: 'Přestávka', description: 'Svačina a pití.' },
   { time: '10:45', title: 'Výukový blok II', description: 'Praktická část — děti pracují samostatně nebo ve dvojicích na svém projektu.' },
   { time: '12:00', title: 'Oběd', description: 'Zajištěný oběd pro všechny účastníky (v ceně tábora).' },
@@ -79,8 +79,8 @@ export const DENNI_HARMONOGRAM = [
   { time: '14:00', title: 'Odpolední blok', description: 'Pokračování práce na projektech, nová témata nebo kreativní výzvy.' },
   { time: '15:00', title: 'Přestávka', description: 'Odpolední pauza a svačina.' },
   { time: '15:15', title: 'Tvůrčí práce', description: 'Samostatná práce na vlastním projektu, individuální přístup lektorů.' },
-  { time: '16:00', title: 'Dokončení a úklid', description: 'Dokončení projektů, úklid pracoviště a shrnutí dne.' },
-  { time: '17:00', title: 'Postupný odchod', description: 'Prostor pro dotazy rodičů.' },
+  { time: '15:45', title: 'Dokončení a úklid', description: 'Dokončení projektů, úklid pracoviště a shrnutí dne.' },
+  { time: '16:00', title: 'Postupný odchod', description: 'Vyzvednutí do 16:30, prostor pro dotazy rodičů.' },
 ]
 
 /**

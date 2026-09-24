@@ -4,7 +4,7 @@ import { ArrowLeft } from 'lucide-react'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { BreadcrumbSchema } from '@/components/seo/StructuredData'
-import { SITE } from '@/lib/site'
+import { PROVOZNI_DOBA, SITE } from '@/lib/site'
 
 const pageTitle = 'Podmínky užití'
 const pageDescription = 'Podmínky užití webu a všeobecné obchodní podmínky IT táborů Weeks.'
@@ -436,7 +436,8 @@ export default function PodminkyPage() {
                     obdrží zákonný zástupce v nástupním listu (čl. 27).
                   </p>
                   <p className="text-ink-500 mt-3 text-sm">
-                    Provozní doba táborů: <strong>8:00–17:00</strong>
+                    Provozní doba táborů: <strong>{PROVOZNI_DOBA.rozsah}</strong> (příchod{' '}
+                    {PROVOZNI_DOBA.prichod}, vyzvednutí {PROVOZNI_DOBA.odchod})
                   </p>
                 </div>
               </section>
@@ -632,9 +633,9 @@ export default function PodminkyPage() {
                   </p>
                   <p className="text-ink-500">
                     <strong>Pozdní vyzvednutí.</strong> Zákonný zástupce je povinen vyzvednout dítě
-                    (nebo zajistit jeho odchod) nejpozději do konce denního programu. Při pozdním
+                    (nebo zajistit jeho odchod) nejpozději do konce provozní doby. Při pozdním
                     vyzvednutí je pořadatel oprávněn účtovat poplatek za prodloužený dohled ve výši
-                    150 Kč za každých započatých 30 minut po skončení denního programu.
+                    150 Kč za každých započatých 30 minut po skončení provozní doby (čl. 18).
                   </p>
                 </div>
               </section>

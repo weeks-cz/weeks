@@ -7,8 +7,9 @@ import type { LucideIcon } from 'lucide-react'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { OslavaPoptavka } from '@/components/oslavy/OslavaPoptavka'
-import { MISTA, POTREBUJEME, PRIKLADY, ZAJISTIME } from '@/lib/oslavy'
+import { MISTA, POTREBUJEME, PRIKLADY, PRUBEHY, ZAJISTIME } from '@/lib/oslavy'
 import { SITE } from '@/lib/site'
+import { MrizkaSekce } from '@/components/ui/MrizkaSekce'
 
 /**
  * `/oslavy` — narozeniny a akce pro děti.
@@ -128,8 +129,50 @@ export default function OslavyPage() {
           </div>
         </section>
 
+        {/* Modelové průběhy — celé odpoledne od začátku do konce. Modely,
+            ne balíčky: bez ceny a počtu dětí, s větou, že se dají poskládat
+            jinak (viz `PRUBEHY` v `src/lib/oslavy.ts`). */}
+        <section className="section-padding border-b border-ink/15 bg-paper">
+          <div className="section-container">
+            <div className="mb-12 max-w-3xl">
+              <p className="mono-label mb-4">Modelový průběh</p>
+              <h2 className="heading-2 mb-4 text-ink">
+                Jak může oslava <span className="text-accent-600">probíhat</span>
+              </h2>
+              <p className="text-lg text-ink-500">
+                Dva modely, jak může odpoledne vypadat od začátku do konce. Délku,
+                pořadí i náplň domluvíme individuálně — klidně úplně jinak.
+              </p>
+            </div>
+
+            <div className="grid gap-6 lg:grid-cols-2">
+              {PRUBEHY.map((p, i) => (
+                <motion.article key={p.id} {...animPriScrollu(i)} className="card-maker p-7">
+                  <div className="mb-6 flex flex-wrap items-baseline justify-between gap-2">
+                    <h3 className="font-display text-xl font-semibold text-ink">{p.nadpis}</h3>
+                    <p className="mono-label">{p.delka}</p>
+                  </div>
+                  <ol className="space-y-4">
+                    {p.kroky.map((k) => (
+                      <li key={k.cas} className="flex gap-4">
+                        <span className="w-12 shrink-0 pt-0.5 font-mono text-sm font-semibold text-accent-700">
+                          {k.cas}
+                        </span>
+                        <div>
+                          <p className="font-semibold text-ink">{k.nadpis}</p>
+                          <p className="text-ink-500">{k.text}</p>
+                        </div>
+                      </li>
+                    ))}
+                  </ol>
+                </motion.article>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* Co zajistíme / co potřebujeme */}
-        <section className="section-padding bg-paper">
+        <section className="section-padding bg-paper-soft">
           <div className="section-container">
             <div className="grid gap-12 md:grid-cols-2">
               <div>
@@ -171,7 +214,7 @@ export default function OslavyPage() {
         </section>
 
         {/* Kde to proběhne — tmavá kotva stránky */}
-        <section className="section-padding relative overflow-hidden border-y border-ink bg-ink blueprint-grid-dark">
+        <MrizkaSekce odstin="tmavy" className="section-padding relative overflow-hidden border-y border-ink bg-ink blueprint-grid-dark">
           <div
             aria-hidden="true"
             className="pointer-events-none absolute -right-16 -top-20 select-none font-display text-[22rem] font-bold leading-none text-paper/[0.04]"
@@ -185,8 +228,8 @@ export default function OslavyPage() {
                 Přijedeme <span className="text-accent-400">za vámi</span>
               </h2>
               <p className="text-lg text-paper/70">
-                Vlastní dílnu nemáme a nepotřebujeme ji — všechno se vejde na
-                jeden stůl.
+                Vlastní dílnu nemáme a nepotřebujeme ji — techniku i materiál
+                vozíme s sebou.
               </p>
             </div>
 
@@ -209,7 +252,7 @@ export default function OslavyPage() {
               })}
             </div>
           </div>
-        </section>
+        </MrizkaSekce>
 
         {/* Poptávka */}
         <section

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code when working with this repository.
 
 ## Project Overview
 
-**Weeks** is a website for a weekly summer příměstský (day) IT camp for children (ages 9-15) in Prague and Karlovy Vary, operated by **Weeks s.r.o.** — not DDM Praha 6. The old catalog of weekend/one-day camp formats and per-city pages is gone: there's now a single product (Monday–Friday, 8:00–17:00) sold as **turnusy** (terms), one per city, see `src/lib/turnusy.ts`. It appeals to two audiences: parents (who pay) and teenagers (who decide if they want to attend).
+**Weeks** is a website for a weekly summer příměstský (day) IT camp for children (ages 9-15) in Prague and Karlovy Vary, operated by **Weeks s.r.o.** — not DDM Praha 6. The old catalog of weekend/one-day camp formats and per-city pages is gone: there's now a single product (Monday–Friday, 8:30–16:30 — `PROVOZNI_DOBA` in `src/lib/site.ts`) sold as **turnusy** (terms), one per city, see `src/lib/turnusy.ts`. It appeals to two audiences: parents (who pay) and teenagers (who decide if they want to attend).
 
 The move off DDM Praha 6 now covers the whole site: `/o-nas`, `/kontakt`, `/gdpr` and `/podminky` all name **Weeks s.r.o.** (IČO 29984360) as organizer — DDM Praha 6 and HWLab survive only in code comments documenting what was removed and why. The registration backend no longer assumes DDM either: `src/lib/locations.ts` is now a 45-line city→contact map for the registration/e-mail flow (price, date, capacity and venue all belong to the turnus, not to a location), and the camp name on invoices and confirmation e-mails is derived server-side from the turnus (`getTrustedProgramName` in `src/lib/payment-pricing.ts`), not read from a DDM program catalog.
 
@@ -64,9 +64,11 @@ npm run lint         # Currently broken — Next 16 removed `next lint`; needs a
     /sections
       HeroSection.tsx       # Homepage hero ("IT tábory, kde děti tvoří budoucnost")
       NejblizsiTurnusy.tsx  # Homepage preview of nearest turnusy (slice of /tabory's list)
-      ProRodice.tsx         # Emerald strip "Co máte jisté" — only claims the site can back (1:5, first aid, capacity from data, 8–17)
+      ProRodice.tsx         # Emerald strip "Co máte jisté" — only claims the site can back (small groups, first aid, capacity from data, hours from `PROVOZNI_DOBA`)
       ProDeti.tsx           # Dark cyan block "Co si postavíš" + the interactive grid; content read from the running tábor's focus modules
       FotoPas.tsx           # Full-width camp photo carrying one claim `DENNI_HARMONOGRAM` backs (outdoors at 13:00)
+      GoogleRecenze.tsx     # Google review carousel (scroll-snap, no library) — renders only when `src/lib/recenze.ts` has reviews + a profile URL
+      InstagramPas.tsx      # Strip of hand-picked IG posts above the closing CTA — renders only when `src/lib/instagram.ts` has posts
       Rozcesti.tsx          # Homepage "co Weeks dělá" — tábor / firmy / e-shop / učebna
       FAQSection.tsx        # Accordion FAQ — reads `getSiteFaq()` from `@/lib/site`
       ContactSection.tsx    # Contact info + email signup (GDPR consent checkbox)
@@ -119,7 +121,9 @@ npm run lint         # Currently broken — Next 16 removed `next lint`; needs a
 
 ## Product: camps (themes) and their terms
 
-The camp is a Monday–Friday weekly příměstský (day) camp, 8:00–17:00. Since
+The camp is a Monday–Friday weekly příměstský (day) camp, 8:30–16:30 (arrival
+8:30–9:00, pickup 16:00–16:30; the only source is `PROVOZNI_DOBA` in
+`src/lib/site.ts` — VOP §18/§24 and the late-pickup fee read it too). Since
 phase 6 it is described by **two entities, not one**:
 
 | | **Tábor** (`src/lib/tabory.ts`) | **Turnus** (`src/lib/turnusy.ts`) |
@@ -227,7 +231,7 @@ read them as a system. If a colour does not fit the role, it is not used.
 |---|---|---|
 | `cta-*` (amber) | action and state | primary buttons, `CHYSTÁME` badge, "zbývá X míst", ticker strip, closing CTA |
 | `accent-*` (cyan) | technology | camp themes, the bar on a theme card, icons in the kids' section, grid cells on dark |
-| `trust-*` (emerald) | a parent's peace of mind | the "Co máte jisté" strip — instructor ratio, first aid, 8–17 |
+| `trust-*` (emerald) | a parent's peace of mind | the "Co máte jisté" strip — small groups, first aid, 8:30–16:30 |
 | `primary-*` (indigo) | the brand's base | grid, links, grid cells on light |
 | `ink` / `paper` | surface and text | everywhere else |
 
@@ -439,10 +443,21 @@ NEXT_PUBLIC_FB_PIXEL_ID=                 # Facebook Pixel (after ads setup)
 
 ## Team (O nás page)
 
-Real team members with specialized icons (`teamMembers` in `src/app/o-nas/page.tsx`):
-1. **Kryštof Ježdík** - VR & Herní vývoj (Gamepad2 icon)
-2. **Lukáš Kubík** - Web & Programování (Code icon)
-3. **Štěpán Jurenka** - 3D modelování & Tisk (Box icon)
+Data live in `TYM` in `src/lib/tym.ts` (moved out of the page 2026-09-24).
+All three are **jednatelé of Weeks s.r.o. and lecturers at once**; the role
+label comes from the `jednatel` flag ("Jednatel · lektor" vs "Lektor"), so a
+new lecturer who does not run the company is one row with `jednatel: false`.
+`foto`, `email` and `telefon` are optional — without a photo the card shows the
+field icon, without a contact it shows none. This repo is public: only put in
+a contact the person wants public.
+1. **Kryštof Ježdík** - Herní vývoj & VR (gamepad icon)
+2. **Lukáš Kubík** - Programování & web (code icon)
+3. **Štěpán Jurenka** - 3D modelování & tisk (box icon)
+
+**Instructor ratio is no longer promised** (2026-09-24): "1:5" depended on how
+many children sign up and how many lecturers a term gets, so the site says
+"malé skupinky" + the capacity cap from data instead. Don't bring a fixed ratio
+back without the founder confirming it.
 
 ## Contact Info
 
@@ -462,7 +477,7 @@ TXT   @     google-site-verification=5epLUIbGFT0mcISr7rJZPFLcNlcAIFkQXe5cBY9nSdY
 ## Key Decisions Made (December 2024)
 
 1. **Hero text**: "Přijímáme zájemce" (not "Registrace otevřena")
-2. **Instructor ratio**: 1:5 (not 1:8)
+2. **Instructor ratio**: 1:5 (not 1:8) — superseded 2026-09-24, see "Team (O nás page)"
 3. **Price**: 2 990 Kč (updated from 2 490)
 4. **CTA wording**: "tábory" (not "běhy")
 5. **No "Domů" in nav**: Logo serves as home link (standard UX)

@@ -6,6 +6,7 @@ import { FirmyPoptavka } from '@/components/firmy/FirmyPoptavka'
 import { BreadcrumbSchema } from '@/components/seo/StructuredData'
 import { getNabidky, type NabidkaId } from '@/lib/firmy'
 import { SITE } from '@/lib/site'
+import { MrizkaSekce } from '@/components/ui/MrizkaSekce'
 
 // Ikona, barva a popisek „poptat" tlačítka se k nabídce nedají odvodit z dat
 // (nadpisy v `src/lib/firmy.ts` jako „Dny pro děti zaměstnanců" se nedají
@@ -196,7 +197,7 @@ export default function FirmyPage() {
             konání. U firem se místo domlouvá případ od případu a FabLab
             VARY&TE je jedna z možností, ne dané místo — partnerství s ním
             podepsané není a tenhle repozitář je veřejný. */}
-        <section className="section-padding relative overflow-hidden border-y border-ink bg-ink blueprint-grid-dark">
+        <MrizkaSekce odstin="tmavy" className="section-padding relative overflow-hidden border-y border-ink bg-ink blueprint-grid-dark">
           <div
             aria-hidden="true"
             className="pointer-events-none absolute -right-16 -top-20 select-none font-display text-[22rem] font-bold leading-none text-paper/[0.04]"
@@ -239,7 +240,7 @@ export default function FirmyPage() {
               ))}
             </div>
           </div>
-        </section>
+        </MrizkaSekce>
 
         {/* Poptávka */}
         <section id="poptavka" className="section-padding bg-paper-soft border-t border-ink/15 scroll-mt-24">

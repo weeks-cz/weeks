@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Target, Heart, Lightbulb, Users, ShieldCheck, MapPin, Gamepad2, Code, Box, type LucideIcon } from 'lucide-react'
+import { Target, Heart, Lightbulb, Users, ShieldCheck, MapPin, Gamepad2, Code, Box, Cpu, Mail, Phone, type LucideIcon } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Header } from '@/components/layout/Header'
@@ -9,6 +9,8 @@ import { Footer } from '@/components/layout/Footer'
 import { getTurnusy } from '@/lib/turnusy'
 import { getVenue, type VenueId } from '@/lib/cities'
 import { SITE } from '@/lib/site'
+import { TYM, roleClena, type IkonaOboru } from '@/lib/tym'
+import { MrizkaSekce } from '@/components/ui/MrizkaSekce'
 
 const values = [
   {
@@ -19,7 +21,7 @@ const values = [
   {
     icon: Heart,
     title: 'Individuální přístup',
-    description: 'Malé skupiny (max 5 dětí na lektora) nám umožňují přizpůsobit tempo a obsah potřebám každého dítěte.',
+    description: 'Malé skupinky nám umožňují přizpůsobit tempo a obsah potřebám každého dítěte.',
   },
   {
     icon: Lightbulb,
@@ -33,26 +35,13 @@ const values = [
   },
 ]
 
-const teamMembers = [
-  {
-    name: 'Kryštof Ježdík',
-    role: 'VR & Herní vývoj',
-    icon: Gamepad2,
-    description: 'Propojuje virtuální realitu s tvorbou her a programováním. Nadšenec do 3D tisku.',
-  },
-  {
-    name: 'Lukáš Kubík',
-    role: 'Web & Programování',
-    icon: Code,
-    description: 'Specialista na webové technologie a programování. Učí děti vytvářet vlastní projekty.',
-  },
-  {
-    name: 'Štěpán Jurenka',
-    role: '3D modelování & Tisk',
-    icon: Box,
-    description: 'Expert na 3D technologie. Kombinuje kreativitu s technikou.',
-  },
-]
+// Tým bydlí v `src/lib/tym.ts` — tam se přidávají další lektoři.
+const IKONY_OBORU: Record<IkonaOboru, LucideIcon> = {
+  gamepad: Gamepad2,
+  code: Code,
+  box: Box,
+  cpu: Cpu,
+}
 
 export default function AboutPage() {
   const turnusy = getTurnusy()
@@ -135,19 +124,16 @@ export default function AboutPage() {
             nanejvýš 960 px se zobrazuje blízko své skutečné velikosti. Tmavý
             podklad kolem zároveň drží sekci jako kotvu stránky, což dřív
             obstarával gradient přes fotku. */}
-        <section className="section-padding border-y border-ink bg-ink blueprint-grid-dark">
+        <MrizkaSekce odstin="tmavy" className="section-padding border-y border-ink bg-ink blueprint-grid-dark">
           <div className="section-container">
-            {/* Fotka bez popisku, schválně.
+            {/* Popisek je o lidech, ne o kapacitě.
 
-                Stál tu nadpis „Tohle je celý turnus" a pod ním strop kapacity
-                s poměrem 1:5. Dvě chyby najednou: na „O nás" nikdo neřeší, kolik
-                se vejde dětí do turnusu — to je otázka pro `/tabory` a pro
-                „Co máte jisté" na úvodce, kde obojí stojí — a věta „Ne zástup,
-                ve kterém se dítě ztratí" byla obrat, ne informace.
-
-                Fotka mezi herem a misí funguje sama. Kdyby sem měl přijít text,
-                patří mu něco o lidech za Weeks, ne prodejní údaj. */}
-            <div className="relative mx-auto max-w-3xl">
+                Stál tu nadpis „Tohle je celý turnus" se stropem kapacity
+                a poměrem 1:5 — prodejní údaj na stránce o tom, kdo za Weeks
+                je. 2026-09-22 zmizel celý, zakladatel ho 2026-09-24 chtěl
+                zpátky, ale o lidech: jednatelé firmy jsou zároveň lektoři. */}
+            <div className="mx-auto grid max-w-5xl items-center gap-10 lg:grid-cols-[1.2fr_1fr]">
+            <div className="relative">
               <div
                 aria-hidden="true"
                 className="absolute -bottom-4 -left-4 hidden h-full w-full rounded-md border-2 border-cta-400 sm:block"
@@ -158,12 +144,25 @@ export default function AboutPage() {
                 width={1195}
                 height={896}
                 loading="lazy"
-                sizes="(min-width: 768px) 48rem, 100vw"
+                sizes="(min-width: 1024px) 34rem, (min-width: 640px) 90vw, 100vw"
                 className="relative w-full rounded-md border border-paper/20"
               />
             </div>
+
+            <div>
+              <p className="mono-label-dark mb-4 text-cta-300">Kdo za tím stojí</p>
+              <h2 className="heading-2 text-paper">
+                Kdo tábor vede, <span className="text-cta-400">ten na něm učí</span>
+              </h2>
+              <p className="mt-4 text-lg text-paper/80">
+                Weeks vedeme tři — Kryštof, Lukáš a Štěpán. Jsme jednatelé firmy
+                a zároveň lektoři, takže tábor nepřipravujeme od stolu: celý týden
+                jsme s dětmi. Na co se zeptáte, řešíte přímo s námi.
+              </p>
+            </div>
+            </div>
           </div>
-        </section>
+        </MrizkaSekce>
 
         {/* Mission Section */}
         <section className="section-padding bg-paper">
@@ -336,7 +335,7 @@ export default function AboutPage() {
         {/* Team Section */}
         {/* Tým je srdce stránky, proto dostává tmavý blok — kotvu, bez které
             se `/o-nas` četla jako dlouhý krémový svitek. */}
-        <section className="section-padding border-y border-ink bg-ink blueprint-grid-dark">
+        <MrizkaSekce odstin="tmavy" className="section-padding border-y border-ink bg-ink blueprint-grid-dark">
           <div className="section-container">
             <motion.div
               initial={{ y: 20 }}
@@ -346,42 +345,72 @@ export default function AboutPage() {
             >
               <p className="mono-label-dark mb-4 text-accent-300">Tým</p>
               <h2 className="heading-2 text-paper mb-4">
-                Lektorský tým
+                Kdo s dětmi bude
               </h2>
               <p className="text-xl text-paper/70 max-w-2xl mx-auto">
-                Naši lektoři jsou odborníci z praxe s vášní pro výuku. Jsou proškolení
-                v první pomoci a s dětmi pracují dlouhodobě.
+                Jednatelé Weeks a lektoři v jednom. Všichni jsme proškolení
+                v první pomoci a s dětmi pracujeme dlouhodobě.
               </p>
             </motion.div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-              {teamMembers.map((member, index) => (
+              {TYM.map((clen, index) => {
+                const Ikona = IKONY_OBORU[clen.ikona]
+                return (
                 <motion.div
-                  key={member.name}
+                  key={clen.id}
                   initial={{ y: 20 }}
                   whileInView={{ y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
                   className="rounded-md border border-paper/15 bg-paper/[0.03] p-6 text-center flex flex-col"
                 >
-                  {/* Icon */}
-                  <div className="w-24 h-24 border border-paper/25 rounded-sm mx-auto mb-4 flex items-center justify-center">
-                    <member.icon className="w-12 h-12 text-accent-400" />
+                  {/* Fotka, a dokud není, ikona oboru. */}
+                  <div className="relative w-24 h-24 border border-paper/25 rounded-sm mx-auto mb-4 flex items-center justify-center overflow-hidden">
+                    {clen.foto ? (
+                      <Image src={clen.foto} alt={clen.jmeno} fill sizes="96px" className="object-cover" />
+                    ) : (
+                      <Ikona className="w-12 h-12 text-accent-400" aria-hidden="true" />
+                    )}
                   </div>
                   <h3 className="font-display font-semibold text-paper mb-1">
-                    {member.name}
+                    {clen.jmeno}
                   </h3>
-                  <p className="mono-label-dark mb-2">
-                    {member.role}
+                  <p className="mono-label-dark mb-1 text-cta-300">
+                    {roleClena(clen)}
+                  </p>
+                  <p className="mono-label-dark mb-3">
+                    {clen.obor}
                   </p>
                   <p className="text-sm text-paper/70">
-                    {member.description}
+                    {clen.popis}
                   </p>
+                  {(clen.email || clen.telefon) && (
+                    <ul className="mt-auto pt-5 space-y-1.5 font-mono text-sm">
+                      {clen.email && (
+                        <li>
+                          <a href={`mailto:${clen.email}`} className="inline-flex items-center gap-2 text-paper/70 hover:text-paper">
+                            <Mail className="h-4 w-4 text-accent-400" aria-hidden="true" />
+                            {clen.email}
+                          </a>
+                        </li>
+                      )}
+                      {clen.telefon && (
+                        <li>
+                          <a href={`tel:${clen.telefon.replace(/\s/g, '')}`} className="inline-flex items-center gap-2 text-paper/70 hover:text-paper">
+                            <Phone className="h-4 w-4 text-accent-400" aria-hidden="true" />
+                            {clen.telefon}
+                          </a>
+                        </li>
+                      )}
+                    </ul>
+                  )}
                 </motion.div>
-              ))}
+                )
+              })}
             </div>
           </div>
-        </section>
+        </MrizkaSekce>
 
         {/* Safety Section — karty „Pojištění účastníků" a „Certifikovaní lektoři"
             odstraněny v opravném kole 1 (nedoložitelná tvrzení, viz report). */}
@@ -412,7 +441,7 @@ export default function AboutPage() {
                         Malé skupiny
                       </h3>
                       <p className="text-sm text-ink-500">
-                        Maximálně 5 dětí na jednoho lektora pro individuální přístup
+                        Při práci dělíme děti do menších skupinek, lektor se dostane ke každému.
                       </p>
                     </div>
                   </div>

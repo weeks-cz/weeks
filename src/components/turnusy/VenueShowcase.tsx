@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { MapPin, Cpu, Printer, ShieldCheck } from 'lucide-react'
 import type { Venue } from '@/lib/cities'
+import { MrizkaSekce } from '@/components/ui/MrizkaSekce'
 
 // Obecné vlastnosti, které platí pro každé místo konání bez ohledu na to,
 // kde zrovna je — konkrétní popis místa (název, text, fotky) dodává `venue`.
@@ -23,7 +24,7 @@ export function VenueShowcase({ venue }: { venue: Venue }) {
   const zbytekNadpisu = nadpisSlova.join(' ')
 
   return (
-    <section className="section-padding bg-ink text-paper blueprint-grid-dark border-y border-ink overflow-hidden">
+    <MrizkaSekce odstin="tmavy" className="section-padding bg-ink text-paper blueprint-grid-dark border-y border-ink overflow-hidden">
       <div className="section-container">
         <div className={`grid gap-10 lg:gap-14 items-center ${hasPhotos ? 'lg:grid-cols-2' : ''}`}>
           {/* Text */}
@@ -84,6 +85,6 @@ export function VenueShowcase({ venue }: { venue: Venue }) {
           )}
         </div>
       </div>
-    </section>
+    </MrizkaSekce>
   )
 }

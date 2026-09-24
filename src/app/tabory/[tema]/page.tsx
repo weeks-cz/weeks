@@ -17,12 +17,13 @@ import { TurnusInterestForm } from '@/components/turnusy/TurnusInterestForm'
 import { VenueShowcase } from '@/components/turnusy/VenueShowcase'
 import { getVenue, type VenueId } from '@/lib/cities'
 import { getFocusModules } from '@/lib/focus'
-import { SITE, getSiteFaq } from '@/lib/site'
+import { PROVOZNI_DOBA, SITE, getSiteFaq } from '@/lib/site'
 import {
   DENNI_HARMONOGRAM, getAktivniTabory, getTabor, getTabory, zkusiSiTabora,
   type IkonaDne, type Tabor,
 } from '@/lib/tabory'
 import { getTurnusyByTabor, isBookable } from '@/lib/turnusy'
+import { MrizkaSekce } from '@/components/ui/MrizkaSekce'
 
 /**
  * Stránka tématu — jediné místo, kde žije popis tábora.
@@ -163,7 +164,7 @@ function ChystanyTabor({ tabor }: { tabor: Tabor }) {
 
       {/* Sběr kontaktu je u chystaného tábora hlavní obsah, proto dostává tmavý
           blok — zároveň je to kotva stránky, která jinak žádnou nemá. */}
-      <section className="section-padding border-y border-ink bg-ink blueprint-grid-dark">
+      <MrizkaSekce odstin="tmavy" className="section-padding border-y border-ink bg-ink blueprint-grid-dark">
         <div className="section-container">
           {/* Formulář si centruje vlastní obsah (`max-w-2xl mx-auto`), ale stál
               v levém sloupci o šířce `max-w-3xl`, takže na stránce seděl vlevo
@@ -172,7 +173,7 @@ function ChystanyTabor({ tabor }: { tabor: Tabor }) {
             <TurnusInterestForm source={`tabor-${tabor.id}`} />
           </div>
         </div>
-      </section>
+      </MrizkaSekce>
 
       {bezici.length > 0 && (
         <section className="section-padding bg-paper-soft">
@@ -224,7 +225,7 @@ function AktivniTabor({ tabor }: { tabor: Tabor }) {
   const vek = turnusy[0]?.ageRange.replace('-', '–') ?? '9–15'
 
   const fakty = [
-    { icon: Clock, label: '8:00–17:00', sublabel: 'Po – Pá' },
+    { icon: Clock, label: PROVOZNI_DOBA.rozsah, sublabel: 'Po – Pá' },
     { icon: Users, label: `${vek} let`, sublabel: 'věk dětí' },
     { icon: Users, label: `Max ${kapacita}`, sublabel: 'dětí v turnusu' },
     { icon: Utensils, label: 'Oběd', sublabel: 'v ceně' },
@@ -240,7 +241,7 @@ function AktivniTabor({ tabor }: { tabor: Tabor }) {
 
             <p className="mono-label mb-6 flex items-center gap-2">
               <Sparkles className="h-4 w-4 text-accent-600" aria-hidden="true" />
-              Pondělí – Pátek · 8:00 – 17:00
+              Pondělí – Pátek · {PROVOZNI_DOBA.od} – {PROVOZNI_DOBA.do}
             </p>
 
             <h1 className="heading-1 mb-6 text-ink">{tabor.name}</h1>
@@ -456,7 +457,7 @@ function AktivniTabor({ tabor }: { tabor: Tabor }) {
               {
                 icon: Users,
                 title: 'Kapacita',
-                text: `Nejvýše ${kapacita} dětí na turnus. Jeden lektor na pět dětí — na každé dítě zbude čas.`,
+                text: `Nejvýše ${kapacita} dětí na turnus, při práci v menších skupinkách — na každé dítě zbude čas.`,
               },
               {
                 icon: MapPin,
@@ -484,7 +485,8 @@ function AktivniTabor({ tabor }: { tabor: Tabor }) {
       <ProjectGallery polozky={galerie} />
 
       {/* Termíny */}
-      <section
+      <MrizkaSekce
+        odstin="tmavy"
         id="turnusy"
         className="section-padding scroll-mt-24 border-y border-ink bg-ink text-paper blueprint-grid-dark"
       >
@@ -511,7 +513,7 @@ function AktivniTabor({ tabor }: { tabor: Tabor }) {
             <TurnusInterestForm source={`tabor-${tabor.id}`} />
           </div>
         </div>
-      </section>
+      </MrizkaSekce>
 
       <FAQSection polozky={faq} />
 

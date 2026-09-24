@@ -9,14 +9,16 @@ import { useState } from 'react'
 import { trackLead } from '@/lib/fbpixel'
 import { getTurnusy } from '@/lib/turnusy'
 import { getVenue, type VenueId } from '@/lib/cities'
-import { SITE, getSiteFaq } from '@/lib/site'
+import { PROVOZNI_DOBA, SITE, getSiteFaq } from '@/lib/site'
+import { SocialniSite } from '@/components/ui/SocialniSite'
+import { MrizkaSekce } from '@/components/ui/MrizkaSekce'
 
 // Provozní doba je vlastnost produktu (turnusu), ne dne v týdnu podle starého
 // víkendového formátu — viz `Provozní doba táborů` na /podminky a rozvrh na
 // /tabory. Žádné jiné hodiny (např. administrativní obsluhu telefonu) web
 // nedokládá, proto tu nejsou — viz opravné kolo 1 v reportu.
 const operatingHours = [
-  { day: 'Pondělí – Pátek', hours: '8:00 – 17:00', note: 'Průběh tábora' },
+  { day: 'Pondělí – Pátek', hours: `${PROVOZNI_DOBA.od} – ${PROVOZNI_DOBA.do}`, note: 'Průběh tábora' },
 ]
 
 // Výtah ze sdíleného FAQ (`getSiteFaq()`), ne vlastní kopie. /kontakt bylo
@@ -65,7 +67,7 @@ export default function ContactPage() {
       icon: Clock,
       title: 'Provozní doba táborů',
       value: 'Pondělí – Pátek',
-      description: '8:00 – 17:00',
+      description: `${PROVOZNI_DOBA.od} – ${PROVOZNI_DOBA.do}`,
     },
   ]
 
@@ -396,6 +398,14 @@ export default function ContactPage() {
                   </div>
                 </div>
 
+                {/* Sociální sítě — stejný seznam jako v patičce (`SOCIALNI_SITE`). */}
+                <div className="card-maker p-6">
+                  <h3 className="font-display text-lg font-semibold text-ink mb-4">
+                    Sledujte nás
+                  </h3>
+                  <SocialniSite />
+                </div>
+
                 {/* Identifikace provozovatele — drobně, ať nepřebíjí kontaktní
                     údaje (stejný vzor jako v patičce, `Footer.tsx`). */}
                 <p className="font-mono text-xs text-ink-500">
@@ -457,7 +467,7 @@ export default function ContactPage() {
         </section>
 
         {/* CTA Section */}
-        <section className="section-padding bg-ink text-paper blueprint-grid-dark border-y border-ink">
+        <MrizkaSekce odstin="tmavy" className="section-padding bg-ink text-paper blueprint-grid-dark border-y border-ink">
           <div className="section-container">
             <motion.div
               initial={{ y: 20 }}
@@ -484,7 +494,7 @@ export default function ContactPage() {
               </div>
             </motion.div>
           </div>
-        </section>
+        </MrizkaSekce>
       </main>
       <Footer />
     </>

@@ -1,7 +1,8 @@
 'use client'
 
 import { motion, useReducedMotion } from 'framer-motion'
-import { HeartPulse } from 'lucide-react'
+import { Clock, HeartPulse, UsersRound } from 'lucide-react'
+import { PROVOZNI_DOBA } from '@/lib/site'
 import { getTurnusy } from '@/lib/turnusy'
 
 /**
@@ -9,8 +10,11 @@ import { getTurnusy } from '@/lib/turnusy'
  *
  * Vznikl rozdělením `USPSection`, která byla jeden seznam šesti dlaždic bez
  * adresáta: půlka mluvila k rodiči, půlka k dítěti a dohromady to nemluvilo
- * k nikomu. Sem jdou jen věci, které Weeks umí doložit — poměr lektorů,
- * proškolení v první pomoci, kapacita z dat a rozsah dne. Sem se přestěhoval
+ * k nikomu. Sem jdou jen věci, které Weeks umí doložit — malé skupiny,
+ * proškolení v první pomoci, kapacita z dat a rozsah dne.
+ *
+ * Pevný poměr „1:5“ tu stával a zmizel: kolik lektorů na turnus bude, záleží
+ * na počtu přihlášených, a číslo, které nemusí platit, sem nepatří. Sem se přestěhoval
  * i trojlístek z rušené sekce „Kde a s kým".
  *
  * Žádné pojištění, certifikace ani sliby doby odezvy: pro nic z toho web
@@ -25,9 +29,9 @@ export function ProRodice() {
 
   const body = [
     {
-      kota: '1:5',
-      title: 'Jeden lektor na pět dětí',
-      text: 'Malá skupina, na každé dítě zbude čas.',
+      icon: UsersRound,
+      title: 'Malé skupinky',
+      text: 'Při práci děti dělíme do menších skupin, lektor se dostane ke každému.',
     },
     {
       icon: HeartPulse,
@@ -40,9 +44,9 @@ export function ProRodice() {
       text: 'Kapacitu držíme malou schválně, ne proto, že se nesešlo víc dětí.',
     },
     {
-      kota: '8–17',
+      icon: Clock,
       title: 'Postaráno celý den',
-      text: 'Oběd, přestávky a střídání aktivit od rána do odpoledne.',
+      text: `Od ${PROVOZNI_DOBA.od} do ${PROVOZNI_DOBA.do}. Oběd, přestávky a střídání aktivit.`,
     },
   ]
 

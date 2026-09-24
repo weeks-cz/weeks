@@ -1,4 +1,5 @@
 import 'server-only'
+import { PROVOZNI_DOBA } from './site'
 
 // Resend transactional email for KV registrations.
 // Domain weeks.cz is verified in Resend (eu-west-1). From defaults to a real
@@ -144,8 +145,8 @@ export interface NastupniListParams {
 /**
  * Nástupní list.
  *
- * Provozní doba tábora je 8:00 – 17:00 — stejně jako na /kontakt, /tabor,
- * v sekci „Co máte jisté“ na úvodce a v §18 VOP. Dřív tu stálo 8:00 – 16:00, jenže VOP
+ * Provozní doba se bere z `PROVOZNI_DOBA` (`site.ts`) — stejně jako na /kontakt,
+ * /tabory, v sekci „Co máte jisté“ na úvodce a v §18 VOP. Dřív tu stálo 8:00 – 16:00, jenže VOP
  * (§24) opravňují pořadatele účtovat 150 Kč za každých započatých 30 minut po
  * skončení programu: rodič se řídil e-mailem, pořadatel VOP a rozcházeli se
  * o hodinu, za kterou padala pokuta.
@@ -162,7 +163,7 @@ export function buildNastupniListEmail(p: NastupniListParams): { subject: string
     <table style="width:100%;border-collapse:collapse;margin:16px 0;font-size:14px;">
       <tr><td style="padding:6px 0;color:#64748b;">Tábor</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.programName}</td></tr>
       <tr><td style="padding:6px 0;color:#64748b;">Termín</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.termLabel}</td></tr>
-      <tr><td style="padding:6px 0;color:#64748b;">Čas</td><td style="padding:6px 0;text-align:right;font-weight:600;">8:00 – 17:00</td></tr>
+      <tr><td style="padding:6px 0;color:#64748b;">Čas</td><td style="padding:6px 0;text-align:right;font-weight:600;">${PROVOZNI_DOBA.od} – ${PROVOZNI_DOBA.do}</td></tr>
       <tr><td style="padding:6px 0;color:#64748b;">Místo</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.venueName}<br>${p.venueAddress}</td></tr>
     </table>
     <p style="font-weight:600;margin-bottom:4px;">Co s sebou:</p>

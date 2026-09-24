@@ -10,7 +10,7 @@ import { turnusLabels } from '@/components/turnusy/turnus-labels'
 import { TurnusInterestForm } from '@/components/turnusy/TurnusInterestForm'
 import { VenueShowcase } from '@/components/turnusy/VenueShowcase'
 import { getCity, getVenue } from '@/lib/cities'
-import { SITE } from '@/lib/site'
+import { PROVOZNI_DOBA, SITE } from '@/lib/site'
 import { zkusiSiTabora } from '@/lib/tabory'
 import { getTurnus, getTurnusy, getTaboryTurnusu, isBookable } from '@/lib/turnusy'
 
@@ -150,7 +150,7 @@ export default async function TerminPage({ params }: { params: Promise<{ slug: s
               <dl className="mb-10 grid grid-cols-2 overflow-hidden rounded-md border border-ink bg-white sm:grid-cols-4">
                 {[
                   { icon: Calendar, label: '5 dní', sublabel: 'Po – Pá' },
-                  { icon: Clock, label: '8:00–17:00', sublabel: 'každý den' },
+                  { icon: Clock, label: PROVOZNI_DOBA.rozsah, sublabel: 'každý den' },
                   { icon: Users, label: `Max ${turnus.capacity}`, sublabel: 'dětí' },
                   { icon: Wallet, label: l.cena || 'Upřesníme', sublabel: 'cena' },
                 ].map((fact, i) => (

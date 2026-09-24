@@ -13,7 +13,7 @@ import { TaborCard } from '@/components/tabory/TaborCard'
 import { TurnusInterestForm } from '@/components/turnusy/TurnusInterestForm'
 import { filtrMest, platneMesto } from '@/components/turnusy/TurnusList'
 import { getCity, getVenue, type CityId, type VenueId } from '@/lib/cities'
-import { SITE } from '@/lib/site'
+import { PROVOZNI_DOBA, SITE } from '@/lib/site'
 import { getAktivniTabory, getChystaneTabory } from '@/lib/tabory'
 import { getCitiesWithTurnusy, getTurnusy, getTurnusyByCity } from '@/lib/turnusy'
 
@@ -36,7 +36,7 @@ function spolecneFakty() {
   const vek = turnusy[0]?.ageRange.replace('-', '–') ?? '9–15'
   return [
     { icon: Calendar, label: '5 dní', sublabel: 'Po – Pá' },
-    { icon: Clock, label: '8:00–17:00', sublabel: 'každý den' },
+    { icon: Clock, label: PROVOZNI_DOBA.rozsah, sublabel: 'každý den' },
     { icon: Users, label: `${vek} let`, sublabel: 'věk dětí' },
     { icon: Gauge, label: `Max ${kapacita}`, sublabel: 'dětí v turnusu' },
     { icon: Utensils, label: 'Oběd', sublabel: 'v ceně' },

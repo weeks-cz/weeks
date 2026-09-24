@@ -3,7 +3,7 @@ import { SITE } from '@/lib/site'
 
 const title = 'Letní příměstské tábory pro děti | Weeks'
 const description =
-  'Týdenní příměstské tábory pro děti 9–15 let v Praze a Karlových Varech. 3D tisk a IoT s Arduinem, jeden lektor na pět dětí, oběd v ceně.'
+  'Týdenní příměstské tábory pro děti 9–15 let v Praze a Karlových Varech. 3D tisk a IoT s Arduinem v malých skupinkách, oběd v ceně.'
 
 export const metadata: Metadata = {
   title: { absolute: title },

@@ -59,6 +59,102 @@ export const PRIKLADY: Priklad[] = [
   },
 ]
 
+export interface KrokPrubehu {
+  /** Čas od začátku oslavy, ne hodina na hodinách — oslava začíná, kdy chcete. */
+  cas: string
+  nadpis: string
+  text: string
+}
+
+export interface Prubeh {
+  id: string
+  nadpis: string
+  /** Přibližná délka slovy. Model, ne závazek — proto „zhruba“. */
+  delka: string
+  kroky: KrokPrubehu[]
+}
+
+/**
+ * Modelové průběhy — „takhle to může vypadat od začátku do konce“.
+ *
+ * Přidané na přání zakladatele (2026-09-24): rodič si oslavu snáz představí,
+ * když vidí celé odpoledne, ne jen jednotlivé nápady. Pořád jsou to **modely,
+ * ne balíčky** — nemají cenu ani počet dětí a stránka pod nimi říká, že se
+ * dají poskládat úplně jinak. Časy jsou relativní (0:15 = čtvrt hodiny od
+ * začátku), aby nesváděly k domněnce, že oslava začíná v pevnou hodinu.
+ */
+export const PRUBEHY: Prubeh[] = [
+  {
+    id: 'kratsi-doma',
+    nadpis: 'Kratší oslava doma',
+    delka: 'zhruba dvě hodiny',
+    kroky: [
+      {
+        cas: '0:00',
+        nadpis: 'Přivítání',
+        text: 'Lektor ukáže tiskárnu i elektroniku a řekne, co dnes děti postaví.',
+      },
+      {
+        cas: '0:15',
+        nadpis: 'Návrh výtisku',
+        text: 'Každý si vybere nebo upraví model — jmenovku, přívěsek, figurku — a pošle ho do tiskárny.',
+      },
+      {
+        cas: '0:45',
+        nadpis: 'Elektronika',
+        text: 'Zatímco tiskárna pracuje, děti zapojují micro:bit a rozsvěcí první světla.',
+      },
+      {
+        cas: '1:30',
+        nadpis: 'Pauza na dort',
+        text: 'Prostor pro oslavence. Program počká.',
+      },
+      {
+        cas: '1:45',
+        nadpis: 'Rozdání výtisků',
+        text: 'Každý si vezme, co navrhl, a oslava pokračuje po svém.',
+      },
+    ],
+  },
+  {
+    id: 'delsi-stanoviste',
+    nadpis: 'Delší odpoledne se stanovišti',
+    delka: 'zhruba tři hodiny',
+    kroky: [
+      {
+        cas: '0:00',
+        nadpis: 'Přivítání a skupinky',
+        text: 'Děti se rozdělí do menších skupinek, které se budou střídat na stanovištích.',
+      },
+      {
+        cas: '0:15',
+        nadpis: 'Stanoviště: 3D modelování',
+        text: 'U notebooků si skupinka navrhne vlastní model, který se pak vytiskne.',
+      },
+      {
+        cas: '1:00',
+        nadpis: 'Stanoviště: elektronika',
+        text: 'Arduino nebo micro:bit — obvod, který reaguje na dotek, světlo nebo náklon.',
+      },
+      {
+        cas: '1:45',
+        nadpis: 'Pauza na dort',
+        text: 'Přestávka, dárky a oslavenec v hlavní roli.',
+      },
+      {
+        cas: '2:15',
+        nadpis: 'Společná výzva',
+        text: 'Skupinky si změří síly v úkolu, ve kterém použijí, co se odpoledne naučily.',
+      },
+      {
+        cas: '2:45',
+        nadpis: 'Rozdání výtisků',
+        text: 'Každý si odnese svůj model a rozloučíme se.',
+      },
+    ],
+  },
+]
+
 /** Co přiveze Weeks. */
 export const ZAJISTIME: string[] = [
   'Lektora, který program vede a hlídá, aby se dostalo na všechny děti.',
@@ -67,9 +163,15 @@ export const ZAJISTIME: string[] = [
   'Program poskládaný podle toho, kolik dětí přijde a kolik je času.',
 ]
 
-/** Co musí být na místě. Krátký seznam schválně — delší by odrazoval. */
+/**
+ * Co musí být na místě. Krátký seznam schválně — delší by odrazoval.
+ *
+ * Stůl odtud zmizel na přání zakladatele (2026-09-24): rodič neměl mít pocit,
+ * že musí kvůli programu shánět nábytek. Zásuvky zůstávají — bez nich tiskárna
+ * ani notebooky nepojedou.
+ */
 export const POTREBUJEME: string[] = [
-  'Stůl, u kterého se děti vystřídají, a pár zásuvek.',
+  'Pár zásuvek poblíž místa, kde program poběží.',
   'Přibližný počet dětí a kolik času na program je.',
 ]
 
@@ -83,7 +185,7 @@ export const MISTA: Misto[] = [
   {
     id: 'u-vas',
     nadpis: 'U vás doma',
-    text: 'Nebo kdekoli oslava probíhá. Přivezeme všechno s sebou, vejdeme se ke stolu.',
+    text: 'Nebo kdekoli oslava probíhá. Přivezeme všechno s sebou.',
   },
   {
     id: 'pronajaty-prostor',

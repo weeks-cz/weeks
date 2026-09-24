@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { MISTA, POTREBUJEME, PRIKLADY, ZAJISTIME } from './oslavy'
+import { MISTA, POTREBUJEME, PRIKLADY, PRUBEHY, ZAJISTIME } from './oslavy'
 
 /**
  * Stejné pojistky jako u `firmy.test.ts`, protože platí stejné pravidlo:
@@ -10,6 +10,10 @@ import { MISTA, POTREBUJEME, PRIKLADY, ZAJISTIME } from './oslavy'
 const HLIDANE_TEXTY: Array<{ jmeno: string; text: string }> = [
   ...PRIKLADY.map((p) => ({ jmeno: `příklad ${p.id}`, text: `${p.nadpis} ${p.text}` })),
   ...MISTA.map((m) => ({ jmeno: `místo ${m.id}`, text: `${m.nadpis} ${m.text}` })),
+  ...PRUBEHY.map((p) => ({
+    jmeno: `průběh ${p.id}`,
+    text: [p.nadpis, p.delka, ...p.kroky.map((k) => `${k.nadpis} ${k.text}`)].join(' '),
+  })),
   { jmeno: 'zajistíme', text: ZAJISTIME.join(' ') },
   { jmeno: 'potřebujeme', text: POTREBUJEME.join(' ') },
 ]
@@ -25,6 +29,28 @@ describe('obsah stránky oslav', () => {
       expect(p.nadpis.length, `${p.id}: nadpis`).toBeGreaterThan(5)
       expect(p.text.length, `${p.id}: text`).toBeGreaterThan(30)
     }
+  })
+
+  it('modelové průběhy mají aspoň tři kroky a časy jdou po sobě', () => {
+    expect(PRUBEHY.length).toBeGreaterThanOrEqual(1)
+    const minuty = (cas: string) => {
+      const [h, m] = cas.split(':').map(Number)
+      return h * 60 + m
+    }
+    for (const p of PRUBEHY) {
+      expect(p.kroky.length, p.id).toBeGreaterThanOrEqual(3)
+      expect(p.kroky[0].cas, `${p.id} začíná od nuly`).toBe('0:00')
+      for (let i = 1; i < p.kroky.length; i++) {
+        expect(minuty(p.kroky[i].cas), `${p.id}: ${p.kroky[i].nadpis}`).toBeGreaterThan(
+          minuty(p.kroky[i - 1].cas)
+        )
+      }
+    }
+  })
+
+  it('nechce po rodiči stůl — techniku i místo si zařídíme', () => {
+    const texty = [...POTREBUJEME, ...MISTA.map((m) => m.text)].join(' ').toLowerCase()
+    expect(texty).not.toMatch(/stol|stůl/)
   })
 
   it('id příkladů i míst jsou jedinečná', () => {
