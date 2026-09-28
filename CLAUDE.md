@@ -585,7 +585,7 @@ has no redirect configured — the route no longer exists and 404s.
 ## Repo & team workflow
 
 - **Org**: `weeks-cz` on GitHub (free, owned by Lukáš). Owners: Lukáš (lukoluko8), Štěpán (step4n), Kryštof (jezdikk), admin@weeks.cz.
-- **Sister repos**: `weeks-cz/weeks-hub` (app.weeks.cz), `weeks-cz/weeks-iot` (iot.weeks.cz + klicenka.weeks.cz). All public, code-only.
+- **Sister repos**: `weeks-cz/weeks-hub` (app.weeks.cz), `weeks-cz/weeks-iot` (ucebna.weeks.cz — since 2026-09-29 production; iot.weeks.cz 308-redirects there — + klicenka.weeks.cz). All public, code-only.
 - **Strategic docs**: live in private repo `weeks-cz/weeks-internal` under `web/docs/`. ROADMAP, content spec, UI/UX spec, plans, specs all moved there 2026-05-09. **Do not commit business strategy or competitive context here** — this repo is public.
 - **Deploys**: Vercel auto-deploys `main` branch to weeks.cz on push.
 - **Vercel Hobby author block**: Free tier rejects deployments when commit author is not Lukáš (lukoluko8@gmail.com). Commits by step4n or jezdikk hit error: *"Git author X must have access to the project on Vercel"*.

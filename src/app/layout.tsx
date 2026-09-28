@@ -45,7 +45,8 @@ const siteDescription =
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: '#3B82F6',
+  // Barva lišty prohlížeče na mobilu = pozadí fixní hlavičky (paper), ne hero.
+  themeColor: '#FAFAF7',
 }
 
 export const metadata: Metadata = {
