@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Target, Heart, Lightbulb, Users, ShieldCheck, MapPin, Gamepad2, Code, Box, Cpu, Mail, Phone, type LucideIcon } from 'lucide-react'
+import { Target, Heart, Lightbulb, Users, MapPin, Gamepad2, Code, Box, Cpu, Mail, Phone, type LucideIcon } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Header } from '@/components/layout/Header'
@@ -53,10 +53,6 @@ export default function AboutPage() {
     new Set(turnusy.map((t) => t.venueId).filter((id): id is VenueId => id !== null))
   )
   const venues = venueIds.map((id) => getVenue(id))
-
-  // Nejvyšší kapacita napříč turnusy — dnes vyjde 15 u obou, číslo se ale
-  // nepíše natvrdo, aby se stránka sama nerozešla s daty (stejně jako `ProRodice`).
-  const kapacita = turnusy.reduce((max, t) => Math.max(max, t.capacity), 0)
 
   return (
     <>
@@ -131,7 +127,11 @@ export default function AboutPage() {
                 Stál tu nadpis „Tohle je celý turnus" se stropem kapacity
                 a poměrem 1:5 — prodejní údaj na stránce o tom, kdo za Weeks
                 je. 2026-09-22 zmizel celý, zakladatel ho 2026-09-24 chtěl
-                zpátky, ale o lidech: jednatelé firmy jsou zároveň lektoři. */}
+                zpátky, ale o lidech.
+
+                „Jsme jednatelé a zároveň lektoři, celý týden jsme s dětmi“
+                odešlo 2026-09-28: s víc turnusy a lektory to platit nebude.
+                Zůstává, co platí vždy — program připravují zakladatelé. */}
             <div className="mx-auto grid max-w-5xl items-center gap-10 lg:grid-cols-[1.2fr_1fr]">
             <div className="relative">
               <div
@@ -152,12 +152,12 @@ export default function AboutPage() {
             <div>
               <p className="mono-label-dark mb-4 text-cta-300">Kdo za tím stojí</p>
               <h2 className="heading-2 text-paper">
-                Kdo tábor vede, <span className="text-cta-400">ten na něm učí</span>
+                Program si <span className="text-cta-400">vymýšlíme sami</span>
               </h2>
               <p className="mt-4 text-lg text-paper/80">
-                Weeks vedeme tři — Kryštof, Lukáš a Štěpán. Jsme jednatelé firmy
-                a zároveň lektoři, takže tábor nepřipravujeme od stolu: celý týden
-                jsme s dětmi. Na co se zeptáte, řešíte přímo s námi.
+                Weeks jsme založili tři — Kryštof, Lukáš a Štěpán. Tábory
+                připravujeme od tématu po poslední den a na co se zeptáte,
+                řešíte přímo s námi.
               </p>
             </div>
             </div>
@@ -345,11 +345,10 @@ export default function AboutPage() {
             >
               <p className="mono-label-dark mb-4 text-accent-300">Tým</p>
               <h2 className="heading-2 text-paper mb-4">
-                Kdo s dětmi bude
+                Zakládající tým
               </h2>
               <p className="text-xl text-paper/70 max-w-2xl mx-auto">
-                Jednatelé Weeks a lektoři v jednom. Všichni jsme proškolení
-                v první pomoci a s dětmi pracujeme dlouhodobě.
+                Tři lidé, tři obory. Z nich skládáme program táborů.
               </p>
             </motion.div>
 
@@ -433,7 +432,7 @@ export default function AboutPage() {
                   v první pomoci a s dětmi pracují dlouhodobě.
                 </p>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="flex items-start gap-4 p-4">
                     <Users className="w-8 h-8 text-trust-600 flex-shrink-0" />
                     <div>
@@ -442,18 +441,6 @@ export default function AboutPage() {
                       </h3>
                       <p className="text-sm text-ink-500">
                         Při práci dělíme děti do menších skupinek, lektor se dostane ke každému.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-4 p-4">
-                    <ShieldCheck className="w-8 h-8 text-trust-600 flex-shrink-0" />
-                    <div>
-                      <h3 className="font-semibold text-ink mb-1">
-                        Nejvýše {kapacita} dětí v turnusu
-                      </h3>
-                      <p className="text-sm text-ink-500">
-                        Kapacitu držíme malou schválně.
                       </p>
                     </div>
                   </div>

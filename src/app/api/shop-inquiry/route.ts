@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { rateLimit, clientIp } from '@/lib/rate-limit'
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
@@ -20,6 +21,16 @@ interface ShopInquiryRequestBody {
 
 export async function POST(request: NextRequest) {
   try {
+    // Abuse guard jako u /api/waitlist: bez něj šel endpoint zaplavit
+    // a každý požadavek odchází do Formspree. Fail-open (výpadek Redisu ≠ blok).
+    const limited = await rateLimit(`shop-inquiry:${clientIp(request)}`, 5, 600)
+    if (!limited.ok) {
+      return NextResponse.json(
+        { error: 'Příliš mnoho pokusů. Zkuste to prosím za chvíli.' },
+        { status: 429 }
+      )
+    }
+
     const body = await request.json() as ShopInquiryRequestBody
     const { name, email, phone, note, gdprConsent, items } = body
 

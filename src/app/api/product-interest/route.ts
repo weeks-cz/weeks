@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { rateLimit, clientIp } from '@/lib/rate-limit'
 import { getShopProductBySlug, productTypeLabels, type ShopProductType } from '@/lib/shop'
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -16,6 +17,16 @@ interface ProductInterestRequestBody {
 
 export async function POST(request: NextRequest) {
   try {
+    // Abuse guard jako u /api/waitlist: bez něj šel endpoint zaplavit
+    // a každý požadavek odchází do Formspree. Fail-open (výpadek Redisu ≠ blok).
+    const limited = await rateLimit(`product-interest:${clientIp(request)}`, 5, 600)
+    if (!limited.ok) {
+      return NextResponse.json(
+        { error: 'Příliš mnoho pokusů. Zkuste to prosím za chvíli.' },
+        { status: 429 }
+      )
+    }
+
     const body = await request.json() as ProductInterestRequestBody
     const { email, name, note, gdprConsent, productSlug, productName, productType } = body
 

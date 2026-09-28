@@ -151,7 +151,7 @@ export default async function TerminPage({ params }: { params: Promise<{ slug: s
                 {[
                   { icon: Calendar, label: '5 dní', sublabel: 'Po – Pá' },
                   { icon: Clock, label: PROVOZNI_DOBA.rozsah, sublabel: 'každý den' },
-                  { icon: Users, label: `Max ${turnus.capacity}`, sublabel: 'dětí' },
+                  { icon: Users, label: l.kapacita || 'Upřesníme', sublabel: 'kapacita' },
                   { icon: Wallet, label: l.cena || 'Upřesníme', sublabel: 'cena' },
                 ].map((fact, i) => (
                   <div

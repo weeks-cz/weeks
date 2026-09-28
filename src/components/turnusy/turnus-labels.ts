@@ -48,6 +48,11 @@ export function turnusLabels(turnus: Turnus) {
   // ji záměrně, i před „Kč": cena se na úzké kartě nesmí zalomit uprostřed čísla.
   const cena = turnus.priceKc !== null ? `${turnus.priceKc.toLocaleString('cs-CZ')} Kč` : ''
 
+  // Kapacita chystaného turnusu je jen pracovní odhad — kolik dětí vezme, se
+  // rozhodne až s místem konání a lektory. Do té doby ji web neslibuje,
+  // stejně jako cenu.
+  const kapacita = turnus.status === 'chystame' ? '' : `${turnus.capacity} dětí`
+
   const stav =
     turnus.status === 'plno'
       ? 'Obsazeno'
@@ -70,6 +75,7 @@ export function turnusLabels(turnus: Turnus) {
     mesto: getCity(turnus.city).name,
     misto,
     cena,
+    kapacita,
     stav,
     ctaText,
     ctaHref: prodejny ? `/registrace?term=${turnus.id}` : null,

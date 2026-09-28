@@ -51,6 +51,14 @@ describe('getSiteFaq', () => {
     const otazky = getSiteFaq().map((f) => f.question)
     expect(new Set(otazky).size).toBe(otazky.length)
   })
+
+  // Strop kapacity („nejvýše patnáct dětí“) zmizel 2026-09-28: kolik dětí
+  // turnus vezme, se rozhodne s místem a lektory, a patří k termínu.
+  it('neslibuje obecný strop počtu dětí', () => {
+    const texty = getSiteFaq().map((f) => f.answer).join(' ')
+    expect(texty).not.toMatch(/nejvýš/i)
+    expect(texty).not.toMatch(/\d+\s*dětí/)
+  })
 })
 
 describe('getVenuesSentence', () => {

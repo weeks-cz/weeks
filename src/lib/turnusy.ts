@@ -98,7 +98,7 @@ export const TURNUSY: Turnus[] = [
     taborIds: ['chytre-technologie'],
     ageRange: '9-15',
     perex:
-      'Týdenní příměstský tábor v Karlových Varech. Místo konání i termíny upřesníme.',
+      'Týdenní příměstský tábor v Karlových Varech.',
   },
   {
     id: 'praha-leto-2027',
@@ -113,7 +113,7 @@ export const TURNUSY: Turnus[] = [
     taborIds: ['chytre-technologie'],
     ageRange: '9-15',
     perex:
-      'Týdenní příměstský tábor v Praze. Místo konání i termíny upřesníme.',
+      'Týdenní příměstský tábor v Praze.',
   },
 ]
 

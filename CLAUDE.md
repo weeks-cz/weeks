@@ -444,9 +444,12 @@ NEXT_PUBLIC_FB_PIXEL_ID=                 # Facebook Pixel (after ads setup)
 ## Team (O nás page)
 
 Data live in `TYM` in `src/lib/tym.ts` (moved out of the page 2026-09-24).
-All three are **jednatelé of Weeks s.r.o. and lecturers at once**; the role
-label comes from the `jednatel` flag ("Jednatel · lektor" vs "Lektor"), so a
-new lecturer who does not run the company is one row with `jednatel: false`.
+The role label comes from the `zakladatel` flag ("Spoluzakladatel" vs
+"Lektor"), so a new lecturer who did not found Weeks is one row with
+`zakladatel: false`. **Don't bring back "jednatelé a zároveň lektoři" /
+"celý týden jsme s dětmi"** (removed 2026-09-28 on Kryštof's feedback): with
+more turnusy and hired lecturers it won't hold. A fuller "core tým" section
+(photos, who owns B2B etc.) is planned but waits for the team's input.
 `foto`, `email` and `telefon` are optional — without a photo the card shows the
 field icon, without a contact it shows none. This repo is public: only put in
 a contact the person wants public.
@@ -456,8 +459,12 @@ a contact the person wants public.
 
 **Instructor ratio is no longer promised** (2026-09-24): "1:5" depended on how
 many children sign up and how many lecturers a term gets, so the site says
-"malé skupinky" + the capacity cap from data instead. Don't bring a fixed ratio
-back without the founder confirming it.
+"malé skupinky" instead. Don't bring a fixed ratio back without the founder
+confirming it. **Neither is a capacity cap** (2026-09-28): "nejvýše 15 dětí"
+left the homepage, `/o-nas`, `/tabory`, the theme page and the FAQ — how many
+children a turnus takes is decided with its venue and lecturers. Capacity shows
+only on a term page, and only once the turnus is past `chystame`
+(`turnusLabels().kapacita`); `site.test.ts` guards the FAQ.
 
 ## Contact Info
 

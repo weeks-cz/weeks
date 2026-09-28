@@ -111,10 +111,11 @@ export function getSiteFaq(): Array<{ question: string; answer: string }> {
     {
       // Dřív tu stál pevný poměr „jeden lektor na pět dětí“. Ten ale záleží na
       // tom, kolik dětí se přihlásí a kolik lektorů na turnus bude — web ho
-      // proto neslibuje. Slibuje jen to, co drží kapacita turnusu.
+      // proto neslibuje. Strop kapacity („nejvýše patnáct dětí“) odešel ze
+      // stejného důvodu 2026-09-28 — patří ke konkrétnímu termínu.
       question: 'Jak velké jsou skupiny?',
       answer:
-        'Malé. Na turnus bereme nejvýše patnáct dětí a při práci je dělíme do menších skupinek, aby se lektor dostal ke každému.',
+        'Malé. Při práci děti dělíme do menších skupinek, aby se lektor dostal ke každému. Kolik dětí turnus vezme, najdete u konkrétního termínu.',
     },
     {
       question: 'Je v ceně oběd?',

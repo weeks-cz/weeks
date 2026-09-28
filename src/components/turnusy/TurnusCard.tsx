@@ -44,6 +44,13 @@ export function TurnusCard({
   const ctaHref = vyprodano ? null : l.ctaHref
   const prodejny = ctaHref !== null
 
+  // Bez termínu by měly všechny karty stejný nadpis „Termín upřesníme"
+  // a jediný rozdíl — město — by stál v drobném štítku nad ním. Dvě chystané
+  // karty vedle sebe pak vypadaly jako duplikát. Dokud termín není, nese
+  // nadpis město a všechno neznámé se vejde do jednoho řádku pod ním.
+  const bezTerminu = !turnus.start || !turnus.end
+  const upresnime = turnus.venueId ? `Termín upřesníme · ${l.misto}` : 'Termín i místo upřesníme'
+
   return (
     <motion.article
       initial={reduced ? false : { y: 16 }}
@@ -54,11 +61,11 @@ export function TurnusCard({
       }`}
     >
       <div className="flex items-start justify-between gap-3 mb-4">
-        <p className="mono-label">{l.mesto}</p>
+        {!bezTerminu && <p className="mono-label">{l.mesto}</p>}
         {prodejny && spotsLeft !== undefined ? (
           <SpotsLeftBadge spotsLeft={spotsLeft} maxCapacity={turnus.capacity} />
         ) : (
-          <span className="font-mono text-xs uppercase tracking-wider text-ink/50">{stav}</span>
+          <span className="ml-auto font-mono text-xs uppercase tracking-wider text-ink/50">{stav}</span>
         )}
       </div>
 
@@ -69,14 +76,22 @@ export function TurnusCard({
           href={`/tabory/termin/${turnus.slug}`}
           className="flex items-center gap-2 transition-colors hover:text-accent-600"
         >
-          <Calendar className="w-4 h-4 text-ink/40 flex-shrink-0" aria-hidden="true" />
-          {l.datum}
+          {bezTerminu ? (
+            <MapPin className="w-4 h-4 text-ink/40 flex-shrink-0" aria-hidden="true" />
+          ) : (
+            <Calendar className="w-4 h-4 text-ink/40 flex-shrink-0" aria-hidden="true" />
+          )}
+          {bezTerminu ? l.mesto : l.datum}
         </Link>
       </h3>
 
       <p className="flex items-center gap-2 text-sm text-ink-500 mb-3">
-        <MapPin className="w-4 h-4 text-ink/40 flex-shrink-0" aria-hidden="true" />
-        {l.misto}
+        {bezTerminu ? (
+          <Calendar className="w-4 h-4 text-ink/40 flex-shrink-0" aria-hidden="true" />
+        ) : (
+          <MapPin className="w-4 h-4 text-ink/40 flex-shrink-0" aria-hidden="true" />
+        )}
+        {bezTerminu ? upresnime : l.misto}
       </p>
 
       {zamereni.length > 0 && (

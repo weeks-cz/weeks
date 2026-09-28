@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import {
-  ArrowRight, Box, Check, Clock, Cpu, Headset, MapPin, Printer, Sparkles,
+  ArrowRight, Box, Calendar, Check, Clock, Cpu, Headset, MapPin, Printer, Sparkles,
   Users, Utensils,
 } from 'lucide-react'
 import { Header } from '@/components/layout/Header'
@@ -221,13 +221,12 @@ function AktivniTabor({ tabor }: { tabor: Tabor }) {
     ...(tabor.faq ?? []),
   ].filter((otazka, i, vse) => vse.findIndex((o) => o.question === otazka.question) === i)
 
-  const kapacita = turnusy.reduce((max, t) => Math.max(max, t.capacity), 0)
   const vek = turnusy[0]?.ageRange.replace('-', '–') ?? '9–15'
 
   const fakty = [
-    { icon: Clock, label: PROVOZNI_DOBA.rozsah, sublabel: 'Po – Pá' },
+    { icon: Calendar, label: '5 dní', sublabel: 'Po – Pá' },
+    { icon: Clock, label: PROVOZNI_DOBA.rozsah, sublabel: 'každý den' },
     { icon: Users, label: `${vek} let`, sublabel: 'věk dětí' },
-    { icon: Users, label: `Max ${kapacita}`, sublabel: 'dětí v turnusu' },
     { icon: Utensils, label: 'Oběd', sublabel: 'v ceně' },
   ]
 
@@ -456,8 +455,8 @@ function AktivniTabor({ tabor }: { tabor: Tabor }) {
               },
               {
                 icon: Users,
-                title: 'Kapacita',
-                text: `Nejvýše ${kapacita} dětí na turnus, při práci v menších skupinkách — na každé dítě zbude čas.`,
+                title: 'Skupinky',
+                text: 'Při práci děti dělíme do menších skupinek, aby se lektor dostal ke každému.',
               },
               {
                 icon: MapPin,
@@ -529,12 +528,12 @@ function AktivniTabor({ tabor }: { tabor: Tabor }) {
           <div className="max-w-3xl">
             <h2 className="heading-2 mb-5 text-ink">
               {prodejny
-                ? `Na jeden turnus bereme nejvýš ${kapacita} dětí`
+                ? 'Přihlaste dítě, dokud jsou volná místa'
                 : 'Chcete vědět o termínech mezi prvními?'}
             </h2>
             <p className="mb-8 text-lg text-ink/80">
               {prodejny
-                ? 'Malá skupina je důvod, proč se dětem na táboře daří — a taky důvod, proč se místa plní.'
+                ? 'Kolik míst ještě zbývá, vidíte u každého termínu.'
                 : 'Nechte nám kontakt a ozveme se vám dřív, než se termíny objeví na webu.'}
             </p>
             <div className="flex flex-col gap-4 sm:flex-row">

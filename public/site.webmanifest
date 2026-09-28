@@ -1,7 +1,7 @@
 {
   "name": "Weeks - IT tábory pro děti",
   "short_name": "Weeks",
-  "description": "Týdenní příměstský tábor pro děti 9–15 let. 3D tisk, 3D modelování a IoT s Arduinem, jeden lektor na pět dětí, oběd i materiál v ceně.",
+  "description": "Týdenní příměstský IT tábor pro děti 9–15 let v Praze a Karlových Varech. 3D tisk, IoT a elektronika, malé skupinky, oběd i materiál v ceně.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
@@ -20,13 +20,17 @@
       "type": "image/png"
     }
   ],
-  "categories": ["education", "kids", "technology"],
+  "categories": [
+    "education",
+    "kids",
+    "technology"
+  ],
   "shortcuts": [
     {
-      "name": "Program",
-      "short_name": "Program",
-      "description": "Co děti čeká",
-      "url": "/tabor#program"
+      "name": "Tábory",
+      "short_name": "Tábory",
+      "description": "Témata a termíny táborů",
+      "url": "/tabory"
     },
     {
       "name": "Kontakt",

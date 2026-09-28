@@ -1,4 +1,5 @@
 import 'server-only'
+import { timingSafeEqual } from 'node:crypto'
 
 export type PaymentStatus = 'paid' | 'cancelled' | 'pending'
 
@@ -98,9 +99,19 @@ export function parseCreateResponse(body: string): CreateResult {
   return { transId, redirect }
 }
 
+/** Constant-time string compare, like `registration-token.ts` and `/api/admin/refund`. */
+function safeEqual(a: string, b: string): boolean {
+  const x = Buffer.from(a)
+  const y = Buffer.from(b)
+  return x.length === y.length && timingSafeEqual(x, y)
+}
+
 /** Comgate includes the merchant secret in its callback; verify it matches ours. */
 export function verifyCallbackIdentity(params: URLSearchParams, cfg: ComgateConfig): boolean {
-  return params.get('secret') === cfg.secret && params.get('merchant') === cfg.merchant
+  return (
+    safeEqual(params.get('secret') ?? '', cfg.secret) &&
+    safeEqual(params.get('merchant') ?? '', cfg.merchant)
+  )
 }
 
 export async function createPayment(input: CreatePaymentInput, cfg = getComgateConfig()): Promise<CreateResult> {

@@ -5,7 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { motion, useReducedMotion } from 'framer-motion'
-import { ArrowRight, Calendar, Clock, Gauge, MapPin, Users, Utensils } from 'lucide-react'
+import { ArrowRight, Calendar, Clock, MapPin, Users, Utensils } from 'lucide-react'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { BreadcrumbSchema } from '@/components/seo/StructuredData'
@@ -29,16 +29,17 @@ import { getCitiesWithTurnusy, getTurnusy, getTurnusyByCity } from '@/lib/turnus
  * místo aby se stránka kvůli jednomu parametru vykreslovala na každý požadavek.
  */
 
-/** Společné pro všechny tábory. Kapacitu a věk bere z dat, ne z paměti. */
+/**
+ * Společné pro všechny tábory. Věk bere z dat, ne z paměti. Kapacita tu
+ * nestojí — patří ke konkrétnímu termínu, ne k táborům obecně.
+ */
 function spolecneFakty() {
   const turnusy = getTurnusy()
-  const kapacita = turnusy.reduce((max, t) => Math.max(max, t.capacity), 0)
   const vek = turnusy[0]?.ageRange.replace('-', '–') ?? '9–15'
   return [
     { icon: Calendar, label: '5 dní', sublabel: 'Po – Pá' },
     { icon: Clock, label: PROVOZNI_DOBA.rozsah, sublabel: 'každý den' },
     { icon: Users, label: `${vek} let`, sublabel: 'věk dětí' },
-    { icon: Gauge, label: `Max ${kapacita}`, sublabel: 'dětí v turnusu' },
     { icon: Utensils, label: 'Oběd', sublabel: 'v ceně' },
   ]
 }
@@ -273,7 +274,7 @@ export default function TaboryPage() {
         {/* Společné fakty — amber pruh v roli „stav“, zároveň předěl pod herem */}
         <section className="border-y border-ink bg-cta-400" aria-label="Co mají všechny tábory společné">
           <div className="section-container">
-            <dl className="grid grid-cols-2 divide-ink/20 sm:grid-cols-3 lg:grid-cols-5 lg:divide-x">
+            <dl className="grid grid-cols-2 divide-ink/20 lg:grid-cols-4 lg:divide-x">
               {fakty.map((fakt, i) => (
                 // V `<dl>` musí `<dt>` (název údaje) stát ve zdroji před svým
                 // `<dd>`. Vizuálně patří pod hodnotu, což řeší `order-last`.

@@ -91,4 +91,8 @@ describe('verifyCallbackIdentity', () => {
     const params = new URLSearchParams({ secret: 'WRONG', merchant: 'M123' })
     expect(verifyCallbackIdentity(params, cfg)).toBe(false)
   })
+  it('rejects when secret is missing', () => {
+    const params = new URLSearchParams({ merchant: 'M123' })
+    expect(verifyCallbackIdentity(params, cfg)).toBe(false)
+  })
 })

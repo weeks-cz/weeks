@@ -50,6 +50,10 @@ describe('turnusLabels — otevřený turnus', () => {
     expect(l.cena).not.toMatch(/DPH/i)
   })
 
+  it('uvede kapacitu, protože s termínem je jistá i ona', () => {
+    expect(l.kapacita).toBe('15 dětí')
+  })
+
   it('vede na registraci konkrétního turnusu', () => {
     expect(l.ctaHref).toBe('/registrace?term=test-otevreny')
     expect(l.ctaText).toBe('Přihlásit dítě')
@@ -70,6 +74,10 @@ describe('turnusLabels — chystaný turnus', () => {
 
   it('neuvádí cenu, dokud není jistá', () => {
     expect(l.cena).toBe('')
+  })
+
+  it('neslibuje kapacitu, dokud není jistá', () => {
+    expect(l.kapacita).toBe('')
   })
 
   it('nevede na registraci, ale na sběr kontaktu', () => {
