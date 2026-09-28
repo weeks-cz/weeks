@@ -460,7 +460,7 @@ summer camps above all, but:
 2. **Lukáš Kubík** - učebna a web; vývoj · UX · design (code icon)
 3. **Štěpán Jurenka** - spolupráce s firmami (B2B); 3D modelování, tisk, IoT (box icon)
 
-Bios, the "Jak Weeks vznikl" story (SSPŠ → VŠE, lecturing) and LinkedIn links
+Bios, the "Jak Weeks vzniklo" story (SSPŠ → VŠE, lecturing) and LinkedIn links
 were supplied by Lukáš on 2026-09-28. Photos come later — add `foto` in
 `tym.ts`, nothing else changes.
 

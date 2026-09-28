@@ -153,7 +153,7 @@ export default function AboutPage() {
             </div>
 
             <div>
-              <p className="mono-label-dark mb-4 text-cta-300">Jak Weeks vznikl</p>
+              <p className="mono-label-dark mb-4 text-cta-300">Jak Weeks vzniklo</p>
               <h2 className="heading-2 text-paper">
                 Ze spolužáků <span className="text-cta-400">vlastní tábor</span>
               </h2>
@@ -164,7 +164,7 @@ export default function AboutPage() {
                 a aplikace.
               </p>
               <p className="mt-4 text-lg text-paper/80">
-                O IT toho víme dost a umíme to předat dál — tak vznikl Weeks.
+                O IT toho víme dost a umíme to předat dál — tak vzniklo Weeks.
                 Program si vymýšlíme sami, od tématu po poslední den, a na co
                 se zeptáte, řešíte přímo s námi.
               </p>
