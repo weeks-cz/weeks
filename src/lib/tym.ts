@@ -55,7 +55,7 @@ export const TYM: ClenTymu[] = [
     email: 'krystof.jezdik@weeks.cz',
     linkedin: 'https://www.linkedin.com/in/kry%C5%A1tof-je%C5%BEd%C3%ADk-5bba57238/',
     popis:
-      'Jako lektor a vedoucí workshopů v HWLabu učí děti techniku dlouho před Weeks. Za sebou má i organizaci herních akcí a práci v pražském herním akcelerátoru. Když zrovna neřeší tábor, řeší auta.',
+      'Jako lektor a vedoucí workshopů v HWLabu učí děti techniku dlouho před Weeks. Za sebou má i Indie Expo na herní konferenci GDS, které měl na starosti, a práci v pražském herním akcelerátoru. Když zrovna neřeší tábor, řeší auta.',
   },
   {
     id: 'lukas-kubik',
