@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Target, Heart, Lightbulb, Users, MapPin, Gamepad2, Code, Box, Cpu, Mail, Phone, type LucideIcon } from 'lucide-react'
+import { Target, Heart, Lightbulb, Users, MapPin, Tent, Code, Box, Mail, Phone, Linkedin, type LucideIcon } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Header } from '@/components/layout/Header'
@@ -37,10 +37,9 @@ const values = [
 
 // Tým bydlí v `src/lib/tym.ts` — tam se přidávají další lektoři.
 const IKONY_OBORU: Record<IkonaOboru, LucideIcon> = {
-  gamepad: Gamepad2,
+  stan: Tent,
   code: Code,
   box: Box,
-  cpu: Cpu,
 }
 
 export default function AboutPage() {
@@ -131,7 +130,11 @@ export default function AboutPage() {
 
                 „Jsme jednatelé a zároveň lektoři, celý týden jsme s dětmi“
                 odešlo 2026-09-28: s víc turnusy a lektory to platit nebude.
-                Zůstává, co platí vždy — program připravují zakladatelé. */}
+                Zůstává, co platí vždy — program připravují zakladatelé.
+
+                Tentýž den sem místo jedné obecné věty přišel skutečný příběh
+                vzniku. Bez „chtěli jsme dělat něco na sebe“ — to je důvod pro
+                nás, ne pro rodiče. */}
             <div className="mx-auto grid max-w-5xl items-center gap-10 lg:grid-cols-[1.2fr_1fr]">
             <div className="relative">
               <div
@@ -150,14 +153,20 @@ export default function AboutPage() {
             </div>
 
             <div>
-              <p className="mono-label-dark mb-4 text-cta-300">Kdo za tím stojí</p>
+              <p className="mono-label-dark mb-4 text-cta-300">Jak Weeks vznikl</p>
               <h2 className="heading-2 text-paper">
-                Program si <span className="text-cta-400">vymýšlíme sami</span>
+                Ze spolužáků <span className="text-cta-400">vlastní tábor</span>
               </h2>
               <p className="mt-4 text-lg text-paper/80">
-                Weeks jsme založili tři — Kryštof, Lukáš a Štěpán. Tábory
-                připravujeme od tématu po poslední den a na co se zeptáte,
-                řešíte přímo s námi.
+                Kryštof, Lukáš a Štěpán se znají ze Smíchovské průmyslovky
+                a dnes spolu studují aplikovanou informatiku na VŠE. Kryštof se
+                Štěpánem léta učí děti techniku jako lektoři, Lukáš staví weby
+                a aplikace.
+              </p>
+              <p className="mt-4 text-lg text-paper/80">
+                O IT toho víme dost a umíme to předat dál — tak vznikl Weeks.
+                Program si vymýšlíme sami, od tématu po poslední den, a na co
+                se zeptáte, řešíte přímo s námi.
               </p>
             </div>
             </div>
@@ -348,7 +357,8 @@ export default function AboutPage() {
                 Zakládající tým
               </h2>
               <p className="text-xl text-paper/70 max-w-2xl mx-auto">
-                Tři lidé, tři obory. Z nich skládáme program táborů.
+                Na všem děláme společně, ale každý za něco odpovídá. Napište
+                rovnou tomu, kdo to má na starosti.
               </p>
             </motion.div>
 
@@ -375,16 +385,24 @@ export default function AboutPage() {
                   <h3 className="font-display font-semibold text-paper mb-1">
                     {clen.jmeno}
                   </h3>
-                  <p className="mono-label-dark mb-1 text-cta-300">
+                  <p className="mono-label-dark mb-3 text-cta-300">
                     {roleClena(clen)}
                   </p>
+                  {/* Komu co napsat — kvůli tomu hlavně rodič nebo firma
+                      na tuhle kartu přijde, proto stojí nad oborem. */}
+                  {clen.naStarosti && (
+                    <p className="mx-auto mb-3 rounded-sm border border-accent-400/40 bg-accent-400/10 px-3 py-1.5 text-sm text-paper">
+                      Má na starosti:{' '}
+                      <strong className="font-semibold">{clen.naStarosti}</strong>
+                    </p>
+                  )}
                   <p className="mono-label-dark mb-3">
                     {clen.obor}
                   </p>
                   <p className="text-sm text-paper/70">
                     {clen.popis}
                   </p>
-                  {(clen.email || clen.telefon) && (
+                  {(clen.email || clen.telefon || clen.linkedin) && (
                     <ul className="mt-auto pt-5 space-y-1.5 font-mono text-sm">
                       {clen.email && (
                         <li>
@@ -399,6 +417,20 @@ export default function AboutPage() {
                           <a href={`tel:${clen.telefon.replace(/\s/g, '')}`} className="inline-flex items-center gap-2 text-paper/70 hover:text-paper">
                             <Phone className="h-4 w-4 text-accent-400" aria-hidden="true" />
                             {clen.telefon}
+                          </a>
+                        </li>
+                      )}
+                      {clen.linkedin && (
+                        <li>
+                          <a
+                            href={clen.linkedin}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label={`${clen.jmeno} na LinkedInu (otevře se v novém okně)`}
+                            className="inline-flex items-center gap-2 text-paper/70 hover:text-paper"
+                          >
+                            <Linkedin className="h-4 w-4 text-accent-400" aria-hidden="true" />
+                            LinkedIn
                           </a>
                         </li>
                       )}

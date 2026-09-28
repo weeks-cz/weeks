@@ -453,9 +453,16 @@ more turnusy and hired lecturers it won't hold. A fuller "core tým" section
 `foto`, `email` and `telefon` are optional — without a photo the card shows the
 field icon, without a contact it shows none. This repo is public: only put in
 a contact the person wants public.
-1. **Kryštof Ježdík** - Herní vývoj & VR (gamepad icon)
-2. **Lukáš Kubík** - Programování & web (code icon)
-3. **Štěpán Jurenka** - 3D modelování & tisk (box icon)
+Each founder has `naStarosti` (what they answer for, shown on the card so a
+parent or company knows whom to write) — all three work on everything,
+summer camps above all, but:
+1. **Kryštof Ježdík** - letní tábory; organizace táborů (tent icon)
+2. **Lukáš Kubík** - učebna a web; vývoj · UX · design (code icon)
+3. **Štěpán Jurenka** - spolupráce s firmami (B2B); 3D modelování, tisk, IoT (box icon)
+
+Bios, the "Jak Weeks vznikl" story (SSPŠ → VŠE, lecturing) and LinkedIn links
+were supplied by Lukáš on 2026-09-28. Photos come later — add `foto` in
+`tym.ts`, nothing else changes.
 
 **Instructor ratio is no longer promised** (2026-09-24): "1:5" depended on how
 many children sign up and how many lecturers a term gets, so the site says
