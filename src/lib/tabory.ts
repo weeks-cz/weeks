@@ -174,15 +174,22 @@ export const TABORY: Tabor[] = [
     name: 'Tábor umělé inteligence',
     shortName: 'Umělá inteligence',
     status: 'chystame',
-    perex: 'Jak modely uvnitř fungují a jak se s nimi dá postavit něco vlastního.',
+    // Směr podle pohovoru s lektorem (2026-09-29): AI na malé desce se
+    // senzory, ne chatbot. Věk 12–16 je dohodnutý jen pro tenhle tábor, proto
+    // stojí v textu — chystaný tábor nemá turnus, odkud by se vzal
+    // `ageRange`. Až tábor dostane turnus, patří věk tam (a `registration.ts`
+    // dnes pouští jen 9–15). Deska, cena ani to, že si ji dítě odnese, nejsou
+    // potvrzené — proto „chceme", ne „dostane".
+    perex:
+      'Pro děti 12–16 let. Postaví si malé zařízení se senzory a naučí ho samo poznávat, co se kolem něj děje.',
     popis:
-      'Tábor teprve chystáme. Chceme na něm ukázat, co model doopravdy dělá, když odpovídá — a nechat děti postavit si vlastního pomocníka.',
+      'Tábor teprve chystáme. Umělou inteligenci na něm děti nepotkají v chatu, ale v malé desce se senzory, kterou během týdne naučí rozpoznat třeba gesto, zvuk nebo pohyb. Učí se přitom stejně jako velké modely: z příkladů. Programovat umět nemusí, většina práce se odklikne v jednoduchém prostředí a kdo chce víc, přepne se do kódu. Chceme, aby si hotové zařízení na konci týdne odnesly domů.',
     focus: [],
     zkusiSi: [
-      'Zkusí si, co se v modelu děje, než odpoví',
-      'Postaví si vlastního pomocníka na konkrétní úlohu',
-      'Uvidí, kde se model splete a proč se mu nedá věřit slepě',
-      'Vyzkouší generování obrázků a jeho hranice',
+      'Nasbírá data ze senzorů a podívá se, jak svět „vidí“ stroj',
+      'Natrénuje vlastní model, který se z příkladů naučí poznat, co se děje',
+      'Nahraje ho do desky a zjistí, kde se trefí, kde se splete a proč',
+      'Vymyslí, k čemu jeho zařízení poslouží, a předvede ho ostatním',
     ],
   },
   {
