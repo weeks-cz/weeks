@@ -171,8 +171,8 @@ export const TABORY: Tabor[] = [
   },
   {
     id: 'ai',
-    name: 'Tábor umělé inteligence',
-    shortName: 'Umělá inteligence',
+    name: 'Tábor umělé inteligence a elektroniky',
+    shortName: 'AI a elektronika',
     status: 'chystame',
     // Směr podle pohovoru s lektorem (2026-09-29): AI na malé desce se
     // senzory, ne chatbot. Věk 12–16 je dohodnutý jen pro tenhle tábor, proto
