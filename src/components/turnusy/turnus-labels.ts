@@ -21,6 +21,12 @@ function denMesic(iso: string): { den: number; mesic: number; rok: number } {
   return { den: d.getDate(), mesic: d.getMonth(), rok: d.getFullYear() }
 }
 
+/** Jedno datum česky: „30. června 2027". */
+export function datumCesky(iso: string): string {
+  const d = denMesic(iso)
+  return `${d.den}. ${MESICE_2P[d.mesic]} ${d.rok}`
+}
+
 /** Rozsah termínu česky: „12. – 16. července 2027", přes měsíce „29. července – 2. srpna 2027". */
 function rozsahData(startIso: string, endIso: string): string {
   const a = denMesic(startIso)

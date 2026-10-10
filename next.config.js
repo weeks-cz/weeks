@@ -37,6 +37,12 @@ const nextConfig = {
       // Adresa nikdy nebyla v indexu (žila jen na větvi feat/web-2027), takže
       // se tu nic nerozbíjí — pravidlo je tu pro odkazy z náhledů a záložek.
       { source: '/tabor', destination: '/tabory', permanent: true },
+      // Placeholder karlovarského léta 2027 se 10. 10. 2026 rozdělil na dva
+      // skutečné turnusy (červenec, srpen) — jeho adresa vede na výpis města,
+      // kde jsou oba. Stará `/tabor/…` varianta míří rovnou tam, ne přes
+      // obecné pravidlo pod ní, aby nevznikl řetěz dvou přesměrování.
+      { source: '/tabor/karlovy-vary-leto-2027', destination: '/tabory?mesto=karlovy-vary', permanent: true },
+      { source: '/tabory/termin/karlovy-vary-leto-2027', destination: '/tabory?mesto=karlovy-vary', permanent: true },
       { source: '/tabor/:slug', destination: '/tabory/termin/:slug', permanent: true },
       // Město přestává být větví webu — karlovarské adresy míří na svůj protějšek,
       // ne plošně na úvodku, ať se neztratí zpětné odkazy ani cíle reklam.

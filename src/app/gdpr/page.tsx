@@ -148,7 +148,7 @@ export default function GDPRPage() {
                     <li><strong>Jméno a příjmení</strong> – pro identifikaci smluvní strany</li>
                     <li><strong>E-mailová adresa</strong> – pro komunikaci a potvrzení registrace</li>
                     <li><strong>Telefonní číslo</strong> – pro urgentní kontakt v průběhu tábora</li>
-                    <li><strong>Fakturační adresa</strong> – pro vystavení daňového dokladu</li>
+                    <li><strong>Fakturační adresa</strong> – pro vystavení faktury</li>
                   </ul>
                   <p className="text-ink-500 text-base mb-3">Údaje o dítěti:</p>
                   <ul className="list-disc pl-6 space-y-2 text-ink-500 mb-4">

@@ -54,22 +54,30 @@ export interface Turnus {
   ageRange: string
   /** Čím je tenhle turnus jiný — jedna až dvě věty na kartu. */
   perex: string
+  /**
+   * Minimální počet dětí, při kterém se turnus koná, a den, do kterého o tom
+   * pořadatel rozhodne. Pravidlo pro případ, že se minimum nenaplní, stojí ve
+   * VOP (čl. 22); tady jsou jen čísla konkrétního turnusu. Bez pole web žádné
+   * minimum neslibuje.
+   */
+  minimum?: { deti: number; rozhodnemeDo: string }
 }
 
 /**
  * Ostrá data.
  *
- * Léto 2027 zatím nemá potvrzené termíny ani místo v Praze, proto oba turnusy
- * stojí ve stavu `chystame` — web o nich mluví v budoucím čase a sbírá kontakty.
- * Až termíny přijdou, doplní se `start`, `end`, `priceKc`, `venueId` a stav se
- * překlopí na `otevreno`.
+ * Léto 2027 v Karlových Varech je v prodeji od 10. 10. 2026: dva týdenní
+ * turnusy ve FabLabu VARY&TE (prostor potvrzený pro léto 2027), 5 990 Kč —
+ * o tisíc víc než léto 2026 (4 990 Kč). Praha zůstává `chystame` — nemá
+ * potvrzené místo ani termín, web o ní mluví v budoucím čase a sbírá kontakty.
  *
- * Dvojí zdroj ceny, kterým tenhle odstavec dřív varoval, je vyřešený:
- * `/tabory`, stránky tématu i termínu a `EventSchema`
- * (`src/components/seo/StructuredData.tsx`) čtou cenu výhradně odtud —
- * `locations.ts` do strukturovaných dat ani do žádné stránky už nezasahuje.
- * `EventSchema` navíc turnus ve stavu `chystame` do JSON-LD vůbec nepustí,
- * takže sama o sobě žádnou cenu nedopočítá ani nedomyslí.
+ * Placeholder `kv-leto-2027` (slug `karlovy-vary-leto-2027`) se 10. 10. 2026
+ * rozdělil na dva skutečné termíny. Registraci na něj nikdo udělat nemohl
+ * (byl `chystame`), takže jeho id na žádné faktuře není; adresa přesměrovává
+ * na `/tabory?mesto=karlovy-vary` (`next.config.js`).
+ *
+ * Cena má jediný zdroj: `/tabory`, stránky tématu i termínu, `EventSchema`
+ * i server při registraci (`payment-pricing.ts`) ji čtou výhradně odtud.
  *
  * POZOR — název programu na faktuře: `RegistrationForm` dál ukládá do pole
  * `program` id tábora (`turnus.taborIds[0]`, např. `'chytre-technologie'`),
@@ -82,23 +90,36 @@ export interface Turnus {
  */
 export const TURNUSY: Turnus[] = [
   {
-    id: 'kv-leto-2027',
-    slug: 'karlovy-vary-leto-2027',
+    id: 'kv-2027-cervenec',
+    slug: 'karlovy-vary-2027-cervenec',
     city: 'karlovy-vary',
-    // FabLab VARY&TE tu stával jako místo konání. Spolupráci na léto 2027
-    // ale nepotvrdil — vyjádřil jen zájem — takže by web sliboval prostor,
-    // který domluvený není. Na `/o-nas` zůstává jako reference z roku 2026,
-    // kde je to doložitelné. Až bude místo jisté, doplní se sem zpátky.
-    venueId: null,
-    start: null,
-    end: null,
-    priceKc: null,
+    venueId: 'fablab-varyte',
+    start: '2027-07-26',
+    end: '2027-07-30',
+    priceKc: 5990,
     capacity: 15,
-    status: 'chystame',
+    minimum: { deti: 10, rozhodnemeDo: '2027-06-30' },
+    status: 'otevreno',
     taborIds: ['chytre-technologie'],
     ageRange: '9-15',
     perex:
-      'Týdenní příměstský tábor v Karlových Varech.',
+      'Týden 3D tisku a elektroniky ve FabLabu VARY&TE v Karlových Varech. Oběd, pitný režim i materiál jsou v ceně.',
+  },
+  {
+    id: 'kv-2027-srpen',
+    slug: 'karlovy-vary-2027-srpen',
+    city: 'karlovy-vary',
+    venueId: 'fablab-varyte',
+    start: '2027-08-02',
+    end: '2027-08-06',
+    priceKc: 5990,
+    capacity: 15,
+    minimum: { deti: 10, rozhodnemeDo: '2027-06-30' },
+    status: 'otevreno',
+    taborIds: ['chytre-technologie'],
+    ageRange: '9-15',
+    perex:
+      'Týden 3D tisku a elektroniky ve FabLabu VARY&TE v Karlových Varech. Oběd, pitný režim i materiál jsou v ceně.',
   },
   {
     id: 'praha-leto-2027',
@@ -163,6 +184,24 @@ export function getTurnusy(list: Turnus[] = TURNUSY): Turnus[] {
  */
 export function nejblizsiTurnusy(pocet = 3, list: Turnus[] = TURNUSY): Turnus[] {
   return getTurnusy(list).slice(0, pocet)
+}
+
+/**
+ * Ohlášení otevřeného přihlašování pro úvodku — z dat, ne natvrdo.
+ *
+ * Bere jen prodejné turnusy: rok z nejbližšího z nich, města ze všech. Při
+ * jednom městě vede rovnou na jeho výpis, při víc městech na celý `/tabory`.
+ * Když nic prodat nejde, vrací `null` a úvodka nic neohlašuje.
+ */
+export function oznameniPrihlasovani(
+  list: Turnus[] = TURNUSY
+): { rok: number; mesta: CityId[]; href: string } | null {
+  const prodejne = getTurnusy(list).filter(isBookable)
+  if (prodejne.length === 0) return null
+  const rok = new Date(`${prodejne[0].start}T12:00:00`).getFullYear()
+  const mesta = Array.from(new Set(prodejne.map((t) => t.city)))
+  const href = mesta.length === 1 ? `/tabory?mesto=${mesta[0]}` : '/tabory'
+  return { rok, mesta, href }
 }
 
 /**
@@ -271,6 +310,17 @@ export function validateTurnusy(list: Turnus[] = TURNUSY): string[] {
       if (getTabor(taborId) === undefined) {
         problems.push(
           `Turnus "${turnus.id}": odkazuje na neexistující tábor "${taborId}".`
+        )
+      }
+    }
+
+    if (turnus.minimum) {
+      if (turnus.minimum.deti <= 0 || turnus.minimum.deti > turnus.capacity) {
+        problems.push(`Turnus "${turnus.id}": minimum dětí musí být mezi 1 a kapacitou.`)
+      }
+      if (turnus.start !== null && turnus.minimum.rozhodnemeDo >= turnus.start) {
+        problems.push(
+          `Turnus "${turnus.id}": o konání se musí rozhodnout před začátkem turnusu.`
         )
       }
     }

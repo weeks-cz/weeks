@@ -76,7 +76,10 @@ export function TaborCard({
                     href={`/tabory/termin/${turnus.slug}`}
                     className="group flex flex-wrap items-baseline gap-x-3 gap-y-1 rounded-sm px-1 py-1 transition-colors hover:bg-paper-soft focus:outline-none focus:ring-2 focus:ring-primary-500"
                   >
-                    <span className="font-display font-semibold text-ink">{l.datum}</span>
+                    {/* Datum na vlastním řádku: jinak se podle délky měsíce
+                        („července“ vs. „srpna“) jednou místo vešlo vedle a jednou
+                        spadlo pod něj a řádky pod sebou nelícovaly. */}
+                    <span className="basis-full font-display font-semibold text-ink">{l.datum}</span>
                     <span className="flex items-center gap-1 text-sm text-ink-500">
                       <MapPin className="h-3.5 w-3.5 text-accent-600" aria-hidden="true" />
                       {l.misto}

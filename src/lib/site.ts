@@ -59,11 +59,29 @@ export const PROVOZNI_DOBA = {
 } as const
 
 /**
+ * Co cena tábora zahrnuje a co ne — jediné místo, kde je to napsané. Čte to
+ * stránka termínu i VOP čl. 20, aby se slib na webu a ve smlouvě nerozešel.
+ * Svačiny v ceně nejsou: dopolední i odpolední si dítě nosí vlastní (oběd
+ * zajišťujeme my).
+ */
+export const V_CENE = [
+  'Program a vedení lektorů',
+  'Oběd každý den',
+  'Pitný režim',
+  'Materiál a pomůcky',
+  'Vlastní výtisk z 3D tiskárny domů',
+] as const
+
+export const MIMO_CENU = [
+  'Svačiny — dopolední a odpolední si dítě nosí vlastní',
+  'Doprava na místo konání a zpět',
+] as const
+
+/**
  * Věta o místech konání — složená z turnusů, ne natvrdo.
  *
  * `list` je kvůli testům: chování „turnus bez místa" i „turnus s místem" se
- * musí dát ověřit bez ohledu na to, co je zrovna v ostrých datech. Dnes tam
- * není ani jedno potvrzené místo, takže věta vrací variantu s upřesněním.
+ * musí dát ověřit bez ohledu na to, co je zrovna v ostrých datech.
  */
 export function getVenuesSentence(list: Turnus[] = TURNUSY): string {
   const nazvy = Array.from(
@@ -139,7 +157,7 @@ export function getSiteFaq(): Array<{ question: string; answer: string }> {
     {
       question: 'Jak probíhá platba?',
       answer:
-        'Platba probíhá bezpečně zrychleným bankovním převodem přes platební bránu Comgate přímo při registraci. Daňový doklad obdržíte po zaplacení.',
+        'Platba probíhá bezpečně zrychleným bankovním převodem přes platební bránu Comgate přímo při registraci. Fakturu vám zašleme e-mailem do 14 dnů od platby.',
     },
     {
       question: 'Kdo tábory pořádá?',

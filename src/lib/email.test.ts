@@ -19,8 +19,8 @@ describe('buildConfirmationEmail', () => {
     // cs-CZ groups with a non-breaking space — compare via the same formatter.
     expect(r.html).toContain(`${(2990).toLocaleString('cs-CZ')} Kč`)
   })
-  it('mentions the daňový doklad and the upcoming nástupní list', () => {
-    expect(r.html).toContain('Daňový doklad')
+  it('mentions the invoice and the upcoming nástupní list', () => {
+    expect(r.html).toContain('Fakturu')
     expect(r.html).toContain('nástupní list')
   })
 })

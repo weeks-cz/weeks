@@ -10,6 +10,7 @@ import {
   getTaboryTurnusu,
   getFocusTurnusu,
   getTurnusyByTabor,
+  oznameniPrihlasovani,
   TURNUSY,
   type Turnus,
 } from './turnusy'
@@ -196,41 +197,48 @@ describe('validateTurnusy', () => {
   })
 })
 
-describe('TURNUSY — brzda před otevřením prodeje', () => {
-  it('žádný ostrý turnus není ve stavu "otevreno"', () => {
-    // POZOR — tenhle test už NEHLÍDÁ žádnou znalou vadu v kódu. Obě původní
-    // odůvodnění, kvůli kterým vznikl, jsou vyřešená (viz komentář nad
-    // `TURNUSY` v src/lib/turnusy.ts):
-    //
-    //  1. Dvojí zdroj ceny. /tabory, stránka termínu i `EventSchema` čtou cenu
-    //     výhradně z turnusů; `locations.ts` už do stránek ani do
-    //     strukturovaných dat nezasahuje.
-    //  2. Pole `program` v registraci. Název tábora na faktuře, v potvrzení,
-    //     v upomínce i v nástupním listu odvozuje server ze `term_id` přes
-    //     `getTrustedProgramName` (payment-pricing.ts). Uložená hodnota
-    //     `program` je už jen záloha pro staré registrace.
-    //
-    // Co tedy tenhle test je: záměrná brzda. Oba turnusy jsou `chystame`, bez
-    // termínu, ceny a (v Praze) i bez místa — přepnutí na `otevreno` je
-    // obchodní rozhodnutí, ne technický krok, a nemá se stát omylem.
-    //
-    // Skutečný další krok, až budou termíny jisté: doplň `start`, `end`,
-    // `priceKc` a `venueId` a projdi, co ještě otevření prodeje blokuje. Jeden
-    // takový blokátor je vidět přímo v repozitáři: /gdpr slibuje výslovný
-    // souhlas se zvláštní kategorií údajů (čl. 9 odst. 2 písm. a) GDPR) pro
-    // zdravotní omezení dítěte, ale `consentsSchema` v src/lib/registration.ts
-    // sbírá jen čtyři obecné souhlasy a `child_health_notes` žádný vlastní
-    // nemá. Teprve až bude jasno, smaž tenhle test vědomě. Údaje, které musí mít otevřený
-    // turnus úplné, hlídá `validateTurnusy` výš a `isBookable` — ty zůstávají.
-    const otevrene = TURNUSY.filter((t) => t.status === 'otevreno')
-    expect(
-      otevrene.map((t) => t.id),
-      'Turnus je ve stavu "otevreno". Tenhle test nehlásí vadu v kódu — je to ' +
-        'záměrná brzda před otevřením prodeje. Pokud turnus opravdu má jít koupit, ' +
-        'zkontroluj otevřené otázky pro majitele (cena, výslovný souhlas se ' +
-        'zdravotními údaji podle čl. 9 GDPR, adresa místa konání) a pak tenhle ' +
-        'test vědomě smaž. Neopravuj pole `program` — to je už vyřešené.'
-    ).toEqual([])
+// Záměrná brzda „žádný ostrý turnus není ve stavu otevreno“ byla 10. 10. 2026
+// vědomě smazaná: Karlovy Vary 2027 šly do prodeje. Otevřené otázky, které
+// hlídala, jsou vyřešené — cena (5 990 Kč), adresa místa (FabLab VARY&TE
+// potvrdil léto 2027) a výslovný souhlas se zdravotními údaji podle čl. 9 GDPR
+// (`health_consent`, viz `healthConsentChybi` v src/lib/registration.ts).
+
+describe('TURNUSY — ostrá data v prodeji', () => {
+  it('každý otevřený turnus jde opravdu koupit', () => {
+    for (const t of TURNUSY.filter((t) => t.status === 'otevreno')) {
+      expect(isBookable(t), t.id).toBe(true)
+    }
+  })
+
+  it('každý otevřený turnus říká, při kolika dětech se koná', () => {
+    // Minimum a den rozhodnutí slibuje VOP čl. 22 „u turnusu“ — otevřený
+    // turnus bez nich by odkazoval do prázdna.
+    for (const t of TURNUSY.filter((t) => t.status === 'otevreno')) {
+      expect(t.minimum, t.id).toBeDefined()
+    }
+  })
+})
+
+describe('validateTurnusy — minimum dětí', () => {
+  it('odhalí minimum vyšší než kapacita', () => {
+    const problems = validateTurnusy([
+      { ...otevreny, minimum: { deti: 16, rozhodnemeDo: '2027-06-30' } },
+    ])
+    expect(problems.join(' ')).toContain('minimum dětí')
+  })
+
+  it('odhalí rozhodnutí o konání až po začátku turnusu', () => {
+    const problems = validateTurnusy([
+      { ...otevreny, minimum: { deti: 10, rozhodnemeDo: otevreny.start! } },
+    ])
+    expect(problems.join(' ')).toContain('rozhodnout před začátkem')
+  })
+
+  it('platné minimum projde', () => {
+    const problems = validateTurnusy([
+      { ...otevreny, minimum: { deti: 10, rozhodnemeDo: '2027-06-30' } },
+    ])
+    expect(problems).toEqual([])
   })
 })
 
@@ -260,5 +268,28 @@ describe('vazba turnusu na tábor', () => {
   it('validateTurnusy odhalí odkaz na neexistující tábor', () => {
     const problems = validateTurnusy([{ ...otevreny, taborIds: ['neexistuje' as TaborId] }])
     expect(problems.join(' ')).toContain('neexistuje')
+  })
+})
+
+describe('oznameniPrihlasovani', () => {
+  it('bez prodejného turnusu nic neohlašuje', () => {
+    expect(oznameniPrihlasovani([chystany])).toBeNull()
+  })
+
+  it('jedno město vede rovnou na jeho výpis', () => {
+    expect(oznameniPrihlasovani([otevreny, pozdejsi, chystany])).toEqual({
+      rok: 2027,
+      mesta: ['karlovy-vary'],
+      href: '/tabory?mesto=karlovy-vary',
+    })
+  })
+
+  it('víc měst vede na celý výpis', () => {
+    // Místo tu jen splní `isBookable` — soulad místa s městem hlídá
+    // `validateTurnusy`, ne tahle funkce.
+    const praha: Turnus = { ...otevreny, id: 'test-praha', slug: 'praha-x', city: 'praha' }
+    const o = oznameniPrihlasovani([otevreny, praha])
+    expect(o?.href).toBe('/tabory')
+    expect(o?.mesta).toHaveLength(2)
   })
 })

@@ -4,7 +4,7 @@ import { ArrowLeft } from 'lucide-react'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { BreadcrumbSchema } from '@/components/seo/StructuredData'
-import { PROVOZNI_DOBA, SITE } from '@/lib/site'
+import { MIMO_CENU, PROVOZNI_DOBA, SITE, V_CENE } from '@/lib/site'
 
 const pageTitle = 'Podmínky užití'
 const pageDescription = 'Podmínky užití webu a všeobecné obchodní podmínky IT táborů Weeks.'
@@ -100,7 +100,7 @@ export default function PodminkyPage() {
               Podmínky užití webu a všeobecné obchodní podmínky táborů Weeks
             </p>
             <p className="text-ink/50 text-sm mt-4">
-              Účinnost od: 16. září 2026
+              Účinnost od: 10. října 2026
             </p>
           </header>
 
@@ -487,9 +487,11 @@ export default function PodminkyPage() {
                   <Link href="/tabory" className="text-primary-600 underline hover:text-primary-700">nabídce turnusů</Link>{' '}
                   a platí ve výši, kterou zobrazuje přihláška v okamžiku jejího odeslání.
                 </p>
+                {/* Výčet čte `V_CENE` / `MIMO_CENU` ze site.ts — stejný seznam
+                    ukazuje stránka termínu, slib na webu a ve smlouvě se nerozejde. */}
                 <p className="text-ink-500 text-sm">
-                  V ceně tábora jsou zahrnuty: odborné vedení, materiál a pomůcky, oběd.
-                  Doprava na místo konání a zpět není součástí ceny.
+                  V ceně tábora je zahrnuto: {V_CENE.join(', ').toLowerCase()}.
+                  Součástí ceny není: {MIMO_CENU.join('; ').toLowerCase()}.
                 </p>
               </section>
 
@@ -518,8 +520,8 @@ export default function PodminkyPage() {
                   <div className="bg-white p-5 rounded-md border border-ink/15">
                     <h3 className="text-base font-semibold text-ink mb-2">21.2 Faktura</h3>
                     <p className="text-ink-500 text-base">
-                      Daňový doklad bude zákonném zástupci zaslán e-mailem po přijetí platby.
-                      Pořadatel není plátcem DPH.
+                      Fakturu zašle pořadatel zákonnému zástupci e-mailem nejpozději do 14 dnů
+                      od přijetí platby. Pořadatel není plátcem DPH.
                     </p>
                   </div>
                   <div className="bg-white p-5 rounded-md border border-ink/15">
@@ -588,9 +590,21 @@ export default function PodminkyPage() {
                   <div className="bg-white p-4 rounded-lg border border-ink/15">
                     <p className="text-ink font-medium mb-1 text-sm">Zrušení ze strany pořadatele</p>
                     <p className="text-ink-500 text-sm">
-                      Pořadatel je oprávněn tábor zrušit z důvodu nedostatečného počtu přihlášených
-                      nebo z jiných závažných důvodů. V takovém případě vrátí zákonným zástupcům
-                      plnou uhrazenou cenu do 10 pracovních dní.
+                      Turnus se koná při minimálním počtu přihlášených dětí uvedeném u turnusu na
+                      weeks.cz. Pokud se minimum nenaplní, oznámí pořadatel zrušení turnusu
+                      zákonným zástupcům e-mailem nejpozději ke dni uvedenému u turnusu. Pokud se
+                      v téže sezóně a městě koná jiný turnus, může pořadatel turnusy sloučit do
+                      toho s vyšším počtem přihlášených; zrušení se pak týká jen turnusu, který se
+                      nekoná.
+                    </p>
+                    <p className="text-ink-500 text-sm mt-2">
+                      Pořadatel je dále oprávněn tábor zrušit z jiných závažných důvodů.
+                    </p>
+                    <p className="text-ink-500 text-sm mt-2">
+                      Při zrušení turnusu ze strany pořadatele si zákonný zástupce zvolí přesun
+                      na jiný turnus téže sezóny, pokud je v něm volné místo, nebo vrácení plné
+                      uhrazené ceny do 10 pracovních dní. Storno poplatek se v takovém případě
+                      neúčtuje.
                     </p>
                   </div>
                 </div>

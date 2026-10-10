@@ -6,7 +6,8 @@ import { ArrowRight, Play } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { trackViewTerms } from '@/lib/analytics'
-import { getTurnusy, isBookable } from '@/lib/turnusy'
+import { getTurnusy, isBookable, oznameniPrihlasovani } from '@/lib/turnusy'
+import { getCity } from '@/lib/cities'
 import { SITE } from '@/lib/site'
 
 const EASE_OUT = [0.16, 1, 0.3, 1] as const
@@ -83,6 +84,10 @@ export function HeroSection() {
       ? 'Chci vědět o volném místě'
       : 'Chci vědět o termínech'
 
+  // Ohlášení otevřeného přihlašování — jantarový štítek nad nadpisem (role
+  // „akce a stav“). Rok i města z prodejných turnusů, ne natvrdo.
+  const oznameni = oznameniPrihlasovani()
+
   const kota = 'Praha · Karlovy Vary'
   const typed = useTypewriter(kota)
 
@@ -112,6 +117,19 @@ export function HeroSection() {
       <div className="section-container relative z-10 grid items-center gap-12 pb-16 pt-32 md:pb-24 md:pt-40 lg:grid-cols-12 lg:gap-10">
         {/* Text */}
         <div className="lg:col-span-7">
+          {oznameni && (
+            <Link
+              href={oznameni.href}
+              onClick={() => trackViewTerms('homepage_hero_oznameni')}
+              className="group mb-6 inline-flex flex-wrap items-center gap-x-2 gap-y-1 rounded-md border border-cta-400 bg-cta-400/10 px-4 py-2 text-sm font-semibold text-cta-300 transition-colors hover:bg-cta-400 hover:text-ink"
+            >
+              Přihlašování na léto {oznameni.rok} je otevřené
+              <span className="hidden font-normal text-paper/60 group-hover:text-ink/70 sm:inline">
+                · {oznameni.mesta.map((m) => getCity(m).name).join(', ')}
+              </span>
+              <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+            </Link>
+          )}
           <p className="mono-label-dark mb-6 min-h-[1.25em] text-accent-300">
             {typed.shown}
             <span

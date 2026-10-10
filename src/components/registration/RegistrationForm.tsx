@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { User, Baby, MapPin, FileCheck, ClipboardList, ArrowRight, ArrowLeft, Loader2 } from 'lucide-react'
-import { parentSchema, childSchema, consentsSchema, INSURANCE_OPTIONS, type ParentData, type ChildData, type ConsentsData } from '@/lib/registration'
+import { parentSchema, childSchema, consentsSchema, healthConsentChybi, HEALTH_CONSENT_CHYBI, INSURANCE_OPTIONS, type ParentData, type ChildData, type ConsentsData } from '@/lib/registration'
 import { getTurnusById, getFocusTurnusu, isBookable } from '@/lib/turnusy'
 import { getCity } from '@/lib/cities'
 import { getFocusModules } from '@/lib/focus'
@@ -64,6 +64,7 @@ export function RegistrationForm() {
     gdpr_consent: false as unknown as true,
     photo_consent: false,
     marketing_consent: false,
+    health_consent: false,
   })
 
   const [customerNote, setCustomerNote] = useState('')
@@ -121,6 +122,10 @@ export function RegistrationForm() {
       const result = consentsSchema.safeParse(consents)
       if (!result.success) {
         setFieldErrors(result.error.flatten().fieldErrors as Record<string, string[]>)
+        return false
+      }
+      if (healthConsentChybi(child.child_health_notes, consents.health_consent)) {
+        setFieldErrors({ health_consent: [HEALTH_CONSENT_CHYBI] })
         return false
       }
     }
@@ -212,6 +217,7 @@ export function RegistrationForm() {
       gdpr_consent: true as unknown as true,
       photo_consent: true,
       marketing_consent: false,
+      health_consent: false,
     })
     setStep(5)
   }
@@ -463,10 +469,25 @@ export function RegistrationForm() {
                   <label htmlFor="gdpr" className="text-sm text-ink">
                     Souhlasím se{' '}
                     <Link href={gdprUrl} target="_blank" className="text-primary-600 underline hover:text-primary-700">zpracováním osobních údajů</Link>
-                    , včetně případných zdravotních údajů dítěte, výhradně pro zajištění bezpečné účasti na táboře{' '}*
+                    {' '}pro účely registrace a zajištění tábora{' '}*
                   </label>
                 </div>
                 <FieldError name="gdpr_consent" />
+
+                {/* Výslovný souhlas podle čl. 9 GDPR — jen když rodič zdravotní
+                    údaje vyplnil. Bez nich není co odsouhlasit. */}
+                {child.child_health_notes.trim() !== '' && (
+                  <>
+                    <div className="flex items-start gap-3">
+                      <input type="checkbox" id="health" checked={consents.health_consent} onChange={e => setConsents({...consents, health_consent: e.target.checked})} className="mt-1 w-5 h-5 shrink-0 rounded-sm border-ink/30 text-primary-600 focus:ring-primary-500" />
+                      <label htmlFor="health" className="text-sm text-ink">
+                        Výslovně souhlasím se zpracováním zdravotních údajů dítěte uvedených
+                        v přihlášce, výhradně pro zajištění jeho bezpečné účasti na táboře{' '}*
+                      </label>
+                    </div>
+                    <FieldError name="health_consent" />
+                  </>
+                )}
 
                 <div className="flex items-start gap-3">
                   <input type="checkbox" id="photo" checked={consents.photo_consent} onChange={e => setConsents({...consents, photo_consent: e.target.checked})} className="mt-1 w-5 h-5 shrink-0 rounded-sm border-ink/30 text-primary-600 focus:ring-primary-500" />

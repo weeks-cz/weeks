@@ -37,7 +37,22 @@ export const consentsSchema = z.object({
   gdpr_consent: z.literal(true, { error: 'Musíte souhlasit se zpracováním osobních údajů' }),
   photo_consent: z.boolean().default(false),
   marketing_consent: z.boolean().default(false),
+  /**
+   * Výslovný souhlas se zpracováním zdravotních údajů dítěte (čl. 9 odst. 2
+   * písm. a) GDPR) — slibuje ho /gdpr. Samostatný, ne schovaný v obecném
+   * souhlasu: výslovný souhlas nesmí být součástí jiného. Povinný jen tehdy,
+   * když rodič zdravotní údaje opravdu vyplní — viz `healthConsentChybi`.
+   */
+  health_consent: z.boolean().default(false),
 })
+
+export const HEALTH_CONSENT_CHYBI =
+  'Bez souhlasu se zpracováním zdravotních údajů je nemůžeme uložit — souhlas zaškrtněte, nebo pole se zdravotními údaji v kroku Dítě vymažte.'
+
+/** Vyplněné zdravotní údaje bez výslovného souhlasu — registraci nelze přijmout. */
+export function healthConsentChybi(healthNotes: string | undefined, healthConsent: boolean): boolean {
+  return (healthNotes ?? '').trim() !== '' && !healthConsent
+}
 
 export const registrationSchema = parentSchema
   .merge(childSchema)
@@ -54,6 +69,13 @@ export const registrationSchema = parentSchema
     term_start: z.string(),
     term_end: z.string(),
     payment_amount: z.number(),
+  })
+  // Pojistka na serveru: klient souhlas vynucuje v kroku 4, ale API se dá
+  // zavolat i bez formuláře — zdravotní údaje bez souhlasu se neuloží.
+  .superRefine((d, ctx) => {
+    if (healthConsentChybi(d.child_health_notes, d.health_consent)) {
+      ctx.addIssue({ code: 'custom', path: ['health_consent'], message: HEALTH_CONSENT_CHYBI })
+    }
   })
 
 export type RegistrationData = z.infer<typeof registrationSchema>

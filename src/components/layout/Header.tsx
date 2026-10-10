@@ -96,7 +96,7 @@ export function Header() {
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center gap-1">
+        <div className="hidden lg:flex items-center gap-1">
           {navItems.map((item) => (
             <Link
               key={item.name}
@@ -129,7 +129,7 @@ export function Header() {
         </div>
 
         {/* Mobile: menu button */}
-        <div className="flex items-center md:hidden">
+        <div className="flex items-center lg:hidden">
           <motion.button
             type="button"
             whileTap={{ scale: 0.9 }}
@@ -159,7 +159,7 @@ export function Header() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="md:hidden fixed inset-0 bg-ink text-paper blueprint-grid-dark overflow-y-auto"
+            className="lg:hidden fixed inset-0 bg-ink text-paper blueprint-grid-dark overflow-y-auto"
           >
             <div className="section-container flex min-h-full flex-col justify-between pt-28 pb-10">
               <div className="space-y-2">

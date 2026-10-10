@@ -46,8 +46,8 @@ export default function AboutPage() {
   const turnusy = getTurnusy()
 
   // Místa konání — jen ta, která nějaký turnus doopravdy má. Dnes vyjde jedna
-  // karta (FabLab VARY&TE u karlovarského turnusu), pražský turnus místo
-  // ještě nemá. Kód počítá s tím, že se to může časem změnit.
+  // karta (FabLab VARY&TE u karlovarských turnusů léta 2027), pražský turnus
+  // místo ještě nemá. Kód počítá s tím, že se to může časem změnit.
   const venueIds = Array.from(
     new Set(turnusy.map((t) => t.venueId).filter((id): id is VenueId => id !== null))
   )
@@ -322,10 +322,10 @@ export default function AboutPage() {
           </section>
         )}
 
-        {/* Reference, ne slib. FabLab VARY&TE stával v datech jako místo
-            konání karlovarského turnusu na léto 2027, jenže spolupráci na
-            příští ročník nepotvrdil — vyjádřil jen zájem. Rok 2026 je ale
-            doložitelný, takže tady stojí v minulém čase a nikde jinde. */}
+        {/* Reference. FabLab VARY&TE léto 2027 potvrdil (10. 10. 2026) a je
+            místem konání obou karlovarských turnusů, takže tu stojí rok 2026
+            i návrat. Praha prostor ještě nemá — o ní věta mluví v budoucím
+            čase, dokud nějaký turnus nedostane `venueId`. */}
         <section className="section-padding bg-paper-soft border-y border-ink/15">
           <div className="section-container">
             <div className="mx-auto max-w-3xl text-center">
@@ -333,8 +333,8 @@ export default function AboutPage() {
               <h2 className="heading-2 text-ink mb-4">Kde už tábor proběhl</h2>
               <p className="text-lg text-ink-500">
                 V létě 2026 jsme tábor pořádali ve FabLabu VARY&amp;TE v Karlových
-                Varech. Prostory pro léto 2027 v Praze i v Karlových Varech
-                domlouváme — jakmile budou jisté, najdete je u konkrétního
+                Varech a v létě 2027 se tam vracíme. Prostor v Praze
+                domlouváme — jakmile bude jistý, najdete ho u konkrétního
                 termínu.
               </p>
             </div>

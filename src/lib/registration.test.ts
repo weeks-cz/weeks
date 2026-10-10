@@ -44,3 +44,28 @@ describe('registrationSchema customer_note', () => {
     expect(result.success).toBe(false)
   })
 })
+
+describe('registrationSchema — výslovný souhlas se zdravotními údaji (čl. 9 GDPR)', () => {
+  it('bez zdravotních údajů souhlas nevyžaduje', () => {
+    expect(registrationSchema.safeParse(basePayload()).success).toBe(true)
+  })
+
+  it('odmítne vyplněné zdravotní údaje bez souhlasu', () => {
+    const result = registrationSchema.safeParse(basePayload({ child_health_notes: 'Alergie na ořechy' }))
+    expect(result.success).toBe(false)
+    if (!result.success) {
+      expect(result.error.flatten().fieldErrors.health_consent?.[0]).toContain('souhlas')
+    }
+  })
+
+  it('přijme zdravotní údaje se souhlasem', () => {
+    const result = registrationSchema.safeParse(
+      basePayload({ child_health_notes: 'Alergie na ořechy', health_consent: true })
+    )
+    expect(result.success).toBe(true)
+  })
+
+  it('samé mezery za zdravotní údaje nepovažuje', () => {
+    expect(registrationSchema.safeParse(basePayload({ child_health_notes: '   ' })).success).toBe(true)
+  })
+})

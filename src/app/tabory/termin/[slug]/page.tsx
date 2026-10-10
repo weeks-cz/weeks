@@ -1,16 +1,17 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { ArrowRight, Calendar, Check, Clock, Users, Wallet } from 'lucide-react'
+import { ArrowRight, Calendar, Check, Clock, Minus, Users, Wallet } from 'lucide-react'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { EventSchema, BreadcrumbSchema } from '@/components/seo/StructuredData'
 import { TurnusCard } from '@/components/turnusy/TurnusCard'
-import { turnusLabels } from '@/components/turnusy/turnus-labels'
+import { datumCesky, turnusLabels } from '@/components/turnusy/turnus-labels'
+import { TerminPrihlaska } from '@/components/turnusy/TerminPrihlaska'
 import { TurnusInterestForm } from '@/components/turnusy/TurnusInterestForm'
 import { VenueShowcase } from '@/components/turnusy/VenueShowcase'
 import { getCity, getVenue } from '@/lib/cities'
-import { PROVOZNI_DOBA, SITE } from '@/lib/site'
+import { MIMO_CENU, PROVOZNI_DOBA, SITE, V_CENE } from '@/lib/site'
 import { zkusiSiTabora } from '@/lib/tabory'
 import { getTurnus, getTurnusy, getTaboryTurnusu, isBookable } from '@/lib/turnusy'
 
@@ -170,13 +171,16 @@ export default async function TerminPage({ params }: { params: Promise<{ slug: s
               {prodejny ? (
                 // `prodejny` je stejná podmínka (`isBookable`), ze které
                 // `turnusLabels` odvozuje `ctaHref` — v téhle větvi je vyplněné.
-                <Link href={l.ctaHref!} className="btn-primary group inline-flex px-8 py-4">
-                  {l.ctaText}
-                  <ArrowRight
-                    className="h-5 w-5 transition-transform group-hover:translate-x-1"
-                    aria-hidden="true"
-                  />
-                </Link>
+                <>
+                  <TerminPrihlaska turnus={turnus} ctaText={l.ctaText} ctaHref={l.ctaHref!} />
+                  {turnus.minimum && (
+                    <p className="mt-5 max-w-xl text-sm text-ink-500">
+                      Turnus se koná při nejméně {turnus.minimum.deti} přihlášených dětech.
+                      O konání rozhodneme do {datumCesky(turnus.minimum.rozhodnemeDo)}; když se
+                      nekoná, nabídneme přesun na jiný termín, nebo vrátíme celou platbu.
+                    </p>
+                  )}
+                </>
               ) : (
                 <TurnusInterestForm turnus={turnus} source={`turnus-${turnus.slug}`} />
               )}
@@ -213,6 +217,40 @@ export default async function TerminPage({ params }: { params: Promise<{ slug: s
           </section>
         )}
 
+        {/* Co cena zahrnuje — jen u turnusu s cenou. Výčet je sdílený s VOP
+            čl. 20 (`V_CENE` / `MIMO_CENU` v site.ts). */}
+        {turnus.priceKc !== null && (
+          <section className="section-padding border-t border-ink/15 bg-paper-soft">
+            <div className="section-container">
+              <p className="mono-label mb-4">Cena {l.cena}</p>
+              <h2 className="heading-2 mb-10 text-ink">Co je v ceně</h2>
+              <div className="grid gap-10 md:grid-cols-2">
+                <ul className="space-y-3">
+                  {V_CENE.map((polozka) => (
+                    <li key={polozka} className="flex gap-3 text-lg text-ink">
+                      <Check className="mt-1 h-5 w-5 shrink-0 text-trust-600" aria-hidden="true" />
+                      {polozka}
+                    </li>
+                  ))}
+                </ul>
+                <div>
+                  <p className="mb-3 font-mono text-xs uppercase tracking-wider text-ink/50">
+                    Není v ceně
+                  </p>
+                  <ul className="space-y-3">
+                    {MIMO_CENU.map((polozka) => (
+                      <li key={polozka} className="flex gap-3 text-ink-500">
+                        <Minus className="mt-1 h-4 w-4 shrink-0 text-ink/40" aria-hidden="true" />
+                        {polozka}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
+
         {venue && <VenueShowcase venue={venue} />}
 
         {dalsiTurnusy.length > 0 && (
@@ -221,7 +259,9 @@ export default async function TerminPage({ params }: { params: Promise<{ slug: s
               <h2 className="heading-2 mb-10 text-ink">Další termíny</h2>
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {dalsiTurnusy.map((t) => (
-                  <TurnusCard key={t.id} turnus={t} />
+                  // Formulář zájmu stojí na stránce TOHO turnusu, ne na téhle —
+                  // prodejný termín žádný nemá, kotva `#zajem` by vedla do prázdna.
+                  <TurnusCard key={t.id} turnus={t} zajemHref={`/tabory/termin/${t.slug}#zajem`} />
                 ))}
               </div>
             </div>

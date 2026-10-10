@@ -5,7 +5,7 @@ import { motion, useReducedMotion } from 'framer-motion'
 import { ArrowRight, Calendar, MapPin } from 'lucide-react'
 import { getFocusTurnusu, type Turnus } from '@/lib/turnusy'
 import { getFocusModules } from '@/lib/focus'
-import { SpotsLeftBadge } from './SpotsLeft'
+import { SpotsLeftBadge, volnaMistaText } from './SpotsLeft'
 import { turnusLabels } from './turnus-labels'
 
 // `turnusLabels` bydlí v samostatném souboru bez `'use client'`, aby ji šlo
@@ -62,8 +62,10 @@ export function TurnusCard({
     >
       <div className="flex items-start justify-between gap-3 mb-4">
         {!bezTerminu && <p className="mono-label">{l.mesto}</p>}
-        {prodejny && spotsLeft !== undefined ? (
-          <SpotsLeftBadge spotsLeft={spotsLeft} maxCapacity={turnus.capacity} />
+        {/* Odznak jen tehdy, když má co říct (viz `volnaMistaText`) — jinak
+            stav, aby horní řádek karty nezůstal prázdný. */}
+        {prodejny && spotsLeft !== undefined && volnaMistaText(spotsLeft) !== null ? (
+          <SpotsLeftBadge spotsLeft={spotsLeft} />
         ) : (
           <span className="ml-auto font-mono text-xs uppercase tracking-wider text-ink/50">{stav}</span>
         )}

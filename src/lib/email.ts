@@ -88,7 +88,7 @@ export function buildConfirmationEmail(p: ConfirmationParams): { subject: string
       <tr><td style="padding:6px 0;color:#64748b;">Termín</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.termLabel}</td></tr>
       <tr><td style="padding:6px 0;color:#64748b;">Uhrazeno</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.priceKc.toLocaleString('cs-CZ')} Kč</td></tr>
     </table>
-    <p><strong>Daňový doklad</strong> obdržíte v samostatném e-mailu.</p>
+    <p><strong>Fakturu</strong> vám zašleme v samostatném e-mailu do 14 dnů od platby.</p>
     <p>Přibližně <strong>týden před táborem</strong> vám pošleme <strong>nástupní list</strong> s podrobnostmi (čas a místo nástupu, co s sebou).</p>
     <p>S pozdravem,<br>tým Weeks</p>`
   return {
@@ -123,7 +123,7 @@ export function buildRegistrationReceivedEmail(p: RegistrationReceivedParams): {
       <tr><td style="padding:6px 0;color:#64748b;">Termín</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.termLabel}</td></tr>
       <tr><td style="padding:6px 0;color:#64748b;">Cena</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.priceKc.toLocaleString('cs-CZ')} Kč</td></tr>
     </table>
-    <p style="font-size:14px;color:#475569;">Po zaplacení vám obratem přijde <strong>potvrzení a daňový doklad</strong>. Přibližně týden před táborem pošleme <strong>nástupní list</strong> s podrobnostmi.</p>
+    <p style="font-size:14px;color:#475569;">Po zaplacení vám obratem přijde <strong>potvrzení</strong>, fakturu zašleme do 14 dnů. Přibližně týden před táborem pošleme <strong>nástupní list</strong> s podrobnostmi.</p>
     <p style="font-size:13px;color:#94a3b8;">Pokud jste se neregistrovali vy nebo si to rozmyslíte, nemusíte nic řešit, bez platby registrace po čase propadne.</p>
     <p>S pozdravem,<br>tým Weeks</p>`
   return {

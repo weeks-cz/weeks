@@ -30,10 +30,13 @@ export function TurnusInterestForm({
   turnus,
   source,
   id = 'zajem',
+  vyprodano = false,
 }: {
   turnus?: Turnus
   source: string
   id?: string
+  /** Živá kapacita je vyčerpaná, i když data turnusu ještě hlásí `otevreno`. */
+  vyprodano?: boolean
 }) {
   const reduced = useReducedMotion()
 
@@ -48,7 +51,7 @@ export function TurnusInterestForm({
   // Turnus ve stavu `plno` je otevřený, jen vyprodaný — nadpis o „otevření"
   // by u něj lhal. Jazyk drží stejný, jaký pro tenhle stav používá
   // `turnusLabels`/`TurnusCard` ("Chci vědět o volném místě"), jen ve větě.
-  const obsazeno = turnus?.status === 'plno'
+  const obsazeno = vyprodano || turnus?.status === 'plno'
   const heading = !turnus
     ? 'Chcete vědět o termínech mezi prvními?'
     : obsazeno

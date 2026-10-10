@@ -164,19 +164,42 @@ perex and "co si dítě zkusí", never a program, price, date or equipment;
 - **Cities**: Praha and Karlovy Vary (`src/lib/cities.ts`). City is a
   *property* of a turnus, not a branch of the site — filter with
   `/tabory?mesto=<city>`, and a turnus's own URL embeds the city in the slug
-  (e.g. `/tabory/termin/karlovy-vary-leto-2027`).
+  (e.g. `/tabory/termin/karlovy-vary-2027-cervenec`).
 - **URLs** (three levels, the funnel a parent actually walks: city → theme → term):
   `/tabory` (listing grouped by city), `/tabory/[tema]` (the description, which
   lives here and **only** here), `/tabory/termin/[slug]` (date, price, venue,
   registration). The term is **not** nested under the theme: with `taborIds`
   being a list, a two-theme turnus would have nowhere to live, and changing a
   theme would force a 301 on an address that is already on an invoice.
-- **Current data (this phase)**: both turnusy (`praha-leto-2027`,
-  `kv-leto-2027`) are `chystame` — no confirmed date, price or venue yet.
-  Summer 2027 terms are expected to go live around October 2026. Until then
-  the site's main job is collecting contacts (`TurnusInterestForm`), not
-  selling — `isBookable(turnus)` is what flips a turnus card from a "notify
-  me" form to a real "Přihlásit dítě" registration CTA.
+- **Current data (since 2026-10-10)**: Karlovy Vary summer 2027 is **on
+  sale** — `kv-2027-cervenec` (26.–30. 7.) and `kv-2027-srpen` (2.–6. 8.),
+  both `otevreno`, FabLab VARY&TE (confirmed for 2027), 5 990 Kč (2026 was
+  4 990 Kč), capacity 15, `minimum: { deti: 10, rozhodnemeDo: '2027-06-30' }`.
+  `praha-leto-2027` stays `chystame` (no venue, no date). The placeholder
+  `kv-leto-2027` was split into the two real terms; its URL 308s to
+  `/tabory?mesto=karlovy-vary`. `isBookable(turnus)` is what flips a card
+  from the "notify me" form to the "Přihlásit dítě" CTA.
+- **Minimum participants**: `turnus.minimum` (optional) carries the number
+  and the decision date; the rule itself (merge into the fuller term, or
+  move / full refund within 10 working days) lives in VOP čl. 22. The term
+  page prints the numbers next to the CTA. Every `otevreno` turnus must have
+  one (`turnusy.test.ts`).
+- **Live capacity** (`SpotsLeft.tsx`): the count is hidden while more than
+  `UKAZAT_VOLNA_MISTA_OD` (10) spots are left — "15 of 15 free" read as
+  nobody wanting it. At ≤10 an amber "Zbývá X míst", at 0 "Obsazeno" and the
+  CTA turns into the interest form. Same rule on `/tabory` cards and the term
+  page (`TerminPrihlaska`).
+- **What's in the price**: `V_CENE` / `MIMO_CENU` in `src/lib/site.ts`, read
+  by the term page and VOP čl. 20. Snacks are NOT included.
+- **Health data consent** (čl. 9 GDPR): separate `health_consent` checkbox,
+  required only when `child_health_notes` is filled; enforced client-side and
+  in `registrationSchema` (`healthConsentChybi`). Stored by migration 019.
+- **Invoices**: until Weeks s.r.o. has its own Fakturoid, the `FAKTUROID_*`
+  env vars stay unset in production — the Comgate callback then skips
+  invoicing (`fakturoid_invoice_id` stays NULL) and the copy promises an
+  invoice "do 14 dnů od platby". Backfill paid registrations once the s.r.o.
+  account exists. Never point it at Lukáš's OSVČ account: money goes to the
+  s.r.o. Comgate shop.
 - **Camp name on invoices/e-mails**: `RegistrationForm` writes
   `turnus.taborIds[0]` (a tábor id like `'chytre-technologie'`) into the
   registration's `program` field, but nothing downstream trusts that field —
@@ -192,8 +215,8 @@ perex and "co si dítě zkusí", never a program, price, date or equipment;
   a turnus `turnusyProSchema()` (`src/components/seo/schema-turnusy.ts`)
   clears: date, price and venue all set, status `otevreno` or `plno`. A sold-out
   turnus (`plno`) still renders, as `Offer.availability: SoldOut` — it doesn't
-  just disappear like a `chystame` turnus does. Both current turnusy are
-  `chystame`, so neither page emits an `Event` today. `/tabory`,
+  just disappear like a `chystame` turnus does. Both KV 2027 turnusy are
+  `otevreno` and emit an `Event`; Praha (`chystame`) does not. `/tabory`,
   `/tabory/[tema]`, `/tabory/termin/[slug]`, `/o-nas`, `/kontakt` and `/firmy`
   all carry `BreadcrumbSchema` matching the visible breadcrumb trail (`/firmy`
   has none on-page, so it matches the header link's name instead).
@@ -279,7 +302,7 @@ rule that spans components.
 ### Target Audience
 1. **Primary**: Parents - trust quality, safety, educational value
 2. **Secondary**: Teenagers (13-15) - find it cool/engaging
-3. **Tertiary**: the venues a turnus runs in (`src/lib/cities.ts`) - professional representation. They are venues, not partners. **No turnus currently has a venue** (`venueId: null` on both): FabLab VARY&TE ran the 2026 camp but has not confirmed summer 2027, only expressed interest, so it survives on the site only as a past reference on `/o-nas` — never as a venue, a partner, or a promise. This repo is public; don't write a partnership into it.
+3. **Tertiary**: the venues a turnus runs in (`src/lib/cities.ts`) - professional representation. They are venues, not partners. FabLab VARY&TE (ran the 2026 camp) **confirmed summer 2027** and is the venue of both KV turnusy since 2026-10-10 — a venue we rent, not a partner. Praha has no venue yet. This repo is public; don't write a partnership into it.
 
 ### Language
 All user-facing content is in Czech. Code/docs can be in English.
@@ -287,7 +310,7 @@ All user-facing content is in Czech. Code/docs can be in English.
 ## Current Status
 
 **Structural rebuild (Weeks s.r.o. as operator)**: Complete across the whole site — the product/marketing pages (`/`, `/tabory`, `/tabory/[tema]`, `/tabory/termin/[slug]`) as well as `/o-nas`, `/kontakt`, `/gdpr` and `/podminky` all describe Weeks s.r.o. as organizer; DDM Praha 6 and HWLab remain only as historical code comments explaining what was removed. `/firmy` (linked from the header, footer and the homepage's Rozcesti section) is built — see "`/firmy` (phase 4)" below.
-**Status**: No turnus is bookable yet — both turnusy are `chystame`, with no confirmed date/price/venue. Summer 2027 terms are expected around October 2026; until then the site's job is collecting contacts, not selling.
+**Status**: Registration for Karlovy Vary summer 2027 is **live since 2026-10-10** (two terms, see "Current data" under Product). Praha is still `chystame` and collects contacts.
 **Phase 5 (structured data, rescued focus-module content, dead analytics) is done** — see "Phase 5" below.
 **Phase 6 (camps as a category, visual system) is done** — see "Phase 6" below.
 **Founder feedback on phase 6 is worked in (2026-09-22)**: scroll reveals animate
@@ -424,7 +447,10 @@ plan: `docs/superpowers/plans/2026-09-21-web-2027-faze-6-tabory-a-vizual.md`.
 ### Pending (blocked or future)
 - [ ] Facebook Pixel - when ready for ads
 - [x] Real phone number: +420 703 046 440 (confirmed April 2026)
-- [ ] Summer 2027 turnusy confirmed (date, price, venue) — before marketing launch, see "Current term status" below
+- [x] Summer 2027 KV turnusy confirmed and on sale (2026-10-10)
+- [ ] Praha 2027 turnus (venue, date, price)
+- [ ] Fakturoid for Weeks s.r.o. + backfill invoices for registrations paid before it existed
+- [ ] Terms (turnusy) editable from weeks-hub instead of `TURNUSY` in code
 
 ## Environment Variables
 
@@ -555,19 +581,20 @@ _Historical record, same as the list above: the `/duben` ad landing page and the
 - Social media accounts (FB + IG) are created
 
 ### Current term status
-Both turnusy — `praha-leto-2027` and `kv-leto-2027` (`src/lib/turnusy.ts`) —
-are `chystame`: no confirmed date, price or venue yet. The site collects
-non-binding interest (`TurnusInterestForm`, Formspree) instead of selling.
-Summer 2027 terms are expected to be announced around October 2026.
+Karlovy Vary summer 2027 is on sale since 2026-10-10: `kv-2027-cervenec`
+and `kv-2027-srpen` (`src/lib/turnusy.ts`), FabLab VARY&TE, 5 990 Kč.
+`praha-leto-2027` is `chystame` and collects non-binding interest
+(`TurnusInterestForm`, Formspree).
 
 The old weekend/one-day formats (MIX, one-day 3D tisk/IoT camps) and their
 DDM Praha 6 registration links are gone, along with `/program`,
 `/tabor-3d-tisk`, `/tabor-iot`, `/tabor-chytrych-technologii` and — since
 phase 6 — the one-page `/tabor` itself. See "Redirects" above.
 
-### When Summer 2027 turnusy are confirmed
-- Fill in `start`, `end`, `priceKc` and `venueId` on the turnus in
-  `src/lib/turnusy.ts` and flip `status` to `otevreno`.
+### When another turnus is confirmed (e.g. Praha)
+- Fill in `start`, `end`, `priceKc`, `venueId` and `minimum` on the turnus in
+  `src/lib/turnusy.ts` and flip `status` to `otevreno`. A turnus id is
+  written into `registrations.term_id` — never change it once sold.
 - `isBookable()` then switches the turnus card from the interest form to a
   real "Přihlásit dítě" registration CTA — no DDM link, no manual step.
 - Nothing about the theme changes: `tabory.ts` does not carry dates or prices.

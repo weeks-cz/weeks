@@ -37,33 +37,37 @@ function mistoLabel(n: number): string {
 }
 
 /**
- * Honest scarcity badge. Render only for confirmed terms and only once real
- * capacity data is available. Color/urgency scales with how few spots remain.
+ * Od kolika volných míst níž se počet ukazuje. Nad tím web mlčí: „Zbývá
+ * 15 míst z 15“ na čerstvě otevřeném turnusu působí, jako by o něj nikdo
+ * nestál (rozhodnutí 10. 10. 2026 — ukazovat až po prvních pěti registracích).
  */
-export function SpotsLeftBadge({ spotsLeft, maxCapacity }: TermCapacity) {
-  if (spotsLeft <= 0) {
-    return (
-      <span className="inline-flex items-center gap-1.5 font-mono text-xs px-2 py-0.5 rounded-sm border border-ink/20 bg-white text-ink/50">
-        <Users className="w-3.5 h-3.5" />
-        Vyprodáno
-      </span>
-    )
-  }
+export const UKAZAT_VOLNA_MISTA_OD = 10
 
-  const urgent = spotsLeft <= 4
-  const low = spotsLeft <= 7
-  const cls = urgent
-    ? 'border-red-600 text-red-600'
-    : low
-    ? 'border-cta-600 text-cta-600'
-    : 'border-trust-600 text-trust-600'
-  const text = urgent
-    ? `Poslední ${spotsLeft} ${mistoLabel(spotsLeft)}!`
-    : `Zbývá ${spotsLeft} ${mistoLabel(spotsLeft)} z ${maxCapacity}`
+/**
+ * Text odznaku, nebo `null`, když se nemá ukázat nic. Čistá funkce — aby šlo
+ * pravidlo otestovat bez vykreslování a aby karta i stránka termínu věděly,
+ * jestli místo odznaku ukázat stav.
+ */
+export function volnaMistaText(spotsLeft: number): string | null {
+  if (spotsLeft <= 0) return 'Obsazeno'
+  if (spotsLeft > UKAZAT_VOLNA_MISTA_OD) return null
+  return `Zbývá ${spotsLeft} ${mistoLabel(spotsLeft)}`
+}
+
+/**
+ * Odznak volných míst. Render only for confirmed terms and only once real
+ * capacity data is available — nikdy vymyšlené číslo. Jantarová je barva
+ * role „akce a stav“; obsazený turnus je neutrální, už se nedá nic udělat.
+ */
+export function SpotsLeftBadge({ spotsLeft }: { spotsLeft: number }) {
+  const text = volnaMistaText(spotsLeft)
+  if (text === null) return null
+  const cls =
+    spotsLeft <= 0 ? 'border-ink/20 bg-white text-ink/50' : 'border-cta-600 bg-cta-50 text-cta-700'
 
   return (
-    <span className={`inline-flex items-center gap-1.5 font-mono text-xs px-2 py-0.5 rounded-sm border bg-white ${cls}`}>
-      <Users className="w-3.5 h-3.5" />
+    <span className={`inline-flex items-center gap-1.5 whitespace-nowrap font-mono text-xs px-2 py-0.5 rounded-sm border ${cls}`}>
+      <Users className="w-3.5 h-3.5" aria-hidden="true" />
       {text}
     </span>
   )

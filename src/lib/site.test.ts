@@ -71,9 +71,13 @@ describe('getVenuesSentence', () => {
     expect(getVenuesSentence([sMistem])).toContain('Místa konání:')
   })
 
-  it('nic neslibuje, když žádný turnus potvrzené místo nemá — dnešní stav', () => {
+  it('nic neslibuje, když žádný turnus potvrzené místo nemá', () => {
     expect(getVenuesSentence([{ ...sMistem, venueId: null }])).toContain('upřesníme')
-    expect(getVenuesSentence()).toContain('upřesníme')
+  })
+
+  it('jmenuje jen potvrzená místa, ne chystaný turnus bez místa', () => {
+    // Ostrá data od 10. 10. 2026: Karlovy Vary ve FabLabu, Praha bez místa.
+    expect(getVenuesSentence()).toContain('FabLab VARY&TE')
   })
 
   it('nekončí prázdnou větou, ani když má turnus místo nedomluvené', () => {

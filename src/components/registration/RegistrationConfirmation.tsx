@@ -121,7 +121,7 @@ export function RegistrationConfirmation({ registrationId, token }: Registration
         </h1>
         <p className="text-ink-500">
           {isPaid
-            ? 'Registraci i platbu jsme zaznamenali. Potvrzení a daňový doklad jsme vám poslali e-mailem — zkontrolujte prosím i složku se spamem. S dotazy se ozvěte na info@weeks.cz.'
+            ? 'Registraci i platbu jsme zaznamenali. Potvrzení jsme vám poslali e-mailem — zkontrolujte prosím i složku se spamem. Fakturu zašleme do 14 dnů od platby. S dotazy se ozvěte na info@weeks.cz.'
             : isPending
             ? 'Vaše registrace čeká na dokončení platby.'
             : 'Tato registrace byla zrušena.'}

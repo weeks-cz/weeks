@@ -6,8 +6,12 @@ import { Mail, Phone, MapPin, Building2 } from 'lucide-react'
 import Link from 'next/link'
 import { trackLead } from '@/lib/fbpixel'
 import { SITE } from '@/lib/site'
+import { getTurnusy, isBookable } from '@/lib/turnusy'
 
 export function ContactSection() {
+  // Když se dá přihlásit, výzva „ozveme se, až otevřeme“ by lhala — blok pak
+  // sbírá kontakty na další termíny a města (Praha je dál `chystame`).
+  const prodejny = getTurnusy().some(isBookable)
   const [email, setEmail] = useState('')
   const [gdprConsent, setGdprConsent] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -59,10 +63,13 @@ export function ContactSection() {
           className="max-w-5xl mx-auto"
         >
           <p className="mono-label mb-4 text-ink/60">Kontakt</p>
-          <h2 className="heading-2 text-ink mb-4">Chcete být u toho, až turnusy otevřeme?</h2>
+          <h2 className="heading-2 text-ink mb-4">
+            {prodejny ? 'Nenašli jste svůj termín nebo město?' : 'Chcete být u toho, až turnusy otevřeme?'}
+          </h2>
           <p className="text-xl text-ink/80 mb-12">
-            Na jeden turnus bereme jen hrstku dětí. Nechte nám kontakt a ozveme
-            se vám dřív, než se termíny objeví na webu.
+            {prodejny
+              ? 'Nechte nám kontakt a ozveme se vám, jakmile vypíšeme další termíny a města.'
+              : 'Na jeden turnus bereme jen hrstku dětí. Nechte nám kontakt a ozveme se vám dřív, než se termíny objeví na webu.'}
           </p>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
