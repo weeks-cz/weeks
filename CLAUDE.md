@@ -194,12 +194,19 @@ perex and "co si dítě zkusí", never a program, price, date or equipment;
 - **Health data consent** (čl. 9 GDPR): separate `health_consent` checkbox,
   required only when `child_health_notes` is filled; enforced client-side and
   in `registrationSchema` (`healthConsentChybi`). Stored by migration 019.
-- **Invoices**: until Weeks s.r.o. has its own Fakturoid, the `FAKTUROID_*`
-  env vars stay unset in production — the Comgate callback then skips
-  invoicing (`fakturoid_invoice_id` stays NULL) and the copy promises an
-  invoice "do 14 dnů od platby". Backfill paid registrations once the s.r.o.
-  account exists. Never point it at Lukáš's OSVČ account: money goes to the
-  s.r.o. Comgate shop.
+- **Invoices**: Weeks s.r.o. has its own Fakturoid since 2026-10-11 (slug
+  `weeks`, tarif Na lehko, neplátce DPH, 1 500 API requests/month ≈ 300
+  invoices). `FAKTUROID_*` are set for **Production only** — a preview has
+  none, so a test payment there issues no invoice. The Comgate callback
+  issues a paid invoice and Fakturoid e-mails it using the account's
+  "Faktura" template; bank account, footer (OR zápis), numbering and logo
+  come from the account settings, not from code. The copy promises the
+  invoice "do 14 dnů od platby" as a buffer for a failed call
+  (`fakturoid_invoice_id` stays NULL → issue it by hand). Never point it at
+  Lukáš's OSVČ account (slug `lukaskubik2`, 2026 invoices): money goes to
+  the s.r.o. Comgate shop. weeks-hub still reads the OSVČ account for its
+  invoice preview — it needs to pick the account per registration before
+  the first 2027 invoice matters there.
 - **Camp name on invoices/e-mails**: `RegistrationForm` writes
   `turnus.taborIds[0]` (a tábor id like `'chytre-technologie'`) into the
   registration's `program` field, but nothing downstream trusts that field —
@@ -449,7 +456,8 @@ plan: `docs/superpowers/plans/2026-09-21-web-2027-faze-6-tabory-a-vizual.md`.
 - [x] Real phone number: +420 703 046 440 (confirmed April 2026)
 - [x] Summer 2027 KV turnusy confirmed and on sale (2026-10-10)
 - [ ] Praha 2027 turnus (venue, date, price)
-- [ ] Fakturoid for Weeks s.r.o. + backfill invoices for registrations paid before it existed
+- [x] Fakturoid for Weeks s.r.o. (2026-10-11, before the first 2027 payment — no backfill needed)
+- [ ] weeks-hub invoice preview: pick OSVČ vs s.r.o. Fakturoid account per registration
 - [ ] Terms (turnusy) editable from weeks-hub instead of `TURNUSY` in code
 
 ## Environment Variables
