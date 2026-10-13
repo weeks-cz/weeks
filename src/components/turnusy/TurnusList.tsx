@@ -2,7 +2,7 @@
 
 import { Suspense } from 'react'
 import Link from 'next/link'
-import { useSearchParams } from 'next/navigation'
+import { usePathname, useSearchParams } from 'next/navigation'
 import { getCitiesWithTurnusy, type Turnus } from '@/lib/turnusy'
 import { getCity, type CityId } from '@/lib/cities'
 import { TurnusCard } from './TurnusCard'
@@ -44,6 +44,10 @@ export function platneMesto(
 
 function TurnusListContent({ turnusy }: { turnusy: Turnus[] }) {
   const searchParams = useSearchParams()
+  // Filtr přepíná na stránce, kde seznam stojí. Odkazy dřív vedly na
+  // /tabory a `scroll={false}` tam přenesl pozici z dlouhé stránky tématu —
+  // člověk skončil na konci jiné stránky.
+  const pathname = usePathname()
   const vybrane = searchParams.get('mesto')
   const mesta = filtrMest(turnusy)
   const platne = platneMesto(vybrane, mesta)
@@ -70,7 +74,7 @@ function TurnusListContent({ turnusy }: { turnusy: Turnus[] }) {
               (~7 : 1 vůči bg-ink, nad WCAG AA 4,5 : 1 pro běžný text), stejně jako
               ostatní tmavé sekce webu (Header mobilní nav, Footer). */}
           <Link
-            href="/tabory"
+            href={pathname}
             scroll={false}
             aria-current={platne === undefined ? 'true' : undefined}
             className={`font-mono text-xs uppercase tracking-wider px-4 py-2 border transition-colors ${
@@ -84,7 +88,7 @@ function TurnusListContent({ turnusy }: { turnusy: Turnus[] }) {
           {mesta.map((m) => (
             <Link
               key={m.id}
-              href={`/tabory?mesto=${m.id}`}
+              href={`${pathname}?mesto=${m.id}`}
               scroll={false}
               aria-current={platne === m.id ? 'true' : undefined}
               className={`font-mono text-xs uppercase tracking-wider px-4 py-2 border transition-colors ${
