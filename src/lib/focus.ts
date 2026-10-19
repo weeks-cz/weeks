@@ -113,8 +113,8 @@ const FOCUS: Record<FocusId, FocusModule> = {
       'kompas',
     ],
     foto: {
-      src: '/images/tabor/dilna-elektronika.webp',
-      alt: 'Dvě děti s lektorem zapojují nepájivé pole s LED diodami u notebooku',
+      src: '/images/tabor/fablab-elektronika.webp',
+      alt: 'Lektor u obrazovky vysvětluje zapojení LED k Arduinu, děti u počítačů skládají program z bloků',
     },
     gallery: [
       { src: '/images/gallery/iot-arduino-breadboard.jpg', alt: 'Práce s Arduino breadboardem' },

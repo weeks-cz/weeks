@@ -1,3 +1,4 @@
+import type { CityId } from './cities'
 import { getFocusModules, type FocusId } from './focus'
 
 /**
@@ -67,6 +68,12 @@ export interface Tabor {
    * nemá, proto je nepovinná a karta bez ní fotku vynechá.
    */
   foto?: { src: string; alt: string }
+  /**
+   * Fotka karty pro sekci konkrétního města na `/tabory` — přebíjí `foto`.
+   * Pod Karlovými Vary nemá viset záběr z pražské dílny; město bez vlastní
+   * fotky dostane `foto`.
+   */
+  fotoMesta?: Partial<Record<CityId, { src: string; alt: string }>>
 }
 
 /**
@@ -116,6 +123,12 @@ export const TABORY: Tabor[] = [
     foto: {
       src: '/images/tabor/dilna-ucebna.webp',
       alt: 'Děti u počítačů a 3D tiskáren v dílně, mezi stoly prochází lektor',
+    },
+    fotoMesta: {
+      'karlovy-vary': {
+        src: '/images/tabor/fablab-ucebna.webp',
+        alt: 'Děti u počítačů modelují ve 3D, vzadu lektor s klukem u 3D tiskárny a holka si prohlíží vytištěný díl',
+      },
     },
     program: [
       {

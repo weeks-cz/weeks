@@ -6,6 +6,7 @@ import { motion, useReducedMotion } from 'framer-motion'
 import { ArrowRight, Star } from 'lucide-react'
 import { getFocusModules } from '@/lib/focus'
 import { GOOGLE_PROFIL, maRecenze } from '@/lib/recenze'
+import type { CityId } from '@/lib/cities'
 import type { Tabor } from '@/lib/tabory'
 import { isBookable, type Turnus } from '@/lib/turnusy'
 import { useTermCapacity, volnaMistaText } from '@/components/turnusy/SpotsLeft'
@@ -27,10 +28,13 @@ import { datumKratce, turnusLabels } from '@/components/turnusy/turnus-labels'
  */
 export function TaborCard({
   tabor,
+  mesto,
   turnusy = [],
   index = 0,
 }: {
   tabor: Tabor
+  /** Město, v jehož sekci karta stojí — vybírá fotku z `tabor.fotoMesta`. */
+  mesto?: CityId
   /** Turnusy tohohle tématu — už zúžené na město, ve kterém karta stojí. */
   turnusy?: Turnus[]
   /** Pořadí v mřížce, jen kvůli odstupňovanému náběhu animace. */
@@ -40,6 +44,7 @@ export function TaborCard({
   const chystame = tabor.status === 'chystame'
   const technologie = getFocusModules(tabor.focus).map((m) => m.name)
   const capacity = useTermCapacity(turnusy[0]?.city)
+  const foto = (mesto && tabor.fotoMesta?.[mesto]) || tabor.foto
 
   const anim = reduced
     ? {}
@@ -52,11 +57,11 @@ export function TaborCard({
 
   return (
     <motion.article {...anim} className="card-maker flex flex-col overflow-hidden">
-      {tabor.foto ? (
+      {foto ? (
         <div className="relative aspect-[16/9] border-b border-ink/15">
           <Image
-            src={tabor.foto.src}
-            alt={tabor.foto.alt}
+            src={foto.src}
+            alt={foto.alt}
             fill
             sizes="(min-width: 1024px) 40vw, 100vw"
             className="object-cover"

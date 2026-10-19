@@ -74,6 +74,7 @@ function MestoSekce({ city, index }: { city: CityId; index: number }) {
           <TaborCard
             key={tabor.id}
             tabor={tabor}
+            mesto={city}
             index={i}
             turnusy={turnusyMesta.filter((t) => t.taborIds.includes(tabor.id))}
           />
