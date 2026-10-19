@@ -73,11 +73,15 @@ npm run lint         # Currently broken — Next 16 removed `next lint`; needs a
       FAQSection.tsx        # Accordion FAQ — reads `getSiteFaq()` from `@/lib/site`
       ContactSection.tsx    # Contact info + email signup (GDPR consent checkbox)
     /tabory
-      TaborCard.tsx          # Theme tile on /tabory — theme, technologies, its terms in that city
+      TaborCard.tsx          # Theme tile on /tabory — photo (`tabor.foto`), rating, its terms in that city as chips with live spot state
+      TemaDetail.tsx         # Whole /tabory/[tema] body (active + chystame variant) — 10 sections, see docs/superpowers/specs/2026-10-19-tabory-detail-redesign.md
     /turnusy
       TurnusList.tsx         # Turnus grid + city filter (`filtrMest`) + live capacity; used by the dark terms section on /tabory/[tema]
       TurnusCard.tsx         # One turnus card — labels/CTA text come from `turnus-labels.ts`
       TurnusInterestForm.tsx # Non-binding "notify me" form for turnusy that aren't bookable yet (GDPR checkbox)
+      TerminDetail.tsx       # Whole /tabory/termin/[slug] body, built as an e-shop product detail (DP-001..019 of the Systedo `shoptet-ux` skill)
+      NakupniBox.tsx         # Buy box: price + per-day price, live spot state, term switcher, CTA, minimum as a guarantee — all above the fold at 390 px
+      NakupniLista.tsx       # Sticky bottom bar, hidden while the main CTA / interest form / closing CTA is on screen
       VenueShowcase.tsx, ProjectGallery.tsx, SpotsLeft.tsx  # Venue photos, project gallery (no hardcoded image list — items come from the calling page's focus modules), live capacity badge
     /firmy
       FirmyPoptavka.tsx      # `/firmy` inquiry form — one form, three modes via `?typ=`, posts to `/api/contact`
@@ -188,7 +192,7 @@ perex and "co si dítě zkusí", never a program, price, date or equipment;
   `UKAZAT_VOLNA_MISTA_OD` (10) spots are left — "15 of 15 free" read as
   nobody wanting it. At ≤10 an amber "Zbývá X míst", at 0 "Obsazeno" and the
   CTA turns into the interest form. Same rule on `/tabory` cards and the term
-  page (`TerminPrihlaska`).
+  page (`NakupniBox`).
 - **What's in the price**: `V_CENE` / `MIMO_CENU` in `src/lib/site.ts`, read
   by the term page and VOP čl. 20. Snacks are NOT included.
 - **Health data consent** (čl. 9 GDPR): separate `health_consent` checkbox,

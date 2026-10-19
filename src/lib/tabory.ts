@@ -61,6 +61,12 @@ export interface Tabor {
   program?: DenProgramu[]
   /** Otázky, které se týkají právě tohohle tématu. Obecné jsou v `site.ts`. */
   faq?: Array<{ question: string; answer: string }>
+  /**
+   * Fotka na kartu tématu ve výpisu `/tabory`, na šířku. Jen skutečná fotka
+   * z tábora tohohle tématu — chystaný tábor žádnou mít nemůže, proto je
+   * nepovinná a karta bez ní fotku vynechá.
+   */
+  foto?: { src: string; alt: string }
 }
 
 /**
@@ -107,6 +113,10 @@ export const TABORY: Tabor[] = [
     // program to jen potvrzuje — žádný den VR neobsahuje. Modul `vr` zůstává
     // ve `focus.ts` i s obsahem; vrátí se dopsáním do tohohle pole.
     focus: ['3d-tisk', 'iot'],
+    foto: {
+      src: '/images/hwlab/hero-print-day.webp',
+      alt: 'Děti a lektoři v dílně u 3D tiskáren, na plátně promítnuté logo Weeks',
+    },
     program: [
       {
         den: 'Pondělí',

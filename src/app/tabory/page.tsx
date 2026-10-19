@@ -80,7 +80,7 @@ function MestoSekce({ city, index }: { city: CityId; index: number }) {
         ))}
 
         {venues.map((venue) => (
-          <div key={venue.id} className="card-maker flex gap-4 p-7">
+          <div key={venue.id} className="card-maker flex gap-4 self-start p-7">
             <div
               className="flex h-12 w-12 shrink-0 items-center justify-center rounded-sm border border-ink/15 bg-white"
               aria-hidden="true"
@@ -104,7 +104,7 @@ function MestoSekce({ city, index }: { city: CityId; index: number }) {
         ))}
 
         {venues.length === 0 && (
-          <div className="flex gap-4 rounded-md border border-dashed border-ink/25 bg-paper-soft p-7">
+          <div className="flex gap-4 self-start rounded-md border border-dashed border-ink/25 bg-paper-soft p-7">
             <div
               className="flex h-12 w-12 shrink-0 items-center justify-center rounded-sm border border-dashed border-ink/25"
               aria-hidden="true"

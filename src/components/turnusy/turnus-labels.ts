@@ -38,6 +38,33 @@ function rozsahData(startIso: string, endIso: string): string {
 }
 
 /**
+ * Krátký rozsah na přepínač termínů: „26.–30. 7.", přes měsíce „29. 7.–2. 8.".
+ * Bez roku — přepínač stojí pod nadpisem, kde rok už je.
+ */
+export function datumKratce(startIso: string, endIso: string): string {
+  const a = denMesic(startIso)
+  const b = denMesic(endIso)
+  if (a.mesic === b.mesic) return `${a.den}.–${b.den}. ${b.mesic + 1}.`
+  return `${a.den}. ${a.mesic + 1}.–${b.den}. ${b.mesic + 1}.`
+}
+
+/**
+ * Cena přepočtená na jeden den tábora, zaokrouhlená na koruny: 5 990 Kč za
+ * pět dní je „1 198 Kč". Jen přepočet ceny z dat, nic nového neslibuje.
+ * `null`, když turnus nemá cenu nebo termín.
+ */
+export function cenaZaDen(turnus: Turnus): string | null {
+  if (turnus.priceKc === null || turnus.start === null || turnus.end === null) return null
+  const dni =
+    Math.round(
+      (new Date(turnus.end + 'T12:00:00').getTime() - new Date(turnus.start + 'T12:00:00').getTime()) /
+        86_400_000
+    ) + 1
+  if (dni <= 0) return null
+  return `${Math.round(turnus.priceKc / dni).toLocaleString('cs-CZ')} Kč`
+}
+
+/**
  * Popisky karty turnusu jako čistá funkce — aby šly otestovat bez vykreslování.
  * Turnus, který není v prodeji, nedostane odkaz na registraci: `ctaHref` je
  * `null` a karta místo tlačítka nabídne sběr kontaktu.

@@ -57,7 +57,7 @@ const FOCUS: Record<FocusId, FocusModule> = {
       // co si dítě odveze, ne jen co tiskárna umí.
       {
         src: '/images/tabor/vytisk-v-ruce.webp',
-        alt: 'Chlapec drží vytištěný díl, který si sám navrhl',
+        alt: 'Vlastní návrh, vytištěný na táboře',
       },
       { src: '/images/gallery/3d-prints-collection.jpg', alt: 'Kolekce výtisků z tábora' },
       { src: '/images/gallery/3d-uv-curing.jpg', alt: 'UV vytvrzování resinových výtisků' },

@@ -20,7 +20,13 @@ const navItems = [
   { name: 'Kontakt', href: '/kontakt' },
 ]
 
-export function Header() {
+/**
+ * `bezCta` schová oranžové tlačítko v liště na počítači. Používá ho stránka
+ * termínu: rodič tam termín už má a druhé oranžové tlačítko by soupeřilo
+ * s „Přihlásit dítě“ v nákupním boxu. V mobilním menu tlačítko zůstává —
+ * tam se otevírá až na vyžádání a nic nepřebíjí.
+ */
+export function Header({ bezCta = false }: { bezCta?: boolean } = {}) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
 
@@ -118,14 +124,16 @@ export function Header() {
             Učebna
             <ExternalLink className="w-3 h-3 ml-1" aria-hidden="true" />
           </a>
-          <Link
-            href={ctaHref}
-            className="ml-4 btn-primary group"
-            onClick={() => trackNavCTA('desktop')}
-          >
-            {ctaLabel}
-            <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-          </Link>
+          {!bezCta && (
+            <Link
+              href={ctaHref}
+              className="ml-4 btn-primary group"
+              onClick={() => trackNavCTA('desktop')}
+            >
+              {ctaLabel}
+              <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+            </Link>
+          )}
         </div>
 
         {/* Mobile: menu button */}

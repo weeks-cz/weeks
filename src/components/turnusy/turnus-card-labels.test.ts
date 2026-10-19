@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { turnusLabels } from './TurnusCard'
+import { cenaZaDen, datumKratce } from './turnus-labels'
 import type { Turnus } from '@/lib/turnusy'
 
 const otevreny: Turnus = {
@@ -98,5 +99,22 @@ describe('turnusLabels — termín přes dva měsíce', () => {
   it('vysází oba měsíce', () => {
     const l = turnusLabels({ ...otevreny, start: '2027-07-29', end: '2027-08-02' })
     expect(l.datum).toBe('29. července – 2. srpna 2027')
+  })
+})
+
+describe('datumKratce a cenaZaDen (přepínač termínů a nákupní box)', () => {
+  it('krátký rozsah v jednom měsíci a přes měsíce', () => {
+    expect(datumKratce('2027-07-26', '2027-07-30')).toBe('26.–30. 7.')
+    expect(datumKratce('2027-07-29', '2027-08-02')).toBe('29. 7.–2. 8.')
+  })
+
+  it('cena za den je přepočet ceny z dat, zaokrouhlený na koruny', () => {
+    // 4 990 Kč / 5 dní = 998 Kč
+    expect(cenaZaDen(otevreny)).toBe('998 Kč')
+    expect(cenaZaDen({ ...otevreny, priceKc: 5990 })).toBe('1 198 Kč')
+  })
+
+  it('turnus bez ceny nebo termínu cenu za den nemá', () => {
+    expect(cenaZaDen(chystany)).toBeNull()
   })
 })

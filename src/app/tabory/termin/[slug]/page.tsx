@@ -1,27 +1,22 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { ArrowRight, Calendar, Check, Clock, Minus, Users, Wallet } from 'lucide-react'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { EventSchema, BreadcrumbSchema } from '@/components/seo/StructuredData'
-import { TurnusCard } from '@/components/turnusy/TurnusCard'
-import { datumCesky, turnusLabels } from '@/components/turnusy/turnus-labels'
-import { TerminPrihlaska } from '@/components/turnusy/TerminPrihlaska'
-import { TurnusInterestForm } from '@/components/turnusy/TurnusInterestForm'
-import { VenueShowcase } from '@/components/turnusy/VenueShowcase'
-import { getCity, getVenue } from '@/lib/cities'
-import { MIMO_CENU, PROVOZNI_DOBA, SITE, V_CENE } from '@/lib/site'
-import { zkusiSiTabora } from '@/lib/tabory'
-import { getTurnus, getTurnusy, getTaboryTurnusu, isBookable } from '@/lib/turnusy'
+import { TerminDetail } from '@/components/turnusy/TerminDetail'
+import { turnusLabels } from '@/components/turnusy/turnus-labels'
+import { getCity } from '@/lib/cities'
+import { SITE } from '@/lib/site'
+import { getTurnus, getTurnusy, getTaboryTurnusu } from '@/lib/turnusy'
 
 /**
- * Stránka konkrétního termínu — nejkratší ze tří úrovní.
+ * Stránka konkrétního termínu — detail produktu (`TerminDetail`, redesign
+ * 2026-10-19, viz `docs/superpowers/specs/2026-10-19-tabory-detail-redesign.md`).
  *
  * Popis tábora se sem schválně NEDUPLIKUJE. Při několika tématech, dvou
  * městech a více termínech by vznikla řada skoro shodných stránek a vyhledávač
- * by si z nich vybral jednu sám. Popis proto žije jen na stránce tématu a sem
- * vede odkaz „Celý popis tábora“ plus tři body výtahu.
+ * by si z nich vybral jednu sám. Popis proto žije jen na stránce tématu; sem
+ * patří jen strukturovaný výtah (body ze zaměření, týden v kostce).
  *
  * Adresa je `/tabory/termin/[slug]`, ne vnořená pod téma: turnus může mít témat
  * víc a změna tématu by jinak vynutila přesměrování adresy, která je na
@@ -78,14 +73,7 @@ export default async function TerminPage({ params }: { params: Promise<{ slug: s
   if (!turnus) notFound()
 
   const l = turnusLabels(turnus)
-  const tabory = getTaboryTurnusu(turnus)
-  const tabor = tabory[0]
-  const venue = turnus.venueId ? getVenue(turnus.venueId) : null
-  const dalsiTurnusy = getTurnusy().filter((t) => t.id !== turnus.id)
-  const prodejny = isBookable(turnus)
-
-  // Tři body výtahu, ne celý popis — ten patří stránce tématu.
-  const vytah = tabor ? zkusiSiTabora(tabor).slice(0, 3) : []
+  const tabor = getTaboryTurnusu(turnus)[0]
 
   return (
     <>
@@ -102,172 +90,10 @@ export default async function TerminPage({ params }: { params: Promise<{ slug: s
           { name: `${l.mesto} — ${l.datum}`, url: `${SITE.url}/tabory/termin/${turnus.slug}` },
         ]}
       />
-      <Header />
-      <main>
-        <section className="relative overflow-hidden border-b border-ink/15 bg-paper blueprint-grid pb-16 pt-32">
-          <div className="section-container relative z-10">
-            <div className="max-w-3xl">
-              <nav
-                aria-label="Drobečková navigace"
-                className="mb-8 font-mono text-xs uppercase tracking-[0.2em]"
-              >
-                <Link href="/" className="text-ink/50 transition-colors hover:text-primary-600">
-                  Domů
-                </Link>
-                <span className="mx-2 text-ink/30">/</span>
-                <Link href="/tabory" className="text-ink/50 transition-colors hover:text-primary-600">
-                  Tábory
-                </Link>
-                {tabor && (
-                  <>
-                    <span className="mx-2 text-ink/30">/</span>
-                    <Link
-                      href={`/tabory/${tabor.id}`}
-                      className="text-ink/50 transition-colors hover:text-primary-600"
-                    >
-                      {tabor.shortName}
-                    </Link>
-                  </>
-                )}
-                <span className="mx-2 text-ink/30">/</span>
-                <span className="font-medium text-ink">
-                  {l.mesto} — {l.datum}
-                </span>
-              </nav>
-
-              <p className="mono-label mb-6">{l.mesto}</p>
-
-              <h1 className="heading-1 mb-6 text-ink">
-                {tabor ? tabor.name : 'Letní příměstský tábor'} —{' '}
-                <span className="text-accent-600">{l.datum}</span>
-              </h1>
-
-              <p className="mb-10 max-w-2xl text-lg leading-relaxed text-ink-500 md:text-xl">
-                {turnus.perex}
-              </p>
-
-              {/* Technický štítek termínu. `<dt>` stojí ve zdroji před svým
-                  `<dd>`; vizuálně patří pod hodnotu, což řeší `order-last`. */}
-              <dl className="mb-10 grid grid-cols-2 overflow-hidden rounded-md border border-ink bg-white sm:grid-cols-4">
-                {[
-                  { icon: Calendar, label: '5 dní', sublabel: 'Po – Pá' },
-                  { icon: Clock, label: PROVOZNI_DOBA.rozsah, sublabel: 'každý den' },
-                  { icon: Users, label: l.kapacita || 'Upřesníme', sublabel: 'kapacita' },
-                  { icon: Wallet, label: l.cena || 'Upřesníme', sublabel: 'cena' },
-                ].map((fact, i) => (
-                  <div
-                    key={fact.sublabel}
-                    className={`flex flex-col border-ink/15 p-4 ${i % 2 === 1 ? 'border-l' : ''} ${i >= 2 ? 'border-t sm:border-t-0' : ''} ${i > 0 ? 'sm:border-l' : ''}`}
-                  >
-                    <fact.icon className="mb-2 h-4 w-4 text-accent-600" aria-hidden="true" />
-                    <dt className="order-last mt-0.5 font-mono text-xs uppercase tracking-wider text-ink/50">
-                      {fact.sublabel}
-                    </dt>
-                    <dd className="font-display text-sm font-semibold text-ink">{fact.label}</dd>
-                  </div>
-                ))}
-              </dl>
-
-              {prodejny ? (
-                // `prodejny` je stejná podmínka (`isBookable`), ze které
-                // `turnusLabels` odvozuje `ctaHref` — v téhle větvi je vyplněné.
-                <>
-                  <TerminPrihlaska turnus={turnus} ctaText={l.ctaText} ctaHref={l.ctaHref!} />
-                  {turnus.minimum && (
-                    <p className="mt-5 max-w-xl text-sm text-ink-500">
-                      Turnus se koná při nejméně {turnus.minimum.deti} přihlášených dětech.
-                      O konání rozhodneme do {datumCesky(turnus.minimum.rozhodnemeDo)}; když se
-                      nekoná, nabídneme přesun na jiný termín, nebo vrátíme celou platbu.
-                    </p>
-                  )}
-                </>
-              ) : (
-                <TurnusInterestForm turnus={turnus} source={`turnus-${turnus.slug}`} />
-              )}
-            </div>
-          </div>
-        </section>
-
-        {/* Výtah z tématu a odkaz na jeho celý popis — ten se sem neopisuje. */}
-        {tabor && (
-          <section className="section-padding bg-paper">
-            <div className="section-container">
-              <div className="max-w-3xl">
-                <p className="mono-label mb-4">Co se na tomhle táboře dělá</p>
-                <h2 className="heading-2 mb-6 text-ink">{tabor.name}</h2>
-
-                <ul className="mb-8 space-y-3">
-                  {vytah.map((bod) => (
-                    <li key={bod} className="flex gap-3 text-lg text-ink-500">
-                      <Check className="mt-1 h-5 w-5 shrink-0 text-accent-600" aria-hidden="true" />
-                      {bod}
-                    </li>
-                  ))}
-                </ul>
-
-                <Link href={`/tabory/${tabor.id}`} className="btn-outline group">
-                  Celý popis tábora
-                  <ArrowRight
-                    className="h-4 w-4 transition-transform group-hover:translate-x-1"
-                    aria-hidden="true"
-                  />
-                </Link>
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* Co cena zahrnuje — jen u turnusu s cenou. Výčet je sdílený s VOP
-            čl. 20 (`V_CENE` / `MIMO_CENU` v site.ts). */}
-        {turnus.priceKc !== null && (
-          <section className="section-padding border-t border-ink/15 bg-paper-soft">
-            <div className="section-container">
-              <p className="mono-label mb-4">Cena {l.cena}</p>
-              <h2 className="heading-2 mb-10 text-ink">Co je v ceně</h2>
-              <div className="grid gap-10 md:grid-cols-2">
-                <ul className="space-y-3">
-                  {V_CENE.map((polozka) => (
-                    <li key={polozka} className="flex gap-3 text-lg text-ink">
-                      <Check className="mt-1 h-5 w-5 shrink-0 text-trust-600" aria-hidden="true" />
-                      {polozka}
-                    </li>
-                  ))}
-                </ul>
-                <div>
-                  <p className="mb-3 font-mono text-xs uppercase tracking-wider text-ink/50">
-                    Není v ceně
-                  </p>
-                  <ul className="space-y-3">
-                    {MIMO_CENU.map((polozka) => (
-                      <li key={polozka} className="flex gap-3 text-ink-500">
-                        <Minus className="mt-1 h-4 w-4 shrink-0 text-ink/40" aria-hidden="true" />
-                        {polozka}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </section>
-        )}
-
-        {venue && <VenueShowcase venue={venue} />}
-
-        {dalsiTurnusy.length > 0 && (
-          <section className="section-padding border-t border-ink/15 bg-paper-soft">
-            <div className="section-container">
-              <h2 className="heading-2 mb-10 text-ink">Další termíny</h2>
-              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {dalsiTurnusy.map((t) => (
-                  // Formulář zájmu stojí na stránce TOHO turnusu, ne na téhle —
-                  // prodejný termín žádný nemá, kotva `#zajem` by vedla do prázdna.
-                  <TurnusCard key={t.id} turnus={t} zajemHref={`/tabory/termin/${t.slug}#zajem`} />
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
-      </main>
+      {/* Bez oranžového tlačítka v liště — rodič termín už má a druhé
+          oranžové tlačítko by soupeřilo s „Přihlásit dítě“. */}
+      <Header bezCta />
+      <TerminDetail turnus={turnus} />
       <Footer />
     </>
   )

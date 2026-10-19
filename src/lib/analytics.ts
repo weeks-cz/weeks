@@ -38,6 +38,18 @@ export function trackNavCTA(source: 'desktop' | 'mobile') {
   sendGAEvent('event', 'nav_cta_click', { source })
 }
 
+// Klik na „Přihlásit dítě“ na stránce termínu. `source` říká, odkud: hlavní
+// tlačítko v nákupním boxu (`uvod`), lepicí lišta (`lista`), nebo závěrečná
+// výzva (`zaver`). Spolu s `registration_step` z formuláře ukazuje, jestli
+// stránka termínu do registrace posílá víc lidí. Jen GA — konverzí je až
+// zaplacená registrace, ne klik.
+export function trackTerminCta(params: {
+  source: 'uvod' | 'lista' | 'zaver'
+  termId: string
+}) {
+  sendGAEvent('event', 'termin_cta_click', { source: params.source, term_id: params.termId })
+}
+
 // Mimosezónní kontakt: web zatím nic neprodává (žádný turnus není bookable),
 // takže tohle je výchozí způsob sběru poptávky, ne výjimka pro jedno město.
 // Jen GA — do Meta se to jako Lead neposílá, žádná kampaň na to teď necílí
