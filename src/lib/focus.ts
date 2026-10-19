@@ -26,6 +26,12 @@ export interface FocusModule {
   gallery?: Array<{ src: string; alt: string }>
   /** Otázky rodičů, které se týkají právě tohohle zaměření. */
   faq?: Array<{ question: string; answer: string }>
+  /**
+   * Fotka na dlaždici zaměření v sekci „Co si postavíš“ (`TemaDetail`).
+   * Ilustrační — dlaždice ji nepopisuje jako záběr z konkrétního tábora,
+   * proto sem smí i upravená fotka. Do `gallery` (výrobky z tábora) ne.
+   */
+  foto?: { src: string; alt: string }
 }
 
 export const FOCUS_IDS: FocusId[] = ['3d-tisk', 'iot', 'vr', 'herni-vyvoj']
@@ -52,6 +58,10 @@ const FOCUS: Record<FocusId, FocusModule> = {
     // bude. Vykreslit se smí, až bude jasné, na čem se na konkrétním místě
     // opravdu pracuje — a pak podle toho místa, ne podle tohohle pole.
     printers: ['MK3S', 'MK4S', 'Mini+', 'CORE One', 'CORE One L', 'XL', 'SL1S'],
+    foto: {
+      src: '/images/tabor/dilna-tiskarny.webp',
+      alt: 'Kluk u počítače se slicerem a holka, která se sklání k 3D tiskárně',
+    },
     gallery: [
       // Dítě s vlastním výtiskem v ruce jde záměrně první: galerie má ukázat,
       // co si dítě odveze, ne jen co tiskárna umí.
@@ -102,6 +112,10 @@ const FOCUS: Record<FocusId, FocusModule> = {
       'akcelerometr',
       'kompas',
     ],
+    foto: {
+      src: '/images/tabor/dilna-elektronika.webp',
+      alt: 'Dvě děti s lektorem zapojují nepájivé pole s LED diodami u notebooku',
+    },
     gallery: [
       { src: '/images/gallery/iot-arduino-breadboard.jpg', alt: 'Práce s Arduino breadboardem' },
       { src: '/images/gallery/iot-plant-sensor.jpg', alt: 'IoT senzor na květině' },

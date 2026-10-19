@@ -2,7 +2,17 @@ import type { LucideIcon } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import {
-  ArrowDown, ArrowRight, Box, Check, ChevronDown, Cpu, Gamepad2, Headset, Printer, Sparkles, Star,
+  ArrowDown,
+  ArrowRight,
+  Box,
+  Check,
+  ChevronDown,
+  Cpu,
+  Gamepad2,
+  Headset,
+  Printer,
+  Sparkles,
+  Star,
 } from 'lucide-react'
 import { FAQSection } from '@/components/sections/FAQSection'
 import { FotoPas } from '@/components/sections/FotoPas'
@@ -44,8 +54,8 @@ const IKONY_DNE: Record<IkonaDne, LucideIcon> = {
 
 const IKONY_ZAMERENI: Record<FocusId, LucideIcon> = {
   '3d-tisk': Box,
-  'iot': Cpu,
-  'vr': Headset,
+  iot: Cpu,
+  vr: Headset,
   'herni-vyvoj': Gamepad2,
 }
 
@@ -59,7 +69,10 @@ const FOTKA_HERA = {
 
 function Drobecky({ tabor }: { tabor: Tabor }) {
   return (
-    <nav aria-label="Drobečková navigace" className="mb-6 font-mono text-xs uppercase tracking-[0.2em] md:mb-8">
+    <nav
+      aria-label="Drobečková navigace"
+      className="mb-6 font-mono text-xs uppercase tracking-[0.2em] md:mb-8"
+    >
       <Link href="/" className="text-paper/50 transition-colors hover:text-paper">
         Domů
       </Link>
@@ -78,7 +91,8 @@ function Hodnoceni() {
   return (
     <a href="#recenze" className="inline-flex items-center gap-1.5 text-sm text-paper/80 hover:text-paper">
       <Star className="h-4 w-4 fill-cta-400 text-cta-400" aria-hidden="true" />
-      <strong className="text-paper">{GOOGLE_PROFIL.prumer}</strong> · {GOOGLE_PROFIL.pocet} hodnocení na Google
+      <strong className="text-paper">{GOOGLE_PROFIL.prumer}</strong> · {GOOGLE_PROFIL.pocet} hodnocení na
+      Google
     </a>
   )
 }
@@ -92,11 +106,11 @@ function AktivniTema({ tabor }: { tabor: Tabor }) {
   const prodejne = turnusy.filter(isBookable)
   const zamereni = getFocusModules(tabor.focus)
   const venueIds = Array.from(
-    new Set(turnusy.map((t) => t.venueId).filter((id): id is VenueId => id !== null))
+    new Set(turnusy.map((t) => t.venueId).filter((id): id is VenueId => id !== null)),
   )
   const galerie = zamereni.flatMap((z) => (z.gallery ?? []).map((img) => ({ ...img, tag: z.name })))
   const faq = [...getSiteFaq(), ...zamereni.flatMap((z) => z.faq ?? []), ...(tabor.faq ?? [])].filter(
-    (otazka, i, vse) => vse.findIndex((o) => o.question === otazka.question) === i
+    (otazka, i, vse) => vse.findIndex((o) => o.question === otazka.question) === i,
   )
   const vek = turnusy[0]?.ageRange.replace('-', '–') ?? '9–15'
   const ceny = prodejne.map((t) => t.priceKc).filter((c): c is number => c !== null)
@@ -143,18 +157,28 @@ function AktivniTema({ tabor }: { tabor: Tabor }) {
                           {getCity(t.city).name}
                         </span>
                         <span className="font-display text-lg font-bold">
-                          {t.start && t.end ? `${datumKratce(t.start, t.end)} ${t.start.slice(0, 4)}` : 'Termín upřesníme'}
+                          {t.start && t.end
+                            ? `${datumKratce(t.start, t.end)} ${t.start.slice(0, 4)}`
+                            : 'Termín upřesníme'}
                         </span>
-                        <span className={`mt-2 inline-flex items-center gap-1 text-sm font-medium ${prodejny ? 'text-ink' : 'text-paper/60'}`}>
+                        <span
+                          className={`mt-2 inline-flex items-center gap-1 text-sm font-medium ${prodejny ? 'text-ink' : 'text-paper/60'}`}
+                        >
                           {prodejny ? 'Přihlásit dítě' : 'Chystáme · dát vědět'}
-                          <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+                          <ArrowRight
+                            className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5"
+                            aria-hidden="true"
+                          />
                         </span>
                       </Link>
                     </li>
                   )
                 })}
               </ul>
-              <a href="#co-si-postavi" className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-paper/70 hover:text-paper">
+              <a
+                href="#co-si-postavi"
+                className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-paper/70 hover:text-paper"
+              >
                 <ArrowDown className="h-4 w-4" aria-hidden="true" />
                 Co děti na táboře čeká
               </a>
@@ -162,7 +186,10 @@ function AktivniTema({ tabor }: { tabor: Tabor }) {
           </div>
 
           <div className="relative mx-auto hidden w-full max-w-sm lg:col-span-5 lg:block">
-            <div aria-hidden="true" className="absolute inset-0 translate-x-4 translate-y-4 rounded-md bg-cta-400" />
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 translate-x-4 translate-y-4 rounded-md bg-cta-400"
+            />
             <Image
               src={FOTKA_HERA.src}
               alt={FOTKA_HERA.alt}
@@ -206,26 +233,43 @@ function AktivniTema({ tabor }: { tabor: Tabor }) {
               Co si <span className="text-accent-400">postavíš</span>
             </h2>
             <p className="text-lg text-paper/70">
-              Týden stojí na {zamereni.length === 2 ? 'dvou tématech' : `${zamereni.length} tématech`}.
-              Každé končí něčím, co uděláš sám.
+              Týden stojí na {zamereni.length === 2 ? 'dvou tématech' : `${zamereni.length} tématech`}. Každé
+              končí něčím, co uděláš sám.
             </p>
           </div>
           <div className="grid gap-6 md:grid-cols-2">
             {zamereni.map((z) => {
               const Ikona = IKONY_ZAMERENI[z.id]
               return (
-                <article key={z.id} className="rounded-md border border-paper/15 bg-paper/[0.03] p-7">
-                  <Ikona className="mb-5 h-9 w-9 text-accent-400" aria-hidden="true" />
-                  <h3 className="mb-2 font-display text-2xl font-semibold text-paper">{z.name}</h3>
-                  <p className="mb-6 text-paper/70">{z.short}</p>
-                  <ul className="space-y-2.5">
-                    {z.tryOut.map((bod) => (
-                      <li key={bod} className="flex gap-2.5 text-paper/85">
-                        <Check className="mt-1 h-4 w-4 shrink-0 text-accent-400" aria-hidden="true" />
-                        {bod}
-                      </li>
-                    ))}
-                  </ul>
+                <article
+                  key={z.id}
+                  className="overflow-hidden rounded-md border border-paper/15 bg-paper/[0.03]"
+                >
+                  {z.foto && (
+                    <div className="relative aspect-[16/9] border-b border-paper/15">
+                      <Image
+                        src={z.foto.src}
+                        alt={z.foto.alt}
+                        fill
+                        loading="lazy"
+                        sizes="(min-width: 768px) 45vw, 100vw"
+                        className="object-cover"
+                      />
+                    </div>
+                  )}
+                  <div className="p-7">
+                    <Ikona className="mb-5 h-9 w-9 text-accent-400" aria-hidden="true" />
+                    <h3 className="mb-2 font-display text-2xl font-semibold text-paper">{z.name}</h3>
+                    <p className="mb-6 text-paper/70">{z.short}</p>
+                    <ul className="space-y-2.5">
+                      {z.tryOut.map((bod) => (
+                        <li key={bod} className="flex gap-2.5 text-paper/85">
+                          <Check className="mt-1 h-4 w-4 shrink-0 text-accent-400" aria-hidden="true" />
+                          {bod}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </article>
               )
             })}
@@ -271,7 +315,10 @@ function AktivniTema({ tabor }: { tabor: Tabor }) {
                         <p className="mb-3 max-w-2xl text-ink-500">{den.description}</p>
                         <ul className="flex flex-wrap gap-2">
                           {den.highlights.map((h) => (
-                            <li key={h} className="rounded-sm bg-accent-50 px-2.5 py-1 text-sm text-accent-800">
+                            <li
+                              key={h}
+                              className="rounded-sm bg-accent-50 px-2.5 py-1 text-sm text-accent-800"
+                            >
                               {h}
                             </li>
                           ))}
@@ -285,15 +332,22 @@ function AktivniTema({ tabor }: { tabor: Tabor }) {
               <details className="group mt-12 rounded-md border border-ink bg-white">
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-5 font-display text-lg font-semibold text-ink [&::-webkit-details-marker]:hidden">
                   Jak vypadá jeden den
-                  <ChevronDown className="h-5 w-5 transition-transform group-open:rotate-180" aria-hidden="true" />
+                  <ChevronDown
+                    className="h-5 w-5 transition-transform group-open:rotate-180"
+                    aria-hidden="true"
+                  />
                 </summary>
                 <ol className="grid border-t border-ink/15 sm:grid-cols-2">
                   {DENNI_HARMONOGRAM.map((item) => (
                     <li key={item.time} className="flex gap-4 border-b border-ink/10 p-4 sm:odd:border-r">
-                      <span className="w-12 shrink-0 font-mono text-sm font-semibold text-accent-600">{item.time}</span>
+                      <span className="w-12 shrink-0 font-mono text-sm font-semibold text-accent-600">
+                        {item.time}
+                      </span>
                       <div>
                         <p className="font-display text-sm font-semibold text-ink">{item.title}</p>
-                        {item.description && <p className="mt-0.5 text-xs text-ink-500">{item.description}</p>}
+                        {item.description && (
+                          <p className="mt-0.5 text-xs text-ink-500">{item.description}</p>
+                        )}
                       </div>
                     </li>
                   ))}
@@ -361,7 +415,9 @@ function AktivniTema({ tabor }: { tabor: Tabor }) {
         <div className="section-container relative z-10">
           <div className="max-w-3xl">
             <h2 className="heading-2 mb-5 text-ink">
-              {prodejne.length > 0 ? 'Přihlaste dítě, dokud jsou volná místa' : 'Chcete vědět o termínech mezi prvními?'}
+              {prodejne.length > 0
+                ? 'Přihlaste dítě, dokud jsou volná místa'
+                : 'Chcete vědět o termínech mezi prvními?'}
             </h2>
             <p className="mb-8 text-lg text-ink/80">
               {prodejne.length > 0
@@ -371,7 +427,10 @@ function AktivniTema({ tabor }: { tabor: Tabor }) {
             <div className="flex flex-col gap-4 sm:flex-row">
               <a href="#turnusy" className="btn-secondary group">
                 {prodejne.length > 0 ? 'Vybrat termín' : 'Nechat kontakt'}
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+                <ArrowRight
+                  className="h-4 w-4 transition-transform group-hover:translate-x-1"
+                  aria-hidden="true"
+                />
               </a>
               <Link href="/kontakt" className="btn-outline">
                 Máte dotazy?
@@ -415,7 +474,10 @@ function ChystaneTema({ tabor }: { tabor: Tabor }) {
             <p className="mb-8 max-w-2xl text-lg leading-relaxed text-paper/75 md:text-xl">{tabor.popis}</p>
             <a href="#zajem" className="btn-primary group px-8 py-4">
               Dát vědět, až ho otevřeme
-              <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+              <ArrowRight
+                className="h-5 w-5 transition-transform group-hover:translate-x-1"
+                aria-hidden="true"
+              />
             </a>
           </div>
         </div>
@@ -461,7 +523,10 @@ function ChystaneTema({ tabor }: { tabor: Tabor }) {
                 {bezici.map((b) => (
                   <Link key={b.id} href={`/tabory/${b.id}`} className="btn-outline group">
                     {b.name}
-                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+                    <ArrowRight
+                      className="h-4 w-4 transition-transform group-hover:translate-x-1"
+                      aria-hidden="true"
+                    />
                   </Link>
                 ))}
               </div>
