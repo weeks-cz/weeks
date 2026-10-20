@@ -69,7 +69,7 @@ export const V_CENE = [
   'Oběd každý den',
   'Pitný režim',
   'Materiál a pomůcky',
-  'Vlastní výtisk z 3D tiskárny domů',
+  'Vlastní výtisky z 3D tiskárny domů',
 ] as const
 
 export const MIMO_CENU = [
@@ -152,7 +152,7 @@ export function getSiteFaq(): Array<{ question: string; answer: string }> {
       // v laboratoři"). Web nesmí tvrdit obojí — obecný slib proto mizí
       // a odpověď posílá čtenáře k zaměření, kde platí provozní pravda.
       answer:
-        'Vlastní výtisk z 3D tiskárny a vlastní 3D model, který si navrhlo. U elektroniky záleží na zaměření turnusu — co si děti odvážejí a co zůstává v laboratoři, píšeme u každého zaměření zvlášť.',
+        'Vlastní výtisky z 3D tiskárny a vlastní 3D model, který si navrhlo. U elektroniky záleží na zaměření turnusu — co si děti odvážejí a co zůstává v laboratoři, píšeme u každého zaměření zvlášť.',
     },
     {
       question: 'Jak probíhá platba?',

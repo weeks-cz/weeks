@@ -41,14 +41,14 @@ const FOCUS: Record<FocusId, FocusModule> = {
     id: '3d-tisk',
     name: '3D tisk',
     short:
-      'Od vlastního modelu k hotovému výtisku, který si dítě odveze domů.',
+      'Od vlastního modelu k hotovým výtiskům, které si dítě odveze domů.',
     tryOut: [
       'Navrhne si vlastní model a připraví ho k tisku',
       // Bez jmenného seznamu modelů — ze stejného důvodu, z jakého se
       // nevykresluje pole `printers` níž.
       'Osahá si několik různých typů tiskáren',
       'Uvidí, proč tisk selže, a naučí se tomu předejít',
-      'Odveze si vlastní výtisk',
+      'Odveze si vlastní výtisky',
     ],
     // POZOR — tenhle seznam se schválně nikde nevykresluje. Je to inventář
     // konkrétního prostoru (HWLab), který pro rok 2027 není domluvený, a
