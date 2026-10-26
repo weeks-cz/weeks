@@ -610,6 +610,10 @@ phase 6 — the one-page `/tabor` itself. See "Redirects" above.
 - `isBookable()` then switches the turnus card from the interest form to a
   real "Přihlásit dítě" registration CTA — no DDM link, no manual step.
 - Nothing about the theme changes: `tabory.ts` does not carry dates or prices.
+- Flip `prihlasky` for that city in `weeks-iot/src/lib/camp-offer.ts` — the
+  učebna's lobby, course finale and parent account show the camp card from
+  it, and nothing checks that the two repos agree. The same applies the other way:
+  closing a turnus here means flipping it back there.
 
 ### Ad landing pages
 None exist right now. `/kveten` (May 2026, 3D tisk/IoT one-day terms)
