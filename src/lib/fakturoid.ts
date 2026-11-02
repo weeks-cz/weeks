@@ -39,6 +39,8 @@ export interface InvoiceParams {
   termLabel: string
   priceKc: number
   sendEmail: boolean
+  /** Položka faktury, když se liší od „program — termín“ (záloha, doplatek). */
+  polozka?: string
 }
 
 export function buildSubjectPayload(p: InvoiceParams) {
@@ -59,7 +61,7 @@ export function buildInvoicePayload(subjectId: number, p: InvoiceParams) {
     subject_id: subjectId,
     lines: [
       {
-        name: `${p.programName} — ${p.termLabel}`,
+        name: p.polozka ?? `${p.programName} — ${p.termLabel}`,
         quantity: '1',
         unit_name: 'ks',
         unit_price: String(p.priceKc),

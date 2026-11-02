@@ -11,6 +11,7 @@ import {
   doplatekKrok,
   addDays,
   isPaymentPlan,
+  labelPlatby,
 } from './zaloha'
 import type { Turnus } from './turnusy'
 
@@ -196,5 +197,22 @@ describe('isPaymentPlan', () => {
     expect(isPaymentPlan('zaloha')).toBe(true)
     expect(isPaymentPlan('splatky')).toBe(false)
     expect(isPaymentPlan(undefined)).toBe(false)
+  })
+})
+
+describe('labelPlatby', () => {
+  it('plná platba má stejný popisek jako dřív', () => {
+    expect(labelPlatby('plna', 'Tomáš')).toBe('Weeks tábor – Tomáš')
+  })
+
+  it('záloha a doplatek se v Comgate poznají podle slova', () => {
+    expect(labelPlatby('zaloha', 'Tomáš')).toBe('Weeks tábor – záloha – Tomáš')
+    expect(labelPlatby('doplatek', 'Tomáš')).toBe('Weeks tábor – doplatek – Tomáš')
+  })
+
+  it('dlouhé jméno zkrátí a nerozbije znaky', () => {
+    const dlouhe = 'Ž'.repeat(60)
+    const label = labelPlatby('zaloha', dlouhe)
+    expect(Array.from(label.split(' – ').pop() ?? '')).toHaveLength(40)
   })
 })

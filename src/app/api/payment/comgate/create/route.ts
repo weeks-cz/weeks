@@ -5,9 +5,36 @@ import { registrationToken } from '@/lib/registration-token'
 import { API_ERRORS } from '@/lib/api-messages'
 import { rateLimit, clientIp } from '@/lib/rate-limit'
 import { reportError } from '@/lib/observability'
+import { pragueIsoDate } from '@/lib/dates'
+import { getTurnusById } from '@/lib/turnusy'
+import { obsazenaMista, zaplaceno } from '@/lib/registration-payments'
+import {
+  castkaDoplatku,
+  castkyPlatby,
+  isPaymentPlan,
+  labelPlatby,
+  platnyPlan,
+  zalohaDostupna,
+  type PaymentKind,
+  type PaymentPlan,
+} from '@/lib/zaloha'
 
 export const dynamic = 'force-dynamic'
 
+/**
+ * Založení platby u Comgate.
+ *
+ * Tři případy podle stavu registrace:
+ * - `completed` → 409, už zaplaceno (beze změny).
+ * - `partial` → doplatek: částka = cena minus součet zaplacených plateb.
+ * - jinak → první platba: záloha, nebo plná cena. Plán určuje server
+ *   (`zalohaDostupna`), tělo jen nabídne volbu. Tahle platba zabírá místo,
+ *   proto se znovu ověří kapacita (ostatní držitelé místa bez této registrace).
+ *
+ * Každá platba dostane vlastní řádek v `registration_payments`. Callback podle
+ * něj pozná, o kterou platbu jde; `registrations.comgate_payment_id` se přepisuje
+ * dál kvůli hubu a staré ochraně proti zastaralému callbacku.
+ */
 export async function POST(request: NextRequest) {
   try {
     // Abuse guard: max 15 payment-init attempts per IP per 10 min. Fail-open.
@@ -17,15 +44,20 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: API_ERRORS.rateLimited }, { status: 429 })
     }
 
-    const { registrationId } = await request.json()
+    const { registrationId, plan: planZBody } = await request.json()
     if (!registrationId) {
+      return NextResponse.json({ error: API_ERRORS.invalidRequest }, { status: 400 })
+    }
+    if (planZBody !== undefined && !isPaymentPlan(planZBody)) {
       return NextResponse.json({ error: API_ERRORS.invalidRequest }, { status: 400 })
     }
 
     const supabase = createServerClient()
     const { data: reg, error } = await supabase
       .from('registrations')
-      .select('id, location_id, program, parent_email, child_name, payment_status, payment_amount')
+      .select(
+        'id, location_id, term_id, program, child_name, parent_email, payment_status, payment_amount, payment_plan'
+      )
       .eq('id', registrationId)
       .single()
 
@@ -42,9 +74,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: API_ERRORS.alreadyPaid }, { status: 409 })
     }
 
-    // Částku NEODVOZUJEME znovu — platí ta, kterou server zapsal při vzniku
-    // registrace a na kterou rodič kývl. Turnus mezitím mohl zmizet z nabídky,
-    // ale nezaplacená registrace musí jít doplatit.
+    // Částku NEODVOZUJEME znovu z dnešního ceníku — platí ta, kterou server zapsal
+    // při vzniku registrace. Turnus mohl mezitím zmizet z nabídky, ale nezaplacená
+    // registrace musí jít doplatit. Záloha se přepočítává, protože ta má termín.
     const priceKc = reg.payment_amount as number | null
     if (!priceKc || priceKc <= 0) {
       reportError(new Error('Registrace nemá uloženou částku k zaplacení'), {
@@ -54,11 +86,44 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: API_ERRORS.paymentInitFailed }, { status: 400 })
     }
 
+    const dnes = pragueIsoDate()
+    const turnus = getTurnusById(reg.term_id as string)
+
+    let kind: PaymentKind
+    let amountKc: number
+    let plan: PaymentPlan | null = null
+
+    if (reg.payment_status === 'partial') {
+      // Doplatek: zbytek ceny, bez další kontroly kapacity (místo už drží záloha).
+      kind = 'doplatek'
+      amountKc = castkaDoplatku(priceKc, await zaplaceno(supabase, reg.id as string))
+      if (amountKc <= 0) {
+        return NextResponse.json({ error: API_ERRORS.alreadyPaid }, { status: 409 })
+      }
+    } else {
+      // První platba. Plán: volba z těla, jinak to, co rodič zvolil při přihlášce.
+      // `platnyPlan` ji přepne na plnou, když záloha není dostupná.
+      const pozadovany = (planZBody ?? reg.payment_plan ?? 'plna') as PaymentPlan
+      plan = turnus ? platnyPlan(pozadovany, zalohaDostupna(turnus, dnes)) : 'plna'
+      kind = plan === 'zaloha' ? 'zaloha' : 'plna'
+      amountKc = plan === 'zaloha' && turnus?.zaloha ? turnus.zaloha.castkaKc : priceKc
+
+      // Oprava díry z grillingu: přihláška, která visela na platbě, mohla místo
+      // mezitím ztratit. Ověříme, že pro ni na turnusu ještě je místo.
+      if (turnus) {
+        const obsazeno = await obsazenaMista(supabase, reg.term_id as string, reg.id as string)
+        if (obsazeno >= turnus.capacity) {
+          return NextResponse.json({ error: API_ERRORS.capacityFull }, { status: 409 })
+        }
+      }
+    }
+
     const origin = request.nextUrl.origin
     const { transId, redirect } = await createPayment({
       registrationId: reg.id as string,
-      priceKc,
-      label: `Weeks tábor – ${reg.child_name ?? 'registrace'}`,
+      priceKc: amountKc,
+      // Plná platba má popisek jako dřív; záloha a doplatek se v Comgate poznají.
+      label: labelPlatby(kind, reg.child_name as string | null),
       email: (reg.parent_email as string) ?? '',
       returnBaseUrl: origin,
       locationId: reg.location_id as string,
@@ -68,12 +133,36 @@ export async function POST(request: NextRequest) {
     // Diagnostic: is the service-role key reaching the function? (boolean only — no secret leak)
     console.log('[comgate/create] hasServiceRole:', !!process.env.SUPABASE_SERVICE_ROLE_KEY, 'transId:', transId)
 
+    // Řádek platby dřív než cokoli jiného: callback ho musí najít, i kdyby se
+    // následující zápis do registrace nepovedl.
+    const { error: paymentInsertError } = await supabase.from('registration_payments').insert({
+      registration_id: reg.id,
+      kind,
+      amount_kc: amountKc,
+      comgate_trans_id: transId,
+      status: 'pending',
+    })
+    if (paymentInsertError) {
+      reportError(paymentInsertError, {
+        route: 'comgate/create',
+        reason: 'insert-payment-row',
+        registrationId: reg.id,
+        transId,
+      })
+      return NextResponse.json({ error: API_ERRORS.paymentInitFailed }, { status: 500 })
+    }
+
     // Persist the transId — and VERIFY it actually wrote a row. A silent 0-row update
     // (e.g. RLS blocking because the anon key is in use) must NOT proceed: that would
     // mean the customer pays but we can never match the callback. Fail loudly instead.
+    // U doplatku se `payment_status` nechává na 'partial' (ne přepisovat na pending).
+    const update: Record<string, unknown> =
+      plan === null
+        ? { comgate_payment_id: transId, comgate_status: 'pending' }
+        : { comgate_payment_id: transId, comgate_status: 'pending', payment_status: 'pending', payment_plan: plan }
     const { data: updated, error: updateError } = await supabase
       .from('registrations')
-      .update({ comgate_payment_id: transId, comgate_status: 'pending', payment_status: 'pending' })
+      .update(update)
       .eq('id', reg.id)
       .select('id')
 
@@ -92,5 +181,67 @@ export async function POST(request: NextRequest) {
   } catch (e) {
     reportError(e, { route: 'comgate/create', reason: 'unhandled' })
     return NextResponse.json({ error: API_ERRORS.gatewayUnavailable }, { status: 502 })
+  }
+}
+
+/**
+ * Stav platby a částky pro stránku `/platba`. Vrací jen čísla a stav, žádná
+ * osobní data — stránka z toho vykreslí volbu (záloha / celá částka) nebo
+ * jen doplatek. Stejně jako POST se nic nezapisuje.
+ */
+export async function GET(request: NextRequest) {
+  const registrationId = request.nextUrl.searchParams.get('registrationId')
+  if (!registrationId) {
+    return NextResponse.json({ error: API_ERRORS.invalidRequest }, { status: 400 })
+  }
+
+  try {
+    const supabase = createServerClient()
+    const { data: reg, error } = await supabase
+      .from('registrations')
+      .select('id, term_id, payment_status, payment_amount, payment_plan')
+      .eq('id', registrationId)
+      .single()
+
+    if (error || !reg) {
+      return NextResponse.json({ error: API_ERRORS.notFound }, { status: 404 })
+    }
+
+    const priceKc = (reg.payment_amount as number | null) ?? 0
+    const turnus = getTurnusById(reg.term_id as string)
+    const doplatekDo = turnus?.zaloha?.doplatekDo ?? null
+
+    if (reg.payment_status === 'completed') {
+      return NextResponse.json({
+        stav: 'completed',
+        plan: reg.payment_plan,
+        castky: { plna: priceKc, zaloha: null, doplatek: 0 },
+        doplatekDo,
+      })
+    }
+
+    if (reg.payment_status === 'partial') {
+      const doplatek = castkaDoplatku(priceKc, await zaplaceno(supabase, reg.id as string))
+      return NextResponse.json({
+        stav: 'partial',
+        plan: 'zaloha',
+        castky: { plna: priceKc, zaloha: null, doplatek },
+        doplatekDo,
+      })
+    }
+
+    const dnes = pragueIsoDate()
+    const plan = turnus
+      ? platnyPlan(isPaymentPlan(reg.payment_plan) ? reg.payment_plan : 'plna', zalohaDostupna(turnus, dnes))
+      : 'plna'
+    return NextResponse.json({
+      stav: 'pending',
+      plan,
+      castky: castkyPlatby(priceKc, turnus ?? {}, dnes),
+      doplatekDo,
+    })
+  } catch (e) {
+    reportError(e, { route: 'comgate/create', reason: 'get-unhandled' })
+    return NextResponse.json({ error: API_ERRORS.notFound }, { status: 404 })
   }
 }

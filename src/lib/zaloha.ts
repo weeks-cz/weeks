@@ -142,3 +142,16 @@ export function doplatekKrok(
   if (zbyva <= 14) return odeslano.r14 ? null : 'pripominka-14'
   return null
 }
+
+/**
+ * Popisek transakce v Comgate. Plná platba zůstává beze změny (stejný text jako
+ * dřív — u stávajících registrací se nic nemění). Záloha a doplatek dostanou
+ * své slovo, aby se v Comgate dalo poznat, o kterou platbu jde. Jméno dítěte se
+ * u nových popisků zkracuje (nevíme přesný limit délky Comgate).
+ */
+export function labelPlatby(kind: PaymentKind, childName: string | null): string {
+  const jmeno = childName ?? 'registrace'
+  if (kind === 'plna') return `Weeks tábor – ${jmeno}`
+  const zkraceno = Array.from(jmeno).slice(0, 40).join('')
+  return `Weeks tábor – ${kind === 'zaloha' ? 'záloha' : 'doplatek'} – ${zkraceno}`
+}
