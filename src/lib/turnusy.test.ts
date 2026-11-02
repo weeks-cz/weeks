@@ -293,3 +293,41 @@ describe('oznameniPrihlasovani', () => {
     expect(o?.mesta).toHaveLength(2)
   })
 })
+
+describe('validateTurnusy — záloha', () => {
+  const sZalohou = {
+    ...otevreny,
+    zaloha: { castkaKc: 2000, doplatekDo: '2027-05-31' },
+  }
+
+  it('platná záloha projde', () => {
+    expect(validateTurnusy([sZalohou])).toEqual([])
+  })
+
+  it('záloha rovna ceně nebo vyšší neprojde', () => {
+    const problems = validateTurnusy([{ ...sZalohou, zaloha: { castkaKc: 4990, doplatekDo: '2027-05-31' } }])
+    expect(problems.join(' ')).toContain('záloha musí být')
+  })
+
+  it('nulová nebo záporná záloha neprojde', () => {
+    const problems = validateTurnusy([{ ...sZalohou, zaloha: { castkaKc: 0, doplatekDo: '2027-05-31' } }])
+    expect(problems.join(' ')).toContain('záloha musí být')
+  })
+
+  it('doplatek po začátku turnusu neprojde', () => {
+    const problems = validateTurnusy([{ ...sZalohou, zaloha: { castkaKc: 2000, doplatekDo: '2027-07-27' } }])
+    expect(problems.join(' ')).toContain('před začátkem turnusu')
+  })
+
+  it('datum doplatku v jiném tvaru neprojde', () => {
+    const problems = validateTurnusy([{ ...sZalohou, zaloha: { castkaKc: 2000, doplatekDo: '31. 5. 2027' } }])
+    expect(problems.join(' ')).toContain('RRRR-MM-DD')
+  })
+
+  it('záloha bez ceny neprojde', () => {
+    const problems = validateTurnusy([
+      { ...chystany, zaloha: { castkaKc: 2000, doplatekDo: '2027-05-31' } },
+    ])
+    expect(problems.join(' ')).toContain('záloha bez ceny')
+  })
+})

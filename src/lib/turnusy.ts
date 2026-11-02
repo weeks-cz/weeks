@@ -61,6 +61,18 @@ export interface Turnus {
    * minimum neslibuje.
    */
   minimum?: { deti: number; rozhodnemeDo: string }
+  /**
+   * Záloha místo celé ceny (VOP čl. 21.4). Volitelné — turnus bez ní se platí
+   * celý najednou. `castkaKc` je záloha, `doplatekDo` ISO datum, do kterého
+   * musí rodič doplatit zbytek. Po něm záloha nedostupná (`zalohaDostupna`).
+   */
+  zaloha?: Zaloha
+}
+
+export interface Zaloha {
+  castkaKc: number
+  /** ISO datum (YYYY-MM-DD), do kterého se doplácí. */
+  doplatekDo: string
 }
 
 /**
@@ -99,6 +111,7 @@ export const TURNUSY: Turnus[] = [
     priceKc: 5990,
     capacity: 15,
     minimum: { deti: 10, rozhodnemeDo: '2027-06-30' },
+    zaloha: { castkaKc: 2000, doplatekDo: '2027-05-31' },
     status: 'otevreno',
     taborIds: ['chytre-technologie'],
     ageRange: '9-15',
@@ -115,6 +128,7 @@ export const TURNUSY: Turnus[] = [
     priceKc: 5990,
     capacity: 15,
     minimum: { deti: 10, rozhodnemeDo: '2027-06-30' },
+    zaloha: { castkaKc: 2000, doplatekDo: '2027-05-31' },
     status: 'otevreno',
     taborIds: ['chytre-technologie'],
     ageRange: '9-15',
@@ -322,6 +336,20 @@ export function validateTurnusy(list: Turnus[] = TURNUSY): string[] {
         problems.push(
           `Turnus "${turnus.id}": o konání se musí rozhodnout před začátkem turnusu.`
         )
+      }
+    }
+
+    if (turnus.zaloha) {
+      const { castkaKc, doplatekDo } = turnus.zaloha
+      if (turnus.priceKc === null) {
+        problems.push(`Turnus "${turnus.id}": záloha bez ceny nedává smysl.`)
+      } else if (!(castkaKc > 0 && castkaKc < turnus.priceKc)) {
+        problems.push(`Turnus "${turnus.id}": záloha musí být kladná a menší než cena.`)
+      }
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(doplatekDo)) {
+        problems.push(`Turnus "${turnus.id}": datum doplatku musí být ve tvaru RRRR-MM-DD.`)
+      } else if (turnus.start !== null && doplatekDo >= turnus.start) {
+        problems.push(`Turnus "${turnus.id}": doplatek musí být splatný před začátkem turnusu.`)
       }
     }
 

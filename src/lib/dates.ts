@@ -14,3 +14,17 @@ export function isoDate(d = new Date()): string {
 export function isoDatePlusDays(days: number, from = new Date()): string {
   return isoDate(new Date(from.getTime() + days * 86_400_000))
 }
+
+/**
+ * YYYY-MM-DD podle pražského času. `isoDate` počítá v UTC, takže kolem půlnoci
+ * ukazuje předchozí den — pro rozhodnutí „je termín doplatku za námi" se musí
+ * používat tahle funkce.
+ */
+export function pragueIsoDate(d = new Date()): string {
+  return new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Europe/Prague',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(d)
+}
