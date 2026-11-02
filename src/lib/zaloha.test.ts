@@ -12,6 +12,7 @@ import {
   addDays,
   isPaymentPlan,
   labelPlatby,
+  duvodBlokovaniPlatby,
 } from './zaloha'
 import type { Turnus } from './turnusy'
 
@@ -214,5 +215,33 @@ describe('labelPlatby', () => {
     const dlouhe = 'Ž'.repeat(60)
     const label = labelPlatby('zaloha', dlouhe)
     expect(Array.from(label.split(' – ').pop() ?? '')).toHaveLength(40)
+  })
+})
+
+describe('duvodBlokovaniPlatby', () => {
+  const pending = { payment_status: 'pending', status: 'pending' }
+
+  it('nezaplacená přihláška platit smí', () => {
+    expect(duvodBlokovaniPlatby(pending, 0, 0)).toBe(null)
+  })
+
+  it('záloha (partial) smí doplatit', () => {
+    expect(duvodBlokovaniPlatby({ payment_status: 'partial', status: 'confirmed' }, 2000, 0)).toBe(null)
+  })
+
+  it('vrácená přihláška (payment_status refunded) platit nesmí', () => {
+    expect(duvodBlokovaniPlatby({ payment_status: 'refunded', status: 'cancelled' }, 0, 1)).not.toBe(null)
+  })
+
+  it('přihláška s vráceným řádkem platby nesmí', () => {
+    expect(duvodBlokovaniPlatby(pending, 0, 1)).not.toBe(null)
+  })
+
+  it('zrušená přihláška, na které jsou peníze, nesmí', () => {
+    expect(duvodBlokovaniPlatby({ payment_status: 'partial', status: 'cancelled' }, 2000, 0)).not.toBe(null)
+  })
+
+  it('zrušená přihláška bez zaplacení smí (legacy zrušení)', () => {
+    expect(duvodBlokovaniPlatby({ payment_status: 'pending', status: 'cancelled' }, 0, 0)).toBe(null)
   })
 })

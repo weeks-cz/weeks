@@ -155,3 +155,23 @@ export function labelPlatby(kind: PaymentKind, childName: string | null): string
   const zkraceno = Array.from(jmeno).slice(0, 40).join('')
   return `Weeks tábor – ${kind === 'zaloha' ? 'záloha' : 'doplatek'} – ${zkraceno}`
 }
+
+/**
+ * Důvod, proč se NESMÍ založit nová platba u přihlášky, nebo `null`.
+ *
+ * Nová platba u vráceného peníze nebo u zrušené přihlášky s již zaplacenou částkou
+ * by se sečetla se starými `paid` řádky (`stavZPlateb`) a registrace by se mohla
+ * tiše přepnout na `completed`. Proto se blokuje předem.
+ */
+export function duvodBlokovaniPlatby(
+  reg: { payment_status: string | null; status: string | null },
+  zaplaceneRadky: number,
+  refundovaneRadky: number
+): string | null {
+  if (reg.payment_status === 'refunded') return 'Platba této přihlášky už byla vrácena.'
+  if (refundovaneRadky > 0) return 'Některá platba této přihlášky už byla vrácena.'
+  if (reg.status === 'cancelled' && zaplaceneRadky > 0) {
+    return 'Přihláška je zrušená, ale má zaplacenou platbu — novou platbu nelze zahájit.'
+  }
+  return null
+}

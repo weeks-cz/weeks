@@ -11,6 +11,7 @@ import { obsazenaMista, zaplaceno } from '@/lib/registration-payments'
 import {
   castkaDoplatku,
   castkyPlatby,
+  duvodBlokovaniPlatby,
   isPaymentPlan,
   labelPlatby,
   platnyPlan,
@@ -56,7 +57,7 @@ export async function POST(request: NextRequest) {
     const { data: reg, error } = await supabase
       .from('registrations')
       .select(
-        'id, location_id, term_id, program, child_name, parent_email, payment_status, payment_amount, payment_plan'
+        'id, location_id, term_id, program, child_name, parent_email, status, payment_status, payment_amount, payment_plan'
       )
       .eq('id', registrationId)
       .single()
@@ -72,6 +73,24 @@ export async function POST(request: NextRequest) {
     // registration keeps payment_status 'pending', so retries still work.
     if (reg.payment_status === 'completed') {
       return NextResponse.json({ error: API_ERRORS.alreadyPaid }, { status: 409 })
+    }
+
+    // Vrácené peníze a zrušená přihláška s platbou se znovu neplatí. Jinak by se
+    // staré `paid` řádky sečetly s novou platbou a registrace by se tiše přepnula.
+    const { data: radky, error: radkyError } = await supabase
+      .from('registration_payments')
+      .select('status')
+      .eq('registration_id', reg.id)
+    if (radkyError) throw radkyError
+    const zaplaceneRadky = (radky ?? []).filter((r) => r.status === 'paid').length
+    const refundovaneRadky = (radky ?? []).filter((r) => r.status === 'refunded').length
+    const duvod = duvodBlokovaniPlatby(
+      { payment_status: reg.payment_status as string | null, status: reg.status as string | null },
+      zaplaceneRadky,
+      refundovaneRadky
+    )
+    if (duvod) {
+      return NextResponse.json({ error: duvod }, { status: 409 })
     }
 
     // Částku NEODVOZUJEME znovu z dnešního ceníku — platí ta, kterou server zapsal
