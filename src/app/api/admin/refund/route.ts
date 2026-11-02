@@ -16,6 +16,12 @@ export const dynamic = 'force-dynamic'
 //     -d '{"registrationId":"<uuid>","amountKc":1495}'
 //
 // Omitting amountKc refunds the full paid amount.
+//
+// Záloha a doplatek (víc plateb, nebo řádky v `registration_payments`) se tímhle
+// route vracet nedají, s jednou výjimkou: přihláška s jedinou zaplacenou plnou
+// platbou. U té se vrací její řádek (`comgate_trans_id`) a řádek se označí jako
+// `refunded`. Všechno ostatní vrací člověk ručně v Comgate — a řádky v
+// `registration_payments` pak označí také ručně.
 
 function tokenValid(header: string | null): boolean {
   const token = process.env.ADMIN_API_TOKEN
@@ -27,6 +33,9 @@ function tokenValid(header: string | null): boolean {
   if (a.length !== b.length) return false
   return timingSafeEqual(a, b)
 }
+
+const RUCNI_VRACENI =
+  'Přihláška má víc plateb, zálohu nebo jiný stav. Vraťte ručně v Comgate a označte řádky v registration_payments jako refunded.'
 
 export async function POST(request: NextRequest) {
   if (!tokenValid(request.headers.get('authorization'))) {
@@ -49,51 +58,66 @@ export async function POST(request: NextRequest) {
     if (error || !reg) {
       return NextResponse.json({ error: 'Registration not found' }, { status: 404 })
     }
-    if (!reg.comgate_payment_id) {
-      return NextResponse.json({ error: 'Registration has no Comgate transaction' }, { status: 400 })
-    }
-    // Idempotency: don't double-refund.
-    if (reg.payment_status === 'refunded') {
-      return NextResponse.json({ ok: true, alreadyRefunded: true })
-    }
-    // Záloha a doplatek (víc plateb) se po řádcích nevrací — to zatím dělá člověk v Comgate.
-    // Vracet jen jednu platbu by zbytek nechalo nekonzistentní s přehledem plateb.
-    const { count: paidRows } = await supabase
+
+    // Platby s vlastním řádkem (nová cesta). Bez řádků platí legacy větev níže.
+    const { data: radky, error: radkyError } = await supabase
       .from('registration_payments')
-      .select('id', { count: 'exact', head: true })
+      .select('id, kind, amount_kc, comgate_trans_id, status')
       .eq('registration_id', reg.id)
-      .eq('status', 'paid')
-    if (reg.payment_status === 'partial' || (paidRows ?? 0) > 1) {
-      return NextResponse.json(
-        { error: 'Přihláška má víc plateb (záloha / doplatek). Vraťte ručně v Comgate.' },
-        { status: 409 }
-      )
-    }
-    if (reg.payment_status !== 'completed') {
-      return NextResponse.json(
-        { error: `Cannot refund a registration with payment_status='${reg.payment_status}'` },
-        { status: 409 }
-      )
+    if (radkyError) throw radkyError
+
+    const novaCesta = (radky ?? []).length > 0
+    let transId: string
+    let paidAmountKc: number
+    let rowId: string | null = null
+
+    if (novaCesta) {
+      const zaplacene = (radky ?? []).filter((r) => r.status === 'paid')
+      if (reg.payment_status === 'refunded') {
+        return NextResponse.json({ ok: true, alreadyRefunded: true })
+      }
+      if (reg.payment_status !== 'completed' || zaplacene.length !== 1 || zaplacene[0].kind !== 'plna') {
+        return NextResponse.json({ error: RUCNI_VRACENI }, { status: 409 })
+      }
+      transId = zaplacene[0].comgate_trans_id as string
+      paidAmountKc = zaplacene[0].amount_kc as number
+      rowId = zaplacene[0].id as string
+    } else {
+      if (!reg.comgate_payment_id) {
+        return NextResponse.json({ error: 'Registration has no Comgate transaction' }, { status: 400 })
+      }
+      // Idempotency: don't double-refund.
+      if (reg.payment_status === 'refunded') {
+        return NextResponse.json({ ok: true, alreadyRefunded: true })
+      }
+      if (reg.payment_status !== 'completed') {
+        return NextResponse.json(
+          { error: `Cannot refund a registration with payment_status='${reg.payment_status}'` },
+          { status: 409 }
+        )
+      }
+      transId = reg.comgate_payment_id as string
+      paidAmountKc = reg.payment_amount as number
     }
 
     // Default to a full refund of the recorded paid amount.
     const refundKc =
       typeof amountKc === 'number' && amountKc > 0
         ? amountKc
-        : (reg.payment_amount as number)
+        : paidAmountKc
 
     if (!refundKc || refundKc <= 0) {
       return NextResponse.json({ error: 'No valid refund amount' }, { status: 400 })
     }
     // Never refund more than was actually paid.
-    if (refundKc > (reg.payment_amount as number)) {
+    if (refundKc > paidAmountKc) {
       return NextResponse.json(
-        { error: `Refund ${refundKc} Kč exceeds paid amount ${reg.payment_amount} Kč` },
+        { error: `Refund ${refundKc} Kč exceeds paid amount ${paidAmountKc} Kč` },
         { status: 400 }
       )
     }
 
-    await refundPayment(reg.comgate_payment_id as string, refundKc)
+    await refundPayment(transId, refundKc)
 
     // The money is already back at Comgate. Persist the state with a few retries to
     // minimise the orphaned window (refunded at Comgate but DB still 'completed').
@@ -108,6 +132,16 @@ export async function POST(request: NextRequest) {
       updateError = e
       if (!e) break
       await new Promise((r) => setTimeout(r, 300))
+    }
+
+    // Řádek platby (nová cesta) se označí spolu s registrací, jinak zůstane `paid`
+    // a přehled plateb by ukazoval peníze, které už nejsou.
+    if (rowId && !updateError) {
+      const { error: rowError } = await supabase
+        .from('registration_payments')
+        .update({ status: 'refunded' })
+        .eq('id', rowId)
+      if (rowError) updateError = rowError
     }
 
     if (updateError) {
