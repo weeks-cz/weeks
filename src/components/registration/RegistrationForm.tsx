@@ -238,6 +238,13 @@ export function RegistrationForm() {
   const inputClass = (name: string) =>
     `w-full px-4 py-3 rounded-md bg-white border ${fieldErrors[name] ? 'border-red-300 bg-red-50' : 'border-ink/20'} text-ink placeholder:text-ink/40 focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink`
 
+  // Safari na iOS dává nativnímu `date`/`time` vlastní minimální šířku a `w-full`
+  // ignoruje — pole pak přeteče rámeček. `appearance-none` + `min-w-0` ho vrátí
+  // do šířky sloupce; bez nativního vzhledu by prázdné pole na iOS splasklo,
+  // proto pevná minimální výška, a hodnota zarovnaná vlevo jako u ostatních polí.
+  const dateTimeClass = (name: string) =>
+    `${inputClass(name)} block min-w-0 max-w-full appearance-none min-h-[3.125rem] [&::-webkit-date-and-time-value]:text-left [&::-webkit-date-and-time-value]:min-h-[1.5em]`
+
   if (!turnus || !isBookable(turnus)) {
     // Odkazy z reklam, e-mailů i karet turnusů míří na term_id, které buď
     // neexistuje, nebo turnus zatím (či už) není v prodeji.
@@ -354,7 +361,7 @@ export function RegistrationForm() {
                 </div>
                 <div>
                   <label htmlFor="child_birthdate" className="block text-sm font-medium text-ink mb-1">Datum narození *</label>
-                  <input id="child_birthdate" type="date" value={child.child_birthdate} onChange={e => setChild({...child, child_birthdate: e.target.value})} className={inputClass('child_birthdate')} />
+                  <input id="child_birthdate" type="date" value={child.child_birthdate} onChange={e => setChild({...child, child_birthdate: e.target.value})} className={dateTimeClass('child_birthdate')} />
                   <FieldError name="child_birthdate" />
                 </div>
                 <div>
@@ -428,7 +435,7 @@ export function RegistrationForm() {
                       type="time"
                       value={pickup.pickup_time}
                       onChange={e => setPickup({ ...pickup, pickup_time: e.target.value })}
-                      className={inputClass('pickup_time')}
+                      className={dateTimeClass('pickup_time')}
                       min="08:30"
                       max="16:30"
                     />
