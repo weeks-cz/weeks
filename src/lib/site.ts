@@ -160,6 +160,11 @@ export function getSiteFaq(): Array<{ question: string; answer: string }> {
         'Platba probíhá bezpečně zrychleným bankovním převodem přes platební bránu Comgate přímo při registraci. Fakturu vám zašleme e-mailem do 14 dnů od platby.',
     },
     {
+      question: 'Můžu zaplatit zálohu?',
+      answer:
+        'Ano, u turnusů, kde záloha je, zaplatíte nejdřív zálohu a zbytek doplatíte do termínu uvedeného u turnusu. Výši zálohy a termín doplatku najdete u konkrétního termínu. Připomeneme vám doplatek e-mailem předem. Zálohu lze zaplatit jen do termínu doplatku.',
+    },
+    {
       question: 'Kdo tábory pořádá?',
       answer: `Tábory pořádá ${SITE.legalName}, IČO ${SITE.ico}. Lektoři jsou proškolení v první pomoci a s dětmi pracují dlouhodobě.`,
     },

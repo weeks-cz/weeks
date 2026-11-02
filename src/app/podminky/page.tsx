@@ -455,8 +455,8 @@ export default function PodminkyPage() {
                   <div className="bg-white p-5 rounded-md border border-ink/15">
                     <h3 className="text-base font-semibold text-ink mb-2">19.2 Vznik smluvního vztahu</h3>
                     <p className="text-ink-500 text-base">
-                      Smluvní vztah mezi pořadatelem a zákonným zástupcem vzniká úhradou ceny tábora
-                      v souladu s těmito VOP. Do té doby se jedná o nezávaznou rezervaci.
+                      Smluvní vztah mezi pořadatelem a zákonným zástupcem vzniká úhradou zálohy nebo
+                      celé ceny tábora v souladu s těmito VOP. Do té doby se jedná o nezávaznou rezervaci.
                     </p>
                   </div>
                   <div className="bg-white p-5 rounded-md border border-ink/15">
@@ -537,6 +537,16 @@ export default function PodminkyPage() {
                       tel. <a href="tel:+420228224267" className="text-primary-600 underline hover:text-primary-700">+420 228 224 267</a>.
                     </p>
                   </div>
+                  <div className="bg-white p-5 rounded-md border border-ink/15">
+                    <h3 className="text-base font-semibold text-ink mb-2">21.4 Záloha a doplatek</h3>
+                    <p className="text-ink-500 text-base">
+                      Zákonný zástupce může uhradit zálohu, jejíž výše je uvedena u turnusu, a zbytek ceny
+                      doplatit do termínu uvedeného u turnusu. Pořadatel zašle zákonnému zástupci připomínku
+                      doplatku. Pokud doplatek nedorazí ani do 7 dnů od upozornění, může pořadatel místo
+                      uvolnit a uhrazenou částku vrátit podle čl. 22. Tento článek se týká nových přihlášek
+                      a platí pro ně v podobě, v jaké se přijímá při přihlášce.
+                    </p>
+                  </div>
                 </div>
               </section>
 
@@ -612,6 +622,10 @@ export default function PodminkyPage() {
                 <p className="text-ink-500 text-sm mt-4">
                   Storno musí být oznámeno písemně e-mailem na adresu {SITE.email}.
                   Vrácení platby proběhne na účet, ze kterého byla platba přijata, do 10 pracovních dní.
+                </p>
+                <p className="text-ink-500 text-sm mt-2">
+                  U přihlášky, která je uhrazena jen zálohou, se storno poplatek počítá z celé ceny
+                  turnusu, ale nikdy nepřekročí částku, kterou zákonný zástupce dosud uhradil.
                 </p>
               </section>
 
