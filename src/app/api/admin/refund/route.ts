@@ -56,6 +56,19 @@ export async function POST(request: NextRequest) {
     if (reg.payment_status === 'refunded') {
       return NextResponse.json({ ok: true, alreadyRefunded: true })
     }
+    // Záloha a doplatek (víc plateb) se po řádcích nevrací — to zatím dělá člověk v Comgate.
+    // Vracet jen jednu platbu by zbytek nechalo nekonzistentní s přehledem plateb.
+    const { count: paidRows } = await supabase
+      .from('registration_payments')
+      .select('id', { count: 'exact', head: true })
+      .eq('registration_id', reg.id)
+      .eq('status', 'paid')
+    if (reg.payment_status === 'partial' || (paidRows ?? 0) > 1) {
+      return NextResponse.json(
+        { error: 'Přihláška má víc plateb (záloha / doplatek). Vraťte ručně v Comgate.' },
+        { status: 409 }
+      )
+    }
     if (reg.payment_status !== 'completed') {
       return NextResponse.json(
         { error: `Cannot refund a registration with payment_status='${reg.payment_status}'` },

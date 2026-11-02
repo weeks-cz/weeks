@@ -9,6 +9,10 @@
     {
       "path": "/api/cron/payment-reminder",
       "schedule": "0 9 * * *"
+    },
+    {
+      "path": "/api/cron/doplatek",
+      "schedule": "0 8 * * *"
     }
   ]
 }

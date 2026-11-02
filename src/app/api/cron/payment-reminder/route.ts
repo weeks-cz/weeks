@@ -2,9 +2,11 @@ import { NextResponse } from 'next/server'
 import { createServerClient } from '@/lib/supabase'
 import { buildPaymentReminderEmail, sendEmail, isEmailConfigured } from '@/lib/email'
 import { getLocationById } from '@/lib/locations'
-import { formatTermLabel, isoDate } from '@/lib/dates'
+import { formatTermLabel, isoDate, pragueIsoDate } from '@/lib/dates'
 import { reportMessage } from '@/lib/observability'
 import { getTrustedProgramName } from '@/lib/payment-pricing'
+import { getTurnusById } from '@/lib/turnusy'
+import { zalohaDostupna } from '@/lib/zaloha'
 
 export const dynamic = 'force-dynamic'
 
@@ -84,12 +86,17 @@ export async function GET(request: Request) {
         throw new Error(`Registrace ${reg.id} nemá uloženou částku k zaplacení`)
       }
       const paymentUrl = `${SITE_URL}/platba/${reg.id}?location=${reg.location_id}`
+      // Záloha se v upomínce nabízí jen tam, kde ještě platí (do termínu doplatku).
+      const turnus = getTurnusById(reg.term_id as string)
+      const zalohaKc =
+        turnus && zalohaDostupna(turnus, pragueIsoDate()) ? turnus.zaloha!.castkaKc : null
       const { subject, html } = buildPaymentReminderEmail({
         childName: reg.child_name as string,
         programName,
         locationName: location.name,
         termLabel: formatTermLabel(reg.term_start as string, reg.term_end as string),
         priceKc,
+        zalohaKc,
         paymentUrl,
       })
       await sendEmail({ to: reg.parent_email as string, subject, html })

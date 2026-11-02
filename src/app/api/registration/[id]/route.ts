@@ -15,7 +15,7 @@ export const dynamic = 'force-dynamic'
 // to derive the trusted program name and returned to the client as `termId`,
 // a stable analytics key that doesn't drift when the display text changes.
 const CONFIRMATION_FIELDS =
-  'id, status, payment_status, location_id, program, term_id, term_start, term_end, parent_name, parent_email, child_name, payment_amount'
+  'id, status, payment_status, payment_plan, location_id, program, term_id, term_start, term_end, parent_name, parent_email, child_name, payment_amount'
 
 export async function GET(
   request: NextRequest,
