@@ -1,5 +1,6 @@
 import 'server-only'
 import { PROVOZNI_DOBA } from './site'
+import { formatDatumCs } from './dates'
 
 // Resend transactional email for KV registrations.
 // Domain weeks.cz is verified in Resend (eu-west-1). From defaults to a real
@@ -103,7 +104,16 @@ export interface RegistrationReceivedParams {
   termLabel: string
   locationName: string
   priceKc: number
+  /** Záloha, pokud je ještě dostupná; jinak `null` a e-mail ji nezmiňuje. */
+  zalohaKc?: number | null
   paymentUrl: string
+}
+
+/** Cena s řádkem „nebo záloha …“ — jen když je záloha opravdu dostupná. */
+function cenaSZalohou(priceKc: number, zalohaKc: number | null | undefined): string {
+  const cena = `${priceKc.toLocaleString('cs-CZ')} Kč`
+  if (!zalohaKc) return cena
+  return `${cena}<br><span style="font-weight:400;color:#64748b;">nebo záloha ${zalohaKc.toLocaleString('cs-CZ')} Kč</span>`
 }
 
 // Sent immediately after a registration is created (before payment). Distinct from
@@ -121,7 +131,7 @@ export function buildRegistrationReceivedEmail(p: RegistrationReceivedParams): {
       <tr><td style="padding:6px 0;color:#64748b;">Tábor</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.programName}</td></tr>
       <tr><td style="padding:6px 0;color:#64748b;">Místo</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.locationName}</td></tr>
       <tr><td style="padding:6px 0;color:#64748b;">Termín</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.termLabel}</td></tr>
-      <tr><td style="padding:6px 0;color:#64748b;">Cena</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.priceKc.toLocaleString('cs-CZ')} Kč</td></tr>
+      <tr><td style="padding:6px 0;color:#64748b;">Cena</td><td style="padding:6px 0;text-align:right;font-weight:600;">${cenaSZalohou(p.priceKc, p.zalohaKc)}</td></tr>
     </table>
     <p style="font-size:14px;color:#475569;">Po zaplacení vám obratem přijde <strong>potvrzení</strong>, fakturu zašleme do 14 dnů. Přibližně týden před táborem pošleme <strong>nástupní list</strong> s podrobnostmi.</p>
     <p style="font-size:13px;color:#94a3b8;">Pokud jste se neregistrovali vy nebo si to rozmyslíte, nemusíte nic řešit, bez platby registrace po čase propadne.</p>
@@ -195,6 +205,8 @@ export interface PaymentReminderParams {
   locationName: string
   termLabel: string
   priceKc: number
+  /** Záloha, pokud je ještě dostupná (`zalohaDostupna`); jinak `null`. */
+  zalohaKc?: number | null
   paymentUrl: string
 }
 
@@ -218,12 +230,144 @@ export function buildPaymentReminderEmail(p: PaymentReminderParams): { subject: 
     <table style="width:100%;border-collapse:collapse;margin:16px 0;font-size:14px;">
       <tr><td style="padding:6px 0;color:#64748b;">Místo</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.locationName}</td></tr>
       <tr><td style="padding:6px 0;color:#64748b;">Termín</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.termLabel}</td></tr>
-      <tr><td style="padding:6px 0;color:#64748b;">Cena</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.priceKc.toLocaleString('cs-CZ')} Kč</td></tr>
+      <tr><td style="padding:6px 0;color:#64748b;">Cena</td><td style="padding:6px 0;text-align:right;font-weight:600;">${cenaSZalohou(p.priceKc, p.zalohaKc)}</td></tr>
     </table>
     <p>Pokud už o místo nemáte zájem, nic neřešte — stačí tento e-mail ignorovat.</p>
     <p>S pozdravem,<br>tým Weeks</p>`
   return {
     subject: `Dokončení registrace – ${p.programName}`,
     html: layout('Dokončení registrace', body),
+  }
+}
+
+// ── Záloha a doplatek ─────────────────────────────────────────────────────────
+
+export interface ZalohaConfirmationParams {
+  childName: string
+  programName: string
+  termLabel: string
+  locationName: string
+  /** Kolik rodič právě zaplatil (záloha). */
+  zaplaceno: number
+  /** Kolik zbývá doplatit. */
+  zbyvaKc: number
+  /** ISO datum splatnosti doplatku. */
+  doplatekDo: string
+  doplatekUrl: string
+}
+
+/**
+ * Potvrzení po zaplacení zálohy. Odesílá se jen u první platby (stejný claim
+ * jako `buildConfirmationEmail`), takže nahrazuje plné potvrzení, ne ho doplňuje.
+ */
+export function buildConfirmationZalohaEmail(p: ZalohaConfirmationParams): { subject: string; html: string } {
+  const body = `
+    <p>Dobrý den,</p>
+    <p>děkujeme, záloha pro <strong>${p.childName}</strong> je přijatá. Místo je závazně rezervované.</p>
+    <table style="width:100%;border-collapse:collapse;margin:16px 0;font-size:14px;">
+      <tr><td style="padding:6px 0;color:#64748b;">Tábor</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.programName}</td></tr>
+      <tr><td style="padding:6px 0;color:#64748b;">Místo</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.locationName}</td></tr>
+      <tr><td style="padding:6px 0;color:#64748b;">Termín</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.termLabel}</td></tr>
+      <tr><td style="padding:6px 0;color:#64748b;">Uhrazeno</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.zaplaceno.toLocaleString('cs-CZ')} Kč</td></tr>
+      <tr><td style="padding:6px 0;color:#64748b;">Zbývá</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.zbyvaKc.toLocaleString('cs-CZ')} Kč do ${formatDatumCs(p.doplatekDo)}</td></tr>
+    </table>
+    <p style="text-align:center;margin:24px 0;">
+      <a href="${p.doplatekUrl}" style="display:inline-block;background:#4f46e5;color:#fff;text-decoration:none;font-weight:600;padding:12px 28px;border-radius:10px;">Doplatit ${p.zbyvaKc.toLocaleString('cs-CZ')} Kč</a>
+    </p>
+    <p><strong>Fakturu</strong> za zálohu vám zašleme do 14 dnů od platby. Fakturu za doplatek pošleme zvlášť, až ho přijmeme.</p>
+    <p>Doplatek vám připomeneme e-mailem předem. Přibližně týden před táborem pošleme <strong>nástupní list</strong>, ale až po úplné úhradě.</p>
+    <p>S pozdravem,<br>tým Weeks</p>`
+  return {
+    subject: `Záloha přijata – ${p.programName}`,
+    html: layout('Záloha přijata 🎉', body),
+  }
+}
+
+export interface DoplatekReceivedParams {
+  childName: string
+  programName: string
+  termLabel: string
+  /** Částka doplatku, která právě přišla. */
+  doplatekKc: number
+}
+
+/** Potvrzení přijatého doplatku. Místo je tím uhrazené celé. */
+export function buildDoplatekPrijatEmail(p: DoplatekReceivedParams): { subject: string; html: string } {
+  const body = `
+    <p>Dobrý den,</p>
+    <p>přijali jsme doplatek <strong>${p.doplatekKc.toLocaleString('cs-CZ')} Kč</strong> za <strong>${p.childName}</strong>. Místo na táboře je tím uhrazené celé.</p>
+    <table style="width:100%;border-collapse:collapse;margin:16px 0;font-size:14px;">
+      <tr><td style="padding:6px 0;color:#64748b;">Tábor</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.programName}</td></tr>
+      <tr><td style="padding:6px 0;color:#64748b;">Termín</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.termLabel}</td></tr>
+    </table>
+    <p><strong>Fakturu</strong> za doplatek vám zašleme do 14 dnů od platby.</p>
+    <p>Přibližně týden před táborem vám pošleme <strong>nástupní list</strong> s praktickými informacemi.</p>
+    <p>S pozdravem,<br>tým Weeks</p>`
+  return {
+    subject: `Doplatek přijat – ${p.programName}`,
+    html: layout('Doplatek přijat ✅', body),
+  }
+}
+
+export interface DoplatekReminderParams {
+  childName: string
+  programName: string
+  termLabel: string
+  zbyvaKc: number
+  /** ISO datum splatnosti. */
+  doplatekDo: string
+  paymentUrl: string
+}
+
+/**
+ * Připomínka doplatku — posílá se 14 a 3 dny před `doplatekDo`. Text je pro
+ * obě stejný; cron vybírá okno, ne obsah.
+ */
+export function buildDoplatekReminderEmail(p: DoplatekReminderParams): { subject: string; html: string } {
+  const castka = `${p.zbyvaKc.toLocaleString('cs-CZ')} Kč`
+  const body = `
+    <p>Dobrý den,</p>
+    <p>připomínáme doplatek za <strong>${p.childName}</strong>. Zaplacená záloha místo drží, zbývá doplatit <strong>${castka}</strong> do <strong>${formatDatumCs(p.doplatekDo)}</strong>.</p>
+    <p style="text-align:center;margin:24px 0;">
+      <a href="${p.paymentUrl}" style="display:inline-block;background:#4f46e5;color:#fff;text-decoration:none;font-weight:600;padding:12px 28px;border-radius:10px;">Doplatit ${castka}</a>
+    </p>
+    <table style="width:100%;border-collapse:collapse;margin:16px 0;font-size:14px;">
+      <tr><td style="padding:6px 0;color:#64748b;">Tábor</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.programName}</td></tr>
+      <tr><td style="padding:6px 0;color:#64748b;">Termín</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.termLabel}</td></tr>
+    </table>
+    <p>Pokud doplatek nedorazí včas, řídíme se čl. 21.4 VOP.</p>
+    <p>S pozdravem,<br>tým Weeks</p>`
+  return {
+    subject: `Doplatek za ${p.programName} – splatný do ${formatDatumCs(p.doplatekDo)}`,
+    html: layout('Připomínka doplatku', body),
+  }
+}
+
+export interface DoplatekOverdueRow {
+  registrationId: string
+  childName: string
+  parentEmail: string
+  zbyvaKc: number
+  doplatekDo: string
+}
+
+/**
+ * Interní upozornění týmu: přihlášky s nedoplacenou zálohou po termínu.
+ * Posílá se jednou den po `doplatekDo`; dál se řeší ručně (VOP čl. 21.4).
+ */
+export function buildDoplatekOverdueAlert(rows: DoplatekOverdueRow[]): { subject: string; html: string } {
+  const esc = (v: string) => v.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+  const items = rows
+    .map(
+      (r) =>
+        `<li><strong>${esc(r.childName)}</strong> · ${esc(r.parentEmail)} · zbývá ${r.zbyvaKc.toLocaleString('cs-CZ')} Kč (do ${formatDatumCs(r.doplatekDo)}) · <code>${esc(r.registrationId)}</code></li>`
+    )
+    .join('')
+  const body = `
+    <p>Po termínu doplatku nejsou uhrazené tyto přihlášky. Řešte je ručně (VOP čl. 21.4).</p>
+    <ul style="margin:0 0 16px;padding-left:20px;font-size:14px;line-height:1.6;">${items}</ul>`
+  return {
+    subject: `Nedoplaceno po termínu doplatku: ${rows.length}`,
+    html: layout('Nedoplatky po termínu', body),
   }
 }

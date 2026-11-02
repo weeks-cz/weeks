@@ -1,5 +1,6 @@
 import { getTurnusById, getTaboryTurnusu, isBookable, TURNUSY, type Turnus } from './turnusy'
 import type { CityId } from './cities'
+import { platnyPlan, zalohaDostupna, type PaymentPlan } from './zaloha'
 
 /**
  * Důvěryhodný zdroj ceny a kapacity pro registraci.
@@ -25,6 +26,21 @@ function resolveBookable(termId: string, list: Turnus[] = TURNUSY): Turnus {
 export function getTrustedPriceKc(termId: string, list: Turnus[] = TURNUSY): number {
   // `isBookable` už zaručilo, že cena není null.
   return resolveBookable(termId, list).priceKc as number
+}
+
+/**
+ * Plán platby, který se skutečně použije. Záloha se nepřijme po termínu doplatku
+ * ani u turnusu bez zálohy — tiše se přepne na plnou platbu. Rozhoduje server,
+ * klientovi se nevěří ani tady.
+ */
+export function getTrustedPlan(
+  termId: string,
+  pozadovany: PaymentPlan,
+  dnes: string,
+  list: Turnus[] = TURNUSY
+): PaymentPlan {
+  const turnus = resolveBookable(termId, list)
+  return platnyPlan(pozadovany, zalohaDostupna(turnus, dnes))
 }
 
 export function getTrustedCapacity(termId: string, list: Turnus[] = TURNUSY): number {

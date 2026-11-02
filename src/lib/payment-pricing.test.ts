@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { getTrustedPriceKc, getTrustedCapacity, getTrustedCity, getTrustedTerm, getTrustedProgramName } from './payment-pricing'
+import { getTrustedPriceKc, getTrustedCapacity, getTrustedCity, getTrustedTerm, getTrustedProgramName, getTrustedPlan } from './payment-pricing'
 import { TURNUSY, type Turnus } from './turnusy'
 
 const prodejny: Turnus = {
@@ -98,5 +98,30 @@ describe('getTrustedProgramName', () => {
 
   it('odmítne neznámý turnus', () => {
     expect(() => getTrustedProgramName('neexistuje', [prodejny])).toThrow()
+  })
+})
+
+describe('getTrustedPlan', () => {
+  const sZalohou: Turnus = { ...prodejny, zaloha: { castkaKc: 2000, doplatekDo: '2027-05-31' } }
+
+  it('záloha se přijme, když je dostupná', () => {
+    expect(getTrustedPlan('test-prodejny', 'zaloha', '2026-11-02', [sZalohou])).toBe('zaloha')
+  })
+
+  it('po termínu doplatku se tiše přepne na plnou platbu', () => {
+    expect(getTrustedPlan('test-prodejny', 'zaloha', '2027-06-01', [sZalohou])).toBe('plna')
+  })
+
+  it('turnus bez zálohy vždy plnou platbu', () => {
+    expect(getTrustedPlan('test-prodejny', 'zaloha', '2026-11-02', [prodejny])).toBe('plna')
+  })
+
+  it('plná platba zůstává plnou', () => {
+    expect(getTrustedPlan('test-prodejny', 'plna', '2026-11-02', [sZalohou])).toBe('plna')
+  })
+
+  it('u turnusu, který není v prodeji, vyhodí výjimku', () => {
+    const chystany: Turnus = { ...prodejny, status: 'chystame' }
+    expect(() => getTrustedPlan('test-prodejny', 'zaloha', '2026-11-02', [chystany])).toThrow()
   })
 })

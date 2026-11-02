@@ -1,13 +1,15 @@
 import { NextRequest, NextResponse, after } from 'next/server'
 import { registrationSchema } from '@/lib/registration'
 import { createServerClient } from '@/lib/supabase'
-import { getTrustedCapacity, getTrustedPriceKc, getTrustedCity, getTrustedTerm, getTrustedProgramName } from '@/lib/payment-pricing'
+import { getTrustedCapacity, getTrustedPriceKc, getTrustedCity, getTrustedTerm, getTrustedProgramName, getTrustedPlan } from '@/lib/payment-pricing'
 import { API_ERRORS } from '@/lib/api-messages'
 import { rateLimit, clientIp } from '@/lib/rate-limit'
 import { reportError, reportMessage } from '@/lib/observability'
 import { buildRegistrationReceivedEmail, sendEmail, isEmailConfigured } from '@/lib/email'
 import { getLocationById } from '@/lib/locations'
-import { formatTermLabel } from '@/lib/dates'
+import { formatTermLabel, pragueIsoDate } from '@/lib/dates'
+import { getTurnusById } from '@/lib/turnusy'
+import { zalohaDostupna } from '@/lib/zaloha'
 import { sendMetaEvent, isMetaCapiConfigured } from '@/lib/meta-capi'
 
 const SITE_URL = 'https://weeks.cz'
@@ -46,11 +48,14 @@ export async function POST(request: NextRequest) {
     let trustedPrice: number
     let trustedLocationId: string
     let trustedTerm: { start: string; end: string }
+    let trustedPlan: 'plna' | 'zaloha'
     try {
       maxCapacity = getTrustedCapacity(parsed.data.term_id)
       trustedPrice = getTrustedPriceKc(parsed.data.term_id)
       trustedLocationId = getTrustedCity(parsed.data.term_id)
       trustedTerm = getTrustedTerm(parsed.data.term_id)
+      // Záloha jen tam, kde je dostupná (do termínu doplatku). Jinak plná platba.
+      trustedPlan = getTrustedPlan(parsed.data.term_id, parsed.data.payment_plan, pragueIsoDate())
     } catch (e) {
       // Only non-PII identifiers in the monitoring context — never the parent/child data.
       reportError(e, {
@@ -72,6 +77,7 @@ export async function POST(request: NextRequest) {
         ...parsed.data,
         location_id: trustedLocationId,
         payment_amount: trustedPrice,
+        payment_plan: trustedPlan,
         term_start: trustedTerm.start,
         term_end: trustedTerm.end,
         vop_accepted_ip: ip,
@@ -94,6 +100,10 @@ export async function POST(request: NextRequest) {
     // already-inserted registration.
     if (isEmailConfigured()) {
       const d = parsed.data
+      // Záloha se nabízí jen tam, kde je dostupná — e-mail nesmí slibovat možnost, která už neplatí.
+      const turnus = getTurnusById(d.term_id)
+      const zalohaKc =
+        turnus && zalohaDostupna(turnus, pragueIsoDate()) ? turnus.zaloha!.castkaKc : null
       after(async () => {
         try {
           const location = getLocationById(trustedLocationId)
@@ -103,6 +113,7 @@ export async function POST(request: NextRequest) {
             termLabel: formatTermLabel(trustedTerm.start, trustedTerm.end),
             locationName: location.name,
             priceKc: trustedPrice,
+            zalohaKc,
             paymentUrl: `${SITE_URL}/platba/${newId}?location=${trustedLocationId}`,
           })
           await sendEmail({ to: d.parent_email, subject, html })

@@ -28,3 +28,12 @@ export function pragueIsoDate(d = new Date()): string {
     day: '2-digit',
   }).format(d)
 }
+
+/** Datum pro text česky, např. „31. 5. 2027“. Vstup je ISO YYYY-MM-DD. */
+export function formatDatumCs(iso: string): string {
+  return new Date(`${iso}T12:00:00`).toLocaleDateString('cs-CZ', {
+    day: 'numeric',
+    month: 'numeric',
+    year: 'numeric',
+  })
+}

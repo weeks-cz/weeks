@@ -69,6 +69,9 @@ export const registrationSchema = parentSchema
     term_start: z.string(),
     term_end: z.string(),
     payment_amount: z.number(),
+    // Volba rodiče na posledním kroku: záloha (výchozí), nebo celá cena. Server
+    // ji přepne na plnou platbu, když záloha není dostupná (viz getTrustedPlan).
+    payment_plan: z.enum(['plna', 'zaloha']).optional().default('zaloha'),
   })
   // Pojistka na serveru: klient souhlas vynucuje v kroku 4, ale API se dá
   // zavolat i bez formuláře — zdravotní údaje bez souhlasu se neuloží.
