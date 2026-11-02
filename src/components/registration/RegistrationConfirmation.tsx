@@ -6,11 +6,13 @@ import { CheckCircle2, Clock, XCircle, Loader2, CreditCard } from 'lucide-react'
 import Link from 'next/link'
 import { trackPaymentCompleted } from '@/lib/analytics'
 import { sklikConversionHit } from '@/lib/sklik'
+import { maOdeslatPurchase, type PaymentPlan } from '@/lib/zaloha'
 
 interface RegistrationData {
   id: string
   status: string
   payment_status: string
+  payment_plan?: PaymentPlan
   location_id: string
   program: string
   termId: string
@@ -46,10 +48,18 @@ export function RegistrationConfirmation({ registrationId, token }: Registration
         // The Comgate callback may still be in flight right after the user returns
         // from the gateway. Re-poll a few times so the page flips to "paid" without
         // a manual refresh.
+        // Záloha (partial) je úspěch: místo je rezervované. Polling končí i u ní.
         const paid =
-          data.registration?.payment_status === 'completed' || data.registration?.status === 'paid'
-        // Fire the conversion event exactly once.
-        if (paid && !paidTracked.current) {
+          data.registration?.payment_status === 'completed' ||
+          data.registration?.payment_status === 'partial' ||
+          data.registration?.status === 'paid'
+        // Konverze jen u platby, která přinesla místo (plná nebo záloha). Doplatek
+        // ji znovu nezapočítá. Stejné pravidlo jako na serveru (`maOdeslatPurchase`).
+        const konverze = maOdeslatPurchase(
+          data.registration?.payment_plan ?? 'plna',
+          data.registration?.payment_status ?? ''
+        )
+        if (paid && konverze && !paidTracked.current) {
           paidTracked.current = true
           trackPaymentCompleted({
             registrationId,
@@ -96,6 +106,7 @@ export function RegistrationConfirmation({ registrationId, token }: Registration
   }
 
   const isPaid = registration.payment_status === 'completed'
+  const isPartial = registration.payment_status === 'partial'
   const isPending = registration.status === 'pending'
 
   return (
@@ -106,7 +117,7 @@ export function RegistrationConfirmation({ registrationId, token }: Registration
     >
       {/* Status */}
       <div className="text-center mb-8">
-        {isPaid ? (
+        {isPaid || isPartial ? (
           <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', duration: 0.5 }}>
             <CheckCircle2 className="w-20 h-20 text-trust-500 mx-auto mb-4" />
           </motion.div>
@@ -117,11 +128,13 @@ export function RegistrationConfirmation({ registrationId, token }: Registration
         )}
 
         <h1 className="heading-2 mb-2">
-          {isPaid ? 'Děkujeme za registraci!' : isPending ? 'Čeká na platbu' : 'Registrace zrušena'}
+          {isPaid ? 'Děkujeme za registraci!' : isPartial ? 'Záloha je přijatá' : isPending ? 'Čeká na platbu' : 'Registrace zrušena'}
         </h1>
         <p className="text-ink-500">
           {isPaid
             ? 'Registraci i platbu jsme zaznamenali. Potvrzení jsme vám poslali e-mailem — zkontrolujte prosím i složku se spamem. Fakturu zašleme do 14 dnů od platby. S dotazy se ozvěte na info@weeks.cz.'
+            : isPartial
+            ? 'Místo je rezervované. Doplatek zbývá uhradit do termínu uvedeného v e-mailu a na stránce platby.'
             : isPending
             ? 'Vaše registrace čeká na dokončení platby.'
             : 'Tato registrace byla zrušena.'}
@@ -133,9 +146,9 @@ export function RegistrationConfirmation({ registrationId, token }: Registration
         <div className="flex justify-between items-center pb-4 border-b border-ink/15">
           <span className="text-sm text-ink-500">Stav</span>
           <span className={`px-3 py-1 rounded-sm text-sm font-medium border ${
-            isPaid ? 'border-trust-300 bg-trust-50 text-trust-600' : isPending ? 'border-amber-300 bg-amber-50 text-amber-600' : 'border-red-300 bg-red-50 text-red-600'
+            isPaid ? 'border-trust-300 bg-trust-50 text-trust-600' : isPartial || isPending ? 'border-amber-300 bg-amber-50 text-amber-600' : 'border-red-300 bg-red-50 text-red-600'
           }`}>
-            {isPaid ? 'Zaplaceno' : isPending ? 'Čeká na platbu' : 'Zrušeno'}
+            {isPaid ? 'Zaplaceno' : isPartial ? 'Záloha zaplacena' : isPending ? 'Čeká na platbu' : 'Zrušeno'}
           </span>
         </div>
         <div className="grid grid-cols-2 gap-4 text-sm">
@@ -170,7 +183,7 @@ export function RegistrationConfirmation({ registrationId, token }: Registration
             className="btn-primary w-full sm:w-auto justify-center"
           >
             <CreditCard className="w-4 h-4" />
-            {isPending ? 'Dokončit platbu' : 'Zkusit platbu znovu'}
+            {isPartial ? 'Doplatit zbytek' : isPending ? 'Dokončit platbu' : 'Zkusit platbu znovu'}
           </Link>
         )}
         <Link

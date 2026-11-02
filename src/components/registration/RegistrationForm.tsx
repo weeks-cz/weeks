@@ -8,6 +8,8 @@ import { parentSchema, childSchema, consentsSchema, healthConsentChybi, HEALTH_C
 import { getTurnusById, getFocusTurnusu, isBookable } from '@/lib/turnusy'
 import { getCity } from '@/lib/cities'
 import { getFocusModules } from '@/lib/focus'
+import { zalohaDostupna, zruseniZdarmaDo, type PaymentPlan } from '@/lib/zaloha'
+import { formatDatumCs, pragueIsoDate } from '@/lib/dates'
 import { turnusLabels } from '@/components/turnusy/TurnusCard'
 import { trackRegistrationSubmit, trackRegistrationStep } from '@/lib/analytics'
 import Link from 'next/link'
@@ -32,6 +34,8 @@ export function RegistrationForm() {
 
   const termId = searchParams.get('term') || ''
   const turnus = getTurnusById(termId)
+  // Záloha se nabízí jen tam, kde je ještě dostupná (do termínu doplatku).
+  const zaloha = turnus?.zaloha && zalohaDostupna(turnus, pragueIsoDate()) ? turnus.zaloha : null
 
   const [step, setStep] = useState(1)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -68,6 +72,8 @@ export function RegistrationForm() {
   })
 
   const [customerNote, setCustomerNote] = useState('')
+  // Výchozí volba je záloha, pokud je dostupná. Server ji stejně ověří.
+  const [paymentPlan, setPaymentPlan] = useState<PaymentPlan>('zaloha')
 
   const vopUrl = '/podminky'
   const gdprUrl = '/gdpr'
@@ -172,6 +178,7 @@ export function RegistrationForm() {
           term_start: turnus?.start ?? '',
           term_end: turnus?.end ?? '',
           payment_amount: turnus?.priceKc ?? 0,
+          payment_plan: zaloha ? paymentPlan : 'plna',
         }),
       })
 
@@ -517,6 +524,40 @@ export function RegistrationForm() {
                   <p className="text-sm text-ink-500">{cityName} · {labels.datum}</p>
                   <p className="text-lg font-bold text-ink mt-2 font-mono">{(turnus.priceKc ?? 0).toLocaleString('cs-CZ')}&nbsp;Kč</p>
                 </div>
+
+                {zaloha && (
+                  <fieldset className="space-y-2">
+                    <legend className="font-medium text-ink mb-2">Jak chcete zaplatit?</legend>
+                    <label className="flex min-h-11 cursor-pointer items-start gap-3 rounded-md border border-ink/20 bg-white p-3">
+                      <input
+                        type="radio"
+                        name="payment_plan"
+                        value="zaloha"
+                        checked={paymentPlan === 'zaloha'}
+                        onChange={() => setPaymentPlan('zaloha')}
+                        className="mt-1"
+                      />
+                      <span className="text-sm text-ink">
+                        <span className="font-semibold">Záloha {zaloha.castkaKc.toLocaleString('cs-CZ')}&nbsp;Kč teď</span>
+                        <span className="block text-ink-500">
+                          doplatek {((turnus.priceKc ?? 0) - zaloha.castkaKc).toLocaleString('cs-CZ')}&nbsp;Kč do {formatDatumCs(zaloha.doplatekDo)}
+                        </span>
+                      </span>
+                    </label>
+                    <label className="flex min-h-11 cursor-pointer items-start gap-3 rounded-md border border-ink/20 bg-white p-3">
+                      <input
+                        type="radio"
+                        name="payment_plan"
+                        value="plna"
+                        checked={paymentPlan === 'plna'}
+                        onChange={() => setPaymentPlan('plna')}
+                        className="mt-1"
+                      />
+                      <span className="text-sm font-semibold text-ink">Celá částka {(turnus.priceKc ?? 0).toLocaleString('cs-CZ')}&nbsp;Kč</span>
+                    </label>
+                    <p className="text-xs text-ink-500">Zrušení zdarma do {formatDatumCs(zruseniZdarmaDo(turnus.start ?? ''))}.</p>
+                  </fieldset>
+                )}
 
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>

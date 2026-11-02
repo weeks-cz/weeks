@@ -4,6 +4,8 @@ import Link from 'next/link'
 import { ArrowRight, Check, ShieldCheck } from 'lucide-react'
 import { trackTerminCta } from '@/lib/analytics'
 import { V_CENE } from '@/lib/site'
+import { formatDatumCs, pragueIsoDate } from '@/lib/dates'
+import { zalohaDostupna, zruseniZdarmaDo } from '@/lib/zaloha'
 import type { Turnus } from '@/lib/turnusy'
 import { SpotsLeftBadge, useTermCapacity, volnaMistaText } from './SpotsLeft'
 import { TurnusInterestForm } from './TurnusInterestForm'
@@ -59,6 +61,8 @@ export function NakupniBox({
   const capacity = useTermCapacity(turnus.city)
   const spotsLeft = capacity?.[turnus.id]?.spotsLeft
   const vyprodano = spotsLeft === 0
+  // Záloha a datum zdarma zrušitelné jen tam, kde záloha ještě platí.
+  const zaloha = zalohaDostupna(turnus, pragueIsoDate()) ? turnus.zaloha : undefined
 
   const stavMist =
     spotsLeft !== undefined && volnaMistaText(spotsLeft) !== null ? (
@@ -79,6 +83,16 @@ export function NakupniBox({
           <p className="mt-1.5 text-sm text-ink-500">
             za týden{cenaZaDen && <> · ≈ {cenaZaDen}/den</>} · oběd v ceně
           </p>
+          {zaloha && (
+            <p className="mt-1 text-sm text-ink-500">
+              nebo záloha {zaloha.castkaKc.toLocaleString('cs-CZ')}&nbsp;Kč, doplatek do {formatDatumCs(zaloha.doplatekDo)}
+            </p>
+          )}
+          {zaloha && turnus.start && (
+            <p className="mt-1 text-sm text-ink-500">
+              Zrušení zdarma do {formatDatumCs(zruseniZdarmaDo(turnus.start))}
+            </p>
+          )}
         </>
       ) : (
         <>
