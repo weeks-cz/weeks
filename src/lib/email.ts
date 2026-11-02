@@ -2,6 +2,19 @@ import 'server-only'
 import { PROVOZNI_DOBA } from './site'
 import { formatDatumCs } from './dates'
 
+/**
+ * Escapuje text pro HTML, včetně uvozovek (hodnoty jdou i do atributu href).
+ * Každý údaj od rodiče nebo z dat, který se dostane do šablony, musí projít tudy.
+ */
+export function esc(v: string): string {
+  return v
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
 // Resend transactional email for KV registrations.
 // Domain weeks.cz is verified in Resend (eu-west-1). From defaults to a real
 // inbox so replies reach the team.
@@ -82,11 +95,11 @@ export interface ConfirmationParams {
 export function buildConfirmationEmail(p: ConfirmationParams): { subject: string; html: string } {
   const body = `
     <p>Dobrý den,</p>
-    <p>děkujeme za registraci a potvrzujeme přijetí platby. Místo pro <strong>${p.childName}</strong> je závazně rezervované.</p>
+    <p>děkujeme za registraci a potvrzujeme přijetí platby. Místo pro <strong>${esc(p.childName)}</strong> je závazně rezervované.</p>
     <table style="width:100%;border-collapse:collapse;margin:16px 0;font-size:14px;">
-      <tr><td style="padding:6px 0;color:#64748b;">Tábor</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.programName}</td></tr>
-      <tr><td style="padding:6px 0;color:#64748b;">Místo</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.locationName}</td></tr>
-      <tr><td style="padding:6px 0;color:#64748b;">Termín</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.termLabel}</td></tr>
+      <tr><td style="padding:6px 0;color:#64748b;">Tábor</td><td style="padding:6px 0;text-align:right;font-weight:600;">${esc(p.programName)}</td></tr>
+      <tr><td style="padding:6px 0;color:#64748b;">Místo</td><td style="padding:6px 0;text-align:right;font-weight:600;">${esc(p.locationName)}</td></tr>
+      <tr><td style="padding:6px 0;color:#64748b;">Termín</td><td style="padding:6px 0;text-align:right;font-weight:600;">${esc(p.termLabel)}</td></tr>
       <tr><td style="padding:6px 0;color:#64748b;">Uhrazeno</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.priceKc.toLocaleString('cs-CZ')} Kč</td></tr>
     </table>
     <p><strong>Fakturu</strong> vám zašleme v samostatném e-mailu do 14 dnů od platby.</p>
@@ -123,14 +136,14 @@ function cenaSZalohou(priceKc: number, zalohaKc: number | null | undefined): str
 export function buildRegistrationReceivedEmail(p: RegistrationReceivedParams): { subject: string; html: string } {
   const body = `
     <p>Dobrý den,</p>
-    <p>děkujeme za registraci, máme ji u nás uloženou. Aby bylo místo pro <strong>${p.childName}</strong> závazně rezervované, zbývá poslední krok: <strong>dokončit platbu</strong>. Kapacita je omezená, místo proto rezervujeme až po přijetí platby.</p>
+    <p>děkujeme za registraci, máme ji u nás uloženou. Aby bylo místo pro <strong>${esc(p.childName)}</strong> závazně rezervované, zbývá poslední krok: <strong>dokončit platbu</strong>. Kapacita je omezená, místo proto rezervujeme až po přijetí platby.</p>
     <p style="text-align:center;margin:24px 0;">
-      <a href="${p.paymentUrl}" style="display:inline-block;background:#4f46e5;color:#fff;text-decoration:none;font-weight:600;padding:12px 28px;border-radius:10px;">Zaplatit a rezervovat místo</a>
+      <a href="${esc(p.paymentUrl)}" style="display:inline-block;background:#4f46e5;color:#fff;text-decoration:none;font-weight:600;padding:12px 28px;border-radius:10px;">Zaplatit a rezervovat místo</a>
     </p>
     <table style="width:100%;border-collapse:collapse;margin:16px 0;font-size:14px;">
-      <tr><td style="padding:6px 0;color:#64748b;">Tábor</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.programName}</td></tr>
-      <tr><td style="padding:6px 0;color:#64748b;">Místo</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.locationName}</td></tr>
-      <tr><td style="padding:6px 0;color:#64748b;">Termín</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.termLabel}</td></tr>
+      <tr><td style="padding:6px 0;color:#64748b;">Tábor</td><td style="padding:6px 0;text-align:right;font-weight:600;">${esc(p.programName)}</td></tr>
+      <tr><td style="padding:6px 0;color:#64748b;">Místo</td><td style="padding:6px 0;text-align:right;font-weight:600;">${esc(p.locationName)}</td></tr>
+      <tr><td style="padding:6px 0;color:#64748b;">Termín</td><td style="padding:6px 0;text-align:right;font-weight:600;">${esc(p.termLabel)}</td></tr>
       <tr><td style="padding:6px 0;color:#64748b;">Cena</td><td style="padding:6px 0;text-align:right;font-weight:600;">${cenaSZalohou(p.priceKc, p.zalohaKc)}</td></tr>
     </table>
     <p style="font-size:14px;color:#475569;">Po zaplacení vám obratem přijde <strong>potvrzení</strong>, fakturu zašleme do 14 dnů. Přibližně týden před táborem pošleme <strong>nástupní list</strong> s podrobnostmi.</p>
@@ -169,12 +182,12 @@ export interface NastupniListParams {
 export function buildNastupniListEmail(p: NastupniListParams): { subject: string; html: string } {
   const body = `
     <p>Dobrý den,</p>
-    <p>blíží se termín tábora, na který je <strong>${p.childName}</strong> přihlášen/a. Posíláme nástupní list s praktickými informacemi.</p>
+    <p>blíží se termín tábora, na který je <strong>${esc(p.childName)}</strong> přihlášen/a. Posíláme nástupní list s praktickými informacemi.</p>
     <table style="width:100%;border-collapse:collapse;margin:16px 0;font-size:14px;">
-      <tr><td style="padding:6px 0;color:#64748b;">Tábor</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.programName}</td></tr>
-      <tr><td style="padding:6px 0;color:#64748b;">Termín</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.termLabel}</td></tr>
+      <tr><td style="padding:6px 0;color:#64748b;">Tábor</td><td style="padding:6px 0;text-align:right;font-weight:600;">${esc(p.programName)}</td></tr>
+      <tr><td style="padding:6px 0;color:#64748b;">Termín</td><td style="padding:6px 0;text-align:right;font-weight:600;">${esc(p.termLabel)}</td></tr>
       <tr><td style="padding:6px 0;color:#64748b;">Čas</td><td style="padding:6px 0;text-align:right;font-weight:600;">${PROVOZNI_DOBA.od} – ${PROVOZNI_DOBA.do}</td></tr>
-      <tr><td style="padding:6px 0;color:#64748b;">Místo</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.venueName}<br>${p.venueAddress}</td></tr>
+      <tr><td style="padding:6px 0;color:#64748b;">Místo</td><td style="padding:6px 0;text-align:right;font-weight:600;">${esc(p.venueName)}<br>${esc(p.venueAddress)}</td></tr>
     </table>
     <p style="font-weight:600;margin-bottom:4px;">Co s sebou:</p>
     <ul style="margin:0 0 16px;padding-left:20px;font-size:14px;line-height:1.6;">
@@ -191,7 +204,7 @@ export function buildNastupniListEmail(p: NastupniListParams): { subject: string
       Oba dokumenty předá zákonný zástupce v den nástupu vedoucímu tábora. Bez jejich
       předání nemůže být dítěti umožněna účast na táboře.
     </p>
-    <p>V případě nemoci nebo dotazů nám dejte vědět na ${p.contactEmail} nebo ${p.contactPhone}.</p>
+    <p>V případě nemoci nebo dotazů nám dejte vědět na ${esc(p.contactEmail)} nebo ${esc(p.contactPhone)}.</p>
     <p>Těšíme se na vaše dítě!<br>tým Weeks</p>`
   return {
     subject: `Nástupní list – ${p.programName} (${p.termLabel})`,
@@ -222,14 +235,14 @@ export interface PaymentReminderParams {
 export function buildPaymentReminderEmail(p: PaymentReminderParams): { subject: string; html: string } {
   const body = `
     <p>Dobrý den,</p>
-    <p>děkujeme za zájem o náš <strong>${p.programName}</strong>. Registraci pro <strong>${p.childName}</strong> máme rozepsanou, ale zatím u ní nevidíme dokončenou platbu. Místo se rezervuje až po zaplacení (volná místa se obsazují průběžně).</p>
+    <p>děkujeme za zájem o náš <strong>${esc(p.programName)}</strong>. Registraci pro <strong>${esc(p.childName)}</strong> máme rozepsanou, ale zatím u ní nevidíme dokončenou platbu. Místo se rezervuje až po zaplacení (volná místa se obsazují průběžně).</p>
     <p>Dokončit ji můžete jedním kliknutím:</p>
     <p style="text-align:center;margin:24px 0;">
-      <a href="${p.paymentUrl}" style="display:inline-block;background:#4f46e5;color:#fff;text-decoration:none;font-weight:600;padding:12px 28px;border-radius:10px;">Dokončit platbu</a>
+      <a href="${esc(p.paymentUrl)}" style="display:inline-block;background:#4f46e5;color:#fff;text-decoration:none;font-weight:600;padding:12px 28px;border-radius:10px;">Dokončit platbu</a>
     </p>
     <table style="width:100%;border-collapse:collapse;margin:16px 0;font-size:14px;">
-      <tr><td style="padding:6px 0;color:#64748b;">Místo</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.locationName}</td></tr>
-      <tr><td style="padding:6px 0;color:#64748b;">Termín</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.termLabel}</td></tr>
+      <tr><td style="padding:6px 0;color:#64748b;">Místo</td><td style="padding:6px 0;text-align:right;font-weight:600;">${esc(p.locationName)}</td></tr>
+      <tr><td style="padding:6px 0;color:#64748b;">Termín</td><td style="padding:6px 0;text-align:right;font-weight:600;">${esc(p.termLabel)}</td></tr>
       <tr><td style="padding:6px 0;color:#64748b;">Cena</td><td style="padding:6px 0;text-align:right;font-weight:600;">${cenaSZalohou(p.priceKc, p.zalohaKc)}</td></tr>
     </table>
     <p>Pokud už o místo nemáte zájem, nic neřešte — stačí tento e-mail ignorovat.</p>
@@ -263,16 +276,16 @@ export interface ZalohaConfirmationParams {
 export function buildConfirmationZalohaEmail(p: ZalohaConfirmationParams): { subject: string; html: string } {
   const body = `
     <p>Dobrý den,</p>
-    <p>děkujeme, záloha pro <strong>${p.childName}</strong> je přijatá. Místo je závazně rezervované.</p>
+    <p>děkujeme, záloha pro <strong>${esc(p.childName)}</strong> je přijatá. Místo je závazně rezervované.</p>
     <table style="width:100%;border-collapse:collapse;margin:16px 0;font-size:14px;">
-      <tr><td style="padding:6px 0;color:#64748b;">Tábor</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.programName}</td></tr>
-      <tr><td style="padding:6px 0;color:#64748b;">Místo</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.locationName}</td></tr>
-      <tr><td style="padding:6px 0;color:#64748b;">Termín</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.termLabel}</td></tr>
+      <tr><td style="padding:6px 0;color:#64748b;">Tábor</td><td style="padding:6px 0;text-align:right;font-weight:600;">${esc(p.programName)}</td></tr>
+      <tr><td style="padding:6px 0;color:#64748b;">Místo</td><td style="padding:6px 0;text-align:right;font-weight:600;">${esc(p.locationName)}</td></tr>
+      <tr><td style="padding:6px 0;color:#64748b;">Termín</td><td style="padding:6px 0;text-align:right;font-weight:600;">${esc(p.termLabel)}</td></tr>
       <tr><td style="padding:6px 0;color:#64748b;">Uhrazeno</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.zaplaceno.toLocaleString('cs-CZ')} Kč</td></tr>
       <tr><td style="padding:6px 0;color:#64748b;">Zbývá</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.zbyvaKc.toLocaleString('cs-CZ')} Kč do ${formatDatumCs(p.doplatekDo)}</td></tr>
     </table>
     <p style="text-align:center;margin:24px 0;">
-      <a href="${p.doplatekUrl}" style="display:inline-block;background:#4f46e5;color:#fff;text-decoration:none;font-weight:600;padding:12px 28px;border-radius:10px;">Doplatit ${p.zbyvaKc.toLocaleString('cs-CZ')} Kč</a>
+      <a href="${esc(p.doplatekUrl)}" style="display:inline-block;background:#4f46e5;color:#fff;text-decoration:none;font-weight:600;padding:12px 28px;border-radius:10px;">Doplatit ${p.zbyvaKc.toLocaleString('cs-CZ')} Kč</a>
     </p>
     <p><strong>Fakturu</strong> za zálohu vám zašleme do 14 dnů od platby. Fakturu za doplatek pošleme zvlášť, až ho přijmeme.</p>
     <p>Doplatek vám připomeneme e-mailem předem. Přibližně týden před táborem pošleme <strong>nástupní list</strong>, ale až po úplné úhradě.</p>
@@ -295,10 +308,10 @@ export interface DoplatekReceivedParams {
 export function buildDoplatekPrijatEmail(p: DoplatekReceivedParams): { subject: string; html: string } {
   const body = `
     <p>Dobrý den,</p>
-    <p>přijali jsme doplatek <strong>${p.doplatekKc.toLocaleString('cs-CZ')} Kč</strong> za <strong>${p.childName}</strong>. Místo na táboře je tím uhrazené celé.</p>
+    <p>přijali jsme doplatek <strong>${p.doplatekKc.toLocaleString('cs-CZ')} Kč</strong> za <strong>${esc(p.childName)}</strong>. Místo na táboře je tím uhrazené celé.</p>
     <table style="width:100%;border-collapse:collapse;margin:16px 0;font-size:14px;">
-      <tr><td style="padding:6px 0;color:#64748b;">Tábor</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.programName}</td></tr>
-      <tr><td style="padding:6px 0;color:#64748b;">Termín</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.termLabel}</td></tr>
+      <tr><td style="padding:6px 0;color:#64748b;">Tábor</td><td style="padding:6px 0;text-align:right;font-weight:600;">${esc(p.programName)}</td></tr>
+      <tr><td style="padding:6px 0;color:#64748b;">Termín</td><td style="padding:6px 0;text-align:right;font-weight:600;">${esc(p.termLabel)}</td></tr>
     </table>
     <p><strong>Fakturu</strong> za doplatek vám zašleme do 14 dnů od platby.</p>
     <p>Přibližně týden před táborem vám pošleme <strong>nástupní list</strong> s praktickými informacemi.</p>
@@ -327,13 +340,13 @@ export function buildDoplatekReminderEmail(p: DoplatekReminderParams): { subject
   const castka = `${p.zbyvaKc.toLocaleString('cs-CZ')} Kč`
   const body = `
     <p>Dobrý den,</p>
-    <p>připomínáme doplatek za <strong>${p.childName}</strong>. Zaplacená záloha místo drží, zbývá doplatit <strong>${castka}</strong> do <strong>${formatDatumCs(p.doplatekDo)}</strong>.</p>
+    <p>připomínáme doplatek za <strong>${esc(p.childName)}</strong>. Zaplacená záloha místo drží, zbývá doplatit <strong>${castka}</strong> do <strong>${formatDatumCs(p.doplatekDo)}</strong>.</p>
     <p style="text-align:center;margin:24px 0;">
-      <a href="${p.paymentUrl}" style="display:inline-block;background:#4f46e5;color:#fff;text-decoration:none;font-weight:600;padding:12px 28px;border-radius:10px;">Doplatit ${castka}</a>
+      <a href="${esc(p.paymentUrl)}" style="display:inline-block;background:#4f46e5;color:#fff;text-decoration:none;font-weight:600;padding:12px 28px;border-radius:10px;">Doplatit ${castka}</a>
     </p>
     <table style="width:100%;border-collapse:collapse;margin:16px 0;font-size:14px;">
-      <tr><td style="padding:6px 0;color:#64748b;">Tábor</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.programName}</td></tr>
-      <tr><td style="padding:6px 0;color:#64748b;">Termín</td><td style="padding:6px 0;text-align:right;font-weight:600;">${p.termLabel}</td></tr>
+      <tr><td style="padding:6px 0;color:#64748b;">Tábor</td><td style="padding:6px 0;text-align:right;font-weight:600;">${esc(p.programName)}</td></tr>
+      <tr><td style="padding:6px 0;color:#64748b;">Termín</td><td style="padding:6px 0;text-align:right;font-weight:600;">${esc(p.termLabel)}</td></tr>
     </table>
     <p>Pokud doplatek nedorazí včas, řídíme se čl. 21.4 VOP.</p>
     <p>S pozdravem,<br>tým Weeks</p>`
@@ -356,7 +369,6 @@ export interface DoplatekOverdueRow {
  * Posílá se jednou den po `doplatekDo`; dál se řeší ručně (VOP čl. 21.4).
  */
 export function buildDoplatekOverdueAlert(rows: DoplatekOverdueRow[]): { subject: string; html: string } {
-  const esc = (v: string) => v.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
   const items = rows
     .map(
       (r) =>

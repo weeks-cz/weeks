@@ -39,7 +39,7 @@ describe('buildNastupniListEmail', () => {
     expect(r.subject).toBe('Nástupní list – Letní příměstský tábor (3D tisk, IoT a elektronika, Virtuální realita) (26. 7. 2027 – 30. 7. 2027)')
   })
   it('includes venue, time window and contact', () => {
-    expect(r.html).toContain('FabLab VARY&TE')
+    expect(r.html).toContain('FabLab VARY&amp;TE')
     expect(r.html).toContain('Dykova, 360 17 Stará Role')
     expect(r.html).toContain(`${PROVOZNI_DOBA.od} – ${PROVOZNI_DOBA.do}`)
     expect(r.html).toContain('+420 703 046 440')
