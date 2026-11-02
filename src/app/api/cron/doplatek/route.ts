@@ -13,7 +13,6 @@ import { getTrustedProgramName } from '@/lib/payment-pricing'
 import { getTurnusById } from '@/lib/turnusy'
 import { castkaDoplatku, doplatekKrok, type DoplatekKrok } from '@/lib/zaloha'
 import { zaplaceno } from '@/lib/registration-payments'
-import { SITE } from '@/lib/site'
 
 export const dynamic = 'force-dynamic'
 
@@ -146,7 +145,9 @@ export async function GET(request: Request) {
   if (overdue.length > 0) {
     try {
       const { subject, html } = buildDoplatekOverdueAlert(overdue.map((o) => o.row))
-      await sendEmail({ to: SITE.email, subject, html })
+      // Interní upozornění jde do týmové schránky (tam chodí i formuláře z Formspree),
+      // ne na veřejný kontakt SITE.email.
+      await sendEmail({ to: 'admin@weeks.cz', subject, html })
       sent++
     } catch (e) {
       failed++

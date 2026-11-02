@@ -543,8 +543,8 @@ export default function PodminkyPage() {
                       Zákonný zástupce může uhradit zálohu, jejíž výše je uvedena u turnusu, a zbytek ceny
                       doplatit do termínu uvedeného u turnusu. Pořadatel zašle zákonnému zástupci připomínku
                       doplatku. Pokud doplatek nedorazí ani do 7 dnů od upozornění, může pořadatel místo
-                      uvolnit a uhrazenou částku vrátit podle čl. 22. Tento článek se týká nových přihlášek
-                      a platí pro ně v podobě, v jaké se přijímá při přihlášce.
+                      uvolnit a uhrazenou částku vrátit podle čl. 22. Platbu zálohou lze zvolit u přihlášek
+                      podaných od 2. 11. 2026.
                     </p>
                   </div>
                 </div>
