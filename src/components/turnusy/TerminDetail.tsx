@@ -33,16 +33,27 @@ import { cenaZaDen, datumCesky, datumKratce, turnusLabels } from './turnus-label
 
 /**
  * Skutečné fotky z táborů Weeks, podle tématu. Místo konání přidá svoje fotky
- * zvlášť. Herní tábor se ještě nekonal, takže dostane jen obecné záběry
- * z tábora — fotky 3D tisku a Arduina by na jeho stránce slibovaly něco
- * jiného, než se tam dělá.
+ * zvlášť. Tábor bez vlastního seznamu dostane jen skupinovou fotku.
  */
 const FOTKY_OBECNE: FotkaGalerie[] = [
   { src: '/images/tabor/skupina-terasa-retus.webp', alt: 'Děti z tábora Weeks s lektory mávají na terase' },
+]
+
+/**
+ * Herní tábor se ještě nekonal: děti u počítačů z dosavadních táborů Weeks,
+ * skupinová fotka až na konec a venkovní blok vůbec (rozhodnutí 2026-11-10).
+ * Popisky neříkají, že děti dělají hru — na těch fotkách ji nedělají.
+ */
+const FOTKY_HERNI_VYVOJ: FotkaGalerie[] = [
   {
-    src: '/images/tabor/venku-sablona.webp',
-    alt: 'Dítě na trávě stříká barvu přes šablonu na karton během venkovního bloku tábora',
+    src: '/images/tabor/dilna-ucebna.webp',
+    alt: 'Děti pracují u počítačů v dílně, mezi stoly prochází lektor',
   },
+  {
+    src: '/images/tabor/fablab-ucebna.webp',
+    alt: 'Děti u počítačů na táboře Weeks, každé u své obrazovky',
+  },
+  ...FOTKY_OBECNE,
 ]
 
 const FOTKY_CHYTRE_TECHNOLOGIE: FotkaGalerie[] = [
@@ -61,6 +72,7 @@ const FOTKY_CHYTRE_TECHNOLOGIE: FotkaGalerie[] = [
 
 const FOTKY_PODLE_TABORA: Partial<Record<TaborId, FotkaGalerie[]>> = {
   'chytre-technologie': FOTKY_CHYTRE_TECHNOLOGIE,
+  'game-dev': FOTKY_HERNI_VYVOJ,
 }
 
 const ZKRATKY_DNU: Record<string, string> = {

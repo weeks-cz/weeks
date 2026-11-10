@@ -228,10 +228,12 @@ export const TABORY: Tabor[] = [
     odnese: 'Vlastní hra, kterou si dítě odnese domů',
     lektori: ['marek-vykysaly'],
     // Skutečná fotka z tábora Weeks (ne z herního — ten se ještě nekonal),
-    // proto alt nepopisuje práci na hře.
+    // proto alt nepopisuje práci na hře. Pražská karta chytrých technologií
+    // má záběr z dílny, tahle z učebny ve FabLabu, ať vedle sebe nestojí
+    // dvakrát stejná fotka.
     foto: {
-      src: '/images/tabor/skupina-terasa-retus.webp',
-      alt: 'Děti z tábora Weeks s lektory mávají na terase',
+      src: '/images/tabor/fablab-ucebna.webp',
+      alt: 'Děti u počítačů na táboře Weeks, každé u své obrazovky',
     },
     program: [
       {
