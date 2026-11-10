@@ -7,12 +7,15 @@ import {
   Box,
   Check,
   ChevronDown,
+  Code,
   Cpu,
   Gamepad2,
   Headset,
+  Music,
   Printer,
   Sparkles,
   Star,
+  UserRound,
 } from 'lucide-react'
 import { FAQSection } from '@/components/sections/FAQSection'
 import { FotoPas } from '@/components/sections/FotoPas'
@@ -30,6 +33,7 @@ import { GOOGLE_PROFIL, maRecenze } from '@/lib/recenze'
 import { PROVOZNI_DOBA, getSiteFaq } from '@/lib/site'
 import { DENNI_HARMONOGRAM, getAktivniTabory, zkusiSiTabora, type IkonaDne, type Tabor } from '@/lib/tabory'
 import { getTurnusyByTabor, isBookable } from '@/lib/turnusy'
+import { TYM } from '@/lib/tym'
 
 /**
  * Stránka tématu — jediné místo, kde žije popis tábora.
@@ -50,6 +54,9 @@ const IKONY_DNE: Record<IkonaDne, LucideIcon> = {
   iot: Cpu,
   vr: Headset,
   projekt: Sparkles,
+  hra: Gamepad2,
+  zvuk: Music,
+  kod: Code,
 }
 
 const IKONY_ZAMERENI: Record<FocusId, LucideIcon> = {
@@ -59,12 +66,11 @@ const IKONY_ZAMERENI: Record<FocusId, LucideIcon> = {
   'herni-vyvoj': Gamepad2,
 }
 
-/** Fotka do hera — skutečná z tábora. Na výšku: dítě s tím, co si samo navrhlo. */
-const FOTKA_HERA = {
-  src: '/images/tabor/vytisk-v-ruce.webp',
-  alt: 'Vlastní návrh, vytištěný na táboře',
-  width: 896,
-  height: 1195,
+/** „1 tématu", „2 tématech" — počet zaměření ve větě pod nadpisem. */
+function pocetTemat(n: number): string {
+  if (n === 1) return 'jednom tématu'
+  if (n === 2) return 'dvou tématech'
+  return `${n} tématech`
 }
 
 function Drobecky({ tabor }: { tabor: Tabor }) {
@@ -113,6 +119,12 @@ function AktivniTema({ tabor }: { tabor: Tabor }) {
     (otazka, i, vse) => vse.findIndex((o) => o.question === otazka.question) === i,
   )
   const vek = turnusy[0]?.ageRange.replace('-', '–') ?? '9–15'
+  // Fotka do hera patří táboru (`tabor.fotoHera`) — dřív tu byla natvrdo fotka
+  // 3D výtisku pro každé téma.
+  const fotka = tabor.fotoHera
+  const lektori = (tabor.lektori ?? [])
+    .map((id) => TYM.find((c) => c.id === id))
+    .filter((c): c is (typeof TYM)[number] => c !== undefined)
   const ceny = prodejne.map((t) => t.priceKc).filter((c): c is number => c !== null)
   const odCeny = ceny.length > 0 ? `${Math.min(...ceny).toLocaleString('cs-CZ')} Kč` : null
 
@@ -127,7 +139,7 @@ function AktivniTema({ tabor }: { tabor: Tabor }) {
           W
         </div>
         <div className="section-container relative z-10 grid items-center gap-12 pb-16 pt-28 md:pb-24 md:pt-36 lg:grid-cols-12">
-          <div className="lg:col-span-7">
+          <div className={fotka ? 'lg:col-span-7' : 'lg:col-span-9'}>
             <Drobecky tabor={tabor} />
             <p className="mono-label-dark mb-5 text-accent-300">
               Po–Pá · {PROVOZNI_DOBA.rozsah} · {vek} let
@@ -185,21 +197,23 @@ function AktivniTema({ tabor }: { tabor: Tabor }) {
             </div>
           </div>
 
-          <div className="relative mx-auto hidden w-full max-w-sm lg:col-span-5 lg:block">
-            <div
-              aria-hidden="true"
-              className="absolute inset-0 translate-x-4 translate-y-4 rounded-md bg-cta-400"
-            />
-            <Image
-              src={FOTKA_HERA.src}
-              alt={FOTKA_HERA.alt}
-              width={FOTKA_HERA.width}
-              height={FOTKA_HERA.height}
-              sizes="(min-width: 1024px) 384px, 0px"
-              priority
-              className="relative aspect-[3/4] w-full rounded-md border border-paper/20 object-cover"
-            />
-          </div>
+          {fotka && (
+            <div className="relative mx-auto hidden w-full max-w-sm lg:col-span-5 lg:block">
+              <div
+                aria-hidden="true"
+                className="absolute inset-0 translate-x-4 translate-y-4 rounded-md bg-cta-400"
+              />
+              <Image
+                src={fotka.src}
+                alt={fotka.alt}
+                width={fotka.width}
+                height={fotka.height}
+                sizes="(min-width: 1024px) 384px, 0px"
+                priority
+                className="relative aspect-[3/4] w-full rounded-md border border-paper/20 object-cover"
+              />
+            </div>
+          )}
         </div>
       </section>
 
@@ -233,11 +247,11 @@ function AktivniTema({ tabor }: { tabor: Tabor }) {
               Co si <span className="text-accent-400">postavíš</span>
             </h2>
             <p className="text-lg text-paper/70">
-              Týden stojí na {zamereni.length === 2 ? 'dvou tématech' : `${zamereni.length} tématech`}. Každé
-              končí něčím, co uděláš sám.
+              Týden stojí na {pocetTemat(zamereni.length)}.{' '}
+              {zamereni.length === 1 ? 'Končí' : 'Každé končí'} něčím, co uděláš sám.
             </p>
           </div>
-          <div className="grid gap-6 md:grid-cols-2">
+          <div className={zamereni.length > 1 ? 'grid gap-6 md:grid-cols-2' : 'grid max-w-2xl gap-6'}>
             {zamereni.map((z) => {
               const Ikona = IKONY_ZAMERENI[z.id]
               return (
@@ -288,8 +302,25 @@ function AktivniTema({ tabor }: { tabor: Tabor }) {
                   Jak vypadá <span className="text-accent-600">týden</span>
                 </h2>
                 <p className="text-lg text-ink-500">
-                  Projekty na sebe navazují. Co dítě začne v pondělí, to si v pátek ukáže rodičům.
+                  Projekty na sebe navazují. Co dítě v pondělí začne, to v pátek dokončí.
                 </p>
+                {lektori.length > 0 && (
+                  <ul className="mt-8 space-y-3">
+                    {lektori.map((clen) => (
+                      <li key={clen.id} className="flex items-center gap-3">
+                        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-ink/15 bg-white">
+                          <UserRound className="h-5 w-5 text-accent-600" aria-hidden="true" />
+                        </span>
+                        <span>
+                          <span className="block text-sm text-ink-500">Hlavní lektor</span>
+                          <Link href="/o-nas" className="font-display font-semibold text-ink hover:underline">
+                            {clen.jmeno}
+                          </Link>
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
             </div>
 

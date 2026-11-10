@@ -488,10 +488,13 @@ export default function PodminkyPage() {
                   a platí ve výši, kterou zobrazuje přihláška v okamžiku jejího odeslání.
                 </p>
                 {/* Výčet čte `V_CENE` / `MIMO_CENU` ze site.ts — stejný seznam
-                    ukazuje stránka termínu, slib na webu a ve smlouvě se nerozejde. */}
+                    ukazuje stránka termínu, slib na webu a ve smlouvě se nerozejde.
+                    Co si dítě odnese, se liší podle tábora (`tabor.odnese`),
+                    proto tu stojí odkazem na stránku termínu. */}
                 <p className="text-ink-500 text-sm">
-                  V ceně tábora je zahrnuto: {V_CENE.join(', ').toLowerCase()}.
-                  Součástí ceny není: {MIMO_CENU.join('; ').toLowerCase()}.
+                  V ceně tábora je zahrnuto: {V_CENE.join(', ').toLowerCase()} a to, co si dítě
+                  podle stránky turnusu z tábora odnese (například vlastní výtisky z 3D tiskárny
+                  nebo vlastní hru). Součástí ceny není: {MIMO_CENU.join('; ').toLowerCase()}.
                 </p>
               </section>
 

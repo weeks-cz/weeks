@@ -1,4 +1,5 @@
 import { getVenue } from './cities'
+import type { Tabor } from './tabory'
 import { getTurnusy, TURNUSY, type Turnus } from './turnusy'
 
 /**
@@ -59,18 +60,26 @@ export const PROVOZNI_DOBA = {
 } as const
 
 /**
- * Co cena tábora zahrnuje a co ne — jediné místo, kde je to napsané. Čte to
+ * Co cena zahrnuje u každého tábora — jediné místo, kde je to napsané. Čte to
  * stránka termínu i VOP čl. 20, aby se slib na webu a ve smlouvě nerozešel.
  * Svačiny v ceně nejsou: dopolední i odpolední si dítě nosí vlastní (oběd
  * zajišťujeme my).
+ *
+ * Co si dítě odnese domů, sem nepatří: dřív tu stály „vlastní výtisky
+ * z 3D tiskárny“ pro celý web, což s herním táborem (2026-11-10) přestalo
+ * platit. Ten řádek teď dodává tábor (`tabor.odnese`), viz `vCeneTabora`.
  */
 export const V_CENE = [
   'Program a vedení lektorů',
   'Oběd každý den',
   'Pitný režim',
   'Materiál a pomůcky',
-  'Vlastní výtisky z 3D tiskárny domů',
 ] as const
+
+/** „V ceně“ konkrétního tábora: společný základ + co si z něj dítě odnese. */
+export function vCeneTabora(tabor?: Pick<Tabor, 'odnese'>): string[] {
+  return tabor?.odnese ? [...V_CENE, tabor.odnese] : [...V_CENE]
+}
 
 export const MIMO_CENU = [
   'Svačiny — dopolední a odpolední si dítě nosí vlastní',
@@ -120,7 +129,7 @@ export function getSiteFaq(): Array<{ question: string; answer: string }> {
     {
       question: 'Co má dítě mít s sebou?',
       answer:
-        'Jen dobrou náladu a svačinu na dopoledne a odpoledne. Oběd zajišťujeme my každý den. Veškeré technické vybavení, tiskárny, Arduina i materiály jsou na místě.',
+        'Jen dobrou náladu a svačinu na dopoledne a odpoledne. Oběd zajišťujeme my každý den. Počítače, technika i materiál jsou na místě.',
     },
     {
       question: 'Kde tábory probíhají?',
@@ -144,15 +153,6 @@ export function getSiteFaq(): Array<{ question: string; answer: string }> {
       question: 'Je zajištěn oběd pro děti s alergiemi?',
       answer:
         'Ano, při registraci se ptáme na stravovací omezení a alergie. Spolupracujeme s dodavatelem, který dokáže připravit alternativní varianty.',
-    },
-    {
-      question: 'Co si dítě odveze domů?',
-      // Obecný slib o „sestaveném zařízení" tu stál proti konkrétní odpovědi
-      // modulu `iot` v `focus.ts` („Micro:bity a Arduina zůstávají
-      // v laboratoři"). Web nesmí tvrdit obojí — obecný slib proto mizí
-      // a odpověď posílá čtenáře k zaměření, kde platí provozní pravda.
-      answer:
-        'Vlastní výtisky z 3D tiskárny a vlastní 3D model, který si navrhlo. U elektroniky záleží na zaměření turnusu — co si děti odvážejí a co zůstává v laboratoři, píšeme u každého zaměření zvlášť.',
     },
     {
       question: 'Jak probíhá platba?',

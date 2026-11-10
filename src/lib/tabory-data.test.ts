@@ -1,5 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { TABORY, validateTabory, getAktivniTabory, zkusiSiTabora } from './tabory'
+import { TYM } from './tym'
+import { vCeneTabora } from './site'
 
 describe('ostrá data táborů', () => {
   it('seznam není prázdný — jinak by kontroly níž proběhly naprázdno', () => {
@@ -31,5 +33,21 @@ describe('ostrá data táborů', () => {
     for (const tabor of getAktivniTabory(TABORY)) {
       expect(tabor.program, `tábor ${tabor.id}`).toHaveLength(5)
     }
+  })
+
+  it('každý lektor tábora je v týmu na /o-nas — jinak by jméno vedlo nikam', () => {
+    for (const tabor of TABORY) {
+      for (const id of tabor.lektori ?? []) {
+        expect(TYM.map((c) => c.id), `tábor ${tabor.id}`).toContain(id)
+      }
+    }
+  })
+
+  it('herní tábor neslibuje 3D výtisky — „V ceně" se liší podle tábora', () => {
+    const herni = TABORY.find((t) => t.id === 'game-dev')!
+    const chytre = TABORY.find((t) => t.id === 'chytre-technologie')!
+    expect(vCeneTabora(herni).join(' ')).not.toMatch(/3D/)
+    expect(vCeneTabora(chytre).join(' ')).toMatch(/3D tiskárny/)
+    expect(vCeneTabora(herni)).toContain('Oběd každý den')
   })
 })

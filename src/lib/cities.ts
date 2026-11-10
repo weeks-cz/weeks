@@ -7,7 +7,7 @@
  */
 
 export type CityId = 'praha' | 'karlovy-vary'
-export type VenueId = 'fablab-varyte'
+export type VenueId = 'fablab-varyte' | 'zs-brectanova'
 
 export interface City {
   id: CityId
@@ -34,6 +34,12 @@ export interface Venue {
    */
   description: string
   url?: string
+  /**
+   * Čím je místo vybavené — první řádek seznamu v `VenueShowcase`. Dřív tam
+   * pro všechna místa stálo natvrdo „3D tiskárny a Arduino soupravy“, což
+   * s druhým táborem v jiném prostoru přestalo platit.
+   */
+  vybaveni: string
   /** Dotaz pro odkaz do map. */
   mapQuery: string
   /** Fotky prostoru pro `VenueShowcase`. Bez fotek se galerie nevykresluje. */
@@ -68,12 +74,31 @@ const VENUES: Record<VenueId, Venue> = {
     description:
       'Kreativní centrum v Karlovarském kraji s FabLabem, GameDev arenou a vzdělávacími prostory.',
     url: 'https://varyete.cz',
+    vybaveni: 'Profesionální 3D tiskárny a Arduino soupravy',
     mapQuery: 'Kreativní+centrum+Vary%26Te+Karlovy+Vary',
     photos: [
       '/images/varyete/fablab-1.avif',
       '/images/varyete/fablab-5.avif',
       '/images/varyete/fablab-6.avif',
     ],
+  },
+  // Potvrzeno pro herní tábor 12.–16. 7. 2027 (2026-11-10). Adresa a souřadnice
+  // podle OpenStreetMap, název podle rejstříku škol (IČO 47611871). Popis jen
+  // to, co víme z vlastní evidence prostor: počítač pro každé dítě a oběd na
+  // místě. Web školy jsme neověřili, proto bez `url`.
+  'zs-brectanova': {
+    id: 'zs-brectanova',
+    cityId: 'praha',
+    name: 'ZŠ Břečťanová',
+    fullName: 'Základní škola Břečťanová',
+    street: 'Břečťanová 2919/6',
+    city: 'Praha 10 – Záběhlice',
+    postalCode: '106 00',
+    geo: { lat: 50.0547494, lng: 14.4968263 },
+    description:
+      'Základní škola v pražských Záběhlicích. Tábor běží v její počítačové učebně.',
+    vybaveni: 'Počítačová učebna, každé dítě má svůj počítač',
+    mapQuery: 'B%C5%99e%C4%8D%C5%A5anov%C3%A1+2919%2F6+Praha+10',
   },
 }
 

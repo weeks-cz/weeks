@@ -40,7 +40,7 @@ const plexMono = IBM_Plex_Mono({
 const siteUrl = SITE.url
 const siteTitle = `${SITE.name} - IT tábory pro děti`
 const siteDescription =
-  'Týdenní příměstský tábor pro děti 9–15 let. 3D tisk, 3D modelování a IoT s Arduinem v malých skupinkách, oběd i materiál v ceně.'
+  'Týdenní příměstské tábory pro děti 9–15 let. 3D tisk, IoT s Arduinem a vývoj her v malých skupinkách, oběd i materiál v ceně.'
 
 export const viewport: Viewport = {
   width: 'device-width',

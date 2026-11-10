@@ -16,6 +16,7 @@ const aktivni: Tabor = {
   perex: 'Celý týden 3D tisk, modelování a IoT s Arduinem.',
   popis: 'Týden rozdělený na dva bloky — tři dny 3D tisk, dva dny elektronika.',
   focus: ['3d-tisk', 'iot'],
+  odnese: 'Vlastní výtisky z 3D tiskárny domů',
   program: [
     { den: 'Pondělí', ikona: 'tisk', title: 'Start', description: 'Popis dne.', highlights: ['a'] },
   ],
@@ -92,5 +93,10 @@ describe('validateTabory', () => {
   it('chystaný tábor bez vlastních bodů je chyba — ze zaměření je nemá odkud vzít', () => {
     const problemy = validateTabory([{ ...chystany, zkusiSi: undefined }])
     expect(problemy.join(' ')).toContain('game-dev')
+  })
+
+  it('aktivní tábor, který neříká, co si dítě odnese, je chyba — chyběl by řádek „V ceně"', () => {
+    const problemy = validateTabory([{ ...aktivni, odnese: undefined }])
+    expect(problemy.join(' ')).toContain('odnese')
   })
 })

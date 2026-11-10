@@ -3,7 +3,8 @@
 import Link from 'next/link'
 import { ArrowRight, Check, ShieldCheck } from 'lucide-react'
 import { trackTerminCta } from '@/lib/analytics'
-import { V_CENE } from '@/lib/site'
+import { vCeneTabora } from '@/lib/site'
+import { getTaboryTurnusu } from '@/lib/turnusy'
 import { formatDatumCs, pragueIsoDate } from '@/lib/dates'
 import { zalohaDostupna, zruseniZdarmaDo } from '@/lib/zaloha'
 import type { Turnus } from '@/lib/turnusy'
@@ -194,7 +195,8 @@ export function NakupniBox({
           {/* Bez první položky („Program a vedení lektorů") — ta je samozřejmá
               a na mobilu by odsunula řádek pod okraj. Malé jen první písmeno:
               celé `toLowerCase()` by z „3D" udělalo „3d". */}
-          {V_CENE.slice(1)
+          {vCeneTabora(getTaboryTurnusu(turnus)[0])
+            .slice(1)
             .map((p) => p.charAt(0).toLowerCase() + p.slice(1))
             .join(' · ')}
           .{' '}

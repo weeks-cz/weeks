@@ -151,12 +151,17 @@ const FOCUS: Record<FocusId, FocusModule> = {
   'herni-vyvoj': {
     id: 'herni-vyvoj',
     name: 'Herní vývoj',
+    // Podle programu lektora (Marek Vykysalý, list „Tábor 1: vývoj her“ na
+    // týmovém Drivu, 2026-11-10). Lektor v něm píše o zbraních a boji; pro
+    // rodiče to web říká jako střely a nepřátele (rozhodnutí 2026-11-10).
     short:
-      'První vlastní hra — od nápadu po něco, co jde opravdu hrát.',
+      'Vlastní akční 2D hra v herním enginu Godot, od prázdné scény po hotovou hru, kterou si dítě odnese domů.',
     tryOut: [
-      'Poskládá si jednoduchou scénu a rozpohybuje postavu',
-      'Napíše první kus herní logiky',
-      'Vyzkouší si, jak se hra ladí, když nedělá to, co má',
+      'Postaví vlastní level a rozpohybuje v něm postavu',
+      'Přidá střely, nepřátele a sbírání mincí',
+      'Nahraje do hry vlastní zvuky a efekty',
+      'Napíše první řádky kódu v GDScriptu',
+      'Na konci týdne hru sestaví a odnese si ji domů',
     ],
   },
 }

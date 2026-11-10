@@ -72,6 +72,7 @@ export function LocalBusinessSchema() {
       'programování pro děti',
       '3D tisk pro děti',
       'IoT a elektronika pro děti',
+      'vývoj her pro děti',
     ],
   }
   return jsonLd(schema)

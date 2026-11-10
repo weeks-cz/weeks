@@ -30,7 +30,7 @@ export type TaborStatus =
  * jít načíst v testu (prostředí `node`) bez Reactu. Mapa klíč → ikona žije ve
  * stránce, která dny vykresluje.
  */
-export type IkonaDne = 'tisk' | 'model' | 'iot' | 'vr' | 'projekt'
+export type IkonaDne = 'tisk' | 'model' | 'iot' | 'vr' | 'projekt' | 'hra' | 'zvuk' | 'kod'
 
 export interface DenProgramu {
   den: string
@@ -62,6 +62,22 @@ export interface Tabor {
   program?: DenProgramu[]
   /** Otázky, které se týkají právě tohohle tématu. Obecné jsou v `site.ts`. */
   faq?: Array<{ question: string; answer: string }>
+  /**
+   * Co si dítě z tábora odnese — poslední řádek „V ceně" na stránce termínu
+   * (`vCeneTabora` v `site.ts`). Povinné u aktivního tábora: dřív to byl
+   * globální slib „výtisky z 3D tiskárny", který herní tábor nesplní.
+   */
+  odnese?: string
+  /**
+   * Lektoři, kteří tábor vedou — `id` z `TYM` (`tym.ts`). Stránka tématu je
+   * jmenuje u programu.
+   */
+  lektori?: string[]
+  /**
+   * Fotka na výšku do hera stránky tématu (3:4). Bez ní se hero kreslí bez
+   * fotky — herní tábor nesmí převzít fotku 3D výtisku.
+   */
+  fotoHera?: { src: string; alt: string; width: number; height: number }
   /**
    * Fotka na kartu tématu ve výpisu `/tabory`, na šířku. Ilustrační — karta
    * ji nepopisuje jako záběr z konkrétního tábora. Chystaný tábor zatím žádnou
@@ -99,7 +115,7 @@ export const DENNI_HARMONOGRAM = [
 /**
  * Ostrá data.
  *
- * POZOR — tři tábory ve stavu `chystame` jsou zatím jen záměr. Nemají potvrzený
+ * POZOR — tábory ve stavu `chystame` jsou zatím jen záměr. Nemají potvrzený
  * program, termín, cenu ani vybavení a jejich texty jsou návrh k opravě
  * zakladatelem. Dokud nedodá potvrzené znění, nedoplňuje se sem harmonogram,
  * galerie, cena ani konkrétní technika — stejné pravidlo jako u prázdných
@@ -120,6 +136,26 @@ export const TABORY: Tabor[] = [
     // program to jen potvrzuje — žádný den VR neobsahuje. Modul `vr` zůstává
     // ve `focus.ts` i s obsahem; vrátí se dopsáním do tohohle pole.
     focus: ['3d-tisk', 'iot'],
+    odnese: 'Vlastní výtisky z 3D tiskárny domů',
+    fotoHera: {
+      src: '/images/tabor/vytisk-v-ruce.webp',
+      alt: 'Vlastní návrh, vytištěný na táboře',
+      width: 896,
+      height: 1195,
+    },
+    faq: [
+      {
+        question: 'Co si dítě odveze domů?',
+        // Obecný slib o „sestaveném zařízení" tu stál proti konkrétní odpovědi
+        // modulu `iot` v `focus.ts` („Micro:bity a Arduina zůstávají
+        // v laboratoři"). Web nesmí tvrdit obojí — obecný slib proto mizí
+        // a odpověď posílá čtenáře k zaměření, kde platí provozní pravda.
+        // Do 2026-11-10 stála otázka v obecných FAQ (`site.ts`); s herním
+        // táborem patří k tématu.
+        answer:
+          'Vlastní výtisky z 3D tiskárny a vlastní 3D model, který si navrhlo. U elektroniky záleží na zaměření turnusu — co si děti odvážejí a co zůstává v laboratoři, píšeme u každého zaměření zvlášť.',
+      },
+    ],
     foto: {
       src: '/images/tabor/dilna-ucebna.webp',
       alt: 'Děti u počítačů a 3D tiskáren v dílně, mezi stoly prochází lektor',
@@ -180,16 +216,84 @@ export const TABORY: Tabor[] = [
     id: 'game-dev',
     name: 'Tábor herního vývoje',
     shortName: 'Herní vývoj',
-    status: 'chystame',
-    perex: 'Vlastní hra od nápadu po hratelnou verzi — úrovně, ovládání i zvuk.',
+    status: 'aktivni',
+    // Program podle lektora Marka Vykysalého (list „Tábor 1: vývoj her" na
+    // týmovém Drivu, stav 2026-11-10). Zbraně a boj z jeho programu říká web
+    // rodičům jako střely a nepřátele (rozhodnutí 2026-11-10).
+    perex:
+      'Vlastní akční 2D hra v enginu Godot: level, postava, střely, zvuky i efekty. Hotovou hru si dítě odnese domů.',
     popis:
-      'Tábor teprve chystáme. Chceme na něm dojít od nápadu k hratelné hře, kterou si děti na konci týdne navzájem zahrají.',
+      'Týden v herním enginu Godot. Každé dítě postaví vlastní akční 2D hru s levelem, postavou, střelami, nepřáteli, zvuky a efekty a v pátek si ji sestavenou odnese domů. Programovat umět nemusí, první řádky kódu přijdou na řadu až ve čtvrtek.',
     focus: ['herni-vyvoj'],
-    zkusiSi: [
-      'Postaví si vlastní úroveň a rozpohybuje v ní postavu',
-      'Napíše pravidla hry — co se stane, když hráč vyhraje nebo prohraje',
-      'Zkusí si, jak se do hry dostane zvuk a hudba',
-      'Dá hru zahrát ostatním a uvidí, co jim v ní nefunguje',
+    odnese: 'Vlastní hra, kterou si dítě odnese domů',
+    lektori: ['marek-vykysaly'],
+    // Skutečná fotka z tábora Weeks (ne z herního — ten se ještě nekonal),
+    // proto alt nepopisuje práci na hře.
+    foto: {
+      src: '/images/tabor/skupina-terasa-retus.webp',
+      alt: 'Děti z tábora Weeks s lektory mávají na terase',
+    },
+    program: [
+      {
+        den: 'Pondělí',
+        ikona: 'hra',
+        title: 'Godot a první level',
+        description:
+          'Seznámení s herním enginem Godot. Děti si založí vlastní projekt, vytvoří postavu a z připravených dílků postaví první level.',
+        highlights: ['Herní engine Godot', 'Vlastní postava', 'První level z dílků'],
+      },
+      {
+        den: 'Úterý',
+        ikona: 'hra',
+        title: 'Pohyb, fyzika a akce',
+        description:
+          'Postava dostane parametry a fyziku, takže se pohybuje a skáče, jak má. Do hry přibudou střely, jejich sbírání a první nepřátelé, na kterých se akce vyzkouší.',
+        highlights: ['Pohyb a fyzika', 'Střely a jejich sbírání', 'První nepřátelé'],
+      },
+      {
+        den: 'Středa',
+        ikona: 'zvuk',
+        title: 'Ladění a zvuky',
+        description:
+          'Dopoledne hru společně ladíme, aby fungovala a nic se v ní nerozbíjelo. Odpoledne si děti vytvoří vlastní zvuky a dají je do hry.',
+        highlights: ['Testování a ladění', 'Tvorba zvuků', 'Zvuky ve hře'],
+      },
+      {
+        den: 'Čtvrtek',
+        ikona: 'kod',
+        title: 'Efekty a první kód',
+        description:
+          'Vizuální efekty, třeba různé druhy střel nebo rychlý úskok. Odpoledne první krok do programování: základy jazyka GDScript, ve kterém se v Godotu píše herní logika.',
+        highlights: ['Vizuální efekty', 'Základy GDScriptu', 'Herní logika v kódu'],
+      },
+      {
+        den: 'Pátek',
+        ikona: 'projekt',
+        title: 'Hotová hra',
+        description:
+          'Děti si samy naprogramují jednoduchou funkci, třeba sbírání mincí, doladí, co je potřeba, a hru sestaví tak, aby šla spustit i doma.',
+        highlights: ['Vlastní funkce v kódu', 'Sestavení hry', 'Hra domů'],
+      },
+    ],
+    faq: [
+      {
+        question: 'V čem budou děti hry dělat?',
+        answer:
+          'V herním enginu Godot. Je zdarma a otevřený, takže v něm dítě může pokračovat i doma.',
+      },
+      {
+        question: 'Musí dítě umět programovat?',
+        answer:
+          'Ne. Většinu týdne se hra skládá v editoru, kód přijde na řadu až ve čtvrtek a v pátek, a to od úplných základů.',
+      },
+      {
+        question: 'Potřebuje dítě vlastní počítač?',
+        answer: 'Ne. Tábor běží v počítačové učebně a každé dítě má svůj počítač.',
+      },
+      {
+        question: 'Co si dítě odveze domů?',
+        answer: 'Vlastní hru. V pátek ji sestavíme tak, aby šla spustit i doma na počítači.',
+      },
     ],
   },
   {
@@ -288,6 +392,11 @@ export function validateTabory(list: Tabor[] = TABORY): string[] {
       }
       if (tabor.focus.length === 0) {
         problems.push(`Tábor "${tabor.id}" je aktivní, ale nemá zaměření.`)
+      }
+      if (!tabor.odnese) {
+        problems.push(
+          `Tábor "${tabor.id}" je aktivní, ale neříká, co si z něj dítě odnese — chybí řádek „V ceně".`
+        )
       }
     }
 

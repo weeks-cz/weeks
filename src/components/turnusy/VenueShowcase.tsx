@@ -2,17 +2,19 @@
 
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { MapPin, Cpu, Printer, ShieldCheck } from 'lucide-react'
+import { MapPin, Cpu, Monitor, ShieldCheck } from 'lucide-react'
 import type { Venue } from '@/lib/cities'
 import { MrizkaSekce } from '@/components/ui/MrizkaSekce'
 
-// Obecné vlastnosti, které platí pro každé místo konání bez ohledu na to,
-// kde zrovna je — konkrétní popis místa (název, text, fotky) dodává `venue`.
-const features = [
-  { icon: Printer, text: 'Profesionální 3D tiskárny a Arduino soupravy' },
-  { icon: Cpu, text: 'Plně vybavený prostor — vše potřebné na místě' },
-  { icon: ShieldCheck, text: 'Bezpečné, moderní prostředí pod dohledem lektorů' },
-]
+// První řádek (vybavení) dodává místo samo — každé je vybavené jinak.
+// Zbylé dva platí pro každé místo konání.
+function features(venue: Venue) {
+  return [
+    { icon: Monitor, text: venue.vybaveni },
+    { icon: Cpu, text: 'Plně vybavený prostor — vše potřebné na místě' },
+    { icon: ShieldCheck, text: 'Bezpečné, moderní prostředí pod dohledem lektorů' },
+  ]
+}
 
 export function VenueShowcase({ venue }: { venue: Venue }) {
   const hasPhotos = (venue.photos?.length ?? 0) > 0
@@ -42,7 +44,7 @@ export function VenueShowcase({ venue }: { venue: Venue }) {
               {venue.description}
             </p>
             <ul className="space-y-4">
-              {features.map((f) => (
+              {features(venue).map((f) => (
                 <li key={f.text} className="flex items-start gap-3">
                   <div className="w-9 h-9 rounded-sm bg-white/10 border border-paper/20 flex items-center justify-center flex-shrink-0">
                     <f.icon className="w-5 h-5 text-accent-400" />

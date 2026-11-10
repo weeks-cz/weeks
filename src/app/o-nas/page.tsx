@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Target, Heart, Lightbulb, Users, MapPin, Tent, Code, Box, Mail, Phone, Linkedin, type LucideIcon } from 'lucide-react'
+import { Target, Heart, Lightbulb, Users, MapPin, Tent, Code, Box, Gamepad2, Mail, Phone, Linkedin, type LucideIcon } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Header } from '@/components/layout/Header'
@@ -40,6 +40,7 @@ const IKONY_OBORU: Record<IkonaOboru, LucideIcon> = {
   stan: Tent,
   code: Code,
   box: Box,
+  hra: Gamepad2,
 }
 
 export default function AboutPage() {
@@ -362,7 +363,7 @@ export default function AboutPage() {
               </p>
             </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
               {TYM.map((clen, index) => {
                 const Ikona = IKONY_OBORU[clen.ikona]
                 return (

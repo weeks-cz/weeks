@@ -135,6 +135,27 @@ export const TURNUSY: Turnus[] = [
     perex:
       'Týden 3D tisku a elektroniky ve FabLabu VARY&TE v Karlových Varech. Oběd, pitný režim i materiál jsou v ceně.',
   },
+  // Vypsáno 2026-11-10 (porada): Praha, druhý prázdninový týden, lektor Marek
+  // Vykysalý, ZŠ Břečťanová potvrzená. Cena a podmínky stejné jako KV 2027.
+  // `id` je v názvu s tématem, ne jen s měsícem — ve stejném týdnu se v Praze
+  // chystá i multimediální tábor a `id` už se po prvním prodeji nesmí změnit.
+  {
+    id: 'praha-2027-herni-vyvoj',
+    slug: 'praha-2027-herni-vyvoj',
+    city: 'praha',
+    venueId: 'zs-brectanova',
+    start: '2027-07-12',
+    end: '2027-07-16',
+    priceKc: 5990,
+    capacity: 15,
+    minimum: { deti: 10, rozhodnemeDo: '2027-06-30' },
+    zaloha: { castkaKc: 2000, doplatekDo: '2027-05-31' },
+    status: 'otevreno',
+    taborIds: ['game-dev'],
+    ageRange: '9-15',
+    perex:
+      'Týden vývoje vlastní hry v Godotu na ZŠ Břečťanová v Praze 10. Oběd, pitný režim i materiál jsou v ceně.',
+  },
   {
     id: 'praha-leto-2027',
     slug: 'praha-leto-2027',

@@ -5,8 +5,8 @@ import {
 import { GoogleRecenze } from '@/components/sections/GoogleRecenze'
 import { getCity, getVenue } from '@/lib/cities'
 import { GOOGLE_PROFIL, RECENZE, maRecenze } from '@/lib/recenze'
-import { MIMO_CENU, PROVOZNI_DOBA, SITE, V_CENE } from '@/lib/site'
-import { zkusiSiTabora } from '@/lib/tabory'
+import { MIMO_CENU, PROVOZNI_DOBA, SITE, vCeneTabora } from '@/lib/site'
+import { zkusiSiTabora, type TaborId } from '@/lib/tabory'
 import { getTaboryTurnusu, getTurnusy, getTurnusyByTabor, isBookable, type Turnus } from '@/lib/turnusy'
 import { NakupniBox, type VariantaTerminu } from './NakupniBox'
 import { NakupniLista } from './NakupniLista'
@@ -31,8 +31,21 @@ import { cenaZaDen, datumCesky, datumKratce, turnusLabels } from './turnus-label
  * odstavců, takže vedle sebe nestojí dvě skoro shodné stránky.
  */
 
-/** Skutečné fotky z táborů Weeks. Místo konání přidá svoje fotky zvlášť. */
-const FOTKY_Z_TABORA: FotkaGalerie[] = [
+/**
+ * Skutečné fotky z táborů Weeks, podle tématu. Místo konání přidá svoje fotky
+ * zvlášť. Herní tábor se ještě nekonal, takže dostane jen obecné záběry
+ * z tábora — fotky 3D tisku a Arduina by na jeho stránce slibovaly něco
+ * jiného, než se tam dělá.
+ */
+const FOTKY_OBECNE: FotkaGalerie[] = [
+  { src: '/images/tabor/skupina-terasa-retus.webp', alt: 'Děti z tábora Weeks s lektory mávají na terase' },
+  {
+    src: '/images/tabor/venku-sablona.webp',
+    alt: 'Dítě na trávě stříká barvu přes šablonu na karton během venkovního bloku tábora',
+  },
+]
+
+const FOTKY_CHYTRE_TECHNOLOGIE: FotkaGalerie[] = [
   {
     src: '/images/hwlab/hero-print-day.webp',
     alt: 'Děti a lektoři v dílně u 3D tiskáren, na plátně promítnuté logo Weeks',
@@ -45,6 +58,10 @@ const FOTKY_Z_TABORA: FotkaGalerie[] = [
     alt: 'Chlapec u stolu ukazuje palec nahoru, před ním nepájivé pole s rozsvícenými LED diodami a Arduino',
   },
 ]
+
+const FOTKY_PODLE_TABORA: Partial<Record<TaborId, FotkaGalerie[]>> = {
+  'chytre-technologie': FOTKY_CHYTRE_TECHNOLOGIE,
+}
 
 const ZKRATKY_DNU: Record<string, string> = {
   Pondělí: 'Po',
@@ -79,7 +96,7 @@ export function TerminDetail({ turnus }: { turnus: Turnus }) {
   // Jen fotky z našich táborů. Fotky místa konání sem nepatří — ukazuje je
   // sekce „Místo konání“ (`VenueShowcase`) a v galerii „z tábora“ by se
   // tvářily jako záběry z něj.
-  const fotky: FotkaGalerie[] = FOTKY_Z_TABORA
+  const fotky: FotkaGalerie[] = (tabor && FOTKY_PODLE_TABORA[tabor.id]) || FOTKY_OBECNE
 
   const recenzeKmeni = maRecenze() ? RECENZE.find((r) => r.text) : undefined
   const vytah = tabor ? zkusiSiTabora(tabor).slice(0, 4) : []
@@ -301,7 +318,7 @@ export function TerminDetail({ turnus }: { turnus: Turnus }) {
               <p className="mono-label mb-4">Cena {l.cena}</p>
               <h2 className="heading-3 mb-6 text-ink">Co je v ceně</h2>
               <ul className="space-y-3">
-                {V_CENE.map((polozka) => (
+                {vCeneTabora(tabor).map((polozka) => (
                   <li key={polozka} className="flex gap-3 text-ink">
                     <Check className="mt-0.5 h-5 w-5 shrink-0 text-trust-600" aria-hidden="true" />
                     {polozka}

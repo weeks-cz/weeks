@@ -41,5 +41,14 @@ describe('getVenue', () => {
   it('každé místo konání ukazuje do existujícího města', () => {
     const cityIds = getAllCities().map((c) => c.id)
     expect(cityIds).toContain(getVenue('fablab-varyte').cityId)
+    expect(cityIds).toContain(getVenue('zs-brectanova').cityId)
+  })
+
+  it('ZŠ Břečťanová je v Praze a říká, čím je vybavená', () => {
+    const venue = getVenue('zs-brectanova')
+    expect(venue.cityId).toBe('praha')
+    expect(venue.vybaveni.length).toBeGreaterThan(10)
+    expect(venue.geo.lat).toBeGreaterThan(50)
+    expect(venue.geo.lat).toBeLessThan(50.2)
   })
 })

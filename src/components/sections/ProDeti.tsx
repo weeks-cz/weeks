@@ -51,18 +51,17 @@ type Dlazdice = {
 
 export function ProDeti() {
   const reduced = useReducedMotion()
-  const bezici = getAktivniTabory()[0]
-
-  const zBezici: Dlazdice[] = bezici
-    ? getFocusModules(bezici.focus).map((z) => ({
-        klic: z.id,
-        nadpis: z.name,
-        text: z.short,
-        href: `/tabory/${bezici.id}`,
-        Ikona: IKONY_ZAMERENI[z.id],
-        chystame: false,
-      }))
-    : []
+  // Všechny běžící tábory, ne jen první — od 2026-11-10 běží i herní vývoj.
+  const zBezici: Dlazdice[] = getAktivniTabory().flatMap((bezici) =>
+    getFocusModules(bezici.focus).map((z) => ({
+      klic: z.id,
+      nadpis: z.name,
+      text: z.short,
+      href: `/tabory/${bezici.id}`,
+      Ikona: IKONY_ZAMERENI[z.id],
+      chystame: false,
+    })),
+  )
 
   const zChystanych: Dlazdice[] = getChystaneTabory().map((t) => ({
     klic: t.id,

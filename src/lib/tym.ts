@@ -17,7 +17,7 @@
  * repozitář je veřejný.
  */
 
-export type IkonaOboru = 'stan' | 'code' | 'box'
+export type IkonaOboru = 'stan' | 'code' | 'box' | 'hra'
 
 export interface ClenTymu {
   id: string
@@ -80,6 +80,18 @@ export const TYM: ClenTymu[] = [
     linkedin: 'https://www.linkedin.com/in/%C5%A1t%C4%9Bp%C3%A1n-jurenka-461598294/',
     popis:
       'Lektor a vedoucí workshopů v HWLabu. Jeho doménou je 3D modelování a tisk — v Blenderu modeluje mnohem déle, než Weeks existuje — a elektronika s Arduinem.',
+  },
+  // Hlavní lektor tábora herního vývoje (Praha, 12.–16. 7. 2027), na web se
+  // souhlasem týmu 2026-11-10. Bio ani fotku zatím nemáme, proto popis říká
+  // jen to, co víme z jeho programu tábora.
+  {
+    id: 'marek-vykysaly',
+    jmeno: 'Marek Vykysalý',
+    zakladatel: false,
+    obor: 'Vývoj her · Godot',
+    ikona: 'hra',
+    popis:
+      'Hlavní lektor tábora herního vývoje. Za týden provede děti herním enginem Godot od prázdné scény až po hotovou hru.',
   },
 ]
 

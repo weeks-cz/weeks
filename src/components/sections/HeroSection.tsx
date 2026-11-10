@@ -173,7 +173,7 @@ export function HeroSection() {
             className="mb-10 max-w-xl text-lg leading-relaxed text-paper/70 md:text-xl"
           >
             Týdenní příměstské tábory, kde si děti postaví vlastní věc — od 3D
-            modelu po zařízení, které samy naprogramují.
+            modelu přes zařízení, které samy naprogramují, po vlastní hru.
             <span className="font-medium text-paper"> Pro děti {ageLabel} let.</span>
           </motion.p>
 
