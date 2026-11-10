@@ -11,14 +11,22 @@ import { DENNI_HARMONOGRAM } from '@/lib/tabory'
  *
  * Serverová komponenta: obrázek a dva odstavce nepotřebují ani kilobajt JS.
  */
-export function FotoPas() {
+export function FotoPas({
+  foto = {
+    src: '/images/tabor/venku-sablona.webp',
+    alt: 'Dítě na trávě stříká barvu přes šablonu na karton během venkovního bloku tábora',
+  },
+}: {
+  /** Jiná fotka než výchozí venkovní — tábor si ji může vybrat (`tabor.fotoPas`). */
+  foto?: { src: string; alt: string }
+} = {}) {
   const venku = DENNI_HARMONOGRAM.find((blok) => blok.title === 'Venkovní aktivita')
 
   return (
     <section className="relative isolate overflow-hidden">
       <Image
-        src="/images/tabor/venku-sablona.webp"
-        alt="Dítě na trávě stříká barvu přes šablonu na karton během venkovního bloku tábora"
+        src={foto.src}
+        alt={foto.alt}
         width={1800}
         height={1350}
         loading="lazy"

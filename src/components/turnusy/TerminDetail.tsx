@@ -4,7 +4,7 @@ import {
 } from 'lucide-react'
 import { GoogleRecenze } from '@/components/sections/GoogleRecenze'
 import { getCity, getVenue } from '@/lib/cities'
-import { GOOGLE_PROFIL, RECENZE, maRecenze } from '@/lib/recenze'
+import { GOOGLE_PROFIL, maRecenze, recenzeProTabor } from '@/lib/recenze'
 import { MIMO_CENU, PROVOZNI_DOBA, SITE, vCeneTabora } from '@/lib/site'
 import { zkusiSiTabora, type TaborId } from '@/lib/tabory'
 import { getTaboryTurnusu, getTurnusy, getTurnusyByTabor, isBookable, type Turnus } from '@/lib/turnusy'
@@ -110,7 +110,7 @@ export function TerminDetail({ turnus }: { turnus: Turnus }) {
   // tvářily jako záběry z něj.
   const fotky: FotkaGalerie[] = (tabor && FOTKY_PODLE_TABORA[tabor.id]) || FOTKY_OBECNE
 
-  const recenzeKmeni = maRecenze() ? RECENZE.find((r) => r.text) : undefined
+  const recenzeKmeni = maRecenze() ? recenzeProTabor(tabor?.id).find((r) => r.text) : undefined
   const vytah = tabor ? zkusiSiTabora(tabor).slice(0, 4) : []
   const zaDen = cenaZaDen(turnus)
 
@@ -389,7 +389,7 @@ export function TerminDetail({ turnus }: { turnus: Turnus }) {
 
       {venue && <VenueShowcase venue={venue} />}
 
-      <GoogleRecenze />
+      <GoogleRecenze tabor={tabor?.id} />
 
       {dalsiTurnusy.length > 0 && (
         <section className="section-padding border-t border-ink/15 bg-paper-soft">

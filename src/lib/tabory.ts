@@ -79,6 +79,11 @@ export interface Tabor {
    */
   fotoHera?: { src: string; alt: string; width: number; height: number }
   /**
+   * Fotka do pásu „Celý den u počítače? Ne.“ (`FotoPas`). Bez ní výchozí
+   * venkovní záběr se šablonou.
+   */
+  fotoPas?: { src: string; alt: string }
+  /**
    * Fotka na kartu tématu ve výpisu `/tabory`, na šířku. Ilustrační — karta
    * ji nepopisuje jako záběr z konkrétního tábora. Chystaný tábor zatím žádnou
    * nemá, proto je nepovinná a karta bez ní fotku vynechá.
@@ -234,6 +239,18 @@ export const TABORY: Tabor[] = [
     foto: {
       src: '/images/tabor/fablab-ucebna.webp',
       alt: 'Děti u počítačů na táboře Weeks, každé u své obrazovky',
+    },
+    // Hero: děti u počítačů (na výšku oříznuté). Pás: skupinová fotka venku
+    // místo venkovní šablony — tu u herního tábora nechceme (2026-11-10).
+    fotoHera: {
+      src: '/images/tabor/dilna-ucebna.webp',
+      alt: 'Děti pracují u počítačů v dílně, mezi stoly prochází lektor',
+      width: 1600,
+      height: 1195,
+    },
+    fotoPas: {
+      src: '/images/tabor/skupina-terasa-retus.webp',
+      alt: 'Děti z tábora Weeks s lektory mávají na terase',
     },
     program: [
       {

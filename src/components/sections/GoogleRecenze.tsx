@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { ArrowLeft, ArrowRight, ArrowUpRight, Star } from 'lucide-react'
-import { GOOGLE_PROFIL, RECENZE, maRecenze } from '@/lib/recenze'
+import { GOOGLE_PROFIL, maRecenze, recenzeProTabor } from '@/lib/recenze'
+import type { TaborId } from '@/lib/tabory'
 
 /**
  * Carousel Google recenzí. Bez knihovny: nativní `scroll-snap`, šipky jen
@@ -15,7 +16,8 @@ import { GOOGLE_PROFIL, RECENZE, maRecenze } from '@/lib/recenze'
  *
  * Obsah je ručně v `src/lib/recenze.ts`; dokud tam nic není, sekce mlčí.
  */
-export function GoogleRecenze() {
+export function GoogleRecenze({ tabor }: { tabor?: TaborId } = {}) {
+  const recenze = recenzeProTabor(tabor)
   const pas = useRef<HTMLUListElement>(null)
   const [muzeZpet, setMuzeZpet] = useState(false)
   const [muzeDal, setMuzeDal] = useState(false)
@@ -104,7 +106,7 @@ export function GoogleRecenze() {
           ref={pas}
           className="-mx-4 flex snap-x snap-mandatory scroll-px-4 gap-6 overflow-x-auto scroll-smooth px-4 pb-4 [scrollbar-width:thin]"
         >
-          {RECENZE.map((r) => (
+          {recenze.map((r) => (
             <li
               key={r.id}
               className="card-maker flex w-[85%] shrink-0 snap-start flex-col p-7 sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]"

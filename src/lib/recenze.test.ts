@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { GOOGLE_PROFIL, RECENZE } from './recenze'
+import { GOOGLE_PROFIL, RECENZE, recenzeProTabor } from './recenze'
 
 describe('Google recenze', () => {
   it('bez odkazu na Google profil se recenze na web nedávají', () => {
@@ -24,5 +24,18 @@ describe('Google recenze', () => {
   it('id jsou jedinečná', () => {
     const id = RECENZE.map((r) => r.id)
     expect(new Set(id).size).toBe(id.length)
+  })
+})
+
+describe('recenzeProTabor', () => {
+  it('na herním táboře se neukazuje recenze o Karlových Varech a 3D tisku', () => {
+    const texty = recenzeProTabor('game-dev').map((r) => r.text ?? '').join(' ')
+    expect(texty).not.toMatch(/Karlových Varech|3D tisk/)
+    expect(recenzeProTabor('game-dev').length).toBeGreaterThan(0)
+  })
+
+  it('úvodka (bez tábora) a tábor chytrých technologií ukazují všechny', () => {
+    expect(recenzeProTabor()).toHaveLength(RECENZE.length)
+    expect(recenzeProTabor('chytre-technologie')).toHaveLength(RECENZE.length)
   })
 })

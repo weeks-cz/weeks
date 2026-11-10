@@ -1,3 +1,5 @@
+import type { TaborId } from './tabory'
+
 /**
  * Google recenze na úvodce — ručně přepsané, ne načítané z API.
  *
@@ -27,6 +29,13 @@ export interface Recenze {
   text?: string
   /** Kdy recenze vyšla, volně („srpen 2026“). Nepovinné. */
   kdy?: string
+  /**
+   * Tábor, o kterém text konkrétně mluví (místo, obsah). Taková recenze se
+   * na stránce jiného tábora neukazuje — „skvělý tábor v Karlových Varech,
+   * nejvíc ho bavil 3D tisk“ by na pražském herním táboře mátla (2026-11-10).
+   * Obecné recenze („dětem se líbilo“) pole nemají a ukazují se všude.
+   */
+  tabor?: TaborId
 }
 
 export const GOOGLE_PROFIL = {
@@ -55,6 +64,7 @@ export const RECENZE: Recenze[] = [
     hvezdicky: 5,
     text: 'Skvělý tábor v Karlových Varech. Syn chodil domů nadšený, nejvíce ho bavil 3D tisk. Lektoři byli super, určitě přijdeme zas.',
     kdy: 'srpen 2026',
+    tabor: 'chytre-technologie',
   },
   {
     id: 'jan-plasil',
@@ -75,6 +85,11 @@ export const RECENZE: Recenze[] = [
   { id: 'tomas-andrla', autor: 'Tomáš Andrla', hvezdicky: 5, kdy: 'srpen 2026' },
   { id: 'radek-pelech', autor: 'Radek Pelech', hvezdicky: 5, kdy: 'srpen 2026' },
 ]
+
+/** Recenze pro stránku tábora: obecné + ty, které mluví právě o něm. Bez tábora (úvodka) všechny. */
+export function recenzeProTabor(tabor?: TaborId, list: Recenze[] = RECENZE): Recenze[] {
+  return tabor ? list.filter((r) => !r.tabor || r.tabor === tabor) : list
+}
 
 /** Sekce se ukáže, jen když má co ukázat a kam odkázat. */
 export function maRecenze(): boolean {

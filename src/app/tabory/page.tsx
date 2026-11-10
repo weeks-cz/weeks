@@ -5,14 +5,14 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { motion, useReducedMotion } from 'framer-motion'
-import { ArrowRight, Calendar, Clock, MapPin, Users, Utensils } from 'lucide-react'
+import { ArrowRight, Calendar, Clock, Users, Utensils } from 'lucide-react'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { BreadcrumbSchema } from '@/components/seo/StructuredData'
 import { TaborCard } from '@/components/tabory/TaborCard'
 import { TurnusInterestForm } from '@/components/turnusy/TurnusInterestForm'
 import { filtrMest, platneMesto } from '@/components/turnusy/TurnusList'
-import { getCity, getVenue, type CityId, type VenueId } from '@/lib/cities'
+import { getCity, type CityId } from '@/lib/cities'
 import { PROVOZNI_DOBA, SITE } from '@/lib/site'
 import { getAktivniTabory, getChystaneTabory } from '@/lib/tabory'
 import { getCitiesWithTurnusy, getTurnusy, getTurnusyByCity } from '@/lib/turnusy'
@@ -51,13 +51,6 @@ function MestoSekce({ city, index }: { city: CityId; index: number }) {
     turnusyMesta.some((t) => t.taborIds.includes(tabor.id))
   )
 
-  // Místa konání — jen ta, která turnus v tomhle městě doopravdy má. Karta
-  // se sem přestěhovala z rušené sekce „Kde a s kým“ na úvodce: „kde to je“
-  // dává smysl vedle města, ke kterému patří.
-  const venues = Array.from(
-    new Set(turnusyMesta.map((t) => t.venueId).filter((id): id is VenueId => id !== null))
-  ).map((id) => getVenue(id))
-
   return (
     <div className={index > 0 ? 'mt-16 border-t border-ink/15 pt-16' : ''}>
       <div className="mb-8 flex flex-wrap items-baseline justify-between gap-4">
@@ -65,11 +58,11 @@ function MestoSekce({ city, index }: { city: CityId; index: number }) {
         <p className="mono-label">{mesto.region}</p>
       </div>
 
-      {/* Téma a místo stojí v jedné mřížce vedle sebe: „co se tam dělá“ a „kde
-          to je“ jsou dvě poloviny téže odpovědi. Když místo ještě není
-          domluvené, řekne to karta rovnou — prázdné místo v mřížce by nechalo
-          rodiče hádat. */}
-      <div className="grid gap-6 md:grid-cols-2">
+      {/* Místo konání je v kartě tábora u termínů, ne jako samostatná dlaždice
+          města: v Praze má každý tábor jiné místo a dlaždice pod oběma
+          kartami mátla (2026-11-10). Jediná karta v městě nezabírá půl
+          mřížky s prázdnem vedle sebe. */}
+      <div className={tabory.length > 1 ? 'grid gap-6 md:grid-cols-2' : 'grid max-w-2xl gap-6'}>
         {tabory.map((tabor, i) => (
           <TaborCard
             key={tabor.id}
@@ -79,49 +72,6 @@ function MestoSekce({ city, index }: { city: CityId; index: number }) {
             turnusy={turnusyMesta.filter((t) => t.taborIds.includes(tabor.id))}
           />
         ))}
-
-        {venues.map((venue) => (
-          <div key={venue.id} className="card-maker flex gap-4 self-start p-7">
-            <div
-              className="flex h-12 w-12 shrink-0 items-center justify-center rounded-sm border border-ink/15 bg-white"
-              aria-hidden="true"
-            >
-              <MapPin className="h-6 w-6 text-accent-600" />
-            </div>
-            <div>
-              <p className="mono-label mb-2">Místo konání</p>
-              <h3 className="mb-1 font-display text-lg font-semibold text-ink">{venue.name}</h3>
-              <p className="mb-3 text-ink-500">{venue.description}</p>
-              <a
-                href={`https://www.google.com/maps/search/?api=1&query=${venue.mapQuery}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-mono text-xs uppercase tracking-[0.15em] text-primary-600 hover:underline"
-              >
-                Zobrazit v mapě
-              </a>
-            </div>
-          </div>
-        ))}
-
-        {venues.length === 0 && (
-          <div className="flex gap-4 self-start rounded-md border border-dashed border-ink/25 bg-paper-soft p-7">
-            <div
-              className="flex h-12 w-12 shrink-0 items-center justify-center rounded-sm border border-dashed border-ink/25"
-              aria-hidden="true"
-            >
-              <MapPin className="h-6 w-6 text-ink/40" />
-            </div>
-            <div>
-              <p className="mono-label mb-2">Místo konání</p>
-              <h3 className="mb-1 font-display text-lg font-semibold text-ink">Upřesníme</h3>
-              <p className="text-ink-500">
-                Prostor pro {mesto.name} ještě domlouváme. Jakmile bude jistý,
-                najdete ho tady i u konkrétního termínu.
-              </p>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   )

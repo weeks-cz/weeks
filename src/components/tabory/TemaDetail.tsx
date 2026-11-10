@@ -390,7 +390,7 @@ function AktivniTema({ tabor }: { tabor: Tabor }) {
       )}
 
       {/* ── 4. Fotka přes celou šířku ─────────────────────────────────── */}
-      <FotoPas />
+      <FotoPas foto={tabor.fotoPas} />
 
       {/* ── 5. Co si odnese ──────────────────────────────────────────── */}
       <ProjectGallery polozky={galerie} />
@@ -402,7 +402,7 @@ function AktivniTema({ tabor }: { tabor: Tabor }) {
 
       {/* ── 7. Recenze — před termíny, ať rodič čte cizí zkušenost těsně
              před tím, než si vybere. ───────────────────────────────── */}
-      <GoogleRecenze />
+      <GoogleRecenze tabor={tabor.id} />
 
       {/* ── 8. Termíny ───────────────────────────────────────────────── */}
       <MrizkaSekce
