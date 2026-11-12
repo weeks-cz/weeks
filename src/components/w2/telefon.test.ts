@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { jeNaTelefonu } from './telefon'
-import { telefonSazba } from './text'
+import { nezlom, telefonSazba } from './text'
 
 // Stav telefonu je slib návštěvníkovi, takže se počítá v pražském čase bez
 // ohledu na to, kde má návštěvník nastavené hodiny. Hodiny se do testu
@@ -41,5 +41,14 @@ describe('telefonSazba', () => {
     const cislo = telefonSazba('+420 703 046 440')
     expect(cislo).not.toContain(' ')
     expect(cislo.split(String.fromCharCode(160))).toEqual(['+420', '703', '046', '440'])
+  })
+})
+
+describe('nezlom', () => {
+  it('rozsah hodin drží na jednom řádku', () => {
+    const text = nezlom('po–pá 9–17')
+    expect(text).not.toContain(' ')
+    // za každou pomlčkou spojovač slov, jinak se řádek zlomí právě tam
+    expect(text.match(/–\u2060/g)).toHaveLength(2)
   })
 })

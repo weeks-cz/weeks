@@ -41,6 +41,15 @@ export function telefonSazba(cislo: string): string {
 }
 
 /**
+ * Krátký údaj, který se nesmí zalomit vůbec: „po–pá 9–17“. Mezery jsou
+ * nezlomitelné a za pomlčkou je spojovač slov — jinak se rozsah zlomí za
+ * pomlčkou („po–“ na jednom řádku, „pá 9–17“ na druhém).
+ */
+export function nezlom(text: string): string {
+  return text.replace(/ /g, '\u00a0').replace(/–/g, '–\u2060')
+}
+
+/**
  * „12. – 16. července 2027“ → „12.–16. července 2027“. Rozsah ve stejném
  * měsíci se píše bez mezer kolem pomlčky; přes dva měsíce mezery zůstávají.
  */

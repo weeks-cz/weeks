@@ -4662,7 +4662,13 @@ html {
   max-width: 640px;
   margin-inline: auto;
 }
-@media (min-width: 560px) {
+/* Dvě pole vedle sebe podle šířky FORMULÁŘE, ne okna. Na 900 px stojí
+   formulář ve sloupci širokém 330 px a dvojice polí v něm měla po 127 px —
+   z „jan.novak@email.cz“ bylo vidět „jan.novak@ema“. */
+.w2 .formular {
+  container-type: inline-size;
+}
+@container (min-width: 470px) {
   .w2 .pole-rada {
     grid-template-columns: 1fr 1fr;
   }
@@ -4866,4 +4872,36 @@ html {
 }
 .w2 .zaver-form .zaver-pravni {
   margin-top: 12px;
+}
+
+/* Záhlaví s fotkou mezi 900 a 1100 px: pevných 440 px pro fotku nechávalo
+   textu 350 px — nadpis na tři řádky a tři výhody po 108 px. Tady se o šířku
+   dělí poměrem. Platí pro všechna záhlaví `zahlavi-dva`, i ta z vlny 1. */
+@media (min-width: 900px) and (max-width: 1099px) {
+  .w2 .zahlavi-dva {
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    gap: 32px;
+  }
+}
+
+/* Hlavička mezi 900 a 1020 px: odkazy se nevešly o necelých 30 px a lámaly
+   se na dva řádky. Text se nikdy neláme a v úzkém pásmu mají odkazy menší
+   vnitřní okraj. */
+@media (min-width: 900px) {
+  .w2 .nav a,
+  .w2 .hdr-cta {
+    white-space: nowrap;
+  }
+}
+@media (min-width: 900px) and (max-width: 1019px) {
+  .w2 .nav a:not(.btn) {
+    padding: 0 8px;
+  }
+  .w2 .nav a:not(.btn)::after {
+    left: 8px;
+    right: 8px;
+  }
+  .w2 .hdr-cta {
+    padding: 0 14px;
+  }
 }

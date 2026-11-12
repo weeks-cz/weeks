@@ -25,7 +25,14 @@ export function MistoFoto({ venue, hned = false }: { venue: Venue; hned?: boolea
       alt={foto.alt}
       width={foto.width}
       height={foto.height}
-      sizes={foto.siroka ? '(min-width: 1184px) 1120px, 100vw' : '(min-width: 900px) 560px, 100vw'}
+      // Panorama se na mobilu ořezává na 16 : 9, takže z něj je vidět jen
+      // prostředek a prohlížeč potřebuje zhruba dvakrát širší soubor, než je
+      // displej. Se „100vw“ si vzal 360 px a roztáhl je na výšku 185 px.
+      sizes={
+        foto.siroka
+          ? '(min-width: 1184px) 1120px, (min-width: 760px) 100vw, 200vw'
+          : '(min-width: 900px) 560px, 100vw'
+      }
       loading={hned ? undefined : 'lazy'}
     />
   )

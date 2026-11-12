@@ -5,7 +5,7 @@ import { Faq } from '@/components/w2/Faq'
 import { Ikona, type IkonaId } from '@/components/w2/Ikona'
 import { KontaktFormular } from '@/components/w2/KontaktFormular'
 import { Mrizka } from '@/components/w2/Mrizka'
-import { sazba, telefonSazba } from '@/components/w2/text'
+import { nezlom, sazba, telefonSazba } from '@/components/w2/text'
 import { getVenue, type VenueId } from '@/lib/cities'
 import { PROVOZNI_DOBA, SITE, SOCIALNI_SITE, getSiteFaq, telefonHodinyText } from '@/lib/site'
 import { getTurnusy } from '@/lib/turnusy'
@@ -43,7 +43,8 @@ export default function ContactPage() {
   const dotazy = getSiteFaq().slice(0, 5)
 
   const tel = `tel:${SITE.phone.replace(/\s/g, '')}`
-  const hodiny = telefonHodinyText()
+  const hodinyText = telefonHodinyText()
+  const hodiny = hodinyText ? nezlom(hodinyText) : null
 
   return (
     <>
