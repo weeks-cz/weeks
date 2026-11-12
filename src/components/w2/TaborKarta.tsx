@@ -1,14 +1,11 @@
-'use client'
-
 import Link from 'next/link'
 import Image from 'next/image'
 import { Ikona } from './Ikona'
-import { rozsahTesne, sazba } from './text'
+import { TerminRadky } from './TerminRadky'
+import { sazba } from './text'
 import { getCity, getVenue, type CityId } from '@/lib/cities'
 import type { Tabor } from '@/lib/tabory'
 import { isBookable, type Turnus } from '@/lib/turnusy'
-import { useTermCapacity, volnaMistaText } from '@/components/turnusy/SpotsLeft'
-import { turnusLabels } from '@/components/turnusy/turnus-labels'
 
 /**
  * Karta tábora v jednom městě: fotka se štítkem města, název (odkaz na stránku
@@ -17,8 +14,8 @@ import { turnusLabels } from '@/components/turnusy/turnus-labels'
  * Cena stojí na kartě jednou a jen tehdy, když ji mají všechny prodejné
  * termíny stejnou — jinak by jedno číslo o některém z nich lhalo.
  *
- * Klientská komponenta kvůli živé obsazenosti: obsazený termín nesmí nabízet
- * „Vybrat“ a u posledních míst má být vidět, kolik jich zbývá.
+ * Serverová komponenta; živou obsazenost si načítají jen řádky termínů
+ * (`TerminRadky`).
  */
 export function TaborKarta({
   tabor,
@@ -30,7 +27,6 @@ export function TaborKarta({
   /** Turnusy tohohle tábora v tomhle městě. */
   turnusy: Turnus[]
 }) {
-  const capacity = useTermCapacity(mesto)
   const prodejne = turnusy.filter(isBookable)
   const foto = tabor.fotoMesta?.[mesto] ?? tabor.foto
   const venueId = prodejne[0]?.venueId ?? turnusy[0]?.venueId
@@ -65,34 +61,10 @@ export function TaborKarta({
           <div className="tabor-koupit">
             {cena && (
               <p className="tabor-cena">
-                <b>{cena}</b> za týden
+                <b>{sazba(cena)}</b> za týden
               </p>
             )}
-            <div className="terminy">
-              {prodejne.map((t) => {
-                const volno = capacity?.[t.id]?.spotsLeft
-                const mista = volno !== undefined ? volnaMistaText(volno) : null
-                const plno = volno === 0
-                return (
-                  <Link className="termin" href={`/tabory/termin/${t.slug}`} key={t.id}>
-                    <span className="termin-ik">
-                      <Ikona id="kalendar" />
-                    </span>
-                    <span className="termin-datum">
-                      {sazba(rozsahTesne(turnusLabels(t).datum))}
-                      {mista && !plno && <small> · {sazba(mista)}</small>}
-                    </span>
-                    {plno ? (
-                      <span className="btn-mini">Obsazeno</span>
-                    ) : (
-                      <span className="termin-jit">
-                        Vybrat <Ikona id="sipka" />
-                      </span>
-                    )}
-                  </Link>
-                )
-              })}
-            </div>
+            <TerminRadky turnusy={prodejne} mesto={mesto} />
           </div>
         )}
       </div>

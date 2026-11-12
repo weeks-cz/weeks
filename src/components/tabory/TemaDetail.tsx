@@ -1,572 +1,510 @@
-import type { LucideIcon } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import {
-  ArrowDown,
-  ArrowRight,
-  Box,
-  Check,
-  ChevronDown,
-  Code,
-  Cpu,
-  Gamepad2,
-  Headset,
-  Music,
-  Printer,
-  Sparkles,
-  Star,
-  UserRound,
-} from 'lucide-react'
-import { FAQSection } from '@/components/sections/FAQSection'
-import { FotoPas } from '@/components/sections/FotoPas'
-import { GoogleRecenze } from '@/components/sections/GoogleRecenze'
-import { NakupniLista } from '@/components/turnusy/NakupniLista'
-import { ProjectGallery } from '@/components/turnusy/ProjectGallery'
 import { TurnusInterestForm } from '@/components/turnusy/TurnusInterestForm'
-import { TurnusList } from '@/components/turnusy/TurnusList'
-import { VenueShowcase } from '@/components/turnusy/VenueShowcase'
-import { datumKratce } from '@/components/turnusy/turnus-labels'
-import { MrizkaSekce } from '@/components/ui/MrizkaSekce'
-import { getCity, getVenue, type VenueId } from '@/lib/cities'
-import { getFocusModules, type FocusId } from '@/lib/focus'
+import { Faq } from '@/components/w2/Faq'
+import { Hvezdy, Ikona } from '@/components/w2/Ikona'
+import { KupLista } from '@/components/w2/KupLista'
+import { Mrizka } from '@/components/w2/Mrizka'
+import { PasFoto } from '@/components/w2/PasFoto'
+import { RecenzeSekce } from '@/components/w2/RecenzeKarty'
+import { Rozvrh } from '@/components/w2/Rozvrh'
+import { TaborKarta } from '@/components/w2/TaborKarta'
+import { TerminRadky } from '@/components/w2/TerminRadky'
+import { IKONA_DNE, ZKRATKY_DNU } from '@/components/w2/dny'
+import { sazba } from '@/components/w2/text'
+import { getCity, getVenue, type CityId } from '@/lib/cities'
+import { getFocusModules } from '@/lib/focus'
 import { GOOGLE_PROFIL, maRecenze } from '@/lib/recenze'
 import { PROVOZNI_DOBA, getSiteFaq } from '@/lib/site'
-import { DENNI_HARMONOGRAM, getAktivniTabory, zkusiSiTabora, type IkonaDne, type Tabor } from '@/lib/tabory'
-import { getTurnusyByTabor, isBookable } from '@/lib/turnusy'
+import { getAktivniTabory, zkusiSiTabora, type Tabor } from '@/lib/tabory'
+import { getTurnusyByTabor, isBookable, type Turnus } from '@/lib/turnusy'
 import { TYM } from '@/lib/tym'
 
 /**
- * Stránka tématu — jediné místo, kde žije popis tábora.
+ * Stránka tématu (redesign, listopad 2026) — jediné místo, kde žije popis
+ * tábora.
  *
- * Deset sekcí místo dřívějších dvanácti a zhruba poloviční délka: týdenní
- * program a typický den jsou jedna časová osa (den se rozbalí), praktické
- * informace se přestěhovaly do častých dotazů, kde už většinou byly.
+ * Pořadí jde za rodičem: krátký úvod se třemi fakty a tlačítkem, hned pod ním
+ * termíny a ceny (kdo ví kdy a kde, je o klik od přihlášky), teprve potom
+ * obsah — co si dítě postaví, týden, den, kde to běží, recenze, dotazy.
  *
- * Rytmus sekcí drží pravidlo z CLAUDE.md — sousední sekce mají jiné pozadí
- * nebo linku, tmavé bloky kotví začátek, střed i termíny.
- *
- * Serverová komponenta: nosný text se nesmí schovat pod nespuštěnou animaci.
+ * Serverová komponenta. Klientské jsou jen kousky, které to potřebují: mřížka
+ * v záhlaví, živá obsazenost u termínů, animace dotazů a spodní lišta.
  */
-
-const IKONY_DNE: Record<IkonaDne, LucideIcon> = {
-  napad: Sparkles,
-  level: Gamepad2,
-  tisk: Printer,
-  model: Box,
-  iot: Cpu,
-  vr: Headset,
-  projekt: Sparkles,
-  hra: Gamepad2,
-  zvuk: Music,
-  kod: Code,
-}
-
-const IKONY_ZAMERENI: Record<FocusId, LucideIcon> = {
-  '3d-tisk': Box,
-  iot: Cpu,
-  vr: Headset,
-  'herni-vyvoj': Gamepad2,
-}
-
-/** „1 tématu", „2 tématech" — počet zaměření ve větě pod nadpisem. */
-function pocetTemat(n: number): string {
-  if (n === 1) return 'jednom tématu'
-  if (n === 2) return 'dvou tématech'
-  return `${n} tématech`
-}
-
-function Drobecky({ tabor }: { tabor: Tabor }) {
-  return (
-    <nav
-      aria-label="Drobečková navigace"
-      className="mb-6 font-mono text-xs uppercase tracking-[0.2em] md:mb-8"
-    >
-      <Link href="/" className="text-paper/50 transition-colors hover:text-paper">
-        Domů
-      </Link>
-      <span className="mx-2 text-paper/30">/</span>
-      <Link href="/tabory" className="text-paper/50 transition-colors hover:text-paper">
-        Tábory
-      </Link>
-      <span className="mx-2 text-paper/30">/</span>
-      <span className="text-paper">{tabor.shortName}</span>
-    </nav>
-  )
-}
-
-function Hodnoceni() {
-  if (!maRecenze()) return null
-  return (
-    <a href="#recenze" className="inline-flex items-center gap-1.5 text-sm text-paper/80 hover:text-paper">
-      <Star className="h-4 w-4 fill-cta-400 text-cta-400" aria-hidden="true" />
-      <strong className="text-paper">{GOOGLE_PROFIL.prumer}</strong> · {GOOGLE_PROFIL.pocet} hodnocení na
-      Google
-    </a>
-  )
-}
-
 export function TemaDetail({ tabor }: { tabor: Tabor }) {
   return tabor.status === 'aktivni' ? <AktivniTema tabor={tabor} /> : <ChystaneTema tabor={tabor} />
 }
 
-function AktivniTema({ tabor }: { tabor: Tabor }) {
-  const turnusy = getTurnusyByTabor(tabor.id)
+function Drobecky({ tabor }: { tabor: Tabor }) {
+  return (
+    <nav className="drob" aria-label="Drobečková navigace">
+      <Link href="/">Domů</Link> <span aria-hidden="true">/</span> <Link href="/tabory">Tábory</Link>{' '}
+      <span aria-hidden="true">/</span> <span>{tabor.name}</span>
+    </nav>
+  )
+}
+
+/** „na jednom tématu“, „na dvou tématech“ — věta pod nadpisem „Co si postavíš“. */
+function naKolikaTematech(n: number): string {
+  if (n === 1) return 'jednom tématu'
+  if (n === 2) return 'dvou tématech'
+  if (n === 3) return 'třech tématech'
+  return `${n} tématech`
+}
+
+/**
+ * Obecné dotazy, kterými se doplní dotazy tématu do pěti. Pořadí je pořadí
+ * důležitosti; celý seznam je na úvodní stránce.
+ */
+const OBECNE_DOTAZY = [
+  'Co má dítě mít s sebou?',
+  'Musí dítě něco umět dopředu?',
+  'Jak velké jsou skupiny?',
+  'Je zajištěn oběd pro děti s alergiemi?',
+]
+const DOTAZU_NA_STRANCE = 5
+
+function dotazyTematu(tabor: Tabor): Array<{ question: string; answer: string }> {
+  const vlastni = tabor.faq ?? []
+  // Tábor, který má vlastní dotaz o tom, co je potřeba umět, nepotřebuje
+  // vedle něj ještě obecnou verzi téže otázky.
+  const maVlastniUmet = vlastni.some((d) => d.question.includes('umět'))
+  const obecne = getSiteFaq()
+  const dopln = OBECNE_DOTAZY.filter((q) => !(maVlastniUmet && q.includes('umět')))
+    .map((q) => obecne.find((d) => d.question === q))
+    .filter((d): d is { question: string; answer: string } => Boolean(d))
+  return [...vlastni, ...dopln].slice(0, DOTAZU_NA_STRANCE)
+}
+
+/** Lístek jednoho města: kde, za kolik a řádky termínů. */
+function Listek({ mesto, turnusy }: { mesto: CityId; turnusy: Turnus[] }) {
   const prodejne = turnusy.filter(isBookable)
-  const zamereni = getFocusModules(tabor.focus)
-  const venueIds = Array.from(
-    new Set(turnusy.map((t) => t.venueId).filter((id): id is VenueId => id !== null)),
-  )
-  const galerie = zamereni.flatMap((z) => (z.gallery ?? []).map((img) => ({ ...img, tag: z.name })))
-  const faq = [...getSiteFaq(), ...zamereni.flatMap((z) => z.faq ?? []), ...(tabor.faq ?? [])].filter(
-    (otazka, i, vse) => vse.findIndex((o) => o.question === otazka.question) === i,
-  )
-  const vek = turnusy[0]?.ageRange.replace('-', '–') ?? '9–15'
-  // Fotka do hera patří táboru (`tabor.fotoHera`) — dřív tu byla natvrdo fotka
-  // 3D výtisku pro každé téma.
-  const fotka = tabor.fotoHera
-  const lektori = (tabor.lektori ?? [])
-    .map((id) => TYM.find((c) => c.id === id))
-    .filter((c): c is (typeof TYM)[number] => c !== undefined)
-  const ceny = prodejne.map((t) => t.priceKc).filter((c): c is number => c !== null)
-  const odCeny = ceny.length > 0 ? `${Math.min(...ceny).toLocaleString('cs-CZ')} Kč` : null
+  const chysta = prodejne.length === 0
+  const venueId = prodejne[0]?.venueId
+  const venue = venueId ? getVenue(venueId) : null
+  const ceny = [...new Set(prodejne.map((t) => t.priceKc).filter((c): c is number => c !== null))]
+  const cena = ceny.length > 0 ? `${ceny.length > 1 ? 'od ' : ''}${Math.min(...ceny).toLocaleString('cs-CZ')} Kč` : null
 
   return (
-    <main>
-      {/* ── 1. Hero s termíny ─────────────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-ink text-paper blueprint-grid-dark">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -right-24 -top-28 select-none font-display text-[26rem] font-bold leading-none text-paper/[0.04]"
-        >
-          W
-        </div>
-        <div className="section-container relative z-10 grid items-center gap-12 pb-16 pt-28 md:pb-24 md:pt-36 lg:grid-cols-12">
-          <div className={fotka ? 'lg:col-span-7' : 'lg:col-span-9'}>
-            <Drobecky tabor={tabor} />
-            <p className="mono-label-dark mb-5 text-accent-300">
-              Po–Pá · {PROVOZNI_DOBA.rozsah} · {vek} let
-            </p>
-            <h1 className="heading-1 mb-6 text-paper">{tabor.name}</h1>
-            <p className="mb-5 max-w-xl text-lg leading-relaxed text-paper/75 md:text-xl">{tabor.popis}</p>
-            <Hodnoceni />
+    <article className={`listek${chysta ? ' chysta' : ''}`}>
+      <div className="listek-kde">
+        <h3>
+          <Ikona id="misto" /> {getCity(mesto).name}
+          {chysta && (
+            <>
+              {' '}
+              <span className="chystame-stav">Chystáme</span>
+            </>
+          )}
+        </h3>
+        <p className="tabor-kde">
+          {venue
+            ? sazba(`${venue.name}, ${venue.city}`)
+            : 'Místo konání a cenu upřesníme spolu s termínem'}
+        </p>
+        {cena && (
+          <p className="listek-cena">
+            <b>{sazba(cena)}</b> za týden včetně oběda
+          </p>
+        )}
+      </div>
+      <TerminRadky turnusy={chysta ? turnusy : prodejne} mesto={mesto} className="listek-terminy terminy" />
+    </article>
+  )
+}
 
-            {/* Termíny přímo v heru — rodič, který ví kdy a kde, je o klik od
-                termínu. `id` sleduje lepicí lišta. */}
-            <div id="vyber-terminu" className="mt-10">
-              <p className="mb-3 text-sm font-medium text-paper">Vyberte termín</p>
-              <ul className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-                {turnusy.map((t) => {
-                  const prodejny = isBookable(t)
-                  return (
-                    <li key={t.id}>
-                      <Link
-                        href={`/tabory/termin/${t.slug}`}
-                        className={`group flex h-full flex-col rounded-md border p-4 transition-all ${
-                          prodejny
-                            ? 'border-ink bg-paper text-ink shadow-hard-amber hover:-translate-x-0.5 hover:-translate-y-0.5'
-                            : 'border-dashed border-paper/30 text-paper/80 hover:border-paper/60'
-                        }`}
-                      >
-                        <span className={`text-sm ${prodejny ? 'text-ink-500' : 'text-paper/60'}`}>
-                          {getCity(t.city).name}
-                        </span>
-                        <span className="font-display text-lg font-bold">
-                          {t.start && t.end
-                            ? `${datumKratce(t.start, t.end)} ${t.start.slice(0, 4)}`
-                            : 'Termín upřesníme'}
-                        </span>
-                        <span
-                          className={`mt-2 inline-flex items-center gap-1 text-sm font-medium ${prodejny ? 'text-ink' : 'text-paper/60'}`}
-                        >
-                          {prodejny ? 'Přihlásit dítě' : 'Chystáme · dát vědět'}
-                          <ArrowRight
-                            className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5"
-                            aria-hidden="true"
-                          />
-                        </span>
-                      </Link>
-                    </li>
-                  )
-                })}
-              </ul>
-              <a
-                href="#co-si-postavi"
-                className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-paper/70 hover:text-paper"
-              >
-                <ArrowDown className="h-4 w-4" aria-hidden="true" />
-                Co děti na táboře čeká
+function AktivniTema({ tabor }: { tabor: Tabor }) {
+  const turnusy = getTurnusyByTabor(tabor.id).filter((t) => t.status !== 'uzavreno')
+  const prodejne = turnusy.filter(isBookable)
+  const zamereni = getFocusModules(tabor.focus)
+  const vek = (turnusy[0]?.ageRange ?? '9-15').replace('-', '–')
+
+  // Města: napřed ta, kde se dá přihlásit, potom ta, kde se termín chystá.
+  const mesta = [...new Set(turnusy.map((t) => t.city))].sort(
+    (a, b) =>
+      Number(!turnusy.some((t) => t.city === a && isBookable(t))) -
+      Number(!turnusy.some((t) => t.city === b && isBookable(t)))
+  )
+  const venues = [...new Set(prodejne.map((t) => t.venueId).filter((v) => v !== null))].map((id) =>
+    getVenue(id)
+  )
+  const mestaBezMista = mesta.filter((m) => !venues.some((v) => v.cityId === m))
+
+  const lektori = (tabor.lektori ?? [])
+    .map((id) => TYM.find((c) => c.id === id)?.jmeno)
+    .filter((j): j is string => Boolean(j))
+
+  const ceny = [...new Set(prodejne.map((t) => t.priceKc).filter((c): c is number => c !== null))]
+  const cena = ceny.length > 0 ? `${ceny.length > 1 ? 'od ' : ''}${Math.min(...ceny).toLocaleString('cs-CZ')} Kč` : null
+  const jdePrihlasit = prodejne.length > 0
+  const dotazy = dotazyTematu(tabor)
+
+  return (
+    <main id="obsah" className="w2">
+      {/* ── Záhlaví: co to je, tři fakta, tlačítko ───────────────────── */}
+      <section className="zahlavi dark mrizka">
+        <Mrizka />
+        <div className="wrap zahlavi-dva">
+          <div>
+            <Drobecky tabor={tabor} />
+            <h1>{sazba(tabor.name)}</h1>
+            <p className="zahlavi-perex">{sazba(tabor.popis)}</p>
+            <ul className="vyhody">
+              <li>
+                <Ikona id="hodiny" />
+                <b>{sazba(PROVOZNI_DOBA.rozsah)}</b>
+                <span>pondělí až pátek</span>
+              </li>
+              <li>
+                <Ikona id="lide" />
+                <b>{sazba(`${vek} let`)}</b>
+                <span>i úplní začátečníci</span>
+              </li>
+              <li>
+                <Ikona id="pribor" />
+                <b>S obědem</b>
+                <span>i pitím a materiálem</span>
+              </li>
+            </ul>
+            <div className="zahlavi-akce">
+              <a className="btn btn-primary btn-lg" id="hlavni-cta" href="#terminy">
+                {jdePrihlasit ? 'Vybrat termín' : 'Termíny'} <Ikona id="dolu" />
               </a>
+              {maRecenze() && (
+                <a className="hodn" href="#recenze">
+                  <Hvezdy />
+                  <b>{sazba(`${GOOGLE_PROFIL.prumer} z 5`)}</b>
+                  <span>na Google</span>
+                </a>
+              )}
             </div>
           </div>
-
-          {fotka && (
-            <div className="relative mx-auto hidden w-full max-w-sm lg:col-span-5 lg:block">
-              <div
-                aria-hidden="true"
-                className="absolute inset-0 translate-x-4 translate-y-4 rounded-md bg-cta-400"
-              />
+          {tabor.fotoHera && (
+            <figure className="zahlavi-foto">
               <Image
-                src={fotka.src}
-                alt={fotka.alt}
-                width={fotka.width}
-                height={fotka.height}
-                sizes="(min-width: 1024px) 384px, 0px"
+                src={tabor.fotoHera.src}
+                alt={tabor.fotoHera.alt}
+                width={tabor.fotoHera.width}
+                height={tabor.fotoHera.height}
+                sizes="(min-width: 900px) 560px, 100vw"
                 priority
-                className="relative aspect-[3/4] w-full rounded-md border border-paper/20 object-cover"
               />
-            </div>
+            </figure>
           )}
         </div>
       </section>
 
-      {/* ── Pás faktů — amber předěl mezi dvěma tmavými bloky ───────── */}
-      <div className="border-y border-ink bg-cta-400 text-ink">
-        <dl className="section-container grid grid-cols-2 gap-y-3 py-4 sm:grid-cols-4">
-          {[
-            ['5 dní', 'pondělí až pátek'],
-            [PROVOZNI_DOBA.rozsah, 'každý den'],
-            [`${vek} let`, 'věk dětí'],
-            ['Oběd', 'v ceně'],
-          ].map(([hodnota, popis]) => (
-            <div key={popis} className="flex flex-col">
-              <dt className="order-last text-sm text-ink/70">{popis}</dt>
-              <dd className="font-display text-lg font-bold">{hodnota}</dd>
-            </div>
-          ))}
-        </dl>
-      </div>
-
-      {/* ── 2. Pro děti ──────────────────────────────────────────────── */}
-      <MrizkaSekce
-        id="co-si-postavi"
-        odstin="tmavy"
-        className="section-padding scroll-mt-24 bg-ink text-paper blueprint-grid-dark"
-      >
-        <div className="section-container">
-          <div className="mb-12 max-w-3xl">
-            <p className="mono-label-dark mb-4 text-accent-300">Pro děti</p>
-            <h2 className="heading-2 mb-4 text-paper">
-              Co si <span className="text-accent-400">postavíš</span>
-            </h2>
-            <p className="text-lg text-paper/70">
-              Týden stojí na {pocetTemat(zamereni.length)}.{' '}
-              {zamereni.length === 1 ? 'Končí' : 'Každé končí'} něčím, co uděláš sám.
-            </p>
+      {/* ── Termíny a ceny ───────────────────────────────────────────── */}
+      <section className="sec sec-papir bez-linky" id="terminy">
+        {/* Stará kotva: odkazy `…#turnusy` z dřívějška mají kam dopadnout. */}
+        <span id="turnusy" />
+        <div className="wrap">
+          <div className="sec-head">
+            <h2>{jdePrihlasit ? 'Termíny a ceny' : 'Termíny'}</h2>
+            {!jdePrihlasit && (
+              <p>
+                Termíny na příští léto teprve vypisujeme. Nechte nám kontakt a ozveme se vám mezi
+                prvními.
+              </p>
+            )}
           </div>
-          <div className={zamereni.length > 1 ? 'grid gap-6 md:grid-cols-2' : 'grid max-w-2xl gap-6'}>
-            {zamereni.map((z) => {
-              const Ikona = IKONY_ZAMERENI[z.id]
-              return (
-                <article
-                  key={z.id}
-                  className="overflow-hidden rounded-md border border-paper/15 bg-paper/[0.03]"
-                >
-                  {z.foto && (
-                    <div className="relative aspect-[16/9] border-b border-paper/15">
-                      <Image
-                        src={z.foto.src}
-                        alt={z.foto.alt}
-                        fill
-                        loading="lazy"
-                        sizes="(min-width: 768px) 45vw, 100vw"
-                        className="object-cover"
-                      />
-                    </div>
-                  )}
-                  <div className="p-7">
-                    <Ikona className="mb-5 h-9 w-9 text-accent-400" aria-hidden="true" />
-                    <h3 className="mb-2 font-display text-2xl font-semibold text-paper">{z.name}</h3>
-                    <p className="mb-6 text-paper/70">{z.short}</p>
-                    <ul className="space-y-2.5">
+          {mesta.length > 0 ? (
+            <div className="listky">
+              {mesta.map((mesto) => (
+                <Listek key={mesto} mesto={mesto} turnusy={turnusy.filter((t) => t.city === mesto)} />
+              ))}
+            </div>
+          ) : (
+            <TurnusInterestForm source={`tabor-${tabor.id}`} />
+          )}
+        </div>
+      </section>
+
+      {/* ── Co si postavíš ───────────────────────────────────────────── */}
+      {zamereni.length > 0 && (
+        <section className="sec" id="co-si-postavi">
+          <div className="wrap">
+            <div className="sec-head">
+              <h2>Co si postavíš</h2>
+              <p>
+                Týden stojí na {naKolikaTematech(zamereni.length)}.{' '}
+                {zamereni.length === 1 ? 'Končí' : 'Každé končí'} něčím, co uděláš sám.
+              </p>
+            </div>
+            <div className={`co-postavi${zamereni.length === 1 ? ' jedno' : ''}`}>
+              {zamereni.map((z) => {
+                const text = (
+                  <>
+                    <h3>{z.name}</h3>
+                    <p>{sazba(z.short)}</p>
+                    <ul className="zaskrt tech" style={zamereni.length === 1 ? { marginTop: 12 } : undefined}>
                       {z.tryOut.map((bod) => (
-                        <li key={bod} className="flex gap-2.5 text-paper/85">
-                          <Check className="mt-1 h-4 w-4 shrink-0 text-accent-400" aria-hidden="true" />
-                          {bod}
+                        <li key={bod}>
+                          <Ikona id="ok" />
+                          <span>{sazba(bod)}</span>
                         </li>
                       ))}
                     </ul>
-                  </div>
-                </article>
-              )
-            })}
-          </div>
-        </div>
-      </MrizkaSekce>
-
-      {/* ── 3. Týden — časová osa, typický den se rozbalí ─────────────── */}
-      {tabor.program && (
-        <section id="tyden" className="section-padding scroll-mt-24 border-b border-ink/15 bg-paper">
-          <div className="section-container grid gap-12 lg:grid-cols-12">
-            <div className="lg:col-span-4">
-              <div className="lg:sticky lg:top-28">
-                <p className="mono-label mb-4">Program</p>
-                <h2 className="heading-2 mb-4 text-ink">
-                  Jak vypadá <span className="text-accent-600">týden</span>
-                </h2>
-                <p className="text-lg text-ink-500">
-                  Projekty na sebe navazují. Co dítě v pondělí začne, to v pátek dokončí.
-                </p>
-                {lektori.length > 0 && (
-                  <ul className="mt-8 space-y-3">
-                    {lektori.map((clen) => (
-                      <li key={clen.id} className="flex items-center gap-3">
-                        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-ink/15 bg-white">
-                          <UserRound className="h-5 w-5 text-accent-600" aria-hidden="true" />
-                        </span>
-                        <span>
-                          <span className="block text-sm text-ink-500">Hlavní lektor</span>
-                          <Link href="/o-nas" className="font-display font-semibold text-ink hover:underline">
-                            {clen.jmeno}
-                          </Link>
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
+                  </>
+                )
+                return (
+                  <article key={z.id}>
+                    {z.foto && (
+                      <Image
+                        src={z.foto.src}
+                        alt={z.foto.alt}
+                        width={1200}
+                        height={800}
+                        sizes="(min-width: 760px) 560px, 100vw"
+                        loading="lazy"
+                      />
+                    )}
+                    {zamereni.length === 1 ? <div>{text}</div> : text}
+                  </article>
+                )
+              })}
             </div>
-
-            <div className="lg:col-span-8">
-              {/* Osa jako dvousloupcová mřížka: kolečko s ikonou v prvním
-                  sloupci, spojnice je jeho okraj dolů. Bez absolutního
-                  posouvání, které se rozjede s každou změnou odsazení. */}
-              <ol>
-                {tabor.program.map((den, i) => {
-                  const Ikona = IKONY_DNE[den.ikona]
-                  const posledni = i === tabor.program!.length - 1
-                  return (
-                    <li key={den.den} className="grid grid-cols-[2.5rem_1fr] gap-x-5 sm:gap-x-6">
-                      <div className="flex flex-col items-center" aria-hidden="true">
-                        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-ink bg-paper">
-                          <Ikona className="h-5 w-5 text-accent-600" />
-                        </span>
-                        {!posledni && <span className="w-0.5 flex-1 bg-ink/15" />}
-                      </div>
-                      <div className={posledni ? '' : 'pb-10'}>
-                        <p className="mb-1 pt-2 text-sm font-medium text-accent-600">{den.den}</p>
-                        <h3 className="mb-2 font-display text-xl font-semibold text-ink">{den.title}</h3>
-                        <p className="mb-3 max-w-2xl text-ink-500">{den.description}</p>
-                        <ul className="flex flex-wrap gap-2">
-                          {den.highlights.map((h) => (
-                            <li
-                              key={h}
-                              className="rounded-sm bg-accent-50 px-2.5 py-1 text-sm text-accent-800"
-                            >
-                              {h}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </li>
-                  )
-                })}
-              </ol>
-
-              <details className="group mt-12 rounded-md border border-ink bg-white">
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-5 font-display text-lg font-semibold text-ink [&::-webkit-details-marker]:hidden">
-                  Jak vypadá jeden den
-                  <ChevronDown
-                    className="h-5 w-5 transition-transform group-open:rotate-180"
-                    aria-hidden="true"
-                  />
-                </summary>
-                <ol className="grid border-t border-ink/15 sm:grid-cols-2">
-                  {DENNI_HARMONOGRAM.map((item) => (
-                    <li key={item.time} className="flex gap-4 border-b border-ink/10 p-4 sm:odd:border-r">
-                      <span className="w-12 shrink-0 font-mono text-sm font-semibold text-accent-600">
-                        {item.time}
-                      </span>
-                      <div>
-                        <p className="font-display text-sm font-semibold text-ink">{item.title}</p>
-                        {item.description && (
-                          <p className="mt-0.5 text-xs text-ink-500">{item.description}</p>
-                        )}
-                      </div>
-                    </li>
+            {tabor.vyrobky && tabor.vyrobky.length > 0 && (
+              <>
+                <h3 className="podnadpis">Výrobky z tábora</h3>
+                <div className="vyrobky" id="odnese">
+                  {tabor.vyrobky.map((v) => (
+                    <figure key={v.src}>
+                      <Image
+                        src={v.src}
+                        alt={v.alt}
+                        width={v.width}
+                        height={v.height}
+                        sizes="(min-width: 760px) 280px, 50vw"
+                        loading="lazy"
+                      />
+                      <figcaption>{sazba(v.popisek)}</figcaption>
+                    </figure>
                   ))}
-                </ol>
-              </details>
-            </div>
+                </div>
+              </>
+            )}
           </div>
         </section>
       )}
 
-      {/* ── 4. Fotka přes celou šířku ─────────────────────────────────── */}
-      <FotoPas foto={tabor.fotoPas} />
-
-      {/* ── 5. Co si odnese ──────────────────────────────────────────── */}
-      <ProjectGallery polozky={galerie} />
-
-      {/* ── 6. Kde ────────────────────────────────────────────────────── */}
-      {venueIds.map((id) => (
-        <VenueShowcase key={id} venue={getVenue(id)} />
-      ))}
-
-      {/* ── 7. Recenze — před termíny, ať rodič čte cizí zkušenost těsně
-             před tím, než si vybere. ───────────────────────────────── */}
-      <GoogleRecenze tabor={tabor.id} />
-
-      {/* ── 8. Termíny ───────────────────────────────────────────────── */}
-      <MrizkaSekce
-        odstin="tmavy"
-        id="turnusy"
-        className="section-padding scroll-mt-24 border-y border-ink bg-ink text-paper blueprint-grid-dark"
-      >
-        <div className="section-container">
-          <div className="mb-12 max-w-3xl">
-            <p className="mono-label-dark mb-4 text-accent-300">Termíny</p>
-            <h2 className="heading-2 mb-4 text-paper">
-              Kdy a kde <span className="text-accent-400">tábor běží</span>
-            </h2>
-            <p className="text-lg text-paper/70">
-              {prodejne.length > 0
-                ? 'Cenu, obsazenost i místo najdete u vybraného termínu.'
-                : 'Termíny na příští léto vypisujeme na podzim. Nechte nám kontakt — ozveme se vám mezi prvními.'}
-            </p>
-          </div>
-          <TurnusList turnusy={turnusy} />
-          <div className="mt-16">
-            <TurnusInterestForm source={`tabor-${tabor.id}`} />
-          </div>
-        </div>
-      </MrizkaSekce>
-
-      {/* ── 9. Časté dotazy ──────────────────────────────────────────── */}
-      <FAQSection polozky={faq} />
-
-      {/* ── 10. Závěrečná výzva ──────────────────────────────────────── */}
-      <section
-        id="zaverecna-vyzva"
-        className="section-padding relative overflow-hidden border-y border-ink bg-cta-400"
-      >
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -bottom-32 -left-10 select-none font-display text-[22rem] font-bold leading-none text-ink/[0.06]"
-        >
-          W
-        </div>
-        <div className="section-container relative z-10">
-          <div className="max-w-3xl">
-            <h2 className="heading-2 mb-5 text-ink">
-              {prodejne.length > 0
-                ? 'Přihlaste dítě, dokud jsou volná místa'
-                : 'Chcete vědět o termínech mezi prvními?'}
-            </h2>
-            <p className="mb-8 text-lg text-ink/80">
-              {prodejne.length > 0
-                ? 'Kolik míst ještě zbývá, vidíte u každého termínu.'
-                : 'Nechte nám kontakt a ozveme se vám dřív, než se termíny objeví na webu.'}
-            </p>
-            <div className="flex flex-col gap-4 sm:flex-row">
-              <a href="#turnusy" className="btn-secondary group">
-                {prodejne.length > 0 ? 'Vybrat termín' : 'Nechat kontakt'}
-                <ArrowRight
-                  className="h-4 w-4 transition-transform group-hover:translate-x-1"
-                  aria-hidden="true"
-                />
-              </a>
-              <Link href="/kontakt" className="btn-outline">
-                Máte dotazy?
-              </Link>
+      {/* ── Týden ────────────────────────────────────────────────────── */}
+      {tabor.program && (
+        <section className="sec bez-linky dark mrizka sec-tyden" id="tyden">
+          <div className="wrap">
+            <div className="sec-head">
+              <h2>Jak vypadá týden</h2>
+              <p>Projekty na sebe navazují. Co dítě v pondělí začne, to v pátek dokončí.</p>
             </div>
+            <ol className="dny">
+              {tabor.program.map((den) => (
+                <li key={den.den}>
+                  <div className="dny-hl">
+                    <span className="dny-den">{ZKRATKY_DNU[den.den] ?? den.den}</span>
+                    <span className="dny-ik">
+                      <Ikona id={IKONA_DNE[den.ikona]} />
+                    </span>
+                  </div>
+                  <h3>{sazba(den.kratce)}</h3>
+                  <p>{sazba(den.shrnuti)}</p>
+                </li>
+              ))}
+            </ol>
+            {lektori.length > 0 && (
+              <p className="lektor">
+                {lektori.length === 1 ? 'Hlavní lektor' : 'Lektoři'}:{' '}
+                <Link className="link" href="/o-nas">
+                  {lektori.join(', ')}
+                </Link>
+              </p>
+            )}
           </div>
+        </section>
+      )}
+
+      {/* ── Den ──────────────────────────────────────────────────────── */}
+      {tabor.program && <Rozvrh />}
+
+      <PasFoto foto={tabor.fotoPas} />
+
+      {/* ── Kde tábor běží ───────────────────────────────────────────── */}
+      {venues.length > 0 && (
+        <section className="sec bez-linky" id="misto">
+          {venues.map((venue, i) => (
+            <div
+              key={venue.id}
+              className={`wrap misto-grid${venue.foto ? '' : ' misto-samo'}`}
+              style={i > 0 ? { marginTop: 40 } : undefined}
+            >
+              <div>
+                {i === 0 && <h2>Kde tábor běží</h2>}
+                <h3 className="podnadpis" style={i === 0 ? { marginTop: 16 } : undefined}>
+                  {sazba(`${venue.fullName}, ${getCity(venue.cityId).name}`)}
+                </h3>
+                <p>{sazba(venue.description)}</p>
+                <p>{sazba(`${venue.vybaveni}.`)}</p>
+                <a
+                  className="adresa link"
+                  href={`https://www.google.com/maps/search/?api=1&query=${venue.mapQuery}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Ikona id="misto" /> {sazba(`${venue.street}, ${venue.city}`)}
+                </a>
+                {i === venues.length - 1 &&
+                  mestaBezMista.map((m) => (
+                    <p className="pozn" key={m}>
+                      {getCity(m).name}: místo konání upřesníme spolu s termínem.
+                    </p>
+                  ))}
+              </div>
+              {venue.foto && (
+                <Image
+                  src={venue.foto.src}
+                  alt={venue.foto.alt}
+                  width={venue.foto.width}
+                  height={venue.foto.height}
+                  sizes="(min-width: 900px) 560px, 100vw"
+                  loading="lazy"
+                />
+              )}
+            </div>
+          ))}
+        </section>
+      )}
+
+      <RecenzeSekce tabor={tabor.id} poznamka={tabor.poznamkaKRecenzim} />
+
+      {/* ── Dotazy ───────────────────────────────────────────────────── */}
+      <section className="sec sec-faq" id="faq">
+        <div className="wrap bok">
+          <div className="sec-head">
+            <h2>Časté dotazy rodičů</h2>
+          </div>
+          <Faq dotazy={dotazy} />
+          <p className="faq-dal">
+            <Link className="link" href="/#faq">
+              Všechny dotazy
+            </Link>{' '}
+            ·{' '}
+            <Link className="link" href="/kontakt">
+              Kontaktujte nás
+            </Link>
+          </p>
         </div>
       </section>
 
-      <NakupniLista
-        nadpis={tabor.shortName}
-        podnadpis={odCeny ? `od ${odCeny} za týden · oběd v ceně` : undefined}
-        ctaText={prodejne.length > 0 ? 'Vybrat termín' : 'Dát vědět'}
-        href="#turnusy"
-        sleduj={['vyber-terminu', 'turnusy', 'zaverecna-vyzva']}
+      {/* ── Závěrečná výzva ──────────────────────────────────────────── */}
+      <section className="zaver amber vz vz-zaver" id="zaverecna-vyzva">
+        <div className="wrap zaver-cta">
+          <div>
+            <h2>
+              {jdePrihlasit
+                ? 'Přihlaste dítě, dokud jsou volná místa'
+                : 'Chcete vědět o termínech mezi prvními?'}
+            </h2>
+          </div>
+          <a className="btn btn-dark btn-lg" href="#terminy">
+            {jdePrihlasit ? 'Vybrat termín' : 'Nechat kontakt'} <Ikona id="sipka" />
+          </a>
+        </div>
+      </section>
+
+      <KupLista
+        nadpis={cena ? `${cena} za týden` : tabor.shortName}
+        podnadpis={cena ? 'Oběd v ceně' : undefined}
+        ctaText={jdePrihlasit ? 'Vybrat termín' : 'Termíny'}
+        href="#terminy"
+        sleduj={['hlavni-cta', 'terminy', 'zaverecna-vyzva']}
       />
     </main>
   )
 }
 
-/** Tábor, který se teprve chystá: záměr, sběr kontaktu a odkaz na běžící tábor. */
+/**
+ * Tábor, který se teprve chystá: záměr, sběr kontaktu a odkaz na tábory, na
+ * které se přihlásit dá. Program, termín, cena ani vybavení tu nejsou — nic
+ * z toho není potvrzené (viz komentář nad `TABORY`).
+ */
 function ChystaneTema({ tabor }: { tabor: Tabor }) {
-  const bezici = getAktivniTabory()
+  const bezici = getAktivniTabory().flatMap((t) => {
+    const prodejne = getTurnusyByTabor(t.id).filter(isBookable)
+    return [...new Set(prodejne.map((x) => x.city))].map((mesto) => ({
+      tabor: t,
+      mesto,
+      turnusy: prodejne.filter((x) => x.city === mesto),
+    }))
+  })
 
   return (
-    <main>
-      <section className="relative overflow-hidden border-b border-ink bg-ink text-paper blueprint-grid-dark">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -right-24 -top-28 select-none font-display text-[26rem] font-bold leading-none text-paper/[0.04]"
-        >
-          W
-        </div>
-        <div className="section-container relative z-10 pb-16 pt-28 md:pb-24 md:pt-36">
-          <div className="max-w-3xl">
-            <Drobecky tabor={tabor} />
-            <p className="mb-6 inline-block rounded-sm border border-cta-400 bg-cta-400 px-2.5 py-1 text-sm font-semibold text-ink">
-              Chystáme
-            </p>
-            <h1 className="heading-1 mb-6 text-paper">{tabor.name}</h1>
-            <p className="mb-8 max-w-2xl text-lg leading-relaxed text-paper/75 md:text-xl">{tabor.popis}</p>
-            <a href="#zajem" className="btn-primary group px-8 py-4">
-              Dát vědět, až ho otevřeme
-              <ArrowRight
-                className="h-5 w-5 transition-transform group-hover:translate-x-1"
-                aria-hidden="true"
-              />
+    <main id="obsah" className="w2">
+      <section className="zahlavi dark mrizka">
+        <Mrizka />
+        <div className="wrap">
+          <Drobecky tabor={tabor} />
+          <p className="chystame-stav" style={{ marginTop: 12 }}>
+            Chystáme
+          </p>
+          <h1 style={{ marginTop: 12 }}>{sazba(tabor.name)}</h1>
+          <p className="zahlavi-perex" style={{ maxWidth: 720 }}>
+            {sazba(tabor.popis)}
+          </p>
+          <div className="zahlavi-akce">
+            <a className="btn btn-primary btn-lg" id="hlavni-cta" href="#zajem">
+              Dát vědět, až ho otevřeme <Ikona id="dolu" />
             </a>
           </div>
         </div>
       </section>
 
-      <section className="section-padding bg-paper">
-        <div className="section-container">
-          <div className="max-w-3xl">
-            <p className="mono-label mb-4">Záměr</p>
-            <h2 className="heading-2 mb-8 text-ink">
-              Co si dítě <span className="text-accent-600">zkusí</span>
-            </h2>
-            <ul className="space-y-4">
-              {zkusiSiTabora(tabor).map((bod) => (
-                <li key={bod} className="flex gap-3 border-b border-ink/15 pb-4 text-lg text-ink-500">
-                  <Check className="mt-1 h-5 w-5 shrink-0 text-accent-600" aria-hidden="true" />
-                  {bod}
-                </li>
-              ))}
-            </ul>
-            <p className="mt-8 text-ink-500">
-              Program, termín ani cenu zatím nemáme potvrzené — jakmile budou, najdete je tady jako první.
+      <section className="sec">
+        <div className="wrap">
+          <div className="sec-head">
+            <h2>Co si dítě zkusí</h2>
+            <p>
+              Program, termín ani cenu zatím nemáme potvrzené. Jakmile budou, najdete je tady jako
+              první.
             </p>
           </div>
+          <ul className="zaskrt tech" style={{ maxWidth: 720 }}>
+            {zkusiSiTabora(tabor).map((bod) => (
+              <li key={bod}>
+                <Ikona id="ok" />
+                <span>{sazba(bod)}</span>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 
-      <MrizkaSekce odstin="tmavy" className="section-padding border-y border-ink bg-ink blueprint-grid-dark">
-        <div className="section-container">
-          <div className="mx-auto max-w-3xl">
-            <TurnusInterestForm source={`tabor-${tabor.id}`} />
-          </div>
+      <section className="sec sec-papir bez-linky">
+        <div className="wrap">
+          <TurnusInterestForm source={`tabor-${tabor.id}`} />
         </div>
-      </MrizkaSekce>
+      </section>
 
       {bezici.length > 0 && (
-        <section className="section-padding bg-paper-soft">
-          <div className="section-container">
-            <div className="max-w-3xl">
-              <p className="mono-label mb-4">Zatím běží</p>
-              <h2 className="heading-2 mb-6 text-ink">Tábor, na který se přihlásit jde</h2>
-              <div className="flex flex-wrap gap-4">
-                {bezici.map((b) => (
-                  <Link key={b.id} href={`/tabory/${b.id}`} className="btn-outline group">
-                    {b.name}
-                    <ArrowRight
-                      className="h-4 w-4 transition-transform group-hover:translate-x-1"
-                      aria-hidden="true"
-                    />
-                  </Link>
-                ))}
-              </div>
+        <section className="sec">
+          <div className="wrap">
+            <div className="sec-head">
+              <h2>Tábory, na které se přihlásit dá</h2>
+            </div>
+            <div className={`tabory${bezici.length === 1 ? ' jedna' : ''}`}>
+              {bezici.map((b) => (
+                <TaborKarta key={`${b.tabor.id}-${b.mesto}`} tabor={b.tabor} mesto={b.mesto} turnusy={b.turnusy} />
+              ))}
             </div>
           </div>
         </section>
       )}
+
+      <KupLista
+        nadpis={tabor.shortName}
+        podnadpis="Tábor chystáme"
+        ctaText="Dát vědět"
+        href="#zajem"
+        sleduj={['hlavni-cta', 'zajem']}
+      />
     </main>
   )
 }

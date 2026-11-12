@@ -99,7 +99,7 @@ export interface Tabor {
    */
   lektori?: string[]
   /**
-   * Fotka na výšku do hera stránky tématu (3:4). Bez ní se hero kreslí bez
+   * Fotka na šířku do záhlaví stránky tématu. Bez ní se záhlaví kreslí bez
    * fotky — herní tábor nesmí převzít fotku 3D výtisku.
    */
   fotoHera?: { src: string; alt: string; width: number; height: number }
@@ -108,6 +108,11 @@ export interface Tabor {
    * venkovní záběr se šablonou.
    */
   fotoPas?: { src: string; alt: string }
+  /**
+   * „Výrobky z tábora“ na stránce tématu: fotky s popiskem. Jen věci, které
+   * na táboře Weeks opravdu vznikly — tábor, který ještě neběžel, je nemá.
+   */
+  vyrobky?: Array<{ src: string; alt: string; popisek: string; width: number; height: number }>
   /**
    * Fotka na kartu tématu ve výpisu `/tabory`, na šířku. Ilustrační — karta
    * ji nepopisuje jako záběr z konkrétního tábora. Chystaný tábor zatím žádnou
@@ -127,19 +132,53 @@ export interface Tabor {
  * stejný pro všechna témata a čtyřikrát opsaný by se rozešel. Vykresluje se jen
  * na stránce aktivního tábora.
  */
-export const DENNI_HARMONOGRAM = [
-  { time: '8:30', title: 'Příchod dětí', description: 'Postupně do 9:00.' },
-  { time: '9:00', title: 'Ranní rozcvička', description: 'Krátká hra nebo výzva na rozehřátí před hlavním programem.' },
-  { time: '9:15', title: 'Výukový blok I', description: 'Hlavní téma dne — výuka s lektorem, ukázky, diskuze.' },
-  { time: '10:30', title: 'Přestávka', description: 'Svačina a pití.' },
-  { time: '10:45', title: 'Výukový blok II', description: 'Praktická část — děti pracují samostatně nebo ve dvojicích na svém projektu.' },
-  { time: '12:00', title: 'Oběd', description: 'Zajištěný oběd pro všechny účastníky (v ceně tábora).' },
-  { time: '13:00', title: 'Venkovní aktivita', description: 'Pohyb, vzduch, hry. V případě špatného počasí organizovaný program uvnitř.' },
-  { time: '14:00', title: 'Odpolední blok', description: 'Pokračování práce na projektech, nová témata nebo kreativní výzvy.' },
-  { time: '15:00', title: 'Přestávka', description: 'Odpolední pauza a svačina.' },
-  { time: '15:15', title: 'Tvůrčí práce', description: 'Samostatná práce na vlastním projektu, individuální přístup lektorů.' },
-  { time: '15:45', title: 'Dokončení a úklid', description: 'Dokončení projektů, úklid pracoviště a shrnutí dne.' },
-  { time: '16:00', title: 'Postupný odchod', description: 'Vyzvednutí do 16:30, prostor pro dotazy rodičů.' },
+export type DruhBloku = 'okraj' | 'pauza' | 'obed' | 'venku'
+
+export const DENNI_HARMONOGRAM: Array<{
+  time: string
+  title: string
+  description: string
+  /** Název na jeden řádek do dlaždice podrobného rozvrhu. */
+  nazev: string
+  /** Dvě tři slova pod název dlaždice. */
+  kratce: string
+  /** Blok, který není program: dlaždice ho barvou odliší. */
+  druh?: DruhBloku
+}> = [
+  { time: '8:30', title: 'Příchod dětí', description: 'Postupně do 9:00.', nazev: 'Příchod', kratce: 'do 9:00', druh: 'okraj' },
+  { time: '9:00', title: 'Ranní rozcvička', description: 'Krátká hra nebo výzva na rozehřátí před hlavním programem.', nazev: 'Rozcvička', kratce: 'hra na rozehřátí' },
+  { time: '9:15', title: 'Výukový blok I', description: 'Hlavní téma dne — výuka s lektorem, ukázky, diskuze.', nazev: 'Výuka I', kratce: 'téma dne s lektorem' },
+  { time: '10:30', title: 'Přestávka', description: 'Svačina a pití.', nazev: 'Svačina', kratce: 'vlastní, z domu', druh: 'pauza' },
+  { time: '10:45', title: 'Výukový blok II', description: 'Praktická část — děti pracují samostatně nebo ve dvojicích na svém projektu.', nazev: 'Výuka II', kratce: 'práce na projektu' },
+  { time: '12:00', title: 'Oběd', description: 'Zajištěný oběd pro všechny účastníky (v ceně tábora).', nazev: 'Oběd', kratce: 'v ceně tábora', druh: 'obed' },
+  { time: '13:00', title: 'Venkovní aktivita', description: 'Pohyb, vzduch, hry. V případě špatného počasí organizovaný program uvnitř.', nazev: 'Venku', kratce: 'pohyb a hry', druh: 'venku' },
+  { time: '14:00', title: 'Odpolední blok', description: 'Pokračování práce na projektech, nová témata nebo kreativní výzvy.', nazev: 'Odpolední blok', kratce: 'projekty a výzvy' },
+  { time: '15:00', title: 'Přestávka', description: 'Odpolední pauza a svačina.', nazev: 'Svačina', kratce: 'odpolední pauza', druh: 'pauza' },
+  { time: '15:15', title: 'Tvůrčí práce', description: 'Samostatná práce na vlastním projektu, individuální přístup lektorů.', nazev: 'Tvůrčí práce', kratce: 'vlastní projekt' },
+  { time: '15:45', title: 'Dokončení a úklid', description: 'Dokončení projektů, úklid pracoviště a shrnutí dne.', nazev: 'Úklid', kratce: 'a shrnutí dne' },
+  { time: '16:00', title: 'Postupný odchod', description: 'Vyzvednutí do 16:30, prostor pro dotazy rodičů.', nazev: 'Odchod', kratce: 'do 16:30', druh: 'okraj' },
+]
+
+/**
+ * Den v šesti pruzích — přehled nad podrobným rozvrhem. Šířka pruhu odpovídá
+ * délce bloku v minutách. Začátky se musí shodovat s `DENNI_HARMONOGRAM`
+ * a dohromady dát celou provozní dobu (hlídá `tabory.test.ts`); jinak by
+ * přehled a podrobný rozvrh na jedné stránce tvrdily každý něco jiného.
+ */
+export const DEN_V_KOSTCE: Array<{
+  time: string
+  minut: number
+  druh: 'okraj' | 'program' | 'obed' | 'venku'
+  ikona: 'dvere' | 'zarovka' | 'pribor' | 'slunce' | 'tuzka'
+  nazev: string
+  kratce: string
+}> = [
+  { time: '8:30', minut: 30, druh: 'okraj', ikona: 'dvere', nazev: 'Příchod', kratce: 'postupně do 9:00' },
+  { time: '9:00', minut: 180, druh: 'program', ikona: 'zarovka', nazev: 'Dopolední program', kratce: 'dva bloky s lektorem a svačina' },
+  { time: '12:00', minut: 60, druh: 'obed', ikona: 'pribor', nazev: 'Oběd', kratce: 'v ceně tábora' },
+  { time: '13:00', minut: 60, druh: 'venku', ikona: 'slunce', nazev: 'Venku', kratce: 'pohyb, vzduch a hry' },
+  { time: '14:00', minut: 120, druh: 'program', ikona: 'tuzka', nazev: 'Odpolední program', kratce: 'vlastní projekt a svačina' },
+  { time: '16:00', minut: 30, druh: 'okraj', ikona: 'dvere', nazev: 'Odchod', kratce: 'vyzvednutí do 16:30' },
 ]
 
 /**
@@ -160,7 +199,7 @@ export const TABORY: Tabor[] = [
     perex:
       'Celý týden 3D tisk, 3D modelování a IoT s Arduinem. Hotový výrobek, který si dítě odveze domů.',
     popis:
-      'Týden je rozdělený na dva tematické bloky — první tři dny věnujeme 3D tisku a modelování, ve čtvrtek a v pátek se vrhneme na IoT s Arduinem.',
+      'Týden 3D tisku a elektroniky. První tři dny děti modelují a tisknou vlastní návrhy, ve čtvrtek a v pátek zapojují a programují zařízení s Arduinem. Výtisky si odvezou domů.',
     // VR je ze zaměření pryč: vybavení na něj není jisté a v Karlových Varech
     // se loni nekonalo, takže by ho web sliboval na základě ničeho. Týdenní
     // program to jen potvrzuje — žádný den VR neobsahuje. Modul `vr` zůstává
@@ -171,22 +210,51 @@ export const TABORY: Tabor[] = [
     proTermin:
       'Týden 3D tisku, 3D modelování a elektroniky s Arduinem. Děti si navrhnou vlastní model, vytisknou ho a postaví zařízení, které reaguje na okolí. Výtisky si odvezou domů.',
     fotoHera: {
-      src: '/images/tabor/vytisk-v-ruce.webp',
-      alt: 'Vlastní návrh, vytištěný na táboře',
-      width: 896,
+      src: '/images/tabor/dilna-ucebna.webp',
+      alt: 'Děti u počítačů a 3D tiskáren v dílně, mezi stoly prochází lektor',
+      width: 1600,
       height: 1195,
     },
+    vyrobky: [
+      {
+        src: '/images/tabor/vyrobky-kolekce.webp',
+        alt: 'Výtisky rozložené na stole: kloubová liška, přívěsky a držák',
+        popisek: 'Kolekce výtisků z tábora',
+        width: 900,
+        height: 900,
+      },
+      {
+        src: '/images/tabor/vytisk-v-ruce.webp',
+        alt: 'Ruka drží vytištěný model podle vlastního návrhu',
+        popisek: 'Vlastní návrh, vytištěný na táboře',
+        width: 896,
+        height: 1195,
+      },
+      {
+        src: '/images/tabor/vyrobky-kocka.webp',
+        alt: 'Šedá vytištěná kočka z plošek na stole',
+        popisek: 'Low-poly kočka',
+        width: 900,
+        height: 900,
+      },
+      {
+        src: '/images/tabor/vyrobky-ledky.webp',
+        alt: 'Malé nepájivé pole s červenou a zelenou LED diodou',
+        popisek: 'Nepájivé pole s LED diodami',
+        width: 900,
+        height: 900,
+      },
+    ],
     faq: [
       {
         question: 'Co si dítě odveze domů?',
-        // Obecný slib o „sestaveném zařízení" tu stál proti konkrétní odpovědi
-        // modulu `iot` v `focus.ts` („Micro:bity a Arduina zůstávají
-        // v laboratoři"). Web nesmí tvrdit obojí — obecný slib proto mizí
-        // a odpověď posílá čtenáře k zaměření, kde platí provozní pravda.
-        // Do 2026-11-10 stála otázka v obecných FAQ (`site.ts`); s herním
-        // táborem patří k tématu.
+        // Jedna odpověď za celý tábor: výtisky si dítě odveze, desky zůstávají.
+        // Dřív tu stál obecný slib o „sestaveném zařízení“ proti odpovědi
+        // modulu `iot` ve `focus.ts` („Micro:bity a Arduina zůstávají
+        // v laboratoři“) — web nesmí tvrdit obojí. Do 2026-11-10 stála otázka
+        // v obecných dotazech (`site.ts`); s herním táborem patří k tématu.
         answer:
-          'Vlastní výtisky z 3D tiskárny a vlastní 3D model, který si navrhlo. U elektroniky záleží na zaměření turnusu — co si děti odvážejí a co zůstává v laboratoři, píšeme u každého zaměření zvlášť.',
+          'Vlastní výtisky z 3D tiskárny a vlastní 3D model, který si navrhlo – klíčenku, stojánek, hračku nebo jiný předmět podle vlastního návrhu. Micro:bity a Arduina zůstávají v laboratoři, ale děti získají přístup k online prostředí, kde mohou pokračovat v programování doma.',
       },
     ],
     foto: {
@@ -265,8 +333,10 @@ export const TABORY: Tabor[] = [
     // rodičům jako střely a nepřátele (rozhodnutí 2026-11-10).
     perex:
       'Vlastní akční 2D hra v enginu Godot: level, postava, střely, zvuky i efekty. Hotovou hru si dítě odnese domů.',
+    // Že dítě nemusí umět programovat, říká první dotaz v `faq` níž — úvod
+    // stránky má být krátký.
     popis:
-      'Týden v herním enginu Godot. Každé dítě postaví vlastní akční 2D hru s levelem, postavou, střelami, nepřáteli, zvuky a efekty a v pátek si ji sestavenou odnese domů. Programovat umět nemusí, první řádky kódu přijdou na řadu až ve čtvrtek.',
+      'Týden v herním enginu Godot. Každé dítě postaví vlastní akční 2D hru s levelem, postavou, střelami, nepřáteli, zvuky a efekty a v pátek si ji sestavenou odnese domů.',
     focus: ['herni-vyvoj'],
     odnese: 'Vlastní hra, kterou si dítě odnese domů',
     odneseKratce: 'Vlastní hra domů',
@@ -282,17 +352,18 @@ export const TABORY: Tabor[] = [
       src: '/images/tabor/gd-deti-u-pocitacu.webp',
       alt: 'Děti zezadu u tří počítačů: na monitorech editor kódu, rozehraná 2D hra a editor scény',
     },
-    // Hero: děti u počítačů (na výšku oříznuté). Pás: skupinová fotka venku
-    // místo venkovní šablony — tu u herního tábora nechceme (2026-11-10).
+    // Záhlaví: tatáž upravená fotka jako na kartě (viz `foto` výš). Pás:
+    // skupinová fotka venku místo venkovní šablony — tu u herního tábora
+    // nechceme (2026-11-10).
     fotoHera: {
-      src: '/images/tabor/dilna-ucebna.webp',
-      alt: 'Děti pracují u počítačů v dílně, mezi stoly prochází lektor',
-      width: 1600,
-      height: 1195,
+      src: '/images/tabor/gd-deti-u-pocitacu.webp',
+      alt: 'Děti zezadu u tří počítačů: na monitorech editor kódu, rozehraná 2D hra a editor scény',
+      width: 1800,
+      height: 1350,
     },
     fotoPas: {
-      src: '/images/tabor/skupina-terasa-retus.webp',
-      alt: 'Děti z tábora Weeks s lektory mávají na terase',
+      src: '/images/tabor/skupina-terasa-2.webp',
+      alt: 'Děti z tábora Weeks s lektory na terase',
     },
     program: [
       {
@@ -348,14 +419,14 @@ export const TABORY: Tabor[] = [
     ],
     faq: [
       {
-        question: 'V čem budou děti hry dělat?',
-        answer:
-          'V herním enginu Godot. Je zdarma a otevřený, takže v něm dítě může pokračovat i doma.',
-      },
-      {
         question: 'Musí dítě umět programovat?',
         answer:
           'Ne. Většinu týdne se hra skládá v editoru, kód přijde na řadu až ve čtvrtek a v pátek, a to od úplných základů.',
+      },
+      {
+        question: 'V čem budou děti hry dělat?',
+        answer:
+          'V herním enginu Godot. Je zdarma a otevřený, takže v něm dítě může pokračovat i doma.',
       },
       {
         question: 'Potřebuje dítě vlastní počítač?',

@@ -163,6 +163,11 @@ const FOCUS: Record<FocusId, FocusModule> = {
       'Napíše první řádky kódu v GDScriptu',
       'Na konci týdne hru sestaví a odnese si ji domů',
     ],
+    // Snímek z ukázkové hry v Godotu, ne záběr z tábora (ten se ještě nekonal).
+    foto: {
+      src: '/images/tabor/gd-hra-mince.webp',
+      alt: 'Ukázka 2D hry v Godotu: postavička sbírá mince na plošinách',
+    },
   },
 }
 

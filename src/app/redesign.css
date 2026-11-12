@@ -4010,6 +4010,10 @@ html {
   color: var(--indigo);
   font-weight: 600;
 }
+/* Štítek „Chystáme“ v tmavém záhlaví chystaného tábora: jantarová plocha potřebuje tmavý text. */
+.w2 .dark .chystame-stav {
+  color: var(--ink);
+}
 /* Hodnocení bez textu: jen hvězdy a jméno, s poznámkou, aby karta nepůsobila jako chyba. */
 .w2 .rec .rec-bez {
   color: var(--muted);

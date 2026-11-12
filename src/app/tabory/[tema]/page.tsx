@@ -9,8 +9,7 @@ import { getTabor, getTabory } from '@/lib/tabory'
 
 /**
  * Stránka tématu — jediné místo, kde žije popis tábora. Obsah vykresluje
- * `TemaDetail` (redesign 2026-10-19, viz
- * `docs/superpowers/specs/2026-10-19-tabory-detail-redesign.md`).
+ * `TemaDetail` (nový vzhled, listopad 2026).
  *
  * Stránky termínů popis schválně neopakují: při čtyřech tématech, dvou městech
  * a několika termínech by web měl sadu skoro shodných stránek a vyhledávač by
@@ -69,7 +68,7 @@ export default async function TaborTemaPage({ params }: { params: Promise<{ tema
           { name: tabor.shortName, url: `${SITE.url}/tabory/${tabor.id}` },
         ]}
       />
-      <Header />
+      <Header vToku />
       <TemaDetail tabor={tabor} />
       <Footer />
     </>

@@ -1,16 +1,17 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { Faq } from '@/components/w2/Faq'
-import { Hvezdy, Ikona, type IkonaId } from '@/components/w2/Ikona'
+import { Hvezdy, Ikona } from '@/components/w2/Ikona'
 import { KupLista } from '@/components/w2/KupLista'
 import { RecenzeSekce, recenzeNaKarty } from '@/components/w2/RecenzeKarty'
 import { TaborKarta } from '@/components/w2/TaborKarta'
+import { IKONA_DNE, ZKRATKY_DNU } from '@/components/w2/dny'
 import { rozsahTesne, sazba } from '@/components/w2/text'
 import { getCity, getVenue } from '@/lib/cities'
 import { formatDatumCs } from '@/lib/dates'
 import { GOOGLE_PROFIL, maRecenze } from '@/lib/recenze'
 import { MIMO_CENU, PROVOZNI_DOBA, SITE, V_CENE_DLAZDICE, getSiteFaq } from '@/lib/site'
-import { getAktivniTabory, type IkonaDne, type TaborId } from '@/lib/tabory'
+import { getAktivniTabory, type TaborId } from '@/lib/tabory'
 import { TYM } from '@/lib/tym'
 import { getTaboryTurnusu, getTurnusyByTabor, isBookable, type Turnus } from '@/lib/turnusy'
 import { zruseniZdarmaDo } from '@/lib/zaloha'
@@ -82,27 +83,6 @@ const FOTKY_PODLE_TABORA: Partial<Record<TaborId, FotkaGalerie[]>> = {
     },
     FOTKA_SPOLECNA,
   ],
-}
-
-const ZKRATKY_DNU: Record<string, string> = {
-  Pondělí: 'Po',
-  Úterý: 'Út',
-  Středa: 'St',
-  Čtvrtek: 'Čt',
-  Pátek: 'Pá',
-}
-
-const IKONA_DNE: Record<IkonaDne, IkonaId> = {
-  napad: 'zarovka',
-  tisk: 'krabice',
-  model: 'tuzka',
-  iot: 'cip',
-  vr: 'jiskra',
-  projekt: 'vlajka',
-  level: 'krabice',
-  hra: 'hra',
-  zvuk: 'zvuk',
-  kod: 'kod',
 }
 
 /** Dotazy, které se týkají přihlášky a placení — zbytek je na úvodní stránce. */

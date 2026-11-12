@@ -6,8 +6,11 @@ import {
   zkusiSiTabora,
   validateTabory,
   TABORY,
+  DENNI_HARMONOGRAM,
+  DEN_V_KOSTCE,
   type Tabor,
 } from './tabory'
+import { PROVOZNI_DOBA } from './site'
 
 const aktivni: Tabor = {
   id: 'chytre-technologie',
@@ -128,5 +131,35 @@ describe('krátké znění dnů v ostrých datech', () => {
       expect(Math.min(...delky), tabor.id).toBeGreaterThanOrEqual(45)
       expect(Math.max(...delky), tabor.id).toBeLessThanOrEqual(70)
     }
+  })
+})
+
+describe('rozvrh dne', () => {
+  const minuty = (cas: string) => {
+    const [h, m] = cas.split(':').map(Number)
+    return h * 60 + m
+  }
+
+  it('přehled v pruzích začíná jen v časech, které zná podrobný rozvrh', () => {
+    const casy = DENNI_HARMONOGRAM.map((b) => b.time)
+    expect(DEN_V_KOSTCE.filter((b) => !casy.includes(b.time)).map((b) => b.time)).toEqual([])
+  })
+
+  it('pruhy na sebe navazují a dohromady dají celou provozní dobu', () => {
+    DEN_V_KOSTCE.slice(0, -1).forEach((b, i) => {
+      expect(minuty(b.time) + b.minut, b.nazev).toBe(minuty(DEN_V_KOSTCE[i + 1].time))
+    })
+    const posledni = DEN_V_KOSTCE[DEN_V_KOSTCE.length - 1]
+    expect(DEN_V_KOSTCE[0].time).toBe(PROVOZNI_DOBA.od)
+    expect(minuty(posledni.time) + posledni.minut).toBe(minuty(PROVOZNI_DOBA.do))
+  })
+
+  it('podrobný rozvrh má právě jeden blok venku — čte ho pás s fotkou', () => {
+    expect(DENNI_HARMONOGRAM.filter((b) => b.druh === 'venku')).toHaveLength(1)
+  })
+
+  it('dlaždice podrobného rozvrhu mají krátký název i popisek', () => {
+    const dlouhe = DENNI_HARMONOGRAM.filter((b) => b.nazev.length > 14 || b.kratce.length > 20)
+    expect(dlouhe.map((b) => `${b.time} ${b.nazev}`)).toEqual([])
   })
 })
