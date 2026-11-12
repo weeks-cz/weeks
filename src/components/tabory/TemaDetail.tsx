@@ -78,7 +78,8 @@ function dotazyTematu(tabor: Tabor): Array<{ question: string; answer: string }>
 
 /** Lístek jednoho města: kde, za kolik a řádky termínů. */
 function Listek({ mesto, turnusy }: { mesto: CityId; turnusy: Turnus[] }) {
-  const prodejne = turnusy.filter(isBookable)
+  // Vypsané termíny: prodejné a obsazené (ten řádek řekne „Obsazeno“).
+  const prodejne = turnusy.filter((t) => isBookable(t) || t.status === 'plno')
   const chysta = prodejne.length === 0
   const venueId = prodejne[0]?.venueId
   const venue = venueId ? getVenue(venueId) : null

@@ -89,8 +89,10 @@ describe('výřez turnusů pro úvodku', () => {
   })
 
   it('schema úvodky vykresluje komponenta s kartami, ze stejné proměnné', () => {
-    const komponenta = zdroj('src/components/sections/NejblizsiTurnusy.tsx')
-    expect(komponenta).toContain('const turnusy = nejblizsiTurnusy()')
+    // Po redesignu (listopad 2026) karty úvodky kreslí `TaboryUvodu`: schema
+    // bere turnusy přímo z karet, které jsou na stránce vidět.
+    const komponenta = zdroj('src/components/w2/TaboryUvodu.tsx')
+    expect(komponenta).toContain('const turnusy = karty.flatMap((k) => k.turnusy)')
     expect(komponenta).toContain('<EventSchema turnusy={turnusy} />')
   })
 

@@ -22,7 +22,10 @@ export interface FocusModule {
   printers?: string[]
   /** Konkrétní hardware — desky, čidla. Jen u IoT. */
   hardware?: string[]
-  /** Fotky ve veřejné složce. Vykresluje je `ProjectGallery` — na `/tabor` i na stránce turnusu. */
+  /**
+   * Starší galerie výrobků. Nový vzhled ji nevykresluje — výrobky z tábora
+   * má tábor sám (`tabor.vyrobky` v `tabory.ts`).
+   */
   gallery?: Array<{ src: string; alt: string }>
   /** Otázky rodičů, které se týkají právě tohohle zaměření. */
   faq?: Array<{ question: string; answer: string }>

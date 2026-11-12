@@ -12,14 +12,14 @@ import { OdkazTerminy } from '@/components/w2/OdkazTerminy'
 import { Pas } from '@/components/w2/Pas'
 import { PasFoto } from '@/components/w2/PasFoto'
 import { RecenzeSekce } from '@/components/w2/RecenzeKarty'
-import { TaborKarta } from '@/components/w2/TaborKarta'
+import { TaboryUvodu } from '@/components/w2/TaboryUvodu'
 import { Usp } from '@/components/w2/Usp'
 import { sazba } from '@/components/w2/text'
 import { getCity } from '@/lib/cities'
 import { GOOGLE_PROFIL, maRecenze } from '@/lib/recenze'
 import { SOCIALNI_SITE, getSiteFaq } from '@/lib/site'
 import { getAktivniTabory, getChystaneTabory } from '@/lib/tabory'
-import { getTurnusy, getTurnusyByTabor, isBookable, oznameniPrihlasovani } from '@/lib/turnusy'
+import { getTurnusy, getTurnusyByTabor, oznameniPrihlasovani } from '@/lib/turnusy'
 
 /**
  * Úvodní stránka (nový vzhled, listopad 2026) — rozcestí, ne katalog.
@@ -91,18 +91,6 @@ export default function Home() {
   const jdePrihlasit = oznameni !== null
   const vek = (getTurnusy()[0]?.ageRange ?? '9-15').replace('-', '–')
   const aktivni = getAktivniTabory()
-
-  // Karty: běžící tábor × město, kde se na něj dá přihlásit. Nejbližší termín první.
-  const karty = aktivni
-    .flatMap((tabor) => {
-      const prodejne = getTurnusyByTabor(tabor.id).filter(isBookable)
-      return [...new Set(prodejne.map((t) => t.city))].map((mesto) => ({
-        tabor,
-        mesto,
-        turnusy: prodejne.filter((t) => t.city === mesto),
-      }))
-    })
-    .sort((a, b) => (a.turnusy[0]?.start ?? '').localeCompare(b.turnusy[0]?.start ?? ''))
 
   // Co se chystá: běžící tábor ve městě, kde termín ještě není, a nová témata.
   const chystaneTerminy = aktivni.flatMap((tabor) =>
@@ -189,13 +177,7 @@ export default function Home() {
               <h2>{oznameni ? `Tábory na léto ${oznameni.rok}` : 'Tábory Weeks'}</h2>
               {!jdePrihlasit && <p>Termíny na další léto chystáme. Nechte nám kontakt a dáme vám vědět.</p>}
             </div>
-            {karty.length > 0 && (
-              <div className={`tabory${karty.length === 1 ? ' jedna' : ''}`}>
-                {karty.map((k) => (
-                  <TaborKarta key={`${k.tabor.id}-${k.mesto}`} tabor={k.tabor} mesto={k.mesto} turnusy={k.turnusy} />
-                ))}
-              </div>
-            )}
+            <TaboryUvodu />
             <aside className="chystame">
               <div className="chystame-text">
                 <p className="chystame-stav">Chystáme</p>

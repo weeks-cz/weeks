@@ -34,7 +34,9 @@ export function TaborKarta({
   stitekMesta?: boolean
 }) {
   const nabidka = turnusy.filter((t) => t.status !== 'uzavreno')
-  const prodejne = nabidka.filter(isBookable)
+  // Vypsané termíny: prodejné a obsazené. Obsazený z karty nemizí — řádek
+  // řekne „Obsazeno“ a vede na stránku termínu s formulářem.
+  const prodejne = nabidka.filter((t) => isBookable(t) || t.status === 'plno')
   const chysta = prodejne.length === 0 && nabidka.length > 0
   const foto = tabor.fotoMesta?.[mesto] ?? tabor.foto
   const venueId = prodejne[0]?.venueId

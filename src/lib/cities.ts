@@ -30,21 +30,21 @@ export interface Venue {
   geo: { lat: number; lng: number }
   /**
    * Popis místa — vykresluje se na `/o-nas`, na `/tabory` u svého města
-   * a na stránkách tématu a termínu (přes `VenueShowcase`). Je to
+   * a na stránkách tématu a termínu (sekce „Kde tábor běží“). Je to
    * tvrzení o cizí firmě, které Weeks nijak nedokládá, takže bez superlativů
    * a bez údajů, které nemáme odkud ověřit.
    */
   description: string
   url?: string
   /**
-   * Čím je místo vybavené — první řádek seznamu v `VenueShowcase`. Dřív tam
+   * Čím je místo vybavené — věta pod popisem místa. Dřív tam
    * pro všechna místa stálo natvrdo „3D tiskárny a Arduino soupravy“, což
    * s druhým táborem v jiném prostoru přestalo platit.
    */
   vybaveni: string
   /** Dotaz pro odkaz do map. */
   mapQuery: string
-  /** Fotky prostoru pro `VenueShowcase`. Bez fotek se galerie nevykresluje. */
+  /** Starší fotky prostoru. Nový vzhled je nevykresluje — používá jednu fotku z pole `foto`. */
   photos?: string[]
   /**
    * Jedna vlastní fotka místa pro stránku termínu a tématu. Jen snímek, na
