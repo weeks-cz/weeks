@@ -22,6 +22,16 @@ export const SITE = {
 } as const
 
 /**
+ * Kdy je někdo u telefonu. Dokud to tým nepotvrdí, je tu `null` a hlavička
+ * netvrdí nic („Zavolejte nám“, bez zelené tečky). Po potvrzení stačí doplnit
+ * dny (0 = neděle) a hodiny a hlavička začne ukazovat „Jsme na telefonu“ /
+ * „Teď offline, ozveme se“ — slib, který musí platit, jinak ho web nesmí dát.
+ *
+ * Příklad: `{ dny: [1, 2, 3, 4, 5], od: 9, do: 17 }`
+ */
+export const TELEFON_HODINY: { dny: number[]; od: number; do: number } | null = null
+
+/**
  * Sociální sítě. Ikony na webu se kreslí z tohohle seznamu, takže nová síť
  * = jeden řádek tady.
  */

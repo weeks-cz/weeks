@@ -1,12 +1,16 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, ChevronRight, ExternalLink } from 'lucide-react'
+import { usePathname } from 'next/navigation'
+import { Ikona } from '@/components/w2/Ikona'
+import { sazba } from '@/components/w2/text'
 import { trackNavCTA, trackUcebnaClick } from '@/lib/analytics'
 import { getTurnusy, isBookable } from '@/lib/turnusy'
+import { getAllCities } from '@/lib/cities'
+import { GOOGLE_PROFIL, maRecenze } from '@/lib/recenze'
+import { SITE, TELEFON_HODINY } from '@/lib/site'
 
 // E-shop je z navigace dočasně schovaný — tým se zatím nerozhodl, jestli ho
 // chce mít veřejně. Není smazaný: route `/eshop` dál funguje, takže staré
@@ -20,216 +24,212 @@ const navItems = [
   { name: 'Kontakt', href: '/kontakt' },
 ]
 
+const UCEBNA = 'https://ucebna.weeks.cz/'
+
+/** Je teď někdo u telefonu? Bez potvrzených hodin (`TELEFON_HODINY`) to web netvrdí. */
+function jeNaTelefonu(ted: Date): boolean {
+  if (!TELEFON_HODINY) return false
+  const den = ted.getDay()
+  const hodina = ted.getHours()
+  return (
+    TELEFON_HODINY.dny.includes(den) && hodina >= TELEFON_HODINY.od && hodina < TELEFON_HODINY.do
+  )
+}
+
 /**
- * `bezCta` schová oranžové tlačítko v liště na počítači. Používá ho stránka
- * termínu: rodič tam termín už má a druhé oranžové tlačítko by soupeřilo
- * s „Přihlásit dítě“ v nákupním boxu. V mobilním menu tlačítko zůstává —
- * tam se otevírá až na vyžádání a nic nepřebíjí.
+ * Hlavička po redesignu (listopad 2026): tmavá lišta se třemi fakty, pod ní
+ * lepicí pruh s logem, navigací, kontaktem a jedním jantarovým tlačítkem.
+ *
+ * `vToku` zapínají přepracované stránky: hlavička je součást toku stránky
+ * (lišta odjede, pruh se přilepí). Stránky, které ještě přepracované nejsou,
+ * počítají s původní hlavičkou připnutou napevno a mají podle ní horní
+ * odsazení — těm zůstává připnutá a lištu nedostanou, aby se jim neposunul
+ * obsah. Až budou přepracované všechny, prop zmizí.
+ *
+ * `bezCta` schová jantarové tlačítko v pruhu na počítači (stránka termínu,
+ * kde by soupeřilo s „Přihlásit dítě“ v nákupním boxu).
  */
-export function Header({ bezCta = false }: { bezCta?: boolean } = {}) {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
+export function Header({
+  bezCta = false,
+  vToku = false,
+}: { bezCta?: boolean; vToku?: boolean } = {}) {
+  const [menu, setMenu] = useState(false)
+  const [online, setOnline] = useState(false)
+  const pathname = usePathname()
 
-  const logoHref = '/'
-  const ctaHref = '/tabory'
-
-  // Stejný trojstav jako na /tabory a v HeroSection — hlavní tlačítko nesmí
+  // Stejný trojstav jako na /tabory a v úvodu — hlavní tlačítko nesmí
   // slibovat výběr termínu, když se zrovna nedá koupit nic.
   const turnusy = getTurnusy()
-  const prodejny = turnusy.some(isBookable)
-  const vyprodano = !prodejny && turnusy.some((t) => t.status === 'plno')
-  const ctaLabel = prodejny
-    ? 'Vybrat turnus'
+  const prodejne = turnusy.filter(isBookable)
+  const vyprodano = prodejne.length === 0 && turnusy.some((t) => t.status === 'plno')
+  const ctaLabel = prodejne.length
+    ? 'Vybrat termín'
     : vyprodano
       ? 'Chci vědět o volném místě'
       : 'Chci vědět o termínech'
 
+  // Lišta: tři fakta, každé z dat. Rok se bere z nejbližšího prodejného termínu.
+  const rok = prodejne
+    .map((t) => t.start)
+    .filter((s): s is string => Boolean(s))
+    .sort()[0]
+    ?.slice(0, 4)
+  const stavPrihlasek = rok ? `Přihlášky na léto ${rok} otevřené` : 'Termíny na další léto chystáme'
+  const mesta = getAllCities().map((c) => c.name)
+  const mestaText =
+    mesta.length > 1 ? `${mesta.slice(0, -1).join(', ')} a ${mesta[mesta.length - 1]}` : mesta[0]
+  const hodnoceni = maRecenze() && GOOGLE_PROFIL.url ? GOOGLE_PROFIL.prumer : null
+
+  const tel = `tel:${SITE.phone.replace(/\s/g, '')}`
+
+  // Stav telefonu se počítá až v prohlížeči — server nezná čas návštěvníka
+  // a stránky jsou statické, takže by ukazoval hodinu sestavení.
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20)
-    }
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
+    if (!TELEFON_HODINY) return
+    const prepocitej = () => setOnline(jeNaTelefonu(new Date()))
+    prepocitej()
+    const casovac = setInterval(prepocitej, 60_000)
+    return () => clearInterval(casovac)
   }, [])
 
-  // Fullscreen mobilní menu: zamknout scroll stránky, dokud je otevřené.
+  // Po přechodu na jinou stránku menu zavřít.
   useEffect(() => {
-    if (!mobileMenuOpen) return
-    const previous = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
-    return () => {
-      document.body.style.overflow = previous
-    }
-  }, [mobileMenuOpen])
+    setMenu(false)
+  }, [pathname])
+
+  const aktivni = (href: string) =>
+    pathname === href || pathname.startsWith(`${href}/`) ? ('page' as const) : undefined
+
+  const stavText = !TELEFON_HODINY
+    ? 'Zavolejte nám'
+    : online
+      ? 'Jsme na telefonu'
+      : 'Teď offline, ozveme se'
 
   return (
-    <>
-      <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b ${
-          mobileMenuOpen
-            ? 'bg-ink border-paper/20'
-            : 'bg-paper/95 backdrop-blur-md border-ink/15'
-        }`}
-      >
-        <nav
-          className={`section-container relative z-10 flex items-center justify-between transition-all duration-300 ${
-            scrolled && !mobileMenuOpen ? 'py-2.5' : 'py-4'
-          }`}
-          aria-label="Hlavní navigace"
-        >
-        {/* Logo */}
-        <Link href={logoHref} className="flex items-center gap-3 group">
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="relative"
-          >
-            <Image
-              src="/images/weeks-logo.png"
-              alt=""
-              width={44}
-              height={44}
-              className="w-11 h-11 object-contain"
-              priority
-              aria-hidden="true"
-            />
-          </motion.div>
-          <span className={`text-xl font-display font-bold tracking-tight transition-colors ${
-            mobileMenuOpen ? 'text-paper' : 'text-ink group-hover:text-primary-600'
-          }`}>
+    <div className={`w2 w2-cast${vToku ? '' : ' w2-pevna'}`}>
+      {vToku && (
+        <div className="top dark">
+          <div className="wrap">
+            <ul className="top-in">
+              <li>
+                <Ikona id="kalendar" />
+                {stavPrihlasek}
+              </li>
+              {hodnoceni && (
+                <li>
+                  <Ikona id="hvezda" />
+                  <span>
+                    {sazba(`${hodnoceni} z 5`)} <span className="top-skryj">na Google</span>
+                  </span>
+                </li>
+              )}
+              <li className="top-jen-d">
+                <Ikona id="misto" />
+                {sazba(mestaText)}
+              </li>
+            </ul>
+          </div>
+        </div>
+      )}
+      <header className="hdr">
+        <div className="wrap hdr-in">
+          <Link className="logo" href="/">
+            <Image src="/images/weeks-logo.png" alt="" width={364} height={245} priority />
             Weeks
-          </span>
-        </Link>
-
-        {/* Desktop Navigation */}
-        <div className="hidden lg:flex items-center gap-1">
-          {navItems.map((item) => (
-            <Link
-              key={item.name}
-              href={item.href}
-              className="relative px-4 py-2 font-medium text-ink/70 hover:text-ink transition-colors group"
+          </Link>
+          <nav className="nav" aria-label="Hlavní navigace">
+            {navItems.map((item) => (
+              <Link key={item.href} href={item.href} aria-current={aktivni(item.href)}>
+                {item.name}
+              </Link>
+            ))}
+            <a
+              href={UCEBNA}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Učebna, výuková platforma (otevře se v nové záložce)"
+              onClick={() => trackUcebnaClick('desktop')}
             >
-              {item.name}
-              <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-cta-500 group-hover:w-2/3 transition-all duration-300" />
-            </Link>
-          ))}
-          <a
-            href="https://iot.weeks.cz/"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Učebna — výuková platforma (otevře se v nové záložce)"
-            onClick={() => trackUcebnaClick('desktop')}
-            className="ml-2 flex items-center text-sm text-ink/50 hover:text-ink transition-colors"
-          >
-            Učebna
-            <ExternalLink className="w-3 h-3 ml-1" aria-hidden="true" />
-          </a>
-          {!bezCta && (
-            <Link
-              href={ctaHref}
-              className="ml-4 btn-primary group"
-              onClick={() => trackNavCTA('desktop')}
+              Učebna
+            </a>
+          </nav>
+          <div className="hdr-vpravo">
+            <a
+              className={`hdr-kontakt${online ? ' je-online' : ''}`}
+              href={tel}
+              aria-label={`Zavolat do Weeks: ${SITE.phone}`}
             >
-              {ctaLabel}
-              <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-            </Link>
-          )}
-        </div>
-
-        {/* Mobile: menu button */}
-        <div className="flex items-center lg:hidden">
-          <motion.button
-            type="button"
-            whileTap={{ scale: 0.9 }}
-            className={`shrink-0 p-2 rounded-md transition-colors ${
-              mobileMenuOpen ? 'hover:bg-paper/10' : 'hover:bg-ink/5'
-            }`}
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label={mobileMenuOpen ? 'Zavřít menu' : 'Otevřít menu'}
-            aria-expanded={mobileMenuOpen}
-            aria-controls="mobile-menu"
-          >
-            {mobileMenuOpen ? (
-              <X className="h-6 w-6 text-paper" aria-hidden="true" />
-            ) : (
-              <Menu className="h-6 w-6 text-ink" aria-hidden="true" />
-            )}
-          </motion.button>
-        </div>
-      </nav>
-
-      {/* Mobile Navigation — fullscreen ink overlay */}
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <motion.div
-            id="mobile-menu"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="lg:hidden fixed inset-0 bg-ink text-paper blueprint-grid-dark overflow-y-auto"
-          >
-            <div className="section-container flex min-h-full flex-col justify-between pt-28 pb-10">
-              <div className="space-y-2">
-                {navItems.map((item, index) => (
-                  <motion.div
-                    key={item.name}
-                    initial={{ opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.05 }}
-                  >
-                    <Link
-                      href={item.href}
-                      className="block py-2 font-display text-4xl font-bold tracking-tight text-paper hover:text-cta-400 transition-colors"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      {item.name}
-                    </Link>
-                  </motion.div>
-                ))}
-                <motion.div
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: navItems.length * 0.05 }}
-                  className="border-t border-paper/20 pt-4 mt-6"
-                >
-                  <a
-                    href="https://iot.weeks.cz/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="Učebna — výuková platforma (otevře se v nové záložce)"
-                    onClick={() => { trackUcebnaClick('mobile'); setMobileMenuOpen(false) }}
-                    className="inline-flex items-center py-2 text-paper/60 hover:text-paper transition-colors"
-                  >
-                    Učebna
-                    <ExternalLink className="w-4 h-4 ml-1.5" aria-hidden="true" />
-                  </a>
-                </motion.div>
-              </div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: (navItems.length + 1) * 0.05 }}
-                className="space-y-6"
+              <span className="hdr-tel" aria-hidden="true">
+                <Ikona id="tel" />
+              </span>
+              <span className="avatar">
+                <Image src="/images/tym-avatar.webp" alt="" width={40} height={40} />
+                {TELEFON_HODINY && <span className="avatar-stav" aria-hidden="true" />}
+              </span>
+              <span className="hdr-kontakt-text">
+                <b>{stavText}</b>
+                <span>{SITE.phone.replace(/ /g, ' ')}</span>
+              </span>
+            </a>
+            {!bezCta && (
+              <Link
+                className="btn btn-primary hdr-cta"
+                href="/tabory"
+                onClick={() => trackNavCTA('desktop')}
               >
-                <Link
-                  href={ctaHref}
-                  className="btn-primary w-full text-center justify-center"
-                  onClick={() => { trackNavCTA('mobile'); setMobileMenuOpen(false) }}
-                >
-                  {ctaLabel}
-                  <ChevronRight className="w-4 h-4" />
-                </Link>
-                <p className="mono-label-dark">
-                  WEEKS — IT TÁBORY
-                </p>
-              </motion.div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+                {ctaLabel}
+              </Link>
+            )}
+            <button
+              type="button"
+              className="menu-btn"
+              aria-expanded={menu}
+              aria-controls="menu"
+              aria-label={menu ? 'Zavřít menu' : 'Otevřít menu'}
+              onClick={() => setMenu((m) => !m)}
+            >
+              <Ikona id="menu" />
+            </button>
+          </div>
+        </div>
+        <div className="menu" id="menu" hidden={!menu}>
+          <nav className="wrap" aria-label="Navigace">
+            {navItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                aria-current={aktivni(item.href)}
+                onClick={() => setMenu(false)}
+              >
+                {item.name}
+              </Link>
+            ))}
+            <a
+              href={UCEBNA}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Učebna, výuková platforma (otevře se v nové záložce)"
+              onClick={() => {
+                trackUcebnaClick('mobile')
+                setMenu(false)
+              }}
+            >
+              Učebna
+            </a>
+            <Link
+              className="btn btn-primary btn-block"
+              href="/tabory"
+              onClick={() => {
+                trackNavCTA('mobile')
+                setMenu(false)
+              }}
+            >
+              {ctaLabel} <Ikona id="sipka" />
+            </Link>
+          </nav>
+        </div>
       </header>
-    </>
+    </div>
   )
 }
