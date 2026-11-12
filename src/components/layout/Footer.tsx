@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { Ikona, type IkonaId } from '@/components/w2/Ikona'
-import { sazba } from '@/components/w2/text'
+import { sazba, telefonSazba } from '@/components/w2/text'
 import { SITE, SOCIALNI_SITE } from '@/lib/site'
 import { openCookieSettings } from '@/lib/consent'
 
@@ -72,7 +72,7 @@ export function Footer() {
             </nav>
             <div className="ftr-kontakt">
               <a href={`tel:${SITE.phone.replace(/\s/g, '')}`}>
-                <Ikona id="tel" /> {SITE.phone.replace(/ /g, ' ')}
+                <Ikona id="tel" /> {telefonSazba(SITE.phone)}
               </a>
               <a href={`mailto:${SITE.email}`}>
                 <Ikona id="mail" /> {SITE.email}

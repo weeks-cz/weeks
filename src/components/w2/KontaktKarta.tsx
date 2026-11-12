@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import { Ikona } from './Ikona'
 import { useTelefonStav } from './telefon'
+import { telefonSazba } from './text'
 import { SITE } from '@/lib/site'
 
 /**
@@ -25,7 +26,7 @@ export function KontaktKarta() {
         <span>{text}</span>
       </div>
       <a href={`tel:${SITE.phone.replace(/\s/g, '')}`}>
-        <Ikona id="tel" /> {SITE.phone.replace(/ /g, ' ')}
+        <Ikona id="tel" /> {telefonSazba(SITE.phone)}
       </a>
       <a href={`mailto:${SITE.email}`}>
         <Ikona id="mail" /> {SITE.email}

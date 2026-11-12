@@ -61,7 +61,7 @@ export const TYM: ClenTymu[] = [
     id: 'lukas-kubik',
     jmeno: 'Lukáš Kubík',
     zakladatel: true,
-    naStarosti: 'Učebna a web',
+    naStarosti: 'Online učebna a web',
     obor: 'Vývoj · UX · design',
     ikona: 'code',
     email: 'lukas.kubik@weeks.cz',

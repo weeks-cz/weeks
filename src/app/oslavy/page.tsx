@@ -5,7 +5,7 @@ import { Footer } from '@/components/layout/Footer'
 import { OslavaPoptavka } from '@/components/oslavy/OslavaPoptavka'
 import { Ikona, type IkonaId } from '@/components/w2/Ikona'
 import { Mrizka } from '@/components/w2/Mrizka'
-import { sazba } from '@/components/w2/text'
+import { sazba, telefonSazba } from '@/components/w2/text'
 import { MISTA, POTREBUJEME, PRIKLADY, PRUBEHY, ZAJISTIME } from '@/lib/oslavy'
 import { SITE } from '@/lib/site'
 
@@ -55,7 +55,7 @@ export default function OslavyPage() {
               </nav>
               <h1>Oslava, ze které si děti něco odnesou</h1>
               <p className="zahlavi-perex">
-                Přivezeme 3D tiskárnu a elektroniku tam, kde oslava probíhá, a děti si u toho něco postaví.
+                {sazba('Přivezeme 3D tiskárnu a elektroniku tam, kde oslava probíhá, a děti si u toho něco postaví.')}
               </p>
               <ul className="vyhody">
                 <li>
@@ -97,8 +97,8 @@ export default function OslavyPage() {
         <section className="sec sec-papir bez-linky">
           <div className="wrap">
             <div className="sec-head">
-              <h2>Jak to může vypadat</h2>
-              <p>Nemáme pevné balíčky. Tohle jsou tři nápady, ze kterých se dá vyjít.</p>
+              <h2>Tři nápady na program</h2>
+              <p>Nemáme pevné balíčky. Tohle jsou příklady, ze kterých se dá vyjít.</p>
             </div>
             <div className="karty r-cyan">
               {PRIKLADY.map((p) => (
@@ -120,8 +120,8 @@ export default function OslavyPage() {
         <section className="sec sec-tint">
           <div className="wrap">
             <div className="sec-head">
-              <h2>Jak může oslava probíhat</h2>
-              <p>Dva modely odpoledne od začátku do konce. Délku, pořadí i náplň domluvíme podle vás.</p>
+              <h2>Jak může odpoledne proběhnout</h2>
+              <p>{sazba('Dva modely od začátku do konce. Délku, pořadí i náplň domluvíme podle vás.')}</p>
             </div>
             <div className="prubehy">
               {PRUBEHY.map((p) => (
@@ -171,7 +171,7 @@ export default function OslavyPage() {
                   </li>
                 ))}
               </ul>
-              <p className="pozn">Nic dalšího. Techniku, prodlužovačky i materiál vozíme s sebou.</p>
+              <p className="pozn">{sazba('Nic dalšího. Techniku, prodlužovačky i materiál vozíme s sebou.')}</p>
             </div>
           </div>
         </section>
@@ -182,7 +182,7 @@ export default function OslavyPage() {
           <div className="wrap">
             <div className="sec-head">
               <h2>Přijedeme za vámi</h2>
-              <p>Vlastní dílnu nemáme a nepotřebujeme ji.</p>
+              <p>{sazba('Vlastní dílnu nemáme a nepotřebujeme ji. Techniku i materiál vozíme s sebou.')}</p>
             </div>
             <div className="karty">
               {MISTA.map((m) => (
@@ -203,10 +203,10 @@ export default function OslavyPage() {
           <div className="wrap zaver-form">
             <div className="zaver-in">
               <h2>Domluvme oslavu</h2>
-              <p>Napište, kolik dětí přijde, kdy to má být a kde. Ozveme se s návrhem programu.</p>
+              <p>{sazba('Napište, kolik dětí přijde, kdy to má být a kde. Ozveme se s návrhem programu a cenou.')}</p>
               <div className="zaver-kontakt">
                 <a href={tel}>
-                  <Ikona id="tel" /> {SITE.phone.replace(/ /g, ' ')}
+                  <Ikona id="tel" /> {telefonSazba(SITE.phone)}
                 </a>
                 <a href={`mailto:${SITE.email}`}>
                   <Ikona id="mail" /> {SITE.email}

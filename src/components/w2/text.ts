@@ -30,6 +30,17 @@ export function sazba(text: string): string {
 }
 
 /**
+ * Telefonní číslo na jednom řádku: mezery mezi trojicemi se nesmí zlomit.
+ *
+ * Dřív to každé místo dělalo samo přes `replace(/ /g, ' ')` s nezlomitelnou
+ * mezerou napsanou přímo ve zdrojáku. Ta není v editoru vidět, takže se při
+ * kopírování čtyřikrát změnila v obyčejnou a oprava nedělala nic.
+ */
+export function telefonSazba(cislo: string): string {
+  return cislo.replace(/ /g, '\u00a0')
+}
+
+/**
  * „12. – 16. července 2027“ → „12.–16. července 2027“. Rozsah ve stejném
  * měsíci se píše bez mezer kolem pomlčky; přes dva měsíce mezery zůstávají.
  */

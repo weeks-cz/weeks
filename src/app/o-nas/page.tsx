@@ -6,7 +6,7 @@ import { Ikona, type IkonaId } from '@/components/w2/Ikona'
 import { MistoFoto, tridaMista } from '@/components/w2/MistoFoto'
 import { Mrizka } from '@/components/w2/Mrizka'
 import { Usp } from '@/components/w2/Usp'
-import { sazba } from '@/components/w2/text'
+import { sazba, telefonSazba } from '@/components/w2/text'
 import { getCity, getVenue, type VenueId } from '@/lib/cities'
 import { GOOGLE_PROFIL, maRecenze } from '@/lib/recenze'
 import { SITE } from '@/lib/site'
@@ -50,6 +50,9 @@ const HODNOTY: Array<{ ikona: IkonaId; nadpis: string; text: string }> = [
   },
 ]
 
+/** Nezlomitelná mezera: „3D tisk“ se nesmí rozdělit na dva řádky. */
+const NBSP = String.fromCharCode(160)
+
 // Tým bydlí v `src/lib/tym.ts` — tam se přidávají další lektoři.
 const IKONY_OBORU: Record<IkonaOboru, IkonaId> = {
   stan: 'stan',
@@ -82,8 +85,9 @@ export default function AboutPage() {
               </nav>
               <h1>Kdo za Weeks stojí</h1>
               <p className="zahlavi-perex">
-                Tři spolužáci, kteří učí děti techniku a staví weby. Program táborů si vymýšlíme sami, od tématu
-                po poslední den.
+                {sazba(
+                  'Tři spolužáci, kteří učí děti techniku a staví weby. Program táborů si vymýšlíme sami, od tématu po poslední den.'
+                )}
               </p>
               <ul className="vyhody">
                 <li>
@@ -138,13 +142,14 @@ export default function AboutPage() {
             <div className="text">
               <h2>Ze spolužáků vlastní tábor</h2>
               <p>
-                Kryštof, Lukáš a Štěpán se znají ze Smíchovské průmyslovky a dnes spolu studují aplikovanou
-                informatiku na VŠE. Kryštof se Štěpánem léta učí děti techniku jako lektoři, Lukáš staví weby
-                a aplikace.
+                {sazba(
+                  'Kryštof, Lukáš a Štěpán se znají ze Smíchovské průmyslovky a dnes spolu studují aplikovanou informatiku na VŠE. Kryštof se Štěpánem léta učí děti techniku jako lektoři, Lukáš staví weby a aplikace.'
+                )}
               </p>
               <p>
-                O IT toho víme dost a umíme to předat dál — tak vzniklo Weeks. Na co se zeptáte, řešíte přímo
-                s námi.
+                {sazba(
+                  'O IT toho víme dost a umíme to předat dál — tak vzniklo Weeks. Na co se zeptáte, řešíte přímo s námi.'
+                )}
               </p>
             </div>
             <div>
@@ -174,7 +179,9 @@ export default function AboutPage() {
           <div className="wrap">
             <div className="sec-head">
               <h2>Tým</h2>
-              <p>Na všem děláme společně, ale každý za něco odpovídá. Napište rovnou tomu, kdo to má na starosti.</p>
+              <p>
+                {sazba('Na všem děláme společně, ale každý za něco odpovídá. Napište rovnou tomu, kdo to má na starosti.')}
+              </p>
             </div>
             <ul className="lide">
               {TYM.map((clen) => (
@@ -188,7 +195,7 @@ export default function AboutPage() {
                     )}
                   </span>
                   <h3>{clen.jmeno}</h3>
-                  <p className="clen-role">{sazba(`${roleClena(clen)} · ${clen.obor}`)}</p>
+                  <p className="clen-role">{sazba(`${roleClena(clen)} · ${clen.obor}`).replace(/3D /g, '3D' + NBSP)}</p>
                   {/* Komu co napsat — kvůli tomu hlavně rodič nebo firma na
                       tuhle kartu přijde, proto stojí hned pod jménem. */}
                   {clen.naStarosti && (
@@ -206,7 +213,7 @@ export default function AboutPage() {
                       )}
                       {clen.telefon && (
                         <a href={`tel:${clen.telefon.replace(/\s/g, '')}`}>
-                          <Ikona id="tel" /> {clen.telefon.replace(/ /g, ' ')}
+                          <Ikona id="tel" /> {telefonSazba(clen.telefon)}
                         </a>
                       )}
                       {clen.linkedin && (
@@ -236,8 +243,9 @@ export default function AboutPage() {
               <div className="sec-head">
                 <h2>Kde tábory běží</h2>
                 <p>
-                  V létě 2026 jsme tábor pořádali ve FabLabu VARY&amp;TE v Karlových Varech a v létě 2027 se tam
-                  vracíme.
+                  {sazba(
+                    'V létě 2026 jsme tábor pořádali ve FabLabu VARY&TE v Karlových Varech a v létě 2027 se tam vracíme.'
+                  )}
                 </p>
               </div>
             </div>
@@ -274,7 +282,7 @@ export default function AboutPage() {
           <div className="wrap">
             <div className="zaver-in">
               <h2>Chcete se na něco zeptat?</h2>
-              <p>Na program, bezpečnost i přihlášku odpovídáme sami.</p>
+              <p>{sazba('Na program, bezpečnost i přihlášku odpovídáme sami.')}</p>
               <div className="zaver-akce">
                 <Link className="btn btn-dark btn-lg" href="/kontakt">
                   Napsat nebo zavolat <Ikona id="sipka" />

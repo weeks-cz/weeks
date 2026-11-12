@@ -31,7 +31,9 @@ export const SITE = {
  * zvedá, opravte je tady. `null` tečku vypne a hlavička řekne jen
  * „Zavolejte nám“.
  */
-export const TELEFON_HODINY: { dny: number[]; od: number; do: number } | null = {
+export type TelefonHodiny = { dny: number[]; od: number; do: number }
+
+export const TELEFON_HODINY: TelefonHodiny | null = {
   dny: [1, 2, 3, 4, 5],
   od: 9,
   do: 17,
@@ -43,15 +45,15 @@ const DNY_ZKRATKY = ['ne', 'po', 'út', 'st', 'čt', 'pá', 'so']
  * Hodiny telefonu slovy: „po–pá 9–17“. `null`, když hodiny nastavené nejsou —
  * stránka pak o dostupnosti na telefonu nepíše nic.
  */
-export function telefonHodinyText(): string | null {
-  if (!TELEFON_HODINY || TELEFON_HODINY.dny.length === 0) return null
-  const dny = [...TELEFON_HODINY.dny].sort((a, b) => a - b)
+export function telefonHodinyText(hodiny: TelefonHodiny | null = TELEFON_HODINY): string | null {
+  if (!hodiny || hodiny.dny.length === 0) return null
+  const dny = [...hodiny.dny].sort((a, b) => a - b)
   const souvisle = dny.every((d, i) => i === 0 || d === dny[i - 1] + 1)
   const dnyText =
     souvisle && dny.length > 1
       ? `${DNY_ZKRATKY[dny[0]]}–${DNY_ZKRATKY[dny[dny.length - 1]]}`
       : dny.map((d) => DNY_ZKRATKY[d]).join(', ')
-  return `${dnyText} ${TELEFON_HODINY.od}–${TELEFON_HODINY.do}`
+  return `${dnyText} ${hodiny.od}–${hodiny.do}`
 }
 
 /**

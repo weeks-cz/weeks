@@ -54,7 +54,7 @@ export function TurnusInterestForm({
     ? 'Chcete vědět o termínech mezi prvními?'
     : obsazeno
       ? 'Chcete vědět o volném místě?'
-      : 'Chcete vědět, až tenhle turnus otevřeme?'
+      : 'Chcete vědět, až tenhle termín otevřeme?'
   const program = turnus ? `${mesto} — zájem o turnus ${turnus.id}` : 'Zájem o příští sezónu'
   const subject = turnus ? `Zájem o turnus ${turnus.id} – ${mesto}` : 'Zájem o příští sezónu'
 
@@ -106,7 +106,7 @@ export function TurnusInterestForm({
             ? 'Jakmile budou termíny jasné'
             : obsazeno
               ? 'Jakmile se uvolní místo'
-              : 'Jakmile tenhle turnus otevřeme'}
+              : 'Jakmile tenhle termín otevřeme'}
           , ozveme se na {email}.
         </div>
       ) : (

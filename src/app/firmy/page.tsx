@@ -5,7 +5,7 @@ import { FirmyPoptavka } from '@/components/firmy/FirmyPoptavka'
 import { BreadcrumbSchema } from '@/components/seo/StructuredData'
 import { Ikona, type IkonaId } from '@/components/w2/Ikona'
 import { Mrizka } from '@/components/w2/Mrizka'
-import { sazba } from '@/components/w2/text'
+import { sazba, telefonSazba } from '@/components/w2/text'
 import { getNabidky, type NabidkaId } from '@/lib/firmy'
 import { SITE } from '@/lib/site'
 
@@ -78,8 +78,9 @@ export default function FirmyPage() {
               </nav>
               <h1>Weeks pro firmy</h1>
               <p className="zahlavi-perex">
-                O prázdninách pracujeme s dětmi na 3D tisku a elektronice s Arduinem. Stejné technologie
-                a lektory nabízíme i firmám.
+                {sazba(
+                  'O prázdninách pracujeme s dětmi na 3D tisku a elektronice s Arduinem. Stejné technologie a lektory nabízíme i firmám.'
+                )}
               </p>
             </div>
             <nav className="rozcesti" aria-label="Přejít na nabídku">
@@ -164,7 +165,7 @@ export default function FirmyPage() {
                       ))}
                     </ul>
                   </div>
-                  <Link className="btn btn-dark btn-block" href={`/firmy?typ=${nabidka.id}#poptavka`}>
+                  <Link className="btn btn-primary btn-block" href={`/firmy?typ=${nabidka.id}#poptavka`}>
                     {meta.poptat} <Ikona id="sipka" />
                   </Link>
                 </div>
@@ -183,8 +184,9 @@ export default function FirmyPage() {
             <div className="sec-head">
               <h2>Místo domluvíme</h2>
               <p>
-                Nemáme pro firmy jedno pevné místo. Vybíráme podle toho, kolik lidí přijde a co je potřeba
-                k programu.
+                {sazba(
+                  'Nemáme pro firmy jedno pevné místo. Vybíráme podle toho, kolik lidí přijde a co je potřeba k programu.'
+                )}
               </p>
             </div>
             <div className="karty dve">
@@ -193,14 +195,14 @@ export default function FirmyPage() {
                   <Ikona id="budova" />
                 </span>
                 <h3>U vás ve firmě</h3>
-                <p>Přivezeme vybavení i lektory. Potřebujeme místnost, stoly a elektřinu.</p>
+                <p>{sazba('Přivezeme vybavení i lektory. Potřebujeme místnost, stoly a elektřinu.')}</p>
               </article>
               <article className="karta">
                 <span className="karta-ik">
                   <Ikona id="misto" />
                 </span>
                 <h3>V pronajatém prostoru</h3>
-                <p>Dílnu nebo sál najdeme a zařídíme podle počtu lidí a programu.</p>
+                <p>{sazba('Dílnu nebo sál najdeme a zařídíme podle počtu lidí a programu.')}</p>
               </article>
             </div>
           </div>
@@ -211,10 +213,10 @@ export default function FirmyPage() {
           <div className="wrap zaver-form">
             <div className="zaver-in">
               <h2>Ozvěte se nám</h2>
-              <p>Vyberte, co vás zajímá, a napište pár vět. Podrobnosti pak doladíme spolu.</p>
+              <p>{sazba('Vyberte, co vás zajímá, a napište pár vět. Ozveme se s návrhem a cenou.')}</p>
               <div className="zaver-kontakt">
                 <a href={tel}>
-                  <Ikona id="tel" /> {SITE.phone.replace(/ /g, ' ')}
+                  <Ikona id="tel" /> {telefonSazba(SITE.phone)}
                 </a>
                 <a href={`mailto:${SITE.email}`}>
                   <Ikona id="mail" /> {SITE.email}

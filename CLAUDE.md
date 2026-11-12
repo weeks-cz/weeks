@@ -63,7 +63,7 @@ npm run lint         # Currently broken — Next 16 removed `next lint`; needs a
       Header.tsx            # Dark top bar with three facts from data + navigation, phone contact and CTA. `vToku` = in-flow (redesigned pages); default = fixed, for pages still on the old layout
       Footer.tsx            # Footer with links, contact, legal line
     /w2                     # Building blocks of the redesigned pages (markup uses the class names of `redesign.css`)
-      Ikona.tsx, text.ts, dny.ts   # Icon set + `Hvezdy`; `sazba()` non-breaking spaces for text built from data; day abbreviations and icons
+      Ikona.tsx, text.ts, dny.ts   # Icon set + `Hvezdy`; `sazba()` non-breaking spaces for text built from data, `telefonSazba()` for a phone number (never write the NBSP by hand — it is invisible and got lost four times); day abbreviations and icons
       TaborKarta.tsx         # Camp card for one city: photo, venue, price, term rows (homepage, /tabory, "Další tábory")
       TerminRadky.tsx        # Term rows with live capacity (client) — "Vybrat" / "Obsazeno" / "Dát vědět"
       TaboryUvodu.tsx        # Homepage camp cards + `EventSchema` from the same variable (guarded by `schema-turnusy.test.ts`)
@@ -73,6 +73,8 @@ npm run lint         # Currently broken — Next 16 removed `next lint`; needs a
       Faq.tsx                # `<details>` FAQ; script only adds the height animation and "show more"
       Usp.tsx, Pas.tsx       # Emerald "Co máte jisté" strip; scrolling topic strip (topics of running camps, year/cities/age from data)
       KontaktKarta.tsx, telefon.ts  # Contact card with the generated face ("Tým Weeks", never a name) + phone-availability hook
+      KontaktFormular.tsx    # `/kontakt` form (client island; the page itself is static) — posts to `/api/contact` without `typ`
+      MistoFoto.tsx          # Venue photo with its credit line (`venue.foto`) + `tridaMista()` for the grid shape — term, theme and /o-nas
       EmailZajem.tsx, KupLista.tsx, Mrizka.tsx, OdkazTerminy.tsx  # E-mail signup (`/api/waitlist`), sticky bottom bar, interactive grid, tracked link
     /tabory
       TemaDetail.tsx         # Whole /tabory/[tema] body (active + chystame variant)
@@ -80,7 +82,7 @@ npm run lint         # Currently broken — Next 16 removed `next lint`; needs a
       TerminDetail.tsx       # Whole /tabory/termin/[slug] body
       NakupniBox.tsx         # Buy box: price, deposit line, live spot state, term switcher, CTA — above the fold at 390 px
       TerminGalerie.tsx      # Photo strip on the term page
-      TurnusInterestForm.tsx # Non-binding "notify me" form for turnusy that aren't bookable yet (GDPR checkbox) — still the old look
+      TurnusInterestForm.tsx # Non-binding "notify me" form for turnusy that aren't bookable yet (GDPR checkbox)
       TurnusList.tsx, TurnusCard.tsx, SpotsLeft.tsx  # Old turnus grid (its `filtrMest` is still tested), live capacity hook `useTermCapacity`
     /firmy
       FirmyPoptavka.tsx      # `/firmy` inquiry form — one form, three modes via `?typ=`, posts to `/api/contact`
@@ -91,7 +93,6 @@ npm run lint         # Currently broken — Next 16 removed `next lint`; needs a
       schema-turnusy.ts     # `turnusyProSchema()` — which turnusy may appear in `EventSchema` and with what `Offer.availability` (InStock/SoldOut); a turnus missing date, price or venue never renders, at any status (+ `schema-turnusy.test.ts`)
     /ui
       CookieConsent.tsx     # GDPR cookie banner
-      MrizkaSekce.tsx       # Interactive grid of the old layout (pages not redesigned yet)
   /lib
     tabory.ts                # Tábor (theme) data + `getTabor`/`getAktivniTabory`/`zkusiSiTabora` + `DENNI_HARMONOGRAM` / `DEN_V_KOSTCE` — source of truth for theme, focus, weekly program and the daily schedule
     turnusy.ts               # Turnus data + `getTurnusy`/`getTurnus`/`isBookable` + `getTaboryTurnusu`/`getFocusTurnusu`/`getTurnusyByTabor` — source of truth for price/date/capacity
@@ -244,11 +245,12 @@ photo rather than borrowing the 3D-print shot.
   turnus (`plno`) still renders, as `Offer.availability: SoldOut` — it doesn't
   just disappear like a `chystame` turnus does. Both KV 2027 turnusy are
   `otevreno` and emit an `Event`; Praha (`chystame`) does not. `/tabory`,
-  `/tabory/[tema]`, `/tabory/termin/[slug]`, `/o-nas`, `/kontakt` and `/firmy`
-  all carry `BreadcrumbSchema` matching the visible breadcrumb trail (`/firmy`
-  has none on-page, so it matches the header link's name instead).
+  `/tabory/[tema]`, `/tabory/termin/[slug]`, `/o-nas`, `/kontakt`, `/oslavy`
+  and `/firmy` all carry `BreadcrumbSchema` matching the visible breadcrumb
+  trail (since wave 2 of the redesign every one of them shows it on-page).
   **Where the JSON-LD lives**: a server layout, but only when that layout has
-  no child routes. `/o-nas` and `/kontakt` render it from `layout.tsx`.
+  no child routes. `/o-nas`, `/kontakt` and `/oslavy` render it from
+  `layout.tsx`; `/firmy` from its `page.tsx`.
   Everything under `/tabory` renders it from its own `page.tsx`, because
   `/tabory/layout.tsx` wraps all three levels — putting a breadcrumb there
   would emit two conflicting `BreadcrumbList` blocks on every theme and term
@@ -348,18 +350,31 @@ FabLab dropped to a past reference, the e-shop is hidden from navigation and
 
 ### Redesign (November 2026)
 
-The homepage, `/tabory`, `/tabory/[tema]` and `/tabory/termin/[slug]`, plus the
-header and footer of every page, carry a new look. It was designed and approved
-as a clickable prototype outside this repo and then ported page by page.
+The homepage, `/tabory`, `/tabory/[tema]` and `/tabory/termin/[slug]` (wave 1),
+`/o-nas`, `/kontakt`, `/oslavy` and `/firmy` with their four forms (wave 2),
+plus the header and footer of every page, carry a new look. Wave 1 was designed
+and approved as a clickable prototype outside this repo and then ported page by
+page; wave 2 had no prototype — it was built here from the same stylesheet.
 
 - **Scope.** All of it lives in `src/app/redesign.css`, every selector prefixed
   with `.w2`. A redesigned page renders `<Header vToku />` and
   `<main id="obsah" className="w2">`; its markup uses the stylesheet's class
-  names, not Tailwind. The other pages (`/oslavy`, `/firmy`, `/o-nas`,
-  `/kontakt`, `/gdpr`, `/podminky`, e-shop, registration, payment) keep the
-  Tailwind layout and only get the new header (fixed, default) and footer.
+  names, not Tailwind. The other pages (`/gdpr`, `/podminky`, e-shop,
+  registration, payment, 404) keep the Tailwind layout and only get the new
+  header (fixed, default) and footer.
   **Edit `redesign.css` by hand** — it was generated from the prototype once
   and is the source of truth now.
+- **Wave 2 building blocks** sit in the block "Vlna 2" at the end of
+  `redesign.css`: `rozcesti` (link tiles on dark), `karty`/`karta`, `lide`/`clen`
+  (team), `prubehy` (a party hour by hour), `formular` (the form card) and
+  `zaver-form` (amber closing block with a form). A colour is applied through a
+  role class (`r-amber`, `r-cyan`, `r-emerald`, `r-indigo`), not written into
+  the component — the roles are the ones under "Design System".
+- **The four forms share one shape** (`formular` > `form` > `pole`, `souhlas`,
+  `hlaska`): contact, party inquiry, company inquiry and the interest form on a
+  `chystame` term. Consent is enforced by `required` on the checkbox, not by
+  disabling the button — a disabled button cannot say what is missing. What
+  each one sends is unchanged from the old layout.
 - **Colour roles and section rhythm from "Design System" still hold**; the new
   stylesheet implements them under its own class names (`dark`, `amber`,
   `sec-tint`, `bez-linky`…).
@@ -567,7 +582,7 @@ Each founder has `naStarosti` (what they answer for, shown on the card so a
 parent or company knows whom to write) — all three work on everything,
 summer camps above all, but:
 1. **Kryštof Ježdík** - letní tábory; organizace táborů (tent icon)
-2. **Lukáš Kubík** - učebna a web; vývoj · UX · design (code icon)
+2. **Lukáš Kubík** - online učebna a web; vývoj · UX · design (code icon)
 3. **Štěpán Jurenka** - spolupráce s firmami (B2B); 3D modelování, tisk, IoT (box icon)
 
 Bios, the "Jak Weeks vzniklo" story (SSPŠ → VŠE, lecturing) and LinkedIn links

@@ -4088,10 +4088,6 @@ html {
 .w2 .zahlavi-uzke {
   max-width: 760px;
 }
-.w2 .zahlavi-foto.ctverec img {
-  aspect-ratio: 1 / 1;
-  object-fit: cover;
-}
 
 /* ── Dlaždice-odkazy na tmavém (kontakt, rozcestí nabídek) ───────────── */
 .w2 .rozcesti {
@@ -4338,12 +4334,13 @@ html {
   margin-top: 14px;
   padding: 8px 12px;
   border-radius: 10px;
-  background: rgba(251, 191, 36, 0.12);
+  background: rgba(255, 255, 255, 0.07);
   font-size: var(--small);
+  color: var(--on-dark-muted);
 }
 .w2 .clen-starost b {
   font: 600 var(--body)/1.3 var(--f-head);
-  color: var(--amber-soft);
+  color: var(--on-dark);
 }
 .w2 .clen-popis {
   grid-column: 1 / -1;
@@ -4632,6 +4629,13 @@ html {
   opacity: 0.5;
   cursor: not-allowed;
   box-shadow: none;
+}
+/* Vypnuté tlačítko se po najetí nemění — jinak vypadá, že jde zmáčknout. */
+.w2 .btn-primary[disabled]:hover {
+  background: var(--amber);
+}
+.w2 .btn[disabled]:hover {
+  transform: none;
 }
 .w2 .hlaska {
   padding: 12px 14px;

@@ -99,7 +99,7 @@ const NABIDKY_MAP: Record<NabidkaId, B2BNabidka> = {
     perex:
       'Tábor stojí na vybavení, které se opotřebovává, a na materiálu, který se spotřebuje. Partnerství může mít podobu peněz, techniky i času vašich lidí — a rádi ho postavíme podle toho, co dává smysl vám.',
     jakToProbiha: [
-      'Ozvete se a řekneme si, co která strana čeká.',
+      'Ozvěte se a řekneme si, co která strana čeká.',
       'Domluvíme konkrétní podobu — od jednorázové podpory turnusu po dlouhodobou spolupráci.',
       'Co si na sebe vzájemně slíbíme, dáme písemně.',
     ],

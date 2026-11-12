@@ -48,12 +48,12 @@ export function KontaktFormular() {
   return (
     <div className="formular" id="formular">
       <h2>Napište nám</h2>
-      <p>Odpovíme co nejdříve na e-mail, který uvedete.</p>
+      <p>Odpovíme na e-mail, který uvedete.</p>
 
       <form className="form" onSubmit={handleSubmit}>
         <div className="pole-rada">
           <div className="pole">
-            <label htmlFor="kontakt-name">Vaše jméno</label>
+            <label htmlFor="kontakt-name">Jméno a příjmení</label>
             <input
               type="text"
               id="kontakt-name"
@@ -104,9 +104,9 @@ export function KontaktFormular() {
         </label>
 
         {submitStatus === 'success' && (
-          <p className="hlaska" role="alert">
+          <p className="hlaska" role="status">
             <b>Děkujeme za zprávu.</b>
-            Odpovíme vám co nejdříve.
+            Ozveme se vám e-mailem.
           </p>
         )}
         {submitStatus === 'error' && (

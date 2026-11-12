@@ -1,5 +1,13 @@
 import { describe, it, expect } from 'vitest'
-import { SITE, V_CENE, V_CENE_DLAZDICE, getSiteFaq, getVenuesSentence } from './site'
+import {
+  SITE,
+  TELEFON_HODINY,
+  V_CENE,
+  V_CENE_DLAZDICE,
+  getSiteFaq,
+  getVenuesSentence,
+  telefonHodinyText,
+} from './site'
 import type { Turnus } from './turnusy'
 
 /** Turnus s potvrzeným místem — v ostrých datech dnes žádný takový není. */
@@ -94,5 +102,32 @@ describe('V_CENE_DLAZDICE', () => {
     V_CENE_DLAZDICE.forEach((d, i) => {
       expect(d.text.split(' ')[0]).toBe(V_CENE[i].split(' ')[0])
     })
+  })
+})
+
+// Hodiny telefonu čte hlavička (tečka), karta u dotazů i /kontakt. Text musí
+// říkat totéž, co `TELEFON_HODINY`, jinak web slibuje dvoje hodiny.
+describe('telefonHodinyText', () => {
+  it('bez parametru čte `TELEFON_HODINY`', () => {
+    expect(telefonHodinyText()).toBe(telefonHodinyText(TELEFON_HODINY))
+  })
+
+  it('pracovní týden zkracuje na „po–pá“ a rozsah píše pomlčkou', () => {
+    expect(telefonHodinyText({ dny: [1, 2, 3, 4, 5], od: 9, do: 17 })).toBe('po–pá 9–17')
+  })
+
+  it('jeden den nebo dny, které na sebe nenavazují, vyjmenuje', () => {
+    expect(telefonHodinyText({ dny: [1], od: 9, do: 17 })).toBe('po 9–17')
+    expect(telefonHodinyText({ dny: [1, 3], od: 10, do: 14 })).toBe('po, st 10–14')
+  })
+
+  it('víkend přes půlnoc týdne nespojí do rozsahu, který neplatí', () => {
+    // Neděle je 0, takže pá–so–ne seřazené dají ne, pá, so. „ne–so“ by slibovalo celý týden.
+    expect(telefonHodinyText({ dny: [5, 6, 0], od: 9, do: 12 })).toBe('ne, pá, so 9–12')
+  })
+
+  it('bez hodin nebo bez dnů neříká nic', () => {
+    expect(telefonHodinyText(null)).toBeNull()
+    expect(telefonHodinyText({ dny: [], od: 9, do: 17 })).toBeNull()
   })
 })

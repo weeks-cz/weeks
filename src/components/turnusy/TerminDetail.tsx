@@ -6,7 +6,7 @@ import { KupLista } from '@/components/w2/KupLista'
 import { RecenzeSekce, recenzeNaKarty } from '@/components/w2/RecenzeKarty'
 import { TaborKarta } from '@/components/w2/TaborKarta'
 import { IKONA_DNE, ZKRATKY_DNU } from '@/components/w2/dny'
-import { rozsahTesne, sazba } from '@/components/w2/text'
+import { rozsahTesne, sazba, telefonSazba } from '@/components/w2/text'
 import { getCity, getVenue } from '@/lib/cities'
 import { formatDatumCs } from '@/lib/dates'
 import { GOOGLE_PROFIL, maRecenze } from '@/lib/recenze'
@@ -248,7 +248,7 @@ export function TerminDetail({ turnus }: { turnus: Turnus }) {
               )}
               <p className="box-pomoc-radek">
                 Máte k táboru otázku?{' '}
-                <a href={`tel:${SITE.phone.replace(/\s/g, '')}`}>{SITE.phone.replace(/ /g, ' ')}</a> ·{' '}
+                <a href={`tel:${SITE.phone.replace(/\s/g, '')}`}>{telefonSazba(SITE.phone)}</a> ·{' '}
                 <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
               </p>
             </div>

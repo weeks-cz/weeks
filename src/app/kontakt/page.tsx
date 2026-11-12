@@ -5,7 +5,7 @@ import { Faq } from '@/components/w2/Faq'
 import { Ikona, type IkonaId } from '@/components/w2/Ikona'
 import { KontaktFormular } from '@/components/w2/KontaktFormular'
 import { Mrizka } from '@/components/w2/Mrizka'
-import { sazba } from '@/components/w2/text'
+import { sazba, telefonSazba } from '@/components/w2/text'
 import { getVenue, type VenueId } from '@/lib/cities'
 import { PROVOZNI_DOBA, SITE, SOCIALNI_SITE, getSiteFaq, telefonHodinyText } from '@/lib/site'
 import { getTurnusy } from '@/lib/turnusy'
@@ -59,7 +59,7 @@ export default function ContactPage() {
               </nav>
               <h1>Napište nebo zavolejte</h1>
               <p className="zahlavi-perex">
-                Dotaz k táboru, přihlášce nebo platbě? Ozvěte se, odpovíme co nejdříve.
+                {sazba('Dotaz k táboru, přihlášce nebo platbě? Ozvěte se, rádi poradíme.')}
               </p>
             </div>
             <div className="rozcesti">
@@ -67,7 +67,7 @@ export default function ContactPage() {
                 <span className="rozcesti-ik">
                   <Ikona id="tel" />
                 </span>
-                <b>{SITE.phone.replace(/ /g, ' ')}</b>
+                <b>{telefonSazba(SITE.phone)}</b>
                 <span>{hodiny ? sazba(`Na telefonu jsme ${hodiny}`) : 'Zavolejte nám'}</span>
                 <Ikona id="sipka" />
               </a>
@@ -76,7 +76,7 @@ export default function ContactPage() {
                   <Ikona id="mail" />
                 </span>
                 <b>{SITE.email}</b>
-                <span>Odpovíme co nejdříve</span>
+                <span>Na dotazy k táboru i přihlášce</span>
                 <Ikona id="sipka" />
               </a>
               <a href="#formular">
@@ -99,7 +99,7 @@ export default function ContactPage() {
               {komu.length > 0 && (
                 <div className="bok-blok">
                   <h2 className="podnadpis">Komu psát rovnou</h2>
-                  <p>Na všem děláme společně, ale každý za něco odpovídá.</p>
+                  <p>{sazba('Na všem děláme společně, ale každý za něco odpovídá.')}</p>
                   <ul className="komu">
                     {komu.map((clen) => (
                       <li key={clen.id}>

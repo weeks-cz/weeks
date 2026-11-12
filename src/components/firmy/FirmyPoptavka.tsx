@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Ikona } from '@/components/w2/Ikona'
 import { getNabidky, isNabidkaId, NABIDKA_IDS, type NabidkaId } from '@/lib/firmy'
+import { telefonSazba } from '@/components/w2/text'
 import { SITE } from '@/lib/site'
 import { trackFirmyPoptavka } from '@/lib/analytics'
 
@@ -80,14 +81,14 @@ function FirmyPoptavkaForm({ zvolenyTyp }: { zvolenyTyp: NabidkaId }) {
   return (
     <div className="formular">
       <h3>Napište nám pár vět</h3>
-      <p>Ozveme se zpět a domluvíme podrobnosti.</p>
+      <p>Ozveme se s návrhem a cenou.</p>
 
       {submitted ? (
         <div className="hlaska" role="status" aria-live="polite">
           <b>Poptávku k nabídce „{vybranaNabidka.nadpis}“ jsme přijali, děkujeme.</b>
-          Ozveme se na {email}. Mezitím nás zastihnete i na{' '}
-          <a href={`mailto:${SITE.email}`}>{SITE.email}</a> nebo{' '}
-          <a href={`tel:${SITE.phone.replace(/\s/g, '')}`}>{SITE.phone.replace(/ /g, ' ')}</a>.
+          Ozveme se na {email}. Kdyby cokoli, napište na{' '}
+          <a href={`mailto:${SITE.email}`}>{SITE.email}</a> nebo zavolejte na{' '}
+          <a href={`tel:${SITE.phone.replace(/\s/g, '')}`}>{telefonSazba(SITE.phone)}</a>.
         </div>
       ) : (
         <form className="form" onSubmit={handleSubmit}>

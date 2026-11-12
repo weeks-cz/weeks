@@ -6,7 +6,7 @@ import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { Ikona } from '@/components/w2/Ikona'
 import { useTelefonStav } from '@/components/w2/telefon'
-import { sazba } from '@/components/w2/text'
+import { sazba, telefonSazba } from '@/components/w2/text'
 import { trackNavCTA, trackUcebnaClick } from '@/lib/analytics'
 import { getTurnusy, isBookable } from '@/lib/turnusy'
 import { getAllCities } from '@/lib/cities'
@@ -145,7 +145,7 @@ export function Header({
               </span>
               <span className="hdr-kontakt-text">
                 <b>{stavText}</b>
-                <span>{SITE.phone.replace(/ /g, ' ')}</span>
+                <span>{telefonSazba(SITE.phone)}</span>
               </span>
             </a>
             {!bezCta && (

@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { NABIDKY, getNabidky, getNabidka, type B2BNabidka } from './firmy'
+import { zdrojBezKomentaru } from './test-zdroj'
 
 /**
  * Všechna próza, kterou pojistky hlídají. Nadpis a `proKoho` v ní musí být —
@@ -45,6 +46,19 @@ describe('nabídky pro firmy', () => {
       const male = text.toLowerCase()
       for (const z of zakazane) {
         expect(male, `${jmeno} obsahuje „${z}"`).not.toContain(z)
+      }
+    }
+  })
+
+  it('ani texty psané přímo ve stránce a formuláři neslibují cenu ani nedoložitelné', () => {
+    // „reference“ tu mezi zakázanými není: stránka to slovo má v kódu, který
+    // reference vykreslí, až je někdo doplní do dat (a to hlídá test níž).
+    const zakazane = ['pojištěn', 'certifik', 'akredit', 'garantujeme']
+    for (const cesta of ['app/firmy/page.tsx', 'app/firmy/layout.tsx', 'components/firmy/FirmyPoptavka.tsx']) {
+      const text = zdrojBezKomentaru(cesta)
+      expect(text, cesta).not.toMatch(/\d+\s*(Kč|,-|CZK)/)
+      for (const z of zakazane) {
+        expect(text.toLowerCase(), `${cesta} obsahuje „${z}"`).not.toContain(z)
       }
     }
   })

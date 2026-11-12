@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { MISTA, POTREBUJEME, PRIKLADY, PRUBEHY, ZAJISTIME } from './oslavy'
+import { zdrojBezKomentaru } from './test-zdroj'
 
 /**
  * Stejné pojistky jako u `firmy.test.ts`, protože platí stejné pravidlo:
@@ -16,6 +17,11 @@ const HLIDANE_TEXTY: Array<{ jmeno: string; text: string }> = [
   })),
   { jmeno: 'zajistíme', text: ZAJISTIME.join(' ') },
   { jmeno: 'potřebujeme', text: POTREBUJEME.join(' ') },
+  // Nadpisy, perexy a hlášky napsané přímo ve stránce a formuláři — stejná
+  // pravidla platí i pro ně, viz `test-zdroj.ts`.
+  ...['app/oslavy/page.tsx', 'app/oslavy/layout.tsx', 'components/oslavy/OslavaPoptavka.tsx'].map(
+    (cesta) => ({ jmeno: cesta, text: zdrojBezKomentaru(cesta) })
+  ),
 ]
 
 describe('obsah stránky oslav', () => {
