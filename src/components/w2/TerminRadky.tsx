@@ -23,10 +23,13 @@ export function TerminRadky({
   turnusy,
   mesto,
   className = 'terminy',
+  textChystame = 'Termín upřesníme',
 }: {
   turnusy: Turnus[]
   mesto: CityId
   className?: string
+  /** Řádek termínu bez data. Karta bez místa konání říká „Termín a místo upřesníme“. */
+  textChystame?: string
 }) {
   const capacity = useTermCapacity(mesto)
   const radky = turnusy.filter((t) => t.status !== 'uzavreno')
@@ -38,7 +41,7 @@ export function TerminRadky({
         if (!isBookable(t) && t.status !== 'plno') {
           return (
             <Link className="termin" href={href} key={t.id}>
-              <span className="termin-datum">Termín upřesníme</span>
+              <span className="termin-datum">{textChystame}</span>
               <span className="btn-mini">Dát vědět</span>
             </Link>
           )

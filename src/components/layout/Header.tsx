@@ -5,12 +5,13 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { Ikona } from '@/components/w2/Ikona'
+import { useTelefonStav } from '@/components/w2/telefon'
 import { sazba } from '@/components/w2/text'
 import { trackNavCTA, trackUcebnaClick } from '@/lib/analytics'
 import { getTurnusy, isBookable } from '@/lib/turnusy'
 import { getAllCities } from '@/lib/cities'
 import { GOOGLE_PROFIL, maRecenze } from '@/lib/recenze'
-import { SITE, TELEFON_HODINY } from '@/lib/site'
+import { SITE } from '@/lib/site'
 
 // E-shop je z navigace dočasně schovaný — tým se zatím nerozhodl, jestli ho
 // chce mít veřejně. Není smazaný: route `/eshop` dál funguje, takže staré
@@ -25,16 +26,6 @@ const navItems = [
 ]
 
 const UCEBNA = 'https://ucebna.weeks.cz/'
-
-/** Je teď někdo u telefonu? Bez potvrzených hodin (`TELEFON_HODINY`) to web netvrdí. */
-function jeNaTelefonu(ted: Date): boolean {
-  if (!TELEFON_HODINY) return false
-  const den = ted.getDay()
-  const hodina = ted.getHours()
-  return (
-    TELEFON_HODINY.dny.includes(den) && hodina >= TELEFON_HODINY.od && hodina < TELEFON_HODINY.do
-  )
-}
 
 /**
  * Hlavička po redesignu (listopad 2026): tmavá lišta se třemi fakty, pod ní
@@ -54,7 +45,7 @@ export function Header({
   vToku = false,
 }: { bezCta?: boolean; vToku?: boolean } = {}) {
   const [menu, setMenu] = useState(false)
-  const [online, setOnline] = useState(false)
+  const { online, text: stavText, maHodiny } = useTelefonStav()
   const pathname = usePathname()
 
   // Stejný trojstav jako na /tabory a v úvodu — hlavní tlačítko nesmí
@@ -82,16 +73,6 @@ export function Header({
 
   const tel = `tel:${SITE.phone.replace(/\s/g, '')}`
 
-  // Stav telefonu se počítá až v prohlížeči — server nezná čas návštěvníka
-  // a stránky jsou statické, takže by ukazoval hodinu sestavení.
-  useEffect(() => {
-    if (!TELEFON_HODINY) return
-    const prepocitej = () => setOnline(jeNaTelefonu(new Date()))
-    prepocitej()
-    const casovac = setInterval(prepocitej, 60_000)
-    return () => clearInterval(casovac)
-  }, [])
-
   // Po přechodu na jinou stránku menu zavřít.
   useEffect(() => {
     setMenu(false)
@@ -100,11 +81,6 @@ export function Header({
   const aktivni = (href: string) =>
     pathname === href || pathname.startsWith(`${href}/`) ? ('page' as const) : undefined
 
-  const stavText = !TELEFON_HODINY
-    ? 'Zavolejte nám'
-    : online
-      ? 'Jsme na telefonu'
-      : 'Teď offline, ozveme se'
 
   return (
     <div className={`w2 w2-cast${vToku ? '' : ' w2-pevna'}`}>
@@ -165,7 +141,7 @@ export function Header({
               </span>
               <span className="avatar">
                 <Image src="/images/tym-avatar.webp" alt="" width={40} height={40} />
-                {TELEFON_HODINY && <span className="avatar-stav" aria-hidden="true" />}
+                {maHodiny && <span className="avatar-stav" aria-hidden="true" />}
               </span>
               <span className="hdr-kontakt-text">
                 <b>{stavText}</b>

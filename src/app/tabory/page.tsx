@@ -1,139 +1,108 @@
-'use client'
-
 import { Suspense } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useSearchParams } from 'next/navigation'
-import { motion, useReducedMotion } from 'framer-motion'
-import { ArrowRight, Calendar, Clock, Users, Utensils } from 'lucide-react'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { BreadcrumbSchema } from '@/components/seo/StructuredData'
-import { TaborCard } from '@/components/tabory/TaborCard'
-import { TurnusInterestForm } from '@/components/turnusy/TurnusInterestForm'
-import { filtrMest, platneMesto } from '@/components/turnusy/TurnusList'
+import { EmailZajem } from '@/components/w2/EmailZajem'
+import { Faq } from '@/components/w2/Faq'
+import { FiltrMest } from '@/components/w2/FiltrMest'
+import { Hvezdy, Ikona } from '@/components/w2/Ikona'
+import { KontaktKarta } from '@/components/w2/KontaktKarta'
+import { Mrizka } from '@/components/w2/Mrizka'
+import { TaborKarta } from '@/components/w2/TaborKarta'
+import { Usp } from '@/components/w2/Usp'
+import { sazba } from '@/components/w2/text'
 import { getCity, type CityId } from '@/lib/cities'
-import { PROVOZNI_DOBA, SITE } from '@/lib/site'
+import { GOOGLE_PROFIL, maRecenze } from '@/lib/recenze'
+import { PROVOZNI_DOBA, SITE, getSiteFaq } from '@/lib/site'
 import { getAktivniTabory, getChystaneTabory } from '@/lib/tabory'
-import { getCitiesWithTurnusy, getTurnusy, getTurnusyByCity } from '@/lib/turnusy'
+import { getCitiesWithTurnusy, getTurnusy, getTurnusyByCity, isBookable } from '@/lib/turnusy'
 
 /**
- * Výpis táborů — rozcestí, které vede rodiče v pořadí město → téma → termín.
+ * Výpis táborů (nový vzhled, listopad 2026) — rozcestí, které vede rodiče
+ * v pořadí město → téma → termín.
  *
  * Tohle pořadí není kosmetika: rodič nejdřív ví, kam dítě dokáže dovézt, pak
- * ho zajímá téma a teprve nakonec termín. Seznam je proto seskupený podle
- * města, uvnitř města stojí karta tématu a teprve v ní jsou termíny.
+ * ho zajímá téma a teprve nakonec termín. Výpis je proto seskupený podle
+ * města, uvnitř města stojí karta tábora a teprve v ní jsou termíny.
  *
- * Stránka je klientská kvůli `?mesto=` (`useSearchParams`) — stejně jako dřív
- * `/tabor`. Díky tomu zůstává staticky předgenerovaná a filtr běží v prohlížeči,
- * místo aby se stránka kvůli jednomu parametru vykreslovala na každý požadavek.
+ * Stránka je serverová a staticky předgenerovaná. Filtr `?mesto=` běží
+ * v prohlížeči (`FiltrMest`); v HTML jsou vždy všechna města.
  */
 
-/**
- * Společné pro všechny tábory. Věk bere z dat, ne z paměti. Kapacita tu
- * nestojí — patří ke konkrétnímu termínu, ne k táborům obecně.
- */
-function spolecneFakty() {
-  const turnusy = getTurnusy()
-  const vek = turnusy[0]?.ageRange.replace('-', '–') ?? '9–15'
-  return [
-    { icon: Calendar, label: '5 dní', sublabel: 'Po – Pá' },
-    { icon: Clock, label: PROVOZNI_DOBA.rozsah, sublabel: 'každý den' },
-    { icon: Users, label: `${vek} let`, sublabel: 'věk dětí' },
-    { icon: Utensils, label: 'Oběd', sublabel: 'v ceně' },
-  ]
+/** Dotazy, které pomáhají s výběrem tábora. Celý seznam je na úvodní stránce. */
+const DOTAZY_VYPISU = [
+  'Pro jak staré děti je tábor určený?',
+  'Musí dítě něco umět dopředu?',
+  'Kde tábory probíhají?',
+  'Je v ceně oběd?',
+  'Můžu zaplatit zálohu?',
+  'Jak velké jsou skupiny?',
+]
+
+/** „1 město“, „2 města“, „5 měst“. */
+function pocetMest(n: number): string {
+  if (n === 1) return '1 město'
+  if (n >= 2 && n <= 4) return `${n} města`
+  return `${n} měst`
 }
 
-function MestoSekce({ city, index }: { city: CityId; index: number }) {
-  const mesto = getCity(city)
-  const turnusyMesta = getTurnusyByCity(city)
-  const tabory = getAktivniTabory().filter((tabor) =>
-    turnusyMesta.some((t) => t.taborIds.includes(tabor.id))
-  )
+/** „v Praze a Karlových Varech“ ze seznamu měst. */
+function vMestech(mesta: CityId[]): string {
+  const tvary = mesta.map((m) => getCity(m).lokal)
+  if (tvary.length === 0) return ''
+  if (tvary.length === 1) return `v ${tvary[0]}`
+  return `v ${tvary.slice(0, -1).join(', ')} a ${tvary[tvary.length - 1]}`
+}
+
+function KartyMesta({ mesto }: { mesto: CityId }) {
+  const turnusyMesta = getTurnusyByCity(mesto)
+  const tabory = getAktivniTabory()
+    .filter((tabor) => turnusyMesta.some((t) => t.taborIds.includes(tabor.id)))
+    // Tábor, na který se dá přihlásit, stojí před táborem, který se chystá.
+    .sort(
+      (a, b) =>
+        Number(!turnusyMesta.some((t) => t.taborIds.includes(a.id) && isBookable(t))) -
+        Number(!turnusyMesta.some((t) => t.taborIds.includes(b.id) && isBookable(t)))
+    )
 
   return (
-    <div className={index > 0 ? 'mt-16 border-t border-ink/15 pt-16' : ''}>
-      <div className="mb-8 flex flex-wrap items-baseline justify-between gap-4">
-        <h2 className="heading-2 text-ink">{mesto.name}</h2>
-        <p className="mono-label">{mesto.region}</p>
-      </div>
-
-      {/* Místo konání je v kartě tábora u termínů, ne jako samostatná dlaždice
-          města: v Praze má každý tábor jiné místo a dlaždice pod oběma
-          kartami mátla (2026-11-10). Jediná karta v městě nezabírá půl
-          mřížky s prázdnem vedle sebe. */}
-      <div className={tabory.length > 1 ? 'grid gap-6 md:grid-cols-2' : 'grid max-w-2xl gap-6'}>
-        {tabory.map((tabor, i) => (
-          <TaborCard
-            key={tabor.id}
-            tabor={tabor}
-            mesto={city}
-            index={i}
-            turnusy={turnusyMesta.filter((t) => t.taborIds.includes(tabor.id))}
-          />
-        ))}
-      </div>
+    <div className={`tabory${tabory.length === 1 ? ' jedna' : ''}`}>
+      {tabory.map((tabor) => (
+        <TaborKarta
+          key={tabor.id}
+          tabor={tabor}
+          mesto={mesto}
+          stitekMesta={false}
+          turnusy={turnusyMesta.filter((t) => t.taborIds.includes(tabor.id))}
+        />
+      ))}
     </div>
   )
 }
 
-function VypisMest() {
-  const searchParams = useSearchParams()
-  const turnusy = getTurnusy()
-  const mesta = filtrMest(turnusy)
-  const vybrane = platneMesto(searchParams.get('mesto'), mesta)
-  const zobrazena = vybrane ? [vybrane] : getCitiesWithTurnusy()
-
-  return (
-    <>
-      {mesta.length > 0 && (
-        <nav className="mb-12 flex flex-wrap gap-2" aria-label="Filtr podle města">
-          <Link
-            href="/tabory"
-            scroll={false}
-            aria-current={vybrane === undefined ? 'true' : undefined}
-            className={`border px-4 py-2 font-mono text-xs uppercase tracking-wider transition-colors ${
-              vybrane === undefined
-                ? 'border-ink bg-ink text-paper'
-                : 'border-ink/25 text-ink-500 hover:border-ink hover:text-ink'
-            }`}
-          >
-            Všechna města
-          </Link>
-          {mesta.map((m) => (
-            <Link
-              key={m.id}
-              href={`/tabory?mesto=${m.id}`}
-              scroll={false}
-              aria-current={vybrane === m.id ? 'true' : undefined}
-              className={`border px-4 py-2 font-mono text-xs uppercase tracking-wider transition-colors ${
-                vybrane === m.id
-                  ? 'border-ink bg-ink text-paper'
-                  : 'border-ink/25 text-ink-500 hover:border-ink hover:text-ink'
-              }`}
-            >
-              {m.name} ({m.pocet})
-            </Link>
-          ))}
-        </nav>
-      )}
-
-      {zobrazena.map((city, i) => (
-        <MestoSekce key={city} city={city} index={i} />
-      ))}
-    </>
-  )
-}
-
 export default function TaboryPage() {
-  const reduced = useReducedMotion()
+  const turnusy = getTurnusy()
+  const prodejne = turnusy.filter(isBookable)
+  const mesta = getCitiesWithTurnusy()
   const chystane = getChystaneTabory()
-  const fakty = spolecneFakty()
 
-  // Nosný text animuje jen posun, ne viditelnost: kdyby se animace nespustila
-  // (zamrzlá záložka, chyba JS, pomalá hydratace), zůstal by nadpis prázdný.
-  const anim = (delay = 0) =>
-    reduced ? {} : { initial: { y: 16 }, animate: { y: 0 }, transition: { duration: 0.4, delay } }
+  // Rok do nadpisu jen tehdy, když je co prodávat — jinak by stránka slibovala
+  // léto, které ještě nemá jediný termín.
+  const rok = prodejne
+    .map((t) => t.start?.slice(0, 4))
+    .filter((r): r is string => Boolean(r))
+    .sort()[0]
+  const vek = (turnusy[0]?.ageRange ?? '9-15').replace('-', '–')
+  const ceny = [...new Set(prodejne.map((t) => t.priceKc).filter((c): c is number => c !== null))]
+  const cena = ceny.length > 0 ? `${ceny.length > 1 ? 'od ' : ''}${Math.min(...ceny).toLocaleString('cs-CZ')} Kč` : null
+
+  const bloky = mesta.map((id) => ({ id, name: getCity(id).name, obsah: <KartyMesta mesto={id} /> }))
+  const obecne = getSiteFaq()
+  const dotazy = DOTAZY_VYPISU.map((q) => obecne.find((d) => d.question === q)).filter(
+    (d): d is { question: string; answer: string } => Boolean(d)
+  )
 
   return (
     <>
@@ -143,165 +112,128 @@ export default function TaboryPage() {
           { name: 'Tábory', url: `${SITE.url}/tabory` },
         ]}
       />
-      <Header />
-      <main>
-        {/* Hero — tmavá kotva stránky */}
-        <section className="relative overflow-hidden bg-ink blueprint-grid-dark pb-20 pt-32 lg:pb-24">
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute -right-20 -top-24 select-none font-display text-[26rem] font-bold leading-none text-paper/[0.04]"
-          >
-            W
-          </div>
-
-          <div className="section-container relative z-10">
-            <nav aria-label="Drobečková navigace" className="mb-8 font-mono text-xs uppercase tracking-[0.2em]">
-              <Link href="/" className="text-paper/50 transition-colors hover:text-accent-300">
-                Domů
-              </Link>
-              <span className="mx-2 text-paper/30">/</span>
-              <span className="font-medium text-paper">Tábory</span>
-            </nav>
-
-            <div className="grid items-center gap-12 lg:grid-cols-[1fr_auto]">
-              <div>
-                <motion.h1 {...anim()} className="heading-1 mb-6 max-w-3xl text-paper">
-                  Letní příměstské tábory,
-                  <br />
-                  kde děti <span className="text-accent-400">něco postaví</span>
-                </motion.h1>
-
-                <motion.p {...anim(0.05)} className="mb-8 max-w-2xl text-lg leading-relaxed text-paper/70">
-                  Týden od pondělí do pátku, malá skupina a hotová věc, kterou si dítě
-                  odveze domů. Vyberte si město a téma — u každého tématu najdete jeho
-                  termíny.
-                </motion.p>
-
-                <motion.div {...anim(0.1)}>
-                  <a href="#mesta" className="btn-primary group">
-                    Vybrat tábor
-                    <ArrowRight
-                      className="h-4 w-4 transition-transform group-hover:translate-x-1"
-                      aria-hidden="true"
-                    />
+      <Header vToku />
+      <main id="obsah" className="w2">
+        {/* ── Záhlaví ──────────────────────────────────────────────────── */}
+        <section className="zahlavi dark mrizka">
+          <Mrizka />
+          <div className="wrap zahlavi-dva">
+            <div>
+              <nav className="drob" aria-label="Drobečková navigace">
+                <Link href="/">Domů</Link> <span aria-hidden="true">/</span> <span>Tábory</span>
+              </nav>
+              <h1>{sazba(`Letní příměstské tábory${rok ? ` ${rok}` : ''}`)}</h1>
+              <p className="zahlavi-perex">
+                {sazba(
+                  `Týdenní příměstské IT tábory ${vMestech(mesta)}. Od pondělí do pátku ${PROVOZNI_DOBA.rozsah} si děti postaví vlastní věc: výtisk z 3D tiskárny, zařízení s Arduinem nebo hru v Godotu.`
+                )}
+              </p>
+              <ul className="vyhody">
+                <li>
+                  <Ikona id="lide" />
+                  <b>{sazba(`${vek} let`)}</b>
+                  <span>i úplní začátečníci</span>
+                </li>
+                <li>
+                  <Ikona id="misto" />
+                  <b>{sazba(pocetMest(mesta.length))}</b>
+                  <span>{sazba(mesta.map((m) => getCity(m).name).join(' a '))}</span>
+                </li>
+                <li>
+                  <Ikona id="pribor" />
+                  <b>{cena ? sazba(cena) : 'S obědem'}</b>
+                  <span>{cena ? 'týden včetně oběda' : 'i pitím a materiálem'}</span>
+                </li>
+              </ul>
+              <div className="zahlavi-akce">
+                <a className="btn btn-primary btn-lg" href="#mesta">
+                  Vybrat tábor <Ikona id="dolu" />
+                </a>
+                {maRecenze() && GOOGLE_PROFIL.url && (
+                  <a className="hodn" href={GOOGLE_PROFIL.url} target="_blank" rel="noopener noreferrer">
+                    <Hvezdy />
+                    <b>{sazba(`${GOOGLE_PROFIL.prumer} z 5`)}</b>
+                    <span>na Google</span>
                   </a>
-                </motion.div>
+                )}
               </div>
-
-              {/* Dvojice fotek místo prázdné tmavé plochy. Amber rámeček za nimi je
-                  stejný motiv jako v heru úvodky, aby se obě tmavé kotvy četly
-                  jako jedna stránka. Fotky jsou z tábora a ukazují práci, ne
-                  prostor — prázdný prostor by sliboval místo konání, které u léta
-                  2027 domluvené není. */}
-              <motion.div {...anim(0.15)} className="relative mx-auto w-full max-w-md lg:mx-0 lg:w-[26rem]">
-                <div
-                  aria-hidden="true"
-                  className="absolute -bottom-4 -right-4 hidden h-full w-full rounded-md border-2 border-cta-400 sm:block"
-                />
-                <div className="relative grid grid-cols-2 gap-3">
-                  <Image
-                    src="/images/tabor/slicer-model.webp"
-                    alt="Děti u monitoru s modelem připraveným k tisku v PrusaSliceru"
-                    width={2000}
-                    height={2667}
-                    priority
-                    sizes="(min-width: 1024px) 13rem, 45vw"
-                    className="h-full w-full rounded-md border border-paper/20 object-cover"
-                  />
-                  <Image
-                    src="/images/tabor/microbit-editor.webp"
-                    alt="Chlapec skládá program pro micro:bit z barevných bloků"
-                    width={2000}
-                    height={2667}
-                    sizes="(min-width: 1024px) 13rem, 45vw"
-                    className="mt-8 h-full w-full rounded-md border border-paper/20 object-cover"
-                  />
-                </div>
-              </motion.div>
             </div>
+            <figure className="zahlavi-foto jen-desktop">
+              <Image
+                src="/images/tabor/skupina-terasa-2.webp"
+                alt="Děti s lektory na terase"
+                width={1600}
+                height={1200}
+                sizes="(min-width: 900px) 560px, 1px"
+                loading="lazy"
+              />
+            </figure>
           </div>
         </section>
 
-        {/* Společné fakty — amber pruh v roli „stav“, zároveň předěl pod herem */}
-        <section className="border-y border-ink bg-cta-400" aria-label="Co mají všechny tábory společné">
-          <div className="section-container">
-            <dl className="grid grid-cols-2 divide-ink/20 lg:grid-cols-4 lg:divide-x">
-              {fakty.map((fakt, i) => (
-                // V `<dl>` musí `<dt>` (název údaje) stát ve zdroji před svým
-                // `<dd>`. Vizuálně patří pod hodnotu, což řeší `order-last`.
-                <div
-                  key={fakt.sublabel}
-                  className={`flex flex-col px-4 py-5 ${i > 0 ? 'border-ink/20 max-lg:border-l-0' : ''}`}
-                >
-                  <fakt.icon className="mb-2 h-4 w-4 text-ink/70" aria-hidden="true" />
-                  <dt className="order-last mt-0.5 font-mono text-xs uppercase tracking-wider text-ink/60">
-                    {fakt.sublabel}
-                  </dt>
-                  <dd className="font-display text-sm font-semibold text-ink">{fakt.label}</dd>
+        {/* ── Města a jejich tábory ────────────────────────────────────── */}
+        <section className="sec bez-linky" id="mesta">
+          <div className="wrap">
+            {/* `FiltrMest` čte `?mesto=` z adresy, proto Suspense. Záložní
+                podoba je celý výpis bez filtru — stejný obsah, jen bez čipů. */}
+            <Suspense
+              fallback={bloky.map((b) => (
+                <div className="mesto" key={b.id}>
+                  <h2>{b.name}</h2>
+                  {b.obsah}
                 </div>
               ))}
-            </dl>
-          </div>
-        </section>
-
-        {/* Města a jejich témata */}
-        <section id="mesta" className="section-padding scroll-mt-24 bg-paper">
-          <div className="section-container">
-            <div className="mb-12 max-w-3xl">
-              <p className="mono-label mb-4">Kde tábory běží</p>
-              <h2 className="sr-only">Tábory podle měst</h2>
-              <p className="text-lg text-ink-500">
-                Město je vlastnost termínu, ne samostatná větev webu. Vyberte si
-                svoje a uvidíte jen to, co je dostupné u vás.
-              </p>
-            </div>
-
-            <Suspense
-              fallback={
-                <p className="text-ink-500" role="status">
-                  Načítáme nabídku…
-                </p>
-              }
             >
-              <VypisMest />
+              <FiltrMest mesta={bloky} />
             </Suspense>
+
+            <aside className="chystame">
+              <div className="chystame-text">
+                <p className="chystame-stav">Chystáme</p>
+                <h3>Další tábory a města</h3>
+                {chystane.length > 0 && (
+                  <ul>
+                    {chystane.map((t) => (
+                      <li key={t.id}>
+                        <span>
+                          <Link href={`/tabory/${t.id}`}>{t.shortName}</Link>
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+              <a className="btn btn-outline" href="#kontakt">
+                Dát vědět o nových termínech <Ikona id="sipka" />
+              </a>
+            </aside>
           </div>
         </section>
 
-        {/* Chystaná témata */}
-        {chystane.length > 0 && (
-          <section className="section-padding border-y border-ink/15 bg-paper-soft">
-            <div className="section-container">
-              <div className="mb-12 max-w-3xl">
-                <p className="mono-label mb-4">Co chystáme</p>
-                <h2 className="heading-2 mb-4 text-ink">
-                  Další <span className="text-accent-600">témata</span>
-                </h2>
-                <p className="text-lg text-ink-500">
-                  Tyhle tábory teprve stavíme — zatím nemají termín ani cenu. Když
-                  nám necháte kontakt, ozveme se vám, jakmile budou.
-                </p>
-              </div>
+        <Usp />
 
-              <div className="grid gap-6 md:grid-cols-3">
-                {chystane.map((tabor, i) => (
-                  <TaborCard key={tabor.id} tabor={tabor} index={i} />
-                ))}
-              </div>
+        {/* ── Dotazy ───────────────────────────────────────────────────── */}
+        <section className="sec sec-faq vz vz-faq" id="faq">
+          <div className="wrap bok">
+            <div className="sec-head">
+              <h2>Časté dotazy rodičů</h2>
+              <p>Nenašli jste odpověď? Napište nebo zavolejte, poradíme.</p>
             </div>
-          </section>
-        )}
-
-        {/* Sběr kontaktů */}
-        <section className="section-padding relative overflow-hidden border-y border-ink bg-cta-400">
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute -bottom-32 -left-10 select-none font-display text-[22rem] font-bold leading-none text-ink/[0.06]"
-          >
-            W
+            <Faq dotazy={dotazy} />
+            <div className="faq-kontakt">
+              <KontaktKarta />
+            </div>
           </div>
-          <div className="section-container relative z-10 max-w-3xl">
-            <TurnusInterestForm source="tabory" />
+        </section>
+
+        {/* ── Závěr: sběr e-mailu ──────────────────────────────────────── */}
+        <section className="zaver amber vz vz-zaver" id="kontakt">
+          <div className="wrap">
+            <div className="zaver-in">
+              <h2>Chcete vědět o termínech mezi prvními?</h2>
+              <p>Necháte nám e-mail a ozveme se, jakmile vypíšeme další termíny a města.</p>
+              <EmailZajem />
+            </div>
           </div>
         </section>
       </main>

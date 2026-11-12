@@ -257,14 +257,16 @@ export const TABORY: Tabor[] = [
           'Vlastní výtisky z 3D tiskárny a vlastní 3D model, který si navrhlo – klíčenku, stojánek, hračku nebo jiný předmět podle vlastního návrhu. Micro:bity a Arduina zůstávají v laboratoři, ale děti získají přístup k online prostředí, kde mohou pokračovat v programování doma.',
       },
     ],
+    // Výchozí fotka karty je detail práce bez místa — visí i u města, kde se
+    // termín teprve chystá a místo konání není známé.
     foto: {
-      src: '/images/tabor/dilna-ucebna.webp',
-      alt: 'Děti u počítačů a 3D tiskáren v dílně, mezi stoly prochází lektor',
+      src: '/images/tabor/arduino-ruce.webp',
+      alt: 'Ruce zapojují součástky do nepájivého pole u desky Arduino',
     },
     fotoMesta: {
       'karlovy-vary': {
-        src: '/images/tabor/fablab-ucebna.webp',
-        alt: 'Děti u počítačů modelují ve 3D, vzadu lektor s klukem u 3D tiskárny a holka si prohlíží vytištěný díl',
+        src: '/images/tabor/fablab-elektronika.webp',
+        alt: 'Lektor u obrazovky vysvětluje zapojení LED k Arduinu, děti u počítačů skládají program z bloků',
       },
     },
     program: [

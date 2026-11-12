@@ -12,6 +12,8 @@ export type VenueId = 'fablab-varyte' | 'zs-brectanova'
 export interface City {
   id: CityId
   name: string
+  /** 6. pád bez předložky („v Praze“, „v Karlových Varech“) — do vět o tom, kde tábory běží. */
+  lokal: string
   /** Kraj — jde do strukturovaných dat a do popisků pro vyhledávače. */
   region: string
   geo: { lat: number; lng: number }
@@ -56,12 +58,14 @@ const CITIES: Record<CityId, City> = {
   'praha': {
     id: 'praha',
     name: 'Praha',
+    lokal: 'Praze',
     region: 'Praha',
     geo: { lat: 50.0755, lng: 14.4378 },
   },
   'karlovy-vary': {
     id: 'karlovy-vary',
     name: 'Karlovy Vary',
+    lokal: 'Karlových Varech',
     region: 'Karlovarský kraj',
     geo: { lat: 50.2318, lng: 12.8714 },
   },

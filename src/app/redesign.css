@@ -4014,6 +4014,10 @@ html {
 .w2 .dark .chystame-stav {
   color: var(--ink);
 }
+/* Filtr měst schovává bloky atributem hidden; vlastní display by ho jinak přebil. */
+.w2 .mesto[hidden] {
+  display: none;
+}
 /* Hodnocení bez textu: jen hvězdy a jméno, s poznámkou, aby karta nepůsobila jako chyba. */
 .w2 .rec .rec-bez {
   color: var(--muted);
