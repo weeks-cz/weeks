@@ -47,11 +47,21 @@ export interface Venue {
   /** Starší fotky prostoru. Nový vzhled je nevykresluje — používá jednu fotku z pole `foto`. */
   photos?: string[]
   /**
-   * Jedna vlastní fotka místa pro stránku termínu a tématu. Jen snímek, na
-   * který máme právo (vlastní, nebo se souhlasem majitele) — bez ní se sekce
-   * vykreslí jen s textem a adresou.
+   * Jedna fotka místa pro stránku termínu a tématu. Bez ní se sekce vykreslí
+   * jen s textem a adresou.
+   *
+   * Cizí snímek musí mít `zdroj` (autor a odkaz) — vypíše se pod fotkou.
+   * `siroka` je panorama: stojí pod textem přes celou šířku, ne vedle něj.
    */
-  foto?: { src: string; alt: string; width: number; height: number }
+  foto?: {
+    src: string
+    alt: string
+    width: number
+    height: number
+    siroka?: boolean
+    popisek?: string
+    zdroj?: { nazev: string; url: string }
+  }
 }
 
 const CITIES: Record<CityId, City> = {
@@ -115,8 +125,18 @@ const VENUES: Record<VenueId, Venue> = {
       'Základní škola v pražských Záběhlicích. Tábor běží v její počítačové učebně.',
     vybaveni: 'Počítačová učebna, každé dítě má svůj počítač',
     mapQuery: 'B%C5%99e%C4%8D%C5%A5anov%C3%A1+2919%2F6+Praha+10',
-    // Bez `foto`: vlastní snímek učebny zatím nemáme a fotku z webu školy
-    // nesmíme použít bez jejího souhlasu.
+    // Panorama areálu je z webu školy (uvedeno pod fotkou). Na web šlo
+    // 12. 11. 2026 rozhodnutím Lukáše; písemný souhlas školy zatím nemáme —
+    // při domluvě pronájmu si ho vyžádat, nebo vyměnit za vlastní snímek učebny.
+    foto: {
+      src: '/images/tabor/zs-brectanova-areal.webp',
+      alt: 'Areál Základní školy Břečťanová z výšky: nízké pavilony mezi stromy, hřiště a běžecký ovál',
+      width: 2400,
+      height: 710,
+      siroka: true,
+      popisek: 'Areál školy s hřištěm.',
+      zdroj: { nazev: 'ZŠ Břečťanová', url: 'https://www.zsbrectanova.cz/' },
+    },
   },
 }
 

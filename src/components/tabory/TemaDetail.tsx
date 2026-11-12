@@ -2,6 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { TurnusInterestForm } from '@/components/turnusy/TurnusInterestForm'
 import { Faq } from '@/components/w2/Faq'
+import { MistoFoto, tridaMista } from '@/components/w2/MistoFoto'
 import { Hvezdy, Ikona } from '@/components/w2/Ikona'
 import { KupLista } from '@/components/w2/KupLista'
 import { Mrizka } from '@/components/w2/Mrizka'
@@ -334,7 +335,7 @@ function AktivniTema({ tabor }: { tabor: Tabor }) {
           {venues.map((venue, i) => (
             <div
               key={venue.id}
-              className={`wrap misto-grid${venue.foto ? '' : ' misto-samo'}`}
+              className={`wrap misto-grid${tridaMista(venue)}`}
               style={i > 0 ? { marginTop: 40 } : undefined}
             >
               <div>
@@ -359,16 +360,7 @@ function AktivniTema({ tabor }: { tabor: Tabor }) {
                     </p>
                   ))}
               </div>
-              {venue.foto && (
-                <Image
-                  src={venue.foto.src}
-                  alt={venue.foto.alt}
-                  width={venue.foto.width}
-                  height={venue.foto.height}
-                  sizes="(min-width: 900px) 560px, 100vw"
-                  loading="lazy"
-                />
-              )}
+              <MistoFoto venue={venue} />
             </div>
           ))}
         </section>

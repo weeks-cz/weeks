@@ -107,7 +107,17 @@ export interface Tabor {
    * Fotka do pásu „Celý den u počítače? Ne.“ (`FotoPas`). Bez ní výchozí
    * venkovní záběr se šablonou.
    */
-  fotoPas?: { src: string; alt: string }
+  fotoPas?: {
+    src: string
+    alt: string
+    /**
+     * Společná fotka: ukáže se celá (nikdo se neořízne) vedle textu, ne jako
+     * výřez přes celou šířku pásu.
+     */
+    celek?: boolean
+    width?: number
+    height?: number
+  }
   /**
    * „Výrobky z tábora“ na stránce tématu: fotky s popiskem. Jen věci, které
    * na táboře Weeks opravdu vznikly — tábor, který ještě neběžel, je nemá.
@@ -366,6 +376,9 @@ export const TABORY: Tabor[] = [
     fotoPas: {
       src: '/images/tabor/skupina-terasa-2.webp',
       alt: 'Děti z tábora Weeks s lektory na terase',
+      celek: true,
+      width: 1600,
+      height: 1200,
     },
     program: [
       {

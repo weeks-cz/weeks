@@ -3999,6 +3999,59 @@ html {
   overflow-y: auto;
 }
 /* Místo konání bez fotky (fotku školy bez souhlasu nedáváme): jeden sloupec na šířku čtení. */
+/* Fotopás se společnou fotkou: fotka se neořezává na výšku pásu, stojí celá
+   vpravo (na mobilu nahoře) a text vedle ní na tmavém podkladu. */
+.w2 .pas-foto.pas-foto-celek {
+  display: block;
+  min-height: 0;
+}
+.w2 .pas-foto-celek img {
+  position: static;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  object-position: 50% 78%;
+  transform: none;
+}
+.w2 .pas-foto-celek::after {
+  inset: auto 0 0;
+  height: 100%;
+  background: linear-gradient(to top, var(--ink) 0, var(--ink) 34%, rgba(12, 14, 26, 0) 52%);
+  pointer-events: none;
+}
+.w2 .pas-foto-celek .wrap {
+  padding-top: 4px;
+  padding-bottom: 28px;
+}
+@media (min-width: 900px) {
+  /* Výška roste se šířkou jen do té míry, aby fotka (4 : 3) v pravých 60 %
+     pásu nikdy nepřišla o kraje — jinak by na užším okně vypadl lektor. */
+  .w2 .pas-foto.pas-foto-celek {
+    display: flex;
+    min-height: min(540px, 44vw);
+  }
+  .w2 .pas-foto-celek img {
+    position: absolute;
+    inset: 0 0 0 auto;
+    width: 60%;
+    height: 100%;
+    aspect-ratio: auto;
+    object-position: 50% 80%;
+  }
+  .w2 .pas-foto-celek::after {
+    inset: 0;
+    height: auto;
+    background: linear-gradient(to right, var(--ink) 0, var(--ink) 40%, rgba(12, 14, 26, 0.45) 47%, rgba(12, 14, 26, 0) 56%);
+  }
+  .w2 .pas-foto-celek .wrap {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  .w2 .pas-foto-celek .wrap > * {
+    max-width: 440px;
+  }
+}
 .w2 .misto-grid.misto-samo {
   grid-template-columns: minmax(0, 1fr);
 }

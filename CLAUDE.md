@@ -378,8 +378,14 @@ as a clickable prototype outside this repo and then ported page by page.
     photos** (screens, one child replaced). Alt texts describe what is
     visible; nothing calls them a shot from the game camp. A child without
     consent must not appear on the site.
-  - A venue photo needs our own picture or the owner's consent
-    (`venue.foto`). ZŠ Břečťanová has none — the section renders text only.
+  - A venue photo (`venue.foto`) is our own picture, or someone else's with
+    its author credited under it (`foto.zdroj`). The ZŠ Břečťanová panorama
+    comes from the school's website and went live 2026-11-12 on Lukáš's
+    decision, credited but without the school's written consent — ask for it,
+    or swap in our own shot of the classroom.
+  - The photo band on a theme page has two shapes: a full-bleed crop
+    (default) and `fotoPas.celek` — a group photo shown whole next to the
+    text, so nobody at the edge (a lecturer, the kids in front) is cut off.
   - `TELEFON_HODINY` in `site.ts` (Mon–Fri 9–17, Prague time, set
     2026-11-12 on Lukáš's request) drives the green/grey dot and "Jsme na
     telefonu" / "Teď offline, ozveme se" in the header and on the contact

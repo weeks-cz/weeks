@@ -1,6 +1,6 @@
 import Link from 'next/link'
-import Image from 'next/image'
 import { Faq } from '@/components/w2/Faq'
+import { MistoFoto, tridaMista } from '@/components/w2/MistoFoto'
 import { Hvezdy, Ikona } from '@/components/w2/Ikona'
 import { KupLista } from '@/components/w2/KupLista'
 import { RecenzeSekce, recenzeNaKarty } from '@/components/w2/RecenzeKarty'
@@ -403,7 +403,7 @@ export function TerminDetail({ turnus }: { turnus: Turnus }) {
       {/* ── Místo konání ─────────────────────────────────────────────── */}
       {venue && (
         <section className="sec" id="misto">
-          <div className={`wrap misto-grid${venue.foto ? '' : ' misto-samo'}`}>
+          <div className={`wrap misto-grid${tridaMista(venue)}`}>
             <div>
               <h2>{sazba(venue.fullName)}</h2>
               <p style={{ marginTop: 8 }}>{sazba(venue.description)}</p>
@@ -417,15 +417,7 @@ export function TerminDetail({ turnus }: { turnus: Turnus }) {
                 <Ikona id="misto" /> {sazba(`${venue.street}, ${venue.city}`)}
               </a>
             </div>
-            {venue.foto && (
-              <Image
-                src={venue.foto.src}
-                alt={venue.foto.alt}
-                width={venue.foto.width}
-                height={venue.foto.height}
-                sizes="(min-width: 900px) 560px, 100vw"
-              />
-            )}
+            <MistoFoto venue={venue} />
           </div>
         </section>
       )}
