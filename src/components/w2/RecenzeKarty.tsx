@@ -23,18 +23,24 @@ export function RecenzeSekce({
   tabor,
   poznamka,
   bezLinky = true,
+  vodoznak = false,
 }: {
   tabor?: TaborId
   /** Věta nad kartami, když recenze nejsou z tohohle tábora (`tabor.poznamkaKRecenzim`). */
   poznamka?: string
   bezLinky?: boolean
+  /** Velké W v pozadí sekce — jen na úvodní stránce. */
+  vodoznak?: boolean
 }) {
   if (!maRecenze()) return null
   const karty = recenzeNaKarty(tabor)
   if (karty.length === 0) return null
 
   return (
-    <section className={`sec sec-tint${bezLinky ? ' bez-linky' : ''}`} id="recenze">
+    <section
+      className={`sec sec-tint${bezLinky ? ' bez-linky' : ''}${vodoznak ? ' vz vz-recenze' : ''}`}
+      id="recenze"
+    >
       <div className="wrap">
         <div className="sec-head rec-head">
           <h2>Co říkají rodiče</h2>
