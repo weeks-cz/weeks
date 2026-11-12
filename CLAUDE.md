@@ -380,8 +380,11 @@ as a clickable prototype outside this repo and then ported page by page.
     consent must not appear on the site.
   - A venue photo needs our own picture or the owner's consent
     (`venue.foto`). ZŠ Břečťanová has none — the section renders text only.
-  - `TELEFON_HODINY` in `site.ts` is `null` until the team confirms phone
-    hours; the header then says "Zavolejte nám" and draws no green dot.
+  - `TELEFON_HODINY` in `site.ts` (Mon–Fri 9–17, Prague time, set
+    2026-11-12 on Lukáš's request) drives the green/grey dot and "Jsme na
+    telefonu" / "Teď offline, ozveme se" in the header and on the contact
+    card. It is a promise to the visitor — change it when the hours change;
+    `null` hides the dot.
   - Texts built from data go through `sazba()`; short day names
     (`den.kratce`), day summaries and schedule tiles have length limits in
     `tabory.test.ts`, because cards standing side by side must keep the same
