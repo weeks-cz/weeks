@@ -2,9 +2,8 @@
 
 import { Suspense, useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { motion, useReducedMotion } from 'framer-motion'
-import { Briefcase, CheckCircle, Mail, Phone } from 'lucide-react'
 import Link from 'next/link'
+import { Ikona } from '@/components/w2/Ikona'
 import { getNabidky, isNabidkaId, NABIDKA_IDS, type NabidkaId } from '@/lib/firmy'
 import { SITE } from '@/lib/site'
 import { trackFirmyPoptavka } from '@/lib/analytics'
@@ -15,7 +14,6 @@ import { trackFirmyPoptavka } from '@/lib/analytics'
  * ní (s adresou) — viz komentář u `FirmyPoptavka` níž.
  */
 function FirmyPoptavkaForm({ zvolenyTyp }: { zvolenyTyp: NabidkaId }) {
-  const reduced = useReducedMotion()
   const nabidky = getNabidky()
 
   const [typ, setTyp] = useState<NabidkaId>(zvolenyTyp)
@@ -57,7 +55,7 @@ function FirmyPoptavkaForm({ zvolenyTyp }: { zvolenyTyp: NabidkaId }) {
           typ,
           // Souhlas posíláme jen jako doklad, že ho odesílatel udělil — server
           // se podle něj nerozhoduje. Že je zaškrtnutý, hlídá `required` na
-          // zaškrtávátku a vypnuté tlačítko níž.
+          // zaškrtávátku níž.
           gdprConsent,
         }),
       })
@@ -80,134 +78,94 @@ function FirmyPoptavkaForm({ zvolenyTyp }: { zvolenyTyp: NabidkaId }) {
   }
 
   return (
-    <motion.div
-      initial={reduced ? false : { y: 16 }}
-      whileInView={reduced ? undefined : { y: 0 }}
-      viewport={{ once: true }}
-      className="max-w-2xl mx-auto bg-paper rounded-md border border-ink/15 p-6 sm:p-8"
-    >
-      <div className="text-center">
-        <div className="w-14 h-14 rounded-md bg-ink/5 border border-ink/15 flex items-center justify-center mx-auto mb-5">
-          <Briefcase className="w-7 h-7 text-ink" aria-hidden="true" />
-        </div>
-        <h3 className="font-display text-xl sm:text-2xl font-bold text-ink mb-2">Máte zájem o spolupráci?</h3>
-        <p className="text-ink-500 leading-relaxed">Napište nám pár vět a ozveme se vám zpět.</p>
-      </div>
+    <div className="formular">
+      <h3>Napište nám pár vět</h3>
+      <p>Ozveme se zpět a domluvíme podrobnosti.</p>
 
       {submitted ? (
-        <div
-          role="status"
-          aria-live="polite"
-          className="mt-7 bg-trust-50 rounded-md p-6 text-center border border-trust-200"
-        >
-          <CheckCircle className="w-10 h-10 text-trust-500 mx-auto mb-3" aria-hidden="true" />
-          <p className="font-semibold text-trust-800 mb-1">
-            Poptávku k nabídce „{vybranaNabidka.nadpis}" jsme přijali, děkujeme.
-          </p>
-          <p className="text-sm text-trust-700">
-            Ozveme se na <span className="font-medium">{email}</span>. Mezitím nás můžete kontaktovat i sami na{' '}
-            <a href={`mailto:${SITE.email}`} className="font-medium underline">
-              {SITE.email}
-            </a>{' '}
-            nebo{' '}
-            <a href={`tel:${SITE.phone.replace(/\s/g, '')}`} className="font-medium underline">
-              {SITE.phone}
-            </a>
-            .
-          </p>
+        <div className="hlaska" role="status" aria-live="polite">
+          <b>Poptávku k nabídce „{vybranaNabidka.nadpis}“ jsme přijali, děkujeme.</b>
+          Ozveme se na {email}. Mezitím nás zastihnete i na{' '}
+          <a href={`mailto:${SITE.email}`}>{SITE.email}</a> nebo{' '}
+          <a href={`tel:${SITE.phone.replace(/\s/g, '')}`}>{SITE.phone.replace(/ /g, ' ')}</a>.
         </div>
       ) : (
-        <form onSubmit={handleSubmit} className="mt-7 space-y-4">
-          <fieldset>
-            <legend className="mono-label mb-2">Co vás zajímá</legend>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+        <form className="form" onSubmit={handleSubmit}>
+          <fieldset className="volba">
+            <legend>Co vás zajímá</legend>
+            <div className="volba-cipy">
               {nabidky.map((n) => (
-                <div key={n.id} className="relative">
+                <label key={n.id}>
                   <input
                     type="radio"
-                    id={`firmy-typ-${n.id}`}
                     name="firmy-typ"
                     value={n.id}
                     checked={typ === n.id}
                     onChange={() => setTyp(n.id)}
-                    className="peer sr-only"
                   />
-                  <label
-                    htmlFor={`firmy-typ-${n.id}`}
-                    className="block cursor-pointer rounded-md border border-ink/20 px-3 py-2.5 text-center text-sm font-medium text-ink-500 transition-colors peer-checked:border-ink peer-checked:bg-ink/5 peer-checked:text-ink peer-focus-visible:outline-none peer-focus-visible:ring-2 peer-focus-visible:ring-primary-500 peer-focus-visible:ring-offset-2"
-                  >
-                    {n.nadpis}
-                  </label>
-                </div>
+                  <span>{n.nadpis}</span>
+                </label>
               ))}
             </div>
           </fieldset>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div>
-              <label htmlFor="firmy-firma" className="block text-sm font-medium text-ink mb-1">
-                Firma
-              </label>
+          <div className="pole-rada">
+            <div className="pole">
+              <label htmlFor="firmy-firma">Firma</label>
               <input
                 id="firmy-firma"
                 type="text"
+                autoComplete="organization"
                 required
                 value={firma}
                 onChange={(e) => setFirma(e.target.value)}
                 placeholder="Název firmy"
-                className="w-full px-4 py-2.5 rounded-md bg-white border border-ink/20 text-ink placeholder:text-ink/40 text-sm focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink"
               />
             </div>
-            <div>
-              <label htmlFor="firmy-name" className="block text-sm font-medium text-ink mb-1">
-                Jméno a příjmení
-              </label>
+            <div className="pole">
+              <label htmlFor="firmy-name">Jméno a příjmení</label>
               <input
                 id="firmy-name"
                 type="text"
+                autoComplete="name"
                 required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Jan Novák"
-                className="w-full px-4 py-2.5 rounded-md bg-white border border-ink/20 text-ink placeholder:text-ink/40 text-sm focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink"
               />
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div>
-              <label htmlFor="firmy-email" className="block text-sm font-medium text-ink mb-1">
-                E-mail
-              </label>
+          <div className="pole-rada">
+            <div className="pole">
+              <label htmlFor="firmy-email">E-mail</label>
               <input
                 id="firmy-email"
                 type="email"
+                autoComplete="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="jan.novak@firma.cz"
-                className="w-full px-4 py-2.5 rounded-md bg-white border border-ink/20 text-ink placeholder:text-ink/40 text-sm focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink"
               />
             </div>
-            <div>
-              <label htmlFor="firmy-telefon" className="block text-sm font-medium text-ink mb-1">
-                Telefon <span className="text-ink/40 font-normal">(nepovinné)</span>
+            <div className="pole">
+              <label htmlFor="firmy-telefon">
+                Telefon <i>(nepovinné)</i>
               </label>
               <input
                 id="firmy-telefon"
                 type="tel"
+                autoComplete="tel"
                 value={telefon}
                 onChange={(e) => setTelefon(e.target.value)}
-                placeholder="+420 —"
-                className="w-full px-4 py-2.5 rounded-md bg-white border border-ink/20 text-ink placeholder:text-ink/40 text-sm focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink"
+                placeholder="+420"
               />
             </div>
           </div>
 
-          <div>
-            <label htmlFor="firmy-message" className="block text-sm font-medium text-ink mb-1">
-              Zpráva
-            </label>
+          <div className="pole">
+            <label htmlFor="firmy-message">Zpráva</label>
             <textarea
               id="firmy-message"
               required
@@ -215,65 +173,37 @@ function FirmyPoptavkaForm({ zvolenyTyp }: { zvolenyTyp: NabidkaId }) {
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               placeholder="Co byste od spolupráce čekali, kolik lidí a v jakém termínu."
-              className="w-full px-4 py-2.5 rounded-md bg-white border border-ink/20 text-ink placeholder:text-ink/40 text-sm focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink resize-none"
             />
           </div>
 
-          <div className="flex items-start gap-2 justify-center pt-1">
+          <label className="souhlas">
             <input
               type="checkbox"
-              id="firmy-gdpr"
               checked={gdprConsent}
               onChange={(e) => setGdprConsent(e.target.checked)}
               required
-              className="mt-0.5 w-4 h-4 rounded-sm border-ink/30 text-primary-600 focus:ring-primary-500"
             />
-            <label htmlFor="firmy-gdpr" className="text-xs text-ink-500 cursor-pointer text-left">
-              Souhlasím se zpracováním osobních údajů.{' '}
-              <Link href="/gdpr" className="underline hover:text-primary-600">
-                Více informací
-              </Link>
-            </label>
-          </div>
+            <span>
+              Souhlasím se zpracováním osobních údajů. <Link href="/gdpr">Více informací</Link>
+            </span>
+          </label>
 
           {/* `role="alert"` schválně: prvek vzniká až se svou hláškou a samotné
               `aria-live` na nově vloženém uzlu většina odečítačů neoznámí.
-              Stejný tvar jako `TurnusInterestForm`; `ContactSection` používá
-              `role="alert"` ze stejného důvodu. */}
+              Stejný tvar jako `TurnusInterestForm` a `OslavaPoptavka`. */}
           {error && (
-            <p role="alert" aria-live="assertive" className="text-sm text-red-600">
+            <p className="hlaska chyba" role="alert" aria-live="assertive">
               {error}
             </p>
           )}
 
-          <button
-            type="submit"
-            disabled={loading || !gdprConsent}
-            className="btn-primary w-full justify-center disabled:opacity-50 disabled:cursor-not-allowed"
-          >
+          <button type="submit" className="btn btn-primary btn-lg btn-block" disabled={loading}>
             {loading ? 'Odesílám…' : 'Odeslat poptávku'}
-            <Mail className="w-4 h-4" aria-hidden="true" />
+            <Ikona id="odeslat" />
           </button>
         </form>
       )}
-
-      <div className="mt-6 pt-5 border-t border-ink/15 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-6 text-sm">
-        <a
-          href={`mailto:${SITE.email}`}
-          className="inline-flex items-center gap-2 text-ink-500 hover:text-ink transition-colors"
-        >
-          <Mail className="w-4 h-4 text-ink/40" aria-hidden="true" />
-          {SITE.email}
-        </a>
-        <a
-          href={`tel:${SITE.phone.replace(/\s/g, '')}`}
-          className="inline-flex items-center gap-2 text-ink-500 hover:text-ink transition-colors"
-        >
-          <Phone className="w-4 h-4 text-ink/40" aria-hidden="true" />
-          {SITE.phone}
-        </a>
-      </div>
-    </motion.div>
+    </div>
   )
 }
 

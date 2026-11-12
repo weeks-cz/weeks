@@ -1,62 +1,63 @@
 import Link from 'next/link'
-import { ArrowLeft, ArrowRight, Building2, Check, Handshake, Users, Wrench } from 'lucide-react'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { FirmyPoptavka } from '@/components/firmy/FirmyPoptavka'
 import { BreadcrumbSchema } from '@/components/seo/StructuredData'
+import { Ikona, type IkonaId } from '@/components/w2/Ikona'
+import { Mrizka } from '@/components/w2/Mrizka'
+import { sazba } from '@/components/w2/text'
 import { getNabidky, type NabidkaId } from '@/lib/firmy'
 import { SITE } from '@/lib/site'
-import { MrizkaSekce } from '@/components/ui/MrizkaSekce'
 
-// Ikona, barva a popisek „poptat" tlačítka se k nabídce nedají odvodit z dat
-// (nadpisy v `src/lib/firmy.ts` jako „Dny pro děti zaměstnanců" se nedají
+// Ikona, barva, krátký popisek a text tlačítka se k nabídce nedají odvodit
+// z dat (nadpisy v `src/lib/firmy.ts` jako „Dny pro děti zaměstnanců" se nedají
 // bezpečně sklonit do tvaru „Poptat …"), proto jsou tady jako malá UI mapa
 // vedle datového zdroje, ne jako duplicitní zdroj obsahu.
 //
 // Barva drží roli z palety, ne náladu: den pro děti zaměstnanců je o klidu
-// rodičů (emerald), workshop o technologiích (cyan), partnerství o značce
-// samotné (indigo). Tři stejné indigo ikony vedle sebe nedávaly čtenáři
-// žádné vodítko, čím se nabídky liší.
-const NABIDKA_META: Record<
-  NabidkaId,
-  { icon: typeof Users; poptatLabel: string; ikona: string; ram: string; odrazka: string }
-> = {
+// rodičů (smaragd), workshop o technologiích (tyrkys), partnerství o značce
+// samotné (indigo).
+const NABIDKA_META: Record<NabidkaId, { ikona: IkonaId; role: string; kratce: string; poptat: string }> = {
   'deti-zamestnancu': {
-    icon: Users,
-    poptatLabel: 'Poptat den pro děti zaměstnanců',
-    ikona: 'text-trust-600',
-    ram: 'border-trust-600',
-    odrazka: 'text-trust-600',
+    ikona: 'lide',
+    role: 'r-emerald',
+    kratce: 'benefit pro rodiče ve firmě',
+    poptat: 'Poptat den pro děti zaměstnanců',
   },
   workshopy: {
-    icon: Wrench,
-    poptatLabel: 'Poptat workshop',
-    ikona: 'text-accent-600',
-    ram: 'border-accent-500',
-    odrazka: 'text-accent-600',
+    ikona: 'naradi',
+    role: 'r-cyan',
+    kratce: 'tým si něco postaví',
+    poptat: 'Poptat workshop',
   },
   partnerstvi: {
-    icon: Handshake,
-    poptatLabel: 'Poptat partnerství',
-    ikona: 'text-primary-600',
-    ram: 'border-primary-500',
-    odrazka: 'text-primary-600',
+    ikona: 'srdce',
+    role: 'r-indigo',
+    kratce: 'podpora technického vzdělávání',
+    poptat: 'Poptat partnerství',
   },
 }
 
+/** Podklad sekcí se střídá, aby tři nabídky pod sebou nesplynuly. */
+const PODKLADY = ['sec sec-papir bez-linky', 'sec sec-tint', 'sec']
+
 /**
- * Stránka `/firmy` — tři nabídky pro tři různé lidi (HR, office manager,
- * marketing/vedení), jeden sdílený poptávkový formulář dole. Zůstává
- * serverová a staticky předgenerovaná komponenta: `FirmyPoptavka` si
+ * Stránka `/firmy` (nový vzhled, vlna 2) — tři nabídky pro tři různé lidi
+ * (HR, office manager, marketing/vedení), jeden sdílený poptávkový formulář
+ * dole. Zůstává serverová a staticky předgenerovaná: `FirmyPoptavka` si
  * `?typ=` z adresy čte sama za vlastní hranicí `Suspense`, takže stránka
  * nesmí sahat na `searchParams` — jinak by ji Next kvůli tomu přepnul na
  * dynamické vykreslování (viz komentář u `FirmyPoptavka`).
+ *
+ * Weeks zatím neodbavil žádnou firemní zakázku: stránka neuvádí cenu,
+ * reference ani počet firem a o chybějících referencích mlčí (CLAUDE.md,
+ * „/firmy (phase 4)“).
  */
 export default function FirmyPage() {
   const nabidky = getNabidky()
+  const tel = `tel:${SITE.phone.replace(/\s/g, '')}`
 
-  // Stránka nemá vlastní viditelný drobečkový řádek (jen odkaz zpět), proto
-  // se název přebírá z hlavičky (`Header.tsx`) — „Pro firmy" je tam i tady.
+  // Název drobečku souhlasí s odkazem v hlavičce (`Header.tsx`): „Pro firmy“.
   const breadcrumbItems = [
     { name: 'Domů', url: SITE.url },
     { name: 'Pro firmy', url: `${SITE.url}/firmy` },
@@ -65,126 +66,106 @@ export default function FirmyPage() {
   return (
     <>
       <BreadcrumbSchema items={breadcrumbItems} />
-      <Header />
-      <main>
-        {/* Hero */}
-        <section className="relative bg-paper blueprint-grid border-b border-ink/15 overflow-hidden pt-32 pb-20">
-          <div className="section-container relative z-10">
-            <div className="max-w-3xl">
-              {/* Breadcrumb */}
-              <Link
-                href="/"
-                className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 mb-8 transition-colors"
-              >
-                <ArrowLeft className="w-4 h-4" aria-hidden="true" />
-                Zpět na hlavní stránku
-              </Link>
-
-              <p className="mono-label mb-6">Pro firmy</p>
-              <h1 className="heading-1 text-ink mb-6">Weeks pro firmy</h1>
-              <p className="text-lg md:text-xl text-ink-500 mb-10 max-w-2xl leading-relaxed">
-                O prázdninách pracujeme s dětmi na 3D tisku a elektronice s Arduinem.
-                Stejné technologie a lektory nabízíme i firmám — jako den pro děti
-                zaměstnanců, workshop pro tým nebo podpora tábora.
-              </p>
-              <nav aria-label="Přejít na nabídku" className="flex flex-col sm:flex-row gap-4">
-                {nabidky.map((n) => (
-                  <Link key={n.id} href={`#${n.id}`} className="btn-outline">
-                    {n.nadpis}
-                  </Link>
-                ))}
+      <Header vToku />
+      <main id="obsah" className="w2">
+        {/* ── Záhlaví ──────────────────────────────────────────────────── */}
+        <section className="zahlavi dark mrizka">
+          <Mrizka />
+          <div className="wrap">
+            <div className="zahlavi-uzke">
+              <nav className="drob" aria-label="Drobečková navigace">
+                <Link href="/">Domů</Link> <span aria-hidden="true">/</span> <span>Pro firmy</span>
               </nav>
+              <h1>Weeks pro firmy</h1>
+              <p className="zahlavi-perex">
+                O prázdninách pracujeme s dětmi na 3D tisku a elektronice s Arduinem. Stejné technologie
+                a lektory nabízíme i firmám.
+              </p>
             </div>
+            <nav className="rozcesti" aria-label="Přejít na nabídku">
+              {nabidky.map((n) => {
+                const meta = NABIDKA_META[n.id]
+                return (
+                  <a href={`#${n.id}`} key={n.id} className={meta.role}>
+                    <span className="rozcesti-ik">
+                      <Ikona id={meta.ikona} />
+                    </span>
+                    <b>{n.nadpis}</b>
+                    <span>{meta.kratce}</span>
+                    <Ikona id="dolu" />
+                  </a>
+                )
+              })}
+            </nav>
           </div>
         </section>
 
-        {/* Tři nabídky */}
+        {/* ── Tři nabídky ──────────────────────────────────────────────── */}
         {nabidky.map((nabidka, index) => {
           const meta = NABIDKA_META[nabidka.id]
-          const Icon = meta.icon
           return (
-            <section
-              key={nabidka.id}
-              id={nabidka.id}
-              className={`section-padding border-b border-ink/15 scroll-mt-24 ${
-                index % 2 === 0 ? 'bg-paper' : 'bg-paper-soft'
-              }`}
-            >
-              <div className="section-container">
-                <div className="max-w-3xl mb-10">
-                  <p className="mono-label mb-4" aria-hidden="true">
-                    {String(index + 1).padStart(2, '0')} / {String(nabidky.length).padStart(2, '0')}
-                  </p>
-                  <div className="flex items-center gap-4 mb-4">
-                    <div
-                      className={`w-12 h-12 bg-white border rounded-sm flex items-center justify-center flex-shrink-0 ${meta.ram}`}
-                      aria-hidden="true"
-                    >
-                      <Icon className={`w-6 h-6 ${meta.ikona}`} />
-                    </div>
-                    <h2 className="heading-2 text-ink">{nabidka.nadpis}</h2>
+            <section key={nabidka.id} id={nabidka.id} className={PODKLADY[index % PODKLADY.length]}>
+              <div className={`wrap dva nabidka ${meta.role}`}>
+                <div>
+                  <div className="nabidka-hl">
+                    <span className="karta-ik">
+                      <Ikona id={meta.ikona} />
+                    </span>
+                    <h2>{nabidka.nadpis}</h2>
                   </div>
-                  <p className="mono-label mb-4">{nabidka.proKoho}</p>
-                  <p className="text-lg text-ink-500 leading-relaxed">{nabidka.perex}</p>
-                </div>
-
-                <div className="max-w-3xl mb-10">
-                  <h3 className="mono-label mb-4">Jak to probíhá</h3>
-                  <ul className="space-y-2.5">
+                  <p className="nabidka-pro">{sazba(nabidka.proKoho)}</p>
+                  <p className="nabidka-perex">{sazba(nabidka.perex)}</p>
+                  <h3 className="podnadpis">Jak to probíhá</h3>
+                  <ul className="zaskrt role">
                     {nabidka.jakToProbiha.map((item) => (
-                      <li key={item} className="flex gap-3 text-ink-500">
-                        <Check className={`w-4 h-4 mt-1 flex-shrink-0 ${meta.odrazka}`} aria-hidden="true" />
-                        <span>{item}</span>
+                      <li key={item}>
+                        <Ikona id="ok" />
+                        <span>{sazba(item)}</span>
                       </li>
                     ))}
                   </ul>
+                  {/* Pole je dnes u všech tří nabídek prázdné (Weeks zatím
+                      neodbavil žádnou firemní zakázku) — vykreslí se, až
+                      v datech doopravdy něco bude. */}
+                  {nabidka.reference && nabidka.reference.length > 0 && (
+                    <>
+                      <h3 className="podnadpis">Reference</h3>
+                      <ul className="zaskrt role">
+                        {nabidka.reference.map((r) => (
+                          <li key={r}>
+                            <Ikona id="ok" />
+                            <span>{r}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </>
+                  )}
                 </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl">
-                  <div className="card-maker p-6">
-                    <h3 className="mono-label mb-4">Co zajistíme my</h3>
-                    <ul className="space-y-2.5">
+                <div className="nabidka-karta">
+                  <div>
+                    <h3>Co zajistíme my</h3>
+                    <ul className="zaskrt role">
                       {nabidka.zajistimeMy.map((item) => (
-                        <li key={item} className="flex gap-3 text-ink-500 text-sm">
-                          <Check className={`w-4 h-4 mt-0.5 flex-shrink-0 ${meta.odrazka}`} aria-hidden="true" />
-                          <span>{item}</span>
+                        <li key={item}>
+                          <Ikona id="ok" />
+                          <span>{sazba(item)}</span>
                         </li>
                       ))}
                     </ul>
                   </div>
-                  <div className="card-maker p-6">
-                    <h3 className="mono-label mb-4">Co zajistíte vy</h3>
-                    <ul className="space-y-2.5">
+                  <div>
+                    <h3>Co zajistíte vy</h3>
+                    <ul className="zaskrt role">
                       {nabidka.zajistiteVy.map((item) => (
-                        <li key={item} className="flex gap-3 text-ink-500 text-sm">
-                          <Check className={`w-4 h-4 mt-0.5 flex-shrink-0 ${meta.odrazka}`} aria-hidden="true" />
-                          <span>{item}</span>
+                        <li key={item}>
+                          <Ikona id="ok" />
+                          <span>{sazba(item)}</span>
                         </li>
                       ))}
                     </ul>
                   </div>
-                </div>
-
-                {/* Pole je dnes u všech tří nabídek prázdné (Weeks zatím
-                    neodbavil žádnou firemní zakázku) — vykresluje se jen
-                    tehdy, až v datech doopravdy něco bude. */}
-                {nabidka.reference && nabidka.reference.length > 0 && (
-                  <div className="max-w-3xl mt-10">
-                    <h3 className="mono-label mb-4">Reference</h3>
-                    <ul className="space-y-2">
-                      {nabidka.reference.map((r) => (
-                        <li key={r} className="text-ink-500">
-                          {r}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-
-                <div className="mt-10">
-                  <Link href={`/firmy?typ=${nabidka.id}#poptavka`} className="btn-secondary group">
-                    {meta.poptatLabel}
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
+                  <Link className="btn btn-dark btn-block" href={`/firmy?typ=${nabidka.id}#poptavka`}>
+                    {meta.poptat} <Ikona id="sipka" />
                   </Link>
                 </div>
               </div>
@@ -192,69 +173,59 @@ export default function FirmyPage() {
           )
         })}
 
-        {/* Kde to proběhne — tmavá kotva stránky.
-            Nahrazuje rušenou sekci „Kde a s kým", která tvrdila pevné místo
-            konání. U firem se místo domlouvá případ od případu a FabLab
-            VARY&TE je jedna z možností, ne dané místo — partnerství s ním
-            podepsané není a tenhle repozitář je veřejný. */}
-        <MrizkaSekce odstin="tmavy" className="section-padding relative overflow-hidden border-y border-ink bg-ink blueprint-grid-dark">
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute -right-16 -top-20 select-none font-display text-[22rem] font-bold leading-none text-paper/[0.04]"
-          >
-            W
-          </div>
-          <div className="section-container relative z-10">
-            <div className="max-w-3xl mb-10">
-              <p className="mono-label-dark mb-4 text-accent-300">Kde to proběhne</p>
-              <h2 className="heading-2 text-paper mb-4">
-                Místo <span className="text-accent-400">domluvíme</span>
-              </h2>
-              <p className="text-lg text-paper/70">
-                Nemáme pro firmy jedno pevné místo. Vybíráme podle toho, kolik
-                lidí přijde a co je potřeba k programu.
+        {/* ── Kde to proběhne ──────────────────────────────────────────── */}
+        {/* Dvě možnosti, ne tři. „V našem prostoru“ tu stávalo neprávem —
+            Weeks vlastní dílnu nemá — a „v partnerském prostoru“ odkazovalo
+            na FabLab VARY&TE, se kterým partnerství podepsané není. */}
+        <section className="sec dark mrizka bez-linky">
+          <Mrizka />
+          <div className="wrap">
+            <div className="sec-head">
+              <h2>Místo domluvíme</h2>
+              <p>
+                Nemáme pro firmy jedno pevné místo. Vybíráme podle toho, kolik lidí přijde a co je potřeba
+                k programu.
               </p>
             </div>
-
-            {/* Dvě možnosti, ne tři. "V našem prostoru" tu stávalo neprávem —
-                Weeks vlastní dílnu nemá — a "v partnerském prostoru" odkazovalo
-                na FabLab VARY&TE, se kterým partnerství podepsané není. */}
-            <div className="grid gap-6 md:grid-cols-2">
-              {[
-                {
-                  icon: Building2,
-                  title: 'U vás ve firmě',
-                  text: 'Přivezeme vybavení i lektory. Potřebujeme místnost, stoly a elektřinu.',
-                },
-                {
-                  icon: Wrench,
-                  title: 'V pronajatém prostoru',
-                  text: 'Dílnu nebo sál najdeme a zařídíme podle počtu lidí a programu.',
-                },
-              ].map((m) => (
-                <div key={m.title} className="rounded-md border border-paper/15 bg-paper/[0.03] p-6">
-                  <m.icon className="mb-4 h-7 w-7 text-accent-400" aria-hidden="true" />
-                  <h3 className="mb-2 font-display text-lg font-semibold text-paper">{m.title}</h3>
-                  <p className="text-paper/70">{m.text}</p>
-                </div>
-              ))}
+            <div className="karty dve">
+              <article className="karta">
+                <span className="karta-ik">
+                  <Ikona id="budova" />
+                </span>
+                <h3>U vás ve firmě</h3>
+                <p>Přivezeme vybavení i lektory. Potřebujeme místnost, stoly a elektřinu.</p>
+              </article>
+              <article className="karta">
+                <span className="karta-ik">
+                  <Ikona id="misto" />
+                </span>
+                <h3>V pronajatém prostoru</h3>
+                <p>Dílnu nebo sál najdeme a zařídíme podle počtu lidí a programu.</p>
+              </article>
             </div>
           </div>
-        </MrizkaSekce>
+        </section>
 
-        {/* Poptávka */}
-        <section id="poptavka" className="section-padding bg-paper-soft border-t border-ink/15 scroll-mt-24">
-          <div className="section-container">
-            <div className="max-w-2xl mx-auto text-center mb-10">
-              <p className="mono-label mb-4">Poptávka</p>
-              <h2 className="heading-2 text-ink">Ozvěte se nám</h2>
+        {/* ── Poptávka ─────────────────────────────────────────────────── */}
+        <section className="zaver amber vz vz-zaver" id="poptavka">
+          <div className="wrap zaver-form">
+            <div className="zaver-in">
+              <h2>Ozvěte se nám</h2>
+              <p>Vyberte, co vás zajímá, a napište pár vět. Podrobnosti pak doladíme spolu.</p>
+              <div className="zaver-kontakt">
+                <a href={tel}>
+                  <Ikona id="tel" /> {SITE.phone.replace(/ /g, ' ')}
+                </a>
+                <a href={`mailto:${SITE.email}`}>
+                  <Ikona id="mail" /> {SITE.email}
+                </a>
+              </div>
+              {/* Identifikace provozovatele — drobně, ať nepřebíjí formulář. */}
+              <p className="zaver-pravni">
+                {SITE.legalName}, IČO {SITE.ico}
+              </p>
             </div>
             <FirmyPoptavka />
-            {/* Identifikace provozovatele — drobně, ať nepřebíjí formulář nad ní
-                (stejný vzor jako na `/kontakt`, viz `src/app/kontakt/page.tsx`). */}
-            <p className="font-mono text-xs text-ink-500 text-center mt-8">
-              {SITE.legalName}, IČO {SITE.ico}
-            </p>
           </div>
         </section>
       </main>

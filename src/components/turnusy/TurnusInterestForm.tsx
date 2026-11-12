@@ -1,11 +1,10 @@
 'use client'
 
 import { useState } from 'react'
-import { motion, useReducedMotion } from 'framer-motion'
-import { CalendarCheck, CheckCircle, Mail, Phone } from 'lucide-react'
 import Link from 'next/link'
 import type { Turnus } from '@/lib/turnusy'
 import { getCity } from '@/lib/cities'
+import { Ikona } from '@/components/w2/Ikona'
 import { SITE } from '@/lib/site'
 import { trackSeasonInterest } from '@/lib/analytics'
 
@@ -38,7 +37,6 @@ export function TurnusInterestForm({
   /** Živá kapacita je vyčerpaná, i když data turnusu ještě hlásí `otevreno`. */
   vyprodano?: boolean
 }) {
-  const reduced = useReducedMotion()
 
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -95,133 +93,77 @@ export function TurnusInterestForm({
   }
 
   return (
-    <motion.div
-      initial={reduced ? false : { y: 16 }}
-      whileInView={reduced ? undefined : { y: 0 }}
-      viewport={{ once: true }}
-      id={id}
-      className="max-w-2xl mx-auto scroll-mt-24 bg-paper rounded-md border border-ink/15 p-6 sm:p-8"
-    >
-      <div className="text-center">
-        <div className="w-14 h-14 rounded-md bg-ink/5 border border-ink/15 flex items-center justify-center mx-auto mb-5">
-          <CalendarCheck className="w-7 h-7 text-ink" aria-hidden="true" />
-        </div>
-        {/* `h2`, ne `h3`: na stránce turnusu stojí tenhle formulář rovnou pod
-            `h1` a úroveň by přeskakovala. Velikost drží třídy, ne úroveň. */}
-        <h2 className="font-display text-xl sm:text-2xl font-bold text-ink mb-2">{heading}</h2>
-        {mesto ? (
-          <p className="mono-label">{mesto}</p>
-        ) : (
-          <p className="text-ink-500 leading-relaxed">
-            Necháte nám kontakt a ozveme se, jakmile budou termíny jasné.
-          </p>
-        )}
-      </div>
+    <div id={id} className="formular stred">
+      {/* `h2`, ne `h3`: na stránce termínu stojí tenhle formulář rovnou pod
+          `h1` a úroveň by přeskakovala. Velikost drží třída `formular`. */}
+      <h2>{heading}</h2>
+      <p>{mesto ?? 'Necháte nám kontakt a ozveme se, jakmile budou termíny jasné.'}</p>
 
       {submitted ? (
-        <div
-          role="status"
-          aria-live="polite"
-          className="mt-7 bg-trust-50 rounded-md p-6 text-center border border-trust-200"
-        >
-          <CheckCircle className="w-10 h-10 text-trust-500 mx-auto mb-3" aria-hidden="true" />
-          <p className="font-semibold text-trust-800 mb-1">Máme to, děkujeme!</p>
-          <p className="text-sm text-trust-700">
-            {!turnus
-              ? 'Jakmile budou termíny jasné'
-              : obsazeno
-                ? 'Jakmile se uvolní místo'
-                : 'Jakmile tenhle turnus otevřeme'}, ozveme se na{' '}
-            <span className="font-medium">{email}</span>.
-          </p>
+        <div className="hlaska" role="status" aria-live="polite">
+          <b>Máme to, děkujeme!</b>
+          {!turnus
+            ? 'Jakmile budou termíny jasné'
+            : obsazeno
+              ? 'Jakmile se uvolní místo'
+              : 'Jakmile tenhle turnus otevřeme'}
+          , ozveme se na {email}.
         </div>
       ) : (
-        <form onSubmit={handleSubmit} className="mt-7 space-y-3">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div>
-              <label htmlFor="turnus-interest-name" className="block text-sm font-medium text-ink mb-1">
-                Jméno rodiče
-              </label>
+        <form className="form" onSubmit={handleSubmit}>
+          <div className="pole-rada">
+            <div className="pole">
+              <label htmlFor="turnus-interest-name">Jméno rodiče</label>
               <input
                 id="turnus-interest-name"
                 type="text"
+                autoComplete="name"
                 required
                 value={name}
-                onChange={e => setName(e.target.value)}
+                onChange={(e) => setName(e.target.value)}
                 placeholder="Jan Novák"
-                className="w-full px-4 py-2.5 rounded-md bg-white border border-ink/20 text-ink placeholder:text-ink/40 text-sm focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink"
               />
             </div>
-            <div>
-              <label htmlFor="turnus-interest-email" className="block text-sm font-medium text-ink mb-1">
-                E-mail
-              </label>
+            <div className="pole">
+              <label htmlFor="turnus-interest-email">E-mail</label>
               <input
                 id="turnus-interest-email"
                 type="email"
+                autoComplete="email"
                 required
                 value={email}
-                onChange={e => setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="rodic@email.cz"
-                className="w-full px-4 py-2.5 rounded-md bg-white border border-ink/20 text-ink placeholder:text-ink/40 text-sm focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink"
               />
             </div>
           </div>
-
-          <div className="flex items-start gap-2 justify-center pt-1">
+          <label className="souhlas">
             <input
               type="checkbox"
-              id="turnus-interest-gdpr"
               checked={gdprConsent}
               onChange={(e) => setGdprConsent(e.target.checked)}
               required
-              className="mt-0.5 w-4 h-4 rounded-sm border-ink/30 text-primary-600 focus:ring-primary-500"
             />
-            <label htmlFor="turnus-interest-gdpr" className="text-xs text-ink-500 cursor-pointer text-left">
-              Souhlasím se zpracováním osobních údajů.{' '}
-              <Link href="/gdpr" className="underline hover:text-primary-600">
-                Více informací
-              </Link>
-            </label>
-          </div>
-
+            <span>
+              Souhlasím se zpracováním osobních údajů. <Link href="/gdpr">Více informací</Link>
+            </span>
+          </label>
+          {/* `role="alert"` schválně: prvek vzniká až se svou hláškou a samotné
+              `aria-live` na nově vloženém uzlu většina odečítačů neoznámí. */}
           {error && (
-            <p role="alert" aria-live="assertive" className="text-sm text-red-600">
+            <p className="hlaska chyba" role="alert" aria-live="assertive">
               {error}
             </p>
           )}
-
-          <button
-            type="submit"
-            disabled={loading || !gdprConsent}
-            className="btn-primary w-full justify-center disabled:opacity-50 disabled:cursor-not-allowed"
-          >
+          <button type="submit" className="btn btn-primary btn-lg btn-block" disabled={loading}>
             {loading ? 'Odesílám…' : 'Dejte mi vědět o termínech'}
-            <Mail className="w-4 h-4" aria-hidden="true" />
+            <Ikona id="mail" />
           </button>
-
-          <p className="text-xs text-ink-500 text-center">
+          <p className="formular-pozn">
             Nezávazné. Údaje použijeme jen k informování o táborech, nikdy je nepředáme třetí straně.
           </p>
         </form>
       )}
-
-      <div className="mt-6 pt-5 border-t border-ink/15 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-6 text-sm">
-        <a
-          href={`mailto:${SITE.email}`}
-          className="inline-flex items-center gap-2 text-ink-500 hover:text-ink transition-colors"
-        >
-          <Mail className="w-4 h-4 text-ink/40" aria-hidden="true" />
-          {SITE.email}
-        </a>
-        <a
-          href={`tel:${SITE.phone.replace(/\s/g, '')}`}
-          className="inline-flex items-center gap-2 text-ink-500 hover:text-ink transition-colors"
-        >
-          <Phone className="w-4 h-4 text-ink/40" aria-hidden="true" />
-          {SITE.phone}
-        </a>
-      </div>
-    </motion.div>
+    </div>
   )
 }

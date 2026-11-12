@@ -4076,3 +4076,790 @@ html {
   color: var(--muted);
   font-size: 0.9375rem;
 }
+
+/* ════════════════════════════════════════════════════════════════════════
+   Vlna 2 (listopad 2026): /o-nas, /kontakt, /oslavy, /firmy a formuláře.
+   Stavební kameny navíc k vlně 1. Barva nese roli: --role je stín karty
+   a barva ikony (jantar = akce, tyrkys = technologie, smaragd = jistota,
+   indigo = značka).
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* ── Záhlaví bez fotky: text drží čitelnou šířku ─────────────────────── */
+.w2 .zahlavi-uzke {
+  max-width: 760px;
+}
+.w2 .zahlavi-foto.ctverec img {
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+/* ── Dlaždice-odkazy na tmavém (kontakt, rozcestí nabídek) ───────────── */
+.w2 .rozcesti {
+  margin-top: 18px;
+  display: grid;
+  gap: 8px;
+}
+.w2 .rozcesti a {
+  display: grid;
+  grid-template-columns: 40px 1fr 20px;
+  gap: 0 12px;
+  align-items: center;
+  min-height: 64px;
+  padding: 10px 12px;
+  border: 1.5px solid var(--line-dark);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  text-decoration: none;
+  transition:
+    border-color 0.15s,
+    background-color 0.15s;
+}
+.w2 .rozcesti-ik {
+  grid-row: 1 / span 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.08);
+}
+.w2 .rozcesti-ik svg {
+  width: 22px;
+  height: 22px;
+  color: var(--role, #34d399);
+}
+.w2 .rozcesti b {
+  grid-column: 2;
+  align-self: end;
+  font: 600 var(--body)/1.25 var(--f-head);
+}
+.w2 .rozcesti a > span:not(.rozcesti-ik) {
+  grid-column: 2;
+  align-self: start;
+  font-size: var(--small);
+  line-height: 1.3;
+  color: var(--on-dark-muted);
+}
+.w2 .rozcesti a > svg {
+  grid-column: 3;
+  grid-row: 1 / span 2;
+  width: 20px;
+  height: 20px;
+  color: var(--on-dark-muted);
+  transition: transform 0.2s var(--ease);
+}
+@media (hover: hover) {
+  .w2 .rozcesti a:hover {
+    border-color: var(--on-dark);
+    background: rgba(255, 255, 255, 0.09);
+  }
+  .w2 .rozcesti a:hover > svg {
+    transform: translateX(3px);
+    color: var(--on-dark);
+  }
+}
+@media (min-width: 760px) {
+  .w2 .rozcesti {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+}
+
+/* ── Role barev ──────────────────────────────────────────────────────── */
+.w2 .r-amber {
+  --role: var(--amber);
+  --role-text: #92400e;
+  --role-tint: var(--tint-amber);
+}
+.w2 .r-cyan {
+  --role: var(--cyan);
+  --role-text: var(--cyan-text);
+  --role-tint: #e0f7fb;
+}
+.w2 .r-emerald {
+  --role: #34d399;
+  --role-text: var(--emerald);
+  --role-tint: #e3f6ee;
+}
+.w2 .r-indigo {
+  --role: #818cf8;
+  --role-text: var(--indigo);
+  --role-tint: var(--tint-indigo);
+}
+
+/* ── Karty ───────────────────────────────────────────────────────────── */
+.w2 .karty {
+  display: grid;
+  gap: 16px;
+}
+.w2 .karta {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  padding: 18px 18px 20px;
+  border: 1.5px solid var(--ink);
+  border-radius: 16px;
+  background: var(--white);
+  box-shadow: 4px 4px 0 var(--role, var(--cyan));
+}
+.w2 .karta p {
+  color: var(--muted);
+}
+.w2 .karta-ik {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin-bottom: 4px;
+  border: 1.5px solid var(--ink);
+  border-radius: 12px;
+  background: var(--role-tint, #e0f7fb);
+  transition: transform 0.25s var(--ease);
+}
+.w2 .karta-ik svg {
+  width: 24px;
+  height: 24px;
+  color: var(--role-text, var(--cyan-text));
+}
+.w2 .dark .karta {
+  border-color: var(--line-dark);
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: none;
+}
+.w2 .dark .karta p {
+  color: var(--on-dark-muted);
+}
+.w2 .dark .karta-ik {
+  border-color: transparent;
+  background: rgba(255, 255, 255, 0.08);
+}
+.w2 .dark .karta-ik svg {
+  color: var(--cyan);
+}
+@media (hover: hover) {
+  .w2 .karta:hover .karta-ik {
+    transform: translateY(-3px) rotate(-4deg);
+  }
+}
+@media (min-width: 760px) {
+  .w2 .karty {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+  }
+  .w2 .karty.dve {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .w2 .karta {
+    padding: 22px 22px 24px;
+  }
+}
+
+/* ── Hodnoty: řádky s ikonou (O nás) ─────────────────────────────────── */
+.w2 .hodnoty {
+  display: grid;
+  gap: 18px;
+}
+.w2 .hodnoty li {
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  gap: 2px 14px;
+  align-items: start;
+}
+.w2 .hodnoty .karta-ik {
+  grid-row: 1 / span 2;
+  margin: 0;
+}
+.w2 .hodnoty b {
+  font: 600 var(--h3)/1.25 var(--f-head);
+}
+.w2 .hodnoty li > span:last-child {
+  color: var(--muted);
+}
+.w2 .text h2 + p,
+.w2 .text p + p {
+  margin-top: 12px;
+}
+.w2 .text .podnadpis:first-child {
+  margin-top: 0;
+}
+
+/* ── Tým ─────────────────────────────────────────────────────────────── */
+.w2 .lide {
+  display: grid;
+  gap: 12px;
+}
+.w2 .clen {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 0 14px;
+  align-content: start;
+  padding: 16px;
+  border: 1.5px solid var(--line-dark);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.05);
+}
+.w2 .clen-foto {
+  grid-row: 1 / span 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  overflow: hidden;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.08);
+}
+.w2 .clen-foto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.w2 .clen-foto svg {
+  width: 28px;
+  height: 28px;
+  color: var(--cyan);
+}
+.w2 .clen h3 {
+  align-self: end;
+}
+.w2 .clen-role {
+  align-self: start;
+  font-size: var(--small);
+  color: var(--on-dark-muted);
+}
+.w2 .clen-starost {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 8px;
+  margin-top: 14px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: rgba(251, 191, 36, 0.12);
+  font-size: var(--small);
+}
+.w2 .clen-starost b {
+  font: 600 var(--body)/1.3 var(--f-head);
+  color: var(--amber-soft);
+}
+.w2 .clen-popis {
+  grid-column: 1 / -1;
+  margin-top: 12px;
+  color: var(--on-dark-muted);
+}
+.w2 .clen-odkazy {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 20px;
+  margin-top: 8px;
+}
+.w2 .clen-odkazy a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  font-weight: 600;
+  font-size: var(--small);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+.w2 .clen-odkazy svg {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  color: var(--cyan);
+}
+@media (hover: hover) {
+  .w2 .clen-odkazy a:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+}
+@media (min-width: 760px) {
+  .w2 .lide {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+  .w2 .clen {
+    padding: 22px;
+  }
+}
+
+/* ── Časová osa (průběh oslavy) ──────────────────────────────────────── */
+.w2 .prubehy {
+  display: grid;
+  gap: 16px;
+}
+.w2 .prubeh {
+  padding: 18px 18px 6px;
+  border: 1.5px solid var(--ink);
+  border-radius: 16px;
+  background: var(--white);
+  box-shadow: 4px 4px 0 var(--cyan);
+}
+.w2 .prubeh-hl {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px 12px;
+}
+.w2 .prubeh-delka {
+  padding: 2px 10px;
+  border: 1.5px solid var(--ink);
+  border-radius: 999px;
+  background: #e0f7fb;
+  font-size: var(--small);
+  font-weight: 600;
+}
+.w2 .prubeh-kroky {
+  margin-top: 16px;
+}
+.w2 .prubeh-kroky li {
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  gap: 0 12px;
+}
+.w2 .prubeh-cas {
+  font: 600 var(--small)/1.6 var(--f-head);
+  font-variant-numeric: tabular-nums;
+  color: var(--cyan-text);
+}
+.w2 .prubeh-kroky li > div {
+  position: relative;
+  padding: 0 0 16px 18px;
+  border-left: 2px solid var(--line);
+}
+.w2 .prubeh-kroky li:last-child > div {
+  border-left-color: transparent;
+}
+.w2 .prubeh-kroky li > div::before {
+  content: "";
+  position: absolute;
+  left: -7px;
+  top: 5px;
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  background: var(--cyan);
+}
+.w2 .prubeh-kroky b {
+  display: block;
+}
+.w2 .prubeh-kroky li > div > span {
+  font-size: var(--small);
+  color: var(--muted);
+}
+@media (min-width: 900px) {
+  .w2 .prubehy {
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+  .w2 .prubeh {
+    padding: 24px 24px 10px;
+  }
+}
+
+/* ── Nabídka pro firmy ───────────────────────────────────────────────── */
+.w2 .nabidka-hl {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: 14px;
+  align-items: center;
+}
+.w2 .nabidka-hl .karta-ik {
+  width: 48px;
+  height: 48px;
+  margin: 0;
+}
+.w2 .nabidka-pro {
+  margin-top: 12px;
+  font-weight: 600;
+  color: var(--role-text, var(--indigo));
+}
+.w2 .nabidka-perex {
+  margin-top: 8px;
+  color: var(--muted);
+}
+.w2 .zaskrt.role svg {
+  color: var(--role-text, var(--emerald));
+}
+.w2 .nabidka-karta {
+  display: grid;
+  gap: 20px;
+  align-content: start;
+  padding: 18px;
+  border: 1.5px solid var(--ink);
+  border-radius: 16px;
+  background: var(--white);
+  box-shadow: 5px 5px 0 var(--role, var(--amber));
+}
+.w2 .nabidka-karta h3 {
+  margin-bottom: 10px;
+}
+.w2 .nabidka-karta .zaskrt {
+  font-size: var(--small);
+}
+@media (min-width: 900px) {
+  .w2 .nabidka-karta {
+    padding: 24px;
+  }
+  .w2 .dva.nabidka {
+    align-items: start;
+  }
+}
+
+/* ── Formulář v kartě ────────────────────────────────────────────────── */
+.w2 .formular {
+  padding: 18px;
+  border: 1.5px solid var(--ink);
+  border-radius: 16px;
+  background: var(--white);
+  color: var(--ink);
+  box-shadow: 5px 5px 0 var(--stin, var(--amber));
+  scroll-margin-top: 88px;
+}
+.w2 .amber .formular {
+  --stin: var(--ink);
+}
+.w2 .formular > h2,
+.w2 .formular > h3 {
+  font-size: var(--h3);
+  line-height: 1.25;
+  font-weight: 600;
+}
+.w2 .formular > h2 + p,
+.w2 .formular > h3 + p {
+  margin-top: 6px;
+  color: var(--muted);
+}
+.w2 .formular .form {
+  margin-top: 16px;
+  gap: 14px;
+}
+.w2 .pole-rada {
+  display: grid;
+  gap: 14px;
+}
+.w2 .pole label i {
+  font-style: normal;
+  font-weight: 400;
+  color: var(--muted);
+}
+.w2 .pole input[type="tel"],
+.w2 .pole textarea,
+.w2 .pole select {
+  width: 100%;
+  min-height: var(--tap);
+  padding: 0 14px;
+  border: 2px solid var(--ink);
+  border-radius: var(--r);
+  background: var(--white);
+}
+.w2 .pole textarea {
+  display: block;
+  min-height: 120px;
+  padding: 12px 14px;
+  line-height: 1.5;
+  resize: vertical;
+}
+.w2 .pole ::placeholder {
+  color: #6f7389;
+  opacity: 1;
+}
+.w2 .volba {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+.w2 .volba legend {
+  padding: 0;
+  margin-bottom: 6px;
+  font-size: var(--small);
+  font-weight: 600;
+}
+.w2 .volba-cipy {
+  display: grid;
+  gap: 8px;
+}
+.w2 .volba-cipy label {
+  position: relative;
+  display: block;
+  cursor: pointer;
+}
+.w2 .volba-cipy input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.w2 .volba-cipy span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 46px;
+  padding: 6px 12px;
+  border: 2px solid var(--ink);
+  border-radius: var(--r);
+  font-size: var(--small);
+  font-weight: 600;
+  line-height: 1.25;
+  text-align: center;
+  transition:
+    background-color 0.15s,
+    color 0.15s;
+}
+.w2 .volba-cipy input:checked + span {
+  background: var(--ink);
+  color: var(--on-dark);
+}
+.w2 .volba-cipy input:focus-visible + span {
+  outline: 3px solid var(--indigo);
+  outline-offset: 2px;
+}
+.w2 .btn[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+.w2 .hlaska {
+  padding: 12px 14px;
+  border-left: 4px solid var(--emerald);
+  border-radius: var(--r);
+  background: #e3f6ee;
+}
+.w2 .hlaska b {
+  display: block;
+}
+.w2 .hlaska.chyba {
+  border-left-color: #b91c1c;
+  background: #fde8e8;
+  color: #7f1d1d;
+}
+.w2 .formular > .hlaska {
+  margin-top: 16px;
+}
+.w2 .formular-pozn {
+  font-size: var(--small);
+  color: var(--muted);
+}
+.w2 .formular.stred {
+  max-width: 640px;
+  margin-inline: auto;
+}
+@media (min-width: 560px) {
+  .w2 .pole-rada {
+    grid-template-columns: 1fr 1fr;
+  }
+  .w2 .volba-cipy {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+@media (min-width: 900px) {
+  .w2 .formular {
+    padding: 28px;
+  }
+}
+
+/* ── Závěr s formulářem: vlevo text a kontakt, vpravo karta ──────────── */
+.w2 .zaver-form {
+  display: grid;
+  gap: 24px;
+}
+.w2 .zaver-form .zaver-in {
+  max-width: 520px;
+}
+.w2 .zaver-pravni {
+  font-size: var(--small);
+  line-height: 1.45;
+}
+@media (min-width: 900px) {
+  .w2 .zaver-form {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: 56px;
+    align-items: start;
+  }
+}
+.w2 .zaver-akce {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.w2 .zaver-akce .btn {
+  flex: 1 1 100%;
+}
+@media (min-width: 560px) {
+  .w2 .zaver-akce .btn {
+    flex: 0 0 auto;
+  }
+}
+
+/* ── Kontakt: komu psát, mapy ────────────────────────────────────────── */
+.w2 .komu {
+  margin-top: 12px;
+  border-top: 1px solid var(--line);
+}
+.w2 .komu li {
+  display: grid;
+  gap: 0 12px;
+  padding: 10px 0 4px;
+  border-bottom: 1px solid var(--line);
+}
+.w2 .komu b {
+  font: 600 var(--body)/1.3 var(--f-head);
+}
+.w2 .komu span {
+  font-size: var(--small);
+  color: var(--muted);
+}
+.w2 .komu a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-weight: 600;
+  color: var(--indigo);
+  text-underline-offset: 3px;
+  overflow-wrap: anywhere;
+}
+.w2 .bok-blok + .bok-blok {
+  margin-top: 28px;
+}
+.w2 .bok-blok > p {
+  margin-top: 8px;
+  color: var(--muted);
+}
+.w2 .site {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+.w2 .site a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border: 1.5px solid var(--ink);
+  border-radius: 50%;
+  background: var(--white);
+  transition:
+    background-color 0.15s,
+    color 0.15s;
+}
+.w2 .site svg {
+  width: 22px;
+  height: 22px;
+}
+@media (hover: hover) {
+  .w2 .site a:hover {
+    background: var(--ink);
+    color: var(--on-dark);
+  }
+}
+.w2 .mapy {
+  display: grid;
+  gap: 16px;
+}
+.w2 .mapa {
+  overflow: hidden;
+  border: 1.5px solid var(--ink);
+  border-radius: 16px;
+  background: var(--white);
+}
+.w2 .mapa iframe {
+  display: block;
+  width: 100%;
+  height: 220px;
+  border: 0;
+}
+.w2 .mapa-popis {
+  display: grid;
+  gap: 2px;
+  padding: 14px 16px 6px;
+  border-top: 1.5px solid var(--ink);
+}
+.w2 .mapa-popis b {
+  font: 600 var(--body)/1.3 var(--f-head);
+}
+.w2 .mapa-popis span {
+  font-size: var(--small);
+  color: var(--muted);
+}
+.w2 .mapa-popis a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  font-weight: 600;
+  color: var(--indigo);
+  text-underline-offset: 3px;
+}
+.w2 .mapa-popis svg {
+  width: 18px;
+  height: 18px;
+}
+@media (min-width: 760px) {
+  .w2 .komu li {
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    padding: 8px 0;
+  }
+  .w2 .komu span {
+    grid-column: 1;
+  }
+  .w2 .komu a {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+  .w2 .mapy {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+  }
+  .w2 .mapa iframe {
+    height: 260px;
+  }
+}
+
+/* ── Místa konání pod sebou (O nás) ──────────────────────────────────── */
+.w2 .mista {
+  display: grid;
+  gap: 32px;
+}
+
+/* Formulář zájmu uvnitř nákupního boxu (vyprodaný termín): karta v kartě by
+   se tloukla, proto bez rámu a stínu. */
+.w2 .box .formular {
+  margin-top: 16px;
+  padding: 16px 0 0;
+  border: 0;
+  border-top: 1px solid var(--line);
+  border-radius: 0;
+  box-shadow: none;
+}
+.w2 .hlaska a {
+  font-weight: 600;
+}
+.w2 .bok-blok > .podnadpis:first-child {
+  margin-top: 0;
+}
+.w2 p.bok-blok {
+  margin-top: 28px;
+}
+.w2 .dark .sec-head p {
+  color: var(--on-dark-muted);
+}
+.w2 .zaver-form .zaver-pravni {
+  margin-top: 12px;
+}

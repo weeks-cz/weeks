@@ -1,531 +1,289 @@
-'use client'
-
-import { motion } from 'framer-motion'
-import { Target, Heart, Lightbulb, Users, MapPin, Tent, Code, Box, Gamepad2, Mail, Phone, Linkedin, type LucideIcon } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
-import { getTurnusy } from '@/lib/turnusy'
-import { getVenue, type VenueId } from '@/lib/cities'
+import { Ikona, type IkonaId } from '@/components/w2/Ikona'
+import { MistoFoto, tridaMista } from '@/components/w2/MistoFoto'
+import { Mrizka } from '@/components/w2/Mrizka'
+import { Usp } from '@/components/w2/Usp'
+import { sazba } from '@/components/w2/text'
+import { getCity, getVenue, type VenueId } from '@/lib/cities'
+import { GOOGLE_PROFIL, maRecenze } from '@/lib/recenze'
 import { SITE } from '@/lib/site'
+import { getTurnusy } from '@/lib/turnusy'
 import { TYM, roleClena, type IkonaOboru } from '@/lib/tym'
-import { MrizkaSekce } from '@/components/ui/MrizkaSekce'
 
-const values = [
+/**
+ * O nás (nový vzhled, vlna 2).
+ *
+ * Stránka o lidech, ne o prodeji: kdo Weeks dělá, jak vzniklo, kdo za co
+ * odpovídá a kde tábory běží. Serverová a statická; drobečkové schema
+ * vykresluje `layout.tsx`.
+ *
+ * Co tu schválně není (viz CLAUDE.md, „Team“): poměr lektorů na děti, strop
+ * kapacity ani věta, že zakladatelé učí na každém turnusu. Bezpečnost
+ * nepopisuje vlastní odstavec, ale stejný pás „Co máte jisté“ jako na úvodní
+ * stránce (`Usp`) — jedno místo, kde jsou ty sliby napsané.
+ */
+
+/** Na čem programu záleží. Zkrácená podoba dřívějších „hodnot“. */
+const HODNOTY: Array<{ ikona: IkonaId; nadpis: string; text: string }> = [
   {
-    icon: Target,
-    title: 'Praktické dovednosti',
-    description: 'Věříme, že děti se učí nejlépe praxí. Každý projekt je navržen tak, aby si děti odnášely reálné výsledky a funkční znalosti.',
+    ikona: 'cil',
+    nadpis: 'Praxe místo výkladu',
+    text: 'Každý projekt končí věcí, kterou dítě ukáže doma.',
   },
   {
-    icon: Heart,
-    title: 'Individuální přístup',
-    description: 'Malé skupinky nám umožňují přizpůsobit tempo a obsah potřebám každého dítěte.',
+    ikona: 'lide',
+    nadpis: 'Malé skupinky',
+    text: 'Tempo přizpůsobujeme tomu, kdo zrovna sedí u stolu.',
   },
   {
-    icon: Lightbulb,
-    title: 'Kreativita a inovace',
-    description: 'Podporujeme experimentování a vlastní nápady. Nejlepší projekty vznikají, když děti mají svobodu tvořit.',
+    ikona: 'zarovka',
+    nadpis: 'Vlastní nápady',
+    text: 'Nejlepší projekty vznikají, když mají děti volnost zkoušet.',
   },
   {
-    icon: Users,
-    title: 'Týmová spolupráce',
-    description: 'Učíme děti pracovat v týmu, sdílet nápady a pomáhat si navzájem - stejně jako v reálném IT světě.',
+    ikona: 'srdce',
+    nadpis: 'Práce v týmu',
+    text: 'Děti si radí a pomáhají, stejně jako v opravdovém vývoji.',
   },
 ]
 
 // Tým bydlí v `src/lib/tym.ts` — tam se přidávají další lektoři.
-const IKONY_OBORU: Record<IkonaOboru, LucideIcon> = {
-  stan: Tent,
-  code: Code,
-  box: Box,
-  hra: Gamepad2,
+const IKONY_OBORU: Record<IkonaOboru, IkonaId> = {
+  stan: 'stan',
+  code: 'kod',
+  box: 'krabice',
+  hra: 'hra',
 }
 
 export default function AboutPage() {
-  const turnusy = getTurnusy()
-
-  // Místa konání — jen ta, která nějaký turnus doopravdy má. Dnes vyjde jedna
-  // karta (FabLab VARY&TE u karlovarských turnusů léta 2027), pražský turnus
-  // místo ještě nemá. Kód počítá s tím, že se to může časem změnit.
-  const venueIds = Array.from(
-    new Set(turnusy.map((t) => t.venueId).filter((id): id is VenueId => id !== null))
-  )
-  const venues = venueIds.map((id) => getVenue(id))
+  // Místa konání — jen ta, která nějaký turnus doopravdy má.
+  const venues = Array.from(
+    new Set(
+      getTurnusy()
+        .map((t) => t.venueId)
+        .filter((id): id is VenueId => id !== null)
+    )
+  ).map((id) => getVenue(id))
 
   return (
     <>
-      <Header />
-      <main>
-        {/* Hero Section */}
-        <section className="bg-paper blueprint-grid border-b border-ink/15 pt-32 pb-16">
-          <div className="section-container">
-            <div className="max-w-4xl mx-auto text-center">
-              {/* Breadcrumb */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="mb-8 font-mono text-xs uppercase tracking-[0.2em]"
-              >
-                <Link href="/" className="text-ink/50 hover:text-primary-600 transition-colors">
-                  Domů
-                </Link>
-                <span className="text-ink/30 mx-2">/</span>
-                <span className="text-ink font-medium">O nás</span>
-              </motion.div>
-
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="mono-label mb-4"
-              >
-                O projektu
-              </motion.p>
-
-              <motion.h1
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-                className="heading-1 text-ink mb-6"
-              >
-                Weeks
-              </motion.h1>
-
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                className="text-xl text-ink-500 max-w-2xl mx-auto"
-              >
-                IT tábory, kde děti získávají praktické dovednosti
-                s nejmodernějšími technologiemi pod vedením zkušených lektorů.
-              </motion.p>
+      <Header vToku />
+      <main id="obsah" className="w2">
+        {/* ── Záhlaví ──────────────────────────────────────────────────── */}
+        <section className="zahlavi dark mrizka">
+          <Mrizka />
+          <div className="wrap zahlavi-dva">
+            <div>
+              <nav className="drob" aria-label="Drobečková navigace">
+                <Link href="/">Domů</Link> <span aria-hidden="true">/</span> <span>O nás</span>
+              </nav>
+              <h1>Kdo za Weeks stojí</h1>
+              <p className="zahlavi-perex">
+                Tři spolužáci, kteří učí děti techniku a staví weby. Program táborů si vymýšlíme sami, od tématu
+                po poslední den.
+              </p>
+              <ul className="vyhody">
+                <li>
+                  <Ikona id="tuzka" />
+                  <b>Program</b>
+                  <span>píšeme si ho sami</span>
+                </li>
+                <li>
+                  <Ikona id="lide" />
+                  <b>Skupinky</b>
+                  <span>malé, na každého je čas</span>
+                </li>
+                {maRecenze() && GOOGLE_PROFIL.url ? (
+                  <li>
+                    <Ikona id="hvezda" />
+                    <b>{sazba(`${GOOGLE_PROFIL.prumer} z 5`)}</b>
+                    <span>hodnocení na Google</span>
+                  </li>
+                ) : (
+                  <li>
+                    <Ikona id="stit" />
+                    <b>První pomoc</b>
+                    <span>lektoři jsou proškolení</span>
+                  </li>
+                )}
+              </ul>
+              <div className="zahlavi-akce">
+                <a className="btn btn-primary btn-lg" href="#tym">
+                  Poznat tým <Ikona id="dolu" />
+                </a>
+              </div>
             </div>
-          </div>
-        </section>
-
-        {/* Fotka z tábora hned pod herem.
-            Stránka dřív ukazovala jen tři fotky prostoru FabLabu z `cities.ts`,
-            zatímco reálné fotky z táborů používalo jediné místo — hero úvodky.
-            Vybírají se schválně jen záběry s dětmi při činnosti: zbytek složky
-            `public/images/hwlab/` jsou fotky prázdného pražského prostoru,
-            který dnes není místem konání, a vypadaly by jako slib, že tam
-            tábor poběží. Název složky je historický zbytek, HWLab pořadatel
-            ani místo konání není. */}
-        {/* Fotka stojí v rámečku, ne přes celou šířku.
-
-            Roztažená na `100vw` se na širokém displeji zvětšovala zhruba
-            dvaapůlkrát nad svoje rozlišení (1195 px) a měkla; v bloku širokém
-            nanejvýš 960 px se zobrazuje blízko své skutečné velikosti. Tmavý
-            podklad kolem zároveň drží sekci jako kotvu stránky, což dřív
-            obstarával gradient přes fotku. */}
-        <MrizkaSekce odstin="tmavy" className="section-padding border-y border-ink bg-ink blueprint-grid-dark">
-          <div className="section-container">
-            {/* Popisek je o lidech, ne o kapacitě.
-
-                Stál tu nadpis „Tohle je celý turnus" se stropem kapacity
-                a poměrem 1:5 — prodejní údaj na stránce o tom, kdo za Weeks
-                je. 2026-09-22 zmizel celý, zakladatel ho 2026-09-24 chtěl
-                zpátky, ale o lidech.
-
-                „Jsme jednatelé a zároveň lektoři, celý týden jsme s dětmi“
-                odešlo 2026-09-28: s víc turnusy a lektory to platit nebude.
-                Zůstává, co platí vždy — program připravují zakladatelé.
-
-                Tentýž den sem místo jedné obecné věty přišel skutečný příběh
-                vzniku. Bez „chtěli jsme dělat něco na sebe“ — to je důvod pro
-                nás, ne pro rodiče. */}
-            <div className="mx-auto grid max-w-5xl items-center gap-10 lg:grid-cols-[1.2fr_1fr]">
-            <div className="relative">
-              <div
-                aria-hidden="true"
-                className="absolute -bottom-4 -left-4 hidden h-full w-full rounded-md border-2 border-cta-400 sm:block"
-              />
+            <figure className="zahlavi-foto jen-desktop">
               <Image
                 src="/images/tabor/skupina-terasa-retus.webp"
                 alt="Skupina dětí s lektory na sluncem zalité terase, mávají do objektivu"
                 width={1195}
                 height={896}
+                sizes="(min-width: 900px) 560px, 1px"
                 loading="lazy"
-                sizes="(min-width: 1024px) 34rem, (min-width: 640px) 90vw, 100vw"
-                className="relative w-full rounded-md border border-paper/20"
               />
-            </div>
+            </figure>
+          </div>
+        </section>
 
-            <div>
-              <p className="mono-label-dark mb-4 text-cta-300">Jak Weeks vzniklo</p>
-              <h2 className="heading-2 text-paper">
-                Ze spolužáků <span className="text-cta-400">vlastní tábor</span>
-              </h2>
-              <p className="mt-4 text-lg text-paper/80">
-                Kryštof, Lukáš a Štěpán se znají ze Smíchovské průmyslovky
-                a dnes spolu studují aplikovanou informatiku na VŠE. Kryštof se
-                Štěpánem léta učí děti techniku jako lektoři, Lukáš staví weby
+        {/* ── Příběh a hodnoty ─────────────────────────────────────────── */}
+        {/* Bez „chtěli jsme dělat něco na sebe“ — to je důvod pro nás, ne pro
+            rodiče. A bez „jednatelé a zároveň lektoři“: s víc turnusy a lektory
+            to platit nebude (2026-09-28). */}
+        <section className="sec sec-papir bez-linky">
+          <div className="wrap dva">
+            <div className="text">
+              <h2>Ze spolužáků vlastní tábor</h2>
+              <p>
+                Kryštof, Lukáš a Štěpán se znají ze Smíchovské průmyslovky a dnes spolu studují aplikovanou
+                informatiku na VŠE. Kryštof se Štěpánem léta učí děti techniku jako lektoři, Lukáš staví weby
                 a aplikace.
               </p>
-              <p className="mt-4 text-lg text-paper/80">
-                O IT toho víme dost a umíme to předat dál — tak vzniklo Weeks.
-                Program si vymýšlíme sami, od tématu po poslední den, a na co
-                se zeptáte, řešíte přímo s námi.
+              <p>
+                O IT toho víme dost a umíme to předat dál — tak vzniklo Weeks. Na co se zeptáte, řešíte přímo
+                s námi.
               </p>
             </div>
-            </div>
-          </div>
-        </MrizkaSekce>
-
-        {/* Mission Section */}
-        <section className="section-padding bg-paper">
-          <div className="section-container">
-            <div className="max-w-4xl mx-auto">
-              <motion.div
-                initial={{ y: 20 }}
-                whileInView={{ y: 0 }}
-                viewport={{ once: true }}
-                className="text-center mb-16"
-              >
-                <p className="mono-label mb-4">Naše mise</p>
-                <h2 className="heading-2 text-ink mb-6">
-                  Každé dítě má potenciál tvořit
-                </h2>
-                <p className="text-lg text-ink-500 mb-4">
-                  V době, kdy technologie pronikají do všech aspektů života, je důležité, aby děti nebyly jen pasivními
-                  uživateli, ale aktivními tvůrci.
-                </p>
-                <p className="text-lg text-ink-500">
-                  Weeks není jen o výuce programování nebo 3D tisku. Jde o rozvoj kritického myšlení,
-                  kreativity a schopnosti řešit problémy. Učíme děti, že chyba není neúspěch,
-                  ale příležitost k učení. Že nejlepší projekty vznikají iterací a experimentováním.
-                </p>
-              </motion.div>
-
-              {/* Values Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {values.map((value, index) => (
-                  <motion.div
-                    key={value.title}
-                    initial={{ y: 20 }}
-                    whileInView={{ y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.1 }}
-                    className="p-6 bg-paper-soft rounded-md border border-ink/15"
-                  >
-                    <div className="w-12 h-12 bg-white border border-ink/15 rounded-sm flex items-center justify-center mb-4">
-                      <value.icon className="w-6 h-6 text-primary-600" />
-                    </div>
-                    <h3 className="font-display text-lg font-semibold text-ink mb-2">
-                      {value.title}
-                    </h3>
-                    <p className="text-ink-500">
-                      {value.description}
-                    </p>
-                  </motion.div>
+            <div>
+              <h2 className="podnadpis" style={{ marginTop: 0 }}>
+                Na čem nám záleží
+              </h2>
+              <ul className="hodnoty r-indigo">
+                {HODNOTY.map((h) => (
+                  <li key={h.nadpis}>
+                    <span className="karta-ik">
+                      <Ikona id={h.ikona} />
+                    </span>
+                    <b>{h.nadpis}</b>
+                    <span>{sazba(h.text)}</span>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </div>
           </div>
         </section>
 
-        {/* Venue Section — dřív ukazovala cizí instituce (DDM, HWLab), pak
-            místa konání odvozená z turnusů (viz `venues` výše).
+        <Usp />
 
-            Dnes žádný turnus potvrzené místo nemá, takže sekce mlčí o tom, kde
-            tábor poběží, a místo toho stojí pod ní reference: kde tábor
-            doopravdy proběhl. Jakmile turnus místo dostane, karta se vrátí
-            sama. */}
-        {venues.length > 0 && (
-          <section className="section-padding bg-paper-soft border-y border-ink/15">
-            <div className="section-container">
-              <motion.div
-                initial={{ y: 20 }}
-                whileInView={{ y: 0 }}
-                viewport={{ once: true }}
-                className="text-center mb-16"
-              >
-                <p className="mono-label mb-4">Zázemí</p>
-                <h2 className="heading-2 text-ink mb-4">
-                  Kde tábory probíhají
-                </h2>
-                <p className="text-xl text-ink-500 max-w-2xl mx-auto">
-                  Tábory pořádá {SITE.legalName}, IČO {SITE.ico}.
-                </p>
-              </motion.div>
-
-              <div className="space-y-12 max-w-5xl mx-auto">
-                {venues.map((venue, index) => (
-                  <motion.div
-                    key={venue.id}
-                    initial={{ y: 30 }}
-                    whileInView={{ y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.2 }}
-                    className="card-maker p-8 md:p-12"
-                  >
-                    <div className="flex flex-col md:flex-row gap-8">
-                      {/* Icon */}
-                      <div className="flex-shrink-0">
-                        <div className="w-24 h-24 border border-ink rounded-sm flex items-center justify-center bg-white">
-                          <MapPin className="w-10 h-10 text-primary-600" aria-hidden="true" />
-                        </div>
-                      </div>
-
-                      {/* Content */}
-                      <div className="flex-1">
-                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-4">
-                          <h3 className="font-display text-2xl font-bold text-ink">
-                            {venue.fullName}
-                          </h3>
-                          <div className="flex items-center gap-1 text-sm text-ink-500">
-                            <MapPin className="w-4 h-4" aria-hidden="true" />
-                            <span>{venue.street}, {venue.city} {venue.postalCode}</span>
-                          </div>
-                        </div>
-
-                        <p className="text-ink-500 mb-6">
-                          {venue.description}
-                        </p>
-
-                        {venue.url && (
-                          <a
-                            href={venue.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 font-mono text-sm text-primary-600 hover:underline"
-                          >
-                            {venue.name} na webu
-                          </a>
-                        )}
-                      </div>
-                    </div>
-
-                    {venue.photos && venue.photos.length > 0 && (
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mt-8">
-                        {venue.photos.map((src, i) => (
-                          <div
-                            key={src}
-                            className="relative aspect-square border border-ink rounded-sm overflow-hidden"
-                          >
-                            <Image
-                              src={src}
-                              alt={`${venue.name} — fotografie prostoru ${i + 1}`}
-                              fill
-                              sizes="(max-width: 640px) 100vw, 33vw"
-                              className="object-cover"
-                            />
-                          </div>
-                        ))}
-                      </div>
+        {/* ── Tým ──────────────────────────────────────────────────────── */}
+        <section className="sec dark mrizka bez-linky" id="tym">
+          <Mrizka />
+          <div className="wrap">
+            <div className="sec-head">
+              <h2>Tým</h2>
+              <p>Na všem děláme společně, ale každý za něco odpovídá. Napište rovnou tomu, kdo to má na starosti.</p>
+            </div>
+            <ul className="lide">
+              {TYM.map((clen) => (
+                <li className="clen" key={clen.id}>
+                  {/* Fotka, a dokud není, ikona oboru. */}
+                  <span className="clen-foto">
+                    {clen.foto ? (
+                      <Image src={clen.foto} alt="" width={112} height={112} loading="lazy" />
+                    ) : (
+                      <Ikona id={IKONY_OBORU[clen.ikona]} />
                     )}
-                  </motion.div>
-                ))}
+                  </span>
+                  <h3>{clen.jmeno}</h3>
+                  <p className="clen-role">{sazba(`${roleClena(clen)} · ${clen.obor}`)}</p>
+                  {/* Komu co napsat — kvůli tomu hlavně rodič nebo firma na
+                      tuhle kartu přijde, proto stojí hned pod jménem. */}
+                  {clen.naStarosti && (
+                    <p className="clen-starost">
+                      Má na starosti <b>{clen.naStarosti}</b>
+                    </p>
+                  )}
+                  <p className="clen-popis">{sazba(clen.popis)}</p>
+                  {(clen.email || clen.telefon || clen.linkedin) && (
+                    <div className="clen-odkazy">
+                      {clen.email && (
+                        <a href={`mailto:${clen.email}`}>
+                          <Ikona id="mail" /> {clen.email}
+                        </a>
+                      )}
+                      {clen.telefon && (
+                        <a href={`tel:${clen.telefon.replace(/\s/g, '')}`}>
+                          <Ikona id="tel" /> {clen.telefon.replace(/ /g, ' ')}
+                        </a>
+                      )}
+                      {clen.linkedin && (
+                        <a
+                          href={clen.linkedin}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={`${clen.jmeno} na LinkedInu (otevře se v nové záložce)`}
+                        >
+                          <Ikona id="linkedin" /> LinkedIn
+                        </a>
+                      )}
+                    </div>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
+        {/* ── Místa konání ─────────────────────────────────────────────── */}
+        {/* Místa jsou odvozená z termínů: kde žádný termín místo nemá, sekce
+            se nevykreslí. Jsou to prostory, které si pronajímáme, ne partneři. */}
+        {venues.length > 0 && (
+          <section className="sec bez-linky" id="mista">
+            <div className="wrap">
+              <div className="sec-head">
+                <h2>Kde tábory běží</h2>
+                <p>
+                  V létě 2026 jsme tábor pořádali ve FabLabu VARY&amp;TE v Karlových Varech a v létě 2027 se tam
+                  vracíme.
+                </p>
               </div>
+            </div>
+            <div className="mista">
+              {venues.map((venue) => (
+                <div key={venue.id} className={`wrap misto-grid${tridaMista(venue)}`}>
+                  <div>
+                    <h3>{sazba(`${venue.fullName}, ${getCity(venue.cityId).name}`)}</h3>
+                    <p style={{ marginTop: 8 }}>{sazba(venue.description)}</p>
+                    <p>{sazba(`${venue.vybaveni}.`)}</p>
+                    <a
+                      className="adresa link"
+                      href={`https://www.google.com/maps/search/?api=1&query=${venue.mapQuery}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Ikona id="misto" /> {sazba(`${venue.street}, ${venue.city}`)}
+                    </a>
+                  </div>
+                  <MistoFoto venue={venue} />
+                </div>
+              ))}
+            </div>
+            <div className="wrap">
+              <p className="pozn">
+                Tábory pořádá {SITE.legalName}, IČO {SITE.ico}.
+              </p>
             </div>
           </section>
         )}
 
-        {/* Reference. FabLab VARY&TE léto 2027 potvrdil (10. 10. 2026) a je
-            místem konání obou karlovarských turnusů, takže tu stojí rok 2026
-            i návrat. Praha prostor ještě nemá — o ní věta mluví v budoucím
-            čase, dokud nějaký turnus nedostane `venueId`. */}
-        <section className="section-padding bg-paper-soft border-y border-ink/15">
-          <div className="section-container">
-            <div className="mx-auto max-w-3xl text-center">
-              <p className="mono-label mb-4">Za sebou</p>
-              <h2 className="heading-2 text-ink mb-4">Kde už tábor proběhl</h2>
-              <p className="text-lg text-ink-500">
-                V létě 2026 jsme tábor pořádali ve FabLabu VARY&amp;TE v Karlových
-                Varech a v létě 2027 se tam vracíme. Prostor v Praze
-                domlouváme — jakmile bude jistý, najdete ho u konkrétního
-                termínu.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Team Section */}
-        {/* Tým je srdce stránky, proto dostává tmavý blok — kotvu, bez které
-            se `/o-nas` četla jako dlouhý krémový svitek. */}
-        <MrizkaSekce odstin="tmavy" className="section-padding border-y border-ink bg-ink blueprint-grid-dark">
-          <div className="section-container">
-            <motion.div
-              initial={{ y: 20 }}
-              whileInView={{ y: 0 }}
-              viewport={{ once: true }}
-              className="text-center mb-16"
-            >
-              <p className="mono-label-dark mb-4 text-accent-300">Tým</p>
-              <h2 className="heading-2 text-paper mb-4">
-                Zakládající tým
-              </h2>
-              <p className="text-xl text-paper/70 max-w-2xl mx-auto">
-                Na všem děláme společně, ale každý za něco odpovídá. Napište
-                rovnou tomu, kdo to má na starosti.
-              </p>
-            </motion.div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
-              {TYM.map((clen, index) => {
-                const Ikona = IKONY_OBORU[clen.ikona]
-                return (
-                <motion.div
-                  key={clen.id}
-                  initial={{ y: 20 }}
-                  whileInView={{ y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                  className="rounded-md border border-paper/15 bg-paper/[0.03] p-6 text-center flex flex-col"
-                >
-                  {/* Fotka, a dokud není, ikona oboru. */}
-                  <div className="relative w-24 h-24 border border-paper/25 rounded-sm mx-auto mb-4 flex items-center justify-center overflow-hidden">
-                    {clen.foto ? (
-                      <Image src={clen.foto} alt={clen.jmeno} fill sizes="96px" className="object-cover" />
-                    ) : (
-                      <Ikona className="w-12 h-12 text-accent-400" aria-hidden="true" />
-                    )}
-                  </div>
-                  <h3 className="font-display font-semibold text-paper mb-1">
-                    {clen.jmeno}
-                  </h3>
-                  <p className="mono-label-dark mb-3 text-cta-300">
-                    {roleClena(clen)}
-                  </p>
-                  {/* Komu co napsat — kvůli tomu hlavně rodič nebo firma
-                      na tuhle kartu přijde, proto stojí nad oborem. */}
-                  {clen.naStarosti && (
-                    <p className="mx-auto mb-3 rounded-sm border border-accent-400/40 bg-accent-400/10 px-3 py-1.5 text-sm text-paper">
-                      Má na starosti:{' '}
-                      <strong className="font-semibold">{clen.naStarosti}</strong>
-                    </p>
-                  )}
-                  <p className="mono-label-dark mb-3">
-                    {clen.obor}
-                  </p>
-                  <p className="text-sm text-paper/70">
-                    {clen.popis}
-                  </p>
-                  {(clen.email || clen.telefon || clen.linkedin) && (
-                    <ul className="mt-auto pt-5 space-y-1.5 font-mono text-sm">
-                      {clen.email && (
-                        <li>
-                          <a href={`mailto:${clen.email}`} className="inline-flex items-center gap-2 text-paper/70 hover:text-paper">
-                            <Mail className="h-4 w-4 text-accent-400" aria-hidden="true" />
-                            {clen.email}
-                          </a>
-                        </li>
-                      )}
-                      {clen.telefon && (
-                        <li>
-                          <a href={`tel:${clen.telefon.replace(/\s/g, '')}`} className="inline-flex items-center gap-2 text-paper/70 hover:text-paper">
-                            <Phone className="h-4 w-4 text-accent-400" aria-hidden="true" />
-                            {clen.telefon}
-                          </a>
-                        </li>
-                      )}
-                      {clen.linkedin && (
-                        <li>
-                          <a
-                            href={clen.linkedin}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label={`${clen.jmeno} na LinkedInu (otevře se v novém okně)`}
-                            className="inline-flex items-center gap-2 text-paper/70 hover:text-paper"
-                          >
-                            <Linkedin className="h-4 w-4 text-accent-400" aria-hidden="true" />
-                            LinkedIn
-                          </a>
-                        </li>
-                      )}
-                    </ul>
-                  )}
-                </motion.div>
-                )
-              })}
-            </div>
-          </div>
-        </MrizkaSekce>
-
-        {/* Safety Section — karty „Pojištění účastníků" a „Certifikovaní lektoři"
-            odstraněny v opravném kole 1 (nedoložitelná tvrzení, viz report). */}
-        <section className="section-padding bg-paper-soft border-y border-ink/15">
-          <div className="section-container">
-            <motion.div
-              initial={{ y: 20 }}
-              whileInView={{ y: 0 }}
-              viewport={{ once: true }}
-              className="max-w-4xl mx-auto"
-            >
-              <p className="mono-label text-center mb-4">Bezpečnost</p>
-              <h2 className="heading-2 text-ink mb-8 text-center">
-                Bezpečnost
-              </h2>
-
-              <div className="card-maker p-8 md:p-12">
-                <p className="text-lg text-ink-500 mb-8 text-center">
-                  Bezpečnost dětí je naší absolutní prioritou. Lektoři jsou proškolení
-                  v první pomoci a s dětmi pracují dlouhodobě.
-                </p>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="flex items-start gap-4 p-4">
-                    <Users className="w-8 h-8 text-trust-600 flex-shrink-0" />
-                    <div>
-                      <h3 className="font-semibold text-ink mb-1">
-                        Malé skupiny
-                      </h3>
-                      <p className="text-sm text-ink-500">
-                        Při práci dělíme děti do menších skupinek, lektor se dostane ke každému.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-4 p-4">
-                    <Heart className="w-8 h-8 text-trust-600 flex-shrink-0" />
-                    <div>
-                      <h3 className="font-semibold text-ink mb-1">
-                        Kontakt na Weeks
-                      </h3>
-                      <p className="text-sm text-ink-500">
-                        Telefon{' '}
-                        <a
-                          href={`tel:${SITE.phone.replace(/\s+/g, '')}`}
-                          className="text-primary-600 hover:underline"
-                        >
-                          {SITE.phone}
-                        </a>{' '}
-                        i e-mail{' '}
-                        <a href={`mailto:${SITE.email}`} className="text-primary-600 hover:underline">
-                          {SITE.email}
-                        </a>{' '}
-                        máte vždy k dispozici.
-                      </p>
-                    </div>
-                  </div>
-                </div>
+        {/* ── Závěr ────────────────────────────────────────────────────── */}
+        <section className="zaver amber vz vz-zaver">
+          <div className="wrap">
+            <div className="zaver-in">
+              <h2>Chcete se na něco zeptat?</h2>
+              <p>Na program, bezpečnost i přihlášku odpovídáme sami.</p>
+              <div className="zaver-akce">
+                <Link className="btn btn-dark btn-lg" href="/kontakt">
+                  Napsat nebo zavolat <Ikona id="sipka" />
+                </Link>
+                <Link className="btn btn-outline btn-lg" href="/tabory">
+                  Vybrat tábor
+                </Link>
               </div>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* CTA Section */}
-        <section className="section-padding bg-paper">
-          <div className="section-container">
-            <motion.div
-              initial={{ y: 20 }}
-              whileInView={{ y: 0 }}
-              viewport={{ once: true }}
-              className="max-w-3xl mx-auto text-center"
-            >
-              <h2 className="heading-2 text-ink mb-6">
-                Máte dotazy?
-              </h2>
-              <p className="text-xl text-ink-500 mb-8">
-                Rádi vám zodpovíme jakékoliv otázky ohledně našich táborů,
-                bezpečnosti nebo programu.
-              </p>
-              <Link href="/kontakt" className="btn-primary">
-                Kontaktujte nás
-              </Link>
-            </motion.div>
+            </div>
           </div>
         </section>
       </main>

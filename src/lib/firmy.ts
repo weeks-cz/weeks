@@ -61,7 +61,7 @@ const NABIDKY_MAP: Record<NabidkaId, B2BNabidka> = {
     ],
     zajistimeMy: [
       'Program, lektory a veškerý materiál.',
-      'Techniku — 3D tiskárny, elektroniku, headsety.',
+      'Techniku — 3D tiskárny, elektroniku a notebooky.',
       'Dozor po celou dobu programu.',
       'Informace pro rodiče v podobě, kterou můžete rozeslat beze změny.',
     ],

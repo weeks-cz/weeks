@@ -32,6 +32,15 @@ const CESTY = {
   slunce: '<circle cx="12" cy="12" r="4"/><path d="M12 2.5V5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8"/>',
   dvere: '<path d="M6 21V4.5A1.5 1.5 0 0 1 7.5 3h9A1.5 1.5 0 0 1 18 4.5V21M3.5 21h17"/><circle cx="14.5" cy="12.5" r="0.7" fill="currentColor"/>',
   kapka: '<path d="M12 3.5c3 3.7 5.5 6.7 5.5 10a5.5 5.5 0 0 1-11 0c0-3.3 2.5-6.3 5.5-10z"/>',
+  dum: '<path d="M4 11l8-7 8 7v8.5a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1V11z"/>',
+  budova: '<rect x="5" y="3.5" width="14" height="17" rx="1.5"/><path d="M9 8h2M13 8h2M9 12h2M13 12h2M10.5 20.5V17h3v3.5"/>',
+  skola: '<path d="M2.5 9.5L12 5l9.5 4.5L12 14 2.5 9.5z"/><path d="M6.5 11.7V16c1.5 1.4 3.3 2.1 5.5 2.1s4-.7 5.5-2.1v-4.3M21.5 9.5V15"/>',
+  srdce: '<path d="M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.3a4.3 4.3 0 0 1 7.5 2.5C19.5 15.4 12 20 12 20z"/>',
+  naradi: '<path d="M14.5 6.2a4 4 0 0 0-5.3 5.3L4 16.700 7.300 20l5.200-5.200a4 4 0 0 0 5.300-5.300l-2.600 2.600-2.400-.6-.6-2.400 2.300-2.900z"/>',
+  linkedin: '<rect x="3.5" y="3.5" width="17" height="17" rx="3"/><path d="M8 10.5v6M8 7.5v.1M12 16.5V13a2 2 0 0 1 4 0v3.500M12 10.500v6"/>',
+  stan: '<path d="M12 4.5L3 20h18L12 4.5z"/><path d="M12 12.5L8.5 20M12 12.5l3.500 7.500M12 4.500V2.500"/>',
+  odeslat: '<path d="M20.5 3.5L3.5 10.5l6.5 3 3 6.500 7.500-16.500z"/><path d="M10 13.500l4.500-4.500"/>',
+  cil: '<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="0.8" fill="currentColor"/>',
 } as const
 
 export type IkonaId = keyof typeof CESTY
