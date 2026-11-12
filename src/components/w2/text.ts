@@ -28,3 +28,11 @@ export function sazba(text: string): string {
       .replace(/ (–) /g, '\u00a0$1 ')
   )
 }
+
+/**
+ * „12. – 16. července 2027“ → „12.–16. července 2027“. Rozsah ve stejném
+ * měsíci se píše bez mezer kolem pomlčky; přes dva měsíce mezery zůstávají.
+ */
+export function rozsahTesne(datum: string): string {
+  return datum.replace(/^(\d+\.) – (\d+\.) /, '$1–$2 ')
+}

@@ -54,11 +54,11 @@ export function Ikona({ id, className }: { id: IkonaId; className?: string }) {
 
 const HVEZDA = '<path d="M10 1.800l2.5 5.2 5.7.8-4.1 4 1 5.700L10 14.800l-5.1 2.7 1-5.7-4.1-4 5.7-.800z"/>'
 
-/** Pět hvězd u hodnocení. Číslo vedle nich píše volající. */
-export function Hvezdy() {
+/** Hvězdy u hodnocení (výchozí pět). Číslo vedle nich píše volající. */
+export function Hvezdy({ pocet = 5 }: { pocet?: number } = {}) {
   return (
     <span className="hvezdy" aria-hidden="true">
-      {[0, 1, 2, 3, 4].map((i) => (
+      {Array.from({ length: pocet }, (_, i) => i).map((i) => (
         <svg key={i} viewBox="0 0 20 20" fill="currentColor" dangerouslySetInnerHTML={{ __html: HVEZDA }} />
       ))}
     </span>

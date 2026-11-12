@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { SITE, getSiteFaq, getVenuesSentence } from './site'
+import { SITE, V_CENE, V_CENE_DLAZDICE, getSiteFaq, getVenuesSentence } from './site'
 import type { Turnus } from './turnusy'
 
 /** Turnus s potvrzeným místem — v ostrých datech dnes žádný takový není. */
@@ -82,5 +82,17 @@ describe('getVenuesSentence', () => {
 
   it('nekončí prázdnou větou, ani když má turnus místo nedomluvené', () => {
     expect(getVenuesSentence().length).toBeGreaterThan(20)
+  })
+})
+
+describe('V_CENE_DLAZDICE', () => {
+  it('má stejný počet položek jako V_CENE — dlaždice nesmí slíbit víc ani míň než VOP', () => {
+    expect(V_CENE_DLAZDICE).toHaveLength(V_CENE.length)
+  })
+
+  it('každá dlaždice začíná stejným slovem jako její řádek ve V_CENE', () => {
+    V_CENE_DLAZDICE.forEach((d, i) => {
+      expect(d.text.split(' ')[0]).toBe(V_CENE[i].split(' ')[0])
+    })
   })
 })

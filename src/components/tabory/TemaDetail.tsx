@@ -49,6 +49,8 @@ import { TYM } from '@/lib/tym'
  */
 
 const IKONY_DNE: Record<IkonaDne, LucideIcon> = {
+  napad: Sparkles,
+  level: Gamepad2,
   tisk: Printer,
   model: Box,
   iot: Cpu,

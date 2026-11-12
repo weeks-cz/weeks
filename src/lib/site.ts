@@ -86,6 +86,18 @@ export const V_CENE = [
   'Materiál a pomůcky',
 ] as const
 
+/**
+ * Tytéž čtyři položky jako dlaždice na stránce termínu: ikona a znění na
+ * jeden řádek. Pořadí a počet musí sedět s `V_CENE` (hlídá `site.test.ts`) —
+ * `V_CENE` zůstává zněním pro VOP, tohle je jen jeho krátká podoba.
+ */
+export const V_CENE_DLAZDICE = [
+  { ikona: 'lide', text: 'Program s lektory' },
+  { ikona: 'pribor', text: 'Oběd každý den' },
+  { ikona: 'kapka', text: 'Pitný režim' },
+  { ikona: 'krabice', text: 'Materiál a pomůcky' },
+] as const
+
 /** „V ceně“ konkrétního tábora: společný základ + co si z něj dítě odnese. */
 export function vCeneTabora(tabor?: Pick<Tabor, 'odnese'>): string[] {
   return tabor?.odnese ? [...V_CENE, tabor.odnese] : [...V_CENE]

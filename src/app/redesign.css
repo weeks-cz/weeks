@@ -3998,3 +3998,20 @@ html {
   max-height: calc(100dvh - 56px);
   overflow-y: auto;
 }
+/* Místo konání bez fotky (fotku školy bez souhlasu nedáváme): jeden sloupec na šířku čtení. */
+.w2 .misto-grid.misto-samo {
+  grid-template-columns: minmax(0, 1fr);
+}
+.w2 .misto-grid.misto-samo > div {
+  max-width: 720px;
+}
+/* Odkazy na jiná města v bílém nákupním boxu: box stojí v tmavém bloku, bez tohohle by byly azurové na bílé. */
+.w2 .dark .box .link {
+  color: var(--indigo);
+  font-weight: 600;
+}
+/* Hodnocení bez textu: jen hvězdy a jméno, s poznámkou, aby karta nepůsobila jako chyba. */
+.w2 .rec .rec-bez {
+  color: var(--muted);
+  font-size: 0.9375rem;
+}

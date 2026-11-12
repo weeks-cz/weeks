@@ -5,6 +5,7 @@ import {
   getChystaneTabory,
   zkusiSiTabora,
   validateTabory,
+  TABORY,
   type Tabor,
 } from './tabory'
 
@@ -18,7 +19,15 @@ const aktivni: Tabor = {
   focus: ['3d-tisk', 'iot'],
   odnese: 'Vlastní výtisky z 3D tiskárny domů',
   program: [
-    { den: 'Pondělí', ikona: 'tisk', title: 'Start', description: 'Popis dne.', highlights: ['a'] },
+    {
+      den: 'Pondělí',
+      ikona: 'tisk',
+      title: 'Start',
+      kratce: 'Start',
+      shrnuti: 'Krátce o dni.',
+      description: 'Popis dne.',
+      highlights: ['a'],
+    },
   ],
 }
 
@@ -98,5 +107,26 @@ describe('validateTabory', () => {
   it('aktivní tábor, který neříká, co si dítě odnese, je chyba — chyběl by řádek „V ceně"', () => {
     const problemy = validateTabory([{ ...aktivni, odnese: undefined }])
     expect(problemy.join(' ')).toContain('odnese')
+  })
+})
+
+describe('krátké znění dnů v ostrých datech', () => {
+  const dny = TABORY.flatMap((t) => (t.program ?? []).map((d) => ({ tabor: t.id, ...d })))
+
+  it('název dne na kartu týdne se vejde na jeden řádek', () => {
+    // Pět karet stojí vedle sebe; delší název se zalomí jen u některých a
+    // karty pak mají různý počet řádků.
+    const dlouhe = dny.filter((d) => d.kratce.length === 0 || d.kratce.length > 16)
+    expect(dlouhe.map((d) => `${d.tabor}: ${d.kratce}`)).toEqual([])
+  })
+
+  it('shrnutí dne mají v jednom táboře podobnou délku', () => {
+    // Stejný důvod: o řádek delší popis rozhodí výšku jedné karty z pěti.
+    for (const tabor of TABORY) {
+      const delky = (tabor.program ?? []).map((d) => d.shrnuti.length)
+      if (delky.length === 0) continue
+      expect(Math.min(...delky), tabor.id).toBeGreaterThanOrEqual(45)
+      expect(Math.max(...delky), tabor.id).toBeLessThanOrEqual(70)
+    }
   })
 })

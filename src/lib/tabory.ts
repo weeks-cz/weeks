@@ -30,12 +30,23 @@ export type TaborStatus =
  * jít načíst v testu (prostředí `node`) bez Reactu. Mapa klíč → ikona žije ve
  * stránce, která dny vykresluje.
  */
-export type IkonaDne = 'tisk' | 'model' | 'iot' | 'vr' | 'projekt' | 'hra' | 'zvuk' | 'kod'
+export type IkonaDne =
+  | 'napad' | 'tisk' | 'model' | 'iot' | 'vr' | 'projekt' | 'level' | 'hra' | 'zvuk' | 'kod'
 
 export interface DenProgramu {
   den: string
   ikona: IkonaDne
   title: string
+  /**
+   * Název dne na jeden řádek, pro kartu týdne. Karty stojí vedle sebe a musí
+   * mít stejně řádků — hlídá to `tabory.test.ts` (nejvýš 16 znaků).
+   */
+  kratce: string
+  /**
+   * Jedna až dvě věty do karty týdne na stránce tématu. Všechny dny tábora je
+   * mají zhruba stejně dlouhé (50–66 znaků), jinak karty neudrží stejnou výšku.
+   */
+  shrnuti: string
   description: string
   highlights: string[]
 }
@@ -58,6 +69,20 @@ export interface Tabor {
    * U chystaného tábora je povinné — zaměření pro něj obsah nemá.
    */
   zkusiSi?: string[]
+  /**
+   * Dvě až tři věty pro stránku termínu. Schválně jiné znění než `perex`
+   * a `popis` na stránce tématu: popis tábora žije na tématu, tady je jen
+   * tolik, aby rodič z reklamy věděl, co kupuje, a nemusel o stránku dál.
+   */
+  proTermin?: string
+  /**
+   * Věta nad recenzemi u tábora, který ještě neběžel: recenze na jeho stránce
+   * jsou z jiných táborů Weeks a stránka to musí říct dřív, než je rodič
+   * přečte jako hodnocení tohohle tábora.
+   */
+  poznamkaKRecenzim?: string
+  /** „Co si dítě odnese“ na dvě tři slova, do dlaždice „Co je v ceně“. */
+  odneseKratce?: string
   /** Program Po–Pá. Jen aktivní tábor; chystaný nesmí slibovat, co se bude dít. */
   program?: DenProgramu[]
   /** Otázky, které se týkají právě tohohle tématu. Obecné jsou v `site.ts`. */
@@ -142,6 +167,9 @@ export const TABORY: Tabor[] = [
     // ve `focus.ts` i s obsahem; vrátí se dopsáním do tohohle pole.
     focus: ['3d-tisk', 'iot'],
     odnese: 'Vlastní výtisky z 3D tiskárny domů',
+    odneseKratce: 'Výtisky domů',
+    proTermin:
+      'Týden 3D tisku, 3D modelování a elektroniky s Arduinem. Děti si navrhnou vlastní model, vytisknou ho a postaví zařízení, které reaguje na okolí. Výtisky si odvezou domů.',
     fotoHera: {
       src: '/images/tabor/vytisk-v-ruce.webp',
       alt: 'Vlastní návrh, vytištěný na táboře',
@@ -174,8 +202,10 @@ export const TABORY: Tabor[] = [
     program: [
       {
         den: 'Pondělí',
-        ikona: 'tisk',
+        ikona: 'napad',
         title: '3D tisk — základy',
+        kratce: 'První výtisk',
+        shrnuti: 'Jak tiskárna funguje a co umí. Každý si spustí svůj první výtisk.',
         description:
           'Úvod do světa 3D tisku. Jak tiskárna funguje, jak najít a připravit model a jak ho poslat na tisk. Každý si spustí svůj první výtisk.',
         highlights: ['Princip FDM tisku', 'Práce s modelem online', 'Spuštění prvního tisku'],
@@ -184,6 +214,8 @@ export const TABORY: Tabor[] = [
         den: 'Úterý',
         ikona: 'model',
         title: '3D modelování',
+        kratce: '3D modelování',
+        shrnuti: 'Základy modelování v počítači a návrh vlastního předmětu.',
         description:
           'Z hotových modelů k vlastním kreacím. Děti se naučí základy 3D modelování a navrhnou vlastní objekt, který si druhý den vytisknou.',
         highlights: ['Základy 3D softwaru', 'Vlastní návrh modelu', 'Příprava pro tisk'],
@@ -192,6 +224,8 @@ export const TABORY: Tabor[] = [
         den: 'Středa',
         ikona: 'tisk',
         title: '3D tisk vlastních modelů',
+        kratce: 'Tisk modelů',
+        shrnuti: 'Tisk úterních návrhů, broušení a poslední úpravy výtisků.',
         description:
           'Tisk vlastních návrhů z úterý, dokončování, broušení a finální úpravy. Vše si děti odnesou domů.',
         highlights: ['Tisk vlastních modelů', 'Post-processing', 'Hotové výtisky domů'],
@@ -200,6 +234,8 @@ export const TABORY: Tabor[] = [
         den: 'Čtvrtek',
         ikona: 'iot',
         title: 'IoT & Arduino — úvod',
+        kratce: 'IoT a Arduino',
+        shrnuti: 'Arduino, Micro:bit, senzory, LED diody a první programy.',
         description:
           'Co je to IoT a k čemu slouží. Seznámení s Arduinem a Micro:bitem, práce se senzory a LED diodami, první programy.',
         highlights: ['Arduino & Micro:bit', 'Senzory a LED', 'První IoT obvod'],
@@ -211,6 +247,8 @@ export const TABORY: Tabor[] = [
         // `focus.ts` říká, že Micro:bity a Arduina zůstávají v laboratoři,
         // a web nesmí tvrdit obojí.
         title: 'IoT projekt + výstava',
+        kratce: 'Vlastní projekt',
+        shrnuti: 'Dokončení vlastního zařízení a malá výstava pro rodiče.',
         description:
           'Dokončení vlastního IoT zařízení a malá výstava pro rodiče. Děti prezentují, co za týden vytvořily.',
         highlights: ['Vlastní IoT zařízení', 'Prezentace pro rodiče', 'Dokončený projekt'],
@@ -231,14 +269,18 @@ export const TABORY: Tabor[] = [
       'Týden v herním enginu Godot. Každé dítě postaví vlastní akční 2D hru s levelem, postavou, střelami, nepřáteli, zvuky a efekty a v pátek si ji sestavenou odnese domů. Programovat umět nemusí, první řádky kódu přijdou na řadu až ve čtvrtek.',
     focus: ['herni-vyvoj'],
     odnese: 'Vlastní hra, kterou si dítě odnese domů',
+    odneseKratce: 'Vlastní hra domů',
+    poznamkaKRecenzim:
+      'Herní tábor běží poprvé v létě 2027. Recenze jsou z táborů Weeks v roce 2026.',
+    proTermin:
+      'Týden v Godotu, programu na tvorbu her. Děti postaví vlastní akční 2D hru: level, postavu, střely, nepřátele, zvuky a efekty. Programovat předem umět nemusí a hotovou hru si v pátek odnesou domů.',
     lektori: ['marek-vykysaly'],
-    // Skutečná fotka z tábora Weeks (ne z herního — ten se ještě nekonal),
-    // proto alt nepopisuje práci na hře. Pražská karta chytrých technologií
-    // má záběr z dílny, tahle z učebny ve FabLabu, ať vedle sebe nestojí
-    // dvakrát stejná fotka.
+    // Fotka z tábora Weeks s upravenými obrazovkami (hra a editor) a jedním
+    // dítětem — herní tábor se ještě nekonal. Alt proto popisuje jen to, co je
+    // na snímku vidět, a web nikde netvrdí, že jde o záběr z herního tábora.
     foto: {
-      src: '/images/tabor/fablab-ucebna.webp',
-      alt: 'Děti u počítačů na táboře Weeks, každé u své obrazovky',
+      src: '/images/tabor/gd-deti-u-pocitacu.webp',
+      alt: 'Děti zezadu u tří počítačů: na monitorech editor kódu, rozehraná 2D hra a editor scény',
     },
     // Hero: děti u počítačů (na výšku oříznuté). Pás: skupinová fotka venku
     // místo venkovní šablony — tu u herního tábora nechceme (2026-11-10).
@@ -255,8 +297,10 @@ export const TABORY: Tabor[] = [
     program: [
       {
         den: 'Pondělí',
-        ikona: 'hra',
+        ikona: 'level',
         title: 'Godot a první level',
+        kratce: 'První level',
+        shrnuti: 'Vlastní projekt, postava a první level z připravených dílků.',
         description:
           'Seznámení s herním enginem Godot. Děti si založí vlastní projekt, vytvoří postavu a z připravených dílků postaví první level.',
         highlights: ['Herní engine Godot', 'Vlastní postava', 'První level z dílků'],
@@ -265,6 +309,8 @@ export const TABORY: Tabor[] = [
         den: 'Úterý',
         ikona: 'hra',
         title: 'Pohyb, fyzika a akce',
+        kratce: 'Pohyb a akce',
+        shrnuti: 'Postava běhá a skáče. Přibudou střely a první nepřátelé.',
         description:
           'Postava dostane parametry a fyziku, takže se pohybuje a skáče, jak má. Do hry přibudou střely, jejich sbírání a první nepřátelé, na kterých se akce vyzkouší.',
         highlights: ['Pohyb a fyzika', 'Střely a jejich sbírání', 'První nepřátelé'],
@@ -273,6 +319,8 @@ export const TABORY: Tabor[] = [
         den: 'Středa',
         ikona: 'zvuk',
         title: 'Ladění a zvuky',
+        kratce: 'Ladění a zvuky',
+        shrnuti: 'Dopoledne hru ladíme, odpoledne do ní děti nahrají zvuky.',
         description:
           'Dopoledne hru společně ladíme, aby fungovala a nic se v ní nerozbíjelo. Odpoledne si děti vytvoří vlastní zvuky a dají je do hry.',
         highlights: ['Testování a ladění', 'Tvorba zvuků', 'Zvuky ve hře'],
@@ -281,6 +329,8 @@ export const TABORY: Tabor[] = [
         den: 'Čtvrtek',
         ikona: 'kod',
         title: 'Efekty a první kód',
+        kratce: 'Efekty a kód',
+        shrnuti: 'Vizuální efekty a první řádky kódu v jazyce GDScript.',
         description:
           'Vizuální efekty, třeba různé druhy střel nebo rychlý úskok. Odpoledne první krok do programování: základy jazyka GDScript, ve kterém se v Godotu píše herní logika.',
         highlights: ['Vizuální efekty', 'Základy GDScriptu', 'Herní logika v kódu'],
@@ -289,6 +339,8 @@ export const TABORY: Tabor[] = [
         den: 'Pátek',
         ikona: 'projekt',
         title: 'Hotová hra',
+        kratce: 'Hotová hra',
+        shrnuti: 'Vlastní funkce v kódu, doladění a hra, která jde spustit i doma.',
         description:
           'Děti si samy naprogramují jednoduchou funkci, třeba sbírání mincí, doladí, co je potřeba, a hru sestaví tak, aby šla spustit i doma.',
         highlights: ['Vlastní funkce v kódu', 'Sestavení hry', 'Hra domů'],

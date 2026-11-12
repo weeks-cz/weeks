@@ -90,9 +90,7 @@ export default async function TerminPage({ params }: { params: Promise<{ slug: s
           { name: `${l.mesto} — ${l.datum}`, url: `${SITE.url}/tabory/termin/${turnus.slug}` },
         ]}
       />
-      {/* Bez oranžového tlačítka v liště — rodič termín už má a druhé
-          oranžové tlačítko by soupeřilo s „Přihlásit dítě“. */}
-      <Header bezCta />
+      <Header vToku />
       <TerminDetail turnus={turnus} />
       <Footer />
     </>

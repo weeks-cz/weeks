@@ -44,6 +44,12 @@ export interface Venue {
   mapQuery: string
   /** Fotky prostoru pro `VenueShowcase`. Bez fotek se galerie nevykresluje. */
   photos?: string[]
+  /**
+   * Jedna vlastní fotka místa pro stránku termínu a tématu. Jen snímek, na
+   * který máme právo (vlastní, nebo se souhlasem majitele) — bez ní se sekce
+   * vykreslí jen s textem a adresou.
+   */
+  foto?: { src: string; alt: string; width: number; height: number }
 }
 
 const CITIES: Record<CityId, City> = {
@@ -76,6 +82,12 @@ const VENUES: Record<VenueId, Venue> = {
     url: 'https://varyete.cz',
     vybaveni: 'Profesionální 3D tiskárny a Arduino soupravy',
     mapQuery: 'Kreativní+centrum+Vary%26Te+Karlovy+Vary',
+    foto: {
+      src: '/images/tabor/fablab-prazdna-ucebna.webp',
+      alt: 'Učebna ve FabLabu: stoly s monitory, regály s technikou a okna do krajiny',
+      width: 1600,
+      height: 1200,
+    },
     photos: [
       '/images/varyete/fablab-1.avif',
       '/images/varyete/fablab-5.avif',
@@ -99,6 +111,8 @@ const VENUES: Record<VenueId, Venue> = {
       'Základní škola v pražských Záběhlicích. Tábor běží v její počítačové učebně.',
     vybaveni: 'Počítačová učebna, každé dítě má svůj počítač',
     mapQuery: 'B%C5%99e%C4%8D%C5%A5anov%C3%A1+2919%2F6+Praha+10',
+    // Bez `foto`: vlastní snímek učebny zatím nemáme a fotku z webu školy
+    // nesmíme použít bez jejího souhlasu.
   },
 }
 
