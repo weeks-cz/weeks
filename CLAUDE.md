@@ -352,18 +352,33 @@ FabLab dropped to a past reference, the e-shop is hidden from navigation and
 
 The homepage, `/tabory`, `/tabory/[tema]` and `/tabory/termin/[slug]` (wave 1),
 `/o-nas`, `/kontakt`, `/oslavy` and `/firmy` with their four forms (wave 2),
-plus the header and footer of every page, carry a new look. Wave 1 was designed
-and approved as a clickable prototype outside this repo and then ported page by
-page; wave 2 had no prototype — it was built here from the same stylesheet.
+the registration form, its confirmation page, `/platba/[id]`, `/gdpr`,
+`/podminky` and the 404 (wave 3), plus the header and footer of every page,
+carry a new look. Wave 1 was designed and approved as a clickable prototype
+outside this repo and then ported page by page; waves 2 and 3 had no
+prototype — they were built here from the same stylesheet.
 
 - **Scope.** All of it lives in `src/app/redesign.css`, every selector prefixed
   with `.w2`. A redesigned page renders `<Header vToku />` and
   `<main id="obsah" className="w2">`; its markup uses the stylesheet's class
-  names, not Tailwind. The other pages (`/gdpr`, `/podminky`, e-shop,
-  registration, payment, 404) keep the Tailwind layout and only get the new
-  header (fixed, default) and footer.
+  names, not Tailwind. Only the e-shop (hidden from navigation) keeps the
+  Tailwind layout with the fixed header (`Header` without `vToku`). Every page,
+  the e-shop included, has `<main id="obsah">`, because the header's first
+  element is a "Přeskočit na obsah" link pointing there.
   **Edit `redesign.css` by hand** — it was generated from the prototype once
   and is the source of truth now.
+- **Wave 3 changed the look, not the flow.** Registration validation, the
+  `/api/register` payload, payment start, the confirmation polling and
+  analytics events are the same code as before; the legal pages' text is the
+  same word for word (checked against the render before the change). Wave 3
+  building blocks are in the block "Vlna 3" at the end of `redesign.css`:
+  `postup` (step bar in the dark header — not `kroky`, that is the term page's
+  "how to sign up"), `objednavka` + `souhrn` (form next to a camp summary on
+  desktop), `volba-karta` (radio as a card), `udaje`, `stav-ikona` /
+  `stav-stitek`, `pravni` + `PravniObsah` (legal text with a table of
+  contents). The contents list (`OBSAH` in each legal page) is written by
+  hand next to the text; `src/app/pravni-obsah.test.ts` fails when it stops
+  matching the sections.
 - **Wave 2 building blocks** sit in the block "Vlna 2" at the end of
   `redesign.css`: `rozcesti` (link tiles on dark), `karty`/`karta`, `lide`/`clen`
   (team), `prubehy` (a party hour by hour), `formular` (the form card) and

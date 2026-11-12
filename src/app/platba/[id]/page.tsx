@@ -8,8 +8,8 @@ import { PaymentRedirect } from '@/components/registration/PaymentRedirect'
 function PaymentContent({ id }: { id: string }) {
   return (
     <>
-      <Header />
-      <main className="min-h-screen bg-paper flex items-center justify-center py-24 px-4">
+      <Header vToku />
+      <main id="obsah" className="w2">
         <PaymentRedirect registrationId={id} />
       </main>
       <Footer />
@@ -21,7 +21,7 @@ export default function PaymentPage({ params }: { params: Promise<{ id: string }
   const { id } = use(params)
 
   return (
-    <Suspense fallback={<div className="min-h-screen bg-paper flex items-center justify-center text-ink/50">Načítání...</div>}>
+    <Suspense fallback={<div className="w2"><p className="nacitani">Načítání...</p></div>}>
       <PaymentContent id={id} />
     </Suspense>
   )

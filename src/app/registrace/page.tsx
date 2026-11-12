@@ -8,11 +8,9 @@ import { RegistrationForm } from '@/components/registration/RegistrationForm'
 function RegistraceContent() {
   return (
     <>
-      <Header />
-      <main className="min-h-screen bg-paper pt-24 pb-16">
-        <div className="section-container">
-          <RegistrationForm />
-        </div>
+      <Header vToku />
+      <main id="obsah" className="w2">
+        <RegistrationForm />
       </main>
       <Footer />
     </>
@@ -21,7 +19,7 @@ function RegistraceContent() {
 
 export default function RegistracePage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-paper flex items-center justify-center text-ink/50">Načítání...</div>}>
+    <Suspense fallback={<div className="w2"><p className="nacitani">Načítání...</p></div>}>
       <RegistraceContent />
     </Suspense>
   )

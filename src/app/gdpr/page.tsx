@@ -1,8 +1,10 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { ArrowLeft } from 'lucide-react'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
+import { Ikona } from '@/components/w2/Ikona'
+import { Mrizka } from '@/components/w2/Mrizka'
+import { PravniObsah, type PolozkaObsahu } from '@/components/w2/PravniObsah'
 import { BreadcrumbSchema } from '@/components/seo/StructuredData'
 import { SITE } from '@/lib/site'
 
@@ -78,6 +80,24 @@ export const metadata: Metadata = {
   Text čeká na kontrolu týmu.
 */
 
+/** Obsah stránky – musí odpovídat oddílům níž (`id` = kotva `<section>`). */
+const OBSAH: PolozkaObsahu[] = [
+  { id: 'cl-1', nazev: '1. Správce osobních údajů' },
+  { id: 'cl-2', nazev: '2. Jaké osobní údaje zpracováváme' },
+  { id: 'cl-3', nazev: '3. Účel zpracování osobních údajů' },
+  { id: 'cl-4', nazev: '4. Právní základ zpracování' },
+  { id: 'cl-5', nazev: '5. Doba uchovávání údajů' },
+  { id: 'cl-6', nazev: '6. Vaše práva' },
+  { id: 'cl-7', nazev: '7. Jak uplatnit Vaše práva' },
+  { id: 'cl-8', nazev: '8. Předávání údajů třetím stranám' },
+  { id: 'cl-9', nazev: '9. Zabezpečení osobních údajů' },
+  { id: 'cl-10', nazev: '10. Cookies a sledovací technologie' },
+  { id: 'cl-11', nazev: '11. Přibližná poloha podle IP adresy' },
+  { id: 'cl-12', nazev: '12. Právo podat stížnost' },
+  { id: 'cl-13', nazev: '13. Změny zásad ochrany osobních údajů' },
+  { id: 'cl-14', nazev: '14. Kontakt' },
+]
+
 export default function GDPRPage() {
   const breadcrumbItems = [
     { name: 'Domů', url: 'https://weeks.cz' },
@@ -87,125 +107,127 @@ export default function GDPRPage() {
   return (
     <>
       <BreadcrumbSchema items={breadcrumbItems} />
-      <Header />
-      <main className="min-h-screen bg-paper pt-24 pb-16">
-        <article className="section-container max-w-4xl">
-          {/* Breadcrumb */}
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 mb-8 transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Zpět na hlavní stránku
-          </Link>
+      <Header vToku />
+      <main id="obsah" className="w2">
+        <section className="zahlavi zahlavi-kratke dark mrizka">
+          <Mrizka />
+          <div className="wrap">
+            <div className="zahlavi-uzke">
+              <nav className="drob" aria-label="Drobečková navigace">
+                <Link href="/">Domů</Link> <span aria-hidden="true">/</span> <span>Ochrana osobních údajů</span>
+              </nav>
+              <h1>Ochrana osobních údajů</h1>
+              <p className="zahlavi-perex">Zásady zpracování osobních údajů v souladu s nařízením GDPR</p>
+              <div className="cipy-info">
+                <span className="cip-info">
+                  <Ikona id="kalendar" />
+                  Účinnost od: 16. září 2026
+                </span>
+                <a className="cip-info" href="#cl-6">
+                  <Ikona id="stit" />
+                  Vaše práva
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
 
-          {/* Header */}
-          <header className="mb-12">
-            <p className="mono-label mb-4">Právní</p>
-            <h1 className="heading-1 text-ink mb-4">
-              Ochrana osobních údajů
-            </h1>
-            <p className="text-ink-500 text-lg">
-              Zásady zpracování osobních údajů v souladu s nařízením GDPR
-            </p>
-            <p className="text-ink/50 text-sm mt-4">
-              Účinnost od: 16. září 2026
-            </p>
-          </header>
+        <section className="sec sec-papir bez-linky">
+          <div className="wrap pravni-rozvrh">
+            <PravniObsah polozky={OBSAH} />
 
-          {/* Content */}
-          <div className="max-w-none">
-            <section className="mb-12">
-              <h2 className="font-display text-2xl font-bold text-ink mb-4">1. Správce osobních údajů</h2>
-              <p className="text-ink mb-4">
+            <article className="pravni">
+            <section id="cl-1">
+              <h2>1. Správce osobních údajů</h2>
+              <p>
                 Správcem Vašich osobních údajů je:
               </p>
-              <div className="bg-white p-6 rounded-md border border-ink/15">
-                <p className="text-ink font-semibold mb-2">{SITE.legalName}</p>
-                <p className="text-ink text-base mb-1">IČO: {SITE.ico}</p>
-                <p className="text-ink text-base mb-1">Sídlo: {SITE.address}</p>
-                <p className="text-ink text-base mb-1">Zapsaná v obchodním rejstříku vedeném u {SITE.court}</p>
-                <p className="text-ink text-base mb-1">E-mail: {SITE.email}</p>
-                <p className="text-ink text-base mb-1">Telefon: {SITE.phone}</p>
-                <p className="text-ink text-base">Web: weeks.cz</p>
-                <p className="text-ink-500 text-sm mt-2">
+              <div className="ramec">
+                <p className="tucne">{SITE.legalName}</p>
+                <p>IČO: {SITE.ico}</p>
+                <p>Sídlo: {SITE.address}</p>
+                <p>Zapsaná v obchodním rejstříku vedeném u {SITE.court}</p>
+                <p>E-mail: {SITE.email}</p>
+                <p>Telefon: {SITE.phone}</p>
+                <p>Web: weeks.cz</p>
+                <p className="small muted">
                   {SITE.legalName} je pořadatelem táborů Weeks a správcem osobních údajů účastníků.
                 </p>
               </div>
             </section>
 
-            <section className="mb-12">
-              <h2 className="font-display text-2xl font-bold text-ink mb-4">2. Jaké osobní údaje zpracováváme</h2>
-              <p className="text-ink mb-4">
+            <section id="cl-2">
+              <h2>2. Jaké osobní údaje zpracováváme</h2>
+              <p>
                 Rozsah údajů závisí na tom, který formulář na webu vyplníte.
               </p>
 
-              <div className="space-y-6">
-                <div className="bg-white p-6 rounded-md border border-ink/15">
-                  <p className="text-ink font-semibold mb-3">Závazná přihláška dítěte na tábor</p>
-                  <p className="text-ink-500 text-base mb-3">Údaje o zákonném zástupci:</p>
-                  <ul className="list-disc pl-6 space-y-2 text-ink-500 mb-4">
+              <div>
+                <div className="ramec">
+                  <p className="tucne">Závazná přihláška dítěte na tábor</p>
+                  <p className="muted">Údaje o zákonném zástupci:</p>
+                  <ul>
                     <li><strong>Jméno a příjmení</strong> – pro identifikaci smluvní strany</li>
                     <li><strong>E-mailová adresa</strong> – pro komunikaci a potvrzení registrace</li>
                     <li><strong>Telefonní číslo</strong> – pro urgentní kontakt v průběhu tábora</li>
                     <li><strong>Fakturační adresa</strong> – pro vystavení faktury</li>
                   </ul>
-                  <p className="text-ink-500 text-base mb-3">Údaje o dítěti:</p>
-                  <ul className="list-disc pl-6 space-y-2 text-ink-500 mb-4">
+                  <p className="muted">Údaje o dítěti:</p>
+                  <ul>
                     <li><strong>Jméno a příjmení</strong> – pro identifikaci účastníka</li>
                     <li><strong>Datum narození</strong> – pro zařazení do vhodné skupiny</li>
-                    <li><strong>Zdravotní pojišťovna</strong> – pro případ ošetření dítěte; při nástupu se dokládá kopií průkazu (viz <Link href="/podminky" className="underline">podmínky</Link>, čl. 27)</li>
+                    <li><strong>Zdravotní pojišťovna</strong> – pro případ ošetření dítěte; při nástupu se dokládá kopií průkazu (viz <Link href="/podminky">podmínky</Link>, čl. 27)</li>
                     <li><strong>Zdravotní omezení a alergie</strong> (nepovinné) – pro zajištění bezpečnosti a stravování dítěte</li>
                     <li><strong>Dosavadní zkušenosti</strong> (nepovinné) – pro přizpůsobení zadání</li>
                   </ul>
-                  <p className="text-ink-500 text-base mb-3">Údaje o vyzvedávání:</p>
-                  <ul className="list-disc pl-6 space-y-2 text-ink-500 mb-4">
+                  <p className="muted">Údaje o vyzvedávání:</p>
+                  <ul>
                     <li><strong>Způsob vyzvednutí</strong> (dítě odchází samo / s uvedenou osobou)</li>
                     <li><strong>Čas odchodu</strong> (nepovinné)</li>
                     <li><strong>Osoby oprávněné dítě vyzvednout</strong> (nepovinné) – abychom dítě nepředali nikomu jinému</li>
                   </ul>
-                  <p className="text-ink-500 text-base mb-3">Souhlasy a doklad o jejich udělení:</p>
-                  <ul className="list-disc pl-6 space-y-2 text-ink-500 mb-4">
+                  <p className="muted">Souhlasy a doklad o jejich udělení:</p>
+                  <ul>
                     <li><strong>Souhlas s obchodními podmínkami</strong> a <strong>souhlas se zpracováním osobních údajů</strong> (oba povinné)</li>
                     <li><strong>Souhlas s pořizováním fotografií</strong> a <strong>souhlas se zasíláním novinek</strong> (oba nepovinné)</li>
                     <li><strong>IP adresa při odeslání registrace</strong> – uchováváme jako doklad o udělení souhlasu s obchodními podmínkami (oprávněný zájem, čl. 6 odst. 1 písm. f) GDPR)</li>
                   </ul>
-                  <p className="text-ink-500 text-base">
+                  <p className="muted">
                     Dále zpracováváme <strong>poznámku k objednávce</strong> (nepovinné), pokud ji v posledním
                     kroku přihlášky vyplníte.
                   </p>
                 </div>
 
-                <div className="bg-white p-6 rounded-md border border-ink/15">
-                  <p className="text-ink font-semibold mb-3">Formuláře zájmu a odběr novinek</p>
-                  <ul className="list-disc pl-6 space-y-2 text-ink-500">
+                <div className="ramec">
+                  <p className="tucne">Formuláře zájmu a odběr novinek</p>
+                  <ul>
                     <li><strong>Jméno a e-mailová adresa</strong> – při zanechání kontaktu na chystaný turnus</li>
                     <li><strong>E-mailová adresa</strong> – při přihlášení k odběru novinek na úvodní stránce</li>
                   </ul>
-                  <p className="text-ink-500 text-base mt-3">
+                  <p className="muted">
                     Zadáte-li pouze kontakt do těchto formulářů, žádné další osobní údaje o Vás
                     ani o dítěti nezpracováváme.
                   </p>
                 </div>
 
-                <div className="bg-white p-6 rounded-md border border-ink/15">
-                  <p className="text-ink font-semibold mb-3">Kontaktní formulář</p>
-                  <ul className="list-disc pl-6 space-y-2 text-ink-500">
+                <div className="ramec">
+                  <p className="tucne">Kontaktní formulář</p>
+                  <ul>
                     <li><strong>Jméno, e-mailová adresa a text zprávy</strong> – pro vyřízení Vašeho dotazu</li>
                     <li><strong>Název firmy</strong> (povinný) a <strong>telefonní číslo</strong> (nepovinné) – pro vyřízení poptávky od firmy</li>
                     <li><strong>Údaj o udělení souhlasu</strong> se zpracováním osobních údajů – abychom doložili, že jste souhlas udělili</li>
                   </ul>
-                  <p className="text-ink-500 text-base mt-3">
+                  <p className="muted">
                     Název firmy a telefonní číslo zadáváte pouze v poptávkovém formuláři na
-                    stránce <Link href="/firmy" className="underline">Pro firmy</Link>; běžný
+                    stránce <Link href="/firmy">Pro firmy</Link>; běžný
                     kontaktní formulář je nevyžaduje.
                   </p>
                 </div>
               </div>
 
-              <div className="bg-primary-50 p-6 rounded-lg border border-primary-200 mt-6">
-                <p className="text-primary-900 font-medium mb-2">Zdravotní omezení a alergie</p>
-                <p className="text-primary-800 text-base">
+              <div className="ramec ramec-info">
+                <p className="tucne">Zdravotní omezení a alergie</p>
+                <p>
                   Zdravotní omezení a alergie dítěte jsou zvláštní kategorií osobních údajů.
                   Jejich uvedení je dobrovolné a zpracováváme je na základě Vašeho výslovného
                   souhlasu — podrobnosti v článku 4 níže.
@@ -213,21 +235,21 @@ export default function GDPRPage() {
               </div>
             </section>
 
-            <section className="mb-12">
-              <h2 className="font-display text-2xl font-bold text-ink mb-4">3. Účel zpracování osobních údajů</h2>
-              <div className="space-y-6">
-                <div className="bg-white p-6 rounded-md border border-ink/15">
-                  <p className="text-ink font-semibold mb-2">Registrace a organizace tábora</p>
-                  <ul className="list-disc pl-6 space-y-1 text-ink-500">
+            <section id="cl-3">
+              <h2>3. Účel zpracování osobních údajů</h2>
+              <div>
+                <div className="ramec">
+                  <p className="tucne">Registrace a organizace tábora</p>
+                  <ul>
                     <li>Zpracování a potvrzení přihlášky</li>
                     <li>Komunikace s rodiči před táborem, v jeho průběhu a po něm</li>
                     <li>Zajištění stravování a bezpečnosti dítěte</li>
                     <li>Fakturace a vedení účetních dokladů</li>
                   </ul>
                 </div>
-                <div className="bg-white p-6 rounded-md border border-ink/15">
-                  <p className="text-ink font-semibold mb-2">Informování o novinkách (pouze se souhlasem)</p>
-                  <ul className="list-disc pl-6 space-y-1 text-ink-500">
+                <div className="ramec">
+                  <p className="tucne">Informování o novinkách (pouze se souhlasem)</p>
+                  <ul>
                     <li>Zasílání informací o nových termínech a volných místech</li>
                     <li>Upozornění na spuštění registrace</li>
                     <li>Informace o změnách v programu nebo podmínkách</li>
@@ -237,52 +259,52 @@ export default function GDPRPage() {
               </div>
             </section>
 
-            <section className="mb-12">
-              <h2 className="font-display text-2xl font-bold text-ink mb-4">4. Právní základ zpracování</h2>
-              <div className="space-y-4">
-                <div className="bg-white p-6 rounded-md border border-ink/15">
-                  <p className="text-ink font-semibold mb-2">
+            <section id="cl-4">
+              <h2>4. Právní základ zpracování</h2>
+              <div>
+                <div className="ramec">
+                  <p className="tucne">
                     Plnění smlouvy (čl. 6 odst. 1 písm. b) GDPR)
                   </p>
-                  <p className="text-ink text-base">
+                  <p>
                     Zpracování registračních údajů je nezbytné pro splnění smlouvy (přihláška na tábor),
                     jejíž stranou je subjekt údajů (zákonný zástupce dítěte).
                   </p>
                 </div>
-                <div className="bg-white p-6 rounded-md border border-ink/15">
-                  <p className="text-ink font-semibold mb-2">
+                <div className="ramec">
+                  <p className="tucne">
                     Souhlas subjektu údajů (čl. 6 odst. 1 písm. a) GDPR)
                   </p>
-                  <p className="text-ink text-base">
+                  <p>
                     Zpracování jména a e-mailové adresy pro zasílání novinek a marketingové
                     komunikace je podmíněno Vaším dobrovolným souhlasem. Souhlas můžete
                     kdykoli odvolat.
                   </p>
                 </div>
-                <div className="bg-white p-6 rounded-md border border-ink/15">
-                  <p className="text-ink font-semibold mb-2">
+                <div className="ramec">
+                  <p className="tucne">
                     Splnění právní povinnosti (čl. 6 odst. 1 písm. c) GDPR)
                   </p>
-                  <p className="text-ink text-base">
+                  <p>
                     Vedení účetních dokladů v souladu s účetními a daňovými předpisy ČR.
                   </p>
                 </div>
-                <div className="bg-white p-6 rounded-md border border-ink/15">
-                  <p className="text-ink font-semibold mb-2">
+                <div className="ramec">
+                  <p className="tucne">
                     Výslovný souhlas se zvláštní kategorií údajů (čl. 9 odst. 2 písm. a) GDPR)
                   </p>
-                  <p className="text-ink text-base">
+                  <p>
                     Pokud v registraci uvedete zdravotní omezení nebo alergie dítěte (zvláštní
                     kategorie osobních údajů), zpracováváme je na základě Vašeho výslovného souhlasu
                     výhradně za účelem zajištění bezpečné účasti dítěte na táboře. Uvedení těchto
                     údajů je dobrovolné.
                   </p>
                 </div>
-                <div className="bg-white p-6 rounded-md border border-ink/15">
-                  <p className="text-ink font-semibold mb-2">
+                <div className="ramec">
+                  <p className="tucne">
                     Oprávněný zájem (čl. 6 odst. 1 písm. f) GDPR)
                   </p>
-                  <p className="text-ink text-base">
+                  <p>
                     IP adresu v okamžiku odeslání přihlášky uchováváme jako doklad o udělení
                     souhlasu s obchodními podmínkami.
                   </p>
@@ -290,67 +312,67 @@ export default function GDPRPage() {
               </div>
             </section>
 
-            <section className="mb-12">
-              <h2 className="font-display text-2xl font-bold text-ink mb-4">5. Doba uchovávání údajů</h2>
-              <ul className="list-disc pl-6 space-y-2 text-ink-500">
+            <section id="cl-5">
+              <h2>5. Doba uchovávání údajů</h2>
+              <ul>
                 <li><strong>Registrační údaje</strong> – po dobu trvání tábora a 1 rok po jeho skončení (pro případné reklamace)</li>
                 <li><strong>Účetní doklady</strong> – 5 let od konce zdaňovacího období (zákonná povinnost)</li>
                 <li><strong>E-mailová adresa pro novinky</strong> – do odvolání souhlasu, maximálně 3 roky od poslední interakce</li>
               </ul>
-              <p className="text-ink mt-4">
+              <p>
                 Po uplynutí uvedených dob — nebo kdykoli na základě Vaší žádosti — údaje z evidence
                 odstraníme nebo anonymizujeme. O výmaz svých údajů (mimo zákonem povinné účetní
                 doklady) můžete kdykoli požádat na {SITE.email}.
               </p>
             </section>
 
-            <section className="mb-12">
-              <h2 className="font-display text-2xl font-bold text-ink mb-4">6. Vaše práva</h2>
-              <p className="text-ink mb-4">
+            <section id="cl-6">
+              <h2>6. Vaše práva</h2>
+              <p>
                 V souvislosti se zpracováním Vašich osobních údajů máte následující práva:
               </p>
-              <div className="space-y-4">
-                <div className="bg-white p-6 rounded-lg border border-ink/15">
-                  <h3 className="font-display text-lg font-semibold text-ink mb-2">Právo na přístup</h3>
-                  <p className="text-ink text-base">
+              <div>
+                <div className="ramec">
+                  <h3>Právo na přístup</h3>
+                  <p>
                     Máte právo získat informaci o tom, jaké údaje o Vás zpracováváme.
                   </p>
                 </div>
-                <div className="bg-white p-6 rounded-lg border border-ink/15">
-                  <h3 className="font-display text-lg font-semibold text-ink mb-2">Právo na opravu</h3>
-                  <p className="text-ink text-base">
+                <div className="ramec">
+                  <h3>Právo na opravu</h3>
+                  <p>
                     Máte právo na opravu nepřesných nebo neúplných osobních údajů.
                   </p>
                 </div>
-                <div className="bg-white p-6 rounded-lg border border-ink/15">
-                  <h3 className="font-display text-lg font-semibold text-ink mb-2">Právo na výmaz</h3>
-                  <p className="text-ink text-base">
+                <div className="ramec">
+                  <h3>Právo na výmaz</h3>
+                  <p>
                     Máte právo požadovat vymazání Vašich osobních údajů (právo „být zapomenut"),
                     pokud odpadl právní základ pro jejich zpracování.
                   </p>
                 </div>
-                <div className="bg-white p-6 rounded-lg border border-ink/15">
-                  <h3 className="font-display text-lg font-semibold text-ink mb-2">Právo na omezení zpracování</h3>
-                  <p className="text-ink text-base">
+                <div className="ramec">
+                  <h3>Právo na omezení zpracování</h3>
+                  <p>
                     Máte právo požadovat omezení zpracování svých osobních údajů.
                   </p>
                 </div>
-                <div className="bg-white p-6 rounded-lg border border-ink/15">
-                  <h3 className="font-display text-lg font-semibold text-ink mb-2">Právo na přenositelnost</h3>
-                  <p className="text-ink text-base">
+                <div className="ramec">
+                  <h3>Právo na přenositelnost</h3>
+                  <p>
                     Máte právo získat kopii Vašich údajů ve strukturovaném, běžně používaném formátu.
                   </p>
                 </div>
-                <div className="bg-white p-6 rounded-lg border border-ink/15">
-                  <h3 className="font-display text-lg font-semibold text-ink mb-2">Právo vznést námitku</h3>
-                  <p className="text-ink text-base">
+                <div className="ramec">
+                  <h3>Právo vznést námitku</h3>
+                  <p>
                     Máte právo vznést námitku proti zpracování Vašich osobních údajů, zejména
                     pro účely přímého marketingu.
                   </p>
                 </div>
-                <div className="bg-white p-6 rounded-lg border border-ink/15">
-                  <h3 className="font-display text-lg font-semibold text-ink mb-2">Právo odvolat souhlas</h3>
-                  <p className="text-ink text-base">
+                <div className="ramec">
+                  <h3>Právo odvolat souhlas</h3>
+                  <p>
                     Máte právo kdykoli odvolat souhlas se zpracováním údajů, aniž by to mělo vliv na
                     zákonnost zpracování založeného na souhlasu uděleném před jeho odvoláním.
                   </p>
@@ -358,29 +380,29 @@ export default function GDPRPage() {
               </div>
             </section>
 
-            <section className="mb-12">
-              <h2 className="font-display text-2xl font-bold text-ink mb-4">7. Jak uplatnit Vaše práva</h2>
-              <p className="text-ink mb-4">
+            <section id="cl-7">
+              <h2>7. Jak uplatnit Vaše práva</h2>
+              <p>
                 Pro uplatnění Vašich práv nás můžete kontaktovat:
               </p>
-              <div className="bg-white p-6 rounded-md border border-ink/15">
-                <ul className="space-y-2 text-ink-500">
+              <div className="ramec">
+                <ul>
                   <li><strong>E-mail:</strong> {SITE.email}</li>
                   <li><strong>Odhlášení z odběru:</strong> Pomocí odkazu v patičce každého e-mailu</li>
                 </ul>
               </div>
-              <p className="text-ink mt-4">
+              <p>
                 Na Vaši žádost odpovíme bez zbytečného odkladu, nejpozději do jednoho měsíce od
                 obdržení žádosti. Tuto lhůtu můžeme v odůvodněných případech prodloužit o další dva měsíce.
               </p>
             </section>
 
-            <section className="mb-12">
-              <h2 className="font-display text-2xl font-bold text-ink mb-4">8. Předávání údajů třetím stranám</h2>
-              <p className="text-ink mb-4">
+            <section id="cl-8">
+              <h2>8. Předávání údajů třetím stranám</h2>
+              <p>
                 Vaše osobní údaje jsou zpracovávány za pomoci následujících zpracovatelů:
               </p>
-              <ul className="list-disc pl-6 space-y-2 text-ink-500">
+              <ul>
                 <li><strong>Supabase</strong> – cloudová databáze pro uložení registračních dat (servery v EU)</li>
                 <li><strong>Formspree</strong> – zpracování kontaktních a zájmových formulářů</li>
                 <li><strong>Resend</strong> – odesílání transakčních e-mailů (potvrzení registrace, nástupní list)</li>
@@ -394,20 +416,20 @@ export default function GDPRPage() {
                 <li><strong>Meta Platforms (Facebook Pixel)</strong> – měření účinnosti reklam, pouze s Vaším souhlasem</li>
                 <li><strong>Seznam.cz (Sklik)</strong> – měření účinnosti reklam, pouze s Vaším souhlasem</li>
               </ul>
-              <p className="text-ink mt-4">
+              <p>
                 Všichni zpracovatelé jsou pečlivě vybráni a zavázáni k ochraně osobních údajů v souladu
                 s GDPR. Vaše údaje neprodáváme třetím stranám pro jejich marketingové účely.
               </p>
             </section>
 
-            <section className="mb-12">
-              <h2 className="font-display text-2xl font-bold text-ink mb-4">9. Zabezpečení osobních údajů</h2>
-              <p className="text-ink mb-4">
+            <section id="cl-9">
+              <h2>9. Zabezpečení osobních údajů</h2>
+              <p>
                 Přijali jsme vhodná technická a organizační opatření k ochraně Vašich osobních údajů
                 před náhodným nebo neoprávněným zničením, ztrátou, změnou, neoprávněným zpřístupněním
                 nebo jakýmkoliv jiným neoprávněným zpracováním.
               </p>
-              <ul className="list-disc pl-6 space-y-2 text-ink-500">
+              <ul>
                 <li>Šifrované připojení (HTTPS)</li>
                 <li>Data v databázi chráněna pomocí Row Level Security (Supabase)</li>
                 <li>Přístup k údajům pouze pro oprávněné osoby</li>
@@ -416,42 +438,42 @@ export default function GDPRPage() {
               </ul>
             </section>
 
-            <section className="mb-12">
-              <h2 className="font-display text-2xl font-bold text-ink mb-4">10. Cookies a sledovací technologie</h2>
-              <p className="text-ink mb-4">
+            <section id="cl-10">
+              <h2>10. Cookies a sledovací technologie</h2>
+              <p>
                 Náš web může používat následující typy cookies:
               </p>
-              <div className="space-y-4">
-                <div className="bg-white p-6 rounded-lg border border-ink/15">
-                  <h3 className="font-display text-lg font-semibold text-ink mb-2">Nezbytné cookies</h3>
-                  <p className="text-ink text-base">
+              <div>
+                <div className="ramec">
+                  <h3>Nezbytné cookies</h3>
+                  <p>
                     Technické cookies nutné pro správné fungování webu. Tyto cookies nevyžadují souhlas.
                   </p>
                 </div>
-                <div className="bg-white p-6 rounded-lg border border-ink/15">
-                  <h3 className="font-display text-lg font-semibold text-ink mb-2">Analytické cookies</h3>
-                  <p className="text-ink text-base">
+                <div className="ramec">
+                  <h3>Analytické cookies</h3>
+                  <p>
                     Slouží k měření návštěvnosti a analýze chování uživatelů na webu (Google Analytics).
                     Používáme je pouze s Vaším souhlasem.
                   </p>
                 </div>
-                <div className="bg-white p-6 rounded-lg border border-ink/15">
-                  <h3 className="font-display text-lg font-semibold text-ink mb-2">Marketingové cookies</h3>
-                  <p className="text-ink text-base">
+                <div className="ramec">
+                  <h3>Marketingové cookies</h3>
+                  <p>
                     Slouží k měření účinnosti reklam a cílení (Facebook Pixel / Meta, Sklik / Seznam.cz).
                     Aktivujeme je pouze s Vaším souhlasem.
                   </p>
                 </div>
               </div>
-              <p className="text-ink mt-4">
+              <p>
                 Svůj souhlas s cookies můžete kdykoli změnit nebo odvolat odkazem
                 <strong> „Nastavení cookies"</strong> v patičce webu — stejně snadno, jako jste jej udělili.
               </p>
             </section>
 
-            <section className="mb-12">
-              <h2 className="font-display text-2xl font-bold text-ink mb-4">11. Přibližná poloha podle IP adresy</h2>
-              <p className="text-ink mb-4">
+            <section id="cl-11">
+              <h2>11. Přibližná poloha podle IP adresy</h2>
+              <p>
                 Pro zobrazení nabídky táborů z nejbližšího místa odvozujeme z Vaší IP adresy
                 přibližný region (kraj). Tuto informaci <strong>neukládáme</strong> — slouží pouze
                 k jednorázovému zobrazení upozornění na tábory ve Vašem kraji. Právním základem je
@@ -460,63 +482,64 @@ export default function GDPRPage() {
               </p>
             </section>
 
-            <section className="mb-12">
-              <h2 className="font-display text-2xl font-bold text-ink mb-4">12. Právo podat stížnost</h2>
-              <p className="text-ink mb-4">
+            <section id="cl-12">
+              <h2>12. Právo podat stížnost</h2>
+              <p>
                 Pokud se domníváte, že zpracováváme Vaše osobní údaje v rozporu s právními předpisy,
                 máte právo podat stížnost u dozorového úřadu:
               </p>
-              <div className="bg-white p-6 rounded-md border border-ink/15">
-                <p className="text-ink font-semibold mb-2">
+              <div className="ramec">
+                <p className="tucne">
                   Úřad pro ochranu osobních údajů
                 </p>
-                <p className="text-ink text-base mb-1">Pplk. Sochora 27</p>
-                <p className="text-ink text-base mb-1">170 00 Praha 7</p>
-                <p className="text-ink text-base mb-1">Web: www.uoou.cz</p>
-                <p className="text-ink text-base">E-mail: posta@uoou.cz</p>
+                <p>Pplk. Sochora 27</p>
+                <p>170 00 Praha 7</p>
+                <p>Web: www.uoou.cz</p>
+                <p>E-mail: posta@uoou.cz</p>
               </div>
             </section>
 
-            <section className="mb-12">
-              <h2 className="font-display text-2xl font-bold text-ink mb-4">13. Změny zásad ochrany osobních údajů</h2>
-              <p className="text-ink mb-4">
+            <section id="cl-13">
+              <h2>13. Změny zásad ochrany osobních údajů</h2>
+              <p>
                 Tyto zásady můžeme čas od času aktualizovat. O podstatných změnách Vás budeme
                 informovat e-mailem nebo prostřednictvím oznámení na našem webu.
               </p>
-              <p className="text-ink">
+              <p>
                 Doporučujeme Vám tyto zásady pravidelně kontrolovat, abyste byli informováni
                 o tom, jak chráníme Vaše osobní údaje.
               </p>
             </section>
 
-            <section className="mb-12">
-              <h2 className="font-display text-2xl font-bold text-ink mb-4">14. Kontakt</h2>
-              <p className="text-ink mb-4">
+            <section id="cl-14">
+              <h2>14. Kontakt</h2>
+              <p>
                 V případě jakýchkoliv dotazů ohledně těchto zásad nebo zpracování Vašich osobních
                 údajů nás neváhejte kontaktovat:
               </p>
-              <div className="bg-primary-50 p-6 rounded-md border border-primary-200">
-                <p className="text-primary-900 font-semibold mb-2">{SITE.legalName}</p>
-                <p className="text-primary-800 text-base mb-1">IČO: {SITE.ico}</p>
-                <p className="text-primary-800 text-base mb-1">Sídlo: {SITE.address}</p>
-                <p className="text-primary-800 text-base mb-1">E-mail: {SITE.email}</p>
-                <p className="text-primary-800 text-base mb-1">Telefon: {SITE.phone}</p>
-                <p className="text-primary-800 text-base">
+              <div className="ramec ramec-kontakt">
+                <p className="tucne">{SITE.legalName}</p>
+                <p>IČO: {SITE.ico}</p>
+                <p>Sídlo: {SITE.address}</p>
+                <p>E-mail: {SITE.email}</p>
+                <p>Telefon: {SITE.phone}</p>
+                <p>
                   Místo konání tábora je uvedené u konkrétního turnusu na weeks.cz.
                 </p>
               </div>
             </section>
 
-            <div className="border-t border-ink/15 pt-8 mt-12">
-              <p className="text-ink-500 text-sm">
+            <div className="pravni-paticka">
+              <p className="small muted">
                 Tyto zásady ochrany osobních údajů jsou platné a účinné od 16. září 2026.
               </p>
-              <p className="text-ink-500 text-sm mt-2">
+              <p className="small muted">
                 Poslední aktualizace: 16. září 2026
               </p>
             </div>
+            </article>
           </div>
-        </article>
+        </section>
       </main>
       <Footer />
     </>

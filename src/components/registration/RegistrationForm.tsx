@@ -2,10 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
-import { motion, AnimatePresence } from 'framer-motion'
-import { User, Baby, MapPin, FileCheck, ClipboardList, ArrowRight, ArrowLeft, Loader2 } from 'lucide-react'
 import { parentSchema, childSchema, consentsSchema, healthConsentChybi, HEALTH_CONSENT_CHYBI, INSURANCE_OPTIONS, type ParentData, type ChildData, type ConsentsData } from '@/lib/registration'
-import { getTurnusById, getFocusTurnusu, isBookable } from '@/lib/turnusy'
+import { getTurnusById, getFocusTurnusu, getTaboryTurnusu, isBookable } from '@/lib/turnusy'
 import { getCity } from '@/lib/cities'
 import { getFocusModules } from '@/lib/focus'
 import { zalohaDostupna, zruseniZdarmaDo, type PaymentPlan } from '@/lib/zaloha'
@@ -13,13 +11,17 @@ import { formatDatumCs, pragueIsoDate } from '@/lib/dates'
 import { turnusLabels } from '@/components/turnusy/TurnusCard'
 import { trackRegistrationSubmit, trackRegistrationStep } from '@/lib/analytics'
 import Link from 'next/link'
+import { Ikona } from '@/components/w2/Ikona'
+import { Mrizka } from '@/components/w2/Mrizka'
+import { sazba, telefonSazba } from '@/components/w2/text'
+import { PROVOZNI_DOBA, SITE } from '@/lib/site'
 
 const STEPS = [
-  { id: 1, title: 'Zákonný zástupce', icon: User },
-  { id: 2, title: 'Dítě', icon: Baby },
-  { id: 3, title: 'Vyzvednutí', icon: MapPin },
-  { id: 4, title: 'Souhlasy', icon: FileCheck },
-  { id: 5, title: 'Shrnutí', icon: ClipboardList },
+  { id: 1, title: 'Zákonný zástupce' },
+  { id: 2, title: 'Dítě' },
+  { id: 3, title: 'Vyzvednutí' },
+  { id: 4, title: 'Souhlasy' },
+  { id: 5, title: 'Shrnutí' },
 ]
 
 type PickupFormState = {
@@ -143,6 +145,7 @@ export function RegistrationForm() {
       const next = Math.min(step + 1, 5)
       setStep(next)
       trackRegistrationStep({ step: next, locationId: turnus?.city ?? '', program: turnus?.taborIds[0] ?? '', termId })
+      naZacatekKroku()
       return
     }
     // Neúspěšná validace — posuň pohled na první chybu (čtečky ji oznámí přes role="alert").
@@ -154,6 +157,18 @@ export function RegistrationForm() {
   function prevStep() {
     setStep(s => Math.max(s - 1, 1))
     setFieldErrors({})
+    naZacatekKroku()
+  }
+
+  // Tlačítka jsou pod formulářem: když byl krok dlouhý, začátek dalšího by
+  // zůstal nad okrajem obrazovky. Posune se jen tehdy, když je karta mimo.
+  function naZacatekKroku() {
+    requestAnimationFrame(() => {
+      const karta = document.querySelector('.objednavka .formular')
+      if (karta && karta.getBoundingClientRect().top < 0) {
+        karta.scrollIntoView({ block: 'start' })
+      }
+    })
   }
 
   async function handleSubmit() {
@@ -232,439 +247,468 @@ export function RegistrationForm() {
   function FieldError({ name }: { name: string }) {
     const errors = fieldErrors[name]
     if (!errors?.length) return null
-    return <p role="alert" className="text-sm text-red-600 mt-1">{errors[0]}</p>
+    return <p role="alert" className="pole-chyba">{errors[0]}</p>
   }
 
-  const inputClass = (name: string) =>
-    `w-full px-4 py-3 rounded-md bg-white border ${fieldErrors[name] ? 'border-red-300 bg-red-50' : 'border-ink/20'} text-ink placeholder:text-ink/40 focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink`
-
-  // Safari na iOS dává nativnímu `date`/`time` vlastní minimální šířku a `w-full`
-  // ignoruje — pole pak přeteče rámeček. `appearance-none` + `min-w-0` ho vrátí
-  // do šířky sloupce; bez nativního vzhledu by prázdné pole na iOS splasklo,
-  // proto pevná minimální výška, a hodnota zarovnaná vlevo jako u ostatních polí.
-  const dateTimeClass = (name: string) =>
-    `${inputClass(name)} block min-w-0 max-w-full appearance-none min-h-[3.125rem] [&::-webkit-date-and-time-value]:text-left [&::-webkit-date-and-time-value]:min-h-[1.5em]`
+  const pole = (name: string) => (fieldErrors[name] ? 'pole ma-chybu' : 'pole')
 
   if (!turnus || !isBookable(turnus)) {
     // Odkazy z reklam, e-mailů i karet turnusů míří na term_id, které buď
     // neexistuje, nebo turnus zatím (či už) není v prodeji.
     return (
-      <div className="max-w-lg mx-auto text-center py-20">
-        <h1 className="heading-2 mb-4">Registrace není otevřená</h1>
-        <p className="text-ink-500 mb-6">
-          Tenhle termín se právě nedá objednat. Vyberte si prosím jiný turnus.
-        </p>
-        <Link href="/tabory" className="btn-primary">
-          Zpět na termíny
-        </Link>
-      </div>
+      <section className="zahlavi zahlavi-kratke dark mrizka">
+        <Mrizka />
+        <div className="wrap">
+          <div className="zahlavi-uzke">
+            <h1>Registrace není otevřená</h1>
+            <p className="zahlavi-perex">
+              {sazba('Tenhle termín se právě nedá objednat. Vyberte si prosím jiný turnus.')}
+            </p>
+            <div className="zahlavi-akce">
+              <Link href="/tabory" className="btn btn-primary btn-lg">
+                Zpět na termíny <Ikona id="sipka" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
     )
   }
 
   const labels = turnusLabels(turnus)
   const cityName = getCity(turnus.city).name
   const focusNames = getFocusModules(getFocusTurnusu(turnus)).map(z => z.name).join(' · ')
+  const tabor = getTaboryTurnusu(turnus)[0]
+  const vek = turnus.ageRange.replace('-', '–')
+  const aktualni = STEPS[step - 1]
 
   return (
-    <div className="max-w-2xl mx-auto">
-      {/* Header */}
-      <div className="text-center mb-8">
-        <h1 className="heading-2 mb-2">Registrace na tábor</h1>
-        <p className="text-ink-500">
-          {focusNames} · {cityName} · {labels.datum}
-        </p>
-      </div>
-
-      {/* Step indicator */}
-      <div className="flex items-center justify-between mb-10 max-w-sm mx-auto">
-        {STEPS.map((s, i) => (
-          <div key={s.id} className="flex items-center">
-            <div
-              aria-current={step === s.id ? 'step' : undefined}
-              aria-label={`Krok ${s.id}: ${s.title}${step === s.id ? ' – aktuální' : step > s.id ? ' – hotovo' : ''}`}
-              className={`flex items-center justify-center w-9 h-9 rounded-sm border transition-colors ${
-                step >= s.id
-                  ? 'bg-primary-600 border-primary-600 text-white'
-                  : 'border-ink/30 text-ink/50'
-              }`}
-            >
-              <s.icon className="w-4 h-4" aria-hidden="true" />
-            </div>
-            {i < STEPS.length - 1 && (
-              <div className={`w-6 sm:w-10 h-0.5 mx-1 ${step > s.id ? 'bg-primary-600' : 'bg-ink/15'}`} />
-            )}
-          </div>
-        ))}
-      </div>
-
-      {/* Dev autofill */}
-      {process.env.NODE_ENV === 'development' && (
-        <div className="mb-4 flex justify-center gap-2">
-          <button
-            type="button"
-            onClick={fillTestData}
-            className="px-4 py-2 text-xs font-mono bg-ink text-green-400 rounded-md border border-ink/30 hover:bg-ink/90 transition-colors"
-          >
-            ⚡ Dev: vyplnit testovací data
-          </button>
-          <button
-            type="button"
-            onClick={() => setStep(1)}
-            className="px-4 py-2 text-xs font-mono bg-ink text-yellow-400 rounded-md border border-ink/30 hover:bg-ink/90 transition-colors"
-          >
-            ↺ Krok 1
-          </button>
+    <>
+      {/* ── Záhlaví s kroky ─────────────────────────────────────────── */}
+      <section className="zahlavi zahlavi-kratke dark mrizka">
+        <Mrizka />
+        <div className="wrap">
+          <nav className="drob" aria-label="Drobečková navigace">
+            <Link href="/">Domů</Link> <span aria-hidden="true">/</span>{' '}
+            <Link href="/tabory">Tábory</Link> <span aria-hidden="true">/</span>{' '}
+            <Link href={`/tabory/termin/${turnus.slug}`}>{sazba(labels.datum)}</Link>{' '}
+            <span aria-hidden="true">/</span> <span>Registrace</span>
+          </nav>
+          <h1>Registrace na tábor</h1>
+          <p className="zahlavi-perex">
+            {sazba(`${focusNames} · ${cityName} · ${labels.datum}`)}
+          </p>
+          <ol className="postup">
+            {STEPS.map(s => (
+              <li
+                key={s.id}
+                className={`postup-krok${step === s.id ? ' ted' : step > s.id ? ' hotovo' : ''}`}
+                aria-current={step === s.id ? 'step' : undefined}
+                aria-label={`Krok ${s.id}: ${s.title}${step === s.id ? ' – aktuální' : step > s.id ? ' – hotovo' : ''}`}
+              >
+                <span className="postup-text">{s.title}</span>
+              </li>
+            ))}
+          </ol>
+          <p className="postup-mobil" aria-hidden="true">
+            Krok {step} z {STEPS.length}: <b>{aktualni.title}</b>
+          </p>
         </div>
-      )}
+      </section>
 
-      {/* Form */}
-      <div className="bg-paper rounded-md border border-ink/15 p-6 sm:p-8">
-        <AnimatePresence mode="wait">
-          {/* Step 1: Parent */}
-          {step === 1 && (
-            <motion.div key="step1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-              <h2 className="mono-label mb-6">Zákonný zástupce</h2>
-              <div className="space-y-4">
-                <div>
-                  <label htmlFor="parent_name" className="block text-sm font-medium text-ink mb-1">Jméno a příjmení *</label>
-                  <input id="parent_name" type="text" value={parent.parent_name} onChange={e => setParent({...parent, parent_name: e.target.value})} className={inputClass('parent_name')} placeholder="Jan Novák" />
-                  <FieldError name="parent_name" />
-                </div>
-                <div>
-                  <label htmlFor="parent_email" className="block text-sm font-medium text-ink mb-1">E-mail *</label>
-                  <input id="parent_email" type="email" value={parent.parent_email} onChange={e => setParent({...parent, parent_email: e.target.value})} className={inputClass('parent_email')} placeholder="jan@email.cz" />
-                  <FieldError name="parent_email" />
-                </div>
-                <div>
-                  <label htmlFor="parent_phone" className="block text-sm font-medium text-ink mb-1">Telefon *</label>
-                  <input id="parent_phone" type="tel" value={parent.parent_phone} onChange={e => setParent({...parent, parent_phone: e.target.value})} className={inputClass('parent_phone')} placeholder="+420 123 456 789" />
-                  <FieldError name="parent_phone" />
-                </div>
-                <div>
-                  <label htmlFor="parent_address" className="block text-sm font-medium text-ink mb-1">Fakturační adresa *</label>
-                  <input id="parent_address" type="text" value={parent.parent_address} onChange={e => setParent({...parent, parent_address: e.target.value})} className={inputClass('parent_address')} placeholder="Ulice 123, 360 01 Karlovy Vary" />
-                  <FieldError name="parent_address" />
+      <section className="sec sec-papir bez-linky">
+        <div className="wrap objednavka">
+          <div className="formular">
+            {/* Dev autofill */}
+            {process.env.NODE_ENV === 'development' && (
+              <div className="dev-lista">
+                <button type="button" onClick={fillTestData}>
+                  ⚡ Dev: vyplnit testovací data
+                </button>
+                <button type="button" onClick={() => setStep(1)}>
+                  ↺ Krok 1
+                </button>
+              </div>
+            )}
+
+            {/* Step 1: Parent */}
+            {step === 1 && (
+              <div key="step1">
+                <h2>Zákonný zástupce</h2>
+                <div className="formular-krok">
+                  <div className={pole('parent_name')}>
+                    <label htmlFor="parent_name">Jméno a příjmení *</label>
+                    <input id="parent_name" type="text" autoComplete="name" value={parent.parent_name} onChange={e => setParent({...parent, parent_name: e.target.value})} placeholder="Jan Novák" />
+                    <FieldError name="parent_name" />
+                  </div>
+                  <div className={pole('parent_email')}>
+                    <label htmlFor="parent_email">E-mail *</label>
+                    <input id="parent_email" type="email" autoComplete="email" value={parent.parent_email} onChange={e => setParent({...parent, parent_email: e.target.value})} placeholder="jan@email.cz" />
+                    <FieldError name="parent_email" />
+                  </div>
+                  <div className={pole('parent_phone')}>
+                    <label htmlFor="parent_phone">Telefon *</label>
+                    <input id="parent_phone" type="tel" autoComplete="tel" value={parent.parent_phone} onChange={e => setParent({...parent, parent_phone: e.target.value})} placeholder="+420 123 456 789" />
+                    <FieldError name="parent_phone" />
+                  </div>
+                  <div className={pole('parent_address')}>
+                    <label htmlFor="parent_address">Fakturační adresa *</label>
+                    <input id="parent_address" type="text" autoComplete="street-address" value={parent.parent_address} onChange={e => setParent({...parent, parent_address: e.target.value})} placeholder="Ulice 123, 360 01 Karlovy Vary" />
+                    <FieldError name="parent_address" />
+                  </div>
                 </div>
               </div>
-            </motion.div>
-          )}
+            )}
 
-          {/* Step 2: Child */}
-          {step === 2 && (
-            <motion.div key="step2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-              <h2 className="mono-label mb-6">Údaje o dítěti</h2>
-              <div className="space-y-4">
-                <div>
-                  <label htmlFor="child_name" className="block text-sm font-medium text-ink mb-1">Jméno a příjmení *</label>
-                  <input id="child_name" type="text" value={child.child_name} onChange={e => setChild({...child, child_name: e.target.value})} className={inputClass('child_name')} placeholder="Tomáš Novák" />
-                  <FieldError name="child_name" />
-                </div>
-                <div>
-                  <label htmlFor="child_birthdate" className="block text-sm font-medium text-ink mb-1">Datum narození *</label>
-                  <input id="child_birthdate" type="date" value={child.child_birthdate} onChange={e => setChild({...child, child_birthdate: e.target.value})} className={dateTimeClass('child_birthdate')} />
-                  <FieldError name="child_birthdate" />
-                </div>
-                <div>
-                  <label htmlFor="child_insurance" className="block text-sm font-medium text-ink mb-1">Zdravotní pojišťovna *</label>
-                  <select id="child_insurance" value={child.child_insurance} onChange={e => setChild({...child, child_insurance: e.target.value})} className={inputClass('child_insurance')}>
-                    {INSURANCE_OPTIONS.map(opt => (
-                      <option key={opt} value={opt}>{opt}</option>
-                    ))}
-                  </select>
-                  <FieldError name="child_insurance" />
-                </div>
-                <div>
-                  <label htmlFor="child_health" className="block text-sm font-medium text-ink mb-1">Zdravotní omezení / alergie</label>
-                  <textarea id="child_health" value={child.child_health_notes} onChange={e => setChild({...child, child_health_notes: e.target.value})} className={inputClass('child_health_notes')} rows={3} placeholder="Nepovinné — uveďte případné alergie, léky, omezení..." />
-                  <p className="text-xs text-ink-500 mt-1">Nepovinné. Uvádějte jen údaje nutné pro bezpečnost — použijeme je výhradně k zajištění bezpečné účasti dítěte na táboře.</p>
-                </div>
-                <div>
-                  <label htmlFor="child_exp" className="block text-sm font-medium text-ink mb-1">Zkušenosti s technologiemi</label>
-                  <textarea id="child_exp" value={child.child_experience} onChange={e => setChild({...child, child_experience: e.target.value})} className={inputClass('child_experience')} rows={2} placeholder="Nepovinné — jaké má dítě zkušenosti s počítači, programováním..." />
+            {/* Step 2: Child */}
+            {step === 2 && (
+              <div key="step2">
+                <h2>Údaje o dítěti</h2>
+                <div className="formular-krok">
+                  <div className={pole('child_name')}>
+                    <label htmlFor="child_name">Jméno a příjmení *</label>
+                    <input id="child_name" type="text" value={child.child_name} onChange={e => setChild({...child, child_name: e.target.value})} placeholder="Tomáš Novák" />
+                    <FieldError name="child_name" />
+                  </div>
+                  <div className="pole-rada">
+                    <div className={pole('child_birthdate')}>
+                      <label htmlFor="child_birthdate">Datum narození *</label>
+                      <input id="child_birthdate" type="date" value={child.child_birthdate} onChange={e => setChild({...child, child_birthdate: e.target.value})} />
+                      <FieldError name="child_birthdate" />
+                    </div>
+                    <div className={pole('child_insurance')}>
+                      <label htmlFor="child_insurance">Zdravotní pojišťovna *</label>
+                      <select id="child_insurance" value={child.child_insurance} onChange={e => setChild({...child, child_insurance: e.target.value})}>
+                        {INSURANCE_OPTIONS.map(opt => (
+                          <option key={opt} value={opt}>{opt}</option>
+                        ))}
+                      </select>
+                      <FieldError name="child_insurance" />
+                    </div>
+                  </div>
+                  <div className={pole('child_health_notes')}>
+                    <label htmlFor="child_health">Zdravotní omezení / alergie</label>
+                    <textarea id="child_health" value={child.child_health_notes} onChange={e => setChild({...child, child_health_notes: e.target.value})} rows={3} placeholder="Nepovinné — uveďte případné alergie, léky, omezení..." aria-describedby="child_health_pozn" />
+                    <p id="child_health_pozn" className="pole-pozn">Nepovinné. Uvádějte jen údaje nutné pro bezpečnost — použijeme je výhradně k zajištění bezpečné účasti dítěte na táboře.</p>
+                  </div>
+                  <div className={pole('child_experience')}>
+                    <label htmlFor="child_exp">Zkušenosti s technologiemi</label>
+                    <textarea id="child_exp" value={child.child_experience} onChange={e => setChild({...child, child_experience: e.target.value})} rows={2} placeholder="Nepovinné — jaké má dítě zkušenosti s počítači, programováním..." />
+                  </div>
                 </div>
               </div>
-            </motion.div>
-          )}
+            )}
 
-          {/* Step 3: Pickup */}
-          {step === 3 && (
-            <motion.div key="step3" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-              <h2 className="mono-label mb-6">Způsob vyzvednutí</h2>
-              <div className="space-y-5">
-                <div>
-                  <p className="text-sm font-medium text-ink mb-3">Jak bude dítě vyzvedáváno po skončení tábora? *</p>
-                  <div className="space-y-3">
-                    <label className={`flex items-start gap-3 p-4 rounded-md border cursor-pointer transition-colors ${pickup.pickup_method === 'solo' ? 'border-primary-600 bg-primary-50' : 'border-ink/15 hover:border-ink/30'}`}>
+            {/* Step 3: Pickup */}
+            {step === 3 && (
+              <div key="step3">
+                <h2>Způsob vyzvednutí</h2>
+                <div className="formular-krok">
+                  <fieldset className="volby">
+                    <legend>Jak bude dítě vyzvedáváno po skončení tábora? *</legend>
+                    <label className="volba-karta">
                       <input
                         type="radio"
                         name="pickup_method"
                         value="solo"
                         checked={pickup.pickup_method === 'solo'}
                         onChange={() => setPickup({ ...pickup, pickup_method: 'solo', pickup_persons: '' })}
-                        className="mt-0.5 accent-primary-600"
                       />
-                      <div>
-                        <p className="font-medium text-ink">Dítě odejde samo</p>
-                        <p className="text-sm text-ink-500 mt-0.5">Dítě odejde po skončení programu samostatně</p>
-                      </div>
+                      <b>Dítě odejde samo</b>
+                      <span>Dítě odejde po skončení programu samostatně</span>
                     </label>
-
-                    <label className={`flex items-start gap-3 p-4 rounded-md border cursor-pointer transition-colors ${pickup.pickup_method === 'named_persons' ? 'border-primary-600 bg-primary-50' : 'border-ink/15 hover:border-ink/30'}`}>
+                    <label className="volba-karta">
                       <input
                         type="radio"
                         name="pickup_method"
                         value="named_persons"
                         checked={pickup.pickup_method === 'named_persons'}
                         onChange={() => setPickup({ ...pickup, pickup_method: 'named_persons', pickup_time: '' })}
-                        className="mt-0.5 accent-primary-600"
                       />
-                      <div>
-                        <p className="font-medium text-ink">Vyzvedne jmenovaná osoba</p>
-                        <p className="text-sm text-ink-500 mt-0.5">Dítě vyzvedne zákonný zástupce nebo níže uvedená osoba</p>
-                      </div>
+                      <b>Vyzvedne jmenovaná osoba</b>
+                      <span>Dítě vyzvedne zákonný zástupce nebo níže uvedená osoba</span>
                     </label>
-                  </div>
-                  <FieldError name="pickup_method" />
-                </div>
+                    <FieldError name="pickup_method" />
+                  </fieldset>
 
-                {pickup.pickup_method === 'solo' && (
-                  <motion.div key="pickup-time" initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}>
-                    <label htmlFor="pickup_time" className="block text-sm font-medium text-ink mb-1">V kolik hodin smí dítě odejít? *</label>
-                    <input
-                      id="pickup_time"
-                      type="time"
-                      value={pickup.pickup_time}
-                      onChange={e => setPickup({ ...pickup, pickup_time: e.target.value })}
-                      className={dateTimeClass('pickup_time')}
-                      min="08:30"
-                      max="16:30"
-                    />
-                    <p className="text-xs text-ink-500 mt-1">Standardně dítě odchází po skončení programu. Čas vyberte, jen pokud má odejít dříve.</p>
-                    <FieldError name="pickup_time" />
-                  </motion.div>
-                )}
-
-                {pickup.pickup_method === 'named_persons' && (
-                  <motion.div key="pickup-persons" initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}>
-                    <label htmlFor="pickup_persons" className="block text-sm font-medium text-ink mb-1">Kdo smí dítě vyzvednout? (nepovinné)</label>
-                    <textarea
-                      id="pickup_persons"
-                      value={pickup.pickup_persons}
-                      onChange={e => setPickup({ ...pickup, pickup_persons: e.target.value })}
-                      className={inputClass('pickup_persons')}
-                      rows={3}
-                      placeholder={'Jana Nováková, +420 601 111 222\nPetr Novák, +420 602 333 444'}
-                    />
-                    <p className="text-xs text-ink-500 mt-1">Zákonný zástupce smí dítě vyzvednout vždy. Vyplňte, jen pokud bude dítě vyzvedávat někdo jiný — jméno a telefon každé osoby na samostatný řádek.</p>
-                    <FieldError name="pickup_persons" />
-                  </motion.div>
-                )}
-              </div>
-            </motion.div>
-          )}
-
-          {/* Step 4: Consents */}
-          {step === 4 && (
-            <motion.div key="step4" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-              <h2 className="mono-label mb-6">Souhlasy</h2>
-              <div className="space-y-5">
-                <div className="flex items-start gap-3">
-                  <input type="checkbox" id="vop" checked={consents.vop_consent as boolean} onChange={e => setConsents({...consents, vop_consent: e.target.checked as unknown as true})} className="mt-1 w-5 h-5 shrink-0 rounded-sm border-ink/30 text-primary-600 focus:ring-primary-500" />
-                  <label htmlFor="vop" className="text-sm text-ink">
-                    Souhlasím s{' '}
-                    <Link href={vopUrl} target="_blank" className="text-primary-600 underline hover:text-primary-700">Všeobecnými obchodními podmínkami</Link>
-                    {' '}*
-                  </label>
-                </div>
-                <FieldError name="vop_consent" />
-
-                <div className="flex items-start gap-3">
-                  <input type="checkbox" id="gdpr" checked={consents.gdpr_consent as boolean} onChange={e => setConsents({...consents, gdpr_consent: e.target.checked as unknown as true})} className="mt-1 w-5 h-5 shrink-0 rounded-sm border-ink/30 text-primary-600 focus:ring-primary-500" />
-                  <label htmlFor="gdpr" className="text-sm text-ink">
-                    Souhlasím se{' '}
-                    <Link href={gdprUrl} target="_blank" className="text-primary-600 underline hover:text-primary-700">zpracováním osobních údajů</Link>
-                    {' '}pro účely registrace a zajištění tábora{' '}*
-                  </label>
-                </div>
-                <FieldError name="gdpr_consent" />
-
-                {/* Výslovný souhlas podle čl. 9 GDPR — jen když rodič zdravotní
-                    údaje vyplnil. Bez nich není co odsouhlasit. */}
-                {child.child_health_notes.trim() !== '' && (
-                  <>
-                    <div className="flex items-start gap-3">
-                      <input type="checkbox" id="health" checked={consents.health_consent} onChange={e => setConsents({...consents, health_consent: e.target.checked})} className="mt-1 w-5 h-5 shrink-0 rounded-sm border-ink/30 text-primary-600 focus:ring-primary-500" />
-                      <label htmlFor="health" className="text-sm text-ink">
-                        Výslovně souhlasím se zpracováním zdravotních údajů dítěte uvedených
-                        v přihlášce, výhradně pro zajištění jeho bezpečné účasti na táboře{' '}*
-                      </label>
-                    </div>
-                    <FieldError name="health_consent" />
-                  </>
-                )}
-
-                <div className="flex items-start gap-3">
-                  <input type="checkbox" id="photo" checked={consents.photo_consent} onChange={e => setConsents({...consents, photo_consent: e.target.checked})} className="mt-1 w-5 h-5 shrink-0 rounded-sm border-ink/30 text-primary-600 focus:ring-primary-500" />
-                  <label htmlFor="photo" className="text-sm text-ink">
-                    Souhlasím s pořizováním fotografií a videí dítěte pro dokumentaci tábora a propagaci na webu a sociálních sítích (nepovinné)
-                  </label>
-                </div>
-
-                <div className="flex items-start gap-3">
-                  <input type="checkbox" id="marketing" checked={consents.marketing_consent} onChange={e => setConsents({...consents, marketing_consent: e.target.checked})} className="mt-1 w-5 h-5 shrink-0 rounded-sm border-ink/30 text-primary-600 focus:ring-primary-500" />
-                  <label htmlFor="marketing" className="text-sm text-ink">
-                    Souhlasím se zasíláním novinek a informací o dalších táborech (nepovinné)
-                  </label>
-                </div>
-              </div>
-            </motion.div>
-          )}
-
-          {/* Step 5: Summary */}
-          {step === 5 && (
-            <motion.div key="step5" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-              <h2 className="mono-label mb-6">Shrnutí registrace</h2>
-              <div className="space-y-6">
-                <div className="border border-primary-300 rounded-md bg-white p-4">
-                  <h3 className="font-medium text-ink mb-2">Tábor</h3>
-                  <p className="text-ink">{focusNames}</p>
-                  <p className="text-sm text-ink-500">{cityName} · {labels.datum}</p>
-                  <p className="text-lg font-bold text-ink mt-2 font-mono">{(turnus.priceKc ?? 0).toLocaleString('cs-CZ')}&nbsp;Kč</p>
-                </div>
-
-                {zaloha && (
-                  <fieldset className="space-y-2">
-                    <legend className="font-medium text-ink mb-2">Jak chcete zaplatit?</legend>
-                    <label className="flex min-h-11 cursor-pointer items-start gap-3 rounded-md border border-ink/20 bg-white p-3">
+                  {pickup.pickup_method === 'solo' && (
+                    <div className={pole('pickup_time')}>
+                      <label htmlFor="pickup_time">V kolik hodin smí dítě odejít? *</label>
                       <input
-                        type="radio"
-                        name="payment_plan"
-                        value="zaloha"
-                        checked={paymentPlan === 'zaloha'}
-                        onChange={() => setPaymentPlan('zaloha')}
-                        className="mt-1"
+                        id="pickup_time"
+                        type="time"
+                        value={pickup.pickup_time}
+                        onChange={e => setPickup({ ...pickup, pickup_time: e.target.value })}
+                        min="08:30"
+                        max="16:30"
+                        aria-describedby="pickup_time_pozn"
                       />
-                      <span className="text-sm text-ink">
-                        <span className="font-semibold">Záloha {zaloha.castkaKc.toLocaleString('cs-CZ')}&nbsp;Kč teď</span>
-                        <span className="block text-ink-500">
-                          doplatek {((turnus.priceKc ?? 0) - zaloha.castkaKc).toLocaleString('cs-CZ')}&nbsp;Kč do {formatDatumCs(zaloha.doplatekDo)}
-                        </span>
+                      <p id="pickup_time_pozn" className="pole-pozn">Standardně dítě odchází po skončení programu. Čas vyberte, jen pokud má odejít dříve.</p>
+                      <FieldError name="pickup_time" />
+                    </div>
+                  )}
+
+                  {pickup.pickup_method === 'named_persons' && (
+                    <div className={pole('pickup_persons')}>
+                      <label htmlFor="pickup_persons">Kdo smí dítě vyzvednout? <i>(nepovinné)</i></label>
+                      <textarea
+                        id="pickup_persons"
+                        value={pickup.pickup_persons}
+                        onChange={e => setPickup({ ...pickup, pickup_persons: e.target.value })}
+                        rows={3}
+                        placeholder={'Jana Nováková, +420 601 111 222\nPetr Novák, +420 602 333 444'}
+                        aria-describedby="pickup_persons_pozn"
+                      />
+                      <p id="pickup_persons_pozn" className="pole-pozn">Zákonný zástupce smí dítě vyzvednout vždy. Vyplňte, jen pokud bude dítě vyzvedávat někdo jiný — jméno a telefon každé osoby na samostatný řádek.</p>
+                      <FieldError name="pickup_persons" />
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Step 4: Consents */}
+            {step === 4 && (
+              <div key="step4">
+                <h2>Souhlasy</h2>
+                <div className="formular-krok souhlasy">
+                  <div>
+                    <label className="souhlas" htmlFor="vop">
+                      <input type="checkbox" id="vop" checked={consents.vop_consent as boolean} onChange={e => setConsents({...consents, vop_consent: e.target.checked as unknown as true})} />
+                      <span>
+                        Souhlasím s{' '}
+                        <Link href={vopUrl} target="_blank">Všeobecnými obchodními podmínkami</Link>
+                        {' '}*
                       </span>
                     </label>
-                    <label className="flex min-h-11 cursor-pointer items-start gap-3 rounded-md border border-ink/20 bg-white p-3">
-                      <input
-                        type="radio"
-                        name="payment_plan"
-                        value="plna"
-                        checked={paymentPlan === 'plna'}
-                        onChange={() => setPaymentPlan('plna')}
-                        className="mt-1"
-                      />
-                      <span className="text-sm font-semibold text-ink">Celá částka {(turnus.priceKc ?? 0).toLocaleString('cs-CZ')}&nbsp;Kč</span>
-                    </label>
-                    <p className="text-xs text-ink-500">Zrušení zdarma do {formatDatumCs(zruseniZdarmaDo(turnus.start ?? ''))}.</p>
-                  </fieldset>
-                )}
+                    <FieldError name="vop_consent" />
+                  </div>
 
-                <div className="grid sm:grid-cols-2 gap-4">
                   <div>
-                    <h3 className="font-medium text-ink mb-2">Zákonný zástupce</h3>
-                    <div className="text-sm text-ink-500 space-y-1">
+                    <label className="souhlas" htmlFor="gdpr">
+                      <input type="checkbox" id="gdpr" checked={consents.gdpr_consent as boolean} onChange={e => setConsents({...consents, gdpr_consent: e.target.checked as unknown as true})} />
+                      <span>
+                        Souhlasím se{' '}
+                        <Link href={gdprUrl} target="_blank">zpracováním osobních údajů</Link>
+                        {' '}pro účely registrace a zajištění tábora{' '}*
+                      </span>
+                    </label>
+                    <FieldError name="gdpr_consent" />
+                  </div>
+
+                  {/* Výslovný souhlas podle čl. 9 GDPR — jen když rodič zdravotní
+                      údaje vyplnil. Bez nich není co odsouhlasit. */}
+                  {child.child_health_notes.trim() !== '' && (
+                    <div>
+                      <label className="souhlas" htmlFor="health">
+                        <input type="checkbox" id="health" checked={consents.health_consent} onChange={e => setConsents({...consents, health_consent: e.target.checked})} />
+                        <span>
+                          Výslovně souhlasím se zpracováním zdravotních údajů dítěte uvedených
+                          v přihlášce, výhradně pro zajištění jeho bezpečné účasti na táboře{' '}*
+                        </span>
+                      </label>
+                      <FieldError name="health_consent" />
+                    </div>
+                  )}
+
+                  <label className="souhlas" htmlFor="photo">
+                    <input type="checkbox" id="photo" checked={consents.photo_consent} onChange={e => setConsents({...consents, photo_consent: e.target.checked})} />
+                    <span>
+                      Souhlasím s pořizováním fotografií a videí dítěte pro dokumentaci tábora a propagaci na webu a sociálních sítích <span className="souhlas-pozn">(nepovinné)</span>
+                    </span>
+                  </label>
+
+                  <label className="souhlas" htmlFor="marketing">
+                    <input type="checkbox" id="marketing" checked={consents.marketing_consent} onChange={e => setConsents({...consents, marketing_consent: e.target.checked})} />
+                    <span>
+                      Souhlasím se zasíláním novinek a informací o dalších táborech <span className="souhlas-pozn">(nepovinné)</span>
+                    </span>
+                  </label>
+                </div>
+              </div>
+            )}
+
+            {/* Step 5: Summary */}
+            {step === 5 && (
+              <div key="step5">
+                <h2>Shrnutí registrace</h2>
+                <div className="formular-krok">
+                  <div className="shrnuti-tabor">
+                    <b>{focusNames}</b>
+                    <span>{cityName} · {labels.datum}</span>
+                    <span className="shrnuti-cena">{(turnus.priceKc ?? 0).toLocaleString('cs-CZ')}&nbsp;Kč</span>
+                  </div>
+
+                  {zaloha && (
+                    <fieldset className="volby">
+                      <legend>Jak chcete zaplatit?</legend>
+                      <label className="volba-karta">
+                        <input
+                          type="radio"
+                          name="payment_plan"
+                          value="zaloha"
+                          checked={paymentPlan === 'zaloha'}
+                          onChange={() => setPaymentPlan('zaloha')}
+                        />
+                        <b>Záloha {zaloha.castkaKc.toLocaleString('cs-CZ')}&nbsp;Kč teď</b>
+                        <span>
+                          doplatek {((turnus.priceKc ?? 0) - zaloha.castkaKc).toLocaleString('cs-CZ')}&nbsp;Kč do {formatDatumCs(zaloha.doplatekDo)}
+                        </span>
+                      </label>
+                      <label className="volba-karta">
+                        <input
+                          type="radio"
+                          name="payment_plan"
+                          value="plna"
+                          checked={paymentPlan === 'plna'}
+                          onChange={() => setPaymentPlan('plna')}
+                        />
+                        <b>Celá částka {(turnus.priceKc ?? 0).toLocaleString('cs-CZ')}&nbsp;Kč</b>
+                      </label>
+                      <p className="pole-pozn">Zrušení zdarma do {formatDatumCs(zruseniZdarmaDo(turnus.start ?? ''))}.</p>
+                    </fieldset>
+                  )}
+
+                  <div className="udaje oddelit">
+                    <div>
+                      <h3>Zákonný zástupce</h3>
                       <p>{parent.parent_name}</p>
                       <p>{parent.parent_email}</p>
                       <p>{parent.parent_phone}</p>
                       <p>{parent.parent_address}</p>
                     </div>
-                  </div>
-                  <div>
-                    <h3 className="font-medium text-ink mb-2">Dítě</h3>
-                    <div className="text-sm text-ink-500 space-y-1">
+                    <div>
+                      <h3>Dítě</h3>
                       <p>{child.child_name}</p>
                       <p>Narozen/a: {child.child_birthdate}</p>
                       <p>Pojišťovna: {child.child_insurance}</p>
                       {child.child_health_notes && <p>Zdravotní info: {child.child_health_notes}</p>}
                     </div>
+                    <div className="cely">
+                      <h3>Vyzvednutí</h3>
+                      {pickup.pickup_method === 'solo' && (
+                        <p>Dítě odejde samo · čas odchodu: {pickup.pickup_time}</p>
+                      )}
+                      {pickup.pickup_method === 'named_persons' && (
+                        <>
+                          <p>Vyzvedne jmenovaná osoba:</p>
+                          <p className="predformat">{pickup.pickup_persons}</p>
+                        </>
+                      )}
+                    </div>
                   </div>
-                </div>
 
-                <div>
-                  <h3 className="font-medium text-ink mb-2">Vyzvednutí</h3>
-                  <div className="text-sm text-ink-500 space-y-1">
-                    {pickup.pickup_method === 'solo' && (
-                      <p>Dítě odejde samo · čas odchodu: {pickup.pickup_time}</p>
-                    )}
-                    {pickup.pickup_method === 'named_persons' && (
-                      <>
-                        <p>Vyzvedne jmenovaná osoba:</p>
-                        <p className="whitespace-pre-line pl-2">{pickup.pickup_persons}</p>
-                      </>
-                    )}
+                  <div className="pole oddelit">
+                    <label htmlFor="customer_note">Poznámka k objednávce <i>(nepovinné)</i></label>
+                    <textarea
+                      id="customer_note"
+                      value={customerNote}
+                      onChange={e => setCustomerNote(e.target.value)}
+                      maxLength={1000}
+                      rows={3}
+                      placeholder="Cokoliv, co bychom měli vědět — např. kdo vám tábor doporučil."
+                    />
                   </div>
-                </div>
 
-                <div className="pt-2 border-t border-ink/15">
-                  <label htmlFor="customer_note" className="block text-sm font-medium text-ink mb-1">Poznámka k objednávce (nepovinné)</label>
-                  <textarea
-                    id="customer_note"
-                    value={customerNote}
-                    onChange={e => setCustomerNote(e.target.value)}
-                    maxLength={1000}
-                    rows={3}
-                    className="w-full px-4 py-3 rounded-md bg-white border border-ink/20 text-ink placeholder:text-ink/40 focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink"
-                    placeholder="Cokoliv, co bychom měli vědět — např. kdo vám tábor doporučil."
-                  />
+                  <p className="formular-pozn oddelit">
+                    Odesláním registrace potvrzujete souhlas s{' '}
+                    <Link href={vopUrl} target="_blank" className="link">VOP</Link>{' '}
+                    a{' '}
+                    <Link href={gdprUrl} target="_blank" className="link">zpracováním osobních údajů</Link>.
+                    Po odeslání budete přesměrováni na platbu.
+                  </p>
                 </div>
-
-                <p className="text-xs text-ink-500 pt-2 border-t border-ink/15">
-                  Odesláním registrace potvrzujete souhlas s{' '}
-                  <Link href={vopUrl} target="_blank" className="underline">VOP</Link>{' '}
-                  a{' '}
-                  <Link href={gdprUrl} target="_blank" className="underline">zpracováním osobních údajů</Link>.
-                  Po odeslání budete přesměrováni na platbu.
-                </p>
               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+            )}
 
-        {/* Error */}
-        {error && (
-          <div role="alert" aria-live="assertive" className="mt-4 p-3 bg-red-50 border border-red-300 rounded-md">
-            <p className="text-sm text-red-600">{error}</p>
-          </div>
-        )}
+            {/* Error */}
+            {error && (
+              <p role="alert" aria-live="assertive" className="hlaska chyba" style={{ marginTop: 16 }}>
+                {error}
+              </p>
+            )}
 
-        {/* Navigation */}
-        <div className="flex justify-between mt-8 pt-6 border-t border-ink/15">
-          {step > 1 ? (
-            <button onClick={prevStep} className="flex items-center gap-2 px-4 py-2 rounded-md text-ink hover:text-ink transition-colors focus:outline-none focus:ring-1 focus:ring-primary-500">
-              <ArrowLeft className="w-4 h-4" />
-              Zpět
-            </button>
-          ) : <div />}
-
-          {step < 5 ? (
-            <button onClick={nextStep} className="btn-primary">
-              Další
-              <ArrowRight className="w-4 h-4" />
-            </button>
-          ) : (
-            <button onClick={handleSubmit} disabled={isSubmitting} className="btn-primary disabled:opacity-50">
-              {isSubmitting ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  Odesílám...
-                </>
-              ) : (
-                <>
-                  Přejít k platbě
-                  <ArrowRight className="w-4 h-4" />
-                </>
+            {/* Navigation */}
+            <div className="formular-nav">
+              {step > 1 && (
+                <button type="button" onClick={prevStep} className="btn btn-outline">
+                  <Ikona id="sipka" className="sipka-zpet" />
+                  Zpět
+                </button>
               )}
-            </button>
-          )}
+
+              {step < 5 ? (
+                <button type="button" onClick={nextStep} className="btn btn-primary">
+                  Další
+                  <Ikona id="sipka" />
+                </button>
+              ) : (
+                <button type="button" onClick={handleSubmit} disabled={isSubmitting} className="btn btn-primary">
+                  {isSubmitting ? (
+                    <>
+                      <Tocitko />
+                      Odesílám...
+                    </>
+                  ) : (
+                    <>
+                      Přejít k platbě
+                      <Ikona id="sipka" />
+                    </>
+                  )}
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* ── Souhrn tábora (jen počítač; na mobilu je totéž v záhlaví) ── */}
+          <aside className="souhrn" aria-label="Vybraný tábor">
+            <span className="souhrn-stitek">Vybraný tábor</span>
+            <h2>{tabor ? tabor.name : focusNames}</h2>
+            <ul className="souhrn-radky">
+              <li>
+                <Ikona id="kalendar" />
+                <span>{sazba(labels.datum)}</span>
+              </li>
+              <li>
+                <Ikona id="misto" />
+                <span>{sazba(`${labels.misto}, ${cityName}`)}</span>
+              </li>
+              <li>
+                <Ikona id="hodiny" />
+                <span>{sazba(`Po–pá ${PROVOZNI_DOBA.rozsah}`)}</span>
+              </li>
+              <li>
+                <Ikona id="lide" />
+                <span>{sazba(`${vek} let`)}</span>
+              </li>
+            </ul>
+            <div className="souhrn-cena">
+              <b>{labels.cena}</b>
+              {zaloha && (
+                <span>
+                  {sazba(`nebo záloha ${zaloha.castkaKc.toLocaleString('cs-CZ')} Kč, doplatek`)}{' '}
+                  <span className="nowrap">do {formatDatumCs(zaloha.doplatekDo)}</span>
+                </span>
+              )}
+            </div>
+            <p className="small muted">
+              {sazba('Dotaz k přihlášce?')}{' '}
+              <a className="link" href={`tel:${SITE.phone.replace(/\s/g, '')}`}>
+                {telefonSazba(SITE.phone)}
+              </a>
+            </p>
+          </aside>
         </div>
-      </div>
-    </div>
+      </section>
+    </>
+  )
+}
+
+/** Točící se kolečko při odesílání (dřív `Loader2` z lucide). */
+function Tocitko() {
+  return (
+    <svg className="tocit" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
+      <path d="M21 12a9 9 0 1 1-6.2-8.56" strokeLinecap="round" />
+    </svg>
   )
 }

@@ -12,11 +12,9 @@ function ConfirmationContent({ id }: { id: string }) {
 
   return (
     <>
-      <Header />
-      <main className="min-h-screen bg-paper pt-24 pb-16">
-        <div className="section-container">
-          <RegistrationConfirmation registrationId={id} token={token} />
-        </div>
+      <Header vToku />
+      <main id="obsah" className="w2">
+        <RegistrationConfirmation registrationId={id} token={token} />
       </main>
       <Footer />
     </>
@@ -27,7 +25,7 @@ export default function ConfirmationPage({ params }: { params: Promise<{ id: str
   const { id } = use(params)
 
   return (
-    <Suspense fallback={<div className="min-h-screen bg-paper flex items-center justify-center text-ink/50">Načítání...</div>}>
+    <Suspense fallback={<div className="w2"><p className="nacitani">Načítání...</p></div>}>
       <ConfirmationContent id={id} />
     </Suspense>
   )

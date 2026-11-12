@@ -84,6 +84,11 @@ export function Header({
 
   return (
     <div className={`w2 w2-cast${vToku ? '' : ' w2-pevna'}`}>
+      {/* Každá stránka má `<main id="obsah">` (od vlny 3 i registrace, platba,
+          právní stránky a e-shop), proto odkaz může být v hlavičce napevno. */}
+      <a className="preskocit" href="#obsah">
+        Přeskočit na obsah
+      </a>
       {vToku && (
         <div className="top dark">
           <div className="wrap">

@@ -13,7 +13,7 @@ export default function ShopCartPage() {
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-paper pt-32 pb-20">
+      <main id="obsah" className="min-h-screen bg-paper pt-32 pb-20">
         <section className="section-container">
           <div className="mb-10 max-w-3xl">
             <p className="mono-label">

@@ -1,8 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { motion } from 'framer-motion'
-import { Landmark, Loader2, Lock, AlertTriangle, ShieldCheck } from 'lucide-react'
+import { Ikona } from '@/components/w2/Ikona'
+import { Mrizka } from '@/components/w2/Mrizka'
 import { trackPaymentInitiated } from '@/lib/analytics'
 import { formatDatumCs } from '@/lib/dates'
 import type { PaymentPlan } from '@/lib/zaloha'
@@ -19,7 +19,8 @@ interface PlatbaInfo {
   doplatekDo: string | null
 }
 
-const kc = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`
+// Mezi číslem a „Kč“ nezlomitelná mezera – částka se na tlačítku nesmí zalomit.
+const kc = (n: number) => `${n.toLocaleString('cs-CZ')} Kč`
 
 export function PaymentRedirect({ registrationId }: PaymentRedirectProps) {
   const [info, setInfo] = useState<PlatbaInfo | null>(null)
@@ -80,111 +81,116 @@ export function PaymentRedirect({ registrationId }: PaymentRedirectProps) {
       : info?.castky.plna ?? 0
 
   return (
-    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-md">
-      {isTest && (
-        <div className="bg-amber-50 border border-amber-200 rounded-t-md px-4 py-3 flex items-center gap-2">
-          <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0" />
-          <p className="text-sm font-medium text-amber-800">TESTOVACÍ REŽIM — žádná reálná platba nebude provedena</p>
-        </div>
-      )}
-      <div className={`bg-paper border border-ink/15 p-8 ${isTest ? 'rounded-b-md border-t-0' : 'rounded-md'}`}>
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-12 h-12 bg-white border border-ink/15 rounded-sm flex items-center justify-center">
-            <Landmark className="w-6 h-6 text-primary-600" />
-          </div>
-          <div>
-            <h2 className="text-lg font-semibold text-ink">
-              {doplatek ? 'Doplatek za tábor' : 'Platba bankovním převodem'}
-            </h2>
-            <p className="text-sm text-ink-500">Zabezpečená platební brána Comgate</p>
+    <>
+      <section className="zahlavi zahlavi-kratke dark mrizka">
+        <Mrizka />
+        <div className="wrap">
+          <div className="zahlavi-uzke">
+            <span className="stav-ikona r-cyan" aria-hidden="true">
+              <Ikona id="budova" />
+            </span>
+            <h1>{doplatek ? 'Doplatek za tábor' : 'Platba bankovním převodem'}</h1>
+            <p className="zahlavi-perex">Zabezpečená platební brána Comgate</p>
           </div>
         </div>
+      </section>
 
-        {zaplaceno && (
-          <p className="text-ink-500 text-sm mb-6">
-            Tato registrace je už zaplacená celá. Potvrzení jsme vám poslali e-mailem.
-          </p>
-        )}
+      <section className="sec sec-papir bez-linky">
+        <div className="wrap">
+          <div className="formular platba">
+            {isTest && (
+              <p className="test-rezim">
+                <Ikona id="stit" />
+                TESTOVACÍ REŽIM — žádná reálná platba nebude provedena
+              </p>
+            )}
 
-        {doplatek && (
-          <p className="text-ink-500 text-sm mb-6">
-            Záloha je zaplacená a místo je rezervované. Zbývá doplatit{' '}
-            <span className="font-semibold text-ink">{kc(info?.castky.doplatek ?? 0)}</span>
-            {info?.doplatekDo && <> do {formatDatumCs(info.doplatekDo)}</>}.
-          </p>
-        )}
+            {zaplaceno && (
+              <p>Tato registrace je už zaplacená celá. Potvrzení jsme vám poslali e-mailem.</p>
+            )}
 
-        {volbaZalohy && (
-          <fieldset className="mb-6">
-            <legend className="text-sm font-medium text-ink mb-3">Jak chcete zaplatit?</legend>
-            <div className="space-y-2">
-              <label className="flex min-h-11 cursor-pointer items-start gap-3 rounded-md border border-ink/20 bg-white p-3">
-                <input
-                  type="radio"
-                  name="plan"
-                  value="zaloha"
-                  checked={plan === 'zaloha'}
-                  onChange={() => setPlan('zaloha')}
-                  className="mt-1"
-                />
-                <span className="text-sm text-ink">
-                  <span className="font-semibold">Záloha {kc(info?.castky.zaloha ?? 0)} teď</span>
+            {doplatek && (
+              <p>
+                Záloha je zaplacená a místo je rezervované. Zbývá doplatit{' '}
+                <b>{kc(info?.castky.doplatek ?? 0)}</b>
+                {info?.doplatekDo && <> do {formatDatumCs(info.doplatekDo)}</>}.
+              </p>
+            )}
+
+            {volbaZalohy && (
+              <fieldset className="volby">
+                <legend>Jak chcete zaplatit?</legend>
+                <label className="volba-karta">
+                  <input
+                    type="radio"
+                    name="plan"
+                    value="zaloha"
+                    checked={plan === 'zaloha'}
+                    onChange={() => setPlan('zaloha')}
+                  />
+                  <b>Záloha {kc(info?.castky.zaloha ?? 0)} teď</b>
                   {info?.doplatekDo && (
-                    <span className="block text-ink-500">
+                    <span>
                       doplatek {kc(info.castky.doplatek ?? 0)} do {formatDatumCs(info.doplatekDo)}
                     </span>
                   )}
-                </span>
-              </label>
-              <label className="flex min-h-11 cursor-pointer items-start gap-3 rounded-md border border-ink/20 bg-white p-3">
-                <input
-                  type="radio"
-                  name="plan"
-                  value="plna"
-                  checked={plan === 'plna'}
-                  onChange={() => setPlan('plna')}
-                  className="mt-1"
-                />
-                <span className="text-sm font-semibold text-ink">Celá částka {kc(info?.castky.plna ?? 0)}</span>
-              </label>
-            </div>
-          </fieldset>
-        )}
+                </label>
+                <label className="volba-karta">
+                  <input
+                    type="radio"
+                    name="plan"
+                    value="plna"
+                    checked={plan === 'plna'}
+                    onChange={() => setPlan('plna')}
+                  />
+                  <b>Celá částka {kc(info?.castky.plna ?? 0)}</b>
+                </label>
+              </fieldset>
+            )}
 
-        {!zaplaceno && (
-          <div className="flex items-start gap-2.5 p-3 mb-6 bg-trust-50 border border-trust-200 rounded-md">
-            <ShieldCheck className="w-5 h-5 text-trust-600 flex-shrink-0 mt-0.5" />
-            <p className="text-sm text-trust-800">
-              <span className="font-semibold">Bez rizika.</span> Zrušíte-li více než 30 dní před
-              táborem, vrátíme vám celou částku. Při nemoci doložené potvrzením řešíme situaci
-              individuálně.
+            {!zaplaceno && (
+              <p className="hlaska">
+                <b>Bez rizika.</b>
+                Zrušíte-li více než 30 dní před táborem, vrátíme vám celou částku. Při nemoci
+                doložené potvrzením řešíme situaci individuálně.
+              </p>
+            )}
+
+            {error && (
+              <p role="alert" aria-live="assertive" className="hlaska chyba">
+                {error}
+              </p>
+            )}
+
+            {!zaplaceno && (
+              <button
+                type="button"
+                onClick={handlePay}
+                disabled={isProcessing || !loaded}
+                className="btn btn-primary btn-lg btn-block"
+              >
+                {isProcessing ? (
+                  <><Tocitko /> Přesměrovávám na bránu…</>
+                ) : (
+                  <>{loaded && castkaKZaplaceni > 0 ? `Zaplatit ${kc(castkaKZaplaceni)}` : 'Přejít k platbě'} <Ikona id="sipka" /></>
+                )}
+              </button>
+            )}
+            <p className="platba-pozn">
+              <Ikona id="stit" /> Platbu zpracovává Comgate a.s.
             </p>
           </div>
-        )}
+        </div>
+      </section>
+    </>
+  )
+}
 
-        {error && (
-          <div role="alert" aria-live="assertive" className="p-3 bg-red-50 border border-red-300 rounded-md mb-4">
-            <p className="text-sm text-red-600">{error}</p>
-          </div>
-        )}
-
-        {!zaplaceno && (
-          <button
-            onClick={handlePay}
-            disabled={isProcessing || !loaded}
-            className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-lg"
-          >
-            {isProcessing ? (
-              <><Loader2 className="w-5 h-5 animate-spin" /> Přesměrovávám na bránu…</>
-            ) : (
-              <><Lock className="w-5 h-5" /> {loaded && castkaKZaplaceni > 0 ? `Zaplatit ${kc(castkaKZaplaceni)}` : 'Přejít k platbě'}</>
-            )}
-          </button>
-        )}
-        <p className="text-xs text-ink/50 text-center mt-4 flex items-center justify-center gap-1">
-          <Lock className="w-3 h-3" /> Platbu zpracovává Comgate a.s.
-        </p>
-      </div>
-    </motion.div>
+/** Točící se kolečko při přesměrování (dřív `Loader2` z lucide). */
+function Tocitko() {
+  return (
+    <svg className="tocit" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
+      <path d="M21 12a9 9 0 1 1-6.2-8.56" strokeLinecap="round" />
+    </svg>
   )
 }

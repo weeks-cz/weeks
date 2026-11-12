@@ -4905,3 +4905,844 @@ html {
     padding: 0 14px;
   }
 }
+
+/* ════════════════════════════════════════════════════════════════════════
+   Vlna 3 (listopad 2026): přihláška, potvrzení, platba, /gdpr, /podminky
+   a 404. Mění se jen vzhled – tok přihlášky a platby zůstává.
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* ── Přeskočit na obsah (hlavička, první prvek stránky) ──────────────── */
+.w2 .preskocit {
+  position: absolute;
+  left: 8px;
+  top: -200px;
+  z-index: 100;
+  padding: 12px 16px;
+  border: 2px solid var(--ink);
+  border-radius: var(--r);
+  background: var(--amber);
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: none;
+}
+.w2 .preskocit:focus {
+  top: 8px;
+}
+
+/* ── Záhlaví transakčních stránek: kratší, bez fotky ─────────────────── */
+.w2 .zahlavi-kratke {
+  padding-bottom: 24px;
+}
+@media (min-width: 900px) {
+  .w2 .zahlavi-kratke {
+    padding-bottom: 36px;
+  }
+}
+
+/* ── Kroky přihlášky (v tmavém záhlaví) ──────────────────────────────── */
+.w2 .postup {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 6px;
+  margin-top: 20px;
+  max-width: 760px;
+}
+.w2 .postup-krok {
+  display: grid;
+  gap: 8px;
+  font-size: var(--small);
+  line-height: 1.3;
+  color: var(--on-dark-muted);
+}
+.w2 .postup-krok::before {
+  content: "";
+  height: 5px;
+  border-radius: 999px;
+  background: var(--line-dark);
+}
+.w2 .postup-krok.hotovo::before,
+.w2 .postup-krok.ted::before {
+  background: var(--amber);
+}
+.w2 .postup-krok.ted {
+  color: var(--on-dark);
+  font-weight: 600;
+}
+.w2 .postup-text {
+  display: none;
+}
+.w2 .postup-mobil {
+  margin-top: 10px;
+  font-size: var(--small);
+  color: var(--on-dark-muted);
+}
+.w2 .postup-mobil b {
+  color: var(--on-dark);
+}
+@media (min-width: 640px) {
+  .w2 .postup-text {
+    display: block;
+  }
+  .w2 .postup-mobil {
+    display: none;
+  }
+}
+
+/* ── Přihláška: formulář vlevo, souhrn tábora vpravo ─────────────────── */
+.w2 .objednavka {
+  display: grid;
+  gap: 24px;
+}
+.w2 .objednavka > .formular {
+  min-width: 0;
+}
+@media (min-width: 900px) {
+  .w2 .objednavka {
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 40px;
+    align-items: start;
+  }
+}
+.w2 .souhrn {
+  display: none;
+}
+@media (min-width: 900px) {
+  .w2 .objednavka .souhrn {
+    display: grid;
+  }
+}
+.w2 .souhrn {
+  position: sticky;
+  top: 96px;
+  gap: 14px;
+  padding: 20px;
+  border: 1.5px solid var(--ink);
+  border-radius: 16px;
+  background: var(--white);
+  box-shadow: 5px 5px 0 var(--cyan);
+}
+.w2 .souhrn-stitek {
+  font-size: var(--small);
+  font-weight: 600;
+  color: var(--cyan-text);
+}
+.w2 .souhrn h2 {
+  font-size: var(--h3);
+  line-height: 1.25;
+}
+.w2 .souhrn-radky {
+  display: grid;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+.w2 .souhrn-radky li {
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  gap: 10px;
+  align-items: start;
+  font-size: var(--small);
+}
+.w2 .souhrn-radky svg {
+  width: 20px;
+  height: 20px;
+  color: var(--cyan-text);
+}
+.w2 .souhrn-cena {
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+.w2 .souhrn-cena b {
+  display: block;
+  font: 700 var(--price)/1.1 var(--f-head);
+}
+.w2 .souhrn-cena span {
+  font-size: var(--small);
+  color: var(--muted);
+}
+
+/* ── Pole přihlášky: chyba, nápověda, datum a čas ────────────────────── */
+.w2 .pole input[type="date"],
+.w2 .pole input[type="time"] {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  min-height: var(--tap);
+  padding: 0 14px;
+  border: 2px solid var(--ink);
+  border-radius: var(--r);
+  background: var(--white);
+  /* Safari na iOS dává nativnímu datu vlastní šířku a ignoruje width: 100 % –
+     pole pak přeteče rámeček. Bez nativního vzhledu se vrátí do sloupce. */
+  -webkit-appearance: none;
+  appearance: none;
+  text-align: left;
+}
+.w2 .pole input::-webkit-date-and-time-value {
+  text-align: left;
+  min-height: 1.5em;
+}
+.w2 .pole select {
+  cursor: pointer;
+}
+.w2 .pole.ma-chybu input,
+.w2 .pole.ma-chybu select,
+.w2 .pole.ma-chybu textarea {
+  border-color: #b91c1c;
+  background: #fef2f2;
+}
+.w2 .pole-chyba {
+  margin-top: 6px;
+  font-size: var(--small);
+  font-weight: 600;
+  color: #b91c1c;
+}
+.w2 .pole-pozn {
+  margin-top: 6px;
+  font-size: var(--small);
+  line-height: 1.45;
+  color: var(--muted);
+}
+.w2 .formular-krok {
+  display: grid;
+  gap: 16px;
+  margin-top: 16px;
+  animation: krok-dovnitr 0.25s ease-out;
+}
+/* Jen posun, nikdy průhlednost – text nesmí čekat na animaci. */
+@keyframes krok-dovnitr {
+  from {
+    transform: translateX(12px);
+  }
+  to {
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .w2 .formular-krok {
+    animation: none;
+  }
+}
+
+/* ── Volba v kartách (vyzvednutí, způsob platby) ─────────────────────── */
+.w2 .volby {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+.w2 .volby legend {
+  padding: 0;
+  margin-bottom: 8px;
+  font-size: var(--small);
+  font-weight: 600;
+}
+.w2 .volba-karta {
+  display: grid;
+  grid-template-columns: 22px 1fr;
+  gap: 2px 12px;
+  align-items: start;
+  min-height: var(--tap);
+  padding: 14px 16px;
+  border: 2px solid var(--line);
+  border-radius: 12px;
+  background: var(--white);
+  cursor: pointer;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
+}
+.w2 .volba-karta input {
+  grid-row: 1 / span 2;
+  width: 20px;
+  height: 20px;
+  margin: 2px 0 0;
+  accent-color: var(--ink);
+  cursor: pointer;
+}
+.w2 .volba-karta b {
+  font-weight: 600;
+  line-height: 1.35;
+}
+.w2 .volba-karta span {
+  font-size: var(--small);
+  line-height: 1.4;
+  color: var(--muted);
+}
+.w2 .volba-karta:has(input:checked) {
+  border-color: var(--ink);
+  background: var(--tint-amber);
+  box-shadow: 3px 3px 0 var(--amber);
+}
+@media (hover: hover) {
+  .w2 .volba-karta:hover {
+    border-color: var(--ink);
+  }
+}
+
+/* ── Souhlasy s delším textem: zaškrtávátko u prvního řádku ──────────── */
+.w2 .souhlasy {
+  display: grid;
+  gap: 14px;
+}
+.w2 .souhlasy .souhlas {
+  align-items: start;
+  min-height: 0;
+  font-size: var(--body);
+  line-height: 1.45;
+}
+.w2 .souhlasy .souhlas input {
+  margin-top: 1px;
+}
+.w2 .souhlasy .souhlas a {
+  display: inline;
+  padding: 0;
+  margin: 0;
+  font-weight: 600;
+  color: var(--indigo);
+  text-underline-offset: 3px;
+}
+.w2 .souhlas-pozn {
+  color: var(--muted);
+}
+
+/* ── Shrnutí přihlášky (krok 5) ──────────────────────────────────────── */
+.w2 .shrnuti-tabor {
+  display: grid;
+  gap: 2px;
+  padding: 16px;
+  border: 1.5px solid var(--ink);
+  border-radius: 12px;
+  background: #e0f7fb;
+}
+.w2 .shrnuti-tabor b {
+  font: 600 var(--h3)/1.25 var(--f-head);
+}
+.w2 .shrnuti-tabor span {
+  color: var(--muted);
+}
+.w2 .shrnuti-tabor .shrnuti-cena {
+  margin-top: 6px;
+  font: 700 var(--h3)/1.2 var(--f-head);
+  color: var(--ink);
+}
+.w2 .udaje {
+  display: grid;
+  gap: 16px;
+}
+.w2 .udaje h3 {
+  margin-bottom: 4px;
+  font-size: var(--body);
+}
+.w2 .udaje p {
+  font-size: var(--small);
+  line-height: 1.5;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+.w2 .udaje .predformat {
+  white-space: pre-line;
+}
+@container (min-width: 470px) {
+  .w2 .udaje {
+    grid-template-columns: 1fr 1fr;
+  }
+  .w2 .udaje .cely {
+    grid-column: 1 / -1;
+  }
+}
+.w2 .oddelit {
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+
+/* ── Spodek formuláře: zpět / další ──────────────────────────────────── */
+.w2 .formular-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+.w2 .formular-nav .btn-primary {
+  margin-left: auto;
+}
+.w2 .tocit {
+  animation: tocit 0.9s linear infinite;
+}
+@keyframes tocit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.w2 .dev-lista {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.w2 .dev-lista button {
+  padding: 6px 12px;
+  border: 1.5px dashed var(--ink);
+  border-radius: var(--r);
+  background: var(--tint-amber);
+  font-size: var(--small);
+  cursor: pointer;
+}
+
+/* ── Stav přihlášky a platby (potvrzení) ─────────────────────────────── */
+.w2 .stav-ikona {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  margin-bottom: 12px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--role, var(--cyan));
+}
+.w2 .stav-ikona svg {
+  width: 30px;
+  height: 30px;
+}
+.w2 .stav-stitek {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0 12px;
+  border: 1.5px solid var(--ink);
+  border-radius: 999px;
+  background: var(--role-tint, var(--tint-amber));
+  color: var(--role-text, var(--ink));
+  font-size: var(--small);
+  font-weight: 600;
+}
+.w2 .r-cervena {
+  --role: #f87171;
+  --role-text: #7f1d1d;
+  --role-tint: #fde8e8;
+}
+.w2 .detail-hl {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 12px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--line);
+}
+.w2 .detail-hl h2 {
+  font-size: var(--h3);
+}
+.w2 .formular .udaje {
+  margin-top: 16px;
+}
+.w2 .akce-svisle {
+  display: grid;
+  gap: 12px;
+  margin-top: 20px;
+}
+@media (min-width: 560px) {
+  .w2 .akce-svisle {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
+.w2 .nacitani {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 240px;
+  color: var(--muted);
+}
+.w2 .nacitani svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* ── Platba ──────────────────────────────────────────────────────────── */
+.w2 .platba {
+  max-width: 560px;
+  margin-inline: auto;
+}
+.w2 .test-rezim {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-bottom: 16px;
+  padding: 12px 14px;
+  border: 1.5px solid var(--ink);
+  border-radius: var(--r);
+  background: var(--tint-amber);
+  font-size: var(--small);
+  font-weight: 600;
+}
+.w2 .test-rezim svg {
+  width: 20px;
+  height: 20px;
+  flex: none;
+}
+.w2 .platba .volby {
+  margin-top: 16px;
+}
+.w2 .platba > .hlaska,
+.w2 .platba > p {
+  margin-top: 16px;
+}
+.w2 .platba .btn-block {
+  margin-top: 20px;
+}
+.w2 .platba-pozn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 12px;
+  font-size: var(--small);
+  color: var(--muted);
+}
+.w2 .platba-pozn svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* ── Právní texty (/gdpr, /podminky) ─────────────────────────────────── */
+.w2 .pravni-rozvrh {
+  display: grid;
+  gap: 24px;
+}
+@media (min-width: 1000px) {
+  .w2 .pravni-rozvrh {
+    grid-template-columns: 260px minmax(0, 760px);
+    gap: 56px;
+    align-items: start;
+  }
+}
+.w2 .pravni-obsah {
+  border: 1.5px solid var(--ink);
+  border-radius: 16px;
+  background: var(--white);
+}
+.w2 .pravni-obsah summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: var(--tap);
+  padding: 0 16px;
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+}
+.w2 .pravni-obsah summary::-webkit-details-marker {
+  display: none;
+}
+.w2 .pravni-obsah summary svg {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.2s;
+}
+.w2 .pravni-obsah[open] summary svg {
+  transform: rotate(180deg);
+}
+.w2 .pravni-obsah ol {
+  padding: 0 8px 12px;
+}
+.w2 .pravni-obsah li a {
+  display: flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 4px 8px;
+  border-radius: var(--r);
+  font-size: var(--small);
+  line-height: 1.3;
+  text-decoration: none;
+}
+.w2 .pravni-obsah .cast {
+  margin-top: 10px;
+  padding: 4px 8px 2px;
+  font-size: var(--small);
+  font-weight: 700;
+  color: var(--indigo);
+}
+@media (hover: hover) {
+  .w2 .pravni-obsah li a:hover {
+    background: var(--tint-indigo);
+  }
+}
+/* Lepí se obal obou podob obsahu (sloupec mřížky), ne samotný seznam –
+   seznam je v obalu stejně vysoký jako obal, takže by se neměl kam posunout. */
+@media (min-width: 1000px) {
+  .w2 .pravni-bok {
+    position: sticky;
+    top: 96px;
+  }
+  .w2 .pravni-obsah {
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+  }
+}
+.w2 .pravni {
+  min-width: 0;
+  padding: 4px 20px 20px;
+  border: 1.5px solid var(--ink);
+  border-radius: 16px;
+  background: var(--white);
+}
+@media (min-width: 900px) {
+  .w2 .pravni {
+    padding: 8px 40px 32px;
+  }
+}
+.w2 .pravni section {
+  padding: 24px 0;
+  border-top: 1px solid var(--line);
+  scroll-margin-top: 0;
+}
+.w2 .pravni section:first-child,
+.w2 .pravni .pravni-cast + section {
+  border-top: 0;
+}
+.w2 .pravni h2 {
+  margin-bottom: 12px;
+  font-size: var(--h3);
+  line-height: 1.25;
+}
+@media (min-width: 900px) {
+  .w2 .pravni h2 {
+    font-size: 26px;
+  }
+}
+.w2 .pravni h3 {
+  margin: 18px 0 8px;
+  font-size: var(--body);
+}
+.w2 .pravni p + p,
+.w2 .pravni p + ul,
+.w2 .pravni ul + p,
+.w2 .pravni p + div,
+.w2 .pravni div + p,
+.w2 .pravni ul + div,
+.w2 .pravni div + div {
+  margin-top: 12px;
+}
+.w2 .pravni ul {
+  display: grid;
+  gap: 6px;
+  padding-left: 22px;
+  list-style: disc;
+  color: var(--muted);
+}
+.w2 .pravni ul + ul {
+  margin-top: 12px;
+}
+.w2 .pravni li::marker {
+  color: var(--cyan-text);
+}
+.w2 .pravni strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+.w2 .pravni a {
+  color: var(--indigo);
+  font-weight: 600;
+  text-underline-offset: 3px;
+}
+.w2 .pravni .ramec {
+  padding: 16px 18px;
+  border: 1.5px solid var(--ink);
+  border-radius: 12px;
+  background: var(--paper);
+}
+.w2 .pravni .ramec > * + * {
+  margin-top: 4px;
+}
+.w2 .pravni .ramec ul + p,
+.w2 .pravni .ramec p + ul {
+  margin-top: 10px;
+}
+.w2 .pravni .ramec-kontakt {
+  background: var(--tint-indigo);
+  box-shadow: 4px 4px 0 #818cf8;
+}
+.w2 .pravni-cast {
+  display: inline-flex;
+  margin: 24px 0 4px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--on-dark);
+  font-size: var(--small);
+  font-weight: 600;
+}
+.w2 .pravni-cast:first-child {
+  margin-top: 20px;
+}
+.w2 .pravni-b {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 2px solid var(--ink);
+  scroll-margin-top: 0;
+}
+.w2 .tabulka {
+  overflow-x: auto;
+  border: 1.5px solid var(--ink);
+  border-radius: 12px;
+}
+.w2 .tabulka table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--small);
+}
+.w2 .tabulka th,
+.w2 .tabulka td {
+  padding: 10px 14px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--line);
+}
+.w2 .tabulka th {
+  background: var(--ink);
+  color: var(--on-dark);
+  font-weight: 600;
+}
+.w2 .tabulka tr:last-child td {
+  border-bottom: 0;
+}
+.w2 .tabulka tbody tr:nth-child(even) {
+  background: var(--paper);
+}
+.w2 .tabulka .t-ok {
+  color: var(--emerald);
+  font-weight: 700;
+}
+.w2 .tabulka .t-pul {
+  color: #92400e;
+  font-weight: 700;
+}
+.w2 .tabulka .t-ne {
+  color: #b91c1c;
+  font-weight: 700;
+}
+.w2 .pravni-paticka {
+  margin-top: 8px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  font-size: var(--small);
+  color: var(--muted);
+}
+.w2 .pravni-paticka p + p {
+  margin-top: 4px;
+}
+.w2 .cipy-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+.w2 .cip-info {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1.5px solid var(--line-dark);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  font-size: var(--small);
+  font-weight: 600;
+  text-decoration: none;
+}
+.w2 .cip-info svg {
+  width: 18px;
+  height: 18px;
+  color: var(--cyan);
+}
+@media (hover: hover) {
+  .w2 a.cip-info:hover {
+    border-color: var(--on-dark);
+  }
+}
+
+/* ── 404 ─────────────────────────────────────────────────────────────── */
+.w2 .nenalezeno {
+  position: relative;
+  overflow: hidden;
+  padding: 40px 0 56px;
+}
+.w2 .nenalezeno-cislo {
+  position: absolute;
+  right: -2%;
+  bottom: -12%;
+  font: 800 clamp(160px, 34vw, 420px)/1 var(--f-head);
+  color: rgba(255, 255, 255, 0.06);
+  pointer-events: none;
+  user-select: none;
+}
+.w2 .nenalezeno .zahlavi-uzke {
+  position: relative;
+}
+@media (min-width: 900px) {
+  .w2 .nenalezeno {
+    padding: 72px 0 96px;
+  }
+}
+
+/* Obsah právního textu: na mobilu rozbalovací, od 1000 px stálý vedle textu. */
+.w2 .obsah-desktop {
+  display: none;
+}
+@media (min-width: 1000px) {
+  .w2 .obsah-mobil {
+    display: none;
+  }
+  .w2 .obsah-desktop {
+    display: block;
+  }
+  .w2 .obsah-desktop .obsah-nadpis {
+    padding: 14px 16px 4px;
+    font-weight: 600;
+  }
+}
+
+.w2 .objednavka .formular h2 {
+  font-size: var(--h3);
+  line-height: 1.25;
+}
+.w2 .sipka-zpet {
+  transform: rotate(180deg);
+}
+.w2 .pravni .ramec-info {
+  background: var(--tint-indigo);
+}
+.w2 .pravni .ramec-ok {
+  background: #e3f6ee;
+}
+
+.w2 .pravni .tucne {
+  font-weight: 600;
+  color: var(--ink);
+}
+.w2 .pravni .ramec .tucne:first-child {
+  font-family: var(--f-head);
+}
+.w2 .souhlasy .pole-chyba {
+  margin: 4px 0 0 34px;
+}
+
+/* Záhlaví bez drobečků (platba, potvrzení): ikona stavu nesmí lepit na hlavičku. */
+.w2 .zahlavi .zahlavi-uzke > .stav-ikona:first-child {
+  margin-top: 20px;
+}
+/* Stránka, která končí tmavou sekcí (404, chybové stavy přihlášky), by
+   splynula s tmavou patičkou – oddělit linkou. */
+main.w2 > .dark:last-child {
+  border-bottom: 1px solid var(--line-dark);
+}

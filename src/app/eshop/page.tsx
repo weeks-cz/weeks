@@ -64,7 +64,7 @@ export default async function ShopPage() {
     <>
       <BreadcrumbSchema items={breadcrumbItems} />
       <Header />
-      <main className="bg-paper">
+      <main id="obsah" className="bg-paper">
         <section className="relative overflow-hidden bg-paper-soft border-y border-ink/15 pt-32 pb-16">
           <div className="relative z-10 mx-auto w-full max-w-[1680px] px-4 sm:px-6 lg:px-8 2xl:px-10">
             <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">

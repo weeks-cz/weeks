@@ -60,7 +60,7 @@ export default async function ShopProductPage({
     <>
       <BreadcrumbSchema items={breadcrumbItems} />
       <Header />
-      <main className="bg-paper">
+      <main id="obsah" className="bg-paper">
         <ProductTracking productSlug={product.slug} productName={product.name} />
         <section className="pt-32 pb-12">
           <div className="section-container">
