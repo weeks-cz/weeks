@@ -37,9 +37,10 @@ npm run lint         # Currently broken — Next 16 removed `next lint`; needs a
 /src
   /app
     layout.tsx              # Root layout with SEO metadata + GA4
-    page.tsx                # Homepage — rozcestí (hero, nearest turnusy, USP, FAQ, contact), not a program catalog
+    page.tsx                # Homepage — rozcestí (hero, topic strip, camp cards, "co máte jisté", reviews, gallery, FAQ, e-mail signup), not a program catalog
     opengraph-image.tsx     # Generated OG/Twitter share image (next/og `ImageResponse`, no static file)
-    globals.css             # Global styles + Tailwind (maker-lab design tokens)
+    globals.css             # Global styles + Tailwind (maker-lab design tokens) — the look of the pages not redesigned yet
+    redesign.css            # The November 2026 look. Every rule is scoped under `.w2`, see "Redesign (November 2026)" below
     sitemap.ts              # Dynamic sitemap (weeks.cz URLs, one entry per tábor and per turnus)
     not-found.tsx           # 404 page
     /api
@@ -55,34 +56,32 @@ npm run lint         # Currently broken — Next 16 removed `next lint`; needs a
     /kontakt                # Contact page — same
     /gdpr                   # GDPR page — same
     /podminky               # Terms page — same
-    /eshop, /registrace, /platba, /go  # Shop, registration + Comgate payment flow, QR redirects — predate this phase. `/eshop` still works but is commented out of the header, footer and Rozcesti (team has not decided whether to run it)
+    /eshop, /registrace, /platba, /go  # Shop, registration + Comgate payment flow, QR redirects — predate this phase. `/eshop` still works but is commented out of the header and footer (team has not decided whether to run it)
     /studio                 # Sanity Studio
   /components
     /layout
-      Header.tsx            # Navigation (logo = home link)
-      Footer.tsx            # Footer with links
-    /sections
-      HeroSection.tsx       # Homepage hero ("IT tábory, kde děti tvoří budoucnost")
-      NejblizsiTurnusy.tsx  # Homepage preview of nearest turnusy (slice of /tabory's list)
-      ProRodice.tsx         # Emerald strip "Co máte jisté" — only claims the site can back (small groups, first aid, capacity from data, hours from `PROVOZNI_DOBA`)
-      ProDeti.tsx           # Dark cyan block "Co si postavíš" + the interactive grid; content read from the running tábor's focus modules
-      FotoPas.tsx           # Full-width camp photo carrying one claim `DENNI_HARMONOGRAM` backs (outdoors at 13:00)
-      GoogleRecenze.tsx     # Google review carousel (scroll-snap, no library) — renders only when `src/lib/recenze.ts` has reviews + a profile URL
-      InstagramPas.tsx      # Strip of hand-picked IG posts above the closing CTA — renders only when `src/lib/instagram.ts` has posts
-      Rozcesti.tsx          # Homepage "co Weeks dělá" — tábor / firmy / e-shop / učebna
-      FAQSection.tsx        # Accordion FAQ — reads `getSiteFaq()` from `@/lib/site`
-      ContactSection.tsx    # Contact info + email signup (GDPR consent checkbox)
+      Header.tsx            # Dark top bar with three facts from data + navigation, phone contact and CTA. `vToku` = in-flow (redesigned pages); default = fixed, for pages still on the old layout
+      Footer.tsx            # Footer with links, contact, legal line
+    /w2                     # Building blocks of the redesigned pages (markup uses the class names of `redesign.css`)
+      Ikona.tsx, text.ts, dny.ts   # Icon set + `Hvezdy`; `sazba()` non-breaking spaces for text built from data; day abbreviations and icons
+      TaborKarta.tsx         # Camp card for one city: photo, venue, price, term rows (homepage, /tabory, "Další tábory")
+      TerminRadky.tsx        # Term rows with live capacity (client) — "Vybrat" / "Obsazeno" / "Dát vědět"
+      TaboryUvodu.tsx        # Homepage camp cards + `EventSchema` from the same variable (guarded by `schema-turnusy.test.ts`)
+      FiltrMest.tsx          # City filter on /tabory — state lives in `?mesto=`, all cities are always in the HTML
+      Rozvrh.tsx, PasFoto.tsx  # Day in six bars + expandable schedule; full-width photo with the one claim `DENNI_HARMONOGRAM` backs
+      RecenzeKarty.tsx       # Reviews section: always three cards, never the review count
+      Faq.tsx                # `<details>` FAQ; script only adds the height animation and "show more"
+      Usp.tsx, Pas.tsx       # Emerald "Co máte jisté" strip; scrolling topic strip (topics of running camps, year/cities/age from data)
+      KontaktKarta.tsx, telefon.ts  # Contact card with the generated face ("Tým Weeks", never a name) + phone-availability hook
+      EmailZajem.tsx, KupLista.tsx, Mrizka.tsx, OdkazTerminy.tsx  # E-mail signup (`/api/waitlist`), sticky bottom bar, interactive grid, tracked link
     /tabory
-      TaborCard.tsx          # Theme tile on /tabory — photo (`tabor.foto`), rating, its terms in that city as chips with live spot state
-      TemaDetail.tsx         # Whole /tabory/[tema] body (active + chystame variant) — 10 sections, see docs/superpowers/specs/2026-10-19-tabory-detail-redesign.md
+      TemaDetail.tsx         # Whole /tabory/[tema] body (active + chystame variant)
     /turnusy
-      TurnusList.tsx         # Turnus grid + city filter (`filtrMest`) + live capacity; used by the dark terms section on /tabory/[tema]
-      TurnusCard.tsx         # One turnus card — labels/CTA text come from `turnus-labels.ts`
-      TurnusInterestForm.tsx # Non-binding "notify me" form for turnusy that aren't bookable yet (GDPR checkbox)
-      TerminDetail.tsx       # Whole /tabory/termin/[slug] body, built as an e-shop product detail (DP-001..019 of the Systedo `shoptet-ux` skill)
-      NakupniBox.tsx         # Buy box: price + per-day price, live spot state, term switcher, CTA, minimum as a guarantee — all above the fold at 390 px
-      NakupniLista.tsx       # Sticky bottom bar, hidden while the main CTA / interest form / closing CTA is on screen
-      VenueShowcase.tsx, ProjectGallery.tsx, SpotsLeft.tsx  # Venue photos, project gallery (no hardcoded image list — items come from the calling page's focus modules), live capacity badge
+      TerminDetail.tsx       # Whole /tabory/termin/[slug] body
+      NakupniBox.tsx         # Buy box: price, deposit line, live spot state, term switcher, CTA — above the fold at 390 px
+      TerminGalerie.tsx      # Photo strip on the term page
+      TurnusInterestForm.tsx # Non-binding "notify me" form for turnusy that aren't bookable yet (GDPR checkbox) — still the old look
+      TurnusList.tsx, TurnusCard.tsx, SpotsLeft.tsx  # Old turnus grid (its `filtrMest` is still tested), live capacity hook `useTermCapacity`
     /firmy
       FirmyPoptavka.tsx      # `/firmy` inquiry form — one form, three modes via `?typ=`, posts to `/api/contact`
     /providers
@@ -92,10 +91,9 @@ npm run lint         # Currently broken — Next 16 removed `next lint`; needs a
       schema-turnusy.ts     # `turnusyProSchema()` — which turnusy may appear in `EventSchema` and with what `Offer.availability` (InStock/SoldOut); a turnus missing date, price or venue never renders, at any status (+ `schema-turnusy.test.ts`)
     /ui
       CookieConsent.tsx     # GDPR cookie banner
-      MrizkaSekce.tsx       # Interactive blueprint grid (cells light up behind the cursor); hangs on any section, cleans up its timers
-      TickerStrip.tsx       # Scrolling topic strip on the homepage, right under the hero (amber — role "akce a stav")
+      MrizkaSekce.tsx       # Interactive grid of the old layout (pages not redesigned yet)
   /lib
-    tabory.ts                # Tábor (theme) data + `getTabor`/`getAktivniTabory`/`zkusiSiTabora` + `DENNI_HARMONOGRAM` — source of truth for theme, focus and weekly program
+    tabory.ts                # Tábor (theme) data + `getTabor`/`getAktivniTabory`/`zkusiSiTabora` + `DENNI_HARMONOGRAM` / `DEN_V_KOSTCE` — source of truth for theme, focus, weekly program and the daily schedule
     turnusy.ts               # Turnus data + `getTurnusy`/`getTurnus`/`isBookable` + `getTaboryTurnusu`/`getFocusTurnusu`/`getTurnusyByTabor` — source of truth for price/date/capacity
     cities.ts                # City + venue registry — `getCity`/`getVenue`
     focus.ts                 # Focus modules (3d-tisk, iot, vr, ...) — owned by the tábor, read by a turnus through it
@@ -114,7 +112,8 @@ npm run lint         # Currently broken — Next 16 removed `next lint`; needs a
   /superpowers              # Plans, specs and runbooks for work done in this repo. ROADMAP, UI/UX spec and content reference used to live here too — moved to the private weeks-internal repo, see "Repo & team workflow" below
 
 /public
-  /images/hwlab             # Camp photos from the HWLab space, used by HeroSection on the homepage — the folder name is a leftover, HWLab itself is no longer organizer or venue (see Project Overview)
+  /images/hwlab             # Older photos from the HWLab space, no longer rendered — the redesigned pages use `/images/tabor`. HWLab itself is no longer organizer or venue (see Project Overview)
+  /images/tabor             # Camp photos used by the redesigned pages (see "Redesign (November 2026)" for which ones are edited)
   /images/weeks-logo.png    # Logo
   /fonts                    # Two static Bricolage Grotesque weights + OFL.txt license, vendored for opengraph-image.tsx (satori can't parse the variable Google Fonts file) — see public/fonts/README.md; the rest of the site loads fonts via next/font/google instead
   favicon.ico               # Favicon (multi-size)
@@ -209,8 +208,9 @@ photo rather than borrowing the 3D-print shot.
   takes home differs per tábor (`tabor.odnese`: 3D prints vs. their own
   game) — `vCeneTabora(tabor)` appends it; never put it back into the
   global list. The same goes for the term-page gallery
-  (`FOTKY_PODLE_TABORA` in `TerminDetail.tsx`) and the venue's equipment
-  line (`venue.vybaveni`).
+  (`FOTKY_PODLE_TABORA` in `TerminDetail.tsx`), the products shown on the
+  theme page (`tabor.vyrobky`) and the venue's equipment line
+  (`venue.vybaveni`).
 - **Health data consent** (čl. 9 GDPR): separate `health_consent` checkbox,
   required only when `child_health_notes` is filled; enforced client-side and
   in `registrationSchema` (`healthConsentChybi`). Stored by migration 019.
@@ -346,6 +346,47 @@ camps too and every tile links to its own camp, VR left the running camp's focus
 FabLab dropped to a past reference, the e-shop is hidden from navigation and
 `/oslavy` was added — see "`/oslavy`" below.
 
+### Redesign (November 2026)
+
+The homepage, `/tabory`, `/tabory/[tema]` and `/tabory/termin/[slug]`, plus the
+header and footer of every page, carry a new look. It was designed and approved
+as a clickable prototype outside this repo and then ported page by page.
+
+- **Scope.** All of it lives in `src/app/redesign.css`, every selector prefixed
+  with `.w2`. A redesigned page renders `<Header vToku />` and
+  `<main id="obsah" className="w2">`; its markup uses the stylesheet's class
+  names, not Tailwind. The other pages (`/oslavy`, `/firmy`, `/o-nas`,
+  `/kontakt`, `/gdpr`, `/podminky`, e-shop, registration, payment) keep the
+  Tailwind layout and only get the new header (fixed, default) and footer.
+  **Edit `redesign.css` by hand** — it was generated from the prototype once
+  and is the source of truth now.
+- **Colour roles and section rhythm from "Design System" still hold**; the new
+  stylesheet implements them under its own class names (`dark`, `amber`,
+  `sec-tint`, `bez-linky`…).
+- **Scripts add, they never reveal.** The grid, the FAQ animation, the city
+  filter and "show more" run in small client components; the server HTML holds
+  the full content. Without JavaScript every question, city and term is there.
+- **Content rules that are easy to break:**
+  - Reviews show "5,0 z 5 na Google", **never the number of reviews**, always
+    three cards. A camp that has not run yet says so above them
+    (`tabor.poznamkaKRecenzim`); a review tagged with another camp is not
+    shown on its page (`recenzeProTabor`).
+  - The face in the header and on the contact card is **generated**. It is
+    never named — the card says "Tým Weeks". No real person's face goes there
+    without that person's consent.
+  - `gd-deti-u-pocitacu.webp` and `skupina-terasa-2.webp` are **edited
+    photos** (screens, one child replaced). Alt texts describe what is
+    visible; nothing calls them a shot from the game camp. A child without
+    consent must not appear on the site.
+  - A venue photo needs our own picture or the owner's consent
+    (`venue.foto`). ZŠ Břečťanová has none — the section renders text only.
+  - `TELEFON_HODINY` in `site.ts` is `null` until the team confirms phone
+    hours; the header then says "Zavolejte nám" and draws no green dot.
+  - Texts built from data go through `sazba()`; short day names
+    (`den.kratce`), day summaries and schedule tiles have length limits in
+    `tabory.test.ts`, because cards standing side by side must keep the same
+    number of lines.
+
 ### `/oslavy`
 
 Kids' parties and events, live since 2026-09-22. Spec:
@@ -370,8 +411,9 @@ parent shopping for a tenth birthday did not recognise themselves in it.
 - **The date field is free text, not `<input type="date">`**: a parent often
   knows "sometime mid-June", and a datepicker would force them to name a day
   that is not settled yet.
-- Navigation order is `Tábory · Oslavy · Pro firmy · O nás · Kontakt`, plus a
-  tile in the homepage's Rozcesti (where it took the hidden e-shop's place).
+- Navigation order is `Tábory · Oslavy · Pro firmy · O nás · Kontakt · Učebna`.
+  The homepage tile it once had (in `Rozcesti`) went away with the November
+  2026 redesign; the header and footer links remain.
 
 ### `/firmy` (phase 4)
 
@@ -411,6 +453,10 @@ space" claimed a workshop Weeks does not own, and "in a partner space" named
 FabLab VARY&TE, which has signed nothing.
 
 ### Phase 5 (structured data, rescued content, analytics cleanup)
+
+_Historical record, like "Phase 6" below: the decisions hold, but the component
+names (`ProjectGallery`, `ProRodice`, `ProDeti`, `ContactSection`…) belong to the
+layout the November 2026 redesign replaced — see "Redesign (November 2026)"._
 
 Phase 5 is done. It picked up what phase 4 deliberately left out:
 
