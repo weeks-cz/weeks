@@ -580,7 +580,7 @@ export function RegistrationForm() {
                     <div>
                       <h3>Dítě</h3>
                       <p>{child.child_name}</p>
-                      <p>Narozen/a: {child.child_birthdate}</p>
+                      <p>Narozen/a: {sazba(child.child_birthdate.split('-').reverse().map(Number).join('. '))}</p>
                       <p>Pojišťovna: {child.child_insurance}</p>
                       {child.child_health_notes && <p>Zdravotní info: {child.child_health_notes}</p>}
                     </div>

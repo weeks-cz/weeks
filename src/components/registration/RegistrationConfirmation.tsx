@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { Ikona } from '@/components/w2/Ikona'
 import { Mrizka } from '@/components/w2/Mrizka'
 import { sazba } from '@/components/w2/text'
+import { formatTermLabel } from '@/lib/dates'
 import { trackPaymentCompleted } from '@/lib/analytics'
 import { sklikConversionHit } from '@/lib/sklik'
 import { maOdeslatPurchase, type PaymentPlan } from '@/lib/zaloha'
@@ -179,7 +180,7 @@ export function RegistrationConfirmation({ registrationId, token }: Registration
               </div>
               <div>
                 <h3>Termín</h3>
-                <p>{new Date(registration.term_start).toLocaleDateString('cs-CZ', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                <p>{sazba(formatTermLabel(registration.term_start, registration.term_end))}</p>
               </div>
               <div>
                 <h3>Částka</h3>
