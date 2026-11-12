@@ -122,10 +122,10 @@ export default function AboutPage() {
             </div>
             <figure className="zahlavi-foto jen-desktop">
               <Image
-                src="/images/tabor/skupina-terasa-retus.webp"
-                alt="Skupina dětí s lektory na sluncem zalité terase, mávají do objektivu"
-                width={1195}
-                height={896}
+                src="/images/tabor/skupina-terasa-2.webp"
+                alt="Děti z tábora Weeks s lektory na terase"
+                width={1600}
+                height={1200}
                 sizes="(min-width: 900px) 560px, 1px"
                 loading="lazy"
               />
