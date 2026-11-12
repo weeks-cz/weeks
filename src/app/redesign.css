@@ -8,7 +8,7 @@
   --line: #deded6;
   --muted: #4a4f6a;
   --on-dark: #fafaf7;
-  --on-dark-muted: #c4c6d4;
+  --on-dark-muted: #d3d5e0;
   --line-dark: #2b2e45;
   --amber: #f59e0b;
   --amber-soft: #fbbf24;
@@ -1977,7 +1977,14 @@ html {
   --tint-amber: #fff3d1;
   --emerald-deep: #065f46;
   --mriz-svetla: rgba(67, 56, 202, 0.07);
-  --mriz-tmava: rgba(165, 180, 252, 0.08);
+  --mriz-tmava: rgba(165, 180, 252, 0.065);
+  /* Plochy na tmavém pozadí (karty, dlaždice, čipy). Neprůhledné schválně:
+     vypadají jako 5–12 % bílé/jantarové přes --ink, ale mřížka jimi neprosvítá,
+     takže čáry nekříží text v kartě. Platí jen na --ink, na jiném podkladu nepoužívat. */
+  --plocha: #181a25;
+  --plocha-2: #1f212c;
+  --plocha-hover: #22242f;
+  --plocha-amber: #281f18;
   --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
   --w-tmave: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='75 135 365 240'%3E%3Cpath d='M115 175 185 335 255 175 325 335 400 175' fill='none' stroke='%230c0e1a' stroke-width='72' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   --w-svetle: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='75 135 365 240'%3E%3Cpath d='M115 175 185 335 255 175 325 335 400 175' fill='none' stroke='%23ffffff' stroke-width='72' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
@@ -2201,11 +2208,11 @@ html {
   width: 31px;
   height: 31px;
   margin: 1px 0 0 1px;
-  background: rgba(34, 211, 238, 0.17);
+  background: rgba(34, 211, 238, 0.15);
   animation: bunka 0.9s ease-out forwards;
 }
 .w2 .mrizka-bunka.signal {
-  background: rgba(34, 211, 238, 0.13);
+  background: rgba(34, 211, 238, 0.11);
   animation-duration: 1.3s;
 }
 @keyframes bunka {
@@ -3130,7 +3137,7 @@ html {
   padding: 10px 8px 10px 10px;
   border: 1.5px solid var(--line-dark);
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--plocha);
 }
 .w2 .vyhody svg {
   width: 22px;
@@ -3299,7 +3306,7 @@ html {
   padding: 12px 14px 12px 12px;
   border: 1.5px solid var(--line-dark);
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--plocha);
 }
 .w2 .dny-hl {
   grid-row: 1 / span 2;
@@ -3331,7 +3338,7 @@ html {
 }
 .w2 .dny li:last-child {
   border-color: var(--amber);
-  background: rgba(245, 158, 11, 0.12);
+  background: var(--plocha-amber);
 }
 .w2 .dny li:last-child .dny-den {
   background: var(--amber);
@@ -4104,7 +4111,7 @@ html {
   padding: 10px 12px;
   border: 1.5px solid var(--line-dark);
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--plocha);
   text-decoration: none;
   transition:
     border-color 0.15s,
@@ -4118,7 +4125,7 @@ html {
   width: 40px;
   height: 40px;
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--plocha-2);
 }
 .w2 .rozcesti-ik svg {
   width: 22px;
@@ -4148,7 +4155,7 @@ html {
 @media (hover: hover) {
   .w2 .rozcesti a:hover {
     border-color: var(--on-dark);
-    background: rgba(255, 255, 255, 0.09);
+    background: var(--plocha-hover);
   }
   .w2 .rozcesti a:hover > svg {
     transform: translateX(3px);
@@ -4221,7 +4228,7 @@ html {
 }
 .w2 .dark .karta {
   border-color: var(--line-dark);
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--plocha);
   box-shadow: none;
 }
 .w2 .dark .karta p {
@@ -4229,7 +4236,7 @@ html {
 }
 .w2 .dark .karta-ik {
   border-color: transparent;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--plocha-2);
 }
 .w2 .dark .karta-ik svg {
   color: var(--cyan);
@@ -4294,7 +4301,7 @@ html {
   padding: 16px;
   border: 1.5px solid var(--line-dark);
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--plocha);
 }
 .w2 .clen-foto {
   grid-row: 1 / span 2;
@@ -4305,7 +4312,7 @@ html {
   height: 56px;
   overflow: hidden;
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--plocha-2);
 }
 .w2 .clen-foto img {
   width: 100%;
@@ -4334,7 +4341,7 @@ html {
   margin-top: 14px;
   padding: 8px 12px;
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.07);
+  background: var(--plocha-2);
   font-size: var(--small);
   color: var(--on-dark-muted);
 }
@@ -5305,7 +5312,7 @@ html {
   height: 56px;
   margin-bottom: 12px;
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--plocha-2);
   color: var(--role, var(--cyan));
 }
 .w2 .stav-ikona svg {
@@ -5655,7 +5662,7 @@ html {
   padding: 0 14px;
   border: 1.5px solid var(--line-dark);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--plocha);
   font-size: var(--small);
   font-weight: 600;
   text-decoration: none;
@@ -5745,4 +5752,19 @@ html {
    splynula s tmavou patičkou – oddělit linkou. */
 main.w2 > .dark:last-child {
   border-bottom: 1px solid var(--line-dark);
+}
+
+/* ── Čitelnost na mřížce (12. 11. 2026) ───────────────────────────────
+   Text, který leží přímo na tmavé mřížce (nadpisy, perex, drobečky, hlavičky
+   sekcí), dostane tmavou „auru“ v barvě pozadí: čáry mřížky těsně kolem písmen
+   zmizí, o kus dál zůstanou. Jen na volném textu – stín se dědí, takže ne na
+   kontejnerech s barevnými štítky a tlačítky uvnitř. */
+.w2 .mrizka :is(h1, h2, .zahlavi-perex, .sec-head p, .drob, .hero p, .hodn, .ftr p, .ftr li) {
+  text-shadow:
+    0 0 2px var(--ink),
+    0 0 6px var(--ink),
+    0 0 12px var(--ink);
+}
+.w2 .mrizka :is(h1, h2, p) :is(.btn, .stitek, .cip) {
+  text-shadow: none;
 }
