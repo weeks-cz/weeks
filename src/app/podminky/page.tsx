@@ -6,7 +6,8 @@ import { Ikona } from '@/components/w2/Ikona'
 import { Mrizka } from '@/components/w2/Mrizka'
 import { PravniObsah, type PolozkaObsahu } from '@/components/w2/PravniObsah'
 import { BreadcrumbSchema } from '@/components/seo/StructuredData'
-import { MIMO_CENU, PROVOZNI_DOBA, SITE, V_CENE } from '@/lib/site'
+import { MIMO_CENU, PRAVNI_ZNENI, PROVOZNI_DOBA, SITE, V_CENE } from '@/lib/site'
+import { sazba } from '@/components/w2/text'
 
 const pageTitle = 'Podmínky užití'
 const pageDescription = 'Podmínky užití webu a všeobecné obchodní podmínky IT táborů Weeks.'
@@ -130,7 +131,7 @@ export default function PodminkyPage() {
               <div className="cipy-info">
                 <span className="cip-info">
                   <Ikona id="kalendar" />
-                  Účinnost od: 10. října 2026
+                  Účinnost od: {sazba(PRAVNI_ZNENI.podminky.ucinnost)}
                 </span>
                 <a className="cip-info" href="#cast-a">
                   <Ikona id="dolu" />
@@ -806,10 +807,12 @@ export default function PodminkyPage() {
 
             <div className="pravni-paticka">
               <p className="small muted">
-                Tyto podmínky užití a všeobecné obchodní podmínky jsou platné a účinné od 16. září 2026.
+                Tyto podmínky užití a všeobecné obchodní podmínky jsou platné a účinné od{' '}
+                {sazba(PRAVNI_ZNENI.podminky.ucinnost)}. Smlouvy uzavřené před tímto dnem se řídí
+                zněním účinným v den jejich uzavření; na požádání ho zašleme e-mailem.
               </p>
               <p className="small muted">
-                Poslední aktualizace: 16. září 2026
+                Poslední aktualizace: {sazba(PRAVNI_ZNENI.podminky.aktualizace)}
               </p>
             </div>
             </article>

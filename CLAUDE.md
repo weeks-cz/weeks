@@ -421,6 +421,10 @@ prototype — they were built here from the same stylesheet.
     telefonu" / "Teď offline, ozveme se" in the header and on the contact
     card. It is a promise to the visitor — change it when the hours change;
     `null` hides the dot.
+  - The effective date of `/podminky` and `/gdpr` lives in `PRAVNI_ZNENI`
+    (`site.ts`); the header chip and the closing line both read it (they had
+    drifted apart: 10 Oct on top, 16 Sep at the bottom). Move `ucinnost` on
+    every change of substance to the text, `aktualizace` on wording-only edits.
   - Texts built from data go through `sazba()`; short day names
     (`den.kratce`), day summaries and schedule tiles have length limits in
     `tabory.test.ts`, because cards standing side by side must keep the same

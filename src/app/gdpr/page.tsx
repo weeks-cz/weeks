@@ -6,7 +6,8 @@ import { Ikona } from '@/components/w2/Ikona'
 import { Mrizka } from '@/components/w2/Mrizka'
 import { PravniObsah, type PolozkaObsahu } from '@/components/w2/PravniObsah'
 import { BreadcrumbSchema } from '@/components/seo/StructuredData'
-import { SITE } from '@/lib/site'
+import { PRAVNI_ZNENI, SITE } from '@/lib/site'
+import { sazba } from '@/components/w2/text'
 
 const pageTitle = 'Ochrana osobních údajů (GDPR)'
 const pageDescription = 'Zásady ochrany osobních údajů pro IT tábory Weeks. Informace o zpracování osobních údajů v souladu s GDPR.'
@@ -121,7 +122,7 @@ export default function GDPRPage() {
               <div className="cipy-info">
                 <span className="cip-info">
                   <Ikona id="kalendar" />
-                  Účinnost od: 16. září 2026
+                  Účinnost od: {sazba(PRAVNI_ZNENI.gdpr.ucinnost)}
                 </span>
                 <a className="cip-info" href="#cl-6">
                   <Ikona id="stit" />
@@ -531,10 +532,11 @@ export default function GDPRPage() {
 
             <div className="pravni-paticka">
               <p className="small muted">
-                Tyto zásady ochrany osobních údajů jsou platné a účinné od 16. září 2026.
+                Tyto zásady ochrany osobních údajů jsou platné a účinné od{' '}
+                {sazba(PRAVNI_ZNENI.gdpr.ucinnost)}.
               </p>
               <p className="small muted">
-                Poslední aktualizace: 16. září 2026
+                Poslední aktualizace: {sazba(PRAVNI_ZNENI.gdpr.aktualizace)}
               </p>
             </div>
             </article>

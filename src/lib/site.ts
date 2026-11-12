@@ -95,6 +95,22 @@ export const PROVOZNI_DOBA = {
 } as const
 
 /**
+ * Znění právních textů (/podminky, /gdpr). Hlavička i patička stránky čtou
+ * datum odsud, aby se nerozešly – stalo se: nahoře „Účinnost od 10. října“,
+ * dole „platné a účinné od 16. září“.
+ *
+ * `ucinnost` je den, od kterého platí aktuální znění. Po každé VĚCNÉ změně
+ * textu (jiné povinnosti, ceny, lhůty, zpracování údajů) ho posuňte na den
+ * nasazení; překlep nebo přeformulování bez změny smyslu mění jen
+ * `aktualizace`. Podmínky: poslední věcná změna 10. 11. 2026 (co je v ceně
+ * podle tábora), předtím 2. 11. (záloha) a 10. 10. (výčet ceny, faktura).
+ */
+export const PRAVNI_ZNENI = {
+  podminky: { ucinnost: '10. listopadu 2026', aktualizace: '12. listopadu 2026' },
+  gdpr: { ucinnost: '16. září 2026', aktualizace: '11. října 2026' },
+} as const
+
+/**
  * Co cena zahrnuje u každého tábora — jediné místo, kde je to napsané. Čte to
  * stránka termínu i VOP čl. 20, aby se slib na webu a ve smlouvě nerozešel.
  * Svačiny v ceně nejsou: dopolední i odpolední si dítě nosí vlastní (oběd

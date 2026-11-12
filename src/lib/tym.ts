@@ -67,7 +67,7 @@ export const TYM: ClenTymu[] = [
     email: 'lukas.kubik@weeks.cz',
     linkedin: 'https://www.linkedin.com/in/luk%C3%A1%C5%A1-kub%C3%ADk-251605245/',
     popis:
-      'Vyvíjí weby a aplikace a pracuje jako e-commerce specialista v marketingové agentuře. Ve Weeks staví všechno, co běží na obrazovce — tenhle web, online učebnu i interní aplikaci, ve které tým tábory řídí.',
+      'Vyvíjí weby a aplikace a pracuje jako e-commerce specialista v marketingové agentuře. Ve Weeks staví všechno, co běží na obrazovce – tenhle web, online učebnu i interní aplikaci, ve které tým tábory řídí.',
   },
   {
     id: 'stepan-jurenka',
@@ -79,7 +79,7 @@ export const TYM: ClenTymu[] = [
     email: 'stepan.jurenka@weeks.cz',
     linkedin: 'https://www.linkedin.com/in/%C5%A1t%C4%9Bp%C3%A1n-jurenka-461598294/',
     popis:
-      'Lektor a vedoucí workshopů v HWLabu. Jeho doménou je 3D modelování a tisk — v Blenderu modeluje mnohem déle, než Weeks existuje — a elektronika s Arduinem.',
+      'Lektor a vedoucí workshopů v HWLabu. Jeho doménou je 3D modelování a tisk – v Blenderu modeluje mnohem déle, než Weeks existuje – a elektronika s Arduinem.',
   },
   // Hlavní lektor tábora herního vývoje (Praha, 12.–16. 7. 2027), na web se
   // souhlasem týmu 2026-11-10. Bio ani fotku zatím nemáme, proto popis říká
