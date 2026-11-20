@@ -296,7 +296,10 @@ function AktivniTema({ tabor }: { tabor: Tabor }) {
           <div className="wrap">
             <div className="sec-head">
               <h2>Jak vypadá týden</h2>
-              <p>Projekty na sebe navazují. Co dítě v pondělí začne, to v pátek dokončí.</p>
+              <p>
+                Projekty na sebe navazují. Co dítě v pondělí začne, to v pátek dokončí. Program
+                je orientační, lektor ho přizpůsobí skupině.
+              </p>
             </div>
             <ol className="dny">
               {tabor.program.map((den) => (

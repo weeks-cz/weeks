@@ -21,7 +21,7 @@ const sMistem: Turnus = {
   priceKc: 4990,
   capacity: 15,
   status: 'otevreno',
-  taborIds: ['chytre-technologie'],
+  taborIds: ['3d-tisk-a-elektronika'],
   ageRange: '9-15',
   perex: 'Testovací turnus.',
 }

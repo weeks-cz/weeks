@@ -13,7 +13,7 @@ const otevreny: Turnus = {
   priceKc: 4990,
   capacity: 15,
   status: 'otevreno',
-  taborIds: ['chytre-technologie'],
+  taborIds: ['3d-tisk-a-elektronika'],
   ageRange: '9-15',
   perex: 'Týdenní příměstský tábor ve FabLabu.',
 }
@@ -28,7 +28,7 @@ const chystany: Turnus = {
   priceKc: null,
   capacity: 15,
   status: 'chystame',
-  taborIds: ['chytre-technologie'],
+  taborIds: ['3d-tisk-a-elektronika'],
   ageRange: '9-15',
   perex: 'Místo konání i termíny upřesníme.',
 }

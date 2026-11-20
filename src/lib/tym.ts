@@ -93,6 +93,17 @@ export const TYM: ClenTymu[] = [
     popis:
       'Hlavní lektor tábora herního vývoje. Za týden provede děti herním enginem Godot od prázdné scény až po hotovou hru.',
   },
+  // Hlavní lektor tábora umělé inteligence (Praha, 26.–30. 7. 2027), na web
+  // 2026-11-20. Bio ani fotku zatím nemáme.
+  {
+    id: 'jakub-lastovka',
+    jmeno: 'Jakub Laštovka',
+    zakladatel: false,
+    obor: 'Umělá inteligence · elektronika',
+    ikona: 'code',
+    popis:
+      'Hlavní lektor tábora umělé inteligence. Za týden ukáže dětem, jak se stroj učí z dat, a pomůže jim naučit malou desku se senzory poznat gesto nebo zvuk.',
+  },
 ]
 
 /** „Spoluzakladatel“, nebo „Lektor“. */

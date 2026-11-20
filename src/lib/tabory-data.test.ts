@@ -45,7 +45,7 @@ describe('ostrá data táborů', () => {
 
   it('herní tábor neslibuje 3D výtisky — „V ceně" se liší podle tábora', () => {
     const herni = TABORY.find((t) => t.id === 'game-dev')!
-    const chytre = TABORY.find((t) => t.id === 'chytre-technologie')!
+    const chytre = TABORY.find((t) => t.id === '3d-tisk-a-elektronika')!
     expect(vCeneTabora(herni).join(' ')).not.toMatch(/3D/)
     expect(vCeneTabora(chytre).join(' ')).toMatch(/3D tiskárny/)
     expect(vCeneTabora(herni)).toContain('Oběd každý den')

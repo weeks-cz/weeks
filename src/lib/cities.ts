@@ -7,7 +7,7 @@
  */
 
 export type CityId = 'praha' | 'karlovy-vary'
-export type VenueId = 'fablab-varyte' | 'zs-brectanova'
+export type VenueId = 'fablab-varyte' | 'zs-brectanova' | 'zs-chvaleticka'
 
 export interface City {
   id: CityId
@@ -137,6 +137,26 @@ const VENUES: Record<VenueId, Venue> = {
       popisek: 'Areál školy s hřištěm.',
       zdroj: { nazev: 'ZŠ Břečťanová', url: 'https://www.zsbrectanova.cz/' },
     },
+  },
+  // Potvrzeno pro tábor 3D tisku 19.–23. 7. 2027: rezervaci termínu potvrdil
+  // e-mailem Daniel Pasini za ředitele (2026-11-20), smlouva se doladí. Adresa
+  // podle kontaktní stránky školy, číslo orientační a souřadnice podle
+  // OpenStreetMap. Vybavení jen podle odpovědi školy (2026-11-18): 31 PC
+  // a 3D tiskárny Prusa. Vlastní fotku učebny zatím nemáme, proto bez `foto`.
+  'zs-chvaleticka': {
+    id: 'zs-chvaleticka',
+    cityId: 'praha',
+    name: 'ZŠ Chvaletická',
+    fullName: 'Základní škola, Praha 9 – Lehovec, Chvaletická 918',
+    street: 'Chvaletická 918/3',
+    city: 'Praha 9 – Lehovec',
+    postalCode: '198 00',
+    geo: { lat: 50.1051078, lng: 14.5502445 },
+    description:
+      'Základní škola v pražském Lehovci, kousek od metra Rajská zahrada. Tábor běží v její počítačové učebně.',
+    url: 'https://www.zschvaleticka.cz/',
+    vybaveni: 'Počítačová učebna, každé dítě má svůj počítač, a 3D tiskárny Prusa',
+    mapQuery: 'Chvaletick%C3%A1+918+Praha+9',
   },
 }
 

@@ -83,7 +83,7 @@ export function getTrustedProgramName(termId: string, list: Turnus[] = TURNUSY):
     throw new Error(`Neznámý turnus: ${termId}`)
   }
   // Název skládá tábor, ne výčet jeho zaměření: faktura má tábor pojmenovat,
-  // ne vyjmenovat jeho obsah. Proto „(Chytré technologie)“, ne
+  // ne vyjmenovat jeho obsah. Proto „(3D tisk a elektronika)“, ne
   // „(3D tisk, IoT a elektronika, Virtuální realita)“.
   const temata = getTaboryTurnusu(turnus).map((t) => t.shortName)
   return temata.length > 0

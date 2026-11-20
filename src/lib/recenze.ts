@@ -64,7 +64,7 @@ export const RECENZE: Recenze[] = [
     hvezdicky: 5,
     text: 'Skvělý tábor v Karlových Varech. Syn chodil domů nadšený, nejvíce ho bavil 3D tisk. Lektoři byli super, určitě přijdeme zas.',
     kdy: 'srpen 2026',
-    tabor: 'chytre-technologie',
+    tabor: '3d-tisk-a-elektronika',
   },
   {
     id: 'jan-plasil',

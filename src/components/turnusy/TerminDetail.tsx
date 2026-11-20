@@ -50,7 +50,7 @@ const FOTKA_SPOLECNA: FotkaGalerie = {
 }
 
 const FOTKY_PODLE_TABORA: Partial<Record<TaborId, FotkaGalerie[]>> = {
-  'chytre-technologie': [
+  '3d-tisk-a-elektronika': [
     {
       src: '/images/tabor/hero-dilna.webp',
       alt: 'Děti a lektoři v dílně u 3D tiskáren, na plátně promítnuté logo Weeks',

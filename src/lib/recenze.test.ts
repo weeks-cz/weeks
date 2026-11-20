@@ -36,6 +36,6 @@ describe('recenzeProTabor', () => {
 
   it('úvodka (bez tábora) a tábor chytrých technologií ukazují všechny', () => {
     expect(recenzeProTabor()).toHaveLength(RECENZE.length)
-    expect(recenzeProTabor('chytre-technologie')).toHaveLength(RECENZE.length)
+    expect(recenzeProTabor('3d-tisk-a-elektronika')).toHaveLength(RECENZE.length)
   })
 })

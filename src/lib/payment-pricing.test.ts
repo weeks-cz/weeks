@@ -12,7 +12,7 @@ const prodejny: Turnus = {
   priceKc: 4990,
   capacity: 15,
   status: 'otevreno',
-  taborIds: ['chytre-technologie'],
+  taborIds: ['3d-tisk-a-elektronika'],
   ageRange: '9-15',
   perex: 'Testovací turnus pro ověření důvěryhodné ceny.',
 }
@@ -88,12 +88,12 @@ describe('ostrá data', () => {
 describe('getTrustedProgramName', () => {
   it('vrátí čitelný název tábora se zaměřením v závorce', () => {
     const nazev = getTrustedProgramName('test-prodejny', [prodejny])
-    expect(nazev).toBe('Letní příměstský tábor (Chytré technologie)')
+    expect(nazev).toBe('Letní příměstský tábor (3D tisk a elektronika)')
   })
 
   it('vrátí název i u turnusu, který je vyprodaný — nástupní list a upomínka běží právě tehdy', () => {
     const plno: Turnus = { ...prodejny, id: 'test-plno', status: 'plno' }
-    expect(getTrustedProgramName('test-plno', [plno])).toBe('Letní příměstský tábor (Chytré technologie)')
+    expect(getTrustedProgramName('test-plno', [plno])).toBe('Letní příměstský tábor (3D tisk a elektronika)')
   })
 
   it('odmítne neznámý turnus', () => {

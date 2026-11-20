@@ -26,7 +26,7 @@ const otevreny: Turnus = {
   priceKc: 4990,
   capacity: 15,
   status: 'otevreno',
-  taborIds: ['chytre-technologie'],
+  taborIds: ['3d-tisk-a-elektronika'],
   ageRange: '9-15',
   perex: 'Týdenní příměstský tábor ve FabLabu.',
 }
@@ -41,7 +41,7 @@ const chystany: Turnus = {
   priceKc: null,
   capacity: 15,
   status: 'chystame',
-  taborIds: ['chytre-technologie'],
+  taborIds: ['3d-tisk-a-elektronika'],
   ageRange: '9-15',
   perex: 'Místo konání i termíny upřesníme.',
 }
@@ -244,7 +244,7 @@ describe('validateTurnusy — minimum dětí', () => {
 
 describe('vazba turnusu na tábor', () => {
   it('getTaboryTurnusu vrátí tábory, na které turnus ukazuje', () => {
-    expect(getTaboryTurnusu(otevreny).map((t) => t.id)).toEqual(['chytre-technologie'])
+    expect(getTaboryTurnusu(otevreny).map((t) => t.id)).toEqual(['3d-tisk-a-elektronika'])
   })
 
   it('getFocusTurnusu poskládá zaměření z táborů, bez duplicit', () => {
@@ -255,7 +255,7 @@ describe('vazba turnusu na tábor', () => {
 
   it('getTurnusyByTabor vybere jen turnusy daného tématu', () => {
     const jiny: Turnus = { ...otevreny, id: 'test-jiny', slug: 'jiny', taborIds: ['game-dev'] }
-    expect(getTurnusyByTabor('chytre-technologie', [otevreny, jiny]).map((t) => t.id)).toEqual([
+    expect(getTurnusyByTabor('3d-tisk-a-elektronika', [otevreny, jiny]).map((t) => t.id)).toEqual([
       'test-kv-cervenec',
     ])
   })

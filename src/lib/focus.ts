@@ -6,7 +6,7 @@
  * odtud si ho přitáhne jak přehled na /tabor, tak stránka konkrétního turnusu.
  */
 
-export type FocusId = '3d-tisk' | 'iot' | 'vr' | 'herni-vyvoj'
+export type FocusId = '3d-tisk' | 'iot' | 'vr' | 'herni-vyvoj' | 'umela-inteligence'
 
 export interface FocusModule {
   id: FocusId
@@ -37,7 +37,7 @@ export interface FocusModule {
   foto?: { src: string; alt: string }
 }
 
-export const FOCUS_IDS: FocusId[] = ['3d-tisk', 'iot', 'vr', 'herni-vyvoj']
+export const FOCUS_IDS: FocusId[] = ['3d-tisk', 'iot', 'vr', 'herni-vyvoj', 'umela-inteligence']
 
 const FOCUS: Record<FocusId, FocusModule> = {
   '3d-tisk': {
@@ -171,6 +171,21 @@ const FOCUS: Record<FocusId, FocusModule> = {
       src: '/images/tabor/gd-hra-mince.webp',
       alt: 'Ukázka 2D hry v Godotu: postavička sbírá mince na plošinách',
     },
+  },
+  'umela-inteligence': {
+    id: 'umela-inteligence',
+    name: 'Umělá inteligence',
+    // Orientačně podle směru z pohovoru s lektorem (2026-09-29): AI v malé
+    // desce se senzory, ne v chatu. Konkrétní deska ani to, že si ji dítě
+    // odnese, potvrzené nejsou — proto bez názvu desky a bez slibu desky domů.
+    short:
+      'Umělá inteligence v malé desce se senzory: dítě ji z vlastních příkladů naučí poznat gesto, pohyb nebo zvuk.',
+    tryOut: [
+      'Nasbírá data ze senzorů a podívá se, jak svět „vidí“ stroj',
+      'Natrénuje vlastní model, který se z příkladů naučí poznat, co se děje',
+      'Nahraje ho do desky a zjistí, kde se trefí, kde se splete a proč',
+      'Vymyslí, k čemu jeho zařízení poslouží, a předvede ho ostatním',
+    ],
   },
 }
 

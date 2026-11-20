@@ -13,7 +13,7 @@ import {
 import { PROVOZNI_DOBA } from './site'
 
 const aktivni: Tabor = {
-  id: 'chytre-technologie',
+  id: '3d-tisk-a-elektronika',
   name: 'Tábor chytrých technologií',
   shortName: 'Chytré technologie',
   status: 'aktivni',
@@ -57,13 +57,13 @@ describe('getTabor', () => {
 
 describe('rozdělení podle stavu', () => {
   it('aktivní a chystané se nemíchají', () => {
-    expect(getAktivniTabory([aktivni, chystany]).map((t) => t.id)).toEqual(['chytre-technologie'])
+    expect(getAktivniTabory([aktivni, chystany]).map((t) => t.id)).toEqual(['3d-tisk-a-elektronika'])
     expect(getChystaneTabory([aktivni, chystany]).map((t) => t.id)).toEqual(['game-dev'])
   })
 
   it('aktivní tábor jde ve výpisu první, i když je v datech až za chystaným', () => {
     const poradi = getAktivniTabory([chystany, aktivni]).map((t) => t.id)
-    expect(poradi).toEqual(['chytre-technologie'])
+    expect(poradi).toEqual(['3d-tisk-a-elektronika'])
   })
 })
 
@@ -89,12 +89,12 @@ describe('validateTabory', () => {
   })
 
   it('odhalí duplicitní id — dva tábory by měly stejnou adresu', () => {
-    expect(validateTabory([aktivni, { ...chystany, id: 'chytre-technologie' }])).toHaveLength(1)
+    expect(validateTabory([aktivni, { ...chystany, id: '3d-tisk-a-elektronika' }])).toHaveLength(1)
   })
 
   it('aktivní tábor bez programu je chyba — stránka by byla prázdná', () => {
     const problemy = validateTabory([{ ...aktivni, program: undefined }])
-    expect(problemy.join(' ')).toContain('chytre-technologie')
+    expect(problemy.join(' ')).toContain('3d-tisk-a-elektronika')
   })
 
   it('chystaný tábor nesmí mít program — nesmí tvrdit, co se na něm bude dít', () => {

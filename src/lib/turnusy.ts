@@ -92,7 +92,7 @@ export interface Zaloha {
  * i server při registraci (`payment-pricing.ts`) ji čtou výhradně odtud.
  *
  * POZOR — název programu na faktuře: `RegistrationForm` dál ukládá do pole
- * `program` id tábora (`turnus.taborIds[0]`, např. `'chytre-technologie'`),
+ * `program` id tábora (`turnus.taborIds[0]`, např. `'3d-tisk-a-elektronika'`),
  * ale e-maily,
  * faktura z Fakturoidu, upomínka na platbu i nástupní list už tohle pole
  * nečtou — název tábora odvozuje server přes `getTrustedProgramName`
@@ -113,7 +113,7 @@ export const TURNUSY: Turnus[] = [
     minimum: { deti: 10, rozhodnemeDo: '2027-06-30' },
     zaloha: { castkaKc: 2000, doplatekDo: '2027-05-31' },
     status: 'otevreno',
-    taborIds: ['chytre-technologie'],
+    taborIds: ['3d-tisk-a-elektronika'],
     ageRange: '9-15',
     perex:
       'Týden 3D tisku a elektroniky ve FabLabu VARY&TE v Karlových Varech. Oběd, pitný režim i materiál jsou v ceně.',
@@ -130,7 +130,7 @@ export const TURNUSY: Turnus[] = [
     minimum: { deti: 10, rozhodnemeDo: '2027-06-30' },
     zaloha: { castkaKc: 2000, doplatekDo: '2027-05-31' },
     status: 'otevreno',
-    taborIds: ['chytre-technologie'],
+    taborIds: ['3d-tisk-a-elektronika'],
     ageRange: '9-15',
     perex:
       'Týden 3D tisku a elektroniky ve FabLabu VARY&TE v Karlových Varech. Oběd, pitný režim i materiál jsou v ceně.',
@@ -156,20 +156,44 @@ export const TURNUSY: Turnus[] = [
     perex:
       'Týden vývoje vlastní hry v Godotu na ZŠ Břečťanová v Praze 10. Oběd, pitný režim i materiál jsou v ceně.',
   },
+  // Vypsáno 2026-11-20: ZŠ Chvaletická potvrdila rezervaci týdne (smlouva se
+  // doladí). Kapacita 31 = počet PC v učebně (Lukáš 2026-11-20). Do té doby
+  // tu stál `praha-leto-2027` (`chystame`, bez místa a data) – na nic se na něj
+  // nikdo nepřihlásil, adresa přesměrovává sem (`next.config.js`).
   {
-    id: 'praha-leto-2027',
-    slug: 'praha-leto-2027',
+    id: 'praha-2027-3d-tisk',
+    slug: 'praha-2027-3d-tisk',
     city: 'praha',
-    venueId: null,
-    start: null,
-    end: null,
-    priceKc: null,
-    capacity: 15,
-    status: 'chystame',
-    taborIds: ['chytre-technologie'],
+    venueId: 'zs-chvaleticka',
+    start: '2027-07-19',
+    end: '2027-07-23',
+    priceKc: 5990,
+    capacity: 31,
+    minimum: { deti: 10, rozhodnemeDo: '2027-06-30' },
+    zaloha: { castkaKc: 2000, doplatekDo: '2027-05-31' },
+    status: 'otevreno',
+    taborIds: ['3d-tisk-a-elektronika'],
     ageRange: '9-15',
     perex:
-      'Týdenní příměstský tábor v Praze.',
+      'Týden 3D tisku a elektroniky na ZŠ Chvaletická v Praze 9. Oběd, pitný režim i materiál jsou v ceně.',
+  },
+  // Vypsáno 2026-11-20: lektor Jakub Laštovka, stejná učebna jako herní tábor.
+  {
+    id: 'praha-2027-umela-inteligence',
+    slug: 'praha-2027-umela-inteligence',
+    city: 'praha',
+    venueId: 'zs-brectanova',
+    start: '2027-07-26',
+    end: '2027-07-30',
+    priceKc: 5990,
+    capacity: 15,
+    minimum: { deti: 10, rozhodnemeDo: '2027-06-30' },
+    zaloha: { castkaKc: 2000, doplatekDo: '2027-05-31' },
+    status: 'otevreno',
+    taborIds: ['umela-inteligence'],
+    ageRange: '9-15',
+    perex:
+      'Týden AI a chytré elektroniky na ZŠ Břečťanová v Praze 10. Oběd, pitný režim i materiál jsou v ceně.',
   },
 ]
 

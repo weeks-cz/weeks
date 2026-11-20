@@ -43,6 +43,12 @@ const nextConfig = {
       // obecné pravidlo pod ní, aby nevznikl řetěz dvou přesměrování.
       { source: '/tabor/karlovy-vary-leto-2027', destination: '/tabory?mesto=karlovy-vary', permanent: true },
       { source: '/tabory/termin/karlovy-vary-leto-2027', destination: '/tabory?mesto=karlovy-vary', permanent: true },
+      // Přejmenování táborů 2026-11-20: 3D tisk v názvu, AI otevřeno. Pražský
+      // placeholder `praha-leto-2027` se stal turnusem `praha-2027-3d-tisk`.
+      { source: '/tabory/chytre-technologie', destination: '/tabory/3d-tisk-a-elektronika', permanent: true },
+      { source: '/tabory/ai', destination: '/tabory/umela-inteligence', permanent: true },
+      { source: '/tabor/praha-leto-2027', destination: '/tabory/termin/praha-2027-3d-tisk', permanent: true },
+      { source: '/tabory/termin/praha-leto-2027', destination: '/tabory/termin/praha-2027-3d-tisk', permanent: true },
       { source: '/tabor/:slug', destination: '/tabory/termin/:slug', permanent: true },
       // Město přestává být větví webu — karlovarské adresy míří na svůj protějšek,
       // ne plošně na úvodku, ať se neztratí zpětné odkazy ani cíle reklam.

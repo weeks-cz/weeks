@@ -17,7 +17,7 @@ import { getFocusModules, type FocusId } from './focus'
  * na faktuře, takže dvě pole by se jen mohla rozejít. `id` je zároveň adresa.
  */
 
-export type TaborId = 'chytre-technologie' | 'game-dev' | 'ai' | 'webovy-tabor'
+export type TaborId = '3d-tisk-a-elektronika' | 'game-dev' | 'umela-inteligence' | 'webovy-tabor'
 
 export type TaborStatus =
   /** Běží, má program i turnusy. */
@@ -202,12 +202,15 @@ export const DEN_V_KOSTCE: Array<{
  */
 export const TABORY: Tabor[] = [
   {
-    id: 'chytre-technologie',
-    name: 'Tábor chytrých technologií',
-    shortName: 'Chytré technologie',
+    // Do 2026-11-20 „Tábor chytrých technologií“ (`/tabory/chytre-technologie`,
+    // trvale přesměrováno). Přejmenováno, aby byl 3D tisk vidět už v názvu –
+    // na ten rodiče slyší; „chytré technologie“ se jako název nepoužívá.
+    id: '3d-tisk-a-elektronika',
+    name: 'Tábor 3D tisku a elektroniky',
+    shortName: '3D tisk a elektronika',
     status: 'aktivni',
     perex:
-      'Celý týden 3D tisk, 3D modelování a IoT s Arduinem. Hotový výrobek, který si dítě odveze domů.',
+      'Celý týden 3D tisk, 3D modelování a elektronika s Arduinem. Vlastní výtisky, které si dítě odveze domů.',
     popis:
       'Týden 3D tisku a elektroniky. První tři dny děti modelují a tisknou vlastní návrhy, ve čtvrtek a v pátek zapojují a programují zařízení s Arduinem. Výtisky si odvezou domů.',
     // VR je ze zaměření pryč: vybavení na něj není jisté a v Karlových Varech
@@ -267,11 +270,11 @@ export const TABORY: Tabor[] = [
           'Vlastní výtisky z 3D tiskárny a vlastní 3D model, který si navrhlo – klíčenku, stojánek, hračku nebo jiný předmět podle vlastního návrhu. Micro:bity a Arduina zůstávají v laboratoři, ale děti získají přístup k online prostředí, kde mohou pokračovat v programování doma.',
       },
     ],
-    // Výchozí fotka karty je detail práce bez místa — visí i u města, kde se
-    // termín teprve chystá a místo konání není známé.
+    // Výchozí fotka karty: 3D tisk, ať karta říká totéž co název. Starší
+    // snímek z dílny, ne z konkrétního místa konání – visí i u Prahy.
     foto: {
-      src: '/images/tabor/arduino-ruce.webp',
-      alt: 'Ruce zapojují součástky do nepájivého pole u desky Arduino',
+      src: '/images/tabor/tisk-filament.webp',
+      alt: 'Chlapec s lektorem zavádí filament do 3D tiskárny',
     },
     fotoMesta: {
       'karlovy-vary': {
@@ -454,26 +457,109 @@ export const TABORY: Tabor[] = [
     ],
   },
   {
-    id: 'ai',
-    name: 'Tábor umělé inteligence a elektroniky',
-    shortName: 'AI a elektronika',
-    status: 'chystame',
-    // Směr podle pohovoru s lektorem (2026-09-29): AI na malé desce se
-    // senzory, ne chatbot. Věk 12–16 je dohodnutý jen pro tenhle tábor, proto
-    // stojí v textu — chystaný tábor nemá turnus, odkud by se vzal
-    // `ageRange`. Až tábor dostane turnus, patří věk tam (a `registration.ts`
-    // dnes pouští jen 9–15). Deska, cena ani to, že si ji dítě odnese, nejsou
-    // potvrzené — proto „chceme", ne „dostane".
+    // Do 2026-11-20 chystaný „Tábor umělé inteligence a elektroniky“
+    // (`/tabory/ai`, trvale přesměrováno). Vede Jakub Laštovka.
+    //
+    // PROGRAM JE ORIENTAČNÍ: od lektora zatím máme jen směr z pohovoru
+    // (2026-09-29) – AI v malé desce se senzory, ne chatbot; děti ji učí
+    // z příkladů. Program po dnech z něj napsal web a schválil Lukáš
+    // (2026-11-20). Konkrétní deska ani to, že si ji dítě odnese, potvrzené
+    // nejsou, proto web desku nejmenuje a domů slibuje projekt, ne hardware.
+    // Věk je 9–15 jako u ostatních (2026-11-20), dřívějších 12–16 neplatí.
+    id: 'umela-inteligence',
+    name: 'Tábor AI a chytré elektroniky',
+    shortName: 'AI a chytrá elektronika',
+    status: 'aktivni',
     perex:
-      'Pro děti 12–16 let. Postaví si malé zařízení se senzory a naučí ho samo poznávat, co se kolem něj děje.',
+      'Umělá inteligence, kterou si dítě samo naučí: malá deska se senzory pozná gesto, pohyb nebo zvuk. Bez chatu, z vlastních příkladů.',
     popis:
-      'Tábor teprve chystáme. Umělou inteligenci na něm děti nepotkají v chatu, ale v malé desce se senzory, kterou během týdne naučí rozpoznat třeba gesto, zvuk nebo pohyb. Učí se přitom stejně jako velké modely: z příkladů. Programovat umět nemusí, většina práce se odklikne v jednoduchém prostředí a kdo chce víc, přepne se do kódu. Chceme, aby si hotové zařízení na konci týdne odnesly domů.',
-    focus: [],
-    zkusiSi: [
-      'Nasbírá data ze senzorů a podívá se, jak svět „vidí“ stroj',
-      'Natrénuje vlastní model, který se z příkladů naučí poznat, co se děje',
-      'Nahraje ho do desky a zjistí, kde se trefí, kde se splete a proč',
-      'Vymyslí, k čemu jeho zařízení poslouží, a předvede ho ostatním',
+      'Týden umělé inteligence v praxi. Děti ji nepotkají v chatu, ale v malé desce se senzory, kterou z vlastních příkladů naučí poznat gesto, pohyb nebo zvuk. Učí se přitom stejně jako velké modely: z dat. V pátek předvedou vlastní chytré zařízení.',
+    focus: ['umela-inteligence'],
+    odnese: 'Vlastní natrénovaný model a hotový projekt',
+    odneseKratce: 'Vlastní projekt',
+    poznamkaKRecenzim:
+      'Tábor umělé inteligence běží poprvé v létě 2027. Recenze jsou z táborů Weeks v roce 2026.',
+    proTermin:
+      'Týden umělé inteligence v praxi. Děti nasbírají data ze senzorů, natrénují vlastní model a nahrají ho do malé desky, která pak sama pozná gesto, pohyb nebo zvuk. Programovat předem umět nemusí.',
+    lektori: ['jakub-lastovka'],
+    // Ilustrační detail práce s elektronikou, bez místa a bez dětské tváře –
+    // tábor se ještě nekonal a vlastní fotky nemá.
+    foto: {
+      src: '/images/tabor/arduino-ruce.webp',
+      alt: 'Ruce zapojují součástky do nepájivého pole u vývojové desky',
+    },
+    program: [
+      {
+        den: 'Pondělí',
+        ikona: 'napad',
+        title: 'Jak se stroj učí',
+        kratce: 'Jak se stroj učí',
+        shrnuti: 'Kde všude je AI, co měří senzory a první program v desce.',
+        description:
+          'Kde všude kolem nás umělá inteligence je a jak se vlastně učí. Děti poznají desku se senzory, zjistí, co umí měřit, a nahrají do ní první program.',
+        highlights: ['Jak se učí AI', 'Deska a její senzory', 'První program'],
+      },
+      {
+        den: 'Úterý',
+        ikona: 'model',
+        title: 'Data a první model',
+        kratce: 'První model',
+        shrnuti: 'Sběr příkladů pohybu a první model, který gesta rozezná.',
+        description:
+          'Děti nasbírají příklady pohybů a gest a natrénují z nich první vlastní model. Deska pak sama pozná, jakým gestem s ní kdo hýbe.',
+        highlights: ['Sběr dat ze senzorů', 'Trénování modelu', 'Rozpoznání gesta'],
+      },
+      {
+        den: 'Středa',
+        ikona: 'zvuk',
+        title: 'Zvuk a chyby modelu',
+        kratce: 'Zvuk a chyby',
+        shrnuti: 'Model na zvuk, hledání chyb a proč se stroj někdy splete.',
+        description:
+          'Model se naučí poznat zvuk, třeba tlesknutí nebo pískání. Děti zkoumají, kde se trefí, kde se splete a proč, a z lepších dat ho vylepší.',
+        highlights: ['Rozpoznání zvuku', 'Proč se model plete', 'Lepší data, lepší model'],
+      },
+      {
+        den: 'Čtvrtek',
+        ikona: 'kod',
+        title: 'Vlastní chytré zařízení',
+        kratce: 'Vlastní nápad',
+        shrnuti: 'Vlastní nápad: model spustí světlo, zvuk nebo počítadlo.',
+        description:
+          'Každý vymyslí, k čemu jeho zařízení poslouží, třeba počítadlo dřepů nebo hlídač na gesto, a propojí model s tím, co deska udělá. Kdo chce, přepne se do kódu.',
+        highlights: ['Vlastní nápad', 'Model ovládá desku', 'Kód pro pokročilé'],
+      },
+      {
+        den: 'Pátek',
+        ikona: 'projekt',
+        title: 'Hotový projekt a výstava',
+        kratce: 'Hotový projekt',
+        shrnuti: 'Doladění zařízení a malá výstava projektů pro rodiče.',
+        description:
+          'Doladění zařízení a malá výstava pro rodiče. Děti předvedou, co jejich model umí, a vysvětlí, jak se to naučil.',
+        highlights: ['Doladění projektu', 'Výstava pro rodiče', 'Hotové chytré zařízení'],
+      },
+    ],
+    faq: [
+      {
+        question: 'Musí dítě umět programovat?',
+        answer:
+          'Ne. Model se trénuje a nahrává do desky v jednoduchém prostředí bez psaní kódu. Kdo chce víc, může se ve čtvrtek přepnout do kódu.',
+      },
+      {
+        question: 'Bude dítě na táboře používat chat s umělou inteligencí?',
+        answer:
+          'Ne. Tábor neučí ptát se chatbota, ale ukazuje, jak se umělá inteligence učí: děti ji samy natrénují z vlastních dat.',
+      },
+      {
+        question: 'Potřebuje dítě vlastní počítač?',
+        answer: 'Ne. Tábor běží v počítačové učebně a každé dítě má svůj počítač.',
+      },
+      {
+        question: 'Co si dítě odveze domů?',
+        answer:
+          'Vlastní natrénovaný model a hotový projekt, který v pátek předvede rodičům.',
+      },
     ],
   },
   {

@@ -125,7 +125,7 @@ export default function TaboryPage() {
               <h1>{sazba(`Letní příměstské tábory${rok ? ` ${rok}` : ''}`)}</h1>
               <p className="zahlavi-perex">
                 {sazba(
-                  `Týdenní příměstské IT tábory ${vMestech(mesta)}. Od pondělí do pátku ${PROVOZNI_DOBA.rozsah} si děti postaví vlastní věc: výtisk z 3D tiskárny, zařízení s Arduinem nebo hru v Godotu.`
+                  `Týdenní příměstské IT tábory ${vMestech(mesta)}. Od pondělí do pátku ${PROVOZNI_DOBA.rozsah} si děti postaví vlastní věc: výtisk z 3D tiskárny, zařízení s Arduinem, hru v Godotu nebo vlastní model umělé inteligence.`
                 )}
               </p>
               <ul className="vyhody">
