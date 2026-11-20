@@ -175,16 +175,15 @@ const FOCUS: Record<FocusId, FocusModule> = {
   'umela-inteligence': {
     id: 'umela-inteligence',
     name: 'Umělá inteligence',
-    // Orientačně podle směru z pohovoru s lektorem (2026-09-29): AI v malé
-    // desce se senzory, ne v chatu. Konkrétní deska ani to, že si ji dítě
-    // odnese, potvrzené nejsou — proto bez názvu desky a bez slibu desky domů.
+    // Podle konceptu lektora Jakuba Laštovky (Notion, 2026-11-20).
     short:
-      'Umělá inteligence v malé desce se senzory: dítě ji z vlastních příkladů naučí poznat gesto, pohyb nebo zvuk.',
+      'Vlastní AI zařízení s displejem a senzorem: od prvního programu po umělou inteligenci, která ovládá skutečný svět.',
     tryOut: [
-      'Nasbírá data ze senzorů a podívá se, jak svět „vidí“ stroj',
-      'Natrénuje vlastní model, který se z příkladů naučí poznat, co se děje',
-      'Nahraje ho do desky a zjistí, kde se trefí, kde se splete a proč',
-      'Vymyslí, k čemu jeho zařízení poslouží, a předvede ho ostatním',
+      'Sestaví vlastní zařízení s displejem, světly a tlačítky, bez pájení',
+      'Dá své AI jméno, povahu a instrukce a zjistí, proč se někdy plete',
+      'Naučí AI ovládat světla, displej i časovač',
+      'Připojí senzor a nechá AI rozhodovat podle skutečných dat',
+      'Vymyslí vlastní projekt a zařízení si odnese domů',
     ],
   },
 }

@@ -150,12 +150,14 @@ technologií"), `game-dev` (`aktivni` since 2026-11-10 — Godot week led by
 lektor Marek Vykysalý, programme taken from his sheet on the team Drive;
 "zbraně/boj" from that sheet is worded for parents as "střely/nepřátelé") and
 `umela-inteligence` "Tábor AI a chytré elektroniky" (`aktivni` since
-2026-11-20, was `ai`; lektor Jakub Laštovka). **The AI programme is
-orientační**: the only input was the direction from the lektor interview
-(2026-09-29 — AI in a small sensor board trained from the kids' own examples,
-not a chatbot); the site wrote the days from it and Lukáš approved them. No
-board is named and nothing says the kid takes hardware home — neither is
-confirmed. Age is 9–15 like the rest (the older 12–16 is void). Every
+2026-11-20, was `ai`; lektor Jakub Laštovka). The AI programme follows
+Jakub's concept "AI Camp – Základní koncept" in Notion (2026-11-20): each kid
+builds their own solder-free AI device (ESP32-S3 with display, LEDs, buttons,
+buzzer, light sensor), gives it a personality and instructions, lets it
+drive the device through tools and react to the sensor, and **takes it home**
+(the concept's main promise to parents). The hardware cost per kid in that
+concept is internal — never on the site. The concept says 10–15; the site
+keeps 9–15 like the rest (the older 12–16 is void). Every
 programme carries the line "Program je orientační, lektor ho přizpůsobí
 skupině." `webovy-tabor` stays `chystame` — intent only: perex and "co si dítě zkusí",
 never a program, price, date or equipment; `validateTabory` rejects a
@@ -202,8 +204,9 @@ photo rather than borrowing the 3D-print shot.
   price, minimum and záloha as KV. Since 2026-11-20 also on sale:
   `praha-2027-3d-tisk` (19.–23. 7., ZŠ Chvaletická in Praha 9 – Lehovec,
   `zs-chvaleticka`, **capacity 31** = PCs in the classroom; the school
-  confirmed the booking by e-mail, the contract is still to be signed; no
-  venue photo yet) and `praha-2027-umela-inteligence` (26.–30. 7., ZŠ
+  confirmed the booking by e-mail, the contract is still to be signed; the
+  venue photo is the school's sports ground from Wikimedia Commons, CC BY-SA
+  4.0, credited under it) and `praha-2027-umela-inteligence` (26.–30. 7., ZŠ
   Břečťanová, capacity 15). The Praha placeholder `praha-leto-2027` became
   `praha-2027-3d-tisk`; its URL 308s there. The placeholder
   `kv-leto-2027` was split into the two real terms; its URL 308s to
@@ -581,7 +584,7 @@ plan: `docs/superpowers/plans/2026-09-21-web-2027-faze-6-tabory-a-vizual.md`.
 - [x] Summer 2027 KV turnusy confirmed and on sale (2026-10-10)
 - [x] Praha 2027 game dev turnus (2026-11-10, ZŠ Břečťanová)
 - [x] Praha 2027 3D tisk (ZŠ Chvaletická) and AI (ZŠ Břečťanová) turnusy (2026-11-20)
-- [ ] ZŠ Chvaletická: contract + handover protocol; our own classroom photo for `zs-chvaleticka`
+- [ ] ZŠ Chvaletická: contract + handover protocol; our own classroom photo could replace the Commons shot on `zs-chvaleticka`
 - [x] Fakturoid for Weeks s.r.o. (2026-10-11, before the first 2027 payment — no backfill needed)
 - [ ] weeks-hub invoice preview: pick OSVČ vs s.r.o. Fakturoid account per registration
 - [ ] Terms (turnusy) editable from weeks-hub instead of `TURNUSY` in code

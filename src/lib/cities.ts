@@ -142,12 +142,14 @@ const VENUES: Record<VenueId, Venue> = {
   // e-mailem Daniel Pasini za ředitele (2026-11-20), smlouva se doladí. Adresa
   // podle kontaktní stránky školy, číslo orientační a souřadnice podle
   // OpenStreetMap. Vybavení jen podle odpovědi školy (2026-11-18): 31 PC
-  // a 3D tiskárny Prusa. Vlastní fotku učebny zatím nemáme, proto bez `foto`.
+  // a 3D tiskárny Prusa. Fotka je školní atletický areál z Wikimedia Commons
+  // (Václav Štorek, 2018, CC BY-SA 4.0 – licence chce autora, licenci a odkaz,
+  // to nese `zdroj`). Vlastní snímek učebny ji může nahradit.
   'zs-chvaleticka': {
     id: 'zs-chvaleticka',
     cityId: 'praha',
     name: 'ZŠ Chvaletická',
-    fullName: 'Základní škola, Praha 9 – Lehovec, Chvaletická 918',
+    fullName: 'Základní škola Chvaletická',
     street: 'Chvaletická 918/3',
     city: 'Praha 9 – Lehovec',
     postalCode: '198 00',
@@ -155,8 +157,20 @@ const VENUES: Record<VenueId, Venue> = {
     description:
       'Základní škola v pražském Lehovci, kousek od metra Rajská zahrada. Tábor běží v její počítačové učebně.',
     url: 'https://www.zschvaleticka.cz/',
-    vybaveni: 'Počítačová učebna, každé dítě má svůj počítač, a 3D tiskárny Prusa',
+    vybaveni: 'Počítačová učebna s počítačem pro každé dítě a 3D tiskárny Prusa',
     mapQuery: 'Chvaletick%C3%A1+918+Praha+9',
+    foto: {
+      src: '/images/tabor/zs-chvaleticka-areal.webp',
+      alt: 'Školní atletický areál: tartanová dráha, oplocené hřiště a doskočiště, v pozadí stromy a domy',
+      width: 1600,
+      height: 750,
+      siroka: true,
+      popisek: 'Školní atletický areál.',
+      zdroj: {
+        nazev: 'Václav Štorek, CC BY-SA 4.0',
+        url: 'https://commons.wikimedia.org/wiki/File:Atletick%C3%A9_h%C5%99i%C5%A1t%C4%9B_Chvaletick%C3%A1.jpg',
+      },
+    },
   },
 }
 

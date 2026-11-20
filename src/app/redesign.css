@@ -2664,15 +2664,17 @@ html {
   background: currentColor;
 }
 @media (min-width: 900px) {
+  /* Výška a výřez tak, aby byl vidět kluk i sprej se šablonou, ne jen
+     jeho záda (Lukáš 2026-11-20). */
   .w2 .pas-foto {
-    min-height: 460px;
+    min-height: 540px;
     align-items: center;
   }
   .w2 .pas-foto {
     overflow: hidden;
   }
   .w2 .pas-foto img {
-    object-position: 50% 38%;
+    object-position: 50% 58%;
     transform: scale(1.32);
     transform-origin: 0% 46%;
   }
