@@ -595,6 +595,14 @@ export const TABORY: Tabor[] = [
       src: '/images/tabor/web-editor-nahled.webp',
       alt: 'Ilustrace: editor s kódem HTML a vedle v prohlížeči hotová stránka s tlačítkem',
     },
+    // Záhlaví stránky tématu: tatáž ilustrace (Lukáš 2026-11-24 – bez obrázku
+    // působilo záhlaví prázdně).
+    fotoHera: {
+      src: '/images/tabor/web-editor-nahled.webp',
+      alt: 'Ilustrace: editor s kódem HTML a vedle v prohlížeči hotová stránka s tlačítkem',
+      width: 1600,
+      height: 1200,
+    },
     program: [
       {
         den: 'Pondělí',
