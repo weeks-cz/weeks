@@ -113,7 +113,7 @@ export const TYM: ClenTymu[] = [
     obor: 'Weby · HTML · JavaScript',
     ikona: 'code',
     popis:
-      'Vede Tábor webových technologií. Za týden provede děti od prvního řádku HTML po vlastní web zveřejněný na internetu.',
+      'Vede Tábor webových technologií. Za týden provede děti od prvního řádku HTML po vlastní hotový web.',
   },
 ]
 

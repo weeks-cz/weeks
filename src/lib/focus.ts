@@ -191,15 +191,16 @@ const FOCUS: Record<FocusId, FocusModule> = {
     name: 'Tvorba webů',
     // Lektor (Filip Freusteiner) vlastní program nedodal. Body vycházejí ze
     // záměru chystaného tábora a jsou schválně obecné (Lukáš 2026-11-24):
-    // HTML, CSS, kousek JavaScriptu, mobil a zveřejnění. Konkrétní nástroje
-    // ani hosting se nejmenují, dokud je lektor nepotvrdí.
+    // HTML, CSS, kousek JavaScriptu, mobil a vlastní odkaz. Konkrétní nástroje
+    // ani hosting se nejmenují, dokud je lektor nepotvrdí. O „zveřejnění“ se
+    // nepíše, rodiče by ho mohli číst jako vystavení dítěte (viz `tabory.ts`).
     short:
-      'Vlastní webová stránka od prvního řádku HTML po zveřejnění na internetu, na adrese, kterou si dítě pošle kamarádům.',
+      'Vlastní webová stránka od prvního řádku HTML po hotový web s odkazem, který dítě pošle rodině a kamarádům.',
     tryOut: [
       'Napíše vlastní stránku v HTML a CSS',
       'Rozpohybuje ji kouskem JavaScriptu',
       'Vyzkouší si, jak vypadá na mobilu',
-      'Vystaví ji na adresu, kterou si může otevřít kdokoli',
+      'Dostane pro ni odkaz a naučí se, co na web patří a co ne',
     ],
   },
 }

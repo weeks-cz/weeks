@@ -571,37 +571,43 @@ export const TABORY: Tabor[] = [
     // Do 2026-11-24 chystaný „Webový tábor“ (stejná adresa `/tabory/webovy-tabor`).
     // Vede Filip Freusteiner. Vlastní program lektor nedodal; tenhle je
     // orientační a schválně obecný (Lukáš 2026-11-24): HTML, CSS, kousek
-    // JavaScriptu, mobil a zveřejnění podle původního záměru tábora. Konkrétní
-    // editor ani hosting se nejmenují, dokud je lektor nepotvrdí.
+    // JavaScriptu, mobil a vlastní odkaz na hotový web. Konkrétní editor ani
+    // hosting se nejmenují, dokud je lektor nepotvrdí.
+    //
+    // „Zveřejnění na internetu“ rodiče může strašit (Lukáš 2026-11-24), proto
+    // texty mluví o odkazu, který dítě pošle rodině, a dotaz „Kdo web uvidí“
+    // říká na rovinu, že odkaz otevře kdokoli, kdo ho má. Sliby v té odpovědi
+    // (bez osobních údajů, mimo vyhledávače, kontrola lektorem, zrušení odkazu
+    // na přání) musí lektor na táboře dodržet – při změně hostingu je ověř.
     id: 'webovy-tabor',
     name: 'Tábor webových technologií',
     shortName: 'Webové technologie',
     status: 'aktivni',
     perex:
-      'Vlastní web od prvního řádku HTML po zveřejnění na internetu. Adresu stránky si dítě odnese a pošle ji kamarádům.',
+      'Vlastní web od prvního řádku HTML po hotovou stránku s vlastním odkazem, který dítě pošle rodině a kamarádům.',
     popis:
-      'Týden, ve kterém se z prázdného souboru stane web. Každé dítě si napíše vlastní stránku v HTML a CSS, rozpohybuje ji JavaScriptem, vyladí ji pro mobil a v pátek ji zveřejní na adrese, kterou může poslat kamarádům i rodině.',
+      'Týden, ve kterém se z prázdného souboru stane web. Každé dítě si napíše vlastní stránku v HTML a CSS, rozpohybuje ji JavaScriptem, vyladí ji pro mobil a v pátek pro ni dostane vlastní odkaz, přes který ji ukáže rodině a kamarádům.',
     focus: ['weby'],
-    odnese: 'Vlastní web zveřejněný na internetu',
-    odneseKratce: 'Vlastní web online',
+    odnese: 'Vlastní web a odkaz, přes který ho ukáže rodině',
+    odneseKratce: 'Web na odkazu',
     poznamkaKRecenzim:
       'Tábor webových technologií běží poprvé v létě 2027. Recenze jsou z táborů Weeks v roce 2026.',
     proTermin:
-      'Týden tvorby webu. Děti si napíšou vlastní stránku v HTML a CSS, rozpohybují ji kouskem JavaScriptu, vyladí ji pro mobil a v pátek ji zveřejní na internetu. Programovat předem umět nemusí.',
+      'Týden tvorby webu. Děti si napíšou vlastní stránku v HTML a CSS, rozpohybují ji kouskem JavaScriptu, vyladí ji pro mobil a v pátek pro ni dostanou vlastní odkaz, který můžou poslat rodině. Programovat předem umět nemusí.',
     lektori: ['filip-freusteiner'],
-    // Ilustrace vykreslená z HTML (editor s kódem a náhled stránky), ne záběr
-    // z tábora – ten se ještě nekonal. Bez fotky zela karta ve výpisu prázdná.
+    // Fotka z učebny Weeks s upravenými obrazovkami (editor HTML a CSS, hotová
+    // stránka v prohlížeči) – webový tábor se ještě nekonal. Stejný postup jako
+    // u herního tábora: alt popisuje jen to, co je na snímku vidět, a web nikde
+    // netvrdí, že jde o záběr z tohoto tábora. Zdroj: `fablab-ucebna.webp`.
     foto: {
-      src: '/images/tabor/web-editor-nahled.webp',
-      alt: 'Ilustrace: editor s kódem HTML a vedle v prohlížeči hotová stránka s tlačítkem',
+      src: '/images/tabor/web-deti-u-pocitacu.webp',
+      alt: 'Děti v učebně u počítačů, na monitorech editor kódu a rozpracované webové stránky',
     },
-    // Záhlaví stránky tématu: tatáž ilustrace (Lukáš 2026-11-24 – bez obrázku
-    // působilo záhlaví prázdně).
     fotoHera: {
-      src: '/images/tabor/web-editor-nahled.webp',
-      alt: 'Ilustrace: editor s kódem HTML a vedle v prohlížeči hotová stránka s tlačítkem',
-      width: 1600,
-      height: 1200,
+      src: '/images/tabor/web-deti-u-pocitacu.webp',
+      alt: 'Děti v učebně u počítačů, na monitorech editor kódu a rozpracované webové stránky',
+      width: 1200,
+      height: 900,
     },
     program: [
       {
@@ -647,12 +653,12 @@ export const TABORY: Tabor[] = [
       {
         den: 'Pátek',
         ikona: 'projekt',
-        title: 'Web na internetu',
-        kratce: 'Web na internetu',
-        shrnuti: 'Dokončení projektu, zveřejnění na vlastní adrese a ukázka.',
+        title: 'Hotový web a odkaz pro rodinu',
+        kratce: 'Web na odkazu',
+        shrnuti: 'Dokončení projektu, vlastní odkaz pro rodinu a ukázka pro ostatní.',
         description:
-          'Děti dokončí vlastní web, třeba stránku o koníčku, fanouškovský web nebo malou hru v prohlížeči, a zveřejní ho na adrese, kterou můžou poslat kamarádům i rodině. Na konci ukázka pro ostatní.',
-        highlights: ['Dokončení projektu', 'Zveřejnění na internetu', 'Ukázka pro ostatní'],
+          'Děti dokončí vlastní web, třeba stránku o koníčku, fanouškovský web nebo malou hru v prohlížeči. Web dostane vlastní odkaz, přes který ho ukážou rodině a kamarádům, a s lektorem si projdou, co na web patří a co ne. Na konci ukázka pro ostatní.',
+        highlights: ['Dokončení projektu', 'Odkaz pro rodinu', 'Co na web patří a co ne'],
       },
     ],
     faq: [
@@ -662,13 +668,18 @@ export const TABORY: Tabor[] = [
           'Ne. Začínáme od úplných základů a každý den přidáme jeden krok. Pokročilejší děti dostanou náročnější úkoly.',
       },
       {
+        question: 'Kdo web uvidí a je to bezpečné?',
+        answer:
+          'Web dostane náhledový odkaz, podobně jako sdílené album fotek. Ve vyhledávačích se neobjeví, ale kdo odkaz má, stránku otevře. Proto na ni nepatří celé jméno, adresa, škola ani fotky dítěte. To je jedno z pravidel, která se děti na táboře naučí, a lektor každý web zkontroluje, než odkaz dostanou. Když budete chtít, odkaz po táboře zrušíme.',
+      },
+      {
         question: 'Potřebuje dítě vlastní počítač?',
         answer: 'Ne. Tábor běží v počítačové učebně a každé dítě má svůj počítač.',
       },
       {
         question: 'Co si dítě odveze domů?',
         answer:
-          'Vlastní web zveřejněný na internetu. Adresu si dítě odnese a může na stránce pracovat i doma.',
+          'Vlastní web a odkaz, přes který ho ukáže rodině a kamarádům. Na stránce může pracovat i doma.',
       },
     ],
   },
