@@ -42,6 +42,7 @@ npm run lint         # Currently broken — Next 16 removed `next lint`; needs a
     globals.css             # Global styles + Tailwind (maker-lab design tokens) — the look of the pages not redesigned yet
     redesign.css            # The November 2026 look. Every rule is scoped under `.w2`, see "Redesign (November 2026)" below
     sitemap.ts              # Dynamic sitemap (weeks.cz URLs, one entry per tábor and per turnus)
+    llms.txt/, llms-full.txt/  # `/llms.txt` (llmstxt.org shape: H1, summary blockquote, H2 link lists, `## Optional` last) and its full-text version — static route handlers built from `src/lib/llms.ts`, which reads tabory/turnusy/site data, so they change with every deploy. No free-spot counts (those are live), no internal data. Guarded by `src/lib/llms.test.ts`
     not-found.tsx           # 404 page
     /api
       /waitlist/route.ts    # Interest/waitlist form API (Formspree)
