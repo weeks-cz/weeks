@@ -89,11 +89,12 @@ describe('výřez turnusů pro úvodku', () => {
   })
 
   it('schema úvodky vykresluje komponenta s kartami, ze stejné proměnné', () => {
-    // Po redesignu (listopad 2026) karty úvodky kreslí `TaboryUvodu`: schema
-    // bere turnusy přímo z karet, které jsou na stránce vidět.
-    const komponenta = zdroj('src/components/w2/TaboryUvodu.tsx')
-    expect(komponenta).toContain('const turnusy = karty.flatMap((k) => k.turnusy)')
+    // Od 2026-11-24 karty úvodky kreslí `TaboryPodleMest` (stejně jako
+    // `/tabory`): schema bere turnusy přímo z karet, které jsou na stránce vidět.
+    const komponenta = zdroj('src/components/w2/TaboryPodleMest.tsx')
+    expect(komponenta).toContain('bloky.flatMap((b) => b.karty.flatMap((k) => k.turnusy))')
     expect(komponenta).toContain('<EventSchema turnusy={turnusy} />')
+    expect(zdroj('src/app/page.tsx')).toContain('<TaboryPodleMest schema />')
   })
 
   it('úvodka nevykresluje EventSchema samostatně', () => {

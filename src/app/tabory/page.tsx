@@ -1,4 +1,3 @@
-import { Suspense } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Header } from '@/components/layout/Header'
@@ -6,18 +5,17 @@ import { Footer } from '@/components/layout/Footer'
 import { BreadcrumbSchema } from '@/components/seo/StructuredData'
 import { EmailZajem } from '@/components/w2/EmailZajem'
 import { Faq } from '@/components/w2/Faq'
-import { FiltrMest } from '@/components/w2/FiltrMest'
 import { Hvezdy, Ikona } from '@/components/w2/Ikona'
 import { KontaktKarta } from '@/components/w2/KontaktKarta'
 import { Mrizka } from '@/components/w2/Mrizka'
-import { TaborKarta } from '@/components/w2/TaborKarta'
+import { TaboryPodleMest } from '@/components/w2/TaboryPodleMest'
 import { Usp } from '@/components/w2/Usp'
 import { sazba } from '@/components/w2/text'
 import { getCity, type CityId } from '@/lib/cities'
 import { GOOGLE_PROFIL, maRecenze } from '@/lib/recenze'
 import { PROVOZNI_DOBA, SITE, getSiteFaq } from '@/lib/site'
-import { getAktivniTabory, getChystaneTabory } from '@/lib/tabory'
-import { getCitiesWithTurnusy, getTurnusy, getTurnusyByCity, isBookable } from '@/lib/turnusy'
+import { getChystaneTabory } from '@/lib/tabory'
+import { getCitiesWithTurnusy, getTurnusy, isBookable } from '@/lib/turnusy'
 
 /**
  * Výpis táborů (nový vzhled, listopad 2026) — rozcestí, které vede rodiče
@@ -56,32 +54,6 @@ function vMestech(mesta: CityId[]): string {
   return `v ${tvary.slice(0, -1).join(', ')} a ${tvary[tvary.length - 1]}`
 }
 
-function KartyMesta({ mesto }: { mesto: CityId }) {
-  const turnusyMesta = getTurnusyByCity(mesto)
-  const tabory = getAktivniTabory()
-    .filter((tabor) => turnusyMesta.some((t) => t.taborIds.includes(tabor.id)))
-    // Tábor, na který se dá přihlásit, stojí před táborem, který se chystá.
-    .sort(
-      (a, b) =>
-        Number(!turnusyMesta.some((t) => t.taborIds.includes(a.id) && isBookable(t))) -
-        Number(!turnusyMesta.some((t) => t.taborIds.includes(b.id) && isBookable(t)))
-    )
-
-  return (
-    <div className={`tabory${tabory.length === 1 ? ' jedna' : ''}`}>
-      {tabory.map((tabor) => (
-        <TaborKarta
-          key={tabor.id}
-          tabor={tabor}
-          mesto={mesto}
-          stitekMesta={false}
-          turnusy={turnusyMesta.filter((t) => t.taborIds.includes(tabor.id))}
-        />
-      ))}
-    </div>
-  )
-}
-
 export default function TaboryPage() {
   const turnusy = getTurnusy()
   const prodejne = turnusy.filter(isBookable)
@@ -98,7 +70,6 @@ export default function TaboryPage() {
   const ceny = [...new Set(prodejne.map((t) => t.priceKc).filter((c): c is number => c !== null))]
   const cena = ceny.length > 0 ? `${ceny.length > 1 ? 'od ' : ''}${Math.min(...ceny).toLocaleString('cs-CZ')} Kč` : null
 
-  const bloky = mesta.map((id) => ({ id, name: getCity(id).name, obsah: <KartyMesta mesto={id} /> }))
   const obecne = getSiteFaq()
   const dotazy = DOTAZY_VYPISU.map((q) => obecne.find((d) => d.question === q)).filter(
     (d): d is { question: string; answer: string } => Boolean(d)
@@ -174,18 +145,7 @@ export default function TaboryPage() {
         {/* ── Města a jejich tábory ────────────────────────────────────── */}
         <section className="sec bez-linky" id="mesta">
           <div className="wrap">
-            {/* `FiltrMest` čte `?mesto=` z adresy, proto Suspense. Záložní
-                podoba je celý výpis bez filtru — stejný obsah, jen bez čipů. */}
-            <Suspense
-              fallback={bloky.map((b) => (
-                <div className="mesto" key={b.id}>
-                  <h2>{b.name}</h2>
-                  {b.obsah}
-                </div>
-              ))}
-            >
-              <FiltrMest mesta={bloky} />
-            </Suspense>
+            <TaboryPodleMest />
 
             <aside className="chystame">
               <div className="chystame-text">

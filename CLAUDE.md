@@ -66,7 +66,7 @@ npm run lint         # Currently broken — Next 16 removed `next lint`; needs a
       Ikona.tsx, text.ts, dny.ts   # Icon set + `Hvezdy`; `sazba()` non-breaking spaces for text built from data, `telefonSazba()` for a phone number (never write the NBSP by hand — it is invisible and got lost four times); day abbreviations and icons
       TaborKarta.tsx         # Camp card for one city: photo, venue, price, term rows (homepage, /tabory, "Další tábory")
       TerminRadky.tsx        # Term rows with live capacity (client) — "Vybrat" / "Obsazeno" / "Dát vědět"
-      TaboryUvodu.tsx        # Homepage camp cards + `EventSchema` from the same variable (guarded by `schema-turnusy.test.ts`)
+      TaboryPodleMest.tsx    # Camps grouped by city with the `?mesto=` filter — `/tabory` AND the homepage (since 2026-11-24: Praha first, then KV, with the filter); `schema` prop renders the homepage `EventSchema` from the same variable (guarded by `schema-turnusy.test.ts`)
       FiltrMest.tsx          # City filter on /tabory — state lives in `?mesto=`, all cities are always in the HTML
       Rozvrh.tsx, PasFoto.tsx  # Day in six bars + expandable schedule; full-width photo with the one claim `DENNI_HARMONOGRAM` backs
       RecenzeKarty.tsx       # Reviews section: always three cards, never the review count

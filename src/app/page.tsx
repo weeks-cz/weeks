@@ -12,7 +12,7 @@ import { OdkazTerminy } from '@/components/w2/OdkazTerminy'
 import { Pas } from '@/components/w2/Pas'
 import { PasFoto } from '@/components/w2/PasFoto'
 import { RecenzeSekce } from '@/components/w2/RecenzeKarty'
-import { TaboryUvodu } from '@/components/w2/TaboryUvodu'
+import { TaboryPodleMest } from '@/components/w2/TaboryPodleMest'
 import { Usp } from '@/components/w2/Usp'
 import { sazba } from '@/components/w2/text'
 import { getCity } from '@/lib/cities'
@@ -177,7 +177,7 @@ export default function Home() {
               <h2>{oznameni ? `Tábory na léto ${oznameni.rok}` : 'Tábory Weeks'}</h2>
               {!jdePrihlasit && <p>Termíny na další léto chystáme. Nechte nám kontakt a dáme vám vědět.</p>}
             </div>
-            <TaboryUvodu />
+            <TaboryPodleMest schema />
             <aside className="chystame">
               <div className="chystame-text">
                 <p className="chystame-stav">Chystáme</p>
