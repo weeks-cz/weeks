@@ -150,7 +150,7 @@ technologií"), `game-dev` (`aktivni` since 2026-11-10 — Godot week led by
 lektor Marek Vykysalý, programme taken from his sheet on the team Drive;
 "zbraně/boj" from that sheet is worded for parents as "střely/nepřátelé") and
 `umela-inteligence` "Tábor AI a chytré elektroniky" (`aktivni` since
-2026-11-20, was `ai`; lektor Jakub Laštovka). The AI programme follows
+2026-11-20, was `ai`; lektor Jakub Laštovka) and `webovy-tabor` "Tábor webových technologií" (`aktivni` since 2026-11-24, was the `chystame` "Webový tábor", same URL; lektor Filip Freusteiner, focus `weby`). Filip supplied no programme: the week (HTML → CSS → JavaScript → mobile → publishing) was drafted generic on purpose (Lukáš 2026-11-24) — no editor or hosting is named until the lektor confirms one; the card photo `web-editor-nahled.webp` is an illustration rendered from HTML, not a camp shot. The AI programme follows
 Jakub's concept "AI Camp – Základní koncept" in Notion (2026-11-20): each kid
 builds their own solder-free AI device (ESP32-S3 with display, LEDs, buttons,
 buzzer, light sensor), gives it a personality and instructions, lets it
@@ -159,8 +159,8 @@ drive the device through tools and react to the sensor, and **takes it home**
 concept is internal — never on the site. The concept says 10–15; the site
 keeps 9–15 like the rest (the older 12–16 is void). Every
 programme carries the line "Program je orientační, lektor ho přizpůsobí
-skupině." `webovy-tabor` stays `chystame` — intent only: perex and "co si dítě zkusí",
-never a program, price, date or equipment; `validateTabory` rejects a
+skupině." A `chystame` tábor (none since 2026-11-24) is intent only: perex and
+"co si dítě zkusí", never a program, price, date or equipment; `validateTabory` rejects a
 `chystame` tábor that carries a program, and an `aktivni` one without
 `odnese`. A tábor can name its lektors (`lektori`, ids from `TYM` in
 `tym.ts`) and its own hero photo (`fotoHera`); without one the hero has no
@@ -176,10 +176,10 @@ photo rather than borrowing the 3D-print shot.
   no price, date, capacity, venue or program in it to read — those belong to
   the turnus.
 - **Focus**: reusable content modules per **tábor**. `FocusId` in
-  `src/lib/focus.ts` is `3d-tisk | iot | vr | herni-vyvoj | umela-inteligence`.
+  `src/lib/focus.ts` is `3d-tisk | iot | vr | herni-vyvoj | umela-inteligence | weby`.
   `3d-tisk-a-elektronika` uses `['3d-tisk', 'iot']` (both KV turnusy and
   `praha-2027-3d-tisk`), `game-dev` uses `['herni-vyvoj']`,
-  `umela-inteligence` uses `['umela-inteligence']`. **VR is
+  `umela-inteligence` uses `['umela-inteligence']`, `webovy-tabor` uses `['weby']`. **VR is
   deliberately not in that list**: the equipment is not certain and Karlovy Vary
   never ran it, so the site would be promising it on the strength of nothing —
   the weekly programme confirms it, no day contains VR. The `vr` module keeps its
@@ -207,7 +207,7 @@ photo rather than borrowing the 3D-print shot.
   confirmed the booking by e-mail, the contract is still to be signed; the
   venue photo is the school's sports ground from Wikimedia Commons, CC BY-SA
   4.0, credited under it) and `praha-2027-umela-inteligence` (26.–30. 7., ZŠ
-  Břečťanová, capacity 15). The Praha placeholder `praha-leto-2027` became
+  Břečťanová, capacity 15). Since 2026-11-24 also `praha-2027-webove-technologie` (26.–30. 7., ZŠ Břečťanová, capacity 15) — the same week as the AI camp: the school gives two classrooms of 15 and both run side by side. The Praha placeholder `praha-leto-2027` became
   `praha-2027-3d-tisk`; its URL 308s there. The placeholder
   `kv-leto-2027` was split into the two real terms; its URL 308s to
   `/tabory?mesto=karlovy-vary`. `isBookable(turnus)` is what flips a card
@@ -357,7 +357,7 @@ All user-facing content is in Czech. Code/docs can be in English.
 ## Current Status
 
 **Structural rebuild (Weeks s.r.o. as operator)**: Complete across the whole site — the product/marketing pages (`/`, `/tabory`, `/tabory/[tema]`, `/tabory/termin/[slug]`) as well as `/o-nas`, `/kontakt`, `/gdpr` and `/podminky` all describe Weeks s.r.o. as organizer; DDM Praha 6 and HWLab remain only as historical code comments explaining what was removed. `/firmy` (linked from the header, footer and the homepage's Rozcesti section) is built — see "`/firmy` (phase 4)" below.
-**Status**: Registration for Karlovy Vary summer 2027 is **live since 2026-10-10** (two terms, see "Current data" under Product). Praha game dev (`praha-2027-herni-vyvoj`) is on sale since 2026-11-10, Praha 3D tisk (`praha-2027-3d-tisk`) and AI (`praha-2027-umela-inteligence`) since 2026-11-20.
+**Status**: Registration for Karlovy Vary summer 2027 is **live since 2026-10-10** (two terms, see "Current data" under Product). Praha game dev (`praha-2027-herni-vyvoj`) is on sale since 2026-11-10, Praha 3D tisk (`praha-2027-3d-tisk`) and AI (`praha-2027-umela-inteligence`) since 2026-11-20, Praha web (`praha-2027-webove-technologie`) since 2026-11-24.
 **Phase 5 (structured data, rescued focus-module content, dead analytics) is done** — see "Phase 5" below.
 **Phase 6 (camps as a category, visual system) is done** — see "Phase 6" below.
 **Founder feedback on phase 6 is worked in (2026-09-22)**: scroll reveals animate
@@ -584,7 +584,7 @@ plan: `docs/superpowers/plans/2026-09-21-web-2027-faze-6-tabory-a-vizual.md`.
 - [x] Summer 2027 KV turnusy confirmed and on sale (2026-10-10)
 - [x] Praha 2027 game dev turnus (2026-11-10, ZŠ Břečťanová)
 - [x] Praha 2027 3D tisk (ZŠ Chvaletická) and AI (ZŠ Břečťanová) turnusy (2026-11-20)
-- [ ] ZŠ Chvaletická: contract + handover protocol; our own classroom photo could replace the Commons shot on `zs-chvaleticka`
+- [x] Praha 2027 web turnus (2026-11-24, ZŠ Břečťanová, second classroom) + handover protocol; our own classroom photo could replace the Commons shot on `zs-chvaleticka`
 - [x] Fakturoid for Weeks s.r.o. (2026-10-11, before the first 2027 payment — no backfill needed)
 - [ ] weeks-hub invoice preview: pick OSVČ vs s.r.o. Fakturoid account per registration
 - [ ] Terms (turnusy) editable from weeks-hub instead of `TURNUSY` in code
@@ -724,7 +724,8 @@ Praha game dev (`praha-2027-herni-vyvoj`, 12.–16. 7. 2027, ZŠ Břečťanová,
 5 990 Kč) is on sale since 2026-11-10 — `prihlasky` for Praha in
 `weeks-iot/src/lib/camp-offer.ts` was flipped with it. Since 2026-11-20
 Praha also sells `praha-2027-3d-tisk` (19.–23. 7., ZŠ Chvaletická) and
-`praha-2027-umela-inteligence` (26.–30. 7., ZŠ Břečťanová); the Praha
+`praha-2027-umela-inteligence` (26.–30. 7., ZŠ Břečťanová), since 2026-11-24 also
+`praha-2027-webove-technologie` (26.–30. 7., ZŠ Břečťanová, second classroom); the Praha
 `nabidka` in weeks-iot names all three camps by their short names.
 
 The old weekend/one-day formats (MIX, one-day 3D tisk/IoT camps) and their

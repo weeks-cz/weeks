@@ -31,7 +31,7 @@ const IKONA_SITE: Record<(typeof SOCIALNI_SITE)[number]['id'], IkonaId> = {
 // Věta říká jen to, co web nabízí. „Se zkušenými instruktory“ z ní vypadlo:
 // je to tvrzení, které stránka nemá čím doložit.
 const POPIS =
-  'Týdenní příměstské IT tábory pro děti 9 až 15 let. 3D tisk, IoT s Arduinem a vývoj her.'
+  'Týdenní příměstské IT tábory pro děti 9 až 15 let. 3D tisk, elektronika s Arduinem, vývoj her, AI a tvorba webů.'
 
 export function Footer() {
   return (

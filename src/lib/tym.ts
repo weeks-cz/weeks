@@ -104,6 +104,17 @@ export const TYM: ClenTymu[] = [
     popis:
       'Hlavní lektor tábora AI a chytré elektroniky. Za týden provede děti od prvního programu po vlastní AI zařízení, které ovládá světla a reaguje na okolí.',
   },
+  // Vede Tábor webových technologií (Praha, 26.–30. 7. 2027), na web
+  // 2026-11-24 podle Lukáše. Bio ani fotku zatím nemáme.
+  {
+    id: 'filip-freusteiner',
+    jmeno: 'Filip Freusteiner',
+    zakladatel: false,
+    obor: 'Weby · HTML · JavaScript',
+    ikona: 'code',
+    popis:
+      'Vede Tábor webových technologií. Za týden provede děti od prvního řádku HTML po vlastní web zveřejněný na internetu.',
+  },
 ]
 
 /** „Spoluzakladatel“, nebo „Lektor“. */

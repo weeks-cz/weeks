@@ -195,6 +195,26 @@ export const TURNUSY: Turnus[] = [
     perex:
       'Týden AI a chytré elektroniky na ZŠ Břečťanová v Praze 10. Oběd, pitný režim i materiál jsou v ceně.',
   },
+  // Vypsáno 2026-11-24: lektor Filip Freusteiner, ZŠ Břečťanová ve stejném
+  // týdnu jako AI tábor – škola dává dvě učebny po 15 místech a oba tábory
+  // běží souběžně (Lukáš 2026-11-24). Cena a podmínky stejné jako ostatní.
+  {
+    id: 'praha-2027-webove-technologie',
+    slug: 'praha-2027-webove-technologie',
+    city: 'praha',
+    venueId: 'zs-brectanova',
+    start: '2027-07-26',
+    end: '2027-07-30',
+    priceKc: 5990,
+    capacity: 15,
+    minimum: { deti: 10, rozhodnemeDo: '2027-06-30' },
+    zaloha: { castkaKc: 2000, doplatekDo: '2027-05-31' },
+    status: 'otevreno',
+    taborIds: ['webovy-tabor'],
+    ageRange: '9-15',
+    perex:
+      'Týden tvorby vlastního webu na ZŠ Břečťanová v Praze 10. Oběd, pitný režim i materiál jsou v ceně.',
+  },
 ]
 
 /** Turnus, který si právě teď může někdo koupit. */

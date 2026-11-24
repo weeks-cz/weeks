@@ -568,19 +568,100 @@ export const TABORY: Tabor[] = [
     ],
   },
   {
+    // Do 2026-11-24 chystaný „Webový tábor“ (stejná adresa `/tabory/webovy-tabor`).
+    // Vede Filip Freusteiner. Vlastní program lektor nedodal; tenhle je
+    // orientační a schválně obecný (Lukáš 2026-11-24): HTML, CSS, kousek
+    // JavaScriptu, mobil a zveřejnění podle původního záměru tábora. Konkrétní
+    // editor ani hosting se nejmenují, dokud je lektor nepotvrdí.
     id: 'webovy-tabor',
-    name: 'Webový tábor',
-    shortName: 'Weby',
-    status: 'chystame',
-    perex: 'Vlastní stránka, která žije na internetu — od návrhu po spuštění.',
+    name: 'Tábor webových technologií',
+    shortName: 'Webové technologie',
+    status: 'aktivni',
+    perex:
+      'Vlastní web od prvního řádku HTML po zveřejnění na internetu. Adresu stránky si dítě odnese a pošle ji kamarádům.',
     popis:
-      'Tábor teprve chystáme. Chceme, aby si každé dítě odneslo adresu vlastní stránky, kterou může poslat kamarádům.',
-    focus: [],
-    zkusiSi: [
-      'Napíše vlastní stránku v HTML a CSS',
-      'Rozpohybuje ji kouskem JavaScriptu',
-      'Vyzkouší si, jak vypadá na mobilu',
-      'Vystaví ji na adresu, kterou si může otevřít kdokoli',
+      'Týden, ve kterém se z prázdného souboru stane web. Každé dítě si napíše vlastní stránku v HTML a CSS, rozpohybuje ji JavaScriptem, vyladí ji pro mobil a v pátek ji zveřejní na adrese, kterou může poslat kamarádům i rodině.',
+    focus: ['weby'],
+    odnese: 'Vlastní web zveřejněný na internetu',
+    odneseKratce: 'Vlastní web online',
+    poznamkaKRecenzim:
+      'Tábor webových technologií běží poprvé v létě 2027. Recenze jsou z táborů Weeks v roce 2026.',
+    proTermin:
+      'Týden tvorby webu. Děti si napíšou vlastní stránku v HTML a CSS, rozpohybují ji kouskem JavaScriptu, vyladí ji pro mobil a v pátek ji zveřejní na internetu. Programovat předem umět nemusí.',
+    lektori: ['filip-freusteiner'],
+    // Ilustrace vykreslená z HTML (editor s kódem a náhled stránky), ne záběr
+    // z tábora – ten se ještě nekonal. Bez fotky zela karta ve výpisu prázdná.
+    foto: {
+      src: '/images/tabor/web-editor-nahled.webp',
+      alt: 'Ilustrace: editor s kódem HTML a vedle v prohlížeči hotová stránka s tlačítkem',
+    },
+    program: [
+      {
+        den: 'Pondělí',
+        ikona: 'napad',
+        title: 'Jak funguje web a první stránka',
+        kratce: 'První stránka',
+        shrnuti: 'Co se stane po zadání adresy a první vlastní stránka v HTML.',
+        description:
+          'Děti zjistí, co se děje mezi zadáním adresy a zobrazením stránky, a napíšou svou první stránku v HTML: nadpisy, text, obrázky a odkazy.',
+        highlights: ['Jak funguje web', 'Základy HTML', 'Nadpisy, obrázky a odkazy'],
+      },
+      {
+        den: 'Úterý',
+        ikona: 'model',
+        title: 'Vzhled a styl',
+        kratce: 'Vzhled v CSS',
+        shrnuti: 'Barvy, písmo a rozložení v CSS. Stránka dostane vlastní styl.',
+        description:
+          'Stránka dostane vlastní vzhled. Děti si v CSS vyberou barvy a písmo, poskládají rozložení a zjistí, co dělá web přehledným a čitelným.',
+        highlights: ['Barvy a písmo v CSS', 'Rozložení stránky', 'Vlastní styl'],
+      },
+      {
+        den: 'Středa',
+        ikona: 'kod',
+        title: 'Stránka ožívá',
+        kratce: 'JavaScript',
+        shrnuti: 'První JavaScript: tlačítka, která něco dělají, a animace.',
+        description:
+          'První kroky v JavaScriptu. Stránka začne reagovat na návštěvníka: tlačítko, které něco změní, počítadlo, jednoduchá animace nebo kvíz pro kamarády.',
+        highlights: ['Základy JavaScriptu', 'Tlačítka a reakce', 'Kvíz nebo animace'],
+      },
+      {
+        den: 'Čtvrtek',
+        ikona: 'vr',
+        title: 'Web do mobilu a vlastní projekt',
+        kratce: 'Web v mobilu',
+        shrnuti: 'Stránka, která dobře vypadá na počítači i na telefonu.',
+        description:
+          'Většina lidí otevře web na telefonu. Děti si vyzkouší, jak jejich stránka vypadá na mobilu, upraví ji pro malou i velkou obrazovku a odpoledne začnou vlastní projekt.',
+        highlights: ['Web na mobilu', 'Rozložení pro každou obrazovku', 'Začátek vlastního projektu'],
+      },
+      {
+        den: 'Pátek',
+        ikona: 'projekt',
+        title: 'Web na internetu',
+        kratce: 'Web na internetu',
+        shrnuti: 'Dokončení projektu, zveřejnění na vlastní adrese a ukázka.',
+        description:
+          'Děti dokončí vlastní web, třeba stránku o koníčku, fanouškovský web nebo malou hru v prohlížeči, a zveřejní ho na adrese, kterou můžou poslat kamarádům i rodině. Na konci ukázka pro ostatní.',
+        highlights: ['Dokončení projektu', 'Zveřejnění na internetu', 'Ukázka pro ostatní'],
+      },
+    ],
+    faq: [
+      {
+        question: 'Musí dítě umět programovat?',
+        answer:
+          'Ne. Začínáme od úplných základů a každý den přidáme jeden krok. Pokročilejší děti dostanou náročnější úkoly.',
+      },
+      {
+        question: 'Potřebuje dítě vlastní počítač?',
+        answer: 'Ne. Tábor běží v počítačové učebně a každé dítě má svůj počítač.',
+      },
+      {
+        question: 'Co si dítě odveze domů?',
+        answer:
+          'Vlastní web zveřejněný na internetu. Adresu si dítě odnese a může na stránce pracovat i doma.',
+      },
     ],
   },
 ]

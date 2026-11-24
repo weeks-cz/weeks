@@ -9,7 +9,7 @@ import { getCitiesWithTurnusy, getTurnusy, oznameniPrihlasovani } from '@/lib/tu
  * se berou z dat — pás nesmí hlásit rok, který už proběhl, ani město, kde
  * žádný termín není.
  */
-const TEMATA = ['3D tisk', '3D modelování', 'Arduino a elektronika', 'Vývoj her v Godotu', 'Umělá inteligence']
+const TEMATA = ['3D tisk', '3D modelování', 'Arduino a elektronika', 'Vývoj her v Godotu', 'Umělá inteligence', 'Tvorba webů']
 
 export function Pas() {
   const oznameni = oznameniPrihlasovani()

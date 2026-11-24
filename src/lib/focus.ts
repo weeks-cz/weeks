@@ -6,7 +6,7 @@
  * odtud si ho přitáhne jak přehled na /tabor, tak stránka konkrétního turnusu.
  */
 
-export type FocusId = '3d-tisk' | 'iot' | 'vr' | 'herni-vyvoj' | 'umela-inteligence'
+export type FocusId = '3d-tisk' | 'iot' | 'vr' | 'herni-vyvoj' | 'umela-inteligence' | 'weby'
 
 export interface FocusModule {
   id: FocusId
@@ -37,7 +37,7 @@ export interface FocusModule {
   foto?: { src: string; alt: string }
 }
 
-export const FOCUS_IDS: FocusId[] = ['3d-tisk', 'iot', 'vr', 'herni-vyvoj', 'umela-inteligence']
+export const FOCUS_IDS: FocusId[] = ['3d-tisk', 'iot', 'vr', 'herni-vyvoj', 'umela-inteligence', 'weby']
 
 const FOCUS: Record<FocusId, FocusModule> = {
   '3d-tisk': {
@@ -184,6 +184,22 @@ const FOCUS: Record<FocusId, FocusModule> = {
       'Naučí AI ovládat světla, displej i časovač',
       'Připojí senzor a nechá AI rozhodovat podle skutečných dat',
       'Vymyslí vlastní projekt a zařízení si odnese domů',
+    ],
+  },
+  'weby': {
+    id: 'weby',
+    name: 'Tvorba webů',
+    // Lektor (Filip Freusteiner) vlastní program nedodal. Body vycházejí ze
+    // záměru chystaného tábora a jsou schválně obecné (Lukáš 2026-11-24):
+    // HTML, CSS, kousek JavaScriptu, mobil a zveřejnění. Konkrétní nástroje
+    // ani hosting se nejmenují, dokud je lektor nepotvrdí.
+    short:
+      'Vlastní webová stránka od prvního řádku HTML po zveřejnění na internetu, na adrese, kterou si dítě pošle kamarádům.',
+    tryOut: [
+      'Napíše vlastní stránku v HTML a CSS',
+      'Rozpohybuje ji kouskem JavaScriptu',
+      'Vyzkouší si, jak vypadá na mobilu',
+      'Vystaví ji na adresu, kterou si může otevřít kdokoli',
     ],
   },
 }
